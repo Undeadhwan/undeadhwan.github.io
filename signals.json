@@ -27,7 +27,8 @@
    "confirmed": false,
    "sd": "서울",
    "sg": "강서구",
-   "radius_type": "도시재생"
+   "radius_type": "도시재생",
+   "phase": "인가"
   },
   {
    "id": "S-0002",
@@ -54,7 +55,8 @@
    "confirmed": false,
    "sd": "서울",
    "sg": "강서구",
-   "radius_type": "공항시설"
+   "radius_type": "공항시설",
+   "phase": "인가"
   },
   {
    "id": "S-0003",
@@ -97,7 +99,8 @@
    "confirmed": false,
    "sd": "서울",
    "sg": "강서구",
-   "radius_type": "대형업무·산업단지"
+   "radius_type": "대형업무·산업단지",
+   "phase": "준공·개통"
   },
   {
    "id": "S-0004",
@@ -125,7 +128,8 @@
    "confirmed": false,
    "sd": "서울",
    "sg": "강서구",
-   "radius_type": "중소기업이전"
+   "radius_type": "중소기업이전",
+   "phase": "계획"
   },
   {
    "id": "S-0005",
@@ -214,7 +218,8 @@
      ]
     ]
    },
-   "radius_type": "지하철·전철역"
+   "radius_type": "지하철·전철역",
+   "phase": "착공"
   },
   {
    "id": "S-0006",
@@ -254,7 +259,8 @@
    "confirmed": false,
    "sd": "서울",
    "sg": "강서구",
-   "radius_type": "고속도로IC"
+   "radius_type": "고속도로IC",
+   "phase": "착공"
   },
   {
    "id": "S-0007",
@@ -296,7 +302,8 @@
    "confirmed": false,
    "sd": "서울",
    "sg": "강서구",
-   "radius_type": "공공청사"
+   "radius_type": "공공청사",
+   "phase": "착공"
   },
   {
    "id": "S-0008",
@@ -341,7 +348,8 @@
    "confirmed": false,
    "sd": "서울",
    "sg": "강서구",
-   "radius_type": "대규모복합개발"
+   "radius_type": "대규모복합개발",
+   "phase": "인가"
   },
   {
    "id": "S-0009",
@@ -371,7 +379,8 @@
    "confirmed": false,
    "sd": "서울",
    "sg": "강서구",
-   "radius_type": "지구단위·도시개발"
+   "radius_type": "지구단위·도시개발",
+   "phase": "인가"
   },
   {
    "id": "S-0010",
@@ -420,7 +429,8 @@
    "confirmed": false,
    "sd": "서울",
    "sg": "강서구",
-   "radius_type": "지구단위·도시개발"
+   "radius_type": "지구단위·도시개발",
+   "phase": "착공"
   },
   {
    "id": "S-0011",
@@ -437,7 +447,7 @@
    "value_tags": [
     "인프라"
    ],
-   "template_type": null,
+   "template_type": "정비사업",
    "current_stage": "지구단위계획 수립 중 (고시 전)",
    "stage_note": "서남권 대개조(2024-02) → 노후계획도시 특별법 1호 적용 추진(최대 3만가구 보도) → 서울시 조례(2025-03) → 교통영향평가 용역 발주(2026-02, 나라장터 수집분). 조합 방식이 아닌 지구단위계획 재정비라 정비사업 템플릿 부적합 — 전용 템플릿 필요(운영자 결정)",
    "last_movement": "2026-02-23",
@@ -450,7 +460,8 @@
    "confirmed": false,
    "sd": "서울",
    "sg": "강서구",
-   "radius_type": "정비구역(재건축·재개발)"
+   "radius_type": "정비구역(재건축·재개발)",
+   "phase": "계획"
   },
   {
    "id": "S-0012",
@@ -488,7 +499,8 @@
    ],
    "source_type": "서울시 설계공모포털 + 강서구 고시",
    "confirmed": false,
-   "radius_type": "도서관·문화시설"
+   "radius_type": "도서관·문화시설",
+   "phase": "인가"
   },
   {
    "id": "S-0013",
@@ -537,7 +549,8 @@
    ],
    "source_type": "서울시 도시철도망 구축계획(news.seoul.go.kr/traffic)",
    "confirmed": false,
-   "radius_type": "지하철·전철역"
+   "radius_type": "지하철·전철역",
+   "phase": "계획"
   },
   {
    "id": "S-0014",
@@ -588,7 +601,8 @@
    ],
    "source_type": "3기신도시포털 + 부천시/국토부 보도",
    "confirmed": false,
-   "radius_type": "대규모복합개발"
+   "radius_type": "대규모복합개발",
+   "phase": "착공"
   },
   {
    "id": "S-0015",
@@ -612,7 +626,8 @@
    ],
    "source_type": "과거 언론·지자체 검토 발표",
    "confirmed": false,
-   "radius_type": "지하철·전철역"
+   "radius_type": "지하철·전철역",
+   "phase": "계획"
   },
   {
    "id": "S-0016",
@@ -643,7 +658,8 @@
    ],
    "source_type": "SH공사 입주자모집공고(i-sh.co.kr)",
    "confirmed": false,
-   "radius_type": "공공주택공급"
+   "radius_type": "공공주택공급",
+   "phase": "준공·개통"
   }
  ]
 }

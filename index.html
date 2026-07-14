@@ -114,6 +114,10 @@
   .badge-draft { display:inline-block; font-size:10px; background:#fff3cd; color:#856404; border-radius:4px; padding:1px 5px; margin-left:4px; }
   .badge-host { display:inline-block; font-size:10px; background:#e8f0fe; color:#1a4d8f; border-radius:4px; padding:1px 5px; }
   .badge-near { display:inline-block; font-size:10px; background:#f2f2f7; color:#6e6e73; border-radius:4px; padding:1px 5px; }
+  .badge-drop { display:inline-block; font-size:10px; background:#e5e5ea; color:#3a3a3c; border:1px dashed #8e8e93; border-radius:4px; padding:0 5px; margin-left:4px; }
+  .pmini { font-size:11px; color:var(--muted); font-weight:400; }
+  .subtrack { font-size:11px; color:var(--muted); margin:2px 0 8px; line-height:1.5; }
+  .subtrack .subcur { color:var(--ink); background:#fff3cd; border-radius:3px; padding:0 3px; }
   .dong-badge { background:#fff; border:1.5px solid var(--navy); border-radius:12px; padding:1px 8px; font-size:11px; font-weight:600; white-space:nowrap; cursor:pointer; }
   /* 아파트 이름 라벨 (조회 진입점용 — §4.1 허용, 배지·개수 없음) */
   .apt-label { font-size:11px; color:#1c1c1e; text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 4px #fff,0 0 4px #fff; white-space:nowrap; cursor:pointer; font-weight:700; }
@@ -287,13 +291,34 @@
 /* ══════════ 상수 (기획서 §3.2, §4.1 v1.2) ══════════ */
 const KAKAO_JS_KEY = "33bf168e1a0f3295c36b53c1add1b69e";
 const TODAY = new Date("2026-07-13");
+/* 공통 4단계 백본 — 전 호재 기본. 유형별 세부단계는 각자 이 4국면 중 하나에 매핑(라벨·의미는 유형별 유연). */
+const PHASES = ["계획", "인가", "착공", "준공·개통"];
+const PHASE_IDX = Object.fromEntries(PHASES.map((p, i) => [p, i]));
+/* 유형별 세부 마일스톤 트랙 (기획서 §3.2) — [세부단계, 소속 국면].
+   정비사업(재건축·재개발)은 이주·철거를 별도 추가단계로 분리(사용자 요청). */
 const STAGE_TRACKS = {
-  "철도": ["계획반영","예타/민자적격성","기본계획","실시계획 승인","착공","개통"],
-  "도로": ["계획반영","타당성","설계","착공","개통"],
-  "공공시설": ["예산반영","설계용역","공사입찰","착공","준공"],
-  "기업이전": ["토지취득","인허가","착공","입주"],
-  "정비사업": ["구역지정","조합설립","사업시행인가","관리처분","이주·철거","착공","준공"]
+  "철도":   [["계획반영","계획"],["예타/민자적격성","계획"],["기본계획","계획"],["실시계획 승인","인가"],["착공","착공"],["개통","준공·개통"]],
+  "도로":   [["계획반영","계획"],["타당성","계획"],["설계","인가"],["착공","착공"],["개통","준공·개통"]],
+  "공공시설": [["예산반영","계획"],["설계용역","인가"],["공사입찰","인가"],["착공","착공"],["준공","준공·개통"]],
+  "기업이전": [["토지취득","계획"],["인허가","인가"],["착공","착공"],["입주","준공·개통"]],
+  "정비사업": [["구역지정","계획"],["조합설립","인가"],["사업시행인가","인가"],["관리처분","인가"],["이주","착공"],["철거","착공"],["착공","착공"],["준공","준공·개통"]]
 };
+/* current_stage → 국면. 우선순위: 신호 명시 phase → 트랙 내 매칭 → 키워드 분류 → 계획(기본).
+   유형별 세부단계 이름이 자유로워도 4국면 필터가 항상 성립하도록 하는 매핑층. */
+const PHASE_KEYWORDS = [
+  ["준공·개통", /준공|개통|입주|완공|공급·모집|분양/],
+  ["착공", /착공|이주|철거/],
+  ["인가", /인가|승인|지정|가결|고시|허가|입찰|설계|관리처분|조합설립/],
+  ["계획", /계획|구상|반영|타당성|검토|수립|예타|취득/]
+];
+function trackOf(s) { return STAGE_TRACKS[s.template_type] || null; }
+function phaseOf(s) {
+  if (s.phase && PHASE_IDX[s.phase] != null) return s.phase;   // 확정층 명시값 우선
+  const tr = trackOf(s);
+  if (tr) { const hit = tr.find(([lb]) => lb === s.current_stage); if (hit) return hit[1]; }
+  for (const [ph, re] of PHASE_KEYWORDS) if (re.test(s.current_stage || "")) return ph;
+  return "계획";
+}
 /* ══════════ 4분류 + 세분 반경 유형 (사용자 편집 가능, 즉시 적용) ══════════
    RADIUS_TYPES: {분류: {세부유형: 기본반경km}} — 항목 추가로 무한 세분화 가능.
    세부유형이 곧 신호의 radius_type이며, 그것이 분류(catOf)와 반경(getRadius) 둘 다 결정. */
@@ -351,7 +376,7 @@ function sggDisplayName(name) {
 const filter = {
   cat: new Set(DISPLAY_CAT_KEYS),
   scale: new Set(["광역", "지구", "근린"]),
-  status: new Set(["활성", "정체", "종결"]),
+  phase: new Set(PHASES),   // 조회축 = 4단계 백본(계획/인가/착공/준공·개통). 정체·무산은 필터 아닌 항상표시 표식
   region: "",   // "" = 전체, "서울 강서구" 형태
   year: null    // null = 전체, 아니면 그 해까지 완료 범위 도달분만
 };
@@ -361,7 +386,7 @@ let mapApi = null;   // {panTo(lnglat), refreshPins()}
 /* ══════════ 유틸 ══════════ */
 const catOf = s => catOfType(s.radius_type) || TEMPLATE_CAT[s.template_type] || "기타";
 const visible = s => filter.cat.has(catOf(s))   // 기타도 정식 분류 — 우회 제거(필터가 전 화면 일관 적용)
-  && filter.status.has(s.status || "활성")
+  && filter.phase.has(phaseOf(s))                // 4단계 백본 조회축
   && (!filter.region || `${s.sd} ${s.sg}` === filter.region);
 /* 연도 기준선(전역): 목록을 숨기지 않고 각 카드의 미니 진행바에 기준선·시점상태 표시 */
 let YEAR_SEL = null;
@@ -420,8 +445,8 @@ const dongName = f => f.properties.adm_nm.split(" ").pop();
 let openDD = null;
 const DD_DEFS = () => [
   { id: "cat", label: "분류", keys: DISPLAY_CAT_KEYS, set: filter.cat },
-  { id: "status", label: "상태", keys: ["활성", "정체", "종결"], set: filter.status },
-];  // '규모'(광역/지구/근린) 제거 — 영향거리는 반경 설정으로 관리(중복·모호 해소)
+  { id: "phase", label: "단계", keys: PHASES, set: filter.phase },
+];  // 조회축: 분류(4) + 단계(4단계 백본). '상태'(활성/정체/종결)는 필터에서 뺌 — 정체·무산은 카드·지도에 항상 표시(P5)
 function renderChips() {
   const host = document.getElementById("f-dd");
   host.innerHTML = "";
@@ -594,11 +619,11 @@ function renderApt(a) {
   const near = signalsNearPoint([a.lon, a.lat]);
   p.innerHTML = `
     <div class="phead"><div class="pt">${a.n}</div><div class="closex" onclick="closePanel()">✕</div></div>
-    <div class="ps">${a.sd} ${a.sg} ${a.dong} · 이 단지에 영향 주는 신호 ${near.length}건 (거리순, 반경 내)</div>
+    <div class="ps">${a.sd} ${a.sg} ${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : ""} · 이 단지에 영향 주는 신호 ${near.length}건 (거리순, 반경 내)</div>
     ${yearChipsHtml()}
     <div id="list"></div>
     <div class="note" style="border-top:1px dashed var(--line);margin-top:8px;padding-top:8px;font-size:11px;color:var(--muted)">
-      단지 좌표는 OSM/지오코딩 근사(Phase 1에서 공동주택 공공데이터로 교체). 거리는 사실이며 '수혜'는 표시하지 않음(P1)</div>`;
+      단지 정보=공동주택 관리정보 공공데이터(세대수 등 사실). 좌표=도로명주소 지오코딩(도로 수준 근사, 건물단위 아님). 거리는 사실이며 '수혜'는 표시하지 않음(P1)</div>`;
   wireYearChips(p);
   const list = p.querySelector("#list");
   if (!near.length) list.innerHTML = `<div class="ps">반경 내 신호 없음</div>`;
@@ -669,17 +694,20 @@ function makeCard(s, extra = "", onClick) {
 
 /* ══════════ 패널: 홈 ══════════ */
 function cardHtml(s, extra = "") {
-  const track = STAGE_TRACKS[s.template_type] || [];
-  const idx = track.indexOf(s.current_stage);
+  const ph = phaseOf(s);
+  const pIdx = PHASE_IDX[ph];
   const noCoord = !signalPoints(s).length;
   const km = (getRadius(s) / 1000).toFixed(1).replace(".0", "");
+  const dropped = s.status === "종결";
+  const detail = s.current_stage && s.current_stage !== ph ? ` — ${s.current_stage}` : "";
   return `
     <div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}</span>
       · ${s.radius_type || ((s.value_tags || []).join("+"))} · 영향 ${km}km
       ${s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>'}
+      ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}
       ${noCoord ? '<span class="badge-near">위치 미확정 — 지도 미표시</span>' : ""} ${extra}</div>
     <div class="title">${s.title}</div>
-    <div class="stage">현재: <b>${s.current_stage || "단계 미지정"}</b>${idx >= 0 ? ` (${idx + 1}/${track.length})` : ""} · ${freshness(s)}</div>
+    <div class="stage">단계: <b>${ph}</b> <span class="pmini">(${pIdx + 1}/${PHASES.length})</span>${detail} · ${freshness(s)}</div>
     <div class="watch">다음 관찰: ${s.next_watch || "미정"}</div>
     ${miniBarHtml(s)}`;
 }
@@ -741,22 +769,28 @@ function renderDong(feature) {
 /* ══════════ 패널: 신호 상세 (§4.3) ══════════ */
 function renderDetail(s) {
   const p = document.getElementById("panel");
-  const track = STAGE_TRACKS[s.template_type] || [];
-  const idx = track.indexOf(s.current_stage);
+  const ph = phaseOf(s);
+  const pIdx = PHASE_IDX[ph];
+  const tr = trackOf(s);
+  const dropped = s.status === "종결";
   p.innerHTML = `
     <div class="phead"><span></span><div class="closex" onclick="closePanel()">✕</div></div>
     <div class="detail">
       <div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}</span>
         · ${s.radius_type || (s.value_tags || []).join("+")} · 영향 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km
-        ${s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>'}</div>
+        ${s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>'}
+        ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}</div>
       <h2>${s.title}</h2>
       ${freshness(s)}
-      <ul class="track">${track.map((st, i) => {
-        const cls = i < idx ? "done" : i === idx ? "now" : "todo";
-        const dot = i < idx ? "●" : i === idx ? "◎" : "○";
-        const when = i === idx && s.last_movement ? ` — ${s.last_movement}` : i > idx ? " — 미도래" : "";
-        return `<li class="${cls}"><span class="dot">${dot}</span>${st}${when}</li>`;
+      <ul class="track">${PHASES.map((P, i) => {
+        const cls = dropped && i >= pIdx ? "todo" : i < pIdx ? "done" : i === pIdx ? "now" : "todo";
+        const dot = i < pIdx ? "●" : i === pIdx ? (dropped ? "✕" : "◎") : "○";
+        const sub = i === pIdx ? ` — <b>${s.current_stage || "단계 미지정"}</b>${dropped ? " (무산)" : s.last_movement ? ` (${s.last_movement})` : ""}`
+          : i > pIdx ? " — 미도래" : "";
+        return `<li class="${cls}"><span class="dot">${dot}</span>${P}${sub}</li>`;
       }).join("")}</ul>
+      ${tr ? `<div class="subtrack">유형 세부단계 · ${s.template_type}: ${tr.map(([lb]) =>
+        lb === s.current_stage ? `<b class="subcur">${lb}</b>` : lb).join(" › ")}</div>` : ""}
       <div class="kv"><b>영향 반경</b> ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km — 유형 기준표(§3.3.1) 가안, 지도에 점선 원으로 표시</div>
       <div class="kv"><b>다음 관찰</b> ${s.next_watch || "미정"}</div>
       ${(s.access_points || []).length ? `<div class="kv"><b>접근점</b> ${s.access_points.map(a =>
@@ -1179,7 +1213,7 @@ const DUR = {
 };
 /* 신호 → 간트 행 (진행 신호). 과거 단계는 확정 날짜(stage_history) 있을 때만 막대, 없으면 텍스트(P2) */
 function ganttRow(s) {
-  const track = STAGE_TRACKS[s.template_type] || [];
+  const track = (STAGE_TRACKS[s.template_type] || []).map(x => Array.isArray(x) ? x[0] : x);
   const idx = track.indexOf(s.current_stage);
   const lm = s.last_movement ? yearDec(s.last_movement) : G_NOW;
   const bars = [], labels = [];
@@ -1346,7 +1380,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260714g");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260714h");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
