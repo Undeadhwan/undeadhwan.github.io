@@ -361,7 +361,7 @@ let mapApi = null;   // {panTo(lnglat), refreshPins()}
 /* ══════════ 유틸 ══════════ */
 const catOf = s => catOfType(s.radius_type) || TEMPLATE_CAT[s.template_type] || "기타";
 const visible = s => filter.cat.has(catOf(s))   // 기타도 정식 분류 — 우회 제거(필터가 전 화면 일관 적용)
-  && filter.scale.has(s.scale) && filter.status.has(s.status || "활성")
+  && filter.status.has(s.status || "활성")
   && (!filter.region || `${s.sd} ${s.sg}` === filter.region);
 /* 연도 기준선(전역): 목록을 숨기지 않고 각 카드의 미니 진행바에 기준선·시점상태 표시 */
 let YEAR_SEL = null;
@@ -420,9 +420,8 @@ const dongName = f => f.properties.adm_nm.split(" ").pop();
 let openDD = null;
 const DD_DEFS = () => [
   { id: "cat", label: "분류", keys: DISPLAY_CAT_KEYS, set: filter.cat },
-  { id: "scale", label: "규모", keys: ["광역", "지구", "근린"], set: filter.scale },
   { id: "status", label: "상태", keys: ["활성", "정체", "종결"], set: filter.status },
-];
+];  // '규모'(광역/지구/근린) 제거 — 영향거리는 반경 설정으로 관리(중복·모호 해소)
 function renderChips() {
   const host = document.getElementById("f-dd");
   host.innerHTML = "";
@@ -673,8 +672,10 @@ function cardHtml(s, extra = "") {
   const track = STAGE_TRACKS[s.template_type] || [];
   const idx = track.indexOf(s.current_stage);
   const noCoord = !signalPoints(s).length;
+  const km = (getRadius(s) / 1000).toFixed(1).replace(".0", "");
   return `
-    <div class="tags">[${s.scale} · ${(s.value_tags || []).join("+")}] ${catOf(s)}
+    <div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}</span>
+      · ${s.radius_type || ((s.value_tags || []).join("+"))} · 영향 ${km}km
       ${s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>'}
       ${noCoord ? '<span class="badge-near">위치 미확정 — 지도 미표시</span>' : ""} ${extra}</div>
     <div class="title">${s.title}</div>
@@ -706,7 +707,7 @@ function renderHome() {
     const el = document.createElement("div");
     el.className = "card";
     el.style.opacity = .75;
-    el.innerHTML = `<div class="tags">[${s.scale} · ${(s.value_tags || []).join("+")}] ${catOf(s)} <span class="badge-draft">초안·미확정</span></div>
+    el.innerHTML = `<div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}</span> · ${(s.value_tags || []).join("+")} <span class="badge-draft">초안·미확정</span></div>
       <div class="title">${s.title}</div>
       <div class="watch">${s.current_stage ? "현재: " + s.current_stage + " · " : ""}${s.sources_todo ? "출처 확인: " + s.sources_todo : ""}</div>`;
     mac.appendChild(el);
@@ -721,11 +722,11 @@ function renderDong(feature) {
     .map(s => ({ s, r: dongRelation(s, feature) }))
     .filter(x => x.r);
   const host = rel.filter(x => x.r === "소재"), near = rel.filter(x => x.r === "반경권");
-  const byScale = {};
-  rel.forEach(x => byScale[x.s.scale] = (byScale[x.s.scale] || 0) + 1);
+  const byCat = {};
+  rel.forEach(x => byCat[catOf(x.s)] = (byCat[catOf(x.s)] || 0) + 1);
   p.innerHTML = `
     <div class="phead"><div class="pt">${name}</div><div class="closex" onclick="closePanel()">✕</div></div>
-    <div class="ps">영향권 신호 ${rel.length}건 (${Object.entries(byScale).map(([k, v]) => k + " " + v).join(" · ") || "없음"})
+    <div class="ps">영향권 신호 ${rel.length}건 (${Object.entries(byCat).map(([k, v]) => k + " " + v).join(" · ") || "없음"})
       — 소재 ${host.length} · 반경권 ${near.length}</div>
     ${yearChipsHtml()}
     <div id="list"></div>`;
@@ -745,7 +746,8 @@ function renderDetail(s) {
   p.innerHTML = `
     <div class="phead"><span></span><div class="closex" onclick="closePanel()">✕</div></div>
     <div class="detail">
-      <div class="tags">[${s.scale} · ${(s.value_tags || []).join("+")}] ${catOf(s)}
+      <div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}</span>
+        · ${s.radius_type || (s.value_tags || []).join("+")} · 영향 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km
         ${s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>'}</div>
       <h2>${s.title}</h2>
       ${freshness(s)}
@@ -1082,11 +1084,11 @@ function initLeaflet() {
   let circles = [];
   const clearRadius = () => { circles.forEach(c => map.removeLayer(c)); circles = []; };
   const addRadius = s => {
-    const col = colorOf(s);   // 영향 원도 분류 색상
+    const col = colorOf(s);   // 영향 원 = 분류 색상으로 안까지 채움
     signalPoints(s).forEach(p => {
       circles.push(L.circle([p.coord[1], p.coord[0]], {
-        radius: getRadius(s), color: col, weight: 2, dashArray: "6 5",
-        fillColor: col, fillOpacity: 0.10, interactive: false
+        radius: getRadius(s), color: col, weight: 2, opacity: .9,
+        fillColor: col, fillOpacity: 0.28, interactive: false
       }).addTo(map));
     });
   };
@@ -1344,7 +1346,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260714f");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260714g");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
