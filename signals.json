@@ -1,0 +1,615 @@
+{
+ "_note": "호재맵 신호 테이블 v0.3 (2026-07-14) — 전 건 공식 출처 검증. sd/sg 지역태그(전국 확장 대비). confirmed:false=운영자 승격 전. 신정지선(S-0015)은 무산을 무산으로, 미리내집(S-0016)은 '임대감소=호재' 통념을 사실로 교정 — 정직 표기(P1·P5) 사례.",
+ "signals": [
+  {
+   "id": "S-0001",
+   "title": "화곡동 369-41 도시재생활성화사업",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.8495,
+     37.5411
+    ]
+   },
+   "position_confidence": "근사 — 지번(화곡동 369-41) 지오코딩 대기",
+   "scale": "지구",
+   "value_tags": [
+    "인프라"
+   ],
+   "template_type": "공공시설",
+   "current_stage": "공사입찰",
+   "stage_note": "철거(건설폐기물 처리) 용역 공고(2026-06-16) = 착공 준비 단계 증거",
+   "last_movement": "2026-06-16",
+   "next_watch": "본공사 입찰 공고 여부 (수개월 내)",
+   "sources": [
+    "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01581429&bidPbancOrd=000"
+   ],
+   "confirmed": false,
+   "sd": "서울",
+   "sg": "강서구"
+  },
+  {
+   "id": "S-0002",
+   "title": "김포공항 화물청사 주차장 재구획",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.7908,
+     37.5585
+    ]
+   },
+   "position_confidence": "근사 — 화물청사 위치 확인 필요",
+   "scale": "근린",
+   "value_tags": [
+    "인프라"
+   ],
+   "template_type": "공공시설",
+   "current_stage": "설계용역",
+   "last_movement": "2026-06-19",
+   "next_watch": "공사 입찰 공고",
+   "sources": [
+    "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01588859&bidPbancOrd=000"
+   ],
+   "confirmed": false,
+   "sd": "서울",
+   "sg": "강서구"
+  },
+  {
+   "id": "S-0003",
+   "title": "마곡 D9-1 신사옥·R&D센터 (셀리드·제넥신 외 컨소시엄)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.8353,
+     37.5595
+    ]
+   },
+   "position_confidence": "근사 — 확정 지번 '마곡동 762-3(D9-1 블록)' 지오코딩 대기",
+   "scale": "지구",
+   "value_tags": [
+    "직장"
+   ],
+   "template_type": "기업이전",
+   "current_stage": "입주",
+   "stage_note": "2026-01-07 사용승인필증 수령(제넥신 공시 원문) — 착공·준공 완료. 제넥신 지분 28%, 셀리드 등 컨소시엄. 공시상 투자기간 2023-07~",
+   "stage_history": [
+    {
+     "stage": "공사",
+     "date": "2023-07",
+     "end": "2026-01-07",
+     "근거": "공시 투자기간·사용승인"
+    }
+   ],
+   "last_movement": "2026-04-30",
+   "next_watch": "입주 기업 공시·발표 (마곡 R&D 클러스터 직장 수요)",
+   "target_completion": {
+    "y": 2026.0,
+    "label": "'26.01 사용승인 (사실)",
+    "type": "confirmed",
+    "finEnd": 2026.2
+   },
+   "sources": [
+    "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260430901064",
+    "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260107900410"
+   ],
+   "confirmed": false,
+   "sd": "서울",
+   "sg": "강서구"
+  },
+  {
+   "id": "S-0004",
+   "title": "케이이엠텍 마곡 토지·건물 양수 (마곡동 787-8)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.829,
+     37.557
+    ]
+   },
+   "position_confidence": "근사 — 확정 지번 '마곡동 787-8' 지오코딩 대기",
+   "scale": "근린",
+   "value_tags": [
+    "직장"
+   ],
+   "template_type": "기업이전",
+   "current_stage": "토지취득",
+   "stage_note": "토지·건물 전체 양수 (대지 1,225.4㎡), 2025-09 공시",
+   "last_movement": "2025-09-26",
+   "next_watch": "용도·입주 계획 공시",
+   "sources": [
+    "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250926000787"
+   ],
+   "confirmed": false,
+   "sd": "서울",
+   "sg": "강서구"
+  },
+  {
+   "id": "S-0005",
+   "title": "대장홍대선 (부천대장~홍대입구 광역철도)",
+   "geometry": null,
+   "access_points": [
+    {
+     "name": "화곡역 (5호선 환승·신설 정거장)",
+     "coordinates": [
+      126.84043,
+      37.54165
+     ],
+     "status": "확정(기존역 위치)",
+     "역명": "가칭"
+    },
+    {
+     "name": "가양역 (9호선 환승·신설 정거장)",
+     "coordinates": [
+      126.8544,
+      37.5615
+     ],
+     "status": "확정(기존역 위치)",
+     "역명": "가칭"
+    },
+    {
+     "name": "강서구청 인근 신설 정거장",
+     "coordinates": [
+      126.84957,
+      37.55098
+     ],
+     "status": "후보 — 정확한 위치 미공개(강서구청 기준 배치)",
+     "역명": "가칭"
+    }
+   ],
+   "position_confidence": "접근점: 기존역 2곳 확정, 신설 1곳 후보",
+   "scale": "광역",
+   "value_tags": [
+    "교통"
+   ],
+   "template_type": "철도",
+   "current_stage": "착공",
+   "stage_note": "실시계획 승인 2025-09-26(국토부고시 2025-493호) → 착공식 2025-12-15. 단 2026-04 보도 기준 실제 굴착 미착수(마포구 소송·굴착허가 지연). 사업시행자 서부광역메트로(현대건설 컨소시엄)",
+   "stage_history": [
+    {
+     "stage": "실시계획 승인",
+     "date": "2025-09-26",
+     "근거": "국토교통부고시 제2025-493호"
+    },
+    {
+     "stage": "착공(착공식)",
+     "date": "2025-12-15"
+    }
+   ],
+   "last_movement": "2026-05-27",
+   "last_movement_note": "PF 금융약정(약 1.9조) 보도 기준 — 원문 확인 필요",
+   "next_watch": "강서 구간 실제 굴착 개시, 마포 구간 소송 결과",
+   "target_completion": {
+    "y": 2031.0,
+    "label": "'31 개통 (실시계획 목표·공사 72개월)",
+    "type": "confirmed",
+    "finEnd": 2031.5
+   },
+   "sources": [
+    "https://www.newsis.com/view/NISX20251216_0003443311",
+    "https://www.korearailroad.kr/news/articleView.html?idxno=90988",
+    "https://v.daum.net/v/20260407140112966"
+   ],
+   "confirmed": false,
+   "sd": "서울",
+   "sg": "강서구"
+  },
+  {
+   "id": "S-0006",
+   "title": "광명~서울 고속도로 (강서IC 접속)",
+   "geometry": null,
+   "access_points": [
+    {
+     "name": "강서IC (신설)",
+     "coordinates": null,
+     "status": "위치 미확정 — 공식 도면 미확보(외발산동~방화대로 축)"
+    }
+   ],
+   "position_confidence": "접근점 좌표 미확보 — 지도 미표시",
+   "scale": "광역",
+   "value_tags": [
+    "교통"
+   ],
+   "template_type": "도로",
+   "current_stage": "착공",
+   "stage_note": "2019-07 착공, 전 구간 공사 중(부분 개통 없음). 2024년 초 실시계획 변경 승인으로 공기 45개월 연장",
+   "last_movement": "2024-01",
+   "status_override": "활성",
+   "status_note": "공사 진행 중 — 공시성 움직임 부재는 공사 단계 특성 (최신 공정률 공식 발표는 미확인)",
+   "next_watch": "개통 시기 재고시 (2027말~2028초 혼재), 강서IC 위치 도면",
+   "target_completion": {
+    "y": 2028.0,
+    "label": "'27말~'28초 개통 (변경승인 기준)",
+    "type": "range",
+    "finEnd": 2028.2
+   },
+   "side_effects": [
+    "본선 인접(방화동 통과 구간) 소음권 — §3.3.1 역효과 표기 대상"
+   ],
+   "sources": [
+    "https://news.mtn.co.kr/news-detail/2024012200580345192"
+   ],
+   "confirmed": false,
+   "sd": "서울",
+   "sg": "강서구"
+  },
+  {
+   "id": "S-0007",
+   "title": "강서구 통합신청사 (마곡동 745-3)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.83,
+     37.559
+    ]
+   },
+   "position_confidence": "근사 — 확정 지번 '마곡동 745-3' 지오코딩 대기",
+   "scale": "지구",
+   "value_tags": [
+    "인프라"
+   ],
+   "template_type": "공공시설",
+   "current_stage": "착공",
+   "stage_note": "2024-03-15 착공, 2026-04 보도 기준 공정률 83%+. 지하2~지상8층, 연면적 5.9만㎡(구청+구의회+보건소). 2026-06 나라장터 '통합신청사 이사 용역' 공고와 정합",
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2024-03-15",
+     "근거": "서울시 건설알림이"
+    }
+   ],
+   "last_movement": "2026-06-17",
+   "next_watch": "2026-08-31 준공 → 10월 개청(이전) 여부",
+   "target_completion": {
+    "y": 2026.65,
+    "label": "'26.08 준공·10월 개청 (공식 목표)",
+    "type": "confirmed",
+    "finEnd": 2026.8
+   },
+   "sources": [
+    "https://www.munhwa.com/article/11582339",
+    "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01587280&bidPbancOrd=000"
+   ],
+   "confirmed": false,
+   "sd": "서울",
+   "sg": "강서구"
+  },
+  {
+   "id": "S-0008",
+   "title": "김포공항 도시재생 혁신지구 (공항동 1373 일원)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.80927,
+     37.55688
+    ]
+   },
+   "position_confidence": "앵커 — 국립항공박물관(지구 내 실좌표) 기준. 지구는 면(35.4만㎡)이라 폴리곤 확보 필요",
+   "scale": "광역",
+   "value_tags": [
+    "교통",
+    "직장"
+   ],
+   "template_type": null,
+   "current_stage": "지구 지정",
+   "stage_note": "국가시범지구 지정 2024-09-09(확인된 마지막 공식 단계). 시행: 한국공항공사 SPC. 총사업비 2조9,640억. UAM 이착륙장·복합환승·항공업무·모빌리티 3개 블록. 발표 일정상 '25 기본계획 → '26 건축설계이나 중간 단계 공식 공표는 미확인",
+   "stage_history": [
+    {
+     "stage": "지구 지정",
+     "date": "2024-09-09",
+     "근거": "국토부 고시(국가시범지구)"
+    }
+   ],
+   "last_movement": "2024-09-09",
+   "status_override": "활성",
+   "status_note": "지정 후 기본계획·설계 국면(발표 일정 기준) — 중간 공표 부재가 정체인지 통상 절차인지 운영자 판단 필요",
+   "next_watch": "건축설계 착수 확인, '27 사업시행계획 인가",
+   "target_completion": {
+    "y": 2030.0,
+    "label": "'30 1블록 준공 (지정 시 발표 목표)",
+    "type": "confirmed",
+    "finEnd": 2030.3
+   },
+   "sources": [
+    "https://uri.seoul.go.kr/web/contents/77.do?mid=1169",
+    "https://mediahub.seoul.go.kr/archives/2012190"
+   ],
+   "confirmed": false,
+   "sd": "서울",
+   "sg": "강서구"
+  },
+  {
+   "id": "S-0009",
+   "title": "마곡 산업단지 유보지 복합용지 전환 (12.5만㎡)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.83559,
+     37.55863
+    ]
+   },
+   "position_confidence": "앵커 — 이대서울병원(유보지 인접 실좌표) 기준. 정확 지번 미공표",
+   "scale": "지구",
+   "value_tags": [
+    "직장",
+    "여가"
+   ],
+   "template_type": null,
+   "current_stage": "도시계획 변경 가결",
+   "stage_note": "2025-12-17 서울시 도계위, 산업시설용지 125,227㎡ → 산업·업무·문화·지원 복합용지 변경 원안가결. 강서구는 돔구장·문화복합시설 유치 타당성 용역(2025-07, 나라장터 수집분) 진행 — 템플릿(도시개발 변경) 미정",
+   "last_movement": "2025-12-17",
+   "next_watch": "SH 공급(매각) 공고, 강서구 타당성 용역 결과",
+   "sources": [
+    "https://news.nate.com/view/20251218n25709",
+    "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R25BK00966122&bidPbancOrd=000"
+   ],
+   "confirmed": false,
+   "sd": "서울",
+   "sg": "강서구"
+  },
+  {
+   "id": "S-0010",
+   "title": "가양동 CJ부지 복합개발 (가양동 92-1 일원)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.8405,
+     37.566
+    ]
+   },
+   "position_confidence": "앵커 — 양천향교역 남측 배치(대지 약 10만㎡). 폴리곤 확보 필요",
+   "scale": "지구",
+   "value_tags": [
+    "직장",
+    "여가"
+   ],
+   "template_type": "기업이전",
+   "current_stage": "착공",
+   "stage_note": "2023-12 건축허가(연면적 76만㎡, '제2코엑스') → 2024-10 본PF 약 3조 → 2025-03~04 착공계·대지조성 공사 중. 2025-11 B3블록 지식산업센터→공동주택(약 1,000가구) 용도변경 신청 + 열람공고(2025-11-27). 시행사(인창개발) 자본잠식 보도 — 리스크 요인",
+   "stage_history": [
+    {
+     "stage": "인허가(건축허가)",
+     "date": "2023-12"
+    },
+    {
+     "stage": "착공",
+     "date": "2025-03"
+    }
+   ],
+   "last_movement": "2025-11-27",
+   "status_override": "활성",
+   "status_note": "대지조성 공사 진행 중(2025-12 언론 확인) — 정체 아님. 단 용도변경 결정고시 여부 미확인",
+   "next_watch": "B3 용도변경 결정고시, 분양 개시, 시행사 재무 이슈",
+   "target_completion": {
+    "y": 2029.6,
+    "label": "'29.08 준공 목표 (착공계 기준)",
+    "type": "confirmed",
+    "finEnd": 2029.9
+   },
+   "sources": [
+    "https://www.thebell.co.kr/front/newsview.asp?key=202504091037518760102587",
+    "https://www.newspim.com/news/view/20251103000516",
+    "https://www.fnnews.com/news/202512031836431308"
+   ],
+   "confirmed": false,
+   "sd": "서울",
+   "sg": "강서구"
+  },
+  {
+   "id": "S-0011",
+   "title": "가양·등촌 택지지구 재정비 (노후계획도시 특별법)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.856,
+     37.559
+    ]
+   },
+   "position_confidence": "근사 — 가양·등촌 택지 일대(총 174만㎡ 면형) 대표점. 구역 폴리곤 확보 필요",
+   "scale": "광역",
+   "value_tags": [
+    "인프라"
+   ],
+   "template_type": null,
+   "current_stage": "지구단위계획 수립 중 (고시 전)",
+   "stage_note": "서남권 대개조(2024-02) → 노후계획도시 특별법 1호 적용 추진(최대 3만가구 보도) → 서울시 조례(2025-03) → 교통영향평가 용역 발주(2026-02, 나라장터 수집분). 조합 방식이 아닌 지구단위계획 재정비라 정비사업 템플릿 부적합 — 전용 템플릿 필요(운영자 결정)",
+   "last_movement": "2026-02-23",
+   "next_watch": "지구단위계획(안) 열람공고·결정고시",
+   "sources": [
+    "https://www.mt.co.kr/estate/2024/04/16/2024041514085239071",
+    "https://www.housingherald.co.kr/news/articleView.html?idxno=49852",
+    "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01350054&bidPbancOrd=000"
+   ],
+   "confirmed": false,
+   "sd": "서울",
+   "sg": "강서구"
+  },
+  {
+   "id": "S-0012",
+   "sd": "서울",
+   "sg": "강서구",
+   "title": "서서울문화플라자 (내발산동 743)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.83772,
+     37.55392
+    ]
+   },
+   "position_confidence": "근사 — 내발산동 743(발산지구 지구단위계획 내) 지오코딩 대기",
+   "scale": "지구",
+   "value_tags": [
+    "여가",
+    "인프라"
+   ],
+   "template_type": "공공시설",
+   "current_stage": "설계용역",
+   "stage_note": "서울시립 복합문화시설(도서관+수영장+서울형키즈카페), 총사업비 약 592억. 2026-05-06 설계공모 당선작 선정(㈜디림건축). 착공·준공 시점 미공개",
+   "stage_history": [
+    {
+     "stage": "설계공모 당선",
+     "date": "2026-05-06",
+     "근거": "서울시 발표"
+    }
+   ],
+   "last_movement": "2026-05-06",
+   "next_watch": "설계계약·기본실시설계, 이후 나라장터 공사입찰 공고",
+   "sources": [
+    "https://www.newspim.com/news/view/20260506000004",
+    "https://project.seoul.go.kr"
+   ],
+   "source_type": "서울시 설계공모포털 + 강서구 고시",
+   "confirmed": false
+  },
+  {
+   "id": "S-0013",
+   "sd": "서울",
+   "sg": "강서구",
+   "title": "서남선 (도시철도, 마곡나루 방면 신설구간)",
+   "geometry": null,
+   "access_points": [
+    {
+     "name": "마곡나루역 (기존 9호선·공항철도)",
+     "coordinates": [
+      126.82581,
+      37.56683
+     ],
+     "status": "확정(기존역, 서남선 본선 기점)"
+    },
+    {
+     "name": "수명산역 (가칭·후보)",
+     "coordinates": [
+      126.838,
+      37.548
+     ],
+     "status": "후보 — 공식 역목록 미등장, 위치·역명 미확정(커뮤니티 가칭)"
+    }
+   ],
+   "position_confidence": "접근점: 마곡나루 확정 / 수명산역은 후보(위치 미확정)",
+   "scale": "광역",
+   "value_tags": [
+    "교통"
+   ],
+   "template_type": "철도",
+   "current_stage": "계획반영",
+   "stage_note": "제3차 서울시 도시철도망 구축계획(안) 2026-06-10 발표(목동선→서남선 확장·개칭, 마곡나루~서부트럭터미널 본선 신설). 미고시·예타 전. '수명산역'은 확정 정거장 아님 — 지도에 후보(점선) 표기",
+   "stage_history": [
+    {
+     "stage": "계획안 발표",
+     "date": "2026-06-10",
+     "근거": "서울시 제3차 도시철도망계획안"
+    }
+   ],
+   "last_movement": "2026-06-10",
+   "next_watch": "공청회(2026-06-30)→국토부 승인·관보 고시→예타. 상세 역위치는 고시문에서 확인",
+   "sources": [
+    "https://mediahub.seoul.go.kr/archives/2018545",
+    "https://www.newspim.com/news/view/20260610001360"
+   ],
+   "source_type": "서울시 도시철도망 구축계획(news.seoul.go.kr/traffic)",
+   "confirmed": false
+  },
+  {
+   "id": "S-0014",
+   "sd": "경기",
+   "sg": "부천시",
+   "title": "부천 대장신도시 + SK 수도권 R&D센터",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.79101,
+     37.54213
+    ]
+   },
+   "position_confidence": "앵커 — 부천 대장지구 대표점(면형, 폴리곤 확보 필요)",
+   "scale": "광역",
+   "value_tags": [
+    "직장",
+    "인프라"
+   ],
+   "template_type": "기업이전",
+   "current_stage": "착공",
+   "stage_note": "3기신도시(2020-05 지구지정, 2023-07 조성착공, 준공목표 2029-12). SK이노베이션+SK하이닉스 공동 수도권 R&D센터(반도체공장 아님, 4.5만㎡·1.19조, 2025-12-15 입주계약, 착공 2027·준공 2030 목표). 대한항공·DN솔루션즈 등 동반 입주. 강서 서남권에는 대장홍대선으로 연결되는 인접 파급",
+   "stage_history": [
+    {
+     "stage": "지구지정",
+     "date": "2020-05"
+    },
+    {
+     "stage": "조성착공",
+     "date": "2023-07"
+    },
+    {
+     "stage": "SK 입주계약",
+     "date": "2025-12-15"
+    }
+   ],
+   "last_movement": "2025-12-15",
+   "next_watch": "R&D센터 착공(2027 목표), 대장홍대선 개통 연계",
+   "target_completion": {
+    "y": 2029.9,
+    "label": "'29.12 신도시 준공 목표",
+    "type": "confirmed",
+    "finEnd": 2030.2
+   },
+   "sources": [
+    "https://www.etnews.com/20251215000386",
+    "https://www.xn--3-3u6ey6lv7rsa.kr/kor/CMS/Contents/Contents.do?mCode=MN068"
+   ],
+   "source_type": "3기신도시포털 + 부천시/국토부 보도",
+   "confirmed": false
+  },
+  {
+   "id": "S-0015",
+   "sd": "서울",
+   "sg": "강서구",
+   "title": "2호선 신정지선 강서(화곡) 연장 — 무산·대체",
+   "geometry": null,
+   "position_confidence": "위치 없음 — 무산된 구상",
+   "scale": "광역",
+   "value_tags": [
+    "교통"
+   ],
+   "template_type": "철도",
+   "current_stage": "구상(무산)",
+   "status_override": "종결",
+   "stage_note": "2012~2013 강서(화곡~홍대) 방면 연장 검토됐으나 차량기지 문제 등으로 무산, 광역수요는 대장홍대선으로 대체됨. 도시철도망계획에 반영된 확정 노선 아님. 현재 살아있는 축은 김포방면(2024 사전타당성). ※ 커뮤니티에 도는 '2호선 강서 연장'은 사실상 종결 — 정직 표기(P5)",
+   "last_movement": "2024-03",
+   "next_watch": "해당 없음 (강서 방면은 종결). 김포방면 별도 사업으로 추적",
+   "sources": [
+    "http://www.joongboodaily.com/news/articleView.html?idxno=20759"
+   ],
+   "source_type": "과거 언론·지자체 검토 발표",
+   "confirmed": false
+  },
+  {
+   "id": "S-0016",
+   "sd": "서울",
+   "sg": "강서구",
+   "title": "마곡 미리내집(장기전세Ⅱ) 공급",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.82369,
+     37.56711
+    ]
+   },
+   "position_confidence": "근사 — 마곡엠밸리 일대(단지 지오코딩 대기)",
+   "scale": "근린",
+   "value_tags": [
+    "보육",
+    "인프라"
+   ],
+   "template_type": null,
+   "current_stage": "공급·모집",
+   "stage_note": "마곡엠밸리17단지 미리내집 196호(5차, 2025-08 모집). ※ 사실 표기: 미리내집은 '분양전환 없는' 임대이며 만기 장기전세는 매각 아닌 미리내집으로 재순환(임대총량 유지). '임대 감소=호재' 통념은 공식 사실과 다름 — 공급/모집 사실까지만 신호, 시세 해석은 하지 않음(P1)",
+   "last_movement": "2025-08-11",
+   "next_watch": "SH 회차별 입주자모집공고(마곡 물량 편입)",
+   "sources": [
+    "https://mediahub.seoul.go.kr/archives/2015199",
+    "https://www.i-sh.co.kr"
+   ],
+   "source_type": "SH공사 입주자모집공고(i-sh.co.kr)",
+   "confirmed": false
+  }
+ ]
+}

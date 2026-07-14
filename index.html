@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>호재맵 (가칭) — 신호 추적</title>
+<style>
+  :root {
+    --ink:#1c1c1e; --muted:#8e8e93; --line:#e5e5ea; --bg:#fff;
+    --navy:#12263f; --stall:#b8860b; --accent:#0a66c2;
+  }
+  * { margin:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif; color:var(--ink); background:var(--bg); }
+  header { display:flex; align-items:center; gap:14px; padding:10px 16px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+  header .logo { font-weight:800; font-size:17px; letter-spacing:-.3px; }
+  header .logo small { font-weight:400; color:var(--muted); font-size:11px; margin-left:4px; }
+  header .region { font-size:13px; border:1px solid var(--line); border-radius:8px; padding:4px 10px; background:#fff; }
+  .chips { display:flex; gap:6px; flex-wrap:wrap; }
+  .chip { font-size:12px; border:1px solid var(--line); border-radius:999px; padding:3px 10px; cursor:pointer; user-select:none; color:var(--muted); }
+  .chip.on { border-color:var(--ink); color:var(--ink); font-weight:600; }
+  /* 필터 드롭다운 (멀티체크) */
+  .dd { position:relative; }
+  .ddbtn { font-size:12.5px; border:1px solid var(--line); border-radius:8px; padding:5px 10px; cursor:pointer;
+           user-select:none; background:#fff; display:flex; align-items:center; gap:5px; }
+  .ddbtn b { font-weight:700; }
+  .ddbtn .arr { color:var(--muted); font-size:10px; }
+  .ddbtn.filtered { border-color:#2e5ce6; color:#2e5ce6; }
+  .ddpanel { position:absolute; top:calc(100% + 5px); left:0; z-index:1200; background:#fff; border:1px solid var(--line);
+             border-radius:10px; box-shadow:0 6px 22px rgba(0,0,0,.12); min-width:160px; padding:6px; }
+  .ddrow { display:flex; align-items:center; gap:8px; padding:7px 9px; border-radius:7px; cursor:pointer; font-size:13px; }
+  .ddrow:hover { background:#f2f6ff; }
+  .ddrow input { accent-color:#2e5ce6; pointer-events:none; }
+  .ddall { border-top:1px solid var(--line); margin-top:4px; padding-top:8px; color:var(--accent); font-size:12px; }
+  #wrap { display:flex; height:calc(100vh - 87px); }
+  #tree { width:300px; flex-shrink:0; border-right:1px solid var(--line); overflow-y:auto; padding:0 0 60px; font-size:13px; }
+  #map { flex:1; min-width:0; }
+  #panel { width:440px; flex-shrink:0; border-left:1px solid var(--line); overflow-y:auto; padding:14px 16px 60px; position:relative; }
+  /* 아실식 브레드크럼 + 격자 선택 */
+  .bc { display:flex; align-items:center; gap:4px; padding:14px 12px; font-size:14px; font-weight:700;
+        border-bottom:2px solid #2e5ce6; background:#f2f6ff; position:sticky; top:0; z-index:4; }
+  .bc span.seg { color:#2e5ce6; cursor:pointer; padding:2px 4px; border-radius:6px; }
+  .bc span.seg:not(.ph):hover { background:#e2ebff; }
+  .bc span.seg.ph { color:#9aa3b2; font-weight:500; cursor:default; }
+  .bc span.sep { color:#b9c4d8; margin:0 1px; font-weight:400; }
+  .ggrid { display:grid; grid-template-columns:1fr 1fr; }
+  .gcell { padding:15px 6px; border-bottom:1px solid var(--line); border-right:1px solid var(--line);
+           cursor:pointer; font-size:14px; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .gcell:nth-child(2n) { border-right:none; }
+  .gcell:hover { background:#f2f6ff; color:#2e5ce6; }
+  .gcell.sel { background:#e2ebff; color:#2e5ce6; font-weight:800; }
+  .gcell .gc { color:var(--muted); font-weight:500; font-size:11.5px; }
+  .gnote { padding:12px; font-size:11.5px; color:var(--muted); }
+  /* 연도 버튼 + 카드 미니 진행바 */
+  .ybar { display:flex; align-items:center; gap:4px; flex-wrap:nowrap; overflow-x:auto;
+          position:sticky; top:0; z-index:6; background:#fff; margin:0 -16px 12px; padding:8px 16px; border-bottom:1px solid var(--line); }
+  .ybar .ylbl { font-size:11px; color:var(--muted); margin-right:2px; flex-shrink:0; }
+  .ybtn { flex-shrink:0; }
+  .ybtn { font-size:12px; padding:4px 9px; border:1px solid var(--line); border-radius:8px; cursor:pointer; background:#fff; color:var(--muted); }
+  .ybtn.on { border-color:#c4392f; color:#c4392f; font-weight:700; background:#fff5f4; }
+  .mbar { margin-top:8px; }
+  .mtrack { position:relative; height:8px; background:#f2f2f7; border-radius:4px; overflow:visible; }
+  .mseg { position:absolute; top:0; height:8px; border-radius:4px; }
+  .mseg.done { background:#12263f; }
+  .mseg.est { background:repeating-linear-gradient(-45deg, rgba(196,57,47,.45) 0 4px, rgba(196,57,47,.15) 4px 8px); }
+  .mnow { position:absolute; top:-3px; bottom:-3px; width:2px; background:#c4392f; opacity:.85; }
+  .mcur { position:absolute; top:-5px; bottom:-5px; width:2px; background:#5b3fd4; }
+  .mfin { position:absolute; top:-7px; font-size:10px; font-weight:800; transform:translateX(-50%); }
+  .mfin.confirmed { color:#c4392f; }
+  .mfin.range { color:#9a4038; }
+  .mmeta { display:flex; justify-content:space-between; font-size:10.5px; color:var(--muted); margin-top:3px; }
+  .mmeta b { color:#5b3fd4; }
+  .card.dimyr { opacity:.42; }
+  .phead { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
+  .closex { flex-shrink:0; width:26px; height:26px; border:1px solid var(--line); border-radius:50%;
+            display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--muted); font-size:15px; background:#fff; }
+  .closex:hover { color:var(--ink); border-color:var(--ink); }
+  .card.hl { border-color:#5b3fd4; box-shadow:0 0 0 2px rgba(91,63,212,.15); }
+  /* 계층 트리 */
+  .tnode { user-select:none; }
+  .trow { display:flex; align-items:center; gap:4px; padding:5px 8px; cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-radius:6px; }
+  .trow:hover { background:#f2f2f7; }
+  .trow.sel { background:#e8f0fe; color:#1a4d8f; font-weight:600; }
+  .trow .tw { display:inline-block; width:12px; color:var(--muted); font-size:10px; }
+  .trow .tc { color:var(--muted); font-size:11px; margin-left:auto; padding-left:6px; }
+  .tchild { margin-left:10px; border-left:1px solid var(--line); }
+  .tapt { color:#555; }
+  .tapt::before { content:"◦ "; color:var(--muted); }
+  .pt { font-size:15px; font-weight:700; margin:4px 0 2px; }
+  .ps { font-size:12px; color:var(--muted); margin-bottom:10px; }
+  .back { font-size:12px; color:var(--accent); cursor:pointer; margin-bottom:8px; display:inline-block; }
+  .summary { border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:12.5px; margin-bottom:12px; background:#fafafa; }
+  .card { border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:10px; cursor:pointer; }
+  .card:hover { border-color:#b0b0b6; }
+  .card .tags { font-size:11px; color:var(--muted); margin-bottom:4px; }
+  .card .title { font-size:14px; font-weight:600; margin-bottom:5px; }
+  .card .stage { font-size:12px; }
+  .card .watch { font-size:12px; color:var(--muted); margin-top:4px; }
+  .fresh { font-size:11px; color:var(--muted); }
+  .fresh.stall { color:var(--stall); font-weight:700; }
+  .badge-draft { display:inline-block; font-size:10px; background:#fff3cd; color:#856404; border-radius:4px; padding:1px 5px; margin-left:4px; }
+  .badge-host { display:inline-block; font-size:10px; background:#e8f0fe; color:#1a4d8f; border-radius:4px; padding:1px 5px; }
+  .badge-near { display:inline-block; font-size:10px; background:#f2f2f7; color:#6e6e73; border-radius:4px; padding:1px 5px; }
+  .dong-badge { background:#fff; border:1.5px solid var(--navy); border-radius:12px; padding:1px 8px; font-size:11px; font-weight:600; white-space:nowrap; cursor:pointer; }
+  .detail h2 { font-size:17px; margin:2px 0 8px; }
+  .track { list-style:none; margin:10px 0; }
+  .track li { display:flex; gap:8px; font-size:13px; padding:4px 0; align-items:baseline; }
+  .track .dot { width:16px; text-align:center; }
+  .track .done { color:var(--ink); }
+  .track .now { font-weight:800; }
+  .track .todo { color:var(--muted); }
+  .kv { font-size:12.5px; margin:6px 0; }
+  .kv b { display:inline-block; min-width:86px; color:var(--muted); font-weight:500; }
+  .src a { font-size:12px; color:var(--accent); text-decoration:none; }
+  .note { font-size:11px; color:var(--muted); border-top:1px dashed var(--line); margin-top:10px; padding-top:8px; }
+  .group-h { font-size:12px; color:var(--muted); margin:16px 0 6px; font-weight:600; }
+  footer { position:fixed; left:0; right:0; bottom:0; background:rgba(255,255,255,.95); border-top:1px solid var(--line);
+           font-size:11px; color:var(--muted); padding:6px 16px; z-index:1000; }
+  /* ── 모바일: 지도 위 + 패널 아래 세로 배치, 필터는 가로 스크롤 ── */
+  @media (max-width: 768px) {
+    header { padding:8px 10px; gap:8px; }
+    .chips { flex-wrap:nowrap; overflow-x:auto; max-width:100%; -webkit-overflow-scrolling:touch; }
+    .chip { flex-shrink:0; }
+    #wrap { flex-direction:column; height:auto; }
+    #map { flex:none; height:46vh; width:100%; }
+    #panel { width:100%; border-left:none; border-top:1px solid var(--line);
+             flex:none; height:auto; overflow:visible; padding-bottom:80px; }
+    #gantt { height:auto; padding:14px 10px 90px; }
+    #raw { height:auto; padding:12px 10px 90px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">호재맵<small>가칭 · 신호 추적 미디어 (내부 v0)</small></div>
+  <div class="region" id="centerLabel" title="현재 지도 중심 위치 (조회용)">중심: —</div>
+  <div class="chips" id="f-view">
+    <span class="chip on" id="v-map">지도</span>
+    <span class="chip" id="v-raw">수도권 데이터</span>
+  </div>
+  <div class="chips" id="f-dd"></div>
+</header>
+<div id="wrap">
+  <nav id="tree"></nav>
+  <div id="map"></div>
+  <aside id="panel"></aside>
+</div>
+
+<div id="raw" style="display:none; height:calc(100vh - 87px); overflow-y:auto; padding:16px 20px 80px;">
+  <div style="max-width:1080px; margin:0 auto;">
+    <div class="pt">수도권 원시 신호 탐색 (최근 1년)</div>
+    <div class="ps">수집·필터 통과한 <b>원시 공고/공시</b>층입니다 — 아직 신호(§3.1) 아님. 큐레이션 판단용.
+      나라장터: 수도권 기관 + 키워드(타당성·기본계획·실시설계·지구단위·정비계획·조성·건립·신설·확장) / DART: 수도권 소재지 언급 공시</div>
+    <div class="rawctl">
+      <select id="r-sido"><option value="">시도: 전체</option></select>
+      <select id="r-sgg"><option value="">시군구: 전체</option></select>
+      <select id="r-price">
+        <option value="0">금액: 전체</option>
+        <option value="100000000">1억+</option>
+        <option value="300000000">3억+</option>
+        <option value="500000000" selected>5억+ (권장 컷)</option>
+        <option value="1000000000">10억+</option>
+        <option value="3000000000">30억+</option>
+      </select>
+      <select id="r-src"><option value="">소스: 전체</option><option>G2B</option><option>DART</option></select>
+      <input id="r-q" type="search" placeholder="제목 검색 (예: 지구단위, 돔구장)">
+    </div>
+    <div class="ps" id="r-count" style="margin-top:10px"></div>
+    <div id="r-list"></div>
+    <div style="text-align:center; margin:14px 0;"><span class="chip" id="r-more" style="display:none">더 보기</span></div>
+  </div>
+</div>
+<style>
+  .rawctl { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .rawctl select, .rawctl input { font-size:13px; padding:6px 8px; border:1px solid var(--line); border-radius:8px; background:#fff; }
+  .rawctl input { flex:1; min-width:180px; }
+  .rrow { border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin-bottom:8px; }
+  .rrow .rt { font-size:13.5px; font-weight:600; }
+  .rrow .rm { font-size:11.5px; color:var(--muted); margin-top:3px; }
+  .rrow .rm b { color:var(--ink); font-weight:600; }
+  .rrow a { color:var(--accent); text-decoration:none; font-size:11.5px; }
+</style>
+
+<div id="gantt" style="display:none; height:calc(100vh - 87px); overflow-y:auto; padding:20px 24px 70px;">
+  <div style="max-width:980px; margin:0 auto;">
+    <div class="pt">강서구 · 신호 타임라인</div>
+    <div class="ps">완료 구간은 사실(실선·날짜), 미래 구간은 절차 통계 기반 추정(빗금·범위). 소요기간 수치는 가안 — 파일럿 캘리브레이션 대상.</div>
+    <div class="timectrl">
+      <div class="trow">
+        <label>시점 필터</label>
+        <input type="range" id="yr" min="2026" max="2033" step="1" value="2033">
+        <span class="yr" id="yrLabel">전체 보기</span>
+      </div>
+      <p class="tdesc" id="yrDesc"></p>
+    </div>
+    <div class="gpaper">
+      <div class="g-inner">
+        <div class="g-head" id="ghead"></div>
+        <div id="grows"></div>
+        <div class="nogroup" id="nogroup"></div>
+      </div>
+      <div class="legend">
+        <span><span class="sw" style="background:#1E2A38"></span>완료 구간 (사실·날짜)</span>
+        <span><span class="sw" style="background:#C4392F"></span>현재 진행 단계</span>
+        <span><span class="sw" style="background:repeating-linear-gradient(-45deg,rgba(196,57,47,.28) 0 5px,rgba(196,57,47,.1) 5px 10px);border:1px dashed rgba(196,57,47,.6)"></span>추정 구간 (절차 통계 가안)</span>
+        <span>◆ 확정·고시 시점 (사실)</span><span>◇ 추정 완료 범위 (±)</span>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .timectrl { background:#fff; border:1px solid var(--line); padding:14px 18px; margin:12px 0 16px; border-radius:10px; }
+  .timectrl .trow { display:flex; align-items:center; gap:14px; }
+  .timectrl label { font-size:13px; font-weight:700; white-space:nowrap; }
+  .timectrl input[type=range] { flex:1; accent-color:#C4392F; }
+  .timectrl .yr { font-size:16px; font-weight:800; color:#C4392F; width:110px; text-align:right; }
+  .timectrl .tdesc { font-size:11.5px; color:var(--muted); margin-top:8px; }
+  .gpaper { background:#fff; border:1px solid var(--line); border-radius:10px; padding:18px 20px 12px; overflow-x:auto; }
+  .g-inner { min-width:760px; }
+  .g-head { display:flex; margin-left:230px; border-bottom:2px solid var(--ink); position:relative; }
+  .g-head span { flex:1; font-size:11px; font-weight:700; color:var(--muted); padding:0 0 6px 5px; border-left:1px solid var(--line); }
+  .g-head span:first-child { border-left:none; }
+  .g-row { display:flex; align-items:center; min-height:60px; border-bottom:1px dashed var(--line); position:relative; }
+  .g-row.dim { opacity:.32; }
+  .g-label { width:230px; flex-shrink:0; padding-right:14px; }
+  .g-label h4 { font-size:13px; font-weight:800; }
+  .g-label .m { font-size:10.5px; color:var(--muted); }
+  .g-badge { display:inline-block; font-size:9.5px; font-weight:700; padding:1px 6px; border-radius:2px; margin-left:4px; background:#F5EDD8; color:#B08A2E; }
+  .g-track { flex:1; position:relative; height:52px; }
+  .gridline { position:absolute; top:-1px; bottom:-1px; width:1px; background:var(--line); }
+  .gbar { position:absolute; top:8px; height:18px; border-radius:2px; }
+  .gbar.done { background:#1E2A38; }
+  .gbar.now { background:#C4392F; }
+  .gbar.est { background:repeating-linear-gradient(-45deg,rgba(196,57,47,.28) 0 5px,rgba(196,57,47,.10) 5px 10px); border:1px dashed rgba(196,57,47,.6); }
+  .gbar.stalldone { background:#B08A2E; }
+  .fin { position:absolute; top:2px; font-size:9.5px; font-weight:800; white-space:nowrap; color:#C4392F; }
+  .fin.range { color:#9A4038; font-weight:700; }
+  .fin.confirmed::before { content:"◆ "; }
+  .fin.range::before { content:"◇ "; }
+  .stageLbl { position:absolute; top:28px; font-size:9px; color:var(--muted); white-space:nowrap; }
+  .nowline { position:absolute; top:-6px; bottom:-6px; width:2px; background:#C4392F; opacity:.8; z-index:2; }
+  .nowline::after { content:"오늘"; position:absolute; top:-13px; left:-11px; font-size:9px; font-weight:800; color:#C4392F; }
+  .pickline { position:absolute; top:-6px; bottom:-6px; width:2px; background:#4A6E93; z-index:2; }
+  .pickline::after { content:attr(data-yr); position:absolute; top:-13px; left:-13px; font-size:9px; font-weight:800; color:#4A6E93; }
+  .nogroup { margin-top:14px; border-top:2px solid var(--line); padding-top:10px; }
+  .nogroup h5 { font-size:11px; letter-spacing:.08em; color:#B08A2E; font-weight:800; margin-bottom:6px; }
+  .nogroup .why { font-size:11px; color:var(--muted); margin:2px 0 10px 230px; }
+  .legend { display:flex; gap:16px; flex-wrap:wrap; font-size:11px; color:var(--muted); margin-top:14px; }
+  .legend .sw { display:inline-block; width:20px; height:11px; vertical-align:-1px; margin-right:5px; border-radius:2px; }
+</style>
+<footer>투자 권유 아님 · 모든 신호는 미확정 — 사실(단계·날짜·거리)만 표시하며 매수/매도 판단은 다루지 않습니다.</footer>
+
+<script>
+/* ══════════ 상수 (기획서 §3.2, §4.1 v1.2) ══════════ */
+const KAKAO_JS_KEY = "33bf168e1a0f3295c36b53c1add1b69e";
+const TODAY = new Date("2026-07-13");
+const STAGE_TRACKS = {
+  "철도": ["계획반영","예타/민자적격성","기본계획","실시계획 승인","착공","개통"],
+  "도로": ["계획반영","타당성","설계","착공","개통"],
+  "공공시설": ["예산반영","설계용역","공사입찰","착공","준공"],
+  "기업이전": ["토지취득","인허가","착공","입주"],
+  "정비사업": ["구역지정","조합설립","사업시행인가","관리처분","이주·철거","착공","준공"]
+};
+const DISPLAY_CAT = {           // 표시 필터 4축 ↔ 템플릿 (§4.1 v1.2)
+  "철도·지하철": ["철도"], "도로": ["도로"],
+  "건설·정비": ["정비사업", "공공시설"], "직장·산업": ["기업이전"]
+};
+const RADIUS_BY_SCALE = { "광역": 3000, "지구": 1000, "근린": 650 };  // §3.3 가안 (폴백)
+/* ── 유형별 영향 반경 기준표 (§3.3.1 가안, 단위 m) — 반경 수정은 여기 한 곳에서.
+   신호 JSON에 radius_m이 있으면 그 값이 우선(개별 오버라이드).
+   주의: IC 5km 제안은 기획서 가안(IC/JC 1~3km)과 상이 — 캘리브레이션 시 결정 */
+const INFLUENCE = {
+  "철도":   { "광역": 1500, "지구": 900,  "근린": 900 },   // 광역철도(GTX급) 역 1.5km / 도시철도 역 800m~1km
+  "도로":   { "광역": 3000, "지구": 1500, "근린": 800 },   // IC/JC 1~3km (본선은 영향점 아님)
+  "공공시설": { "광역": 2000, "지구": 1000, "근린": 650 },  // 복합시설 1km / 근린시설 500~800m
+  "기업이전": { "광역": 2000, "지구": 1500, "근린": 800 },  // 대형 업무지구 1~2km
+  "정비사업": { "광역": 1000, "지구": 800,  "근린": 500 }   // 구역 + 인접 500m (폴리곤 확보 전 점 기준)
+};
+const getRadius = s => s.radius_m || INFLUENCE[s.template_type]?.[s.scale] || RADIUS_BY_SCALE[s.scale] || 800;
+
+/* ══════════ 상태 ══════════ */
+let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [];
+const RAW_BADGE_CUT = 500000000;  // 시군구 뱃지 집계의 원시공고 금액 하한 (5억)
+/* 대도시 분할구(고양시덕양구 등) → 시 단위 표시명 */
+function sggDisplayName(name) {
+  const m = name.match(/^(.+?시)(.+구)$/);
+  return m ? m[1] : name;
+}
+const filter = {
+  cat: new Set(Object.keys(DISPLAY_CAT)),
+  scale: new Set(["광역", "지구", "근린"]),
+  status: new Set(["활성", "정체", "종결"]),
+  region: "",   // "" = 전체, "서울 강서구" 형태
+  year: null    // null = 전체, 아니면 그 해까지 완료 범위 도달분만
+};
+let view = { mode: "home", dong: null, signal: null };
+let mapApi = null;   // {panTo(lnglat), refreshPins()}
+
+/* ══════════ 유틸 ══════════ */
+const catOf = s => Object.keys(DISPLAY_CAT).find(k => DISPLAY_CAT[k].includes(s.template_type)) || "기타(템플릿 미정)";
+const visible = s => (catOf(s).startsWith("기타") || filter.cat.has(catOf(s)))
+  && filter.scale.has(s.scale) && filter.status.has(s.status || "활성")
+  && (!filter.region || `${s.sd} ${s.sg}` === filter.region);
+/* 연도 기준선(전역): 목록을 숨기지 않고 각 카드의 미니 진행바에 기준선·시점상태 표시 */
+let YEAR_SEL = null;
+function weeksAgo(d) {
+  if (!d) return null;
+  const t = new Date(d.length === 7 ? d + "-01" : d);
+  return Math.max(0, Math.round((TODAY - t) / (7 * 864e5)));
+}
+function freshness(s) {
+  const w = weeksAgo(s.last_movement);
+  if (w === null) return "";
+  const months = w / 4.345;
+  if (months >= 6) return `<span class="fresh stall">정체 ${Math.floor(months)}개월 ⚠</span>`;
+  return `<span class="fresh">▸ ${w === 0 ? "이번 주" : w + "주 전"} 움직임</span>`;
+}
+function meters(p1, p2) {
+  const x = (p2[0] - p1[0]) * 111320 * Math.cos((p1[1] + p2[1]) / 2 * Math.PI / 180);
+  const y = (p2[1] - p1[1]) * 110540;
+  return Math.hypot(x, y);
+}
+function ringsOf(f) {
+  const g = f.geometry;
+  return (g.type === "MultiPolygon" ? g.coordinates : [g.coordinates]).map(p => p[0]);
+}
+function pointInRing(px, py, ring) {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i], [xj, yj] = ring[j];
+    if ((yi > py) !== (yj > py) && px < (xj - xi) * (py - yi) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+function ringCentroid(r) { let x = 0, y = 0; r.forEach(([a, b]) => { x += a; y += b; }); return [x / r.length, y / r.length]; }
+/* 신호의 렌더 가능한 점들: 본체 좌표 + 접근점(수혜는 점에서 발생, §3.1) */
+function signalPoints(sig) {
+  const pts = [];
+  if (sig.geometry?.coordinates) pts.push({ coord: sig.geometry.coordinates, name: null, cand: false });
+  for (const ap of sig.access_points || []) {
+    if (ap.coordinates) pts.push({ coord: ap.coordinates, name: ap.name, cand: /후보|미확/.test(ap.status || "") });
+  }
+  return pts;
+}
+/* 신호 ↔ 동 관계 (§3.3.1): "소재" | "반경권" | null */
+function dongRelation(sig, feature) {
+  const pts = signalPoints(sig);
+  if (!pts.length) return null;
+  const rings = ringsOf(feature);
+  const R = getRadius(sig);
+  if (pts.some(p => rings.some(r => pointInRing(p.coord[0], p.coord[1], r)))) return "소재";
+  return pts.some(p => rings.some(r => r.some(v => meters(p.coord, v) <= R))) ? "반경권" : null;
+}
+const dongName = f => f.properties.adm_nm.split(" ").pop();
+
+/* ══════════ 필터 칩 ══════════ */
+/* 필터 3종을 드롭다운 멀티체크로 통합 */
+let openDD = null;
+const DD_DEFS = () => [
+  { id: "cat", label: "분류", keys: Object.keys(DISPLAY_CAT), set: filter.cat },
+  { id: "scale", label: "규모", keys: ["광역", "지구", "근린"], set: filter.scale },
+  { id: "status", label: "상태", keys: ["활성", "정체", "종결"], set: filter.status },
+];
+function renderChips() {
+  const host = document.getElementById("f-dd");
+  host.innerHTML = "";
+  DD_DEFS().forEach(d => {
+    const wrap = document.createElement("div");
+    wrap.className = "dd";
+    const all = d.set.size === d.keys.length;
+    const summary = all ? "전체" : (d.set.size === 0 ? "없음" : `${d.set.size}/${d.keys.length}`);
+    const btn = document.createElement("div");
+    btn.className = "ddbtn" + (all ? "" : " filtered");
+    btn.innerHTML = `${d.label}: <b>${summary}</b> <span class="arr">▾</span>`;
+    btn.onclick = (e) => { e.stopPropagation(); openDD = openDD === d.id ? null : d.id; renderChips(); };
+    wrap.appendChild(btn);
+    if (openDD === d.id) {
+      const panel = document.createElement("div");
+      panel.className = "ddpanel";
+      panel.onclick = e => e.stopPropagation();
+      d.keys.forEach(k => {
+        const row = document.createElement("div");
+        row.className = "ddrow";
+        row.innerHTML = `<input type="checkbox" ${d.set.has(k) ? "checked" : ""}> ${k}`;
+        row.onclick = () => { d.set.has(k) ? d.set.delete(k) : d.set.add(k); renderAll(); };
+        panel.appendChild(row);
+      });
+      const allRow = document.createElement("div");
+      allRow.className = "ddrow ddall";
+      allRow.textContent = all ? "모두 해제" : "모두 선택";
+      allRow.onclick = () => { d.keys.forEach(k => all ? d.set.delete(k) : d.set.add(k)); renderAll(); };
+      panel.appendChild(allRow);
+      wrap.appendChild(panel);
+    }
+    host.appendChild(wrap);
+  });
+}
+document.addEventListener("click", () => { if (openDD) { openDD = null; renderChips(); } });
+function fillRegionSelect() {
+  const sel = document.getElementById("f-region");
+  const regions = [...new Set(SIGNALS.map(s => `${s.sd} ${s.sg}`))].sort((a, b) => a.localeCompare(b, "ko"));
+  regions.forEach(r => sel.appendChild(new Option(r, r)));
+  sel.onchange = () => { filter.region = sel.value; renderAll(); };
+}
+
+/* ══════════ 좌측 4레벨 선택 (아실식 브레드크럼 + 격자): 시도>시군구>동>단지 ══════════ */
+const SIDO_LONG = { "서울": "서울특별시", "경기": "경기도", "인천": "인천광역시" };
+const treeState = { selKey: null };        // 지도 마커 연동용(기존 참조 유지)
+const nav = { sd: null, sg: null, dong: null };   // 현재 드릴다운 위치
+function dongsOfSgg(sd, sg) {
+  return DONG_GEO.features.filter(f => f.properties.sgg === sg)
+    .map(f => f.properties.EMD_KOR_NM).sort((a, b) => a.localeCompare(b, "ko"));
+}
+function aptsOfDong(sg, dong) {
+  return APTS.filter(a => a.sg === sg && a.dong === dong).sort((a, b) => a.n.localeCompare(b.n, "ko"));
+}
+/* 지역 단위 신호 수(영향권): 시군구=태그, 동=dongRelation, 아파트=반경 */
+function sigCountRegion(sd, sg) { return SIGNALS.filter(visible).filter(s => s.sd === sd && s.sg === sg).length; }
+function bcSeg(label, onclickJs, ph) {
+  return `<span class="seg ${ph ? "ph" : ""}" ${onclickJs ? `onclick="${onclickJs}"` : ""}>${label}</span>`;
+}
+function buildTree() {
+  const el = document.getElementById("tree");
+  // ── 브레드크럼 (아실: 시도 선택 > 시군구 선택 > 읍면동 선택)
+  let bc = bcSeg(nav.sd ? (SIDO_LONG[nav.sd] || nav.sd) : "시도 선택", nav.sd ? "navTo()" : null, !nav.sd);
+  bc += `<span class="sep">›</span>` + bcSeg(nav.sg || "시군구 선택", nav.sg ? `navTo('${nav.sd}')` : null, !nav.sg);
+  bc += `<span class="sep">›</span>` + bcSeg(nav.dong || "읍면동 선택", nav.dong ? `navTo('${nav.sd}','${nav.sg}')` : null, !nav.dong);
+  let html = `<div class="bc">${bc}</div>`;
+  // ── 현재 레벨 격자
+  let cells = "";
+  if (!nav.sd) {
+    // 시도 레벨: 개수 표기 없음 (시군구 레벨부터 표시)
+    ["서울", "경기", "인천"].forEach(sd => {
+      cells += `<div class="gcell" onclick="navPick('sd','${sd}')">${SIDO_LONG[sd]}</div>`;
+    });
+  } else if (!nav.sg) {
+    const list = nav.sd === "서울"
+      ? [...new Set(DONG_GEO.features.map(f => f.properties.sgg))].sort((a, b) => a.localeCompare(b, "ko"))
+      : [...new Set(SGG_GEO.features.filter(f => f.properties.sido === nav.sd).map(f => sggDisplayName(f.properties.name)))].sort((a, b) => a.localeCompare(b, "ko"));
+    list.forEach(sg => {
+      const n = sigCountRegion(nav.sd, sg);
+      cells += `<div class="gcell ${treeState.selKey === `${nav.sd}|${sg}` ? "sel" : ""}" onclick="navPick('sg','${sg}')">${sg} <span class="gc">${n ? "(" + n + ")" : ""}</span></div>`;
+    });
+  } else if (!nav.dong) {
+    if (nav.sd !== "서울") {
+      html += `<div class="gnote">경기·인천은 동 경계 데이터 확보 전 — 시군구 피드까지 제공됩니다</div>`;
+    } else {
+      dongsOfSgg(nav.sd, nav.sg).forEach(dong => {
+        const f = DONG_GEO.features.find(x => x.properties.sgg === nav.sg && x.properties.EMD_KOR_NM === dong);
+        const n = f ? SIGNALS.filter(visible).filter(s => dongRelation(s, f)).length : 0;
+        cells += `<div class="gcell ${treeState.selKey === `${nav.sd}|${nav.sg}|${dong}` ? "sel" : ""}" onclick="navPick('dong','${dong}')">${dong} <span class="gc">${n ? "(" + n + ")" : ""}</span></div>`;
+      });
+    }
+  } else {
+    const apts = aptsOfDong(nav.sg, nav.dong);
+    if (!apts.length) html += `<div class="gnote">이 동의 단지 데이터 없음 (파일럿: 강서구 일부 — Phase 1에서 공동주택 공공데이터로 확충)</div>`;
+    apts.forEach(a => {
+      const n = signalsNearPoint([a.lon, a.lat]).length;
+      cells += `<div class="gcell ${treeState.selKey === `apt|${a.n}|${a.dong}` ? "sel" : ""}" onclick="navPick('apt','${a.n.replace(/'/g, "\\'")}')">${a.n} <span class="gc">${n ? "(" + n + ")" : ""}</span></div>`;
+    });
+  }
+  el.innerHTML = html + `<div class="ggrid">${cells}</div>`;
+}
+/* 브레드크럼 상위로 이동 */
+function navTo(sd, sg) {
+  nav.sd = sd || null; nav.sg = sg || null; nav.dong = null;
+  buildTree();
+}
+/* 격자 셀 선택 → 드릴다운 + 우측/지도 연동 */
+function navPick(level, val) {
+  if (level === "sd") { nav.sd = val; nav.sg = null; nav.dong = null; buildTree(); return; }
+  if (level === "sg") {
+    nav.sg = val; nav.dong = null;
+    treeState.selKey = `${nav.sd}|${val}`;
+    buildTree(); showSgg(`${nav.sd} ${val}`);
+  } else if (level === "dong") {
+    nav.dong = val;
+    treeState.selKey = `${nav.sd}|${nav.sg}|${val}`;
+    const f = DONG_GEO.features.find(x => x.properties.sgg === nav.sg && x.properties.EMD_KOR_NM === val);
+    buildTree(); if (f) showDong(f);
+  } else if (level === "apt") {
+    treeState.selKey = `apt|${val}|${nav.dong}`;
+    const a = APTS.find(x => x.n === val && x.dong === nav.dong);
+    buildTree(); if (a) showApt(a);
+  }
+}
+
+/* ══════════ 아파트 앵커: 단지 좌표 반경 내 신호 (§4.4 역방향 조회) ══════════ */
+function signalsNearPoint(coord) {
+  return SIGNALS.filter(visible).map(s => {
+    const d = Math.min(...(signalPoints(s).map(p => meters(coord, p.coord)) || [Infinity]));
+    return { s, dist: d, within: d <= getRadius(s) };
+  }).filter(x => x.within && isFinite(x.dist)).sort((a, b) => a.dist - b.dist);
+}
+function showApt(a) {
+  view = { mode: "apt", apt: a }; renderPanel();
+  if (window._map) { window._map.setView([a.lat, a.lon], 15); mapApi?.showAptAnchor?.(a); }
+}
+function renderApt(a) {
+  const p = document.getElementById("panel");
+  const near = signalsNearPoint([a.lon, a.lat]);
+  p.innerHTML = `
+    <div class="phead"><div class="pt">${a.n}</div><div class="closex" onclick="closePanel()">✕</div></div>
+    <div class="ps">${a.sd} ${a.sg} ${a.dong} · 이 단지에 영향 주는 신호 ${near.length}건 (거리순, 반경 내)</div>
+    ${yearChipsHtml()}
+    <div id="list"></div>
+    <div class="note" style="border-top:1px dashed var(--line);margin-top:8px;padding-top:8px;font-size:11px;color:var(--muted)">
+      단지 좌표는 OSM/지오코딩 근사(Phase 1에서 공동주택 공공데이터로 교체). 거리는 사실이며 '수혜'는 표시하지 않음(P1)</div>`;
+  wireYearChips(p);
+  const list = p.querySelector("#list");
+  if (!near.length) list.innerHTML = `<div class="ps">반경 내 신호 없음</div>`;
+  near.forEach(({ s, dist }) => list.appendChild(
+    makeCard(s, `<span class="badge-near">${dist < 1000 ? Math.round(dist) + "m" : (dist / 1000).toFixed(1) + "km"}</span>`)));
+}
+
+/* 연도 버튼 (타임라인 통합) — 각 카드의 진행바에 기준선을 긋는다 */
+function yearChipsHtml() {
+  const yrs = [2026, 2027, 2028, 2029, 2030, 2031, 2032];
+  return `<div class="ybar"><span class="ylbl">시점</span>
+    <span class="ybtn ${YEAR_SEL === null ? "on" : ""}" data-y="">전체</span>
+    ${yrs.map(y => `<span class="ybtn ${YEAR_SEL === y ? "on" : ""}" data-y="${y}">'${String(y).slice(2)}</span>`).join("")}</div>`;
+}
+function wireYearChips(p) {
+  p.querySelectorAll(".ybtn").forEach(b => {
+    b.onclick = () => { YEAR_SEL = b.dataset.y ? +b.dataset.y : null; renderPanel(); };
+  });
+}
+/* 신호의 시간 골격: 시작(이력 최솟값)~오늘~목표 */
+function sigTimeline(s) {
+  const hs = (s.stage_history || []).map(h => yearDec(h.date)).filter(isFinite);
+  const lm = s.last_movement ? yearDec(s.last_movement) : null;
+  const startY = Math.min(...(hs.length ? hs : [lm ?? G_NOW]), lm ?? G_NOW);
+  return { startY, t: s.target_completion || null };
+}
+function asOfLabel(s, yr) {
+  if (!yr) return "";
+  if (s.status === "종결") return "종결(무산)";
+  const { t } = sigTimeline(s);
+  if (!t) return "완료 시점 산출 불가";
+  if (yr >= t.finEnd) return "완료 범위 도달 (추정)";
+  if (yr >= Math.floor(t.y)) return "완료 경계 (±범위 내)";
+  return "진행 중 (추정)";
+}
+/* 카드 미니 진행바: 공통 시간축 '24~'34, 완료=실선/잔여=빗금/◆목표/오늘·기준선 */
+const M0 = 2024, M1 = 2034;
+const mpct = y => Math.max(0, Math.min(100, (y - M0) / (M1 - M0) * 100));
+function miniBarHtml(s) {
+  const { startY, t } = sigTimeline(s);
+  const doneEnd = Math.min(G_NOW, M1);
+  let segs = `<div class="mseg done" style="left:${mpct(startY)}%;width:${Math.max(1, mpct(doneEnd) - mpct(startY))}%"></div>`;
+  let fin = "";
+  if (t) {
+    if (t.y > G_NOW) segs += `<div class="mseg est" style="left:${mpct(G_NOW)}%;width:${Math.max(1, mpct(t.y) - mpct(G_NOW))}%"></div>`;
+    fin = `<span class="mfin ${t.type || "range"}" style="left:${mpct(t.y)}%">${t.type === "confirmed" ? "◆" : "◇"}</span>`;
+  }
+  const cur = YEAR_SEL ? `<div class="mcur" style="left:${mpct(YEAR_SEL)}%"></div>` : "";
+  const asOf = YEAR_SEL ? ` · <b>'${String(YEAR_SEL).slice(2)} 시점: ${asOfLabel(s, YEAR_SEL)}</b>` : "";
+  return `<div class="mbar">
+    <div class="mtrack">${segs}${fin}<div class="mnow" style="left:${mpct(G_NOW)}%"></div>${cur}</div>
+    <div class="mmeta"><span>'24</span><span>${t ? t.label : "완료 시점 미상"}${asOf}</span><span>'34</span></div>
+  </div>`;
+}
+/* 카드 생성 (클릭 + hover 지도 연동) */
+function makeCard(s, extra = "", onClick) {
+  const el = document.createElement("div");
+  el.className = "card";
+  // 기준연도까지 완료범위 미도달 신호는 흐림 (숨기지 않음 — 간트의 dim과 동일)
+  const t = s.target_completion;
+  if (YEAR_SEL && (!t || t.finEnd > YEAR_SEL) && s.status !== "종결") el.classList.add("dimyr");
+  el.innerHTML = cardHtml(s, extra);
+  el.onclick = onClick || (() => showSignal(s, true));
+  el.onmouseenter = () => { el.classList.add("hl"); mapApi?.emphasizePin?.(s); };
+  el.onmouseleave = () => { el.classList.remove("hl"); mapApi?.emphasizePin?.(null); };
+  return el;
+}
+
+/* ══════════ 패널: 홈 ══════════ */
+function cardHtml(s, extra = "") {
+  const track = STAGE_TRACKS[s.template_type] || [];
+  const idx = track.indexOf(s.current_stage);
+  const noCoord = !signalPoints(s).length;
+  return `
+    <div class="tags">[${s.scale} · ${(s.value_tags || []).join("+")}] ${catOf(s)}
+      ${s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>'}
+      ${noCoord ? '<span class="badge-near">위치 미확정 — 지도 미표시</span>' : ""} ${extra}</div>
+    <div class="title">${s.title}</div>
+    <div class="stage">현재: <b>${s.current_stage || "단계 미지정"}</b>${idx >= 0 ? ` (${idx + 1}/${track.length})` : ""} · ${freshness(s)}</div>
+    <div class="watch">다음 관찰: ${s.next_watch || "미정"}</div>
+    ${miniBarHtml(s)}`;
+}
+function renderHome() {
+  const p = document.getElementById("panel");
+  const shown = SIGNALS.filter(visible)
+    .sort((a, b) => (b.last_movement || "").localeCompare(a.last_movement || ""));
+  const recent = shown.filter(s => weeksAgo(s.last_movement) === 0);
+  p.innerHTML = `
+    <div class="pt">큐레이션 신호 ${shown.length}건 <span style="font-weight:400;font-size:11px;color:var(--muted)">${filter.region || "전 지역"} — 수도권 원시층은 [수도권 데이터] 탭</span></div>
+    <div class="ps">정렬: 최근 움직임순 · 시점 버튼 = 각 신호 진행바에 기준선 (실현 보장 아님, 절차 추정)</div>
+    ${yearChipsHtml()}
+    <div class="summary"><b>이번 주 변동</b> — ${
+      recent.length ? recent.map(s => s.title).join(" · ")
+      : "없음 · 최근 움직임: " + (shown[0] ? `${shown[0].last_movement} ${shown[0].title}` : "-")
+    }</div>
+    <div id="list"></div>
+    <div class="group-h">광역 신호 초안 ${MACRO.length}건 — 좌표·출처 확정 대기, 지도 미표시</div>
+    <div id="macro"></div>`;
+  wireYearChips(p);
+  const list = p.querySelector("#list");
+  shown.forEach(s => list.appendChild(makeCard(s)));
+  const mac = p.querySelector("#macro");
+  MACRO.forEach(s => {
+    const el = document.createElement("div");
+    el.className = "card";
+    el.style.opacity = .75;
+    el.innerHTML = `<div class="tags">[${s.scale} · ${(s.value_tags || []).join("+")}] ${catOf(s)} <span class="badge-draft">초안·미확정</span></div>
+      <div class="title">${s.title}</div>
+      <div class="watch">${s.current_stage ? "현재: " + s.current_stage + " · " : ""}${s.sources_todo ? "출처 확인: " + s.sources_todo : ""}</div>`;
+    mac.appendChild(el);
+  });
+}
+
+/* ══════════ 패널: 동 피드 (§4.2) ══════════ */
+function renderDong(feature) {
+  const p = document.getElementById("panel");
+  const name = dongName(feature);
+  const rel = SIGNALS.filter(visible)
+    .map(s => ({ s, r: dongRelation(s, feature) }))
+    .filter(x => x.r);
+  const host = rel.filter(x => x.r === "소재"), near = rel.filter(x => x.r === "반경권");
+  const byScale = {};
+  rel.forEach(x => byScale[x.s.scale] = (byScale[x.s.scale] || 0) + 1);
+  p.innerHTML = `
+    <div class="phead"><div class="pt">${name}</div><div class="closex" onclick="closePanel()">✕</div></div>
+    <div class="ps">영향권 신호 ${rel.length}건 (${Object.entries(byScale).map(([k, v]) => k + " " + v).join(" · ") || "없음"})
+      — 소재 ${host.length} · 반경권 ${near.length}</div>
+    ${yearChipsHtml()}
+    <div id="list"></div>`;
+  wireYearChips(p);
+  const list = p.querySelector("#list");
+  [...host, ...near]
+    .sort((a, b) => (b.s.last_movement || "").localeCompare(a.s.last_movement || ""))
+    .forEach(({ s, r }) => list.appendChild(
+      makeCard(s, r === "소재" ? '<span class="badge-host">이 동 소재</span>' : '<span class="badge-near">반경권</span>')));
+}
+
+/* ══════════ 패널: 신호 상세 (§4.3) ══════════ */
+function renderDetail(s) {
+  const p = document.getElementById("panel");
+  const track = STAGE_TRACKS[s.template_type] || [];
+  const idx = track.indexOf(s.current_stage);
+  p.innerHTML = `
+    <div class="phead"><span></span><div class="closex" onclick="closePanel()">✕</div></div>
+    <div class="detail">
+      <div class="tags">[${s.scale} · ${(s.value_tags || []).join("+")}] ${catOf(s)}
+        ${s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>'}</div>
+      <h2>${s.title}</h2>
+      ${freshness(s)}
+      <ul class="track">${track.map((st, i) => {
+        const cls = i < idx ? "done" : i === idx ? "now" : "todo";
+        const dot = i < idx ? "●" : i === idx ? "◎" : "○";
+        const when = i === idx && s.last_movement ? ` — ${s.last_movement}` : i > idx ? " — 미도래" : "";
+        return `<li class="${cls}"><span class="dot">${dot}</span>${st}${when}</li>`;
+      }).join("")}</ul>
+      <div class="kv"><b>영향 반경</b> ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km — 유형 기준표(§3.3.1) 가안, 지도에 점선 원으로 표시</div>
+      <div class="kv"><b>다음 관찰</b> ${s.next_watch || "미정"}</div>
+      ${(s.access_points || []).length ? `<div class="kv"><b>접근점</b> ${s.access_points.map(a =>
+        `${a.name}${a.coordinates ? "" : " (좌표 미확보)"} — ${a.status || ""}`).join(" · ")}</div>` : ""}
+      ${(s.stage_history || []).length ? `<div class="kv"><b>단계 이력</b> ${s.stage_history.map(h =>
+        `${h.stage} ${h.date}${h.end ? "~" + h.end : ""}`).join(" → ")}</div>` : ""}
+      ${s.stage_note ? `<div class="kv"><b>단계 근거</b> ${s.stage_note}</div>` : ""}
+      ${s.status_note ? `<div class="kv"><b>상태 판단</b> ${s.status_note}</div>` : ""}
+      ${s.side_effects?.length ? `<div class="kv"><b>역효과 표기</b> ${s.side_effects.join(", ")}</div>` : ""}
+      <div class="kv"><b>근거 원문</b> <span class="src">${(s.sources || []).map((u, i) => `<a href="${u}" target="_blank">공시/공고 ${i + 1}</a>`).join(" · ")}</span></div>
+      <div class="note">지도 표기 근거: ${s.position_confidence || "확정 좌표"} · 미래 단계는 목표/미정이며 진척률(%) 없음</div>
+    </div>`;
+}
+
+/* ══════════ 시군구 피드 (지도에서 구/시 클릭) ══════════ */
+function showSgg(disp) {
+  view = { mode: "sgg", sgg: disp };
+  renderPanel(); mapApi?.clearRadius(); mapApi?.clearAptMarker?.();
+  mapApi?.highlightRings?.((window._sggRings || {})[disp]);   // 선택 시군구 경계 강조
+  const bd = window._sggBounds?.[disp];
+  if (bd && window._map) window._map.fitBounds(bd);
+}
+function pointInSgg(pt, disp) {
+  return (window._sggRings?.[disp] || []).some(r => pointInRing(pt[0], pt[1], r));
+}
+function renderSggFeed(disp) {
+  const p = document.getElementById("panel");
+  const curated = SIGNALS.filter(visible)
+    .filter(s => signalPoints(s).some(pt => pointInSgg(pt.coord, disp)));
+  const cands = (AUTO || []).filter(a => `${a.sd} ${a.sg}` === disp);
+  const rawN = (RAW || []).filter(r => `${r.sd} ${r.sg}` === disp).length;
+  p.innerHTML = `
+    <div class="phead"><div class="pt">${disp}</div><div class="closex" onclick="closePanel()">✕</div></div>
+    <div class="ps">확정 신호 ${curated.length}건 · 후보 신호(자동 통합) ${cands.length}건 — 원시 공고 ${rawN}건에서 생성</div>
+    ${yearChipsHtml()}
+    <div id="list"></div>
+    ${cands.length ? `<div class="group-h">후보 신호 (자동 생성 — 5억+·DART, 중복 통합, 단계는 추정)</div><div id="candlist"></div>
+      <div style="margin:10px 0"><span class="chip" onclick="gotoRaw('${disp}')">원시 공고 전체 보기 →</span></div>` : ""}`;
+  wireYearChips(p);
+  const list = p.querySelector("#list");
+  curated.sort((a, b) => (b.last_movement || "").localeCompare(a.last_movement || ""))
+    .forEach(s => list.appendChild(makeCard(s)));
+  const cl = p.querySelector("#candlist");
+  if (cl) cands.sort((a, b) => b.last_seen.localeCompare(a.last_seen)).slice(0, 40).forEach(a => {
+    cl.insertAdjacentHTML("beforeend", `
+      <div class="rrow">
+        <div class="rt">${a.title}</div>
+        <div class="rm">${a.stage_guess} · ${a.first_seen}${a.n_notices > 1 ? `~${a.last_seen} · 공고 ${a.n_notices}건 통합` : ""}
+          ${a.price ? ` · <b>${(a.price / 1e8).toFixed(1)}억</b>` : ""}${a.dong ? ` · 위치추출: ${a.jibun || a.dong}` : ""}
+          · ${a.src} · ${a.sources.map((u, i) => `<a href="${u}" target="_blank">원문${a.sources.length > 1 ? i + 1 : ""}</a>`).join(" ")}</div>
+      </div>`);
+  });
+}
+function gotoRaw(disp) {
+  const [sd, sg] = disp.split(" ");
+  setView("raw");
+  document.getElementById("r-sido").value = sd;
+  document.getElementById("r-sido").onchange();
+  document.getElementById("r-sgg").value = sg;
+  renderRaw();
+}
+
+/* ══════════ 뷰 전환 ══════════ */
+function goHome() {
+  view = { mode: "home" }; treeState.selKey = null;
+  if (typeof buildTree === "function" && DONG_GEO) buildTree();
+  renderPanel();
+  mapApi?.clearRadius(); mapApi?.clearHighlight?.(); mapApi?.clearAptMarker?.();
+}
+function showDong(f) {
+  view = { mode: "dong", dong: f }; renderPanel();
+  mapApi?.clearRadius(); mapApi?.clearAptMarker?.();
+  mapApi?.highlightRings?.(ringsOf(f));   // 선택한 동 경계만 강조
+}
+let returnView = null;
+function showSignal(s, pan) {
+  if (view.mode !== "detail") returnView = view;   // 신호 클릭 직전 뷰(동/구/단지) 기억
+  view = { mode: "detail", signal: s }; renderPanel();
+  if (pan && s._pan) s._pan();
+  mapApi?.showRadius(s);   // 영향 반경 원 표시 (§3.3.1 기준표)
+}
+/* 닫기: 신호 상세는 왔던 피드(동/구/단지)로 복귀(경계 강조 유지), 피드는 홈으로 */
+function closePanel() {
+  if (view.mode === "detail" && returnView && returnView.mode && returnView.mode !== "home") {
+    const rv = returnView; returnView = null;
+    if (rv.mode === "dong") return showDong(rv.dong);
+    if (rv.mode === "sgg") return showSgg(rv.sgg);
+    if (rv.mode === "apt") return showApt(rv.apt);
+  }
+  goHome();
+}
+function renderPanel() {
+  if (view.mode === "dong") return renderDong(view.dong);
+  if (view.mode === "sgg") return renderSggFeed(view.sgg);
+  if (view.mode === "apt") return renderApt(view.apt);
+  if (view.mode === "detail") return renderDetail(view.signal);
+  renderHome();
+}
+function renderAll() { renderChips(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); }
+
+/* ══════════ 지도: 카카오 → Leaflet 폴백 ══════════ */
+function bootMap() {
+  const s = document.createElement("script");
+  s.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_JS_KEY}&autoload=false`;
+  s.onload = () => { try { kakao.maps.load(initKakao); } catch (e) { loadLeaflet(); } };
+  s.onerror = loadLeaflet;
+  document.head.appendChild(s);
+}
+function loadLeaflet() {
+  const css = document.createElement("link");
+  css.rel = "stylesheet"; css.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+  document.head.appendChild(css);
+  const s = document.createElement("script");
+  s.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+  s.onload = initLeaflet;
+  document.head.appendChild(s);
+}
+function initLeaflet() {
+  const map = L.map("map").setView([37.556, 126.95], 10);   // 수도권 전역
+  window._map = map;   // 디버그·검증용
+  // 컨테이너 크기 변동 대응 (초기 0크기·모바일 회전 등)
+  setTimeout(() => map.invalidateSize(), 300);
+  new ResizeObserver(() => map.invalidateSize()).observe(document.getElementById("map"));
+  // 신호 핀이 동 폴리곤에 클릭을 뺏기지 않도록 전용 상위 pane
+  map.createPane("cand").style.zIndex = 640;
+  map.createPane("sig").style.zIndex = 650;
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    { maxZoom: 19, attribution: "&copy; OpenStreetMap — 임시 베이스맵 (카카오맵 승인 시 전환)" }).addTo(map);
+  const DONG_ZOOM = 12;   // 이 줌 이상 = 동 레벨, 미만 = 시군구 레벨
+
+  // ── 시군구 79 폴리곤 (항상 표시) + 클릭 → 지역 목록 + 확대
+  const sggCenters = {};  // 표시명 → [좌표 합, 개수]
+  window._sggBounds = {}; window._sggRings = {};
+  SGG_GEO.features.forEach(f => {
+    const disp = `${f.properties.sido} ${sggDisplayName(f.properties.name)}`;
+    ringsOf(f).forEach(r => {
+      // 평소엔 투명(경계 숨김) — 클릭만 받음. 선택 시 highlight 레이어로 강조
+      const poly = L.polygon(r.map(([x, y]) => [y, x]),
+        { stroke: false, fill: true, fillOpacity: 0, interactive: true }).addTo(map);
+      poly.on("click", () => showSgg(disp));
+      if (!window._sggBounds[disp]) window._sggBounds[disp] = poly.getBounds();
+      else window._sggBounds[disp].extend(poly.getBounds());
+      (window._sggRings[disp] = window._sggRings[disp] || []).push(r);
+      const c = ringCentroid(r);
+      const acc = sggCenters[disp] || [0, 0, 0];
+      sggCenters[disp] = [acc[0] + c[0], acc[1] + c[1], acc[2] + 1];
+    });
+  });
+
+  // ── 서울 법정동 467 (동 레벨 줌에서만)
+  const dongLayer = L.layerGroup();
+  DONG_GEO.features.forEach(f => {
+    ringsOf(f).forEach(r => {
+      // 투명 클릭 타겟 — 경계는 선택 시에만 강조
+      const poly = L.polygon(r.map(([x, y]) => [y, x]), { stroke: false, fill: true, fillOpacity: 0, interactive: true });
+      poly.on("click", () => showDong(f));
+      dongLayer.addLayer(poly);
+    });
+  });
+  // 선택 경계 강조 레이어 (호갱노노식: 선택한 동/구만 표시)
+  let hlLayer = null;
+  const clearHighlight = () => { if (hlLayer) { map.removeLayer(hlLayer); hlLayer = null; } };
+  const highlightRings = (ringsXY) => {
+    clearHighlight();
+    if (!ringsXY || !ringsXY.length) return;
+    const latlngs = ringsXY.map(r => r.map(([x, y]) => [y, x]));
+    hlLayer = L.polygon(latlngs, { pane: "cand", color: "#5b3fd4", weight: 2.5, opacity: .95,
+      fillColor: "#5b3fd4", fillOpacity: .12, interactive: false }).addTo(map);
+  };
+
+  let badges = [], pins = [];
+  const clearBadges = () => { badges.forEach(m => map.removeLayer(m)); badges = []; };
+
+  // 시군구 뱃지: 원시공고(5억+)+DART + 큐레이션 신호 집계 (개수 = 사실)
+  const sggCounts = {};
+  (RAW || []).forEach(r => {
+    if (r.src === "G2B" && (r.p || 0) < RAW_BADGE_CUT) return;
+    if (r.sg.startsWith("(")) return;   // 전역·미상은 뱃지 미표시
+    const k = `${r.sd} ${r.sg}`;
+    sggCounts[k] = (sggCounts[k] || 0) + 1;
+  });
+  const renderSggBadges = () => {
+    clearBadges();
+    for (const [disp, acc] of Object.entries(sggCenters)) {
+      const c = [acc[0] / acc[2], acc[1] / acc[2]];
+      const curated = disp === "서울 강서구" ? SIGNALS.filter(visible).length : 0;
+      const n = (sggCounts[disp] || 0) + curated;
+      const b = L.marker([c[1], c[0]], {
+        icon: L.divIcon({ className: "", html: `<div class="dong-badge">${disp.split(" ")[1]}${n ? " " + n : ""}</div>`, iconSize: null })
+      }).addTo(map);
+      b.on("click", () => showSgg(disp));
+      badges.push(b);
+    }
+  };
+  // 동 뱃지: 뷰포트 내 + 큐레이션 소재 개수 + 후보 신호(자동, 동 대표점 폴백) 회색 마커
+  const renderDongBadges = () => {
+    clearBadges();
+    const bd = map.getBounds();
+    (AUTO || []).filter(a => a.coords_fallback && bd.contains([a.coords_fallback[1], a.coords_fallback[0]]))
+      .slice(0, 60).forEach(a => {
+        const m2 = L.circleMarker([a.coords_fallback[1], a.coords_fallback[0]], {
+          pane: "cand", radius: 5, color: "#8e8e93", weight: 1.5, dashArray: "2 2", fillColor: "#f2f2f7", fillOpacity: .9
+        }).addTo(map);
+        m2.bindTooltip(`후보(자동): ${a.title.slice(0, 40)} — 위치: ${a.dong} 대표점(폴백)`, { direction: "right", offset: [8, 0] });
+        m2.on("click", () => showSgg(`${a.sd} ${a.sg}`));
+        badges.push(m2);
+      });
+    let shown = 0;
+    for (const f of DONG_GEO.features) {
+      if (shown > 120) break;
+      const c = ringCentroid(ringsOf(f)[0]);
+      if (!bd.contains([c[1], c[0]])) continue;
+      shown++;
+      // 영향권(소재+반경권) 전체 — 동 피드 목록 건수와 동일 기준 (§3.3.1 동 중복 노출 정상)
+      const n = SIGNALS.filter(visible).filter(s => dongRelation(s, f)).length;
+      const b = L.marker([c[1], c[0]], {
+        icon: L.divIcon({ className: "", html: `<div class="dong-badge">${dongName(f)}${n ? " " + n : ""}</div>`, iconSize: null })
+      }).addTo(map);
+      b.on("click", () => showDong(f));
+      badges.push(b);
+    }
+  };
+  const APT_ZOOM = 15;   // 이 줌 이상 = 아파트 단지 마커 노출
+  let aptDots = [];
+  const clearAptDots = () => { aptDots.forEach(m => map.removeLayer(m)); aptDots = []; };
+  const renderAptDots = () => {
+    clearAptDots();
+    if (map.getZoom() < APT_ZOOM) return;
+    const bd = map.getBounds();
+    APTS.filter(a => bd.contains([a.lat, a.lon])).slice(0, 120).forEach(a => {
+      const m = L.marker([a.lat, a.lon], { pane: "cand",
+        icon: L.divIcon({ className: "", html: `<div class="dong-badge" style="font-size:10px;padding:0 5px;border-color:#8a8a8f;color:#555">${a.n}</div>`, iconSize: null }) }).addTo(map);
+      m.on("click", () => { treeState.selKey = `apt|${a.n}|${a.dong}`; buildTree(); showApt(a); });
+      aptDots.push(m);
+    });
+  };
+  const applyLOD = () => {
+    if (map.getZoom() >= DONG_ZOOM) {
+      if (!map.hasLayer(dongLayer)) map.addLayer(dongLayer);
+      renderDongBadges();
+    } else {
+      if (map.hasLayer(dongLayer)) map.removeLayer(dongLayer);
+      renderSggBadges();
+    }
+    renderAptDots();
+  };
+  map.on("zoomend moveend", applyLOD);
+  map.on("moveend", () => { try { updateCenterLabel(); } catch (e) {} });
+  setTimeout(() => { try { updateCenterLabel(); } catch (e) {} }, 600);
+  // 지도 여백(타일)만 클릭 → 선택 해제 + 반경 원 제거.
+  // 피처(폴리곤·핀=path, 뱃지=marker-pane)는 자체 핸들러가 처리하므로 제외
+  map.on("click", (e) => {
+    const t = e.originalEvent && e.originalEvent.target;
+    if (t && (t.tagName === "path" || t.closest?.(".leaflet-marker-pane"))) return;
+    goHome();
+  });
+  window._dbg = { applyLOD, renderSggBadges, renderDongBadges, get badges() { return badges; } };
+
+  const refreshPins = () => {
+    pins.forEach(m => map.removeLayer(m)); pins = [];
+    applyLOD();
+    SIGNALS.filter(visible).forEach(sg => {
+      const pts = signalPoints(sg);
+      pts.forEach((p, k) => {
+        const [x, y] = p.coord;
+        const m = L.circleMarker([y, x], {
+          pane: "sig", radius: p.name ? 7 : 9, color: "#12263f", weight: p.cand ? 2 : 3,
+          dashArray: p.cand ? "3 3" : null,               // ◌ 후보 표기(§4.1 문법)
+          fillColor: "#fff", fillOpacity: 1,
+          opacity: sg.status === "정체" ? .45 : 1
+        }).addTo(map);
+        m.bindTooltip(p.name ? `${sg.title} — ${p.name}${p.cand ? " (후보)" : ""}` : sg.title,
+          { direction: "right", offset: [10, 0] });
+        m.on("click", () => showSignal(sg, false));
+        m._sid = sg.id; m._baseR = p.name ? 7 : 9;
+        if (k === 0) sg._pan = () => map.panTo([y, x]);
+        pins.push(m);
+      });
+    });
+  };
+  const emphasizePin = s => {
+    pins.forEach(m => {
+      const on = s && m._sid === s.id;
+      m.setStyle({ radius: on ? m._baseR + 5 : m._baseR, color: on ? "#5b3fd4" : "#12263f", weight: on ? 4 : 3 });
+      if (on) m.bringToFront();
+    });
+  };
+  let circles = [];
+  const clearRadius = () => { circles.forEach(c => map.removeLayer(c)); circles = []; };
+  const addRadius = s => {
+    signalPoints(s).forEach(p => {
+      circles.push(L.circle([p.coord[1], p.coord[0]], {
+        radius: getRadius(s), color: "#12263f", weight: 1.5, dashArray: "6 5",
+        fillColor: "#12263f", fillOpacity: 0.07, interactive: false
+      }).addTo(map));
+    });
+  };
+  const showRadius = s => { clearRadius(); addRadius(s); };
+  const showRadiusMany = list => { clearRadius(); list.forEach(addRadius); };
+  let aptMarker = null;
+  const showAptAnchor = a => {
+    if (aptMarker) map.removeLayer(aptMarker);
+    aptMarker = L.marker([a.lat, a.lon], { pane: "sig",
+      icon: L.divIcon({ className: "", html: `<div class="dong-badge" style="border-color:#c4392f;color:#c4392f">◎ ${a.n}</div>`, iconSize: null }) }).addTo(map);
+    clearRadius(); clearHighlight();   // 앵커 마커만
+  };
+  const clearAptMarker = () => { if (aptMarker) { map.removeLayer(aptMarker); aptMarker = null; } };
+  mapApi = { refreshPins, panTo: ll => map.panTo([ll[1], ll[0]]), showRadius, showRadiusMany, clearRadius, showAptAnchor,
+             highlightRings, clearHighlight, clearAptMarker, emphasizePin, sggRings: () => window._sggRings };
+  refreshPins();
+}
+function initKakao() {
+  const map = new kakao.maps.Map(document.getElementById("map"),
+    { center: new kakao.maps.LatLng(37.5568, 126.8397), level: 6 });
+  DONG_GEO.features.forEach(f => {
+    ringsOf(f).forEach(r => {
+      const poly = new kakao.maps.Polygon({
+        map, path: r.map(([x, y]) => new kakao.maps.LatLng(y, x)),
+        strokeWeight: 1.5, strokeColor: "#666", strokeOpacity: .7, fillColor: "#fff", fillOpacity: .02
+      });
+      kakao.maps.event.addListener(poly, "click", () => showDong(f));
+    });
+  });
+  let overlays = [];
+  const refreshPins = () => {
+    overlays.forEach(o => o.setMap(null)); overlays = [];
+    DONG_GEO.features.forEach(f => {
+      const n = SIGNALS.filter(visible).filter(s => dongRelation(s, f) === "소재").length;
+      const c = ringCentroid(ringsOf(f)[0]);
+      const el = document.createElement("div");
+      el.className = "dong-badge"; el.textContent = dongName(f) + (n ? " " + n : "");
+      el.onclick = () => showDong(f);
+      const ov = new kakao.maps.CustomOverlay({ map, position: new kakao.maps.LatLng(c[1], c[0]), content: el, yAnchor: .5 });
+      overlays.push(ov);
+    });
+    SIGNALS.filter(visible).forEach(sg => {
+      signalPoints(sg).forEach((p, k) => {
+        const pos = new kakao.maps.LatLng(p.coord[1], p.coord[0]);
+        const mk = new kakao.maps.Marker({ map, position: pos, opacity: sg.status === "정체" ? .5 : 1,
+          title: p.name ? `${sg.title} — ${p.name}${p.cand ? " (후보)" : ""}` : sg.title });
+        kakao.maps.event.addListener(mk, "click", () => showSignal(sg, false));
+        if (k === 0) sg._pan = () => map.panTo(pos);
+        overlays.push(mk);
+      });
+    });
+  };
+  let circles = [];
+  const clearRadius = () => { circles.forEach(c => c.setMap(null)); circles = []; };
+  const addRadius = s => {
+    signalPoints(s).forEach(p => {
+      circles.push(new kakao.maps.Circle({
+        map, center: new kakao.maps.LatLng(p.coord[1], p.coord[0]), radius: getRadius(s),
+        strokeWeight: 1.5, strokeColor: "#12263f", strokeStyle: "dash",
+        fillColor: "#12263f", fillOpacity: 0.07
+      }));
+    });
+  };
+  const showRadius = s => { clearRadius(); addRadius(s); };
+  const showRadiusMany = list => { clearRadius(); list.forEach(addRadius); };
+  mapApi = { refreshPins, panTo: ll => map.panTo(new kakao.maps.LatLng(ll[1], ll[0])), showRadius, showRadiusMany, clearRadius };
+  refreshPins();
+}
+
+/* ══════════ 타임라인 (간트, §4.7) ══════════ */
+const G_T0 = 2023, G_T1 = 2034, G_NOW = 2026.53;  // 2026-07-13
+const gp = y => (y - G_T0) / (G_T1 - G_T0) * 100;
+const yearDec = d => { const t = new Date(d.length === 7 ? d + "-01" : d); return t.getFullYear() + t.getMonth() / 12; };
+/* 단계별 통상 소요 가안 [최소, 최대] 개월 — 캘리브레이션 대상(§3.2) */
+const DUR = {
+  "공공시설": { "설계용역": [6, 12], "공사입찰": [2, 4], "착공": [12, 24] },
+  "기업이전": { "인허가": [6, 12], "착공": [18, 30] },
+  "철도": { "착공": [60, 84] },
+  "도로": { "설계": [12, 24], "착공": [24, 48] }
+};
+/* 신호 → 간트 행 (진행 신호). 과거 단계는 확정 날짜(stage_history) 있을 때만 막대, 없으면 텍스트(P2) */
+function ganttRow(s) {
+  const track = STAGE_TRACKS[s.template_type] || [];
+  const idx = track.indexOf(s.current_stage);
+  const lm = s.last_movement ? yearDec(s.last_movement) : G_NOW;
+  const bars = [], labels = [];
+  let hist = s.stage_history || [];
+  // 확정 이력: 기간(date~end)은 done 막대, 시점만 있으면 라벨
+  hist.forEach((h, j) => {
+    const a = yearDec(h.date);
+    if (h.end) {
+      bars.push([a, yearDec(h.end), "done"]);
+      labels.push([a, `${h.stage} ${h.date}~${h.end} (사실)`]);
+    } else {
+      labels.push([Math.max(G_T0, a), `◆ ${h.stage} ${h.date}`]);
+    }
+  });
+  if (!hist.length && idx > 0) {
+    labels.push([Math.max(G_T0, lm - 0.55), `● 이전 ${idx}단계 완료 (일자 미상)`]);
+  }
+  // 현재 단계: last_movement → 오늘
+  bars.push([Math.min(lm, G_NOW - 0.05), G_NOW, "now"]);
+  labels.push([Math.min(lm, G_NOW - 0.05), `${s.current_stage} (${s.last_movement || "?"}~)`]);
+  // 미래: 목표일(target_completion)이 있으면 그 지점까지 추정 막대 1개, 없으면 통상 소요 가안 누적
+  let fin;
+  if (s.target_completion) {
+    const t = s.target_completion;
+    if (t.y > G_NOW + 0.1) {
+      bars.push([G_NOW, t.y, "est"]);
+      labels.push([G_NOW + .2, track.length && idx >= 0 && idx < track.length - 1 ? `${track[track.length - 1]}까지 잔여 절차` : "잔여 절차"]);
+    }
+    fin = { type: t.type || "range", y: t.y, label: t.label, finEnd: t.finEnd || t.y };
+  } else if (track.length && idx >= 0) {
+    let cur = G_NOW, spreadMo = 0;
+    const durs = DUR[s.template_type] || {};
+    for (let i = idx + 1; i < track.length; i++) {
+      const d = durs[track[i]] || [6, 12];
+      const mid = (d[0] + d[1]) / 2 / 12;
+      if (track[i] !== track[track.length - 1]) {
+        bars.push([cur, cur + mid, "est"]);
+        labels.push([cur, `${track[i]} (통상 ${d[0]}~${d[1]}개월 가안)`]);
+        cur += mid; spreadMo += (d[1] - d[0]) / 2;
+      }
+    }
+    fin = { type: "range", y: cur, label: `'${String(Math.round(cur)).slice(2)} 전후 ±${Math.max(3, Math.round(spreadMo))}개월 (추정)`, finEnd: cur + spreadMo / 12 };
+  } else {
+    // 템플릿 미정 신호: 추정하지 않음 — 다음 관찰 포인트만
+    fin = { type: "range", y: G_NOW + .15, label: `다음 관찰: ${(s.next_watch || "").slice(0, 22)}`, finEnd: G_NOW };
+  }
+  return { s, bars, labels, fin };
+}
+function buildGantt() {
+  const ghead = document.getElementById("ghead");
+  ghead.innerHTML = "";
+  for (let y = G_T0; y < G_T1; y++) ghead.innerHTML += `<span>'${String(y).slice(2)}</span>`;
+  const grid = [...Array(G_T1 - G_T0)].map((_, j) => `<div class="gridline" style="left:${gp(G_T0 + j)}%"></div>`).join("");
+  const active = SIGNALS.filter(s => s.status !== "정체");
+  const stalled = SIGNALS.filter(s => s.status === "정체");
+  const rows = active.map(ganttRow);
+  const grows = document.getElementById("grows");
+  grows.innerHTML = "";
+  rows.forEach((r, i) => {
+    grows.innerHTML += `<div class="g-row" data-fin="${r.fin.finEnd}" id="grow${i}">
+      <div class="g-label"><h4>${r.s.title}${r.draft ? '<span class="g-badge">초안</span>' : ""}</h4>
+        <div class="m">${r.s.scale} · ${(r.s.value_tags || []).join("+")} · 현재: <b>${r.s.current_stage || "?"}</b></div></div>
+      <div class="g-track">${grid}
+        ${r.bars.map(([a, b, c]) => `<div class="gbar ${c}" style="left:${gp(a)}%;width:${Math.max(0.5, gp(b) - gp(a))}%"></div>`).join("")}
+        ${r.labels.map(([a, t], j) => `<div class="stageLbl" style="left:${gp(a)}%;top:${28 + (j % 2) * 11}px">${t}</div>`).join("")}
+        <div class="fin ${r.fin.type}" style="left:${gp(r.fin.y)}%">${r.fin.label}</div>
+        <div class="nowline" style="left:${gp(G_NOW)}%"></div>
+        <div class="pickline" id="gpick${i}" style="display:none"></div>
+      </div></div>`;
+  });
+  const ng = document.getElementById("nogroup");
+  ng.innerHTML = stalled.length ? `<h5>⚠ 일정 산출 불가 (정체 — 추정 막대를 그리지 않음)</h5>` : "";
+  stalled.forEach(s => {
+    const lm = yearDec(s.last_movement);
+    const mo = Math.floor((G_NOW - lm) * 12);
+    ng.innerHTML += `<div class="g-row">
+      <div class="g-label"><h4>${s.title}<span class="g-badge">정체</span></h4>
+        <div class="m">${s.scale} · 현재: ${s.current_stage}</div></div>
+      <div class="g-track">${grid}
+        <div class="gbar stalldone" style="left:${gp(lm)}%;width:1.2%"></div>
+        <div class="stageLbl" style="left:${gp(lm)}%">${s.current_stage} (${s.last_movement})</div>
+        <div class="stageLbl" style="left:${gp(lm) + 3}%;top:12px;color:#B08A2E;font-weight:700">■ 이후 절차 미확정 — 추정 표시하지 않음</div>
+        <div class="nowline" style="left:${gp(G_NOW)}%"></div>
+      </div></div>
+      <p class="why">${s.current_stage}(${s.last_movement}) 후 ${mo}개월 무움직임. 다음 단계 확정 전에는 일정을 추정하지 않습니다${s.next_watch ? ` — 관찰 포인트: ${s.next_watch}` : ""}.</p>`;
+  });
+  applyYearFilter();
+}
+function applyYearFilter() {
+  const v = +document.getElementById("yr").value;
+  const full = v === 2033;
+  document.getElementById("yrLabel").textContent = full ? "전체 보기" : v + "년 기준";
+  document.getElementById("yrDesc").innerHTML = full
+    ? '슬라이더를 조정하면 <b>해당 연도까지 절차상 완료 범위에 도달하는 신호</b>만 강조됩니다. "실현 보장"이 아니라 절차 소요기간 기반 추정이며, 정체 신호는 산출 대상에서 제외됩니다.'
+    : `<b>${v}년까지 절차상 완료 범위에 도달하는 신호</b> 강조 중 — 도달 여부는 추정이며 실현을 보장하지 않습니다. 정체 신호는 산출 대상에서 제외됩니다.`;
+  document.querySelectorAll("#grows .g-row").forEach((row, i) => {
+    const pick = document.getElementById("gpick" + i);
+    if (full) { row.classList.remove("dim"); if (pick) pick.style.display = "none"; return; }
+    row.classList.toggle("dim", +row.dataset.fin > v);
+    if (pick) { pick.style.display = "block"; pick.style.left = gp(v) + "%"; pick.setAttribute("data-yr", v); }
+  });
+}
+function setView(mode) {
+  if (mode === "gantt") mode = "map";   // 타임라인 뷰 제거 — 연도필터는 우측 목록에 통합
+  document.getElementById("wrap").style.display = mode === "map" ? "flex" : "none";
+  document.getElementById("raw").style.display = mode === "raw" ? "block" : "none";
+  const g = document.getElementById("gantt"); if (g) g.style.display = "none";
+  for (const v of ["map", "raw"])
+    document.getElementById("v-" + v).classList.toggle("on", mode === v);
+  if (mode === "raw") initRaw();
+}
+
+/* ══════════ 수도권 원시 데이터 탐색 ══════════ */
+let RAW = null, rawShown = 0, rawReady = false;
+const RAW_PAGE = 150;
+const SIDO_LABEL = { "서울": "서울특별시", "경기": "경기도", "인천": "인천광역시" };
+function initRaw() {
+  if (!rawReady) {
+    rawReady = true;
+    const sel = document.getElementById("r-sido");
+    ["서울", "경기", "인천"].forEach(s => sel.appendChild(new Option(SIDO_LABEL[s], s)));
+    const sgg = document.getElementById("r-sgg");
+    const fillSgg = () => {
+      const sido = sel.value;
+      sgg.innerHTML = '<option value="">시군구: 전체</option>';
+      [...new Set(RAW.filter(r => !sido || r.sd === sido).map(r => r.sg))]
+        .sort((a, b) => a.localeCompare(b, "ko"))
+        .forEach(g => sgg.appendChild(new Option(g, g)));
+    };
+    sel.onchange = () => { fillSgg(); renderRaw(); };
+    fillSgg();
+    for (const id of ["r-sgg", "r-price", "r-src"]) document.getElementById(id).onchange = renderRaw;
+    document.getElementById("r-q").oninput = () => { clearTimeout(window._rq); window._rq = setTimeout(renderRaw, 250); };
+    document.getElementById("r-more").onclick = () => renderRaw(true);
+  }
+  renderRaw();
+}
+function rawFiltered() {
+  const sido = document.getElementById("r-sido").value;
+  const sgg = document.getElementById("r-sgg").value;
+  const minP = +document.getElementById("r-price").value;
+  const src = document.getElementById("r-src").value;
+  const q = document.getElementById("r-q").value.trim();
+  return RAW.filter(r =>
+    (!sido || r.sd === sido) && (!sgg || r.sg === sgg) && (!src || r.src === src)
+    && (minP === 0 || r.src === "DART" || (r.p || 0) >= minP)   // DART는 금액 개념 없음 → 통과
+    && (!q || r.t.includes(q) || r.org.includes(q))
+  ).sort((a, b) => b.d.localeCompare(a.d));
+}
+function renderRaw(more) {
+  const list = document.getElementById("r-list");
+  const rows = rawFiltered();
+  rawShown = more ? rawShown + RAW_PAGE : RAW_PAGE;
+  document.getElementById("r-count").innerHTML =
+    `<b>${rows.length.toLocaleString()}건</b> (월평균 ${(rows.length / 12).toFixed(1)}건) — 표시 ${Math.min(rawShown, rows.length)}건, 공고일 최신순`;
+  list.innerHTML = rows.slice(0, rawShown).map(r => `
+    <div class="rrow">
+      <div class="rt">${r.t}</div>
+      <div class="rm">${r.d} · <b>${SIDO_LABEL[r.sd] || r.sd} ${r.sg}</b> · ${r.org} · ${r.src}${r.p ? ` · <b>${(r.p / 1e8).toFixed(1)}억</b>` : ""}
+        ${r.kw ? ` · ${r.kw}` : ""} · <a href="${r.u}" target="_blank">원문</a></div>
+    </div>`).join("");
+  document.getElementById("r-more").style.display = rows.length > rawShown ? "inline-block" : "none";
+}
+
+/* ══════════ 부트 ══════════ */
+(async () => {
+  const [dong, sgg, main, macro, rawData, autoData, apartments] = await Promise.all([
+    fetch("seoul_bdong.geojson").then(r => r.json()),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
+    fetch("sgg_capital.geojson").then(r => r.json()),     // 수도권 시군구 79
+    fetch("signals.json").then(r => r.json()),
+    fetch("macro_signals_draft.json").then(r => r.json()),
+    fetch("capital_raw.json").then(r => r.json()),
+    fetch("signals_auto.json").then(r => r.json()),
+    fetch("apartments.json").then(r => r.json()).catch(() => ({ apts: [] }))
+  ]);
+  DONG_GEO = dong;
+  SGG_GEO = sgg;
+  RAW = rawData.rows;
+  AUTO = autoData.candidates;
+  APTS = (apartments && apartments.apts) || [];
+  // 상태 파생 (§3.1: 정체 = 6개월+ 무움직임). status_override는 공사 진행 등
+  // "무공시가 정상인 단계"에 한해 명시 근거(status_note)와 함께 사용
+  SIGNALS = main.signals.map(s => {
+    const w = weeksAgo(s.last_movement);
+    const derived = s.status_override || (w !== null && w / 4.345 >= 6 ? "정체" : "활성");
+    return { ...s, status: derived };
+  });
+  MACRO = macro.signals;
+  renderChips();
+  buildTree();
+  renderPanel();
+  bootMap();
+  document.getElementById("v-map").onclick = () => setView("map");
+  document.getElementById("v-raw").onclick = () => setView("raw");
+})();
+
+/* 헤더: 현재 지도 중심 동네 표시 (조회용, 필터 아님) */
+function updateCenterLabel() {
+  const el = document.getElementById("centerLabel");
+  if (!el || !window._map) return;
+  const c = window._map.getCenter();
+  const pt = [c.lng, c.lat];
+  let hit = null;
+  for (const f of (DONG_GEO?.features || [])) {
+    if (ringsOf(f).some(r => pointInRing(pt[0], pt[1], r))) { hit = `${f.properties.sgg} ${f.properties.EMD_KOR_NM}`; break; }
+  }
+  if (!hit) for (const f of (SGG_GEO?.features || [])) {
+    if (ringsOf(f).some(r => pointInRing(pt[0], pt[1], r))) { hit = `${f.properties.sido} ${sggDisplayName(f.properties.name)}`; break; }
+  }
+  el.textContent = "중심: " + (hit || "수도권 밖");
+}
+</script>
+</body>
+</html>
