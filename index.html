@@ -178,9 +178,13 @@
   .subtrack .subcur { color:var(--ink); background:#fff3cd; border-radius:3px; padding:0 3px; }
   .dong-badge { background:#fff; border:1.5px solid var(--navy); border-radius:12px; padding:1px 8px; font-size:11px; font-weight:600; white-space:nowrap; cursor:pointer; }
   /* 아파트 이름 라벨 (조회 진입점용 — §4.1 허용, 배지·개수 없음) */
-  .apt-label { font-size:11px; color:#1c1c1e; text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 4px #fff,0 0 4px #fff; white-space:nowrap; cursor:pointer; font-weight:700; }
-  .apt-label::before { content:"▪"; color:#2e5ce6; margin-right:2px; font-size:9px; vertical-align:middle; }
-  .apt-label:hover { color:#2e5ce6; }
+  /* 호갱노노식 아파트 마커 — 흰 pill + 파란 점(금액·개수 없음, 이름만) */
+  .apt-label { font-size:11px; color:#1c1c1e; white-space:nowrap; cursor:pointer; font-weight:700;
+    background:#fff; border:1px solid #d7dbe3; border-radius:9px; padding:2px 7px; box-shadow:0 1px 3px rgba(0,0,0,.2); line-height:1.15; }
+  .apt-label::before { content:"▪"; color:#3b5bdb; margin-right:3px; font-size:9px; vertical-align:middle; }
+  .apt-label:hover { color:#3b5bdb; border-color:#3b5bdb; z-index:600; }
+  .apt-label.sel { background:#3b5bdb; color:#fff; border-color:#3b5bdb; }
+  .apt-label.sel::before { color:#fff; }
   /* 레이더 파동 (크게) */
   .radar { position:relative; width:0; height:0; pointer-events:none; }
   .radar span { position:absolute; border:3px solid #2e5ce6; border-radius:50%; left:0; top:0; transform:translate(-50%,-50%);
@@ -1195,30 +1199,29 @@ function initLeaflet() {
       badges.push(b);
     }
   };
-  const APT_ZOOM = 14;   // 이 줌 이상 = 아파트 이름 라벨 노출
+  const APT_ZOOM = 14;   // 이 줌 이상 = 아파트 마커(동 박스 대신). 호갱노노식 LOD 사다리 최하단
   let aptDots = [];
   const clearAptDots = () => { aptDots.forEach(m => map.removeLayer(m)); aptDots = []; };
-  // 아파트 이름 라벨: 고배율에서 뷰포트 내 이름만(§4.1 조회 진입점 마커 허용 — 배지·개수·순위 없음)
+  // 아파트 마커: 확대 시 뷰포트 내 단지 이름만(§4.1 조회 진입점 마커 — 금액·호재개수·순위 배지 없음, §7)
   const renderAptDots = () => {
     clearAptDots();
     if (map.getZoom() < APT_ZOOM) return;
     const bd = map.getBounds();
-    APTS.filter(a => bd.contains([a.lat, a.lon])).slice(0, 140).forEach(a => {
+    APTS.filter(a => bd.contains([a.lat, a.lon])).slice(0, 200).forEach(a => {
+      const sel = treeState.selKey === `apt|${a.n}|${a.dong}`;
       const m = L.marker([a.lat, a.lon], { pane: "cand",
-        icon: L.divIcon({ className: "", html: `<div class="apt-label">${a.n}</div>`, iconSize: null }) }).addTo(map);
+        icon: L.divIcon({ className: "", html: `<div class="apt-label${sel ? " sel" : ""}">${a.n}</div>`, iconSize: null }) }).addTo(map);
       m.on("click", () => { treeState.selKey = `apt|${a.n}|${a.dong}`; buildTree(); showApt(a); });
       aptDots.push(m);
     });
   };
+  // 호갱노노식 LOD: 축소=시군구 박스 → 중간=동 박스 → 확대=아파트(동 박스 숨김, 동 대신 아파트)
   const applyLOD = () => {
-    if (map.getZoom() >= DONG_ZOOM) {
-      if (!map.hasLayer(dongLayer)) map.addLayer(dongLayer);
-      renderDongBadges();
-    } else {
-      if (map.hasLayer(dongLayer)) map.removeLayer(dongLayer);
-      renderSggBadges();
-    }
-    renderAptDots();
+    const z = map.getZoom();
+    if (z >= DONG_ZOOM) { if (!map.hasLayer(dongLayer)) map.addLayer(dongLayer); }   // 동 경계 폴리곤 문맥
+    else { if (map.hasLayer(dongLayer)) map.removeLayer(dongLayer); }
+    if (z >= APT_ZOOM) { clearBadges(); renderAptDots(); }        // 아파트 노출 = 동/시군구 박스 제거
+    else { clearAptDots(); (z >= DONG_ZOOM ? renderDongBadges : renderSggBadges)(); }
   };
   map.on("zoomend moveend", applyLOD);
   map.on("moveend", () => { try { updateCenterLabel(); } catch (e) {} });
@@ -1562,7 +1565,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260714i");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260714j");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
