@@ -179,13 +179,20 @@
   .subtrack .subcur { color:var(--ink); background:#fff3cd; border-radius:3px; padding:0 3px; }
   .dong-badge { background:#fff; border:1.5px solid var(--navy); border-radius:12px; padding:1px 8px; font-size:11px; font-weight:600; white-space:nowrap; cursor:pointer; }
   /* 아파트 이름 라벨 (조회 진입점용 — §4.1 허용, 배지·개수 없음) */
-  /* 호갱노노식 아파트 마커 — 흰 pill + 파란 점(금액·개수 없음, 이름만) */
-  .apt-label { font-size:11px; color:#1c1c1e; white-space:nowrap; cursor:pointer; font-weight:700;
-    background:#fff; border:1px solid #d7dbe3; border-radius:9px; padding:2px 7px; box-shadow:0 1px 3px rgba(0,0,0,.2); line-height:1.15; }
-  .apt-label::before { content:"▪"; color:#3b5bdb; margin-right:3px; font-size:9px; vertical-align:middle; }
-  .apt-label:hover { color:#3b5bdb; border-color:#3b5bdb; z-index:600; }
-  .apt-label.sel { background:#3b5bdb; color:#fff; border-color:#3b5bdb; }
-  .apt-label.sel::before { color:#fff; }
+  /* 호갱노노식 아파트 집모양 마커 — 신호 있는 단지만 호재 건수(§7 절충), 0건은 흐린 집(숫자 없음) */
+  .apt-house { position:relative; display:inline-block; background:#4460e0; color:#fff; border-radius:6px;
+    min-width:24px; padding:6px 8px 5px; text-align:center; font-weight:800; line-height:1;
+    box-shadow:0 2px 6px rgba(40,60,160,.42); cursor:pointer; }
+  .apt-house::before { content:""; position:absolute; top:-8px; left:50%; transform:translateX(-50%);
+    border-left:12px solid transparent; border-right:12px solid transparent; border-bottom:9px solid #4460e0; }
+  .apt-house::after { content:""; position:absolute; bottom:-6px; left:50%; transform:translateX(-50%);
+    border-left:6px solid transparent; border-right:6px solid transparent; border-top:7px solid #4460e0; }
+  .apt-house .hc { font-size:13px; white-space:nowrap; } .apt-house .hc small { font-size:8.5px; font-weight:600; opacity:.85; margin-left:1px; }
+  .apt-house:hover { filter:brightness(1.09); z-index:600; }
+  .apt-house.sel { background:#c4392f; } .apt-house.sel::before { border-bottom-color:#c4392f; } .apt-house.sel::after { border-top-color:#c4392f; }
+  .apt-house.zero { background:#a7afc4; box-shadow:0 1px 3px rgba(0,0,0,.2); min-width:0; width:9px; height:9px; padding:0; border-radius:3px; opacity:.85; }
+  .apt-house.zero::before { border-bottom-color:#a7afc4; border-left-width:7px; border-right-width:7px; top:-6px; }
+  .apt-house.zero::after { border-top-color:#a7afc4; border-left-width:4px; border-right-width:4px; bottom:-4px; }
   /* 레이더 파동 (크게) */
   .radar { position:relative; width:0; height:0; pointer-events:none; }
   .radar span { position:absolute; border:3px solid #2e5ce6; border-radius:50%; left:0; top:0; transform:translate(-50%,-50%);
@@ -1218,18 +1225,29 @@ function initLeaflet() {
   const APT_ZOOM = 14;   // 이 줌 이상 = 아파트 마커(동 박스 대신). 호갱노노식 LOD 사다리 최하단
   let aptDots = [];
   const clearAptDots = () => { aptDots.forEach(m => map.removeLayer(m)); aptDots = []; };
-  // 아파트 마커: 확대 시 뷰포트 내 단지 이름만(§4.1 조회 진입점 마커 — 금액·호재개수·순위 배지 없음, §7)
+  // 아파트 집모양 마커: 확대 시 뷰포트 내 단지. 신호 있는 단지만 호재 건수 표시(§7 절충, A안), 0건=흐린 점.
+  // 이동/줌마다 applyLOD→여기서 재계산 → 건수 자동 갱신(호갱노노식). 필터 변경 시도 renderAll→refreshPins→applyLOD로 갱신.
   const renderAptDots = () => {
     clearAptDots();
     if (map.getZoom() < APT_ZOOM) return;
     const bd = map.getBounds();
-    APTS.filter(a => bd.contains([a.lat, a.lon])).slice(0, 200).forEach(a => {
+    const cands = APTS.filter(a => bd.contains([a.lat, a.lon]))
+      .map(a => ({ a, n: signalsNearPoint([a.lon, a.lat]).length }));
+    cands.sort((x, y) => y.n - x.n);   // 신호 있는 단지 우선(겹칠 때 이긴다 → 0건은 양보)
+    const placed = [];
+    for (const { a, n } of cands) {
+      if (placed.length > 170) break;
+      const pt = map.latLngToContainerPoint([a.lat, a.lon]);
+      if (collides(placed, pt, n ? 40 : 16, n ? 34 : 16)) continue;   // 겹치면 숨김
+      placed.push({ x: pt.x, y: pt.y });
       const sel = treeState.selKey === `apt|${a.n}|${a.dong}`;
-      const m = L.marker([a.lat, a.lon], { pane: "cand",
-        icon: L.divIcon({ className: "", html: `<div class="apt-label${sel ? " sel" : ""}">${a.n}</div>`, iconSize: null }) }).addTo(map);
+      const cls = "apt-house" + (n ? "" : " zero") + (sel ? " sel" : "");
+      const inner = n ? `<span class="hc">${n}<small>건</small></span>` : "";
+      const m = L.marker([a.lat, a.lon], { pane: "cand", zIndexOffset: n ? 1000 : 0,
+        icon: L.divIcon({ className: "", html: `<div class="${cls}" title="${a.n.replace(/"/g, "")}${n ? " · 호재 " + n + "건" : ""}">${inner}</div>`, iconSize: null }) }).addTo(map);
       m.on("click", () => { treeState.selKey = `apt|${a.n}|${a.dong}`; buildTree(); showApt(a); });
       aptDots.push(m);
-    });
+    }
   };
   // 호갱노노식 LOD: 축소=시군구 박스 → 중간=동 박스 → 확대=아파트(동 박스 숨김, 동 대신 아파트)
   const applyLOD = () => {
@@ -1581,7 +1599,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260714k");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260714l");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
