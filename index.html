@@ -76,6 +76,19 @@
             display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--muted); font-size:15px; background:#fff; }
   .closex:hover { color:var(--ink); border-color:var(--ink); }
   .card.hl { border-color:#5b3fd4; box-shadow:0 0 0 2px rgba(91,63,212,.15); }
+  /* 반경 설정 모달 */
+  #radiusModal { position:fixed; inset:0; z-index:3000; }
+  .rmbackdrop { position:absolute; inset:0; background:rgba(0,0,0,.35); }
+  .rmpanel { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; border-radius:14px;
+             width:min(460px,92vw); max-height:86vh; overflow-y:auto; box-shadow:0 12px 48px rgba(0,0,0,.28); padding:18px 20px; }
+  .rmhead { display:flex; justify-content:space-between; align-items:center; font-size:15px; margin-bottom:6px; }
+  .rmnote { font-size:11.5px; color:var(--muted); margin-bottom:14px; line-height:1.5; }
+  .rmcat { font-size:12px; font-weight:800; color:#2e5ce6; margin:14px 0 6px; }
+  .rmrow { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:7px 0; border-bottom:1px solid var(--line); }
+  .rmrow .rlabel { font-size:13px; }
+  .rmrow input { width:76px; font-size:13px; padding:5px 8px; border:1px solid var(--line); border-radius:7px; text-align:right; }
+  .rmrow .unit { font-size:11px; color:var(--muted); margin-left:4px; }
+  .rmfoot { margin-top:16px; text-align:right; }
   /* 계층 트리 */
   .tnode { user-select:none; }
   .trow { display:flex; align-items:center; gap:4px; padding:5px 8px; cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-radius:6px; }
@@ -137,9 +150,19 @@
   <div class="chips" id="f-view">
     <span class="chip on" id="v-map">지도</span>
     <span class="chip" id="v-raw">수도권 데이터</span>
+    <span class="chip" id="v-radius" title="호재 유형별 영향 반경 직접 설정">⚙ 반경 설정</span>
   </div>
   <div class="chips" id="f-dd"></div>
 </header>
+<div id="radiusModal" style="display:none;">
+  <div class="rmbackdrop" onclick="closeRadius()"></div>
+  <div class="rmpanel">
+    <div class="rmhead"><b>호재 유형별 영향 반경 설정</b><span class="closex" onclick="closeRadius()">✕</span></div>
+    <div class="rmnote">유형별 "이내" 반경(km). 값을 바꾸면 지도·목록·건수에 즉시 반영됩니다. 항목은 데이터에 유형이 추가되면 자동으로 늘어납니다.</div>
+    <div id="rmbody"></div>
+    <div class="rmfoot"><span class="chip" onclick="resetRadius()">기본값 복원</span></div>
+  </div>
+</div>
 <div id="wrap">
   <nav id="tree"></nav>
   <div id="map"></div>
@@ -261,23 +284,48 @@ const STAGE_TRACKS = {
   "기업이전": ["토지취득","인허가","착공","입주"],
   "정비사업": ["구역지정","조합설립","사업시행인가","관리처분","이주·철거","착공","준공"]
 };
-const DISPLAY_CAT = {           // 표시 필터 5축 ↔ 템플릿 (§4.1 v1.2). "기타"=템플릿 미정 신호도 정식 토글 대상
-  "철도·지하철": ["철도"], "도로": ["도로"],
-  "건설·정비": ["정비사업", "공공시설"], "직장·산업": ["기업이전"],
-  "기타": [null, undefined, "주거", "복합"]   // 미리내집·혁신지구·유보지·재정비 등 (SSOT: 우회 아님)
+/* ══════════ 4분류 + 세분 반경 유형 (사용자 편집 가능, 즉시 적용) ══════════
+   RADIUS_TYPES: {분류: {세부유형: 기본반경km}} — 항목 추가로 무한 세분화 가능.
+   세부유형이 곧 신호의 radius_type이며, 그것이 분류(catOf)와 반경(getRadius) 둘 다 결정. */
+const RADIUS_TYPES_DEFAULT = {
+  "교통": {
+    "지하철·전철역": 1.2, "GTX·광역철도역": 2.0, "고속도로IC": 7.0, "도로본선(소음권)": 0.5, "공항시설": 1.5
+  },
+  "일자리": {
+    "대형업무·산업단지": 2.5, "중소기업이전": 1.0, "대규모복합개발": 3.0
+  },
+  "정비": {
+    "정비구역(재건축·재개발)": 0.5, "지구단위·도시개발": 1.0, "도시재생": 0.8
+  },
+  "생활인프라": {
+    "대규모공원": 1.0, "소규모공원": 0.5, "대학병원": 2.0, "중소병원": 1.0,
+    "학교": 0.8, "도서관·문화시설": 1.0, "공공청사": 0.8, "공공주택공급": 0.6
+  }
 };
-const RADIUS_BY_SCALE = { "광역": 3000, "지구": 1000, "근린": 650 };  // §3.3 가안 (폴백)
-/* ── 유형별 영향 반경 기준표 (§3.3.1 가안, 단위 m) — 반경 수정은 여기 한 곳에서.
-   신호 JSON에 radius_m이 있으면 그 값이 우선(개별 오버라이드).
-   주의: IC 5km 제안은 기획서 가안(IC/JC 1~3km)과 상이 — 캘리브레이션 시 결정 */
-const INFLUENCE = {
-  "철도":   { "광역": 1500, "지구": 900,  "근린": 900 },   // 광역철도(GTX급) 역 1.5km / 도시철도 역 800m~1km
-  "도로":   { "광역": 3000, "지구": 1500, "근린": 800 },   // IC/JC 1~3km (본선은 영향점 아님)
-  "공공시설": { "광역": 2000, "지구": 1000, "근린": 650 },  // 복합시설 1km / 근린시설 500~800m
-  "기업이전": { "광역": 2000, "지구": 1500, "근린": 800 },  // 대형 업무지구 1~2km
-  "정비사업": { "광역": 1000, "지구": 800,  "근린": 500 }   // 구역 + 인접 500m (폴리곤 확보 전 점 기준)
+/* 사용자 오버라이드 로드 (localStorage) — 편집 시 저장, 즉시 반영 */
+function loadRadii() {
+  const merged = JSON.parse(JSON.stringify(RADIUS_TYPES_DEFAULT));
+  try {
+    const saved = JSON.parse(localStorage.getItem("hojae_radii") || "{}");
+    for (const cat in saved) for (const t in (saved[cat] || {}))
+      if (merged[cat] && merged[cat][t] != null) merged[cat][t] = saved[cat][t];
+  } catch (e) {}
+  return merged;
+}
+let RADIUS_TYPES = loadRadii();
+function saveRadii() { localStorage.setItem("hojae_radii", JSON.stringify(RADIUS_TYPES)); }
+/* radius_type → 분류 역인덱스 */
+function catOfType(rt) { for (const c in RADIUS_TYPES) if (rt in RADIUS_TYPES[c]) return c; return null; }
+const RADIUS_BY_SCALE = { "광역": 3000, "지구": 1000, "근린": 650 };  // radius_type 없을 때 폴백
+const getRadius = s => {
+  if (s.radius_m) return s.radius_m;
+  const c = catOfType(s.radius_type);
+  if (c) return RADIUS_TYPES[c][s.radius_type] * 1000;
+  return RADIUS_BY_SCALE[s.scale] || 800;
 };
-const getRadius = s => s.radius_m || INFLUENCE[s.template_type]?.[s.scale] || RADIUS_BY_SCALE[s.scale] || 800;
+/* 4분류 표시필터 — radius_type의 소속 분류 우선, 없으면 템플릿 매핑 폴백 */
+const TEMPLATE_CAT = { "철도": "교통", "도로": "교통", "기업이전": "일자리", "정비사업": "정비", "공공시설": "생활인프라" };
+const DISPLAY_CAT_KEYS = ["교통", "일자리", "정비", "생활인프라", "기타"];
 
 /* ══════════ 상태 ══════════ */
 let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null;
@@ -288,7 +336,7 @@ function sggDisplayName(name) {
   return m ? m[1] : name;
 }
 const filter = {
-  cat: new Set(Object.keys(DISPLAY_CAT)),
+  cat: new Set(DISPLAY_CAT_KEYS),
   scale: new Set(["광역", "지구", "근린"]),
   status: new Set(["활성", "정체", "종결"]),
   region: "",   // "" = 전체, "서울 강서구" 형태
@@ -298,7 +346,7 @@ let view = { mode: "home", dong: null, signal: null };
 let mapApi = null;   // {panTo(lnglat), refreshPins()}
 
 /* ══════════ 유틸 ══════════ */
-const catOf = s => Object.keys(DISPLAY_CAT).find(k => DISPLAY_CAT[k].includes(s.template_type)) || "기타";
+const catOf = s => catOfType(s.radius_type) || TEMPLATE_CAT[s.template_type] || "기타";
 const visible = s => filter.cat.has(catOf(s))   // 기타도 정식 분류 — 우회 제거(필터가 전 화면 일관 적용)
   && filter.scale.has(s.scale) && filter.status.has(s.status || "활성")
   && (!filter.region || `${s.sd} ${s.sg}` === filter.region);
@@ -358,7 +406,7 @@ const dongName = f => f.properties.adm_nm.split(" ").pop();
 /* 필터 3종을 드롭다운 멀티체크로 통합 */
 let openDD = null;
 const DD_DEFS = () => [
-  { id: "cat", label: "분류", keys: Object.keys(DISPLAY_CAT), set: filter.cat },
+  { id: "cat", label: "분류", keys: DISPLAY_CAT_KEYS, set: filter.cat },
   { id: "scale", label: "규모", keys: ["광역", "지구", "근린"], set: filter.scale },
   { id: "status", label: "상태", keys: ["활성", "정체", "종결"], set: filter.status },
 ];
@@ -397,6 +445,32 @@ function renderChips() {
   });
 }
 document.addEventListener("click", () => { if (openDD) { openDD = null; renderChips(); } });
+
+/* ══════════ 반경 설정 모달 (편집 → 즉시 적용) ══════════ */
+function openRadius() {
+  const body = document.getElementById("rmbody");
+  body.innerHTML = "";
+  for (const cat in RADIUS_TYPES) {
+    const h = document.createElement("div"); h.className = "rmcat"; h.textContent = cat; body.appendChild(h);
+    for (const t in RADIUS_TYPES[cat]) {
+      const row = document.createElement("div"); row.className = "rmrow";
+      row.innerHTML = `<span class="rlabel">${t}</span><span><input type="number" min="0.1" step="0.1" value="${RADIUS_TYPES[cat][t]}"><span class="unit">km 이내</span></span>`;
+      const inp = row.querySelector("input");
+      inp.onchange = () => {
+        const v = parseFloat(inp.value);
+        if (v > 0) { RADIUS_TYPES[cat][t] = v; saveRadii(); renderAll(); }  // 즉시 적용
+      };
+      body.appendChild(row);
+    }
+  }
+  document.getElementById("radiusModal").style.display = "block";
+}
+function closeRadius() { document.getElementById("radiusModal").style.display = "none"; }
+function resetRadius() {
+  localStorage.removeItem("hojae_radii");
+  RADIUS_TYPES = loadRadii();
+  openRadius(); renderAll();
+}
 function fillRegionSelect() {
   const sel = document.getElementById("f-region");
   const regions = [...new Set(SIGNALS.map(s => `${s.sd} ${s.sg}`))].sort((a, b) => a.localeCompare(b, "ko"));
@@ -897,17 +971,8 @@ function initLeaflet() {
   const APT_ZOOM = 15;   // 이 줌 이상 = 아파트 단지 마커 노출
   let aptDots = [];
   const clearAptDots = () => { aptDots.forEach(m => map.removeLayer(m)); aptDots = []; };
-  const renderAptDots = () => {
-    clearAptDots();
-    if (map.getZoom() < APT_ZOOM) return;
-    const bd = map.getBounds();
-    APTS.filter(a => bd.contains([a.lat, a.lon])).slice(0, 120).forEach(a => {
-      const m = L.marker([a.lat, a.lon], { pane: "cand",
-        icon: L.divIcon({ className: "", html: `<div class="dong-badge" style="font-size:10px;padding:0 5px;border-color:#8a8a8f;color:#555">${a.n}</div>`, iconSize: null }) }).addTo(map);
-      m.on("click", () => { treeState.selKey = `apt|${a.n}|${a.dong}`; buildTree(); showApt(a); });
-      aptDots.push(m);
-    });
-  };
+  // 아파트 상시 마커 없음 — 검색/트리 선택 시에만 앵커 표시(§4.1 전 단지 상시전시 금지)
+  const renderAptDots = () => { clearAptDots(); };
   const applyLOD = () => {
     if (map.getZoom() >= DONG_ZOOM) {
       if (!map.hasLayer(dongLayer)) map.addLayer(dongLayer);
@@ -1240,7 +1305,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260714b");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260714c");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
@@ -1272,6 +1337,7 @@ function renderRaw(more) {
   bootMap();
   document.getElementById("v-map").onclick = () => setView("map");
   document.getElementById("v-raw").onclick = () => setView("raw");
+  document.getElementById("v-radius").onclick = (e) => { e.stopPropagation(); openRadius(); };
 })();
 
 /* 헤더: 현재 지도 중심 동네 표시 (조회용, 필터 아님) */
