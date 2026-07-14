@@ -87,12 +87,16 @@
   .yslide .ylbl { font-size:11px; color:var(--muted); }
   .yslide .yval { font-size:13px; font-weight:800; color:#5b3fd4; }
   .yslide .yval.all { color:var(--muted); font-weight:600; }
-  .yslide input[type=range] { -webkit-appearance:none; appearance:none; width:100%; height:6px; border-radius:3px;
-     background:linear-gradient(90deg,#12263f 0 var(--fill,0%),#e7e9ef var(--fill,0%) 100%); outline:none; margin:4px 0 2px; cursor:pointer; }
-  .yslide input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:20px; height:20px; border-radius:50%;
+  /* 슬라이더·눈금을 카드 padding(12px)만큼 inset → 카드 미니바 연도축과 수평 정렬 */
+  .yslide input[type=range] { -webkit-appearance:none; appearance:none; width:calc(100% - 24px); height:6px; border-radius:3px;
+     background:linear-gradient(90deg,#12263f 0 var(--fill,0%),#e7e9ef var(--fill,0%) 100%); outline:none; margin:4px 12px 2px; cursor:pointer; }
+  .yslide input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; border-radius:50%;
      background:#fff; border:3px solid #5b3fd4; box-shadow:0 1px 4px rgba(0,0,0,.25); cursor:grab; margin-top:0; }
   .yslide input[type=range]::-webkit-slider-thumb:active { cursor:grabbing; transform:scale(1.12); }
-  .yslide .yticks { display:flex; justify-content:space-between; font-size:9.5px; color:var(--muted); margin-top:2px; }
+  .yslide .yticks { display:flex; justify-content:space-between; font-size:9.5px; color:var(--muted); margin:2px 12px 0; }
+  .yslide .yhead .yr-right { display:flex; align-items:center; gap:7px; }
+  .yslide .ychip { font-size:10.5px; font-weight:700; color:var(--muted); border:1px solid var(--line); border-radius:8px; padding:1px 8px; cursor:pointer; }
+  .yslide .ychip.on { border-color:#5b3fd4; color:#5b3fd4; background:#f3f0ff; }
   /* ── 아파트 비교 (§4.5 가드레일: 점수·승자 없음, 컬럼 등가) ── */
   .cmpbar { position:fixed; left:50%; bottom:16px; transform:translateX(-50%); z-index:3000; background:#1a1a1a; color:#fff;
             border-radius:14px; padding:9px 12px; display:flex; align-items:center; gap:8px; box-shadow:0 8px 26px rgba(0,0,0,.32); max-width:92vw; }
@@ -753,16 +757,19 @@ function renderApt(a) {
   panelListRender();
 }
 
-/* 시점 드래그 슬라이더 — 각 신호 진행바에 기준선을 긋는다. 좌측 끝=전체 보기 */
-const YR_MIN = 2025, YR_MAX = 2033;   // 2025 슬롯 = 전체(null)
+/* 시점 드래그 슬라이더 — 각 신호 진행바에 기준선을 긋는다.
+   축을 카드 미니바(M0~M1=2024~2034)와 통일 → 슬라이더 연도와 카드 연도가 Y축으로 정렬됨.
+   '전체'는 별도 칩(null=기준선 없음). */
+const YR_MIN = 2024, YR_MAX = 2034;
 function yearValLabel() { return YEAR_SEL ? `'${String(YEAR_SEL).slice(2)} 시점 기준` : "전체 보기"; }
 function yearChipsHtml() {
-  const v = YEAR_SEL || YR_MIN;
+  const v = YEAR_SEL || YR_MAX;   // 전체(null)면 thumb 오른쪽 끝
   return `<div class="yslide">
     <div class="yhead"><span class="ylbl">시점 · 드래그로 조정</span>
-      <span class="yval ${YEAR_SEL ? "" : "all"}" id="yr-val">${yearValLabel()}</span></div>
+      <span class="yr-right"><span class="yval ${YEAR_SEL ? "" : "all"}" id="yr-val">${yearValLabel()}</span>
+        <span class="ychip ${YEAR_SEL ? "" : "on"}" id="yr-all">전체</span></span></div>
     <input type="range" id="yr-slide" min="${YR_MIN}" max="${YR_MAX}" step="1" value="${v}">
-    <div class="yticks"><span>전체</span><span>'26</span><span>'28</span><span>'30</span><span>'32</span></div>
+    <div class="yticks"><span>'24</span><span>'26</span><span>'28</span><span>'30</span><span>'32</span><span>'34</span></div>
   </div>`;
 }
 let panelListRender = null;   // 현재 뷰의 #list 재생성 함수 (슬라이더 드래그가 이것만 호출 → 슬라이더 유지)
@@ -770,14 +777,21 @@ function wireYearChips(p) {
   const sl = p.querySelector("#yr-slide");
   if (!sl) return;
   const setFill = () => sl.style.setProperty("--fill", ((sl.value - YR_MIN) / (YR_MAX - YR_MIN) * 100) + "%");
+  const applyLabels = () => {
+    const vl = p.querySelector("#yr-val"); const ac = p.querySelector("#yr-all");
+    if (vl) { vl.textContent = yearValLabel(); vl.classList.toggle("all", !YEAR_SEL); }
+    if (ac) ac.classList.toggle("on", !YEAR_SEL);
+  };
   setFill();
   sl.oninput = () => {
-    setFill();
-    const v = +sl.value;
-    YEAR_SEL = v <= YR_MIN ? null : v;
-    const vl = p.querySelector("#yr-val");
-    if (vl) { vl.textContent = yearValLabel(); vl.classList.toggle("all", !YEAR_SEL); }
+    YEAR_SEL = +sl.value;   // 드래그 = 항상 특정 연도
+    setFill(); applyLabels();
     if (panelListRender) panelListRender();   // 리스트만 갱신(애니메이션 없이)
+  };
+  const allBtn = p.querySelector("#yr-all");
+  if (allBtn) allBtn.onclick = () => {
+    YEAR_SEL = null; sl.value = YR_MAX; setFill(); applyLabels();
+    if (panelListRender) panelListRender();
   };
 }
 /* 신호의 시간 골격: 시작(이력 최솟값)~오늘~목표 */
@@ -1619,16 +1633,17 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260714m");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260714n");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
-  const [dong, sgg, main, macro, rawData, autoData, apartments, regions] = await Promise.all([
+  const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
     gj("macro_signals_draft.json"),
     gj("capital_raw.json"),
     gj("signals_auto.json"),
-    gj("apartments.json").catch(() => ({ apts: [] })),
+    gj("apartments.json").catch(() => ({ apts: [] })),          // 강서 정밀본(도로수준 검수)
+    gj("apartments_all.json").catch(() => ({ apts: [] })),       // 전국(공동주택 API+브이월드)
     gj("regions.json").catch(() => null)
   ]);
   REGIONS = regions;
@@ -1636,7 +1651,13 @@ function renderRaw(more) {
   SGG_GEO = sgg;
   RAW = rawData.rows;
   AUTO = autoData.candidates;
-  APTS = (apartments && apartments.apts) || [];
+  // 전국 아파트 병합: 전국본을 베이스로, 강서 정밀본(검수)으로 덮어씀. 좌표 있는 것만.
+  {
+    const m = new Map();
+    ((apartmentsAll && apartmentsAll.apts) || []).forEach(a => { if (a.lat) m.set(a.n + "|" + a.dong, a); });
+    ((apartments && apartments.apts) || []).forEach(a => { if (a.lat) m.set(a.n + "|" + a.dong, a); });
+    APTS = [...m.values()];
+  }
   // 상태 파생 (§3.1: 정체 = 6개월+ 무움직임). status_override는 공사 진행 등
   // "무공시가 정상인 단계"에 한해 명시 근거(status_note)와 함께 사용
   SIGNALS = main.signals.map(s => {
