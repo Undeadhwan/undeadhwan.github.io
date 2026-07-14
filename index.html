@@ -280,7 +280,7 @@ const INFLUENCE = {
 const getRadius = s => s.radius_m || INFLUENCE[s.template_type]?.[s.scale] || RADIUS_BY_SCALE[s.scale] || 800;
 
 /* ══════════ 상태 ══════════ */
-let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [];
+let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null;
 const RAW_BADGE_CUT = 500000000;  // 시군구 뱃지 집계의 원시공고 금액 하한 (5억)
 /* 대도시 분할구(고양시덕양구 등) → 시 단위 표시명 */
 function sggDisplayName(name) {
@@ -405,7 +405,12 @@ function fillRegionSelect() {
 }
 
 /* ══════════ 좌측 4레벨 선택 (아실식 브레드크럼 + 격자): 시도>시군구>동>단지 ══════════ */
-const SIDO_LONG = { "서울": "서울특별시", "경기": "경기도", "인천": "인천광역시" };
+const SIDO_LONG = { "서울": "서울특별시", "경기": "경기도", "인천": "인천광역시", "부산": "부산광역시",
+  "대구": "대구광역시", "광주": "광주광역시", "대전": "대전광역시", "울산": "울산광역시", "세종": "세종특별자치시",
+  "강원": "강원특별자치도", "충북": "충청북도", "충남": "충청남도", "전북": "전북특별자치도", "전남": "전라남도",
+  "경북": "경상북도", "경남": "경상남도", "제주": "제주특별자치도" };
+const SIDO_ORDER = ["서울", "인천", "경기", "부산", "대구", "광주", "대전", "울산", "세종",
+  "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주"];
 const treeState = { selKey: null };        // 지도 마커 연동용(기존 참조 유지)
 const nav = { sd: null, sg: null, dong: null };   // 현재 드릴다운 위치
 function dongsOfSgg(sd, sg) {
@@ -430,8 +435,8 @@ function buildTree() {
   // ── 현재 레벨 격자
   let cells = "";
   if (!nav.sd) {
-    // 시도 레벨: 개수 표기 없음 (시군구 레벨부터 표시)
-    ["서울", "경기", "인천"].forEach(sd => {
+    // 시도 레벨: 전국 17개 (개수 표기 없음 — 시군구부터)
+    SIDO_ORDER.forEach(sd => {
       cells += `<div class="gcell" onclick="navPick('sd','${sd}')">${SIDO_LONG[sd]}</div>`;
     });
   } else if (!nav.sg) {
@@ -444,7 +449,7 @@ function buildTree() {
     });
   } else if (!nav.dong) {
     if (nav.sd !== "서울") {
-      html += `<div class="gnote">경기·인천은 동 경계 데이터 확보 전 — 시군구 피드까지 제공됩니다</div>`;
+      html += `<div class="gnote">${SIDO_LONG[nav.sd]} ${nav.sg} — 동·단지·신호는 수도권 파일럿부터 순차 확충. 현재는 시군구 피드까지</div>`;
     } else {
       dongsOfSgg(nav.sd, nav.sg).forEach(dong => {
         const f = DONG_GEO.features.find(x => x.properties.sgg === nav.sg && x.properties.EMD_KOR_NM === dong);
@@ -845,8 +850,13 @@ function initLeaflet() {
   });
   const renderSggBadges = () => {
     clearBadges();
+    const bd = map.getBounds();
+    let shown = 0;
     for (const [disp, acc] of Object.entries(sggCenters)) {
+      if (shown > 90) break;
       const c = [acc[0] / acc[2], acc[1] / acc[2]];
+      if (!bd.contains([c[1], c[0]])) continue;   // 전국 251개 중 뷰포트 내만
+      shown++;
       const curated = disp === "서울 강서구" ? SIGNALS.filter(visible).length : 0;
       const n = (sggCounts[disp] || 0) + curated;
       const b = L.marker([c[1], c[0]], {
@@ -1232,15 +1242,17 @@ function renderRaw(more) {
 (async () => {
   const CB = "?b=" + (window.BUILD || "20260714b");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
-  const [dong, sgg, main, macro, rawData, autoData, apartments] = await Promise.all([
+  const [dong, sgg, main, macro, rawData, autoData, apartments, regions] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
-    gj("sgg_capital.geojson"),     // 수도권 시군구 79
+    gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
     gj("macro_signals_draft.json"),
     gj("capital_raw.json"),
     gj("signals_auto.json"),
-    gj("apartments.json").catch(() => ({ apts: [] }))
+    gj("apartments.json").catch(() => ({ apts: [] })),
+    gj("regions.json").catch(() => null)
   ]);
+  REGIONS = regions;
   DONG_GEO = dong;
   SGG_GEO = sgg;
   RAW = rawData.rows;
