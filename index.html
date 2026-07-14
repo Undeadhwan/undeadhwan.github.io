@@ -261,9 +261,10 @@ const STAGE_TRACKS = {
   "기업이전": ["토지취득","인허가","착공","입주"],
   "정비사업": ["구역지정","조합설립","사업시행인가","관리처분","이주·철거","착공","준공"]
 };
-const DISPLAY_CAT = {           // 표시 필터 4축 ↔ 템플릿 (§4.1 v1.2)
+const DISPLAY_CAT = {           // 표시 필터 5축 ↔ 템플릿 (§4.1 v1.2). "기타"=템플릿 미정 신호도 정식 토글 대상
   "철도·지하철": ["철도"], "도로": ["도로"],
-  "건설·정비": ["정비사업", "공공시설"], "직장·산업": ["기업이전"]
+  "건설·정비": ["정비사업", "공공시설"], "직장·산업": ["기업이전"],
+  "기타": [null, undefined, "주거", "복합"]   // 미리내집·혁신지구·유보지·재정비 등 (SSOT: 우회 아님)
 };
 const RADIUS_BY_SCALE = { "광역": 3000, "지구": 1000, "근린": 650 };  // §3.3 가안 (폴백)
 /* ── 유형별 영향 반경 기준표 (§3.3.1 가안, 단위 m) — 반경 수정은 여기 한 곳에서.
@@ -297,8 +298,8 @@ let view = { mode: "home", dong: null, signal: null };
 let mapApi = null;   // {panTo(lnglat), refreshPins()}
 
 /* ══════════ 유틸 ══════════ */
-const catOf = s => Object.keys(DISPLAY_CAT).find(k => DISPLAY_CAT[k].includes(s.template_type)) || "기타(템플릿 미정)";
-const visible = s => (catOf(s).startsWith("기타") || filter.cat.has(catOf(s)))
+const catOf = s => Object.keys(DISPLAY_CAT).find(k => DISPLAY_CAT[k].includes(s.template_type)) || "기타";
+const visible = s => filter.cat.has(catOf(s))   // 기타도 정식 분류 — 우회 제거(필터가 전 화면 일관 적용)
   && filter.scale.has(s.scale) && filter.status.has(s.status || "활성")
   && (!filter.region || `${s.sd} ${s.sg}` === filter.region);
 /* 연도 기준선(전역): 목록을 숨기지 않고 각 카드의 미니 진행바에 기준선·시점상태 표시 */
