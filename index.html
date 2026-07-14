@@ -116,8 +116,8 @@
   .badge-near { display:inline-block; font-size:10px; background:#f2f2f7; color:#6e6e73; border-radius:4px; padding:1px 5px; }
   .dong-badge { background:#fff; border:1.5px solid var(--navy); border-radius:12px; padding:1px 8px; font-size:11px; font-weight:600; white-space:nowrap; cursor:pointer; }
   /* 아파트 이름 라벨 (조회 진입점용 — §4.1 허용, 배지·개수 없음) */
-  .apt-label { font-size:10.5px; color:#5a5a60; text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 3px #fff; white-space:nowrap; cursor:pointer; font-weight:500; }
-  .apt-label::before { content:"·"; color:#8a8a8f; margin-right:1px; }
+  .apt-label { font-size:11px; color:#1c1c1e; text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 4px #fff,0 0 4px #fff; white-space:nowrap; cursor:pointer; font-weight:700; }
+  .apt-label::before { content:"▪"; color:#2e5ce6; margin-right:2px; font-size:9px; vertical-align:middle; }
   .apt-label:hover { color:#2e5ce6; }
   /* 레이더 파동 (크게) */
   .radar { position:relative; width:0; height:0; pointer-events:none; }
@@ -894,10 +894,9 @@ function initLeaflet() {
   SGG_GEO.features.forEach(f => {
     const disp = `${f.properties.sido} ${sggDisplayName(f.properties.name)}`;
     ringsOf(f).forEach(r => {
-      // 평소엔 투명(경계 숨김) — 클릭만 받음. 선택 시 highlight 레이어로 강조
+      // 비클릭(빈 영역 오선택 방지) — 선택은 이름 뱃지로만. 경계는 선택 시 highlight
       const poly = L.polygon(r.map(([x, y]) => [y, x]),
-        { stroke: false, fill: true, fillOpacity: 0, interactive: true }).addTo(map);
-      poly.on("click", () => showSgg(disp));
+        { stroke: false, fill: false, interactive: false }).addTo(map);
       if (!window._sggBounds[disp]) window._sggBounds[disp] = poly.getBounds();
       else window._sggBounds[disp].extend(poly.getBounds());
       (window._sggRings[disp] = window._sggRings[disp] || []).push(r);
@@ -911,9 +910,8 @@ function initLeaflet() {
   const dongLayer = L.layerGroup();
   DONG_GEO.features.forEach(f => {
     ringsOf(f).forEach(r => {
-      // 투명 클릭 타겟 — 경계는 선택 시에만 강조
-      const poly = L.polygon(r.map(([x, y]) => [y, x]), { stroke: false, fill: true, fillOpacity: 0, interactive: true });
-      poly.on("click", () => showDong(f));
+      // 비클릭 — 동 선택은 이름 뱃지 클릭으로만 (빈 영역 오선택 방지)
+      const poly = L.polygon(r.map(([x, y]) => [y, x]), { stroke: false, fill: false, interactive: false });
       dongLayer.addLayer(poly);
     });
   });
@@ -1346,7 +1344,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260714e");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260714f");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
