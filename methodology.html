@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>호재맵 — 데이터 소스·방법론</title>
+<style>
+  :root { --ink:#1c1c1e; --muted:#6e6e73; --line:#e5e5ea; --accent:#0a66c2; --navy:#12263f; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+         color:var(--ink); line-height:1.65; background:#fafbfc; }
+  .wrap { max-width:980px; margin:0 auto; padding:28px 20px 120px; }
+  h1 { font-size:24px; margin-bottom:4px; }
+  .sub { color:var(--muted); font-size:13px; margin-bottom:28px; }
+  h2 { font-size:18px; margin:38px 0 10px; padding-top:18px; border-top:2px solid var(--navy); }
+  h3 { font-size:14.5px; margin:20px 0 6px; }
+  p, li { font-size:13.5px; }
+  ul { padding-left:20px; margin:6px 0; }
+  table { width:100%; border-collapse:collapse; font-size:12.5px; margin:10px 0; background:#fff; }
+  th, td { border:1px solid var(--line); padding:7px 9px; text-align:left; vertical-align:top; }
+  th { background:#f2f4f8; font-weight:700; white-space:nowrap; }
+  td code, p code, li code { background:#eef1f6; border-radius:4px; padding:1px 5px; font-size:11.5px; font-family:ui-monospace,Menlo,monospace; }
+  .tag { display:inline-block; font-size:10.5px; font-weight:700; border-radius:5px; padding:1px 7px; margin-right:3px; }
+  .tag.auto { background:#e3f0e6; color:#1d6f37; }
+  .tag.manual { background:#fdeaea; color:#b3251e; }
+  .tag.plan { background:#fff3cd; color:#856404; }
+  .tag.live { background:#e2ebff; color:#2545a8; }
+  .box { background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px 18px; margin:12px 0; }
+  .box.warn { border-color:#e7c766; background:#fffdf4; }
+  .chain { font-family:ui-monospace,Menlo,monospace; font-size:12.5px; background:var(--navy); color:#dfe8f5; border-radius:10px; padding:14px 18px; overflow-x:auto; white-space:pre; line-height:1.9; }
+  .note { color:var(--muted); font-size:12px; }
+  a { color:var(--accent); text-decoration:none; } a:hover { text-decoration:underline; }
+  .back { display:inline-block; margin-bottom:14px; font-size:13px; }
+  .toc { background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 18px; font-size:13px; }
+  .toc a { display:inline-block; margin:2px 12px 2px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← 호재맵으로</a>
+<h1>데이터 소스·방법론</h1>
+<div class="sub">운영 문서 (1인 운영·자동화 우선) · 갱신 2026-07-14 · 이 문서는 실제 스크립트·규칙과 1:1로 유지한다</div>
+
+<div class="toc">
+  <a href="#principle">0. 운영 원칙</a> <a href="#chain">1. 파이프라인</a> <a href="#audit">2. 데이터 유래 감사</a>
+  <a href="#sources">3. 소스 카탈로그</a> <a href="#extract">4. 추출 방법</a> <a href="#process">5. 가공 방법</a>
+  <a href="#mapping">6. 매핑 방법</a> <a href="#manual">7. 수동 지점·자동화 로드맵</a>
+</div>
+
+<h2 id="principle">0. 운영 원칙 (전국 공통 틀)</h2>
+<ul>
+  <li><b>전국 공통 로직.</b> 모든 수집·추출·가공은 전국 기준으로 설계하고, 지역은 파라미터/데이터로만 주입한다. 특정 지역 하드코딩 금지. (지역별로 소스 자체가 다른 경우만 예외 — 소스 카탈로그에 지역 필드로 명시)</li>
+  <li><b>단일 소스 기본, 다중 소스 허용.</b> 신호 1건의 근거는 원칙적으로 단일 공식 소스. 필요 시 복수 소스를 병합하되 <code>sources[]</code>에 전부 보존해 계보를 유지한다.</li>
+  <li><b>이중 단계 관리.</b> 모든 호재는 ① <b>소스상 진행단계</b>(<code>current_stage</code> — 공고·고시 원문 용어)와 ② <b>우리 4단계 백본</b>(<code>phase</code> — 계획→인가→착공→준공·개통)을 둘 다 기록한다. 매핑 규칙은 §6.</li>
+  <li><b>수작업 최소화.</b> 사람 판단은 "후보→확정 승격" 1지점으로 수렴시킨다. 신호를 손으로 새로 쓰는 일은 금지 — 수동으로 알게 된 호재는 "그 호재를 잡아낼 소스"를 카탈로그에 추가하는 방식으로 정형화한다.</li>
+  <li><b>전국 동시 오픈 목표.</b> (정 어려우면 수도권 우선) 강서·서부권은 검증용 예시일 뿐 오픈 단위가 아니다.</li>
+</ul>
+
+<h2 id="chain">1. 파이프라인 (SSOT 3층 체인)</h2>
+<div class="chain">[수집: 자동]   collect_capital.py / apt_list_all.py / build_apts_all.py
+                └→ capital_raw.json (원시 공고·공시) + apartments_all.json (전국 단지)
+
+[후보화: 자동]  signalize.py
+                └→ signals_auto.json (후보 신호 — 5억+/DART 컷, 중복통합, 동·지번 추출, 단계 추정)
+
+[확정: 사람 1클릭]  운영자 승격 (좌표·단계 확인만)
+                └→ signals.json (확정 신호 — 지도 정식 핀, 원시 공고 링크 보존)</div>
+<p class="note">사이트(index.html)는 이 3층 파일 + 경계 geojson만 읽는다. 원시→후보는 재실행으로 언제든 재현 가능해야 하며, 재현 불가능한 데이터가 확정층에 들어가면 안 된다(§2 감사 참고).</p>
+
+<h2 id="audit">2. 데이터 유래 감사 (2026-07-14, 정직 공개)</h2>
+<div class="box warn">
+  <b>⚠ 확정층 16건 중 9건이 수동 리서치 유래</b> — 파이프라인 밖(뉴스·고시 웹리서치)에서 직접 등록된 것으로, 현재 자동 재현이 불가능하다. 이는 파일럿 검증 과정의 산물이며, 아래 표의 "소스화 대상" 커넥터가 추가되는 대로 자동 유도로 대체한다.
+</div>
+<table>
+  <tr><th>유래</th><th>건수</th><th>신호</th><th>처리 방침</th></tr>
+  <tr><td><span class="tag auto">자동</span>G2B/DART 수집망</td><td>7</td><td>화곡 도시재생 · 김포공항 화물청사 · 마곡 D9-1 · 케이이엠텍 · 강서구 신청사 · 마곡 유보지 · 가양등촌 재정비</td><td>유지 (원공고 링크 보존, signalize 재실행으로 재현 가능)</td></tr>
+  <tr><td><span class="tag manual">수동</span>웹 리서치</td><td>9</td><td>대장홍대선 · 광명서울고속도로 · 김포공항 혁신지구 · 가양 CJ부지 · 서서울문화플라자 · 서남선 · 대장신도시+SK · 신정지선(무산) · 마곡 미리내집</td><td><b>각 신호가 "빠진 소스"를 가리킴</b> → §3의 소스화 대상 커넥터 추가 후 자동 유도로 대체</td></tr>
+  <tr><td><span class="tag manual">수동</span>초안</td><td>1</td><td>macro_signals_draft.json</td><td>소스 확보 시 폐기 또는 승격</td></tr>
+  <tr><td><span class="tag auto">자동</span>후보층</td><td>464</td><td>signals_auto.json 전체</td><td>완전 자동 (signalize.py)</td></tr>
+</table>
+
+<h2 id="sources">3. 소스 카탈로그</h2>
+<h3>3-1. 가동 중 (전국 커버)</h3>
+<table>
+  <tr><th>소스</th><th>주소</th><th>커버리지</th><th>무엇을 얻나</th><th>스크립트</th></tr>
+  <tr><td><span class="tag live">가동</span><b>나라장터 입찰공고 API</b></td><td><code>apis.data.go.kr/1230000/ad/BidPublicInfoService</code></td><td>전국 (현재 active_scope=수도권)</td><td>용역·공사 입찰공고 = 사업의 "움직임" (타당성→설계→공사 단계 증거)</td><td><code>collect_capital.py</code></td></tr>
+  <tr><td><span class="tag live">가동</span><b>DART 공시 API</b></td><td><code>opendart.fss.or.kr/api</code></td><td>전국</td><td>유형자산 취득·신규시설투자 = 기업이전/사옥·공장 신호</td><td><code>collect_capital.py</code></td></tr>
+  <tr><td><span class="tag live">가동</span><b>공동주택 관리정보 API</b></td><td><code>apis.data.go.kr/1613000/AptListService3</code> + <code>AptBasisInfoServiceV4</code></td><td><b>전국 22,235단지</b></td><td>단지명·법정동코드·세대수·준공년월·도로명주소 (아파트는 신호의 파생 참조 정보, P4)</td><td><code>apt_list_all.py</code> → <code>build_apts_all.py</code></td></tr>
+  <tr><td><span class="tag live">가동</span><b>브이월드 지오코더 2.0</b></td><td><code>api.vworld.kr/req/address</code></td><td>전국</td><td>도로명/지번 주소 → 좌표 (도로명 road 우선, 지번 parcel 폴백)</td><td><code>build_apts_all.py</code>, <code>geocode_vworld.py</code></td></tr>
+  <tr><td><span class="tag live">가동</span><b>행정경계 geojson</b></td><td>공공 경계 데이터 (SGIS/행안부 유래)</td><td>시군구 251 전국 / 법정동 서울 467</td><td>지도 폴리곤·집계 단위. <b>법정동 전국 확장이 남은 과제</b></td><td><code>sgg_all.geojson</code>, <code>seoul_bdong.geojson</code></td></tr>
+</table>
+
+<h3>3-2. Phase 1 예정 (sources.json 골격 있음)</h3>
+<table>
+  <tr><th>소스</th><th>주소</th><th>커버리지</th><th>왜 필요한가</th></tr>
+  <tr><td><span class="tag plan">예정</span>서울시 고시공고</td><td><code>seoul.go.kr/news/news_notice.do</code></td><td>서울 전역</td><td>도시관리계획·정비계획·지구단위 <b>최초 공식 등장 지점</b></td></tr>
+  <tr><td><span class="tag plan">예정</span>서울시 도시철도망계획</td><td><code>news.seoul.go.kr/traffic</code></td><td>서울 전역</td><td>서남선 등 도시철도 노선의 최초 공식 소스 → <b>수동신호 '서남선' 대체</b></td></tr>
+  <tr><td><span class="tag plan">예정</span>국토교통부 보도·고시</td><td><code>molit.go.kr/USR/NEWS/m_71/lst.jsp</code></td><td><b>전국</b></td><td>광역철도(대장홍대선)·고속도로(광명서울)·혁신지구(김포공항) 승인/고시 → <b>수동신호 3건+ 대체</b></td></tr>
+  <tr><td><span class="tag plan">예정</span>3기신도시/LH</td><td><code>3기신도시.kr</code></td><td>수도권</td><td>대장신도시 등 택지지구 추진현황 → <b>수동신호 대체</b></td></tr>
+  <tr><td><span class="tag plan">예정</span>SH 공고</td><td><code>i-sh.co.kr</code></td><td>서울</td><td>미리내집 등 공공주택 모집 → <b>수동신호 대체</b></td></tr>
+  <tr><td><span class="tag plan">예정</span>자치구·시군구 고시</td><td>각 기초단체 고시판</td><td>전국 (템플릿 복제)</td><td>정비구역·문화시설 등. <b>기관목록은 데이터(sources.json) — 한 줄 추가로 시군구 복제</b></td></tr>
+  <tr><td><span class="tag plan">예정</span>정비사업 정보몽땅</td><td><code>cleanup.seoul.go.kr</code></td><td>서울(타 시도 유사시스템 별도)</td><td>정비구역별 공식 추진단계 — 정비사업 소스단계의 표준 공급원</td></tr>
+</table>
+<p class="note">원칙: 새 소스는 반드시 <code>sources.json</code>에 등록(주소·파서·지역·상태) 후 크롤러가 데이터로 순회. 코드에 기관 하드코딩 금지.</p>
+
+<h2 id="extract">4. 추출 방법 (소스별)</h2>
+<table>
+  <tr><th>소스</th><th>방법</th><th>필터/규칙</th></tr>
+  <tr><td>나라장터</td><td>REST API, JSON. 조회기간은 "달력상 1개월" 제한 → 구간 분할 호출. 월 단위 캐시(<code>cache_1yr/</code>)로 이어받기</td><td>키워드 포함: 개발계획·지구단위·정비·타당성·기본계획·실시설계·철도·도로·조성·건립 등 / 제외: 폐기물·청소·방화벽·유지관리 등 (<code>sources.json</code>의 keyword_include/exclude가 SSOT). 지역 키워드 단독 필터는 동음이의어(부산 강서구, 방화문) 때문에 금지 — 수요기관 소재지 병행</td></tr>
+  <tr><td>DART</td><td>목록 API → (지역정보 없음) → 수도권 소재 기업만 회사 API+원문 zip 2단 조회로 취득 목적물 소재지 확인</td><td>공시유형: 유형자산취득·신규시설투자. 금액 컷 없음(전건)</td></tr>
+  <tr><td>공동주택</td><td><code>getTotalAptList3</code> 1회 페이징으로 전국 단지목록(22,235) → 단지별 <code>getAphusBassInfoV4</code>로 기본정보</td><td>일일 트래픽 한도 존재 → 100건 단위 증분 저장, kaptCode 기준 재개</td></tr>
+  <tr><td>브이월드</td><td>주소→좌표 REST. 도로명(road) 실패 시 지번(parcel) 폴백</td><td>지번주소는 단지명 꼬리 제거 후 질의. 실패율 &lt;1%</td></tr>
+</table>
+
+<h2 id="process">5. 가공 방법 (signalize.py — 원시→후보)</h2>
+<ul>
+  <li><b>컷라인</b>: G2B는 추정가 <b>5억+</b>만(<code>CUT_KRW</code> 한 곳에서 관리), DART는 전건.</li>
+  <li><b>중복 통합</b>: 제목 정규화(괄호·차수·"재공고" 제거) 후 (시도, 시군구, 정규화제목 40자) 키로 그룹핑 → 같은 사업의 차수·재공고를 1신호로. 대표 공고는 최신일자.</li>
+  <li><b>위치 추출</b>: 제목·본문에서 동·지번 정규식 추출 → 동 대표점 폴백 좌표(법정동 경계 보유 지역). <b>폴백 좌표는 실좌표 아님을 항상 표기</b>(지도 정직성 §4.1).</li>
+  <li><b>소스단계 추정</b>: 공고 제목 키워드 → 소스단계 라벨. 규칙표(<code>STAGE_GUESS</code>):
+    타당성|기본구상 → "타당성·기본구상 (추정)" / 기본계획 → "기본계획 (추정)" / 지구단위|정비계획 → "계획수립 (추정)" / 실시설계|설계용역 → "설계 (추정)" / 감리|건설사업관리 → "착공·공사 (추정)" / 조성|건립|신설|확장 → "사업추진 (단계 미상)"</li>
+  <li><b>산출 필드</b>: 제목, 기간, 공고수, 금액, 소스, 원문링크(전부), 위치추출, stage_guess.</li>
+</ul>
+
+<h2 id="mapping">6. 매핑 방법</h2>
+<h3>6-1. 지역 매핑</h3>
+<p><code>regions.json</code>(17시도·251시군구·신도시별칭·기관규칙 SSOT) + <code>region_util.py</code>(공용 함수). 수집범위는 <code>active_scope.collect</code>로만 제어 — 코드 수정 없이 전국 전환.</p>
+<h3>6-2. 분류·반경 매핑</h3>
+<p>신호의 <code>radius_type</code>(세부유형) 하나가 <b>4분류</b>(교통/일자리/정비/생활인프라)와 <b>영향반경</b>을 동시에 결정. 반경은 사용자 편집 가능(사이트 ⚙ 반경 설정). 점수·가중치 합산은 금지(P3) — 분류·개수·거리만.</p>
+<h3>6-3. 단계 매핑 (이중 관리: 소스단계 → 4단계 백본)</h3>
+<p>모든 신호는 소스단계(<code>current_stage</code>)를 원문 용어로 보존하고, 아래 규칙으로 4단계 백본(<code>phase</code>)에 매핑해 둘 다 기록한다. 우선순위: <b>① 확정층 명시 phase → ② 유형 트랙 매칭 → ③ 키워드 폴백</b>.</p>
+<table>
+  <tr><th>유형(템플릿)</th><th>계획</th><th>인가</th><th>착공</th><th>준공·개통</th></tr>
+  <tr><td>철도</td><td>계획반영 · 예타/민자적격성 · 기본계획</td><td>실시계획 승인</td><td>착공</td><td>개통</td></tr>
+  <tr><td>도로</td><td>계획반영 · 타당성</td><td>설계</td><td>착공</td><td>개통</td></tr>
+  <tr><td>공공시설</td><td>예산반영</td><td>설계용역 · 공사입찰</td><td>착공</td><td>준공</td></tr>
+  <tr><td>기업이전</td><td>토지취득</td><td>인허가</td><td>착공</td><td>입주</td></tr>
+  <tr><td>정비사업</td><td>구역지정</td><td>조합설립 · 사업시행인가 · 관리처분</td><td><b>이주 · 철거</b> · 착공</td><td>준공</td></tr>
+  <tr><td colspan="5" class="note">키워드 폴백: 준공|개통|입주|공급·모집 → 준공·개통 / 착공|이주|철거 → 착공 / 인가|승인|지정|가결|고시|입찰|설계 → 인가 / 계획|구상|타당성|예타 → 계획</td></tr>
+</table>
+<p class="note">상태(활성/정체/종결)는 단계와 직교하는 별개 축: 6개월+ 무움직임=정체(자동 파생), 무산=종결. 필터 대상이 아니라 항상표시 표식(P5).</p>
+<h3>6-4. 좌표 매핑</h3>
+<p>확정 신호=검증 좌표(정식 핀) / 후보=동 대표점 폴백(회색 점선, "근사" 표기) / 아파트=도로명 지오코딩(도로 수준, 건물단위 아님을 표기).</p>
+
+<h2 id="manual">7. 수동 작업 지점 · 자동화 로드맵</h2>
+<table>
+  <tr><th>#</th><th>수동 지점 (현재)</th><th>자동화 방침</th></tr>
+  <tr><td>1</td><td>후보→확정 승격 (좌표·단계 확인)</td><td><b>유일하게 남길 사람 판단.</b> 승격 UI를 1클릭화(좌표 자동제안=브이월드, 단계 자동제안=STAGE_GUESS)</td></tr>
+  <tr><td>2</td><td>수동 리서치 신호 등록 (§2의 9건)</td><td><b>중단.</b> 새 호재를 알게 되면 신호를 쓰는 게 아니라 그 호재의 공식 소스를 sources.json에 커넥터로 추가 → 자동 유도</td></tr>
+  <tr><td>3</td><td>지번→좌표 확인</td><td>완료 — 브이월드 자동 지오코딩으로 대체</td></tr>
+  <tr><td>4</td><td>macro 초안 관리</td><td>소스 커넥터 확보 대로 폐기</td></tr>
+</table>
+<p class="note">목표 상태: 소스 커넥터(sources.json) 추가 = 데이터 1줄, 수집·후보화 전자동, 사람은 승격 클릭만. 이 구조가 전국을 1인이 감당하는 유일한 방법이다.</p>
+
+</div>
+</body>
+</html>
