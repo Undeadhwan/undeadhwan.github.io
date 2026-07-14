@@ -193,6 +193,16 @@
   .apt-house.zero { background:#a7afc4; box-shadow:0 1px 3px rgba(0,0,0,.2); min-width:0; width:9px; height:9px; padding:0; border-radius:3px; opacity:.85; }
   .apt-house.zero::before { border-bottom-color:#a7afc4; border-left-width:7px; border-right-width:7px; top:-6px; }
   .apt-house.zero::after { border-top-color:#a7afc4; border-left-width:4px; border-right-width:4px; bottom:-4px; }
+  /* 아파트 hover 팝업 (호갱노노식 카드 — 실거래가 제외) */
+  .leaflet-tooltip.apt-tip { background:transparent; border:none; box-shadow:none; padding:0; white-space:normal; }
+  .leaflet-tooltip.apt-tip::before { display:none; }
+  .apt-pop { background:#fff; border-radius:12px; box-shadow:0 6px 22px rgba(0,0,0,.24); padding:11px 14px; min-width:180px; max-width:250px; }
+  .apt-pop-nm { font-size:15px; font-weight:800; color:#1a1a1a; }
+  .apt-pop-sub { font-size:11.5px; color:var(--muted); margin-top:3px; }
+  .apt-pop-cats { font-size:12px; margin-top:8px; display:flex; flex-wrap:wrap; gap:4px 10px; border-top:1px solid var(--line); padding-top:7px; }
+  .apt-pop-cats span { font-weight:700; }
+  .apt-pop-cats .tot { color:var(--ink); font-weight:800; width:100%; margin-bottom:1px; }
+  .apt-pop-cats.none { color:var(--muted); font-weight:400; }
   /* 레이더 파동 (크게) */
   .radar { position:relative; width:0; height:0; pointer-events:none; }
   .radar span { position:absolute; border:3px solid #2e5ce6; border-radius:50%; left:0; top:0; transform:translate(-50%,-50%);
@@ -1232,10 +1242,10 @@ function initLeaflet() {
     if (map.getZoom() < APT_ZOOM) return;
     const bd = map.getBounds();
     const cands = APTS.filter(a => bd.contains([a.lat, a.lon]))
-      .map(a => ({ a, n: signalsNearPoint([a.lon, a.lat]).length }));
+      .map(a => { const near = signalsNearPoint([a.lon, a.lat]); return { a, near, n: near.length }; });
     cands.sort((x, y) => y.n - x.n);   // 신호 있는 단지 우선(겹칠 때 이긴다 → 0건은 양보)
     const placed = [];
-    for (const { a, n } of cands) {
+    for (const { a, near, n } of cands) {
       if (placed.length > 170) break;
       const pt = map.latLngToContainerPoint([a.lat, a.lon]);
       if (collides(placed, pt, n ? 40 : 16, n ? 34 : 16)) continue;   // 겹치면 숨김
@@ -1244,7 +1254,17 @@ function initLeaflet() {
       const cls = "apt-house" + (n ? "" : " zero") + (sel ? " sel" : "");
       const inner = n ? `<span class="hc">${n}<small>건</small></span>` : "";
       const m = L.marker([a.lat, a.lon], { pane: "cand", zIndexOffset: n ? 1000 : 0,
-        icon: L.divIcon({ className: "", html: `<div class="${cls}" title="${a.n.replace(/"/g, "")}${n ? " · 호재 " + n + "건" : ""}">${inner}</div>`, iconSize: null }) }).addTo(map);
+        icon: L.divIcon({ className: "", html: `<div class="${cls}">${inner}</div>`, iconSize: null }) }).addTo(map);
+      // hover 팝업: 이름·세대수·준공년월 + 호재유형별 건수 (실거래가 제외)
+      const byCat = {};
+      near.forEach(({ s }) => { const c = catOf(s); byCat[c] = (byCat[c] || 0) + 1; });
+      const catHtml = DISPLAY_CAT_KEYS.filter(k => byCat[k])
+        .map(k => `<span style="color:${CAT_COLOR[k]}">● ${k} ${byCat[k]}</span>`).join("");
+      const sub = `${a.sg} ${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : ""}${a.built ? " · 준공 " + a.built : ""}`;
+      const pop = `<div class="apt-pop"><div class="apt-pop-nm">${a.n}</div><div class="apt-pop-sub">${sub}</div>`
+        + (n ? `<div class="apt-pop-cats"><span class="tot">반경 내 호재 ${n}건</span>${catHtml}</div>`
+             : `<div class="apt-pop-cats none">반경 내 호재 없음</div>`) + `</div>`;
+      m.bindTooltip(pop, { direction: "top", offset: [0, n ? -12 : -6], className: "apt-tip", sticky: false });
       m.on("click", () => { treeState.selKey = `apt|${a.n}|${a.dong}`; buildTree(); showApt(a); });
       aptDots.push(m);
     }
@@ -1599,7 +1619,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260714l");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260714m");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
