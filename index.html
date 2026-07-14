@@ -1133,6 +1133,7 @@ function initLeaflet() {
   // 신호 핀이 동 폴리곤에 클릭을 뺏기지 않도록 전용 상위 pane
   map.createPane("cand").style.zIndex = 640;
   map.createPane("sig").style.zIndex = 650;
+  map.getPane("tooltipPane").style.zIndex = 720;   // 팝업(아파트 hover 카드 등)은 항상 핀·영향원 위에
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     { maxZoom: 19, attribution: "&copy; OpenStreetMap — 임시 베이스맵 (카카오맵 승인 시 전환)" }).addTo(map);
   const DONG_ZOOM = 12;   // 이 줌 이상 = 동 레벨, 미만 = 시군구 레벨
@@ -1634,7 +1635,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260714o");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260714p");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
