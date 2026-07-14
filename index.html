@@ -920,9 +920,34 @@ function initLeaflet() {
   });
   window._dbg = { applyLOD, renderSggBadges, renderDongBadges, get badges() { return badges; } };
 
+  let lines = [];
+  const clearLines = () => { lines.forEach(l => map.removeLayer(l)); lines = []; };
+  // 노선 선: 실제 LineString geometry면 실선(확정), corridor(approx)면 점선+회랑(§4.1)
+  const drawLine = sg => {
+    let latlngs = null, approx = false;
+    if (sg.geometry && sg.geometry.type === "LineString") latlngs = sg.geometry.coordinates.map(([x, y]) => [y, x]);
+    else if (sg.corridor && sg.corridor.path) { latlngs = sg.corridor.path.map(([x, y]) => [y, x]); approx = sg.corridor.type === "approx"; }
+    if (!latlngs || latlngs.length < 2) return;
+    const col = catOf(sg) === "도로" ? "#e07b2e" : "#4a6e93";
+    if (approx) {  // 반투명 회랑 밴드 + 점선 중심선
+      lines.push(L.polyline(latlngs, { pane: "cand", color: col, weight: 16, opacity: .12, interactive: false }).addTo(map));
+      const dl = L.polyline(latlngs, { pane: "cand", color: col, weight: 3, opacity: .85, dashArray: "8 6" }).addTo(map);
+      dl.bindTooltip(`${sg.title} — 개략 회랑(점선): 역 위치 연결, 실제 노선도 아님`, { sticky: true });
+      dl.on("click", () => showSignal(sg, false));
+      lines.push(dl);
+    } else {       // 확정 고시 도형 = 실선 + 케이싱
+      lines.push(L.polyline(latlngs, { pane: "cand", color: "#fff", weight: 6, opacity: .9, interactive: false }).addTo(map));
+      const sl = L.polyline(latlngs, { pane: "cand", color: col, weight: 3.5, opacity: .95 }).addTo(map);
+      sl.bindTooltip(sg.title, { sticky: true });
+      sl.on("click", () => showSignal(sg, false));
+      lines.push(sl);
+    }
+  };
   const refreshPins = () => {
     pins.forEach(m => map.removeLayer(m)); pins = [];
+    clearLines();
     applyLOD();
+    SIGNALS.filter(visible).forEach(sg => drawLine(sg));   // 노선 먼저(핀이 위)
     SIGNALS.filter(visible).forEach(sg => {
       const pts = signalPoints(sg);
       pts.forEach((p, k) => {
@@ -1205,14 +1230,16 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
+  const CB = "?b=" + (window.BUILD || "20260714b");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments] = await Promise.all([
-    fetch("seoul_bdong.geojson").then(r => r.json()),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
-    fetch("sgg_capital.geojson").then(r => r.json()),     // 수도권 시군구 79
-    fetch("signals.json").then(r => r.json()),
-    fetch("macro_signals_draft.json").then(r => r.json()),
-    fetch("capital_raw.json").then(r => r.json()),
-    fetch("signals_auto.json").then(r => r.json()),
-    fetch("apartments.json").then(r => r.json()).catch(() => ({ apts: [] }))
+    gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
+    gj("sgg_capital.geojson"),     // 수도권 시군구 79
+    gj("signals.json"),
+    gj("macro_signals_draft.json"),
+    gj("capital_raw.json"),
+    gj("signals_auto.json"),
+    gj("apartments.json").catch(() => ({ apts: [] }))
   ]);
   DONG_GEO = dong;
   SGG_GEO = sgg;
