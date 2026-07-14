@@ -459,7 +459,7 @@ const CAT_COLOR = { "교통": "#2e5ce6", "일자리": "#e0761e", "정비": "#c43
 const colorOf = s => CAT_COLOR[catOf(s)] || "#12263f";
 
 /* ══════════ 상태 ══════════ */
-let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null;
+let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [];
 const RAW_BADGE_CUT = 500000000;  // 시군구 뱃지 집계의 원시공고 금액 하한 (5억)
 /* 대도시 분할구(고양시덕양구 등) → 시 단위 표시명 */
 function sggDisplayName(name) {
@@ -1285,6 +1285,25 @@ function initLeaflet() {
       aptDots.push(m);
     }
   };
+  // 정비사업 후보 마커(정비몽땅+공공데이터): 동 레벨 이상, 단계별 색·후보 점선. 좌표 기반이라 동경계 없어도 표시
+  let jbDots = [];
+  const clearJeongbi = () => { jbDots.forEach(m => map.removeLayer(m)); jbDots = []; };
+  const JB_PHASE_COL = { "계획": "#9aa6c8", "인가": "#e0761e", "착공": "#c4392f", "준공·개통": "#2e8b57" };
+  const renderJeongbi = () => {
+    clearJeongbi();
+    if (map.getZoom() < DONG_ZOOM || !JEONGBI.length) return;
+    const bd = map.getBounds();
+    JEONGBI.filter(c => bd.contains([c.lat, c.lon])).slice(0, 280).forEach(c => {
+      const col = c.drop ? "#9aa3b2" : (JB_PHASE_COL[c.phase] || "#c4392f");
+      const m = L.circleMarker([c.lat, c.lon], { pane: "cand", radius: 5, color: col, weight: 2,
+        dashArray: "2 2", fillColor: "#fff", fillOpacity: .9, opacity: c.drop ? .5 : .95 }).addTo(map);
+      m.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${c.n}</div>`
+        + `<div class="apt-pop-sub">정비 후보 · ${c.type || ""} · ${c.sg || ""} ${c.dong || ""}${c.hh ? " · " + c.hh + "세대" : ""}</div>`
+        + `<div class="apt-pop-cats"><span style="color:${col}">● 단계 ${c.stage} → ${c.phase}</span>${c.drop ? '<span style="color:#b3251e">· 종결·무산</span>' : ""}</div></div>`,
+        { direction: "top", offset: [0, -6], className: "apt-tip", sticky: true });
+      jbDots.push(m);
+    });
+  };
   // 호갱노노식 LOD: 축소=시군구 박스 → 중간=동 박스 → 확대=아파트(동 박스 숨김, 동 대신 아파트)
   const applyLOD = () => {
     const z = map.getZoom();
@@ -1292,6 +1311,7 @@ function initLeaflet() {
     else { if (map.hasLayer(dongLayer)) map.removeLayer(dongLayer); }
     if (z >= APT_ZOOM) { clearBadges(); renderAptDots(); }        // 아파트 노출 = 동/시군구 박스 제거
     else { clearAptDots(); (z >= DONG_ZOOM ? renderDongBadges : renderSggBadges)(); }
+    renderJeongbi();   // 정비 후보는 배지/아파트와 별개 레이어로 항상(동 레벨 이상)
   };
   map.on("zoomend moveend", applyLOD);
   map.on("moveend", () => { try { updateCenterLabel(); } catch (e) {} });
@@ -1635,9 +1655,9 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260714p");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260714q");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
-  const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions] = await Promise.all([
+  const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
@@ -1646,13 +1666,15 @@ function renderRaw(more) {
     gj("signals_auto.json"),
     gj("apartments.json").catch(() => ({ apts: [] })),          // 강서 정밀본(도로수준 검수)
     gj("apartments_all.json").catch(() => ({ apts: [] })),       // 전국(공동주택 API+브이월드)
-    gj("regions.json").catch(() => null)
+    gj("regions.json").catch(() => null),
+    gj("signals_jeongbi_all.json").catch(() => ({ cands: [] }))  // 정비사업 후보(정비몽땅+공공데이터)
   ]);
   REGIONS = regions;
   DONG_GEO = dong;
   SGG_GEO = sgg;
   RAW = rawData.rows;
   AUTO = autoData.candidates;
+  JEONGBI = (jeongbiData && jeongbiData.cands) || [];
   // 전국 아파트 병합: 전국본을 베이스로, 강서 정밀본(검수)으로 덮어씀. 좌표 있는 것만.
   {
     const m = new Map();
