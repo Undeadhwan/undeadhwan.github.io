@@ -76,9 +76,10 @@
             border:1px solid #e2e6f0; transition:transform .1s; }
   .hj-box:hover { transform:translateY(-2px); z-index:500; }
   .hj-box .nm { font-size:10px; font-weight:700; color:#4a5468; white-space:nowrap; margin-bottom:1px; }
-  .hj-box .grades { display:flex; gap:5px; justify-content:center; align-items:center; white-space:nowrap; }
-  .hj-box .grades .g { font-size:12px; font-weight:800; font-variant-numeric:tabular-nums; }
-  .hj-box .grades .g-A { background:#d6156d; border-radius:5px; padding:0 5px; box-shadow:0 1px 3px rgba(214,21,109,.4); }
+  .hj-box .grades { display:flex; gap:7px; justify-content:center; align-items:center; white-space:nowrap; }
+  .hj-box .grades .g { display:inline-flex; align-items:center; gap:3px; }
+  .hj-box .grades .gl { font-size:10px; font-weight:800; color:#fff; border-radius:4px; padding:0 4px; line-height:1.5; }
+  .hj-box .grades .gn { font-size:12.5px; font-weight:800; color:#1f2633; font-variant-numeric:tabular-nums; }
   .hj-box::after { content:""; position:absolute; left:50%; bottom:-5px; transform:translateX(-50%);
                    border:5px solid transparent; border-top-color:#fff; }
   .hj-box.zero { background:#f1f3f7; border-color:#e2e6f0; box-shadow:0 1px 4px rgba(0,0,0,.12); }
@@ -496,10 +497,10 @@ function levelCounts(sigs) {
   sigs.forEach(x => { const s = x.s || x; const l = levelOf(s), c = catOf(s); if (!m[l]) return; m[l].total++; m[l].cats[c] = (m[l].cats[c] || 0) + 1; m._total++; });
   return m;
 }
-/* 지도 배지용: 등급별 건수 (총건수·내부박스 없이 등급색 텍스트, A급은 강조 배경) */
+/* 지도 배지용: 등급별 건수. 등급=색 칩(letter), 건수=중립 검정(number) 분리 */
 function gradeBadgeHtml(m) {
   const inner = LEVELS.filter(l => m[l].total).map(l =>
-    `<span class="g g-${l}" style="color:${l === "A" ? "#fff" : LVL_COLOR[l]}">${l}${m[l].total}</span>`).join("");
+    `<span class="g"><b class="gl" style="background:${LVL_COLOR[l]}">${l}</b><span class="gn">${m[l].total}</span></span>`).join("");
   return inner ? `<div class="grades">${inner}</div>` : "";
 }
 /* 사용자 오버라이드 로드 (localStorage) — 편집 시 저장, 즉시 반영 */
@@ -2016,7 +2017,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260715r");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260715s");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
