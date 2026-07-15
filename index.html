@@ -171,6 +171,7 @@
   .rmhead { display:flex; justify-content:space-between; align-items:center; font-size:15px; margin-bottom:6px; }
   .rmnote { font-size:11.5px; color:var(--muted); margin-bottom:14px; line-height:1.5; }
   .rmcat { font-size:12px; font-weight:800; color:#2e5ce6; margin:14px 0 6px; }
+  .rmsub { font-size:11.5px; font-weight:700; color:#5a6478; margin:8px 0 3px 2px; }
   .rmrow { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:7px 0; border-bottom:1px solid var(--line); }
   .rmrow .rlabel { font-size:13px; }
   .rmrow input { width:76px; font-size:13px; padding:5px 8px; border:1px solid var(--line); border-radius:7px; text-align:right; }
@@ -459,21 +460,28 @@ function phaseOf(s) {
    세부유형이 곧 신호의 radius_type이며, 그것이 분류(catOf)와 반경(getRadius) 둘 다 결정. */
 /* 4대분류 × 레벨(A핵심/B중대형/C일반). 각 신호=cat(대분류)+lvl. 반경=CLASSES[cat][lvl]. */
 const CLASSES_DEFAULT = {
-  "교통":     { A: 3.0, B: 1.5, C: 0.8 },
+  "교통": {   // 세부: 철도(역세권)/도로(차량 이동) — 반경 특성 상이
+    "철도": { A: 3.0, B: 1.5, C: 0.8 },
+    "도로": { A: 5.0, B: 3.0, C: 1.5 }
+  },
   "일자리":   { A: 4.0, B: 2.0, C: 1.0 },
   "인프라":   { A: 3.0, B: 1.5, C: 0.5 },
-  "주거개발": { A: 5.0, B: 2.0, C: 0.8 }
+  "주거개발": { A: 3.0, B: 2.0, C: 0.8 }
 };
 const CAT_KEYS = ["교통", "일자리", "인프라", "주거개발"];
 const DISPLAY_CAT_KEYS = ["교통", "일자리", "인프라", "주거개발", "기타"];
 const LEVELS = ["A", "B", "C"];
 const LEVEL_NAME = { A: "A급", B: "B급", C: "C급" };
+const SUB_KEYS = { "교통": ["철도", "도로"] };   // 세부 반경 축 있는 대분류
 const CAT_SUB = { "교통": "철도 / 도로", "일자리": "업무 / R&D", "인프라": "쇼핑 / 병원 / 녹지", "주거개발": "신도시 / 택지 / 재개발 / 재건축" };
 const LEVEL_DESC = {
-  "교통": { A: "핵심 광역철도·도시고속화 (GTX·신분당·지하화)", B: "일반 지하철·고속도로 IC 신설", C: "지선·경전철·트램·우회도로" },
+  "교통": {
+    "철도": { A: "핵심 광역철도 (GTX·신분당·지하화)", B: "일반 지하철 신설·연장", C: "지선·경전철·트램" },
+    "도로": { A: "핵심 지하고속도로·주요 고속도로 IC 신설", B: "외곽순환 등 일반 IC·대형 터널", C: "일반 우회도로·진출입로 개선" }
+  },
   "일자리": { A: "메가 업무타운 (연면적 10만㎡↑·3천명↑)", B: "중대형 업무·지식산업센터 (3~10만㎡)", C: "일반 오피스·지산 (1~3만㎡)" },
   "인프라": { A: "랜드마크급 (복합몰·상급종합병원·대형공원)", B: "중대형 (대형마트·종합병원·근린공원)", C: "근린 생활 (준종합병원·소공원·문화체육센터)" },
-  "주거개발": { A: "도시급 대형 (1만 세대↑·3기 신도시)", B: "지역 대장주급 (3천~1만 세대)", C: "일반 단지급 (500~3천 세대)" }
+  "주거개발": { A: "도시급 대형 (5천 세대↑)", B: "지역 대장주급 (1,500~5천 세대)", C: "일반 단지급 (500~1,500 세대)" }
 };
 const CAT_COLOR = { "교통": "#2e5ce6", "일자리": "#e0761e", "인프라": "#2e8b57", "주거개발": "#c4392f", "기타": "#6e6e73" };
 /* 레벨 pill: 분류색 강도로 등급화 (A=진한 채움/B=중간 채움/C=연한). A급이 확 띔 */
@@ -503,26 +511,30 @@ function gradeBadgeHtml(m) {
     `<span class="g"><b class="gl" style="background:${LVL_COLOR[l]}">${l}</b><span class="gn">${m[l].total}</span></span>`).join("");
   return inner ? `<div class="grades">${inner}</div>` : "";
 }
-/* 사용자 오버라이드 로드 (localStorage) — 편집 시 저장, 즉시 반영 */
+/* 사용자 오버라이드 로드 (localStorage) — 편집 시 저장, 즉시 반영. 교통은 {철도/도로:{A/B/C}} 중첩 */
 function loadRadii() {
   const merged = JSON.parse(JSON.stringify(CLASSES_DEFAULT));
   try {
-    const saved = JSON.parse(localStorage.getItem("hojae_radii2") || "{}");
-    for (const c in saved) for (const l in (saved[c] || {}))
-      if (merged[c] && merged[c][l] != null) merged[c][l] = saved[c][l];
+    const saved = JSON.parse(localStorage.getItem("hojae_radii3") || "{}");
+    const deep = (m, s) => { for (const k in s) { if (m[k] && typeof s[k] === "object" && typeof m[k] === "object") deep(m[k], s[k]); else if (m[k] != null && typeof s[k] === "number") m[k] = s[k]; } };
+    deep(merged, saved);
   } catch (e) {}
   return merged;
 }
 let CLASSES = loadRadii();
-function saveRadii() { localStorage.setItem("hojae_radii2", JSON.stringify(CLASSES)); }
+function saveRadii() { localStorage.setItem("hojae_radii3", JSON.stringify(CLASSES)); }
 /* 신호 → 대분류/레벨. cat·lvl 명시 우선, 없으면 레거시 template_type 폴백 */
 const CAT_LEGACY = { "철도": "교통", "도로": "교통", "기업이전": "일자리", "정비사업": "주거개발", "공공시설": "인프라" };
 const catOf = s => s.cat || CAT_LEGACY[s.template_type] || "기타";
 const levelOf = s => s.lvl || "C";
+/* 교통 세부(철도/도로) — 반경만 좌우, 표시 분류는 여전히 교통. sub 명시 우선, 없으면 template_type→기본 철도 */
+const subOf = s => s.sub || (s.template_type === "도로" ? "도로" : "철도");
 const getRadius = s => {
   if (s.radius_m) return s.radius_m;
   const c = catOf(s), l = levelOf(s);
-  return ((CLASSES[c] && CLASSES[c][l]) || 0.8) * 1000;
+  let tbl = CLASSES[c];
+  if (SUB_KEYS[c]) tbl = (tbl[subOf(s)] || tbl[SUB_KEYS[c][0]]);   // 교통=철도/도로 세부표
+  return ((tbl && tbl[l]) || 0.8) * 1000;
 };
 const colorOf = s => CAT_COLOR[catOf(s)] || "#12263f";
 /* ── 호재 카운트: 대분류×레벨 집계 + 표현 헬퍼 ── */
@@ -587,7 +599,7 @@ function buildRailSignals() {
   RAIL.filter(f => f.properties.kind === "line").forEach(f =>
     lvlByLine[f.properties.name] = railLevelOf(f.properties.name, f.properties.linekind));
   RAIL_SIG = RAIL.filter(f => f.properties.kind === "station").map(f => ({
-    _rail: true, title: f.properties.name, cat: "교통", lvl: lvlByLine[f.properties.line] || "B",
+    _rail: true, title: f.properties.name, cat: "교통", sub: "철도", lvl: lvlByLine[f.properties.line] || "B",
     template_type: "철도", current_stage: f.properties.status, phase: f.properties.confirmed ? "착공" : "계획",
     status: "활성", confirmed: f.properties.confirmed, sd: "수도권",
     geometry: { coordinates: f.geometry.coordinates }
@@ -597,7 +609,7 @@ function buildRailSignals() {
    phaseOf가 명시 phase 우선 사용, radius_type로 catOf(정비)·getRadius 결정. */
 function buildJeongbiSignals() {
   JEONGBI_SIG = JEONGBI.filter(c => c.lat && c.lon).map(c => ({
-    _jb: true, title: c.n, cat: "주거개발", lvl: (c.hh >= 10000 ? "A" : c.hh >= 3000 ? "B" : "C"),
+    _jb: true, title: c.n, cat: "주거개발", lvl: (c.hh >= 5000 ? "A" : c.hh >= 1500 ? "B" : "C"),
     template_type: "정비사업", current_stage: c.stage, phase: c.phase, status: c.drop ? "종결" : "활성", confirmed: false,
     sd: c.sd, sg: c.sg, dong: c.dong, hh: c.hh, last_movement: null, target_completion: null,
     geometry: { coordinates: [c.lon, c.lat] }
@@ -754,27 +766,34 @@ document.addEventListener("click", () => { if (openDD) { openDD = null; renderCh
 function openRadius() {
   const body = document.getElementById("rmbody");
   body.innerHTML = "";
+  const rmRow = (label, desc, tbl, lv) => {
+    const row = document.createElement("div"); row.className = "rmrow";
+    row.innerHTML = `<span class="rlabel"><b>${label}</b> <span style="color:#9aa0ad;font-size:11px">${desc}</span></span>`
+      + `<span style="white-space:nowrap"><input type="number" min="0.1" step="0.1" value="${tbl[lv]}"><span class="unit">km 이내</span></span>`;
+    const inp = row.querySelector("input");
+    inp.onchange = () => { const v = parseFloat(inp.value); if (v > 0) { tbl[lv] = v; saveRadii(); renderAll(); } };
+    return row;
+  };
   for (const cat of CAT_KEYS) {
     const h = document.createElement("div"); h.className = "rmcat";
     h.innerHTML = `<span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${CAT_COLOR[cat]};margin-right:6px;vertical-align:1px"></span>${cat} <span style="color:#9aa0ad;font-weight:600">· ${CAT_SUB[cat]}</span>`;
     body.appendChild(h);
-    for (const lv of LEVELS) {
-      const row = document.createElement("div"); row.className = "rmrow";
-      row.innerHTML = `<span class="rlabel"><b>${LEVEL_NAME[lv]}</b> <span style="color:#9aa0ad;font-size:11px">${LEVEL_DESC[cat][lv]}</span></span>`
-        + `<span style="white-space:nowrap"><input type="number" min="0.1" step="0.1" value="${CLASSES[cat][lv]}"><span class="unit">km 이내</span></span>`;
-      const inp = row.querySelector("input");
-      inp.onchange = () => {
-        const v = parseFloat(inp.value);
-        if (v > 0) { CLASSES[cat][lv] = v; saveRadii(); renderAll(); }  // 즉시 적용
-      };
-      body.appendChild(row);
+    if (SUB_KEYS[cat]) {   // 교통: 철도/도로 세부
+      for (const sub of SUB_KEYS[cat]) {
+        const sh = document.createElement("div"); sh.className = "rmsub";
+        sh.textContent = cat === "교통" && sub === "철도" ? "🚈 철도 (역세권 중심)" : "🛣 도로 (차량 이동 중심)";
+        body.appendChild(sh);
+        for (const lv of LEVELS) body.appendChild(rmRow(LEVEL_NAME[lv], LEVEL_DESC[cat][sub][lv], CLASSES[cat][sub], lv));
+      }
+    } else {
+      for (const lv of LEVELS) body.appendChild(rmRow(LEVEL_NAME[lv], LEVEL_DESC[cat][lv], CLASSES[cat], lv));
     }
   }
   document.getElementById("radiusModal").style.display = "block";
 }
 function closeRadius() { document.getElementById("radiusModal").style.display = "none"; }
 function resetRadius() {
-  localStorage.removeItem("hojae_radii2");
+  localStorage.removeItem("hojae_radii3");
   CLASSES = loadRadii();
   openRadius(); renderAll();
 }
@@ -1024,7 +1043,7 @@ function cardHtml(s, extra = "") {
   const dropped = s.status === "종결";
   const detail = s.current_stage && s.current_stage !== ph ? ` — ${s.current_stage}` : "";
   return `
-    <div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}</span>
+    <div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}${catOf(s) === "교통" ? " · " + subOf(s) : ""}</span>
       · ${levelPill(s)} · 영향 ${km}km
       ${s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>'}
       ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}
@@ -1155,7 +1174,7 @@ function renderDetail(s) {
   p.innerHTML = `
     <div class="phead"><span></span><div class="closex" onclick="closePanel()">✕</div></div>
     <div class="detail">
-      <div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}</span>
+      <div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}${catOf(s) === "교통" ? " · " + subOf(s) : ""}</span>
         · ${levelPill(s)} · 영향 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km
         ${s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>'}
         ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}</div>
@@ -1674,7 +1693,7 @@ function initLeaflet() {
   };
   // 철도 노선 → 신호 상세 어댑트(우측 패널)
   const railToSignal = (p, cen) => ({
-    _rail: true, title: p.full || p.name, cat: "교통", lvl: railLevelOf(p.full || p.name, p.linekind),
+    _rail: true, title: p.full || p.name, cat: "교통", sub: "철도", lvl: railLevelOf(p.full || p.name, p.linekind),
     template_type: "철도", current_stage: p.status, phase: p.phase, status: "활성", confirmed: p.confirmed,
     sd: "수도권", geometry: { coordinates: cen },
     sources: p.src_url ? [p.src_url] : [], stage_note: `${p.linekind} · ${p.status}${p.note ? " · " + p.note : ""}`,
@@ -2033,7 +2052,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260715u");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260715v");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData, dartData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
