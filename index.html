@@ -483,7 +483,18 @@ function lvStyle(cat, lvl) {
   if (lvl === "B") return `background:${mid};color:#fff;`;
   return `background:${tint[0]};color:${tint[1]};`;
 }
-function levelPill(s) { const l = levelOf(s); return `<span class="lvtag" style="${lvStyle(catOf(s), l)}">${LEVEL_NAME[l]}</span>`; }
+/* 등급(A/B/C) 공통 색 — 카테고리 무관. A=진한 보라(핵심)→C=연함. 각 화면에서 등급으로 그루핑 */
+const LVL_STYLE = { A: "background:#5a3aa8;color:#fff;", B: "background:#8c74cf;color:#fff;", C: "background:#ece7f8;color:#5a3aa8;" };
+const LVL_TXT = { A: "#4a2f8f", B: "#6f52c0", C: "#8a72c9" };
+function lvlPill(l) { return `<span class="lvtag" style="${LVL_STYLE[l]}">${LEVEL_NAME[l]}</span>`; }
+function levelPill(s) { return lvlPill(levelOf(s)); }
+/* 등급별 집계 (교통·일자리 등 카테고리 pooling) */
+function levelCounts(sigs) {
+  const m = { A: { total: 0, cats: {} }, B: { total: 0, cats: {} }, C: { total: 0, cats: {} }, _total: 0 };
+  sigs.forEach(x => { const s = x.s || x; const l = levelOf(s), c = catOf(s); if (!m[l]) return; m[l].total++; m[l].cats[c] = (m[l].cats[c] || 0) + 1; m._total++; });
+  return m;
+}
+function lvlMiniHtml(m) { const inner = LEVELS.filter(l => m[l].total).map(l => `<span style="color:${LVL_TXT[l]}">${LEVEL_NAME[l]} ${m[l].total}</span>`).join(""); return inner ? `<div class="catmini">${inner}</div>` : ""; }
 /* 사용자 오버라이드 로드 (localStorage) — 편집 시 저장, 즉시 반영 */
 function loadRadii() {
   const merged = JSON.parse(JSON.stringify(CLASSES_DEFAULT));
@@ -520,20 +531,20 @@ function catMiniHtml(m) {
     .map(c => `<span style="color:${CAT_COLOR[c]}">${CAT_SHORT[c]}${m[c].total}</span>`).join("");
   return inner ? `<div class="catmini">${inner}</div>` : "";
 }
-/* 좌측 패널용: 대분류×레벨(A/B/C) 매트릭스 */
+/* 좌측 패널용: 등급(A/B/C)별 그루핑 매트릭스 — 각 등급 안에 분류 구성(교/일/인/주) 소표기 */
 function hojaeMatrixHtml(sigs) {
-  const m = catLevelCounts(sigs);
+  const m = levelCounts(sigs);
   if (!m._total) return `<div class="hmatrix"><div class="pickhint" style="padding:14px 8px">반경 내 호재 없음</div></div>`;
-  const rows = DISPLAY_CAT_KEYS.filter(c => c !== "기타" || m["기타"].total).map(c => {
-    const tot = m[c].total, tint = CAT_TINT[c] || CAT_TINT["기타"];
-    const pills = LEVELS.filter(l => m[c][l]).map(l =>
-      `<span class="lvpill" style="${lvStyle(c, l)}">${LEVEL_NAME[l]} ${m[c][l]}</span>`).join("");
-    return `<div class="hmrow ${tot ? "" : "z"}">
-      <span class="hmc"><span class="hdot" style="background:${CAT_COLOR[c]}"></span>${c}</span>
-      <span class="hmpills">${pills || '<span class="hmz">해당 없음</span>'}</span>
-      <span class="hmtot">${tot || ""}</span></div>`;
+  const rows = LEVELS.map(l => {
+    const g = m[l];
+    const cats = CAT_KEYS.filter(c => g.cats[c])
+      .map(c => `<span style="color:${CAT_COLOR[c]};font-weight:700">${CAT_SHORT[c]}${g.cats[c]}</span>`).join(" ");
+    return `<div class="hmrow ${g.total ? "" : "z"}">
+      <span class="hmc"><span class="lvtag" style="${LVL_STYLE[l]}">${LEVEL_NAME[l]}</span></span>
+      <span class="hmpills">${cats || '<span class="hmz">없음</span>'}</span>
+      <span class="hmtot">${g.total || ""}</span></div>`;
   }).join("");
-  return `<div class="hmatrix"><div class="hmhead">호재 <b>${m._total}</b>건 · 4개 분류 × 레벨(A핵심/B중대형/C일반)</div>${rows}</div>`;
+  return `<div class="hmatrix"><div class="hmhead">호재 <b>${m._total}</b>건 · 등급별 (A핵심 / B중대형 / C일반)</div>${rows}</div>`;
 }
 
 /* ══════════ 상태 ══════════ */
@@ -1043,7 +1054,7 @@ function cmpStats(a) {
   let stalled = 0;
   near.forEach(({ s }) => { byCat[catOf(s)] = (byCat[catOf(s)] || 0) + 1; byPhase[phaseOf(s)]++; if (s.status === "정체") stalled++; });
   const nearest = near[0] ? { title: near[0].s.title, dist: near[0].dist } : null;
-  return { total: near.length, byCat, byCatLvl: catLevelCounts(near), byPhase, stalled, nearest };
+  return { total: near.length, byCat, byLvl: levelCounts(near), byPhase, stalled, nearest };
 }
 function openCompare() {
   if (compareSet.length < 2) return;
@@ -1059,14 +1070,13 @@ function openCompare() {
       <tbody>
         ${row("반경 내 호재", s => `<b>${s.total}건</b>`)}
         ${row("가장 가까운 호재", s => s.nearest ? `${s.nearest.title.length > 16 ? s.nearest.title.slice(0, 16) + "…" : s.nearest.title}<br><span style="color:var(--muted)">${dist(s.nearest.dist)}</span>` : "—")}
-        <tr class="catrow"><td class="rowh" colspan="${compareSet.length + 1}" style="background:#eef1f6;text-align:left">분류 · 레벨별 개수 (A핵심/B중대형/C일반)</td></tr>
-        ${DISPLAY_CAT_KEYS.filter(k => stats.some(s => s.byCat[k])).map(k =>
-          row(`　<span style="color:${CAT_COLOR[k]}">●</span> ${k}`, s => {
-            const m = s.byCatLvl[k];
-            if (!m || !m.total) return `<span style="color:#c3c8d2">·</span>`;
-            const tint = CAT_TINT[k] || CAT_TINT["기타"];
-            return `<span style="white-space:nowrap">${LEVELS.filter(l => m[l]).map(l =>
-              `<span class="cmplv" style="${lvStyle(k, l)}">${LEVEL_NAME[l]} ${m[l]}</span>`).join(" ")}</span>`;
+        <tr class="catrow"><td class="rowh" colspan="${compareSet.length + 1}" style="background:#eef1f6;text-align:left">등급별 개수 (A핵심 / B중대형 / C일반)</td></tr>
+        ${LEVELS.filter(l => stats.some(s => s.byLvl[l].total)).map(l =>
+          row(`　<span class="lvtag" style="${LVL_STYLE[l]}">${LEVEL_NAME[l]}</span>`, s => {
+            const g = s.byLvl[l];
+            if (!g.total) return `<span style="color:#c3c8d2">·</span>`;
+            const cats = CAT_KEYS.filter(c => g.cats[c]).map(c => `<span style="color:${CAT_COLOR[c]}">${CAT_SHORT[c]}${g.cats[c]}</span>`).join(" ");
+            return `<b>${g.total}</b> <span style="font-size:10px">${cats}</span>`;
           })).join("")}
         <tr class="catrow"><td class="rowh" colspan="${compareSet.length + 1}" style="background:#eef1f6;text-align:left">단계별 개수</td></tr>
         ${PHASES.filter(p => stats.some(s => s.byPhase[p])).map(p =>
@@ -1360,7 +1370,7 @@ function initLeaflet() {
       const pt = map.latLngToContainerPoint([c[1], c[0]]);
       if (collides(placed, pt, 78, 46)) continue;   // 겹치면 숨김
       placed.push({ x: pt.x, y: pt.y });
-      const mini = n ? catMiniHtml(catLevelCounts(sigs)) : "";
+      const mini = n ? lvlMiniHtml(levelCounts(sigs)) : "";
       const b = L.marker([c[1], c[0]], {
         icon: L.divIcon({ className: "", html: `<div class="hj-box sgg ${n ? "" : "zero"}"><div class="nm">${disp.split(" ")[1]}</div><div class="ct">${n}<small>건</small></div>${mini}</div>`, iconSize: null })
       }).addTo(map);
@@ -1402,7 +1412,7 @@ function initLeaflet() {
       placed.push({ x: pt.x, y: pt.y });
       const rel = SIGNALS.filter(visible).filter(s => dongRelation(s, f))
         .concat(JEONGBI_SIG.filter(visible).filter(s => s.sg === f.properties.sgg && s.dong === f.properties.EMD_KOR_NM));
-      const mini = n ? catMiniHtml(catLevelCounts(rel)) : "";
+      const mini = n ? lvlMiniHtml(levelCounts(rel)) : "";
       const b = L.marker([c[1], c[0]], {
         icon: L.divIcon({ className: "", html: `<div class="hj-box ${n ? "" : "zero"}"><div class="nm">${dongName(f)}</div><div class="ct">${n}<small>건</small></div>${mini}</div>`, iconSize: null })
       }).addTo(map);
@@ -1947,7 +1957,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260715m");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260715n");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
