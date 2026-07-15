@@ -1249,6 +1249,33 @@ function showDong(f) {
   mapApi?.refreshPins?.();   // 이 동 호재만 등장(애니메이션)
   ANIMATE = false;
 }
+/* 서울 외 동 배지 클릭 → 경계 없이 신호 묶음으로 패널(매트릭스+목록) */
+function showDongSig(sd, sg, dong, sigs) {
+  view = { mode: "dongsig", sd, sg, dong, sigs };
+  nav.sd = sd; nav.sg = sg; nav.dong = null; syncRegionBar();
+  ANIMATE = true; renderPanel();
+  mapApi?.clearRadius?.(); mapApi?.clearAptMarker?.(); mapApi?.refreshPins?.();
+  ANIMATE = false;
+}
+function renderDongSig(v) {
+  const p = document.getElementById("panel");
+  const list = (v.sigs || []).filter(visible);
+  p.innerHTML = `
+    <div class="phead"><div class="pt">${v.dong}</div><div class="closex" onclick="closePanel()">✕</div></div>
+    <div class="ps">${v.sg} · 이 동 영향권 호재 (정비·확정 기준 — 동 경계 미확보 지역)</div>
+    ${hojaeMatrixHtml(list)}
+    ${yearChipsHtml()}
+    <div id="list"></div>`;
+  wireYearChips(p);
+  const el = p.querySelector("#list");
+  panelListRender = () => {
+    el.innerHTML = "";
+    if (!list.length) { el.innerHTML = `<div class="pickhint">이 동 영향권 호재 없음</div>`; return; }
+    list.slice().sort((a, b) => (a.lvl || "C").localeCompare(b.lvl || "C")).slice(0, 80).forEach(s => el.appendChild(makeCard(s)));
+    animateCards(el);
+  };
+  panelListRender();
+}
 let returnView = null;
 function showSignal(s, pan) {
   if (view.mode !== "detail") returnView = view;   // 신호 클릭 직전 뷰(동/구/단지) 기억
@@ -1269,6 +1296,7 @@ function closePanel() {
 }
 function renderPanel() {
   if (view.mode === "dong") return renderDong(view.dong);
+  if (view.mode === "dongsig") return renderDongSig(view);
   if (view.mode === "sgg") return renderSggFeed(view.sgg);
   if (view.mode === "apt") return renderApt(view.apt);
   if (view.mode === "detail") return renderDetail(view.signal);
@@ -1427,6 +1455,27 @@ function initLeaflet() {
         icon: L.divIcon({ className: "", html: `<div class="hj-box ${n ? "" : "zero"}"><div class="nm">${dongName(f)}</div>${mini}</div>`, iconSize: null })
       }).addTo(map);
       b.on("click", () => showDong(f));
+      badges.push(b);
+    }
+    // ── 서울 외(경기·인천 등): 동 경계 geojson 없음 → 정비·확정 신호를 (시군구·동)명으로 묶어 신호 중심에 동 배지
+    const ndong = {};
+    JEONGBI_SIG.filter(visible).concat(SIGNALS.filter(visible)).forEach(s => {
+      if (s.sd === "서울" || !s.dong || !s.sg) return;
+      const k = `${s.sd}|${s.sg}|${s.dong}`;
+      const g = ndong[k] || (ndong[k] = { sd: s.sd, sg: s.sg, dong: s.dong, sigs: [], sx: 0, sy: 0 });
+      const c = s.geometry.coordinates; g.sigs.push(s); g.sx += c[0]; g.sy += c[1];
+    });
+    const ncands = Object.values(ndong).map(g => ({ g, cx: g.sx / g.sigs.length, cy: g.sy / g.sigs.length, n: g.sigs.length }))
+      .filter(o => bd.contains([o.cy, o.cx]));
+    ncands.sort((a, b) => b.n - a.n);
+    for (const { g, cx, cy } of ncands) {
+      if (placed.length > 150) break;
+      const pt = map.latLngToContainerPoint([cy, cx]);
+      if (collides(placed, pt, 62, 40)) continue;
+      placed.push({ x: pt.x, y: pt.y });
+      const b = L.marker([cy, cx], { pane: "badge",
+        icon: L.divIcon({ className: "", html: `<div class="hj-box"><div class="nm">${g.dong}</div>${gradeBadgeHtml(levelCounts(g.sigs))}</div>`, iconSize: null }) }).addTo(map);
+      b.on("click", () => showDongSig(g.sd, g.sg, g.dong, g.sigs));
       badges.push(b);
     }
   };
@@ -1967,7 +2016,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260715q");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260715r");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
