@@ -101,6 +101,7 @@
   .lvpill { font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; white-space:nowrap; }
   .hmz { font-size:11px; color:var(--muted); }
   .hmtot { font-size:13px; color:var(--muted); font-weight:700; min-width:18px; text-align:right; }
+  .cmplv { font-size:10.5px; font-weight:700; padding:1px 6px; border-radius:10px; white-space:nowrap; display:inline-block; margin:1px 1px; }
   /* ── 시점 드래그 슬라이더 ── */
   .yslide { position:sticky; top:0; z-index:6; background:#fff; margin:0 -16px 12px; padding:10px 16px 8px; border-bottom:1px solid var(--line); }
   .yslide .yhead { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; }
@@ -1003,7 +1004,7 @@ function cmpStats(a) {
   let stalled = 0;
   near.forEach(({ s }) => { byCat[catOf(s)] = (byCat[catOf(s)] || 0) + 1; byPhase[phaseOf(s)]++; if (s.status === "정체") stalled++; });
   const nearest = near[0] ? { title: near[0].s.title, dist: near[0].dist } : null;
-  return { total: near.length, byCat, byPhase, stalled, nearest };
+  return { total: near.length, byCat, byCatLvl: catLevelCounts(near), byPhase, stalled, nearest };
 }
 function openCompare() {
   if (compareSet.length < 2) return;
@@ -1019,9 +1020,15 @@ function openCompare() {
       <tbody>
         ${row("반경 내 호재", s => `<b>${s.total}건</b>`)}
         ${row("가장 가까운 호재", s => s.nearest ? `${s.nearest.title.length > 16 ? s.nearest.title.slice(0, 16) + "…" : s.nearest.title}<br><span style="color:var(--muted)">${dist(s.nearest.dist)}</span>` : "—")}
-        <tr class="catrow"><td class="rowh" colspan="${compareSet.length + 1}" style="background:#eef1f6;text-align:left">분류별 개수</td></tr>
+        <tr class="catrow"><td class="rowh" colspan="${compareSet.length + 1}" style="background:#eef1f6;text-align:left">분류 · 레벨별 개수 (A핵심/B중대형/C일반)</td></tr>
         ${DISPLAY_CAT_KEYS.filter(k => stats.some(s => s.byCat[k])).map(k =>
-          row(`　${k}`, s => `<span style="color:${CAT_COLOR[k]}">${s.byCat[k] || 0}</span>`)).join("")}
+          row(`　<span style="color:${CAT_COLOR[k]}">●</span> ${k}`, s => {
+            const m = s.byCatLvl[k];
+            if (!m || !m.total) return `<span style="color:#c3c8d2">·</span>`;
+            const tint = CAT_TINT[k] || CAT_TINT["기타"];
+            return `<span style="white-space:nowrap">${LEVELS.filter(l => m[l]).map(l =>
+              `<span class="cmplv" style="background:${tint[0]};color:${tint[1]}">${LEVEL_NAME[l]} ${m[l]}</span>`).join(" ")}</span>`;
+          })).join("")}
         <tr class="catrow"><td class="rowh" colspan="${compareSet.length + 1}" style="background:#eef1f6;text-align:left">단계별 개수</td></tr>
         ${PHASES.filter(p => stats.some(s => s.byPhase[p])).map(p =>
           row(`　${p}`, s => `${s.byPhase[p] || 0}`)).join("")}
@@ -1897,7 +1904,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260715j");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260715k");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
