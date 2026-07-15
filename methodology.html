@@ -39,7 +39,7 @@
 <div class="wrap">
 <a class="back" href="index.html">← 호재맵으로</a>
 <h1>데이터 소스·방법론</h1>
-<div class="sub">운영 문서 (1인 운영·자동화 우선) · 갱신 2026-07-14 · 이 문서는 실제 스크립트·규칙과 1:1로 유지한다</div>
+<div class="sub">운영 문서 (1인 운영·자동화 우선) · 갱신 2026-07-15 · 이 문서는 실제 스크립트·규칙과 1:1로 유지한다</div>
 
 <div class="toc">
   <a href="#principle">0. 운영 원칙</a> <a href="#chain">1. 파이프라인</a> <a href="#audit">2. 데이터 유래 감사</a>
@@ -54,7 +54,13 @@
   <li><b>이중 단계 관리.</b> 모든 호재는 ① <b>소스상 진행단계</b>(<code>current_stage</code> — 공고·고시 원문 용어)와 ② <b>우리 4단계 백본</b>(<code>phase</code> — 계획→인가→착공→준공·개통)을 둘 다 기록한다. 매핑 규칙은 §6.</li>
   <li><b>수작업 최소화 → 판단의 정형화.</b> 사람 판단은 "후보→확정 승격" 1지점으로 수렴시키되, <b>그 지점도 최종적으로는 거의 전부 자동화한다</b> — 사람 판단도 정해진 틀 안에서 이루어지므로, 판단 기준을 하나하나 명문화하면 자동 수행 가능하다(§7 로드맵). 사람의 역할은 게이트키퍼가 아니라 <b>감사자(샘플 검수·예외 처리)</b>로 이동한다. 신호를 손으로 새로 쓰는 일은 금지 — 수동으로 알게 된 호재는 "그 호재를 잡아낼 소스"를 카탈로그에 추가하는 방식으로 정형화한다.</li>
   <li><b>전국 동시 오픈 목표.</b> (정 어려우면 수도권 우선) 강서·서부권은 검증용 예시일 뿐 오픈 단위가 아니다.</li>
+  <li><b>소스별 라이선스 관리 (상업화 전제).</b> 모든 소스는 <b>공공누리 유형</b>을 확인해 카탈로그에 기록한다. <b>제1유형/제한없음</b>=상업·변경 자유(출처표시만), <b>제4유형</b>=상업·변경 금지(제공기관 별도 이용허락 필요). 현재 비상업 파일럿이라 4유형도 출처표시로 사용하되, <b>상업화(광고 등) 전 4유형 소스는 이용허락 필수</b> — 목록·절차는 <code>상업화_라이선스_체크리스트.md</code>.</li>
 </ul>
+<div class="box warn">
+  <b>⚖ 라이선스 현황(2026-07-15).</b>
+  <b>서울 정비구역 폴리곤·정비몽땅(진척도)</b> = 공공누리 <b>제4유형</b>(상업·변경 금지, 저작권자 서울시 도시공간본부 ☎02-2133-8339) → 파일럿은 출처표시로 사용, 상업화 전 이용허락 필요.
+  <b>브이월드·국토부 도시계획·지자체 정비 CSV·국가철도공단 역정보</b> = 자유이용/제한없음(상업 OK, 출처표시). 상세: <code>상업화_라이선스_체크리스트.md</code>.
+</div>
 
 <h2 id="chain">1. 파이프라인 (SSOT 3층 체인)</h2>
 <div class="chain">[수집: 자동]   collect_capital.py / apt_list_all.py / build_apts_all.py
@@ -88,6 +94,8 @@
   <tr><td><span class="tag live">가동</span><b>공동주택 관리정보 API</b></td><td><code>apis.data.go.kr/1613000/AptListService3</code> + <code>AptBasisInfoServiceV4</code></td><td><b>전국 22,235단지</b></td><td>단지명·법정동코드·세대수·준공년월·도로명주소 (아파트는 신호의 파생 참조 정보, P4)</td><td><code>apt_list_all.py</code> → <code>build_apts_all.py</code></td></tr>
   <tr><td><span class="tag live">가동</span><b>브이월드 지오코더 2.0</b></td><td><code>api.vworld.kr/req/address</code></td><td>전국</td><td>도로명/지번 주소 → 좌표 (도로명 road 우선, 지번 parcel 폴백)</td><td><code>build_apts_all.py</code>, <code>geocode_vworld.py</code></td></tr>
   <tr><td><span class="tag live">가동</span><b>행정경계 geojson</b></td><td>공공 경계 데이터 (SGIS/행안부 유래)</td><td>시군구 251 전국 / 법정동 서울 467</td><td>지도 폴리곤·집계 단위. <b>법정동 전국 확장이 남은 과제</b></td><td><code>sgg_all.geojson</code>, <code>seoul_bdong.geojson</code></td></tr>
+  <tr><td><span class="tag live">가동</span><b>서울 의제처리구역 SHP</b> <span class="tag manual">4유형</span></td><td>서울 열린데이터광장 OA-20957 (원본 서울도시공간포털)</td><td>서울 정비구역 2,626개</td><td>정비구역 <b>경계 폴리곤</b> + 유형·면적·고시일. 진척도는 정비몽땅 신호와 이름·좌표 매칭(§6). <b>4유형=상업화 전 이용허락 필요</b></td><td><code>build_jeongbi_polygons.py</code></td></tr>
+  <tr><td><span class="tag live">가동</span><b>브이월드 WFS</b></td><td><code>api.vworld.kr/req/wfs</code></td><td>전국</td><td>도시계획 구역 폴리곤(지구단위·주거환경개선·LH사업지구·개발진흥·도로중심선). 자유이용. <span class="note">정비구역(재개발·재건축)은 VWorld에 없음 → 위 서울 SHP 사용</span></td><td><code>build_vworld_polygons.py</code></td></tr>
 </table>
 
 <h3>3-2. 구조화 소스 (API·파일데이터) — <b>우선순위</b> · 2026-07 전국 서베이 결과</h3>
@@ -108,7 +116,8 @@
   <tr><td><span class="tag">생활</span>공공주택 공급</td><td><b>LH 공공임대 단지정보</b> (<a href="https://www.data.go.kr/data/15058476/openapi.do" target="_blank">15058476</a>)·공공주택지구 지정절차</td><td>API·파일</td><td>공공주택 지구·단지 공급 정보</td><td>마곡 미리내집</td></tr>
   <tr><td><span class="tag">일자리</span>산업단지·지식산업센터</td><td><b>산업단지 현황</b> (한국산업단지공단·<a href="https://www.data.go.kr/data/15087615/openapi.do" target="_blank">공장등록필지 API</a>)</td><td>API·파일</td><td>산단 지정·조성 단계, 지식산업센터 현황</td><td>—</td></tr>
   <tr><td><span class="tag">일자리</span>택지·신도시</td><td><b>택지정보</b> (<a href="https://openapi.jigu.go.kr" target="_blank">jigu.go.kr</a>)</td><td>API</td><td>택지개발지구 지정·조성</td><td>대장신도시</td></tr>
-  <tr><td><span class="tag">교통</span>철도·도로 착공</td><td>나라장터(가동) + <a href="https://data.ex.co.kr/openapi/intro/introduce01" target="_blank">한국도로공사 API</a> + 국가철도공단 데이터</td><td>API</td><td>착공·공사 단계는 나라장터 입찰로 이미 포착. 노선/역사 표준데이터로 좌표 보강</td><td>—</td></tr>
+  <tr><td><span class="tag">교통</span>철도 역/노선</td><td><b>국가철도공단_철도역 정보</b>(<a href="https://www.data.go.kr/data/15067652/fileData.do" target="_blank">15067652</a>, 제한없음)·노선별 역위치·부산 등 도시철도역사 + 브이월드 도로중심선</td><td>파일·API</td><td><b>역 좌표(전국)</b> 자동 수집. 신설노선의 노선 route geometry는 공개 GIS가 드묾 → <b>§7 문법</b>: 확정·건설중=실선, 미확정(예타·구상)=점선+회랑+후보역(아는 역 좌표)</td><td><span class="tag plan">예정</span> <code>build_rail.py</code></td></tr>
+  <tr><td><span class="tag">교통</span>도로 착공</td><td>나라장터(가동) + <a href="https://data.ex.co.kr/openapi/intro/introduce01" target="_blank">한국도로공사 API</a></td><td>API</td><td>도로 착공·공사 단계는 나라장터 입찰로 포착. 노선 선형은 브이월드 도로중심선</td><td>—</td></tr>
 </table>
 <p class="note"><b>내 몫 vs 사용자 몫</b>: 수집기·파서·매핑·통합은 전부 내가 구현. 단 data.go.kr openapi는 서비스별 <b>활용신청</b>(공동주택 때와 동일, 무료·1~3일)이 필요 — 클릭할 API 목록을 내가 정확히 알려주면 사용자가 신청, 그러면 <b>기존 통합키가 그 서비스에도 열림</b>. 파일데이터(CSV)는 키 없이 내가 바로 다운로드. HTML은 내가 전부 처리.</p>
 
