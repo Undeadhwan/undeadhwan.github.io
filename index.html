@@ -829,6 +829,36 @@ function signalsNearPoint(coord) {
     return { s, dist: d, within: d <= getRadius(s) };
   }).filter(x => x.within && isFinite(x.dist)).sort((a, b) => a.dist - b.dist);
 }
+/* ══════════ 시군구 단위 분류 신호 (확정+정비+철도) — 수도권 전역 카운팅 ══════════ */
+let SGG_SIG = null;
+function ensureRailSgg() {
+  if (!window._sggRings || !window._sggBounds) return false;
+  if (RAIL_SIG.length && RAIL_SIG[0]._sgg === undefined) {
+    const entries = Object.entries(window._sggRings);
+    RAIL_SIG.forEach(s => {
+      const [x, y] = s.geometry.coordinates; s._sgg = null;
+      for (const [disp, rings] of entries) {
+        const bd = window._sggBounds[disp];
+        if (bd && !bd.contains([y, x])) continue;   // bbox 프리필터
+        if (rings.some(r => pointInRing(x, y, r))) { s._sgg = disp; break; }
+      }
+    });
+  }
+  return true;
+}
+function buildSggIndex() {
+  if (!ensureRailSgg()) return false;
+  SGG_SIG = {};
+  const add = (disp, s) => { if (disp) (SGG_SIG[disp] || (SGG_SIG[disp] = [])).push(s); };
+  SIGNALS.forEach(s => add(`${s.sd} ${s.sg}`, s));
+  JEONGBI_SIG.forEach(s => add(`${s.sd} ${s.sg}`, s));
+  RAIL_SIG.forEach(s => add(s._sgg, s));
+  return true;
+}
+function signalsInSgg(disp) {
+  if (!SGG_SIG) buildSggIndex();
+  return ((SGG_SIG && SGG_SIG[disp]) || []).filter(visible);
+}
 function showApt(a) {
   view = { mode: "apt", apt: a };
   ANIMATE = true;
@@ -1138,13 +1168,14 @@ function pointInSgg(pt, disp) {
 }
 function renderSggFeed(disp) {
   const p = document.getElementById("panel");
-  const curated = SIGNALS.filter(visible)
-    .filter(s => signalPoints(s).some(pt => pointInSgg(pt.coord, disp)));
+  const sggSigs = signalsInSgg(disp);   // 확정+정비+철도 (수도권 전역)
   const cands = (AUTO || []).filter(a => `${a.sd} ${a.sg}` === disp);
   const rawN = (RAW || []).filter(r => `${r.sd} ${r.sg}` === disp).length;
+  const LIST_CAP = 80;
   p.innerHTML = `
     <div class="phead"><div class="pt">${disp}</div><div class="closex" onclick="closePanel()">✕</div></div>
-    <div class="ps">확정 신호 ${curated.length}건 · 후보 신호(자동 통합) ${cands.length}건 — 원시 공고 ${rawN}건에서 생성</div>
+    <div class="ps">이 시군구 영향권 호재 — 확정·정비·철도 통합${sggSigs.length > LIST_CAP ? ` · 상위 ${LIST_CAP}건 표시` : ""}</div>
+    ${hojaeMatrixHtml(sggSigs)}
     ${yearChipsHtml()}
     <div id="list"></div>
     ${cands.length ? `<div class="group-h">후보 신호 (자동 생성 — 5억+·DART, 중복 통합, 단계는 추정)</div><div id="candlist"></div>
@@ -1153,8 +1184,10 @@ function renderSggFeed(disp) {
   const list = p.querySelector("#list");
   panelListRender = () => {
     list.innerHTML = "";
-    curated.sort((a, b) => (b.last_movement || "").localeCompare(a.last_movement || ""))
-      .forEach(s => list.appendChild(makeCard(s)));
+    if (!sggSigs.length) { list.innerHTML = `<div class="pickhint">이 시군구 영향권 호재 없음</div>`; return; }
+    const order = { "착공": 0, "인가": 1, "계획": 2, "준공·개통": 3 };
+    sggSigs.slice().sort((a, b) => (a.cat || "").localeCompare(b.cat || "") || (a.lvl || "C").localeCompare(b.lvl || "C"))
+      .slice(0, LIST_CAP).forEach(s => list.appendChild(makeCard(s)));
     animateCards(list);
   };
   panelListRender();
@@ -1317,18 +1350,19 @@ function initLeaflet() {
     for (const [disp, acc] of Object.entries(sggCenters)) {
       const c = [acc[0] / acc[2], acc[1] / acc[2]];
       if (!bd.contains([c[1], c[0]])) continue;   // 전국 251개 중 뷰포트 내만
-      const curated = disp === "서울 강서구" ? SIGNALS.filter(visible).length : 0;
-      cands.push({ disp, c, n: (sggCounts[disp] || 0) + curated });
+      const sigs = signalsInSgg(disp);   // 확정+정비+철도 분류 신호
+      cands.push({ disp, c, n: sigs.length, sigs });
     }
     cands.sort((a, b) => b.n - a.n);   // 신호 많은 시군구 우선(겹칠 때 이긴다)
     const placed = [];
-    for (const { disp, c, n } of cands) {
+    for (const { disp, c, n, sigs } of cands) {
       if (placed.length > 80) break;
       const pt = map.latLngToContainerPoint([c[1], c[0]]);
       if (collides(placed, pt, 78, 46)) continue;   // 겹치면 숨김
       placed.push({ x: pt.x, y: pt.y });
+      const mini = n ? catMiniHtml(catLevelCounts(sigs)) : "";
       const b = L.marker([c[1], c[0]], {
-        icon: L.divIcon({ className: "", html: `<div class="hj-box sgg ${n ? "" : "zero"}"><div class="nm">${disp.split(" ")[1]}</div><div class="ct">${n}<small>건</small></div></div>`, iconSize: null })
+        icon: L.divIcon({ className: "", html: `<div class="hj-box sgg ${n ? "" : "zero"}"><div class="nm">${disp.split(" ")[1]}</div><div class="ct">${n}<small>건</small></div>${mini}</div>`, iconSize: null })
       }).addTo(map);
       b.on("click", () => showSgg(disp));
       badges.push(b);
@@ -1913,7 +1947,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260715l");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260715m");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
