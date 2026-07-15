@@ -239,6 +239,8 @@
     #gantt { height:auto; padding:14px 10px 90px; }
     #raw { height:auto; padding:12px 10px 90px; }
   }
+  /* 폴리곤 클릭 시 브라우저 기본 포커스 외곽선(bounding box 검은 네모) 제거 */
+  .leaflet-interactive:focus, .leaflet-container path:focus, .leaflet-interactive:focus-visible { outline: none !important; }
   /* 정비구역 유형 범례 (지도 좌하단, 동 레벨 이상에서만) */
   .jb-legend { background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:8px;
     padding:7px 9px 8px; box-shadow:0 1px 6px rgba(0,0,0,.14); font-size:11px; line-height:1.5;
@@ -467,7 +469,17 @@ const CAT_COLOR = { "교통": "#2e5ce6", "일자리": "#e0761e", "정비": "#c43
 const colorOf = s => CAT_COLOR[catOf(s)] || "#12263f";
 
 /* ══════════ 상태 ══════════ */
-let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [];
+let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [], JEONGBI_SIG = [];
+/* 정비(JEONGBI) 후보를 신호 형태로 어댑트 → 아파트 호재 카운팅·카드·4단계 필터에 정비 포함(분류=정비).
+   phaseOf가 명시 phase 우선 사용, radius_type로 catOf(정비)·getRadius 결정. */
+function buildJeongbiSignals() {
+  JEONGBI_SIG = JEONGBI.filter(c => c.lat && c.lon).map(c => ({
+    _jb: true, title: c.n, radius_type: "정비구역(재건축·재개발)", template_type: "정비사업",
+    current_stage: c.stage, phase: c.phase, status: c.drop ? "종결" : "활성", confirmed: false,
+    sd: c.sd, sg: c.sg, dong: c.dong, hh: c.hh, last_movement: null, target_completion: null,
+    geometry: { coordinates: [c.lon, c.lat] }
+  }));
+}
 const RAW_BADGE_CUT = 500000000;  // 시군구 뱃지 집계의 원시공고 금액 하한 (5억)
 /* 대도시 분할구(고양시덕양구 등) → 시 단위 표시명 */
 function sggDisplayName(name) {
@@ -727,7 +739,12 @@ function navPick(level, val) {
 
 /* ══════════ 아파트 앵커: 단지 좌표 반경 내 신호 (§4.4 역방향 조회) ══════════ */
 function signalsNearPoint(coord) {
-  return SIGNALS.filter(visible).map(s => {
+  // 확정 신호 + 정비(어댑트) 통합 카운팅. 정비는 좌표 근접(~2km bbox)만 우선 추려 성능 확보.
+  const jbLocal = JEONGBI_SIG.filter(s => {
+    const c = s.geometry.coordinates;
+    return Math.abs(c[0] - coord[0]) < 0.02 && Math.abs(c[1] - coord[1]) < 0.02;
+  });
+  return SIGNALS.concat(jbLocal).filter(visible).map(s => {
     const d = Math.min(...(signalPoints(s).map(p => meters(coord, p.coord)) || [Infinity]));
     return { s, dist: d, within: d <= getRadius(s) };
   }).filter(x => x.within && isFinite(x.dist)).sort((a, b) => a.dist - b.dist);
@@ -1335,7 +1352,9 @@ function initLeaflet() {
   };
   const renderJeongbiPoly = () => {
     clearJeongbiPoly();
-    if (map.getZoom() < DONG_ZOOM || !JEONGBI_POLY.length) { toggleJbLegend(false); return; }
+    // 분류 필터: '정비' 꺼져 있으면 폴리곤 전체 숨김(전 화면 필터 일관)
+    if (map.getZoom() < DONG_ZOOM || !JEONGBI_POLY.length || !filter.cat.has("정비")) { toggleJbLegend(false); return; }
+    const phaseFiltering = filter.phase.size < PHASES.length;   // 단계 조회축이 부분선택이면 4단계 필터 적용
     const b = map.getBounds(), bx0 = b.getWest(), by0 = b.getSouth(), bx1 = b.getEast(), by1 = b.getNorth();
     let n = 0;
     for (const f of JEONGBI_POLY) {
@@ -1343,6 +1362,8 @@ function initLeaflet() {
       if (x1 < bx0 || x0 > bx1 || y1 < by0 || y0 > by1) continue;   // 뷰포트 밖
       const p = f.properties;
       if (YEAR_SEL && p.year && p.year > YEAR_SEL) continue;   // 시점 기준: 아직 고시 안 된 구역은 숨김
+      // 4단계 조회: 부분선택이면 매칭 단계(p.phase)가 선택에 포함된 구역만(미상은 이때 숨김)
+      if (phaseFiltering && (!p.phase || !filter.phase.has(p.phase))) continue;
       if (++n > 240) break;   // 성능 상한
       const tracked = !!p.phase;   // 우리 신호와 매칭돼 진척도를 아는 구역
       const col = tracked ? (JB_PHASE_COL[p.phase] || "#c4392f") : "#aeb4c0";
@@ -1353,7 +1374,7 @@ function initLeaflet() {
       poly.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${p.name || "정비구역"}</div>`
         + `<div class="apt-pop-sub">정비구역 · ${p.jtype}${p.area ? " · " + (p.area / 1e4).toFixed(1) + "만㎡" : ""}</div>`
         + `<div class="apt-pop-cats">${tracked
-            ? `<span style="color:${col}">● ${p.stage || ""} → 단계 ${p.phase}</span>${p.psrc ? `<span style="color:#8a90a0"> · ${p.psrc} 기준</span>` : ""}`
+            ? `<span style="color:${col}">● ${p.stage || "추진 중"}</span>${p.psrc ? `<span style="color:#8a90a0"> · ${p.psrc} 기준</span>` : ""}`
             : `<span style="color:#8a90a0">단계 미상 · 고시 경계</span>`}${p.date ? ` · 고시 ${p.date}` : ""}</div></div>`,
         { direction: "top", className: "apt-tip", sticky: true });
       jbPolys.push(poly);
@@ -1367,9 +1388,11 @@ function initLeaflet() {
   const JB_PHASE_COL = { "계획": "#9aa6c8", "인가": "#e0761e", "착공": "#c4392f", "준공·개통": "#2e8b57" };
   const renderJeongbi = () => {
     clearJeongbi();
-    if (map.getZoom() < DONG_ZOOM || !JEONGBI.length) return;
+    if (map.getZoom() < DONG_ZOOM || !JEONGBI.length || !filter.cat.has("정비")) return;   // 분류 필터
+    const phaseFiltering = filter.phase.size < PHASES.length;
     const bd = map.getBounds();
     JEONGBI.filter(c => bd.contains([c.lat, c.lon]))
+      .filter(c => !phaseFiltering || filter.phase.has(c.phase))   // 4단계 조회축
       .filter(c => !jbDrawnRings.some(r => ptInRing(c.lon, c.lat, r)))   // 이미 폴리곤으로 표시된 구역이면 마커 생략
       .slice(0, 280).forEach(c => {
       const col = c.drop ? "#9aa3b2" : (JB_PHASE_COL[c.phase] || "#c4392f");
@@ -1377,7 +1400,7 @@ function initLeaflet() {
         dashArray: "2 2", fillColor: "#fff", fillOpacity: .9, opacity: c.drop ? .5 : .95 }).addTo(map);
       m.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${c.n}</div>`
         + `<div class="apt-pop-sub">정비 후보 · ${c.type || ""} · ${c.sg || ""} ${c.dong || ""}${c.hh ? " · " + c.hh + "세대" : ""}</div>`
-        + `<div class="apt-pop-cats"><span style="color:${col}">● 단계 ${c.stage} → ${c.phase}</span>${c.drop ? '<span style="color:#b3251e">· 종결·무산</span>' : ""}</div></div>`,
+        + `<div class="apt-pop-cats"><span style="color:${col}">● ${c.stage || "추진 중"}</span>${c.drop ? '<span style="color:#b3251e">· 종결·무산</span>' : ""}</div></div>`,
         { direction: "top", offset: [0, -6], className: "apt-tip", sticky: true });
       jbDots.push(m);
     });
@@ -1735,7 +1758,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260714v");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260714w");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
@@ -1757,6 +1780,7 @@ function renderRaw(more) {
   AUTO = autoData.candidates;
   JEONGBI = (jeongbiData && jeongbiData.cands) || [];
   JEONGBI_POLY = (jeongbiPolyData && jeongbiPolyData.features) || [];
+  buildJeongbiSignals();   // 정비 후보 → 신호 어댑트(호재 카운팅 포함용)
   // 전국 아파트 병합: 전국본을 베이스로, 강서 정밀본(검수)으로 덮어씀. 좌표 있는 것만.
   {
     const m = new Map();
