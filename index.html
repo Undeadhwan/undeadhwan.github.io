@@ -472,9 +472,9 @@ const colorOf = s => CAT_COLOR[catOf(s)] || "#12263f";
 // 서울 정비 데이터(의제처리구역 폴리곤·정비몽땅 점)는 공공누리 4유형(상업·변경 금지).
 // 비상업 파일럿 동안은 출처표시와 함께 사용, 상업화(광고) 전 서울시 이용허락 필요(상업화_라이선스_체크리스트.md #1·#2).
 const JEONGBI_LICENSED = true;
-// 신규 철도 노선: 초기 시드가 추정 역목록+직선연결이라 실제와 다름(§4.1 위반) → 비활성.
-// 실제 노선 route geometry(운영선=국가철도공단 GIS / 신규선=계획 노선도) 확보 후 true.
-const RAIL_READY = false;
+// 신규 철도 노선: OSM 실제 선형(railway=construction/proposed) 기반 재구축 → 활성.
+// 건설중=실선, 계획=점선(§7). 출처 OpenStreetMap(ODbL, 지도 하단·툴팁 표기).
+const RAIL_READY = true;
 let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [], JEONGBI_SIG = [], RAIL = [];
 /* 정비(JEONGBI) 후보를 신호 형태로 어댑트 → 아파트 호재 카운팅·카드·4단계 필터에 정비 포함(분류=정비).
    phaseOf가 명시 phase 우선 사용, radius_type로 catOf(정비)·getRadius 결정. */
@@ -1449,15 +1449,19 @@ function initLeaflet() {
       const p = f.properties;
       if (phaseFiltering && p.phase && !filter.phase.has(p.phase)) continue;
       if (YEAR_SEL && false) continue;   // (철도 고시연도 필터는 추후)
-      if (f.geometry.type === "LineString") {
-        const ll = f.geometry.coordinates.map(([x, y]) => [y, x]);
+      if (f.geometry.type === "LineString" || f.geometry.type === "MultiLineString") {
+        const ll = f.geometry.type === "MultiLineString"
+          ? f.geometry.coordinates.map(seg => seg.map(([x, y]) => [y, x]))   // 다중 세그먼트
+          : f.geometry.coordinates.map(([x, y]) => [y, x]);
         const line = L.polyline(ll, { pane: "rail", color: railCol, weight: p.dashed ? 3 : 4,
           opacity: .9, dashArray: p.dashed ? "8 7" : null, lineCap: "round" }).addTo(map);
         line.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">🚈 ${p.full || p.name}</div>`
           + `<div class="apt-pop-sub">${p.linekind} · <span style="color:${railCol}">${p.status}</span>${p.dashed ? " (미확정 노선 — 점선)" : ""}</div>`
           + `<div class="apt-pop-cats"><span style="color:${railCol}">● 단계 ${p.phase}</span>${p.note ? " · " + p.note : ""}${p.src_name ? ` · 출처: ${p.src_name}` : ""}</div></div>`,
           { sticky: true, className: "apt-tip" });
-        line.on("click", (e) => { L.DomEvent.stopPropagation(e); showSignal(railToSignal(p, ll), false); });
+        line.on("click", (e) => { L.DomEvent.stopPropagation(e);
+          const flat = f.geometry.type === "MultiLineString" ? f.geometry.coordinates.flat() : f.geometry.coordinates;
+          showSignal(railToSignal(p, flat[Math.floor(flat.length / 2)]), false); });
         railLayers.push(line);
       } else if (f.geometry.type === "Point" && z >= 11) {
         const [x, y] = f.geometry.coordinates;
@@ -1470,10 +1474,10 @@ function initLeaflet() {
     }
   };
   // 철도 노선 → 신호 상세 어댑트(우측 패널)
-  const railToSignal = (p, ll) => ({
+  const railToSignal = (p, cen) => ({
     _rail: true, title: p.full || p.name, radius_type: "지하철·전철역", template_type: "철도",
     current_stage: p.status, phase: p.phase, status: "활성", confirmed: p.confirmed,
-    sd: "수도권", geometry: { coordinates: ll[Math.floor(ll.length / 2)].slice().reverse() },
+    sd: "수도권", geometry: { coordinates: cen },
     sources: p.src_url ? [p.src_url] : [], stage_note: `${p.linekind} · ${p.status}${p.note ? " · " + p.note : ""}`,
   });
   // 호갱노노식 LOD: 축소=시군구 박스 → 중간=동 박스 → 확대=아파트(동 박스 숨김, 동 대신 아파트)
@@ -1830,7 +1834,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260715b");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260715c");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
