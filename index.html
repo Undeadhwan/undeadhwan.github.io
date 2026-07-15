@@ -480,6 +480,16 @@ function buildJeongbiSignals() {
     geometry: { coordinates: [c.lon, c.lat] }
   }));
 }
+/* 정비구역 폴리곤 클릭 → 신호 상세 어댑트(우측 패널 renderDetail용) */
+function jeongbiPolyToSignal(p, centroid) {
+  return {
+    _jbpoly: true, title: p.name || "정비구역", radius_type: "정비구역(재건축·재개발)",
+    template_type: "정비사업", current_stage: p.stage || (p.phase ? "" : "고시 경계 (추진단계 미상)"),
+    phase: p.phase, status: "활성", confirmed: false, sd: "서울특별시",
+    geometry: { coordinates: centroid },
+    stage_note: `${p.jtype}${p.area ? " · " + (p.area / 1e4).toFixed(1) + "만㎡" : ""}${p.date ? " · 고시 " + p.date : ""}${p.psrc ? " · 진척도 출처: " + p.psrc : ""}`
+  };
+}
 const RAW_BADGE_CUT = 500000000;  // 시군구 뱃지 집계의 원시공고 금액 하한 (5억)
 /* 대도시 분할구(고양시덕양구 등) → 시 단위 표시명 */
 function sggDisplayName(name) {
@@ -971,6 +981,10 @@ function renderDong(feature) {
   const rel = SIGNALS.filter(visible)
     .map(s => ({ s, r: dongRelation(s, feature) }))
     .filter(x => x.r);
+  // 정비(어댑트)는 법정동명 매칭으로 '소재' 포함 — 카운트·목록 일관
+  JEONGBI_SIG.filter(visible)
+    .filter(s => s.sg === feature.properties.sgg && s.dong === feature.properties.EMD_KOR_NM)
+    .forEach(s => rel.push({ s, r: "소재" }));
   const host = rel.filter(x => x.r === "소재"), near = rel.filter(x => x.r === "반경권");
   const byCat = {};
   rel.forEach(x => byCat[catOf(x.s)] = (byCat[catOf(x.s)] || 0) + 1);
@@ -1255,12 +1269,16 @@ function initLeaflet() {
         m2.on("click", () => showSgg(`${a.sd} ${a.sg}`));
         badges.push(m2);
       });
+    // 정비(어댑트) 법정동별 개수 사전집계(성능: 프레임마다 dongRelation 대신 문자열 그룹)
+    const jbByDong = {};
+    JEONGBI_SIG.filter(visible).forEach(s => { const k = s.sg + "|" + s.dong; jbByDong[k] = (jbByDong[k] || 0) + 1; });
     const cands = [];
     for (const f of DONG_GEO.features) {
       const c = ringCentroid(ringsOf(f)[0]);
       if (!bd.contains([c[1], c[0]])) continue;
       // 영향권(소재+반경권) 전체 — 동 피드 목록 건수와 동일 기준 (§3.3.1 동 중복 노출 정상)
-      const n = SIGNALS.filter(visible).filter(s => dongRelation(s, f)).length;
+      const n = SIGNALS.filter(visible).filter(s => dongRelation(s, f)).length
+        + (jbByDong[f.properties.sgg + "|" + f.properties.EMD_KOR_NM] || 0);   // 정비 포함
       cands.push({ f, c, n });
     }
     cands.sort((a, b) => b.n - a.n);   // 신호 있는 동 우선 표시(겹칠 때 0건 동은 양보)
@@ -1377,6 +1395,12 @@ function initLeaflet() {
             ? `<span style="color:${col}">● ${p.stage || "추진 중"}</span>${p.psrc ? `<span style="color:#8a90a0"> · ${p.psrc} 기준</span>` : ""}`
             : `<span style="color:#8a90a0">단계 미상 · 고시 경계</span>`}${p.date ? ` · 고시 ${p.date}` : ""}</div></div>`,
         { direction: "top", className: "apt-tip", sticky: true });
+      poly.on("click", (e) => {   // 클릭 → 우측 패널에 이 정비구역 호재 상세
+        L.DomEvent.stopPropagation(e);
+        const ring = f.geometry.coordinates[0];
+        let sx = 0, sy = 0; ring.forEach(([x, y]) => { sx += x; sy += y; });
+        showSignal(jeongbiPolyToSignal(p, [sx / ring.length, sy / ring.length]), false);
+      });
       jbPolys.push(poly);
       if (tracked) jbDrawnRings.push(f.geometry.coordinates[0]);   // 매칭된 구역만 마커 억제(미상 구역은 신호 마커 유지)
     }
@@ -1758,7 +1782,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260714w");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260714x");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
