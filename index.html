@@ -85,8 +85,10 @@
   .hj-box.sgg { background:#2c3fb5; min-width:66px; } .hj-box.sgg::after { border-top-color:#2c3fb5; }
   .hj-box.sgg.zero { background:#8a93b8; } .hj-box.sgg.zero::after { border-top-color:#8a93b8; }
   /* ── 대분류×레벨 카운트 UI ── */
-  .catbar { display:flex; height:5px; border-radius:3px; overflow:hidden; margin:5px auto 0; }
-  .catbar i { display:block; }
+  .catmini { display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin:4px auto 0;
+    background:rgba(255,255,255,.94); border-radius:6px; padding:2px 6px; width:fit-content; }
+  .catmini span { font-size:10.5px; font-weight:800; white-space:nowrap; line-height:1.2; font-variant-numeric:tabular-nums; }
+  .hj-box.zero .catmini { display:none; }
   .hmatrix { border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin:2px 0 14px; background:#fbfcfe; }
   .hmhead { font-size:12px; color:var(--muted); margin-bottom:5px; }
   .hmhead b { color:var(--ink); font-size:15px; font-weight:800; }
@@ -501,10 +503,12 @@ function catLevelCounts(sigs) {
   m._total = DISPLAY_CAT_KEYS.reduce((a, c) => a + m[c].total, 0);
   return m;
 }
-/* 지도 배지용: 분류색 비율 띠 */
-function catBarHtml(m, w) {
-  const segs = CAT_KEYS.filter(c => m[c].total).map(c => `<i style="flex:${m[c].total};background:${CAT_COLOR[c]}"></i>`).join("");
-  return segs ? `<div class="catbar" style="width:${w || 68}px">${segs}</div>` : "";
+/* 지도 배지용: 분류별 건수 미니 스트립(흰 배경 — 분류색 글자 가독) */
+const CAT_SHORT = { "교통": "교", "일자리": "일", "인프라": "인", "주거개발": "주", "기타": "기" };
+function catMiniHtml(m) {
+  const inner = CAT_KEYS.filter(c => m[c].total)
+    .map(c => `<span style="color:${CAT_COLOR[c]}">${CAT_SHORT[c]}${m[c].total}</span>`).join("");
+  return inner ? `<div class="catmini">${inner}</div>` : "";
 }
 /* 좌측 패널용: 대분류×레벨(A/B/C) 매트릭스 */
 function hojaeMatrixHtml(sigs) {
@@ -1348,9 +1352,9 @@ function initLeaflet() {
       placed.push({ x: pt.x, y: pt.y });
       const rel = SIGNALS.filter(visible).filter(s => dongRelation(s, f))
         .concat(JEONGBI_SIG.filter(visible).filter(s => s.sg === f.properties.sgg && s.dong === f.properties.EMD_KOR_NM));
-      const bar = n ? catBarHtml(catLevelCounts(rel), 58) : "";
+      const mini = n ? catMiniHtml(catLevelCounts(rel)) : "";
       const b = L.marker([c[1], c[0]], {
-        icon: L.divIcon({ className: "", html: `<div class="hj-box ${n ? "" : "zero"}"><div class="nm">${dongName(f)}</div><div class="ct">${n}<small>건</small></div>${bar}</div>`, iconSize: null })
+        icon: L.divIcon({ className: "", html: `<div class="hj-box ${n ? "" : "zero"}"><div class="nm">${dongName(f)}</div><div class="ct">${n}<small>건</small></div>${mini}</div>`, iconSize: null })
       }).addTo(map);
       b.on("click", () => showDong(f));
       badges.push(b);
@@ -1893,7 +1897,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260715i");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260715j");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
