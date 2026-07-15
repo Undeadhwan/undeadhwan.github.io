@@ -199,6 +199,7 @@
   .card { border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:10px; cursor:pointer; }
   .card:hover { border-color:#b0b0b6; }
   .card .tags { font-size:11px; color:var(--muted); margin-bottom:4px; }
+  .gbasis { color:#e0761e; font-weight:600; }
   .card .title { font-size:14px; font-weight:600; margin-bottom:5px; }
   .card .stage { font-size:12px; }
   .card .watch { font-size:12px; color:var(--muted); margin-top:4px; }
@@ -485,7 +486,7 @@ const LEVEL_DESC = {
     "철도": { A: "핵심 광역철도 (GTX·신분당·지하화)", B: "일반 지하철 신설·연장", C: "지선·경전철·트램" },
     "도로": { A: "핵심 지하고속도로·주요 고속도로 IC 신설", B: "외곽순환 등 일반 IC·대형 터널", C: "일반 우회도로·진출입로 개선" }
   },
-  "일자리": { A: "메가 업무타운 (연면적 10만㎡↑·3천명↑)", B: "중대형 업무·지식산업센터 (3~10만㎡)", C: "일반 오피스·지산 (1~3만㎡)" },
+  "일자리": { A: "메가 업무타운 (연면적 10만㎡↑ 또는 투자 1,000억↑)", B: "중대형 업무·지식산업센터 (연면적 3~10만㎡ 또는 투자 300~1,000억)", C: "일반 오피스·지산 (연면적 1~3만㎡ 또는 투자 300억 미만)" },
   "인프라": { A: "랜드마크급 (복합몰·상급종합병원·대형공원)", B: "중대형 (대형마트·종합병원·근린공원)", C: "근린 생활 (준종합병원·소공원·문화체육센터)" },
   "주거개발": { A: "도시급 대형 (5천 세대↑)", B: "지역 대장주급 (1,500~5천 세대)", C: "일반 단지급 (500~1,500 세대)" }
 };
@@ -505,6 +506,20 @@ const LVL_STYLE = { A: "background:#d6156d;color:#fff;", B: "background:#7c3aed;
 const LVL_TXT = LVL_COLOR;
 function lvlPill(l) { return `<span class="lvtag" style="${LVL_STYLE[l]}">${LEVEL_NAME[l]}</span>`; }
 function levelPill(s) { return lvlPill(levelOf(s)); }
+// 세부 축 라벨: 교통=철도/도로, 일자리=면적/금액(등급 산정 기준)
+function subLabel(s) {
+  const c = catOf(s);
+  if (c === "교통") return " · " + subOf(s);
+  if (c === "일자리" && s.sub) return " · " + s.sub + "기준";
+  return "";
+}
+// 일자리 등급 근거값(사실): 면적기준=연면적, 금액기준=투자액. 데이터 소스 최대 활용 + 근거 투명(P2)
+function gradeBasisHtml(s) {
+  if (catOf(s) !== "일자리") return "";
+  if (s.sub === "면적" && s.area_m2) return `<span class="gbasis">연면적 ${(s.area_m2 / 10000).toFixed(1).replace(".0", "")}만㎡</span> · `;
+  if (s.sub === "금액" && s.amount_eok) return `<span class="gbasis">투자 ${Number(s.amount_eok).toLocaleString()}억</span> · `;
+  return "";
+}
 /* 등급별 집계 (교통·일자리 등 카테고리 pooling) */
 function levelCounts(sigs) {
   const m = { A: { total: 0, cats: {} }, B: { total: 0, cats: {} }, C: { total: 0, cats: {} }, _total: 0 };
@@ -587,7 +602,7 @@ let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS =
 /* DART(신규시설투자·유형자산양수) → 일자리 후보 신호 어댑트. 위치=회사 소재지 근사(§ 후보층, confirmed:false) */
 function buildDartSignals() {
   DART_SIG = (DART || []).filter(s => s.geometry && s.geometry.coordinates).map(s => ({
-    _dart: true, title: s.title, cat: "일자리", lvl: s.lvl || "C", template_type: "기업이전",
+    _dart: true, title: s.title, cat: "일자리", sub: "금액", lvl: s.lvl || "C", template_type: "기업이전",
     current_stage: s.current_stage || "공시", phase: s.phase || "계획", status: "활성", confirmed: false,
     sd: s.sd, sg: s.sg, dong: s.dong || null, amount_eok: s.amount_eok,
     last_movement: s.rcept_dt && s.rcept_dt.length === 8 ? `${s.rcept_dt.slice(0,4)}-${s.rcept_dt.slice(4,6)}-${s.rcept_dt.slice(6,8)}` : null,
@@ -598,13 +613,20 @@ function buildDartSignals() {
 /* 건축인허가(건축HUB) → 인프라·일자리 후보 어댑트. 위치=대지위치 지오코딩, 연면적→레벨(§ 후보층, confirmed:false, 발견형) */
 function buildArchSignals() {
   ARCH_SIG = (ARCH || []).filter(s => s.geometry && s.geometry.coordinates).map(s => ({
-    _arch: true, title: s.title, cat: s.cat || "인프라", lvl: s.lvl || "C", template_type: s.cat === "일자리" ? "기업이전" : "생활인프라",
+    _arch: true, title: s.title, cat: s.cat || "인프라", sub: s.cat === "일자리" ? "면적" : undefined, lvl: s.lvl || "C", template_type: s.cat === "일자리" ? "기업이전" : "생활인프라",
     current_stage: s.current_stage || "인허가", phase: s.phase || "계획", status: s.status || "활성", confirmed: false,
     sd: s.sd, sg: s.sg, dong: s.dong || null, area_m2: s.area_m2, purp: s.purp,
     last_movement: s.rcept_dt && s.rcept_dt.length === 8 ? `${s.rcept_dt.slice(0,4)}-${s.rcept_dt.slice(4,6)}-${s.rcept_dt.slice(6,8)}` : null,
     target_completion: null, sources: s.src ? [s.src] : [],
     geometry: { coordinates: s.geometry.coordinates }
   }));
+}
+// 일자리 등급 이원화(사용자 확정): 면적기준(건축인허가)·금액기준(DART). 둘 다 있으면 면적 우선 —
+// 건축인허가 일자리 신호 근처(≤250m=같은 시설 추정) DART(금액)는 제거해 중복·기준혼선 방지. 데이터 소스는 최대한 살림.
+function dedupJobByArea() {
+  const archJobs = ARCH_SIG.filter(s => catOf(s) === "일자리");
+  if (!archJobs.length) return;
+  DART_SIG = DART_SIG.filter(d => !archJobs.some(a => meters(d.geometry.coordinates, a.geometry.coordinates) <= 250));
 }
 /* 계획/건설 역 → 교통 신호 어댑트: 신설역이 호재 앵커(근처 아파트 카운팅). 역=지하철·전철역 반경. */
 /* 철도 노선종류 → 교통 레벨(A핵심/B일반/C경전철·지선) */
@@ -1092,8 +1114,8 @@ function cardHtml(s, extra = "") {
   const dropped = s.status === "종결";
   const detail = s.current_stage && s.current_stage !== ph ? ` — ${s.current_stage}` : "";
   return `
-    <div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}${catOf(s) === "교통" ? " · " + subOf(s) : ""}</span>
-      · ${levelPill(s)} · 영향 ${km}km
+    <div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}${subLabel(s)}</span>
+      · ${levelPill(s)} · ${gradeBasisHtml(s)}영향 ${km}km
       ${s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>'}
       ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}
       ${noCoord ? '<span class="badge-near">위치 미확정 — 지도 미표시</span>' : ""} ${extra}</div>
@@ -1224,8 +1246,8 @@ function renderDetail(s) {
   p.innerHTML = `
     <div class="phead"><span></span><div class="closex" onclick="closePanel()">✕</div></div>
     <div class="detail">
-      <div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}${catOf(s) === "교통" ? " · " + subOf(s) : ""}</span>
-        · ${levelPill(s)} · 영향 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km
+      <div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}${subLabel(s)}</span>
+        · ${levelPill(s)} · ${gradeBasisHtml(s)}영향 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km
         ${s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>'}
         ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}</div>
       <h2>${s.title}</h2>
@@ -2108,7 +2130,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260716c");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260716d");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, capitalDong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData, dartData, archData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
@@ -2133,6 +2155,7 @@ function renderRaw(more) {
   buildDartSignals();   // DART → 일자리 후보 신호(호재 카운팅 포함)
   ARCH = (archData && archData.signals) || [];
   buildArchSignals();   // 건축인허가 → 인프라·일자리 후보 신호(호재 카운팅 포함)
+  dedupJobByArea();     // 일자리 면적 우선: 건축인허가 근처 DART(금액) 중복 제거
   REGIONS = regions;
   DONG_GEO = dong;
   // 경기·인천 법정동 병합(서울 feature엔 sido 없음 → 렌더/드릴다운서 sido||"서울" 폴백)
