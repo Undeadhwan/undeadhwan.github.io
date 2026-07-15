@@ -1353,7 +1353,7 @@ function initLeaflet() {
       poly.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${p.name || "정비구역"}</div>`
         + `<div class="apt-pop-sub">정비구역 · ${p.jtype}${p.area ? " · " + (p.area / 1e4).toFixed(1) + "만㎡" : ""}</div>`
         + `<div class="apt-pop-cats">${tracked
-            ? `<span style="color:${col}">● ${p.stage || ""} → 단계 ${p.phase}</span>`
+            ? `<span style="color:${col}">● ${p.stage || ""} → 단계 ${p.phase}</span>${p.psrc ? `<span style="color:#8a90a0"> · ${p.psrc} 기준</span>` : ""}`
             : `<span style="color:#8a90a0">단계 미상 · 고시 경계</span>`}${p.date ? ` · 고시 ${p.date}` : ""}</div></div>`,
         { direction: "top", className: "apt-tip", sticky: true });
       jbPolys.push(poly);
@@ -1735,7 +1735,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260714u");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260714v");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
