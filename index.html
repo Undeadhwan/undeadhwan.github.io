@@ -475,7 +475,16 @@ const JEONGBI_LICENSED = true;
 // 신규 철도 노선: OSM 실제 선형(railway=construction/proposed) 기반 재구축 → 활성.
 // 건설중=실선, 계획=점선(§7). 출처 OpenStreetMap(ODbL, 지도 하단·툴팁 표기).
 const RAIL_READY = true;
-let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [], JEONGBI_SIG = [], RAIL = [];
+let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [], JEONGBI_SIG = [], RAIL = [], RAIL_SIG = [];
+/* 계획/건설 역 → 교통 신호 어댑트: 신설역이 호재 앵커(근처 아파트 카운팅). 역=지하철·전철역 반경. */
+function buildRailSignals() {
+  RAIL_SIG = RAIL.filter(f => f.properties.kind === "station").map(f => ({
+    _rail: true, title: f.properties.name, radius_type: "지하철·전철역", template_type: "철도",
+    current_stage: f.properties.status, phase: f.properties.confirmed ? "착공" : "계획",
+    status: "활성", confirmed: f.properties.confirmed, sd: "수도권",
+    geometry: { coordinates: f.geometry.coordinates }
+  }));
+}
 /* 정비(JEONGBI) 후보를 신호 형태로 어댑트 → 아파트 호재 카운팅·카드·4단계 필터에 정비 포함(분류=정비).
    phaseOf가 명시 phase 우선 사용, radius_type로 catOf(정비)·getRadius 결정. */
 function buildJeongbiSignals() {
@@ -756,11 +765,10 @@ function navPick(level, val) {
 /* ══════════ 아파트 앵커: 단지 좌표 반경 내 신호 (§4.4 역방향 조회) ══════════ */
 function signalsNearPoint(coord) {
   // 확정 신호 + 정비(어댑트) 통합 카운팅. 정비는 좌표 근접(~2km bbox)만 우선 추려 성능 확보.
-  const jbLocal = JEONGBI_SIG.filter(s => {
-    const c = s.geometry.coordinates;
-    return Math.abs(c[0] - coord[0]) < 0.02 && Math.abs(c[1] - coord[1]) < 0.02;
-  });
-  return SIGNALS.concat(jbLocal).filter(visible).map(s => {
+  const near = s => { const c = s.geometry.coordinates; return Math.abs(c[0] - coord[0]) < 0.02 && Math.abs(c[1] - coord[1]) < 0.02; };
+  const jbLocal = JEONGBI_SIG.filter(near);
+  const railLocal = RAIL_SIG.filter(near);   // 계획/건설역도 호재로 카운팅
+  return SIGNALS.concat(jbLocal, railLocal).filter(visible).map(s => {
     const d = Math.min(...(signalPoints(s).map(p => meters(coord, p.coord)) || [Infinity]));
     return { s, dist: d, within: d <= getRadius(s) };
   }).filter(x => x.within && isFinite(x.dist)).sort((a, b) => a.dist - b.dist);
@@ -1834,7 +1842,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260715c");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260715d");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
@@ -1851,6 +1859,7 @@ function renderRaw(more) {
     RAIL_READY ? gj("rail_signals.json").catch(() => ({ features: [] })) : Promise.resolve({ features: [] })  // 신규 철도 노선 — 시드 부정확(§4.1)로 비활성, 실제 노선 geometry 확보 후 재개
   ]);
   RAIL = (railData && railData.features) || [];
+  buildRailSignals();   // 계획/건설역 → 교통 신호(신설역 근처 아파트 호재 카운팅 기준좌표)
   REGIONS = regions;
   DONG_GEO = dong;
   SGG_GEO = sgg;
