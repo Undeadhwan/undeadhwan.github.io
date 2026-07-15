@@ -814,7 +814,7 @@ const SIDO_ORDER = ["서울", "인천", "경기", "부산", "대구", "광주", 
 const treeState = { selKey: null };        // 지도 마커 연동용(기존 참조 유지)
 const nav = { sd: null, sg: null, dong: null };   // 현재 드릴다운 위치(상단 드롭다운)
 function dongsOfSgg(sd, sg) {
-  return DONG_GEO.features.filter(f => f.properties.sgg === sg)
+  return DONG_GEO.features.filter(f => (f.properties.sido || "서울") === sd && f.properties.sgg === sg)
     .map(f => f.properties.EMD_KOR_NM).sort((a, b) => a.localeCompare(b, "ko"));
 }
 /* ══════════ 상단 지역 드롭다운 (시도 > 시군구 > 읍면동, 조회조건) ══════════ */
@@ -847,12 +847,12 @@ function selectSido(sd) {
 }
 function selectSgg(sg) {
   nav.sg = sg || null; nav.dong = null;
-  fillRegion("r-dong", (sg && nav.sd === "서울") ? dongsOfSgg(nav.sd, sg) : [], "읍면동 선택");
+  fillRegion("r-dong", sg ? dongsOfSgg(nav.sd, sg) : [], "읍면동 선택");   // 경계 있는 시도(서울·경기·인천)면 읍면동 채움
   if (sg) showSgg(`${nav.sd} ${sg}`); else closePanel();
 }
 function selectDong(dong) {
   nav.dong = dong || null;
-  if (dong) { const f = DONG_GEO.features.find(x => x.properties.sgg === nav.sg && x.properties.EMD_KOR_NM === dong); if (f) showDong(f); }
+  if (dong) { const f = DONG_GEO.features.find(x => (x.properties.sido || "서울") === nav.sd && x.properties.sgg === nav.sg && x.properties.EMD_KOR_NM === dong); if (f) showDong(f); }
   else if (nav.sg) showSgg(`${nav.sd} ${nav.sg}`);
 }
 /* 지도/배지 클릭으로 진입 시 드롭다운 값 동기화 */
@@ -860,7 +860,7 @@ function syncRegionBar() {
   const sido = document.getElementById("r-sido"); if (!sido || !sido.options.length) return;
   if (sido.value !== (nav.sd || "")) { sido.value = nav.sd || ""; fillRegion("r-sgg", nav.sd ? sggListOf(nav.sd) : [], "시군구 선택"); }
   const sgg = document.getElementById("r-sgg");
-  if (nav.sg && sgg.value !== nav.sg) { fillRegion("r-dong", nav.sd === "서울" ? dongsOfSgg(nav.sd, nav.sg) : [], "읍면동 선택"); }
+  if (nav.sg && sgg.value !== nav.sg) { fillRegion("r-dong", dongsOfSgg(nav.sd, nav.sg), "읍면동 선택"); }
   sgg.value = nav.sg || "";
   const dong = document.getElementById("r-dong");
   dong.value = nav.dong || "";
@@ -1272,7 +1272,7 @@ function goHome() {
 }
 function showDong(f) {
   view = { mode: "dong", dong: f };
-  nav.sd = "서울"; nav.sg = f.properties.sgg; nav.dong = f.properties.EMD_KOR_NM; syncRegionBar();
+  nav.sd = f.properties.sido || "서울"; nav.sg = f.properties.sgg; nav.dong = f.properties.EMD_KOR_NM; syncRegionBar();
   ANIMATE = true;
   renderPanel();
   mapApi?.clearRadius(); mapApi?.clearAptMarker?.();
@@ -1493,10 +1493,12 @@ function initLeaflet() {
       b.on("click", () => showDong(f));
       badges.push(b);
     }
-    // ── 서울 외(경기·인천 등): 동 경계 geojson 없음 → 정비·확정 신호를 (시군구·동)명으로 묶어 신호 중심에 동 배지
+    // ── 경계 미확보 시도(지방 등): 동 경계 geojson 없음 → 정비·확정 신호를 (시군구·동)명으로 묶어 신호 중심에 동 배지.
+    // 서울·경기·인천은 DONG_GEO 정식 경계 있음 → 위 메인 루프가 정centroid 배지 처리(이중 방지)
+    const covered = new Set(DONG_GEO.features.map(f => f.properties.sido || "서울"));
     const ndong = {};
     JEONGBI_SIG.filter(visible).concat(SIGNALS.filter(visible)).forEach(s => {
-      if (s.sd === "서울" || !s.dong || !s.sg) return;
+      if (covered.has(s.sd) || !s.dong || !s.sg) return;
       const k = `${s.sd}|${s.sg}|${s.dong}`;
       const g = ndong[k] || (ndong[k] = { sd: s.sd, sg: s.sg, dong: s.dong, sigs: [], sx: 0, sy: 0 });
       const c = s.geometry.coordinates; g.sigs.push(s); g.sx += c[0]; g.sy += c[1];
@@ -2052,10 +2054,11 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260715v");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260716a");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
-  const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData, dartData] = await Promise.all([
+  const [dong, capitalDong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData, dartData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
+    gj("capital_bdong.geojson").catch(() => ({ features: [] })),   // 경기·인천 법정동(VWorld WFS, sido 속성 포함)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
     gj("macro_signals_draft.json"),
@@ -2075,6 +2078,9 @@ function renderRaw(more) {
   buildDartSignals();   // DART → 일자리 후보 신호(호재 카운팅 포함)
   REGIONS = regions;
   DONG_GEO = dong;
+  // 경기·인천 법정동 병합(서울 feature엔 sido 없음 → 렌더/드릴다운서 sido||"서울" 폴백)
+  if (capitalDong && capitalDong.features && capitalDong.features.length)
+    DONG_GEO = { type: "FeatureCollection", features: dong.features.concat(capitalDong.features) };
   SGG_GEO = sgg;
   RAW = rawData.rows;
   AUTO = autoData.candidates;
