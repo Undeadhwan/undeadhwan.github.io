@@ -469,6 +469,9 @@ const CAT_COLOR = { "교통": "#2e5ce6", "일자리": "#e0761e", "정비": "#c43
 const colorOf = s => CAT_COLOR[catOf(s)] || "#12263f";
 
 /* ══════════ 상태 ══════════ */
+// ⚠️ 서울 정비 데이터(의제처리구역 폴리곤·정비몽땅 점)는 공공누리 4유형(상업·변경 금지).
+// 상업화 목표라 서울시 이용허락 전까지 라이브 비공개(2026-07-15). 허락 시 true로 복구.
+const JEONGBI_LICENSED = false;
 let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [], JEONGBI_SIG = [];
 /* 정비(JEONGBI) 후보를 신호 형태로 어댑트 → 아파트 호재 카운팅·카드·4단계 필터에 정비 포함(분류=정비).
    phaseOf가 명시 phase 우선 사용, radius_type로 catOf(정비)·getRadius 결정. */
@@ -1782,7 +1785,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260714x");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260714y");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
@@ -1794,8 +1797,8 @@ function renderRaw(more) {
     gj("apartments.json").catch(() => ({ apts: [] })),          // 강서 정밀본(도로수준 검수)
     gj("apartments_all.json").catch(() => ({ apts: [] })),       // 전국(공동주택 API+브이월드)
     gj("regions.json").catch(() => null),
-    gj("signals_jeongbi_all.json").catch(() => ({ cands: [] })),  // 정비사업 후보(정비몽땅+공공데이터)
-    gj("jeongbi_poly_seoul.json").catch(() => ({ features: [] }))  // 정비구역 경계 폴리곤(서울 의제처리구역 SHP → geojson)
+    JEONGBI_LICENSED ? gj("signals_jeongbi_all.json").catch(() => ({ cands: [] })) : Promise.resolve({ cands: [] }),  // 정비사업 후보(정비몽땅+공공데이터) — 4유형, 이용허락 전 비공개
+    JEONGBI_LICENSED ? gj("jeongbi_poly_seoul.json").catch(() => ({ features: [] })) : Promise.resolve({ features: [] })  // 정비구역 경계 폴리곤 — 4유형, 이용허락 전 비공개
   ]);
   REGIONS = regions;
   DONG_GEO = dong;
