@@ -1297,21 +1297,17 @@ function initLeaflet() {
       aptDots.push(m);
     }
   };
-  // 정비구역 경계 폴리곤(서울 의제처리구역 SHP → geojson): 지정고시된 구역 = 실선 폴리곤(사실, P2·P5).
-  // 유형 색은 사실 분류(P3 허용, 판단 아님). 우리 추진 신호(JEONGBI 후보)와 별개 — 폴리곤=고시 경계, 마커=추진 신호.
-  const JT_COL = { "재개발": "#d64550", "재건축": "#e0761e", "재정비촉진": "#b3439c", "주거환경개선": "#2e8b57",
-    "도시개발": "#8a6d3b", "역세권정비": "#0d9488", "가로주택": "#4460e0", "소규모정비": "#4460e0",
-    "모아타운": "#4460e0", "정비구역": "#7a6a9c" };
-  // 범례(정비구역 유형) — 동 레벨 이상, 폴리곤 데이터 있을 때만 노출
-  const JB_LEGEND_ITEMS = [["재개발", "#d64550"], ["재건축", "#e0761e"], ["재정비촉진", "#b3439c"],
-    ["주거환경개선", "#2e8b57"], ["모아·가로·소규모", "#4460e0"], ["역세권정비", "#0d9488"],
-    ["도시개발", "#8a6d3b"], ["기타 정비구역", "#7a6a9c"]];
+  // 정비구역 경계 폴리곤(서울 의제처리구역 SHP → geojson): 지정고시된 개별 구역 = 실선 폴리곤(사실, P2·P5).
+  // 색 = 진행단계(우리 신호와 매칭된 구역만). 미매칭은 흐린 경계(단계 미상). 유형은 툴팁 표기.
+  // 범례(정비구역 진행단계) — 동 레벨 이상, 폴리곤 데이터 있을 때만 노출
+  const JB_LEGEND_ITEMS = [["계획", "#9aa6c8"], ["인가", "#e0761e"], ["착공", "#c4392f"],
+    ["준공·개통", "#2e8b57"], ["단계 미상", "#aeb4c0"]];
   const jbLegend = L.control({ position: "bottomleft" });
   jbLegend.onAdd = () => {
     const div = L.DomUtil.create("div", "jb-legend");
-    div.innerHTML = "<b>정비구역 유형</b>"
+    div.innerHTML = "<b>정비구역 진행단계</b>"
       + JB_LEGEND_ITEMS.map(([n, c]) => `<span class="jl"><i style="background:${c}"></i>${n}</span>`).join("")
-      + `<div class="jhint">지정고시된 구역 경계(사실). 추진 신호는 점선 마커.</div>`;
+      + `<div class="jhint">색=추적 중인 구역의 단계(우리 신호 기준). 흐린 경계=단계 미상(고시 경계만).</div>`;
     return div;
   };
   let jbLegendOn = false;
@@ -1348,16 +1344,20 @@ function initLeaflet() {
       const p = f.properties;
       if (YEAR_SEL && p.year && p.year > YEAR_SEL) continue;   // 시점 기준: 아직 고시 안 된 구역은 숨김
       if (++n > 240) break;   // 성능 상한
-      const col = JT_COL[p.jtype] || "#7a6a9c";
+      const tracked = !!p.phase;   // 우리 신호와 매칭돼 진척도를 아는 구역
+      const col = tracked ? (JB_PHASE_COL[p.phase] || "#c4392f") : "#aeb4c0";
       const latlngs = f.geometry.coordinates.map(r => r.map(([x, y]) => [y, x]));
-      const poly = L.polygon(latlngs, { pane: "jbpoly", color: col, weight: 1.4, opacity: .85,
-        fillColor: col, fillOpacity: .1 }).addTo(map);
+      const poly = L.polygon(latlngs, { pane: "jbpoly", color: col,
+        weight: tracked ? 1.9 : 1, opacity: tracked ? .95 : .6,
+        fillColor: col, fillOpacity: tracked ? .2 : .05 }).addTo(map);
       poly.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${p.name || "정비구역"}</div>`
-        + `<div class="apt-pop-sub">정비구역 경계(고시) · <span style="color:${col}">${p.jtype}</span></div>`
-        + `<div class="apt-pop-cats">${p.area ? (p.area / 1e4).toFixed(1) + "만㎡ · " : ""}${p.date ? "고시 " + p.date : ""}</div></div>`,
+        + `<div class="apt-pop-sub">정비구역 · ${p.jtype}${p.area ? " · " + (p.area / 1e4).toFixed(1) + "만㎡" : ""}</div>`
+        + `<div class="apt-pop-cats">${tracked
+            ? `<span style="color:${col}">● ${p.stage || ""} → 단계 ${p.phase}</span>`
+            : `<span style="color:#8a90a0">단계 미상 · 고시 경계</span>`}${p.date ? ` · 고시 ${p.date}` : ""}</div></div>`,
         { direction: "top", className: "apt-tip", sticky: true });
       jbPolys.push(poly);
-      jbDrawnRings.push(f.geometry.coordinates[0]);   // 외곽링만 억제 판정에 사용
+      if (tracked) jbDrawnRings.push(f.geometry.coordinates[0]);   // 매칭된 구역만 마커 억제(미상 구역은 신호 마커 유지)
     }
     toggleJbLegend(n > 0);   // 화면에 폴리곤이 있을 때만 범례 노출
   };
@@ -1735,7 +1735,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260714t");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260714u");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
