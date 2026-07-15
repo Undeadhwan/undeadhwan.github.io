@@ -472,6 +472,9 @@ const colorOf = s => CAT_COLOR[catOf(s)] || "#12263f";
 // 서울 정비 데이터(의제처리구역 폴리곤·정비몽땅 점)는 공공누리 4유형(상업·변경 금지).
 // 비상업 파일럿 동안은 출처표시와 함께 사용, 상업화(광고) 전 서울시 이용허락 필요(상업화_라이선스_체크리스트.md #1·#2).
 const JEONGBI_LICENSED = true;
+// 신규 철도 노선: 초기 시드가 추정 역목록+직선연결이라 실제와 다름(§4.1 위반) → 비활성.
+// 실제 노선 route geometry(운영선=국가철도공단 GIS / 신규선=계획 노선도) 확보 후 true.
+const RAIL_READY = false;
 let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [], JEONGBI_SIG = [], RAIL = [];
 /* 정비(JEONGBI) 후보를 신호 형태로 어댑트 → 아파트 호재 카운팅·카드·4단계 필터에 정비 포함(분류=정비).
    phaseOf가 명시 phase 우선 사용, radius_type로 catOf(정비)·getRadius 결정. */
@@ -1827,7 +1830,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260715a");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260715b");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
@@ -1841,7 +1844,7 @@ function renderRaw(more) {
     gj("regions.json").catch(() => null),
     JEONGBI_LICENSED ? gj("signals_jeongbi_all.json").catch(() => ({ cands: [] })) : Promise.resolve({ cands: [] }),  // 정비사업 후보(정비몽땅+공공데이터) — 4유형, 이용허락 전 비공개
     JEONGBI_LICENSED ? gj("jeongbi_poly_seoul.json").catch(() => ({ features: [] })) : Promise.resolve({ features: [] }),  // 정비구역 경계 폴리곤 — 4유형, 이용허락 전 비공개
-    gj("rail_signals.json").catch(() => ({ features: [] }))  // 신규 철도 노선(호재) — 국토부/서울시 철도망계획 + VWorld 좌표
+    RAIL_READY ? gj("rail_signals.json").catch(() => ({ features: [] })) : Promise.resolve({ features: [] })  // 신규 철도 노선 — 시드 부정확(§4.1)로 비활성, 실제 노선 geometry 확보 후 재개
   ]);
   RAIL = (railData && railData.features) || [];
   REGIONS = regions;
