@@ -200,6 +200,9 @@
   /* 아파트 hover 팝업 (호갱노노식 카드 — 실거래가 제외) */
   .leaflet-tooltip.apt-tip { background:transparent; border:none; box-shadow:none; padding:0; white-space:normal; }
   .leaflet-tooltip.apt-tip::before { display:none; }
+  .leaflet-tooltip.rail-stlbl { background:rgba(255,255,255,.92); border:1px solid #2e5ce6; color:#1a2b6b;
+    font-size:11px; font-weight:700; padding:1px 5px; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,.18); white-space:nowrap; }
+  .leaflet-tooltip.rail-stlbl::before { display:none; }
   .apt-pop { background:#fff; border-radius:12px; box-shadow:0 6px 22px rgba(0,0,0,.24); padding:11px 14px; min-width:180px; max-width:250px; }
   .apt-pop-nm { font-size:15px; font-weight:800; color:#1a1a1a; }
   .apt-pop-sub { font-size:11.5px; color:var(--muted); margin-top:3px; }
@@ -1471,12 +1474,17 @@ function initLeaflet() {
           const flat = f.geometry.type === "MultiLineString" ? f.geometry.coordinates.flat() : f.geometry.coordinates;
           showSignal(railToSignal(p, flat[Math.floor(flat.length / 2)]), false); });
         railLayers.push(line);
-      } else if (f.geometry.type === "Point" && z >= 11) {
+      } else if (f.geometry.type === "Point" && z >= 10) {
         const [x, y] = f.geometry.coordinates;
-        const m = L.circleMarker([y, x], { pane: "rail", radius: 4, color: railCol, weight: 2,
-          fillColor: p.confirmed ? railCol : "#fff", fillOpacity: p.confirmed ? 1 : .95, opacity: .95 }).addTo(map);
-        m.bindTooltip(`${p.name} <span style="color:#8a90a0">· ${p.line}${p.confirmed ? "" : " (후보역)"}</span>`,
+        const rr = z >= 14 ? 5.5 : (z >= 12 ? 4.5 : 3.5);
+        // 지하철 노선도식 도넛(흰 속 + 색 링) — 어느 배경에서도 보이고 겹침 적음. 확정=실링/후보=점선링
+        const m = L.circleMarker([y, x], { pane: "rail", radius: rr, color: railCol,
+          weight: 2.5, dashArray: p.confirmed ? null : "2 2",
+          fillColor: "#fff", fillOpacity: 1, opacity: 1 }).addTo(map);
+        m.bindTooltip(`${p.name} <span style="color:#8a90a0">· ${p.line || ""}${p.confirmed ? "" : " (후보역)"}</span>`,
           { direction: "top", className: "apt-tip" });
+        if (z >= 14) m.bindTooltip(p.name, { permanent: true, direction: "right",
+          className: "rail-stlbl", offset: [rr + 3, 0] });   // 고배율(z14+)=역명 상시 라벨
         railLayers.push(m);
       }
     }
@@ -1842,7 +1850,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260715f");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260715g");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
