@@ -1298,6 +1298,7 @@ function initLeaflet() {
   map.createPane("rail").style.zIndex = 638;     // 신규 철도 노선(§7 실선/점선) — 정비폴리곤 위, 마커 아래
   map.createPane("cand").style.zIndex = 640;
   map.createPane("sig").style.zIndex = 650;
+  map.createPane("badge").style.zIndex = 660;    // 시군구/동 카운트 배지 — 철도·도로 노선 위에 표시
   map.getPane("tooltipPane").style.zIndex = 720;   // 팝업(아파트 hover 카드 등)은 항상 핀·영향원 위에
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     { maxZoom: 19, attribution: "&copy; OpenStreetMap — 임시 베이스맵 (카카오맵 승인 시 전환)" }).addTo(map);
@@ -1373,6 +1374,7 @@ function initLeaflet() {
       placed.push({ x: pt.x, y: pt.y });
       const mini = n ? gradeBadgeHtml(levelCounts(sigs)) : "";
       const b = L.marker([c[1], c[0]], {
+        pane: "badge",
         icon: L.divIcon({ className: "", html: `<div class="hj-box sgg ${n ? "" : "zero"}"><div class="nm">${disp.split(" ")[1]}</div>${mini}</div>`, iconSize: null })
       }).addTo(map);
       b.on("click", () => showSgg(disp));
@@ -1415,6 +1417,7 @@ function initLeaflet() {
         .concat(JEONGBI_SIG.filter(visible).filter(s => s.sg === f.properties.sgg && s.dong === f.properties.EMD_KOR_NM));
       const mini = n ? gradeBadgeHtml(levelCounts(rel)) : "";
       const b = L.marker([c[1], c[0]], {
+        pane: "badge",
         icon: L.divIcon({ className: "", html: `<div class="hj-box ${n ? "" : "zero"}"><div class="nm">${dongName(f)}</div>${mini}</div>`, iconSize: null })
       }).addTo(map);
       b.on("click", () => showDong(f));
@@ -1958,7 +1961,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260715o");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260715p");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
