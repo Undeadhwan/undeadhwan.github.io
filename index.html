@@ -472,7 +472,7 @@ const colorOf = s => CAT_COLOR[catOf(s)] || "#12263f";
 // 서울 정비 데이터(의제처리구역 폴리곤·정비몽땅 점)는 공공누리 4유형(상업·변경 금지).
 // 비상업 파일럿 동안은 출처표시와 함께 사용, 상업화(광고) 전 서울시 이용허락 필요(상업화_라이선스_체크리스트.md #1·#2).
 const JEONGBI_LICENSED = true;
-let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [], JEONGBI_SIG = [];
+let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [], JEONGBI_SIG = [], RAIL = [];
 /* 정비(JEONGBI) 후보를 신호 형태로 어댑트 → 아파트 호재 카운팅·카드·4단계 필터에 정비 포함(분류=정비).
    phaseOf가 명시 phase 우선 사용, radius_type로 catOf(정비)·getRadius 결정. */
 function buildJeongbiSignals() {
@@ -1177,6 +1177,7 @@ function initLeaflet() {
   new ResizeObserver(() => map.invalidateSize()).observe(document.getElementById("map"));
   // 신호 핀이 동 폴리곤에 클릭을 뺏기지 않도록 전용 상위 pane
   map.createPane("jbpoly").style.zIndex = 635;   // 정비구역 경계 폴리곤(고시 사실) — 마커(cand)보다 아래
+  map.createPane("rail").style.zIndex = 638;     // 신규 철도 노선(§7 실선/점선) — 정비폴리곤 위, 마커 아래
   map.createPane("cand").style.zIndex = 640;
   map.createPane("sig").style.zIndex = 650;
   map.getPane("tooltipPane").style.zIndex = 720;   // 팝업(아파트 hover 카드 등)은 항상 핀·영향원 위에
@@ -1432,6 +1433,46 @@ function initLeaflet() {
       jbDots.push(m);
     });
   };
+  // 신규 철도 노선(호재) §7 렌더: 확정/건설중=실선, 미확정(계획·구상)=점선. 후보역=점. 교통 분류·4단계 필터 반응.
+  let railLayers = [];
+  const clearRail = () => { railLayers.forEach(l => map.removeLayer(l)); railLayers = []; };
+  const renderRail = () => {
+    clearRail();
+    if (!RAIL.length || !filter.cat.has("교통")) return;
+    const phaseFiltering = filter.phase.size < PHASES.length;
+    const railCol = CAT_COLOR["교통"];   // 파랑
+    const z = map.getZoom();
+    for (const f of RAIL) {
+      const p = f.properties;
+      if (phaseFiltering && p.phase && !filter.phase.has(p.phase)) continue;
+      if (YEAR_SEL && false) continue;   // (철도 고시연도 필터는 추후)
+      if (f.geometry.type === "LineString") {
+        const ll = f.geometry.coordinates.map(([x, y]) => [y, x]);
+        const line = L.polyline(ll, { pane: "rail", color: railCol, weight: p.dashed ? 3 : 4,
+          opacity: .9, dashArray: p.dashed ? "8 7" : null, lineCap: "round" }).addTo(map);
+        line.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">🚈 ${p.full || p.name}</div>`
+          + `<div class="apt-pop-sub">${p.linekind} · <span style="color:${railCol}">${p.status}</span>${p.dashed ? " (미확정 노선 — 점선)" : ""}</div>`
+          + `<div class="apt-pop-cats"><span style="color:${railCol}">● 단계 ${p.phase}</span>${p.note ? " · " + p.note : ""}${p.src_name ? ` · 출처: ${p.src_name}` : ""}</div></div>`,
+          { sticky: true, className: "apt-tip" });
+        line.on("click", (e) => { L.DomEvent.stopPropagation(e); showSignal(railToSignal(p, ll), false); });
+        railLayers.push(line);
+      } else if (f.geometry.type === "Point" && z >= 11) {
+        const [x, y] = f.geometry.coordinates;
+        const m = L.circleMarker([y, x], { pane: "rail", radius: 4, color: railCol, weight: 2,
+          fillColor: p.confirmed ? railCol : "#fff", fillOpacity: p.confirmed ? 1 : .95, opacity: .95 }).addTo(map);
+        m.bindTooltip(`${p.name} <span style="color:#8a90a0">· ${p.line}${p.confirmed ? "" : " (후보역)"}</span>`,
+          { direction: "top", className: "apt-tip" });
+        railLayers.push(m);
+      }
+    }
+  };
+  // 철도 노선 → 신호 상세 어댑트(우측 패널)
+  const railToSignal = (p, ll) => ({
+    _rail: true, title: p.full || p.name, radius_type: "지하철·전철역", template_type: "철도",
+    current_stage: p.status, phase: p.phase, status: "활성", confirmed: p.confirmed,
+    sd: "수도권", geometry: { coordinates: ll[Math.floor(ll.length / 2)].slice().reverse() },
+    sources: p.src_url ? [p.src_url] : [], stage_note: `${p.linekind} · ${p.status}${p.note ? " · " + p.note : ""}`,
+  });
   // 호갱노노식 LOD: 축소=시군구 박스 → 중간=동 박스 → 확대=아파트(동 박스 숨김, 동 대신 아파트)
   const applyLOD = () => {
     const z = map.getZoom();
@@ -1441,6 +1482,7 @@ function initLeaflet() {
     else { clearAptDots(); (z >= DONG_ZOOM ? renderDongBadges : renderSggBadges)(); }
     renderJeongbiPoly();   // 정비구역 경계 폴리곤 먼저(고시 사실) — jbDrawnRings 채워짐
     renderJeongbi();       // 그다음 추진 신호 마커(폴리곤과 겹치면 억제)
+    renderRail();          // 신규 철도 노선(§7 실선/점선)
   };
   map.on("zoomend moveend", applyLOD);
   map.on("moveend", () => { try { updateCenterLabel(); } catch (e) {} });
@@ -1785,9 +1827,9 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260714z");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260715a");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
-  const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData] = await Promise.all([
+  const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
@@ -1798,8 +1840,10 @@ function renderRaw(more) {
     gj("apartments_all.json").catch(() => ({ apts: [] })),       // 전국(공동주택 API+브이월드)
     gj("regions.json").catch(() => null),
     JEONGBI_LICENSED ? gj("signals_jeongbi_all.json").catch(() => ({ cands: [] })) : Promise.resolve({ cands: [] }),  // 정비사업 후보(정비몽땅+공공데이터) — 4유형, 이용허락 전 비공개
-    JEONGBI_LICENSED ? gj("jeongbi_poly_seoul.json").catch(() => ({ features: [] })) : Promise.resolve({ features: [] })  // 정비구역 경계 폴리곤 — 4유형, 이용허락 전 비공개
+    JEONGBI_LICENSED ? gj("jeongbi_poly_seoul.json").catch(() => ({ features: [] })) : Promise.resolve({ features: [] }),  // 정비구역 경계 폴리곤 — 4유형, 이용허락 전 비공개
+    gj("rail_signals.json").catch(() => ({ features: [] }))  // 신규 철도 노선(호재) — 국토부/서울시 철도망계획 + VWorld 좌표
   ]);
+  RAIL = (railData && railData.features) || [];
   REGIONS = regions;
   DONG_GEO = dong;
   SGG_GEO = sgg;
