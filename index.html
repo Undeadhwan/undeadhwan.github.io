@@ -76,8 +76,9 @@
             border:1px solid #e2e6f0; transition:transform .1s; }
   .hj-box:hover { transform:translateY(-2px); z-index:500; }
   .hj-box .nm { font-size:10px; font-weight:700; color:#4a5468; white-space:nowrap; margin-bottom:1px; }
-  .hj-box .grades { display:flex; gap:6px; justify-content:center; white-space:nowrap; }
+  .hj-box .grades { display:flex; gap:5px; justify-content:center; align-items:center; white-space:nowrap; }
   .hj-box .grades .g { font-size:12px; font-weight:800; font-variant-numeric:tabular-nums; }
+  .hj-box .grades .g-A { background:#d6156d; border-radius:5px; padding:0 5px; box-shadow:0 1px 3px rgba(214,21,109,.4); }
   .hj-box::after { content:""; position:absolute; left:50%; bottom:-5px; transform:translateX(-50%);
                    border:5px solid transparent; border-top-color:#fff; }
   .hj-box.zero { background:#f1f3f7; border-color:#e2e6f0; box-shadow:0 1px 4px rgba(0,0,0,.12); }
@@ -85,6 +86,10 @@
   .hj-box.zero::after { border-top-color:#f1f3f7; }
   .hj-box.sgg::after { border-top-color:#fff; }
   .hj-box.sgg.zero::after { border-top-color:#f1f3f7; }
+  .hj-box.apt { padding:3px 7px 4px; }
+  .hj-box.apt.sel { border-color:#d6156d; box-shadow:0 0 0 2px rgba(214,21,109,.32), 0 2px 8px rgba(30,45,90,.25); }
+  .apt-dot { width:8px; height:8px; border-radius:50%; background:#b4bccc; border:1.5px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.25); }
+  .apt-dot.sel { background:#d6156d; border-color:#fff; box-shadow:0 0 0 3px rgba(214,21,109,.3); }
   .hmatrix { border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin:2px 0 14px; background:#fbfcfe; }
   .hmhead { font-size:12px; color:var(--muted); margin-bottom:5px; }
   .hmhead b { color:var(--ink); font-size:15px; font-weight:800; }
@@ -480,8 +485,8 @@ function lvStyle(cat, lvl) {
   return `background:${tint[0]};color:${tint[1]};`;
 }
 /* 등급(A/B/C) 공통 색 — 카테고리 무관. A=보라(핵심)/B=청록(중대형)/C=슬레이트(일반). 각 화면 등급 그루핑 */
-const LVL_COLOR = { A: "#7c3aed", B: "#0e9488", C: "#64748b" };
-const LVL_STYLE = { A: "background:#7c3aed;color:#fff;", B: "background:#0e9488;color:#fff;", C: "background:#64748b;color:#fff;" };
+const LVL_COLOR = { A: "#d6156d", B: "#7c3aed", C: "#94a3b8" };   // A=마젠타(핵심·최선명)/B=보라/C=슬레이트
+const LVL_STYLE = { A: "background:#d6156d;color:#fff;", B: "background:#7c3aed;color:#fff;", C: "background:#94a3b8;color:#fff;" };
 const LVL_TXT = LVL_COLOR;
 function lvlPill(l) { return `<span class="lvtag" style="${LVL_STYLE[l]}">${LEVEL_NAME[l]}</span>`; }
 function levelPill(s) { return lvlPill(levelOf(s)); }
@@ -491,9 +496,10 @@ function levelCounts(sigs) {
   sigs.forEach(x => { const s = x.s || x; const l = levelOf(s), c = catOf(s); if (!m[l]) return; m[l].total++; m[l].cats[c] = (m[l].cats[c] || 0) + 1; m._total++; });
   return m;
 }
-/* 지도 배지용: 등급별 건수 (총건수·내부박스 없이 등급색 텍스트) */
+/* 지도 배지용: 등급별 건수 (총건수·내부박스 없이 등급색 텍스트, A급은 강조 배경) */
 function gradeBadgeHtml(m) {
-  const inner = LEVELS.filter(l => m[l].total).map(l => `<span class="g" style="color:${LVL_COLOR[l]}">${l}${m[l].total}</span>`).join("");
+  const inner = LEVELS.filter(l => m[l].total).map(l =>
+    `<span class="g g-${l}" style="color:${l === "A" ? "#fff" : LVL_COLOR[l]}">${l}${m[l].total}</span>`).join("");
   return inner ? `<div class="grades">${inner}</div>` : "";
 }
 /* 사용자 오버라이드 로드 (localStorage) — 편집 시 저장, 즉시 반영 */
@@ -1440,21 +1446,21 @@ function initLeaflet() {
     for (const { a, near, n } of cands) {
       if (placed.length > 170) break;
       const pt = map.latLngToContainerPoint([a.lat, a.lon]);
-      if (collides(placed, pt, n ? 40 : 16, n ? 34 : 16)) continue;   // 겹치면 숨김
+      if (collides(placed, pt, n ? 54 : 14, n ? 28 : 14)) continue;   // 겹치면 숨김
       placed.push({ x: pt.x, y: pt.y });
       const sel = treeState.selKey === `apt|${a.n}|${a.dong}`;
-      const cls = "apt-house" + (n ? "" : " zero") + (sel ? " sel" : "");
-      const inner = n ? `<span class="hc">${n}<small>건</small></span>` : "";
-      const m = L.marker([a.lat, a.lon], { pane: "cand", zIndexOffset: n ? 1000 : 0,
-        icon: L.divIcon({ className: "", html: `<div class="${cls}">${inner}</div>`, iconSize: null }) }).addTo(map);
-      // hover 팝업: 이름·세대수·준공년월 + 호재유형별 건수 (실거래가 제외)
-      const byCat = {};
-      near.forEach(({ s }) => { const c = catOf(s); byCat[c] = (byCat[c] || 0) + 1; });
-      const catHtml = DISPLAY_CAT_KEYS.filter(k => byCat[k])
-        .map(k => `<span style="color:${CAT_COLOR[k]}">● ${k} ${byCat[k]}</span>`).join("");
+      const lc = levelCounts(near);
+      const html = n
+        ? `<div class="hj-box apt${sel ? " sel" : ""}">${gradeBadgeHtml(lc)}</div>`
+        : `<div class="apt-dot${sel ? " sel" : ""}"></div>`;
+      const m = L.marker([a.lat, a.lon], { pane: "badge", zIndexOffset: n ? 1000 : 0,
+        icon: L.divIcon({ className: "", html, iconSize: null }) }).addTo(map);
+      // hover 팝업: 이름·세대수·준공년월 + 등급별 건수 (동 배지와 동일 체계)
+      const gradeHtml = LEVELS.filter(l => lc[l].total).map(l =>
+        `<span style="color:${LVL_COLOR[l]};font-weight:800">${LEVEL_NAME[l]} ${lc[l].total}</span>`).join(" · ");
       const sub = `${a.sg} ${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : ""}${a.built ? " · 준공 " + a.built : ""}`;
       const pop = `<div class="apt-pop"><div class="apt-pop-nm">${a.n}</div><div class="apt-pop-sub">${sub}</div>`
-        + (n ? `<div class="apt-pop-cats"><span class="tot">반경 내 호재 ${n}건</span>${catHtml}</div>`
+        + (n ? `<div class="apt-pop-cats"><span class="tot">반경 내 호재 ${n}건 · 등급별</span>${gradeHtml}</div>`
              : `<div class="apt-pop-cats none">반경 내 호재 없음</div>`) + `</div>`;
       m.bindTooltip(pop, { direction: "top", offset: [0, n ? -12 : -6], className: "apt-tip", sticky: false });
       m.on("click", () => { treeState.selKey = `apt|${a.n}|${a.dong}`; buildTree(); showApt(a); });
@@ -1961,7 +1967,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260715p");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260715q");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
