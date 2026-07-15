@@ -98,7 +98,8 @@
   .hmc { font-size:13px; font-weight:700; width:66px; flex-shrink:0; display:flex; align-items:center; gap:6px; }
   .hdot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
   .hmpills { display:flex; gap:5px; flex:1; flex-wrap:wrap; }
-  .lvpill { font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; white-space:nowrap; }
+  .lvpill { font-size:11px; font-weight:800; padding:2px 8px; border-radius:20px; white-space:nowrap; }
+  .lvtag { font-size:11px; font-weight:800; padding:2px 8px; border-radius:6px; white-space:nowrap; display:inline-block; letter-spacing:.02em; vertical-align:1px; }
   .hmz { font-size:11px; color:var(--muted); }
   .hmtot { font-size:13px; color:var(--muted); font-weight:700; min-width:18px; text-align:right; }
   .cmplv { font-size:10.5px; font-weight:700; padding:1px 6px; border-radius:10px; white-space:nowrap; display:inline-block; margin:1px 1px; }
@@ -473,8 +474,16 @@ const LEVEL_DESC = {
   "주거개발": { A: "도시급 대형 (1만 세대↑·3기 신도시)", B: "지역 대장주급 (3천~1만 세대)", C: "일반 단지급 (500~3천 세대)" }
 };
 const CAT_COLOR = { "교통": "#2e5ce6", "일자리": "#e0761e", "인프라": "#2e8b57", "주거개발": "#c4392f", "기타": "#6e6e73" };
-/* 레벨 pill 배경/글자색 (분류색 계열 연한 배경) */
+/* 레벨 pill: 분류색 강도로 등급화 (A=진한 채움/B=중간 채움/C=연한). A급이 확 띔 */
 const CAT_TINT = { "교통": ["#e7ecfc", "#1c3aa8"], "일자리": ["#fbebdb", "#8a4a12"], "인프라": ["#e2f1e8", "#1d6b40"], "주거개발": ["#f8e3e0", "#9a2c22"], "기타": ["#ececf0", "#55555a"] };
+const CAT_MID = { "교통": "#6f8cec", "일자리": "#e79f5a", "인프라": "#5aab84", "주거개발": "#d67e75", "기타": "#a2a7b5" };
+function lvStyle(cat, lvl) {
+  const base = CAT_COLOR[cat] || "#6e6e73", tint = CAT_TINT[cat] || CAT_TINT["기타"], mid = CAT_MID[cat] || "#a2a7b5";
+  if (lvl === "A") return `background:${base};color:#fff;`;
+  if (lvl === "B") return `background:${mid};color:#fff;`;
+  return `background:${tint[0]};color:${tint[1]};`;
+}
+function levelPill(s) { const l = levelOf(s); return `<span class="lvtag" style="${lvStyle(catOf(s), l)}">${LEVEL_NAME[l]}</span>`; }
 /* 사용자 오버라이드 로드 (localStorage) — 편집 시 저장, 즉시 반영 */
 function loadRadii() {
   const merged = JSON.parse(JSON.stringify(CLASSES_DEFAULT));
@@ -518,7 +527,7 @@ function hojaeMatrixHtml(sigs) {
   const rows = DISPLAY_CAT_KEYS.filter(c => c !== "기타" || m["기타"].total).map(c => {
     const tot = m[c].total, tint = CAT_TINT[c] || CAT_TINT["기타"];
     const pills = LEVELS.filter(l => m[c][l]).map(l =>
-      `<span class="lvpill" style="background:${tint[0]};color:${tint[1]}">${LEVEL_NAME[l]} ${m[c][l]}</span>`).join("");
+      `<span class="lvpill" style="${lvStyle(c, l)}">${LEVEL_NAME[l]} ${m[c][l]}</span>`).join("");
     return `<div class="hmrow ${tot ? "" : "z"}">
       <span class="hmc"><span class="hdot" style="background:${CAT_COLOR[c]}"></span>${c}</span>
       <span class="hmpills">${pills || '<span class="hmz">해당 없음</span>'}</span>
@@ -954,7 +963,7 @@ function cardHtml(s, extra = "") {
   const detail = s.current_stage && s.current_stage !== ph ? ` — ${s.current_stage}` : "";
   return `
     <div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}</span>
-      · ${LEVEL_NAME[levelOf(s)]} · 영향 ${km}km
+      · ${levelPill(s)} · 영향 ${km}km
       ${s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>'}
       ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}
       ${noCoord ? '<span class="badge-near">위치 미확정 — 지도 미표시</span>' : ""} ${extra}</div>
@@ -1027,7 +1036,7 @@ function openCompare() {
             if (!m || !m.total) return `<span style="color:#c3c8d2">·</span>`;
             const tint = CAT_TINT[k] || CAT_TINT["기타"];
             return `<span style="white-space:nowrap">${LEVELS.filter(l => m[l]).map(l =>
-              `<span class="cmplv" style="background:${tint[0]};color:${tint[1]}">${LEVEL_NAME[l]} ${m[l]}</span>`).join(" ")}</span>`;
+              `<span class="cmplv" style="${lvStyle(k, l)}">${LEVEL_NAME[l]} ${m[l]}</span>`).join(" ")}</span>`;
           })).join("")}
         <tr class="catrow"><td class="rowh" colspan="${compareSet.length + 1}" style="background:#eef1f6;text-align:left">단계별 개수</td></tr>
         ${PHASES.filter(p => stats.some(s => s.byPhase[p])).map(p =>
@@ -1085,7 +1094,7 @@ function renderDetail(s) {
     <div class="phead"><span></span><div class="closex" onclick="closePanel()">✕</div></div>
     <div class="detail">
       <div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}</span>
-        · ${LEVEL_NAME[levelOf(s)]} · 영향 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km
+        · ${levelPill(s)} · 영향 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km
         ${s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>'}
         ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}</div>
       <h2>${s.title}</h2>
@@ -1904,7 +1913,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260715k");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260715l");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
