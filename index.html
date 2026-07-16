@@ -2004,7 +2004,8 @@ function initLeaflet() {
     let ai = 0;
     act.forEach(sg => drawLine(sg));   // 노선 먼저(핀이 위)
     act.forEach(sg => {
-      const pts = signalPoints(sg);
+      // 도로 노선 신호: 샘플점(access_points)은 집계용일 뿐 — 핀은 앵커 1개만(선은 renderRail이 황갈로 표시). 점 폭탄 방지
+      const pts = sg._road ? signalPoints(sg).slice(0, 1) : signalPoints(sg);
       const col = colorOf(sg);
       // 핀 크기 = 영향 반경에 비례 (반경 클수록 큰 핀). 접근점은 약간 작게
       const rKm = getRadius(sg) / 1000;
@@ -2352,7 +2353,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260716j");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260716k");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions, jeongbiData, railData, roadData, dartData, archData] = await Promise.all([
@@ -2411,7 +2412,7 @@ function renderRaw(more) {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 3파일(8.2MB)은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260716j");
+  const CB = "?b=" + (window.BUILD || "20260716k");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 경기·인천 법정동(동배지·드릴다운) — 도착 즉시 병합
   gj("capital_bdong.geojson").then(cap => {
