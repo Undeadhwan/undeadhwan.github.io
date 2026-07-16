@@ -239,6 +239,9 @@
   .leaflet-tooltip.rail-stlbl { background:rgba(255,255,255,.92); border:1px solid #2e5ce6; color:#1a2b6b;
     font-size:11px; font-weight:700; padding:1px 5px; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,.18); white-space:nowrap; }
   .leaflet-tooltip.rail-stlbl::before { display:none; }
+  .leaflet-tooltip.rail-hover { background:#fff; border:1px solid var(--line); border-radius:8px; padding:3px 8px;
+    font-size:12px; box-shadow:0 2px 8px rgba(0,0,0,.18); white-space:nowrap; }   /* 역·IC hover — 가장자리 세로붕괴 방지 */
+  .leaflet-tooltip.rail-hover::before { display:none; }
   .apt-pop { background:#fff; border-radius:12px; box-shadow:0 6px 22px rgba(0,0,0,.24); padding:11px 14px; min-width:180px; max-width:250px; }
   .apt-pop-nm { font-size:15px; font-weight:800; color:#1a1a1a; }
   .apt-pop-sub { font-size:11.5px; color:var(--muted); margin-top:3px; }
@@ -1927,7 +1930,7 @@ function initLeaflet() {
           weight: 2.5, dashArray: p.confirmed ? null : "2 2",
           fillColor: "#fff", fillOpacity: 1, opacity: 1 }).addTo(map);
         m.bindTooltip(`${p.name} <span style="color:#8a90a0">· ${p.line || ""}${p.confirmed ? "" : isRoad ? " (계획 IC)" : " (후보역)"}</span>`,
-          { direction: "top", className: "apt-tip" });
+          { direction: "top", className: "rail-hover" });
         if (z >= 14) m.bindTooltip(p.name, { permanent: true, direction: "right",
           className: "rail-stlbl", offset: [rr + 3, 0] });   // 고배율(z14+)=역명 상시 라벨
         railLayers.push(m);
