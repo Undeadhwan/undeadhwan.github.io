@@ -1433,8 +1433,9 @@ function renderDetail(s) {
           <span>착공일</span><b>${fmtDay(s.real_stcns_day)}</b>
           <span>사용승인일</span><b>${fmtDay(s.use_apr_day)}</b>
         </div></div>` : ""}
-      ${(s.access_points || []).length ? `<div class="kv"><b>접근점</b> ${s.access_points.map(a =>
-        `${a.name}${a.coordinates ? "" : " (좌표 미확보)"} — ${a.status || ""}`).join(" · ")}</div>` : ""}
+      ${(s.access_points || []).filter(a => a.name).length ? `<div class="kv"><b>접근점</b> ${s.access_points.filter(a => a.name).map(a =>
+        `${a.name}${a.coordinates ? "" : " (좌표 미확보)"} — ${a.status || ""}`).join(" · ")}</div>`
+        : s._road && (s.access_points || []).length ? `<div class="kv"><b>영향권</b> 노선 양측 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km 회랑 (선 전체 기준)</div>` : ""}
       ${(s.stage_history || []).length ? `<div class="kv"><b>단계 이력</b> ${s.stage_history.map(h =>
         `${h.stage} ${h.date}${h.end ? "~" + h.end : ""}`).join(" → ")}</div>` : ""}
       ${s.stage_note ? `<div class="kv"><b>단계 근거</b> ${s.stage_note}</div>` : ""}
@@ -2105,6 +2106,13 @@ function initLeaflet() {
   const clearRadius = () => { circles.forEach(c => map.removeLayer(c)); circles = []; };
   const addRadius = s => {
     const col = colorOf(s);   // 영향 원 = 분류 색상으로 안까지 채움
+    if (s._road && s.access_points) {   // 도로 노선: 샘플점별 진한 원 겹침=얼룩 → 옅은 무테 원들로 회랑 밴드 근사
+      signalPoints(s).forEach(p => {
+        circles.push(L.circle([p.coord[1], p.coord[0]], {
+          radius: getRadius(s), stroke: false, fillColor: col, fillOpacity: 0.05, interactive: false }).addTo(map));
+      });
+      return;
+    }
     signalPoints(s).forEach(p => {
       const c = L.circle([p.coord[1], p.coord[0]], {
         radius: getRadius(s), color: col, weight: 2, opacity: .9,
