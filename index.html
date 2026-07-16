@@ -651,7 +651,7 @@ const JEONGBI_LICENSED = true;
 // 신규 철도 노선: OSM 실제 선형(railway=construction/proposed) 기반 재구축 → 활성.
 // 건설중=실선, 계획=점선(§7). 출처 OpenStreetMap(ODbL, 지도 하단·툴팁 표기).
 const RAIL_READY = true;
-let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [], JEONGBI_SIG = [], RAIL = [], RAIL_SIG = [], DART = [], DART_SIG = [], ARCH = [], ARCH_SIG = [];
+let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [], JEONGBI_SIG = [], RAIL = [], RAIL_SIG = [], DART = [], DART_SIG = [], ARCH = [], ARCH_SIG = [], ROADF = [], ROAD_SIG = [];
 /* DART(신규시설투자·유형자산양수) → 일자리 후보 신호 어댑트. 위치=회사 소재지 근사(§ 후보층, confirmed:false) */
 function buildDartSignals() {
   DART_SIG = (DART || []).filter(s => s.geometry && s.geometry.coordinates).map(s => ({
@@ -701,6 +701,46 @@ function buildRailSignals() {
     status: "활성", confirmed: f.properties.confirmed, sd: "수도권",
     geometry: { coordinates: f.geometry.coordinates }
   }));
+}
+/* 도로(신설/확장/지하화) → 교통·도로 신호 어댑트 (사용자 기획 2026-07-16):
+   - IC·JC = 점 신호(철도 역과 동일 개념)
+   - 도로 노선 자체 = 호재 → 선을 ~1.2km 간격 샘플점으로 다점 신호화(geometry=첫 점, access_points=샘플점.
+     signalPoints/dongRelation이 다점을 지원하므로 동·아파트 집계에 1건으로 정확히 잡힘)
+   등급 = OSM 도로등급(motorway=A/trunk=B/primary=C, LEVEL_DESC 교통>도로와 일치). 반경 = CLASSES.교통.도로 */
+function buildRoadSignals() {
+  const SAMPLE_M = 1200;
+  const sample = coords => {   // MultiLineString 세그먼트들 → 간격 샘플점
+    const pts = [];
+    for (const seg of coords) {
+      let acc = SAMPLE_M;   // 각 세그 시작점 포함
+      for (let i = 0; i < seg.length; i++) {
+        if (i === 0 || acc >= SAMPLE_M) { pts.push(seg[i]); acc = 0; }
+        if (i < seg.length - 1) acc += meters(seg[i], seg[i + 1]);
+      }
+    }
+    return pts;
+  };
+  ROAD_SIG = [];
+  for (const f of ROADF) {
+    const p = f.properties;
+    if (p.kind === "station") {   // IC·JC 점
+      ROAD_SIG.push({ _road: true, title: p.name, cat: "교통", sub: "도로", lvl: p.lvl || "A",
+        template_type: "도로", current_stage: p.status, phase: p.confirmed ? "착공" : "계획",
+        status: "활성", confirmed: !!p.confirmed, sd: "수도권",
+        geometry: { coordinates: f.geometry.coordinates } });
+      continue;
+    }
+    const pts = sample(f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates]);
+    if (!pts.length) continue;
+    ROAD_SIG.push({ _road: true, title: `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: "도로", lvl: p.lvl || "C",
+      template_type: "도로", current_stage: p.status, phase: p.confirmed ? "착공" : "계획",
+      status: "활성", confirmed: !!p.confirmed, sd: "수도권",
+      sources: p.src_url ? [p.src_url] : [],
+      stage_note: `${p.linekind || "도로"} · ${p.status} · 선형=OSM(ODbL)`,
+      geometry: { coordinates: pts[0] },
+      access_points: pts.slice(1).map(c => ({ coordinates: c, name: null, status: "노선 경유" }))
+    });
+  }
 }
 /* 정비(JEONGBI) 후보를 신호 형태로 어댑트 → 아파트 호재 카운팅·카드·4단계 필터에 정비 포함(분류=정비).
    phaseOf가 명시 phase 우선 사용, radius_type로 catOf(정비)·getRadius 결정. */
@@ -991,7 +1031,8 @@ function signalsNearPoint(coord) {
   const railLocal = RAIL_SIG.filter(near);   // 계획/건설역도 호재로 카운팅
   const dartLocal = DART_SIG.filter(near);   // DART 일자리 후보
   const archLocal = ARCH_SIG.filter(near);   // 건축인허가 인프라·일자리 후보
-  return SIGNALS.concat(jbLocal, railLocal, dartLocal, archLocal).filter(visible).map(s => {
+  // 도로: 30여 개 다점 신호 — bbox 프리필터 없이 전체 평가(signalPoints가 샘플점 전부 검사, 노선당 1건 집계)
+  return SIGNALS.concat(jbLocal, railLocal, dartLocal, archLocal, ROAD_SIG).filter(visible).map(s => {
     const d = Math.min(...(signalPoints(s).map(p => meters(coord, p.coord)) || [Infinity]));
     return { s, dist: d, within: d <= getRadius(s) };
   }).filter(x => x.within && isFinite(x.dist)).sort((a, b) => a.dist - b.dist);
@@ -1022,6 +1063,23 @@ function buildSggIndex() {
   RAIL_SIG.forEach(s => add(s._sgg, s));
   DART_SIG.forEach(s => add(`${s.sd} ${s.sg}`, s));   // DART 일자리 후보
   ARCH_SIG.forEach(s => add(`${s.sd} ${s.sg}`, s));   // 건축인허가 인프라·일자리 후보
+  // 도로: 노선이 여러 시군구를 지나므로 샘플점이 걸치는 모든 시군구에 1회씩 귀속
+  if (ROAD_SIG.length && ROAD_SIG[0]._sggs === undefined) {
+    const entries = Object.entries(window._sggRings);
+    ROAD_SIG.forEach(s => {
+      const hit = new Set();
+      for (const p of signalPoints(s)) {
+        for (const [disp, rings] of entries) {
+          if (hit.has(disp)) continue;
+          const bd = window._sggBounds[disp];
+          if (bd && !bd.contains([p.coord[1], p.coord[0]])) continue;
+          if (rings.some(r => pointInRing(p.coord[0], p.coord[1], r))) hit.add(disp);
+        }
+      }
+      s._sggs = [...hit];
+    });
+  }
+  ROAD_SIG.forEach(s => (s._sggs || []).forEach(d => add(d, s)));
   return true;
 }
 function signalsInSgg(disp) {
@@ -1287,6 +1345,7 @@ function renderDong(feature) {
     .forEach(s => rel.push({ s, r: "소재" }));
   DART_SIG.filter(visible).map(s => ({ s, r: dongRelation(s, feature) })).filter(x => x.r).forEach(x => rel.push(x));   // DART 일자리(반경 기준)
   ARCH_SIG.filter(visible).map(s => ({ s, r: dongRelation(s, feature) })).filter(x => x.r).forEach(x => rel.push(x));   // 건축인허가 인프라·일자리(반경 기준)
+  ROAD_SIG.filter(visible).map(s => ({ s, r: dongRelation(s, feature) })).filter(x => x.r).forEach(x => rel.push(x));   // 도로 노선·IC(다점 반경 기준)
   const host = rel.filter(x => x.r === "소재"), near = rel.filter(x => x.r === "반경권");
   p.innerHTML = `
     <div class="phead"><div class="pt">${name}</div><div class="closex" onclick="closePanel()">✕</div></div>
@@ -1622,8 +1681,8 @@ function initLeaflet() {
         m2.on("click", () => showSgg(`${a.sd} ${a.sg}`));
         badges.push(m2);
       });
-    // 반경권 후보(확정+DART+ARCH) 1회 필터 — 동 루프 내 재필터 방지
-    const radSigs = SIGNALS.filter(visible).concat(DART_SIG.filter(visible), ARCH_SIG.filter(visible));
+    // 반경권 후보(확정+DART+ARCH+도로) 1회 필터 — 동 루프 내 재필터 방지
+    const radSigs = SIGNALS.filter(visible).concat(DART_SIG.filter(visible), ARCH_SIG.filter(visible), ROAD_SIG.filter(visible));
     const jbVisible = JEONGBI_SIG.filter(visible);
     const cands = [];
     for (const f of DONG_GEO.features) {
@@ -1827,38 +1886,47 @@ function initLeaflet() {
   // 신규 철도 노선(호재) §7 렌더: 확정/건설중=실선, 미확정(계획·구상)=점선. 후보역=점. 교통 분류·4단계 필터 반응.
   let railLayers = [];
   const clearRail = () => { railLayers.forEach(l => map.removeLayer(l)); railLayers = []; };
+  const ROAD_COL = "#b45309";   // 도로=황갈(철도 파랑과 구분). §7 문법 동일: 건설중=실선/계획=점선
   const renderRail = () => {
     clearRail();
-    if (!RAIL.length || !filter.cat.has("교통")) return;
+    if ((!RAIL.length && !ROADF.length) || !filter.cat.has("교통")) return;
     const phaseFiltering = filter.phase.size < PHASES.length;
     const railCol = CAT_COLOR["교통"];   // 파랑
     const z = map.getZoom();
-    for (const f of RAIL) {
+    for (const f of RAIL.concat(ROADF)) {
       const p = f.properties;
+      const isRoad = p.mode === "road";
+      const col = isRoad ? ROAD_COL : railCol;
+      const dashed = isRoad ? !p.confirmed : p.dashed;
       if (phaseFiltering && p.phase && !filter.phase.has(p.phase)) continue;
       if (YEAR_SEL && false) continue;   // (철도 고시연도 필터는 추후)
       if (f.geometry.type === "LineString" || f.geometry.type === "MultiLineString") {
         const ll = f.geometry.type === "MultiLineString"
           ? f.geometry.coordinates.map(seg => seg.map(([x, y]) => [y, x]))   // 다중 세그먼트
           : f.geometry.coordinates.map(([x, y]) => [y, x]);
-        const line = L.polyline(ll, { pane: "rail", color: railCol, weight: p.dashed ? 3 : 4,
-          opacity: .9, dashArray: p.dashed ? "8 7" : null, lineCap: "round" }).addTo(map);
-        line.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">🚈 ${p.full || p.name}</div>`
-          + `<div class="apt-pop-sub">${p.linekind} · <span style="color:${railCol}">${p.status}</span>${p.dashed ? " (미확정 노선 — 점선)" : ""}</div>`
-          + `<div class="apt-pop-cats"><span style="color:${railCol}">● 단계 ${p.phase}</span>${p.note ? " · " + p.note : ""}${p.src_name ? ` · 출처: ${p.src_name}` : ""}</div></div>`,
+        const line = L.polyline(ll, { pane: "rail", color: col, weight: dashed ? 3 : 4,
+          opacity: isRoad ? .8 : .9, dashArray: dashed ? "8 7" : null, lineCap: "round" }).addTo(map);
+        line.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${isRoad ? "🛣" : "🚈"} ${p.full || p.name}</div>`
+          + `<div class="apt-pop-sub">${p.linekind || ""} · <span style="color:${col}">${p.status}</span>${dashed ? " (미확정 — 점선)" : ""}</div>`
+          + `<div class="apt-pop-cats"><span style="color:${col}">● 단계 ${p.phase || (p.confirmed ? "착공" : "계획")}</span>${p.note ? " · " + p.note : ""}${p.src_name ? ` · 출처: ${p.src_name}` : isRoad ? " · 선형: OSM(ODbL)" : ""}</div></div>`,
           { sticky: true, className: "apt-tip" });
         line.on("click", (e) => { L.DomEvent.stopPropagation(e);
+          if (isRoad) {   // 도로 노선 = 그 자체가 신호(ROAD_SIG에서 찾아 상세)
+            const sig = ROAD_SIG.find(s => s.title.startsWith(p.name));
+            if (sig) showSignal(sig, false);
+            return;
+          }
           const flat = f.geometry.type === "MultiLineString" ? f.geometry.coordinates.flat() : f.geometry.coordinates;
           showSignal(railToSignal(p, flat[Math.floor(flat.length / 2)]), false); });
         railLayers.push(line);
       } else if (f.geometry.type === "Point" && z >= 10) {
         const [x, y] = f.geometry.coordinates;
         const rr = z >= 14 ? 5.5 : (z >= 12 ? 4.5 : 3.5);
-        // 지하철 노선도식 도넛(흰 속 + 색 링) — 어느 배경에서도 보이고 겹침 적음. 확정=실링/후보=점선링
-        const m = L.circleMarker([y, x], { pane: "rail", radius: rr, color: railCol,
+        // 지하철 노선도식 도넛(흰 속 + 색 링) — 어느 배경에서도 보이고 겹침 적음. 확정=실링/후보=점선링. 도로 IC=황갈 링
+        const m = L.circleMarker([y, x], { pane: "rail", radius: rr, color: col,
           weight: 2.5, dashArray: p.confirmed ? null : "2 2",
           fillColor: "#fff", fillOpacity: 1, opacity: 1 }).addTo(map);
-        m.bindTooltip(`${p.name} <span style="color:#8a90a0">· ${p.line || ""}${p.confirmed ? "" : " (후보역)"}</span>`,
+        m.bindTooltip(`${p.name} <span style="color:#8a90a0">· ${p.line || ""}${p.confirmed ? "" : isRoad ? " (계획 IC)" : " (후보역)"}</span>`,
           { direction: "top", className: "apt-tip" });
         if (z >= 14) m.bindTooltip(p.name, { permanent: true, direction: "right",
           className: "rail-stlbl", offset: [rr + 3, 0] });   // 고배율(z14+)=역명 상시 라벨
@@ -2181,7 +2249,7 @@ function setView(mode) {
 /* ══════════ 등급 미판정(미정) 목록 ══════════ */
 // 모든 신호 통합 후 등급 미판정(levelOf==="미정")만 — 결측 사유 표기. 사용자가 보고 소스·기준 보완.
 function allSignalsFlat() {
-  return [].concat(SIGNALS, JEONGBI_SIG, RAIL_SIG, DART_SIG, ARCH_SIG).filter(s => s && s.geometry);
+  return [].concat(SIGNALS, JEONGBI_SIG, RAIL_SIG, ROAD_SIG, DART_SIG, ARCH_SIG).filter(s => s && s.geometry);
 }
 function undetReason(s) {
   const c = catOf(s);
@@ -2281,10 +2349,10 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260716i");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260716j");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
-  const [dong, sgg, main, macro, rawData, autoData, apartments, regions, jeongbiData, railData, dartData, archData] = await Promise.all([
+  const [dong, sgg, main, macro, rawData, autoData, apartments, regions, jeongbiData, railData, roadData, dartData, archData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
@@ -2295,11 +2363,14 @@ function renderRaw(more) {
     gj("regions.json").catch(() => null),
     JEONGBI_LICENSED ? gj("signals_jeongbi_all.json").catch(() => ({ cands: [] })) : Promise.resolve({ cands: [] }),  // 정비 후보 신호(카운트·배지용, 357KB — 폴리곤은 지연)
     RAIL_READY ? gj("rail_signals.json").catch(() => ({ features: [] })) : Promise.resolve({ features: [] }),  // 신규 철도 노선
+    gj("road_signals.json").catch(() => ({ features: [] })),   // 신규 도로(고속·간선 신설/확장/지하화, OSM) — IC=점·노선=다점 신호
     gj("dart_signals.json").catch(() => ({ signals: [] })),   // DART → 일자리 후보
     gj("arch_signals.json").catch(() => ({ signals: [] }))   // 건축인허가 → 인프라·일자리 후보
   ]);
   RAIL = (railData && railData.features) || [];
   buildRailSignals();   // 계획/건설역 → 교통 신호(신설역 근처 아파트 호재 카운팅 기준좌표)
+  ROADF = (roadData && roadData.features) || [];
+  buildRoadSignals();   // 도로 노선(다점)·IC(점) → 교통·도로 신호
   DART = (dartData && dartData.signals) || [];
   buildDartSignals();   // DART → 일자리 후보 신호(호재 카운팅 포함)
   ARCH = (archData && archData.signals) || [];
@@ -2337,7 +2408,7 @@ function renderRaw(more) {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 3파일(8.2MB)은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260716i");
+  const CB = "?b=" + (window.BUILD || "20260716j");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 경기·인천 법정동(동배지·드릴다운) — 도착 즉시 병합
   gj("capital_bdong.geojson").then(cap => {
