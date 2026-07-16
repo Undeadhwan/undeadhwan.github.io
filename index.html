@@ -1790,16 +1790,15 @@ function initLeaflet() {
     }
   };
   // 정비구역 경계 폴리곤(서울 의제처리구역 SHP → geojson): 지정고시된 개별 구역 = 실선 폴리곤(사실, P2·P5).
-  // 색 = 진행단계(우리 신호와 매칭된 구역만). 미매칭은 흐린 경계(단계 미상). 유형은 툴팁 표기.
-  // 범례(정비구역 진행단계) — 동 레벨 이상, 폴리곤 데이터 있을 때만 노출
-  const JB_LEGEND_ITEMS = [["계획", "#9aa6c8"], ["인가", "#e0761e"], ["착공", "#c4392f"],
-    ["준공·개통", "#2e8b57"], ["단계 미상", "#aeb4c0"]];
+  // 색 = 분류색 단일(주거개발) — 단계별 색은 과다해 제외(사용자 확정 2026-07-16). 단계는 툴팁·상세·카드에서.
+  // 범례 — 동 레벨 이상, 폴리곤 데이터 있을 때만 노출
+  const JB_LEGEND_ITEMS = [["정비구역(주거개발)", CAT_COLOR["주거개발"]], ["단계 미상(고시 경계만)", "#aeb4c0"], ["종결·무산", "#9aa3b2"]];
   const jbLegend = L.control({ position: "bottomleft" });
   jbLegend.onAdd = () => {
     const div = L.DomUtil.create("div", "jb-legend");
-    div.innerHTML = "<b>정비구역 진행단계</b>"
+    div.innerHTML = "<b>정비구역</b>"
       + JB_LEGEND_ITEMS.map(([n, c]) => `<span class="jl"><i style="background:${c}"></i>${n}</span>`).join("")
-      + `<div class="jhint">색=추적 중인 구역의 단계(우리 신호 기준). 흐린 경계=단계 미상(고시 경계만).<br>출처: 서울특별시 도시공간본부(공공누리 4유형)</div>`;
+      + `<div class="jhint">진행 단계는 구역 클릭·툴팁에서 확인 (색은 분류 통일 — 교통 파랑 / 도로 황갈 / 주거 빨강).<br>출처: 서울특별시 도시공간본부(공공누리 4유형)</div>`;
     return div;
   };
   let jbLegendOn = false;
@@ -1841,7 +1840,8 @@ function initLeaflet() {
       if (phaseFiltering && (!p.phase || !filter.phase.has(p.phase))) continue;
       if (++n > 240) break;   // 성능 상한
       const tracked = !!p.phase;   // 우리 신호와 매칭돼 진척도를 아는 구역
-      const col = tracked ? (JB_PHASE_COL[p.phase] || "#c4392f") : "#aeb4c0";
+      // 색 = 분류색 단일(주거개발) — 진척상태별 색은 과다해 제외(사용자 확정 2026-07-16). 단계는 툴팁·상세로
+      const col = tracked ? CAT_COLOR["주거개발"] : "#aeb4c0";
       const latlngs = f.geometry.coordinates.map(r => r.map(([x, y]) => [y, x]));
       const poly = L.polygon(latlngs, { pane: "jbpoly", color: col,
         weight: tracked ? 1.9 : 1, opacity: tracked ? .95 : .6,
@@ -1866,7 +1866,6 @@ function initLeaflet() {
   // 정비 추진 신호 마커(정비몽땅+공공데이터): 폴리곤 없는 추진건만 점선 표시(폴리곤과 겹치면 억제 = 중복 방지)
   let jbDots = [];
   const clearJeongbi = () => { jbDots.forEach(m => map.removeLayer(m)); jbDots = []; };
-  const JB_PHASE_COL = { "계획": "#9aa6c8", "인가": "#e0761e", "착공": "#c4392f", "준공·개통": "#2e8b57" };
   const renderJeongbi = () => {
     clearJeongbi();
     if (map.getZoom() < DONG_ZOOM || !JEONGBI.length || !filter.cat.has("정비")) return;   // 분류 필터
@@ -1876,7 +1875,7 @@ function initLeaflet() {
       .filter(c => !phaseFiltering || filter.phase.has(c.phase))   // 4단계 조회축
       .filter(c => !jbDrawnRings.some(r => ptInRing(c.lon, c.lat, r)))   // 이미 폴리곤으로 표시된 구역이면 마커 생략
       .slice(0, 280).forEach(c => {
-      const col = c.drop ? "#9aa3b2" : (JB_PHASE_COL[c.phase] || "#c4392f");
+      const col = c.drop ? "#9aa3b2" : CAT_COLOR["주거개발"];   // 분류색 단일(단계색 제외 — 사용자 확정)
       const m = L.circleMarker([c.lat, c.lon], { pane: "cand", radius: 5, color: col, weight: 2,
         dashArray: "2 2", fillColor: "#fff", fillOpacity: .9, opacity: c.drop ? .5 : .95 }).addTo(map);
       m.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${c.n}</div>`
