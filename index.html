@@ -567,6 +567,18 @@ function fmtDay(d) { d = (d || "").trim(); return d.length === 8 ? `${d.slice(0,
 function copyAddr(el, addr) {
   if (navigator.clipboard) { navigator.clipboard.writeText(addr); const o = el.textContent; el.textContent = "✓"; setTimeout(() => el.textContent = o, 1200); }
 }
+// 등급 근거 미상 여부(전 소스 일반화): 미정 등급 + 등급은 있으나 근거값(세대수·면적·금액) 없는 신호.
+// 지도 원 = 회색·C급 크기(사용자 확정 2026-07-16). 등급 표기 자체는 유지(P2 — 시각 신뢰도만 낮춤)
+function basisUnknown(s) {
+  if (levelOf(s) === "미정") return true;
+  const c = catOf(s);
+  if (c === "주거개발") return !s.hh;
+  if (c === "일자리") {
+    if (s.sub === "면적") return !s.area_m2;
+    if (s.sub === "금액") return !s.amount_eok;
+  }
+  return false;   // 교통(노선종류)·인프라(면적)·수기 확정 등은 근거 보유로 간주
+}
 // 등급 근거값(사실): 일자리=연면적/투자액, 주거개발=세대수. 근거 데이터 없으면 '미상'(→등급 미정, P2)
 function gradeBasisHtml(s) {
   const c = catOf(s);
@@ -1907,13 +1919,14 @@ function initLeaflet() {
     for (const s of pool) {
       if (++n > 600) break;   // 성능 상한
       const [x, y] = s.geometry.coordinates;
-      const col = s.status === "종결" ? "#9aa3b2" : colorOf(s);
+      const unk = basisUnknown(s);   // 근거 미상(미정 포함) = 회색 원·C급 크기(사용자 확정)
+      const col = s.status === "종결" ? "#9aa3b2" : unk ? "#8a93a3" : colorOf(s);
       const lv = levelOf(s);
-      const m = L.circleMarker([y, x], { pane: "cand", radius: HJ_R[lv] || 5,
-        color: col, weight: lv === "A" ? 2.6 : 2,
+      const m = L.circleMarker([y, x], { pane: "cand", radius: unk ? HJ_R.C : (HJ_R[lv] || 5),
+        color: col, weight: !unk && lv === "A" ? 2.6 : 2,
         dashArray: s.confirmed ? null : "4 3",           // 미확정=점선(§7)
-        fillColor: col, fillOpacity: .18,                // 낮은 채움 — 밀집=자연 히트맵
-        opacity: s.status === "종결" ? .45 : .9 }).addTo(map);
+        fillColor: col, fillOpacity: unk ? .12 : .18,    // 낮은 채움 — 밀집=자연 히트맵
+        opacity: s.status === "종결" ? .45 : unk ? .75 : .9 }).addTo(map);
       m.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${s.title}</div>`
         + `<div class="apt-pop-sub"><span style="color:${col};font-weight:700">● ${catOf(s)}</span> · ${lvlPill(lv)} ${gradeBasisHtml(s).replace(/ · $/, "")}</div>`
         + `<div class="apt-pop-cats"><span>단계 ${phaseOf(s)}${s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : ""}</span></div></div>`,
