@@ -246,6 +246,7 @@
   .apt-pop-cats span { font-weight:700; }
   .apt-pop-cats .tot { color:var(--ink); font-weight:800; width:100%; margin-bottom:1px; }
   .apt-pop-cats.none { color:var(--muted); font-weight:400; }
+  .apt-pop-cnt { font-size:12px; color:var(--muted); margin-top:6px; } .apt-pop-cnt b { color:var(--ink); }
   .apt-pop-cmp { margin-top:9px; text-align:center; font-size:12px; font-weight:700; border:1.5px solid #1a1a1a; border-radius:8px; padding:5px 0; cursor:pointer; color:#1a1a1a; background:#fff; }
   .apt-pop-cmp:hover { background:#f3f4f6; }
   .apt-pop-cmp.in { background:#1a1a1a; color:#fff; }
@@ -698,9 +699,11 @@ function buildRailSignals() {
    phaseOf가 명시 phase 우선 사용, radius_type로 catOf(정비)·getRadius 결정. */
 function buildJeongbiSignals() {
   JEONGBI_SIG = JEONGBI.filter(c => c.lat && c.lon).map(c => ({
-    _jb: true, title: c.n, cat: "주거개발", lvl: (c.hh ? (c.hh >= 5000 ? "A" : c.hh >= 1500 ? "B" : "C") : "미정"),   // 세대수 있어야 등급, 없으면 미정(미판정)
+    // 세대수 기준: A≥5천/B 1500~5천/C 500~1500. 500 미만·미확보 = 미정(미판정, 최소기준 미달/데이터없음)
+    _jb: true, title: c.n, cat: "주거개발", lvl: (!c.hh ? "미정" : c.hh >= 5000 ? "A" : c.hh >= 1500 ? "B" : c.hh >= 500 ? "C" : "미정"),
     template_type: "정비사업", current_stage: c.stage, phase: c.phase, status: c.drop ? "종결" : "활성", confirmed: false,
     sd: c.sd, sg: c.sg, dong: c.dong, hh: c.hh, last_movement: null, target_completion: null,
+    sources: [c.sd === "서울" ? "https://cleanup.seoul.go.kr" : c.sd === "경기" ? "https://gg.go.kr" : "https://www.data.go.kr"],
     geometry: { coordinates: [c.lon, c.lat] }
   }));
 }
@@ -1319,9 +1322,9 @@ function renderDetail(s) {
       ${s.status_note ? `<div class="kv"><b>상태 판단</b> ${s.status_note}</div>` : ""}
       ${s.side_effects?.length ? `<div class="kv"><b>역효과 표기</b> ${s.side_effects.join(", ")}</div>` : ""}
       <div class="kv"><b>근거 원문</b> <span class="src">${(s.sources || []).map((u, i) => {
-        const lbl = /eais\.go\.kr/.test(u) ? "세움터(건축행정시스템) — 주소로 조회" : /opendart\.fss/.test(u) ? "DART 공시" : /g2b|nara/.test(u) ? "나라장터 공고" : `공시/공고 ${i + 1}`;
+        const lbl = /eais\.go\.kr/.test(u) ? "세움터(건축행정시스템) — 주소로 조회" : /opendart\.fss/.test(u) ? "DART 공시" : /g2b|nara/.test(u) ? "나라장터 공고" : /cleanup\.seoul/.test(u) ? "정비몽땅(서울 정비사업) — 사업장명으로 조회" : /gg\.go\.kr/.test(u) ? "경기 정비사업 현황 — 사업장명으로 조회" : /data\.go\.kr/.test(u) ? "공공데이터포털 정비사업 — 사업장명으로 조회" : `공시/공고 ${i + 1}`;
         return `<a href="${u}" target="_blank">${lbl}</a>`;
-      }).join(" · ")}</span>${/eais\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 건축HUB API는 개별 허가 딥링크가 없어 세움터 홈으로 연결됩니다 — <b>위 대지위치</b>로 세움터에서 조회하세요</div>' : ""}</div>
+      }).join(" · ")}</span>${/eais\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 건축HUB API는 개별 허가 딥링크가 없어 세움터 홈으로 연결됩니다 — <b>위 대지위치</b>로 세움터에서 조회하세요</div>' : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 정비 추진현황엔 개별 딥링크가 없어 포털로 연결됩니다 — <b>위 사업장명</b>으로 조회하세요</div>' : ""}</div>
       <div class="note">지도 표기 근거: ${s.position_confidence || "확정 좌표"} · 미래 단계는 목표/미정이며 진척률(%) 없음</div>
     </div>`;
 }
@@ -1670,19 +1673,16 @@ function initLeaflet() {
         : `<div class="apt-dot${sel ? " sel" : ""}"></div>`;
       const m = L.marker([a.lat, a.lon], { pane: "badge", zIndexOffset: n ? 1000 : 0,
         icon: L.divIcon({ className: "", html, iconSize: null }) }).addTo(map);
-      // hover 팝업: 이름·세대수·준공년월 + 등급별 건수 (동 배지와 동일 체계)
-      const gradeHtml = LEVELS.filter(l => lc[l].total).map(l =>
-        `<span style="color:${LVL_COLOR[l]};font-weight:800">${LEVEL_NAME[l]} ${lc[l].total}</span>`).join(" · ");
+      // hover 팝업: 이름·세대수·준공년월 + 비교담기. 등급별 건수는 마커 배지에 이미 있어 중복 → 생략.
       const sub = `${a.sg} ${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : ""}${a.built ? " · 준공 " + a.built : ""}`;
       const inCmp = compareSet.some(x => x.n === a.n && x.dong === a.dong);
       const pop = `<div class="apt-pop"><div class="apt-pop-nm">${a.n}</div><div class="apt-pop-sub">${sub}</div>`
-        + (n ? `<div class="apt-pop-cats"><span class="tot">반경 내 호재 ${n}건 · 등급별</span>${gradeHtml}</div>`
-             : `<div class="apt-pop-cats none">반경 내 호재 없음</div>`)
+        + `<div class="apt-pop-cnt">반경 내 호재 <b>${n}</b>건</div>`
         + `<div class="apt-pop-cmp${inCmp ? " in" : ""}">${inCmp ? "✓ 비교함" : "＋ 비교담기"}</div></div>`;
       // hover 시 팝업으로 표시(툴팁은 마커 벗어나면 닫혀 버튼 클릭 불가 → 팝업은 열린 채 유지되어 비교담기 클릭 가능).
       // 마커 클릭은 showApt(패널). 팝업은 다른 마커 hover나 지도 클릭 시 닫힘.
       m.on("mouseover", () => {
-        const pu = L.popup({ className: "apt-pop-wrap", closeButton: false, autoPan: false, offset: [0, n ? -10 : -4] })
+        const pu = L.popup({ className: "apt-pop-wrap", closeButton: false, autoPan: false, offset: [0, n ? 14 : 8] })
           .setLatLng([a.lat, a.lon]).setContent(pop).openOn(map);
         const el = pu.getElement(); const btn = el && el.querySelector(".apt-pop-cmp");
         if (btn) L.DomEvent.on(btn, "click", e => {
@@ -2149,7 +2149,7 @@ function allSignalsFlat() {
 }
 function undetReason(s) {
   const c = catOf(s);
-  if (c === "주거개발") return "세대수 미확보 (정비 추진현황에 세대수 없음)";
+  if (c === "주거개발") return s.hh ? `세대수 ${Number(s.hh).toLocaleString()}세대 — 최소 등급기준(500세대) 미달` : "세대수 미확보 (정비 추진현황에 세대수 없음)";
   if (c === "일자리") return "연면적·투자액 미확보";
   if (c === "교통") return "노선종류 미상";
   return "등급 기준 데이터 미확보";
