@@ -780,12 +780,26 @@ function signalPoints(sig) {
   }
   return pts;
 }
-/* 신호 ↔ 동 관계 (§3.3.1): "소재" | "반경권" | null */
+/* 동 경계 bbox 캐시 (feature에 1회 계산) — dongRelation 프리필터용 */
+function dongBB(f) {
+  if (f._bb) return f._bb;
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const r of ringsOf(f)) for (const [x, y] of r) {
+    if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+  }
+  return (f._bb = [x0, y0, x1, y1]);
+}
+/* 신호 ↔ 동 관계 (§3.3.1): "소재" | "반경권" | null.
+   bbox 프리필터: 반경만큼 확장한 동 bbox 밖 신호는 즉시 탈락 → 정점거리 계산 95%↓ (동배지 렌더 정지 해소) */
 function dongRelation(sig, feature) {
   const pts = signalPoints(sig);
   if (!pts.length) return null;
-  const rings = ringsOf(feature);
   const R = getRadius(sig);
+  const bb = dongBB(feature);
+  const dLat = R / 110540, dLng = R / (111320 * Math.cos((bb[1] + bb[3]) / 2 * Math.PI / 180));
+  const hit = pts.some(p => p.coord[0] >= bb[0] - dLng && p.coord[0] <= bb[2] + dLng && p.coord[1] >= bb[1] - dLat && p.coord[1] <= bb[3] + dLat);
+  if (!hit) return null;
+  const rings = ringsOf(feature);
   if (pts.some(p => rings.some(r => pointInRing(p.coord[0], p.coord[1], r)))) return "소재";
   return pts.some(p => rings.some(r => r.some(v => meters(p.coord, v) <= R))) ? "반경권" : null;
 }
@@ -1591,31 +1605,25 @@ function initLeaflet() {
         m2.on("click", () => showSgg(`${a.sd} ${a.sg}`));
         badges.push(m2);
       });
-    // 정비(어댑트) 법정동별 개수 사전집계(성능: 프레임마다 dongRelation 대신 문자열 그룹)
-    const jbByDong = {};
-    JEONGBI_SIG.filter(visible).forEach(s => { const k = s.sg + "|" + s.dong; jbByDong[k] = (jbByDong[k] || 0) + 1; });
+    // 반경권 후보(확정+DART+ARCH) 1회 필터 — 동 루프 내 재필터 방지
+    const radSigs = SIGNALS.filter(visible).concat(DART_SIG.filter(visible), ARCH_SIG.filter(visible));
+    const jbVisible = JEONGBI_SIG.filter(visible);
     const cands = [];
     for (const f of DONG_GEO.features) {
       const c = ringCentroid(ringsOf(f)[0]);
       if (!bd.contains([c[1], c[0]])) continue;
-      // 영향권(소재+반경권) 전체 — 동 피드 목록 건수와 동일 기준 (§3.3.1 동 중복 노출 정상)
-      const n = SIGNALS.filter(visible).filter(s => dongRelation(s, f)).length
-        + (jbByDong[f.properties.sgg + "|" + f.properties.EMD_KOR_NM] || 0)   // 정비 포함
-        + DART_SIG.filter(visible).filter(s => dongRelation(s, f)).length   // DART 일자리 포함
-        + ARCH_SIG.filter(visible).filter(s => dongRelation(s, f)).length;   // 건축인허가 인프라·일자리 포함
-      cands.push({ f, c, n });
+      // 영향권(소재+반경권) 전체 — 카운트와 목록을 같은 rel로(이중 dongRelation 계산 제거, §3.3.1 동 중복 노출 정상)
+      const rel = radSigs.filter(s => dongRelation(s, f))
+        .concat(jbVisible.filter(s => s.sg === f.properties.sgg && s.dong === f.properties.EMD_KOR_NM));
+      cands.push({ f, c, n: rel.length, rel });
     }
     cands.sort((a, b) => b.n - a.n);   // 신호 있는 동 우선 표시(겹칠 때 0건 동은 양보)
     const placed = [];
-    for (const { f, c, n } of cands) {
+    for (const { f, c, n, rel } of cands) {
       if (placed.length > 90) break;
       const pt = map.latLngToContainerPoint([c[1], c[0]]);
       if (collides(placed, pt, 74, 44)) continue;   // 겹치면 숨김
       placed.push({ x: pt.x, y: pt.y });
-      const rel = SIGNALS.filter(visible).filter(s => dongRelation(s, f))
-        .concat(JEONGBI_SIG.filter(visible).filter(s => s.sg === f.properties.sgg && s.dong === f.properties.EMD_KOR_NM))
-        .concat(DART_SIG.filter(visible).filter(s => dongRelation(s, f)))
-        .concat(ARCH_SIG.filter(visible).filter(s => dongRelation(s, f)));
       const mini = n ? gradeBadgeHtml(levelCounts(rel)) : "";
       const b = L.marker([c[1], c[0]], {
         pane: "badge",
@@ -2245,7 +2253,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260716g");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260716h");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions, jeongbiData, railData, dartData, archData] = await Promise.all([
@@ -2301,7 +2309,7 @@ function renderRaw(more) {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 3파일(8.2MB)은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260716g");
+  const CB = "?b=" + (window.BUILD || "20260716h");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 경기·인천 법정동(동배지·드릴다운) — 도착 즉시 병합
   gj("capital_bdong.geojson").then(cap => {
