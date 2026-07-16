@@ -748,8 +748,8 @@ function freshness(s) {
   const w = weeksAgo(s.last_movement);
   if (w === null) return "";
   const months = w / 4.345;
-  if (phaseOf(s) === "준공·개통")   // 종결 단계 = '정체' 개념 없음(P5) — 완료 시점만 사실 표기
-    return `<span class="fresh done">✓ 준공 ${months >= 12 ? Math.floor(months / 12) + "년" : Math.max(1, Math.floor(months)) + "개월"} 전</span>`;
+  if (phaseOf(s) === "준공·개통")   // 종결 단계 = '정체' 개념 없음(P5) — 완료 후 경과만 사실 표기("N개월 전"은 잔여기간으로 오독됨)
+    return `<span class="fresh done">✓ 준공 후 ${months >= 12 ? Math.floor(months / 12) + "년" : Math.max(1, Math.floor(months)) + "개월"} 경과</span>`;
   if (months >= 6) return `<span class="fresh stall">정체 ${Math.floor(months)}개월 ⚠</span>`;
   return `<span class="fresh">▸ ${w === 0 ? "이번 주" : w + "주 전"} 움직임</span>`;
 }
@@ -1336,9 +1336,9 @@ function renderDetail(s) {
       ${s.status_note ? `<div class="kv"><b>상태 판단</b> ${s.status_note}</div>` : ""}
       ${s.side_effects?.length ? `<div class="kv"><b>역효과 표기</b> ${s.side_effects.join(", ")}</div>` : ""}
       <div class="kv"><b>근거 원문</b> <span class="src">${(s.sources || []).map((u, i) => {
-        const lbl = /eais\.go\.kr/.test(u) ? "세움터(건축행정시스템) — 주소로 조회" : /opendart\.fss/.test(u) ? "DART 공시" : /g2b|nara/.test(u) ? "나라장터 공고" : /cleanup\.seoul/.test(u) ? "정비몽땅(서울 정비사업) — 사업장명으로 조회" : /gg\.go\.kr/.test(u) ? "경기 정비사업 현황 — 사업장명으로 조회" : /data\.go\.kr/.test(u) ? "공공데이터포털 정비사업 — 사업장명으로 조회" : `공시/공고 ${i + 1}`;
+        const lbl = /hub\.go\.kr/.test(u) ? "건축HUB 열람 (로그인 불필요) — 대지위치로 조회" : /eais\.go\.kr/.test(u) ? "세움터(건축행정시스템) — 주소로 조회" : /opendart\.fss/.test(u) ? "DART 공시" : /g2b|nara/.test(u) ? "나라장터 공고" : /cleanup\.seoul/.test(u) ? "정비몽땅(서울 정비사업) — 사업장명으로 조회" : /gg\.go\.kr/.test(u) ? "경기 정비사업 현황 — 사업장명으로 조회" : /data\.go\.kr/.test(u) ? "공공데이터포털 정비사업 — 사업장명으로 조회" : `공시/공고 ${i + 1}`;
         return `<a href="${u}" target="_blank">${lbl}</a>`;
-      }).join(" · ")}</span>${/eais\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 건축HUB API는 개별 허가 딥링크가 없어 세움터 홈으로 연결됩니다 — <b>위 대지위치</b>로 세움터에서 조회하세요</div>' : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 정비 추진현황엔 개별 딥링크가 없어 포털로 연결됩니다 — <b>위 사업장명</b>으로 조회하세요</div>' : ""}</div>
+      }).join(" · ")}</span>${/hub\.go\.kr|eais\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 열린 화면에서 <b>위 대지위치의 시도·시군구·법정동·번지</b>를 선택하면 로그인 없이 해당 허가 원본을 볼 수 있습니다 (📋로 주소 복사)</div>' : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 정비 추진현황엔 개별 딥링크가 없어 포털로 연결됩니다 — <b>위 사업장명</b>으로 조회하세요</div>' : ""}</div>
       <div class="note">지도 표기 근거: ${s.position_confidence || "확정 좌표"} · 미래 단계는 목표/미정이며 진척률(%) 없음</div>
     </div>`;
 }
@@ -2253,7 +2253,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260716h");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260716i");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions, jeongbiData, railData, dartData, archData] = await Promise.all([
@@ -2309,7 +2309,7 @@ function renderRaw(more) {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 3파일(8.2MB)은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260716h");
+  const CB = "?b=" + (window.BUILD || "20260716i");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 경기·인천 법정동(동배지·드릴다운) — 도착 즉시 병합
   gj("capital_bdong.geojson").then(cap => {
