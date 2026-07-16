@@ -753,7 +753,12 @@ function buildRailSignals() {
    - IC·JC = 점 신호(철도 역과 동일 개념)
    - 도로 노선 자체 = 호재 → 선을 ~1.2km 간격 샘플점으로 다점 신호화(geometry=첫 점, access_points=샘플점.
      signalPoints/dongRelation이 다점을 지원하므로 동·아파트 집계에 1건으로 정확히 잡힘)
-   등급 = OSM 도로등급(motorway=A/trunk=B/primary=C, LEVEL_DESC 교통>도로와 일치). 반경 = CLASSES.교통.도로 */
+   등급 = OSM 도로등급(motorway=A/trunk=B/primary=C, LEVEL_DESC 교통>도로와 일치). 반경 = CLASSES.교통.도로
+   ── 도로 이원 관리(사용자 확정 2026-07-16): 일반도로=선(Line) 회랑 버퍼 / 고속·고속화·전용도로=진출입 IC(Point) 버퍼만.
+   전용도로는 연도(沿道) 접근이 불가하므로 선 자체는 영향권을 만들지 않는다 — IC 좌표 미확보 시 영향권 미산정으로 정직 표기(P2) */
+function roadKindOf(p) {   // "전용"=출입제한(IC 접속만) / "일반"=연도 접근 가능
+  return p.linekind === "고속도로" || /고속화|자동차전용|지하차도|지하화|지하도로/.test(p.name || "") ? "전용" : "일반";
+}
 function buildRoadSignals() {
   const SAMPLE_M = 1200;
   const sample = coords => {   // MultiLineString 세그먼트들 → 간격 샘플점
@@ -781,13 +786,19 @@ function buildRoadSignals() {
     if (!pts.length) continue;
     ROAD_SIG.push({ _road: true, title: `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: "도로", lvl: p.lvl || "C",
       template_type: "도로", current_stage: p.status, phase: p.confirmed ? "착공" : "계획",
-      status: "활성", confirmed: !!p.confirmed, sd: "수도권",
+      status: "활성", confirmed: !!p.confirmed, sd: "수도권", road_kind: roadKindOf(p),
       sources: p.src_url ? [p.src_url] : [],
       stage_note: `${p.linekind || "도로"} · ${p.status} · 선형=OSM(ODbL)`,
       geometry: { coordinates: pts[0] },
       access_points: pts.slice(1).map(c => ({ coordinates: c, name: null, status: "노선 경유" }))
     });
   }
+  // 전용도로 ↔ 근접 IC 연결(표시·반경 렌더용): IC 점 신호가 영향권(버퍼)의 주체 — 노선 상세엔 접속 IC로 나열만(이중 카운트 없음)
+  const ics = ROAD_SIG.filter(s => !s.access_points);
+  ROAD_SIG.filter(s => s.access_points && s.road_kind === "전용").forEach(ln => {
+    ln.ic_points = ics.filter(ic => roadLinePoints(ln).some(pt => meters(pt.coord, ic.geometry.coordinates) < 1500))
+      .map(ic => ({ coordinates: ic.geometry.coordinates, name: ic.title, status: ic.current_stage }));
+  });
 }
 /* 정비(JEONGBI) 후보를 신호 형태로 어댑트 → 아파트 호재 카운팅·카드·4단계 필터에 정비 포함(분류=정비).
    phaseOf가 명시 phase 우선 사용, radius_type로 catOf(정비)·getRadius 결정. */
@@ -822,6 +833,8 @@ const filter = {
   scale: new Set(["광역", "지구", "근린"]),
   phase: new Set(PHASES),   // 조회축 = 4단계 백본(계획/인가/착공/준공·개통). 정체·무산은 필터 아닌 항상표시 표식
   lvl: new Set(GRADES_DISP),   // 등급 조회축(A/B/C/미정) — 지도 원·카드·집계 전 화면 일관(호재 중심 개편 2026-07-16)
+  // 노선 선형 표시(철도선/도로선) — 신호·집계는 불변, 지도 위 선만 on/off (호재 원 집중용, localStorage 유지)
+  lines: new Set(JSON.parse(localStorage.getItem("hojae_lines") || '["철도선","도로선"]')),
   region: "",   // "" = 전체, "서울 강서구" 형태
   year: null    // null = 전체, 아니면 그 해까지 완료 범위 도달분만
 };
@@ -867,13 +880,23 @@ function pointInRing(px, py, ring) {
   return inside;
 }
 function ringCentroid(r) { let x = 0, y = 0; r.forEach(([a, b]) => { x += a; y += b; }); return [x / r.length, y / r.length]; }
-/* 신호의 렌더 가능한 점들: 본체 좌표 + 접근점(수혜는 점에서 발생, §3.1) */
+/* 신호의 영향권 기준점들: 본체 좌표 + 접근점(수혜는 점에서 발생, §3.1).
+   도로 이원 관리: 전용도로(고속·고속화·지하화)는 IC 점만 영향권 — IC는 별도 점 신호가 버퍼 주체라 선 신호는 빈 배열(집계 제외).
+   일반도로는 선 샘플점 전체(회랑 버퍼). */
 function signalPoints(sig) {
+  if (sig._road && sig.access_points && sig.road_kind === "전용") return [];
   const pts = [];
   if (sig.geometry?.coordinates) pts.push({ coord: sig.geometry.coordinates, name: null, cand: false });
   for (const ap of sig.access_points || []) {
     if (ap.coordinates) pts.push({ coord: ap.coordinates, name: ap.name, cand: /후보|미확/.test(ap.status || "") });
   }
+  return pts;
+}
+/* 노선 전체 점(선형 사실 — 버퍼 아님): 시군구 귀속·회랑 밴드 표시용. 전용도로 포함 항상 선 샘플점 반환 */
+function roadLinePoints(sig) {
+  const pts = [];
+  if (sig.geometry?.coordinates) pts.push({ coord: sig.geometry.coordinates, name: null });
+  for (const ap of sig.access_points || []) if (ap.coordinates) pts.push({ coord: ap.coordinates, name: ap.name });
   return pts;
 }
 /* 동 경계 bbox 캐시 (feature에 1회 계산) — dongRelation 프리필터용 */
@@ -925,7 +948,15 @@ const DD_DEFS = () => [
   { id: "cat", label: "분류", title: "호재 분류", keys: DISPLAY_CAT_KEYS, set: filter.cat },
   { id: "lvl", label: "등급", title: "호재 등급 (A/B/C/미정)", keys: GRADES_DISP, set: filter.lvl },
   { id: "phase", label: "단계", title: "진행 단계", keys: PHASES, set: filter.phase },
+  // 노선 = 표시 토글(신호·집계 불변, 지도 위 선만) — 호재 원에 집중용
+  { id: "lines", label: "노선", title: "노선 선형 표시 (지도 위 선만 on/off — 호재·집계 불변)",
+    keys: ["철도선", "도로선"], set: filter.lines, save: "hojae_lines", redraw: true },
 ];  // 조회축: 분류(4) + 등급(A/B/C/미정) + 단계(4단계 백본). '상태'는 필터에서 뺌 — 정체·무산은 항상 표시(P5)
+/* 드롭다운 변경 후처리: 저장(localStorage)·지도 선형 재렌더 필요한 축만 */
+function ddAfter(d) {
+  if (d.save) localStorage.setItem(d.save, JSON.stringify([...d.set]));
+  if (d.redraw) window._dbg?.applyLOD?.();
+}
 function renderChips() {
   const host = document.getElementById("f-dd");
   host.innerHTML = "";
@@ -950,7 +981,7 @@ function renderChips() {
         const t = document.createElement("div");
         t.className = "ddtog" + (d.set.has(k) ? " on" : "");
         t.textContent = k;
-        t.onclick = () => { d.set.has(k) ? d.set.delete(k) : d.set.add(k); renderAll(); };
+        t.onclick = () => { d.set.has(k) ? d.set.delete(k) : d.set.add(k); ddAfter(d); renderAll(); };
         tg.appendChild(t);
       });
       panel.innerHTML = `<div class="ddttl">${d.title || d.label}</div>`;
@@ -958,7 +989,7 @@ function renderChips() {
       const allRow = document.createElement("div");
       allRow.className = "ddall";
       allRow.textContent = all ? "모두 해제" : "모두 선택";
-      allRow.onclick = () => { d.keys.forEach(k => all ? d.set.delete(k) : d.set.add(k)); renderAll(); };
+      allRow.onclick = () => { d.keys.forEach(k => all ? d.set.delete(k) : d.set.add(k)); ddAfter(d); renderAll(); };
       panel.appendChild(allRow);
       wrap.appendChild(panel);
     }
@@ -1108,17 +1139,19 @@ function buildSggIndex() {
   if (!ensureRailSgg()) return false;
   SGG_SIG = {};
   const add = (disp, s) => { if (disp) (SGG_SIG[disp] || (SGG_SIG[disp] = [])).push(s); };
-  SIGNALS.forEach(s => add(`${s.sd} ${s.sg}`, s));
+  SIGNALS.filter(s => !s._road).forEach(s => add(`${s.sd} ${s.sg}`, s));   // 도로 병합 확정 신호는 아래 노선 귀속으로
   JEONGBI_SIG.forEach(s => add(`${s.sd} ${s.sg}`, s));
   RAIL_SIG.forEach(s => add(s._sgg, s));
   DART_SIG.forEach(s => add(`${s.sd} ${s.sg}`, s));   // DART 일자리 후보
   ARCH_SIG.forEach(s => add(`${s.sd} ${s.sg}`, s));   // 건축인허가 인프라·일자리 후보
   // 도로: 노선이 여러 시군구를 지나므로 샘플점이 걸치는 모든 시군구에 1회씩 귀속
-  if (ROAD_SIG.length && ROAD_SIG[0]._sggs === undefined) {
+  // (귀속은 선형 사실 기준 roadLinePoints — 전용도로도 "지나는 지역" 목록엔 뜨되, 반경 집계는 signalPoints=IC만)
+  const roadAll = ROAD_SIG.concat(SIGNALS.filter(s => s._road));
+  if (roadAll.length && roadAll[0]._sggs === undefined) {
     const entries = Object.entries(window._sggRings);
-    ROAD_SIG.forEach(s => {
+    roadAll.forEach(s => {
       const hit = new Set();
-      for (const p of signalPoints(s)) {
+      for (const p of roadLinePoints(s)) {
         for (const [disp, rings] of entries) {
           if (hit.has(disp)) continue;
           const bd = window._sggBounds[disp];
@@ -1129,7 +1162,7 @@ function buildSggIndex() {
       s._sggs = [...hit];
     });
   }
-  ROAD_SIG.forEach(s => (s._sggs || []).forEach(d => add(d, s)));
+  roadAll.forEach(s => (s._sggs || []).forEach(d => add(d, s)));
   return true;
 }
 function signalsInSgg(disp) {
@@ -1289,7 +1322,9 @@ function makeCard(s, extra = "", onClick) {
 function cardHtml(s, extra = "") {
   const ph = phaseOf(s);
   const pIdx = PHASE_IDX[ph];
-  const noCoord = !signalPoints(s).length;
+  const roadLine = s._road && (s.access_points || []).length;   // 선형 보유 도로(지도에 선으로 표시됨)
+  const noCoord = !signalPoints(s).length && !roadLine;
+  const icMissing = roadLine && s.road_kind === "전용" && !(s.ic_points || []).length;
   const km = (getRadius(s) / 1000).toFixed(1).replace(".0", "");
   const dropped = s.status === "종결";
   const detail = s.current_stage && s.current_stage !== ph ? ` — ${s.current_stage}` : "";
@@ -1298,7 +1333,8 @@ function cardHtml(s, extra = "") {
       · ${levelPill(s)} · ${gradeBasisHtml(s)}영향 ${km}km
       ${s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>'}
       ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}
-      ${noCoord ? '<span class="badge-near">위치 미확정 — 지도 미표시</span>' : ""} ${extra}</div>
+      ${noCoord ? '<span class="badge-near">위치 미확정 — 지도 미표시</span>' : ""}
+      ${icMissing ? '<span class="badge-near">전용도로 · IC 미확보 — 영향권 미산정</span>' : ""} ${extra}</div>
     <div class="title">${s.title}</div>
     <div class="stage">단계: <b>${ph}</b> <span class="pmini">(${pIdx + 1}/${PHASES.length})</span>${detail} · ${freshness(s)}</div>
     ${miniBarHtml(s)}`;
@@ -1454,9 +1490,14 @@ function renderDetail(s) {
           <span>착공일</span><b>${fmtDay(s.real_stcns_day)}</b>
           <span>사용승인일</span><b>${fmtDay(s.use_apr_day)}</b>
         </div></div>` : ""}
-      ${(s.access_points || []).filter(a => a.name).length ? `<div class="kv"><b>접근점</b> ${s.access_points.filter(a => a.name).map(a =>
-        `${a.name}${a.coordinates ? "" : " (좌표 미확보)"} — ${a.status || ""}`).join(" · ")}</div>`
-        : s._road && (s.access_points || []).length ? `<div class="kv"><b>영향권</b> 노선 양측 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km 회랑 (선 전체 기준)</div>` : ""}
+      ${(s.access_points || []).filter(a => a.name).concat(s.ic_points || []).length ? `<div class="kv"><b>접근점</b> ${
+        (s.access_points || []).filter(a => a.name).concat(s.ic_points || []).map(a =>
+        `${a.name}${a.coordinates ? "" : " (좌표 미확보)"} — ${a.status || ""}`).join(" · ")}</div>` : ""}
+      ${s._road && (s.access_points || []).length ? (s.road_kind === "전용"
+        ? `<div class="kv"><b>영향권</b> ${(s.ic_points || []).length
+            ? `진출입 IC ${s.ic_points.length}개소 반경 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km (전용도로 — 선 자체는 영향권 미산정)`
+            : `진출입 IC 좌표 미확보 — 영향권 미산정 (전용도로는 IC 접속점 기준, 선형만 표시)`}</div>`
+        : `<div class="kv"><b>영향권</b> 노선 양측 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km 회랑 (선 전체 기준)</div>`) : ""}
       ${(s.stage_history || []).length ? `<div class="kv"><b>단계 이력</b> ${s.stage_history.map(h =>
         `${h.stage} ${h.date}${h.end ? "~" + h.end : ""}`).join(" → ")}</div>` : ""}
       ${s.stage_note ? `<div class="kv"><b>단계 근거</b> ${s.stage_note}</div>` : ""}
@@ -1936,8 +1977,9 @@ function initLeaflet() {
     const show = new Set(lodGrades(z));
     const bd = map.getBounds();
     // 철도역·도로IC도 호재 원 체계로 일원화(2026-07-16 사용자 지적 — "역 생기는 곳이 호재인데 원이 없다").
-    // 도로 노선 신호(access_points 보유)는 선으로 렌더되므로 제외, IC 점만 포함.
-    const pool = SIGNALS.concat(JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG.filter(s => !s.access_points)).filter(visible)
+    // 도로 노선 신호(access_points 보유)는 선으로 렌더되므로 제외(확정 병합분 포함), IC 점만 포함.
+    const pool = SIGNALS.concat(JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG)
+      .filter(s => !(s._road && s.access_points)).filter(visible)
       .filter(s => s.geometry && s.geometry.coordinates)   // 좌표 미확정 신호 제외(지도 미표시 — 카드에서 표기)
       .filter(s => show.has(levelOf(s)))
       .filter(s => { const c = s.geometry.coordinates; return bd.contains([c[1], c[0]]); })
@@ -1981,6 +2023,8 @@ function initLeaflet() {
       if (phaseFiltering && p.phase && !filter.phase.has(p.phase)) continue;
       if (YEAR_SEL && false) continue;   // (철도 고시연도 필터는 추후)
       if (f.geometry.type === "LineString" || f.geometry.type === "MultiLineString") {
+        // 노선 선형 표시 토글(헤더 '노선') — 선만 숨김, 역·IC 라벨과 호재 원·집계는 불변
+        if (isRoad ? !filter.lines.has("도로선") : !filter.lines.has("철도선")) continue;
         const ll = f.geometry.type === "MultiLineString"
           ? f.geometry.coordinates.map(seg => seg.map(([x, y]) => [y, x]))   // 다중 세그먼트
           : f.geometry.coordinates.map(([x, y]) => [y, x]);
@@ -1991,8 +2035,9 @@ function initLeaflet() {
           + `<div class="apt-pop-cats"><span style="color:${col}">● 단계 ${p.phase || (p.confirmed ? "착공" : "계획")}</span>${p.note ? " · " + p.note : ""}${p.src_name ? ` · 출처: ${p.src_name}` : isRoad ? " · 선형: OSM(ODbL)" : ""}</div></div>`,
           { sticky: true, className: "apt-tip" });
         line.on("click", (e) => { L.DomEvent.stopPropagation(e);
-          if (isRoad) {   // 도로 노선 = 그 자체가 신호(ROAD_SIG에서 찾아 상세)
-            const sig = ROAD_SIG.find(s => s.title.startsWith(p.name));
+          if (isRoad) {   // 도로 노선 = 그 자체가 신호(ROAD_SIG, 확정 병합분은 SIGNALS에서 찾아 상세)
+            const sig = ROAD_SIG.find(s => s.title.startsWith(p.name))
+              || SIGNALS.find(s => s._road && s.road_ref && p.name.includes(s.road_ref));
             if (sig) showSignal(sig, false);
             return;
           }
@@ -2127,8 +2172,19 @@ function initLeaflet() {
   const clearRadius = () => { circles.forEach(c => map.removeLayer(c)); circles = []; };
   const addRadius = s => {
     const col = colorOf(s);   // 영향 원 = 분류 색상으로 안까지 채움
-    if (s._road && s.access_points) {   // 도로 노선: 샘플점별 진한 원 겹침=얼룩 → 옅은 무테 원들로 회랑 밴드 근사
-      signalPoints(s).forEach(p => {
+    if (s._road && s.access_points) {
+      if (s.road_kind === "전용") {   // 전용도로: 영향권 = 진출입 IC 반경만 (선 자체는 버퍼 없음 — 이원 관리)
+        (s.ic_points || []).forEach(ap => {
+          const c = L.circle([ap.coordinates[1], ap.coordinates[0]], {
+            radius: getRadius(s), color: col, weight: 2, opacity: .9,
+            fillColor: col, fillOpacity: 0.28, interactive: false }).addTo(map);
+          if (c._path) c._path.classList.add("circ-in");
+          circles.push(c);
+        });
+        return;
+      }
+      // 일반도로: 샘플점별 진한 원 겹침=얼룩 → 옅은 무테 원들로 회랑 밴드 근사
+      roadLinePoints(s).forEach(p => {
         circles.push(L.circle([p.coord[1], p.coord[0]], {
           radius: getRadius(s), stroke: false, fillColor: col, fillOpacity: 0.05, interactive: false }).addTo(map));
       });
@@ -2485,7 +2541,7 @@ function srchResults(qRaw) {
   return out;
 }
 function srchGoSignal(s) {
-  const pts = signalPoints(s);
+  const pts = signalPoints(s).length ? signalPoints(s) : (s._road ? roadLinePoints(s) : []);   // 전용도로=선형 폴백(이동용)
   if (pts.length && window._map)
     window._map.setView([pts[0].coord[1], pts[0].coord[0]], Math.max(window._map.getZoom(), 14));
   showSignal(s);   // 상세 패널 + 영향 반경 (좌표 미확정 신호는 패널만)
@@ -2542,7 +2598,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260716k");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260716m");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions, jeongbiData, railData, roadData, dartData, archData] = await Promise.all([
@@ -2588,6 +2644,20 @@ function initSearch() {
     return { ...s, status: derived };
   });
   MACRO = macro.signals;
+  // 확정 신호 ↔ OSM 도로 병합(승격): signals.json에 road_ref 명시 시, 매칭 노선의 선형·샘플점·IC를 확정 신호가 승계하고
+  // 자동(OSM) 신호는 제거 — 같은 사업 이중 카운트 방지 + 양쪽 계보(sources) 보존 (SSOT: 후보→확정 승격 지점)
+  SIGNALS.forEach(s => {
+    if (!s.road_ref) return;
+    const i = ROAD_SIG.findIndex(r => r.access_points && r.title.includes(s.road_ref));
+    if (i < 0) return;   // 매칭 실패 시 양쪽 그대로(정직)
+    const rd = ROAD_SIG.splice(i, 1)[0];
+    s._road = true; s.road_kind = rd.road_kind;
+    if (!s.geometry || !s.geometry.coordinates) s.geometry = rd.geometry;
+    s.access_points = (s.access_points || []).concat(rd.access_points || []);
+    s.ic_points = rd.ic_points;
+    s.sources = [...new Set((s.sources || []).concat(rd.sources || []))];
+    s.merged_osm = rd.title;   // renderRail 선 클릭 → 이 확정 신호로 연결
+  });
   renderChips();
   initRegionBar();
   initSearch();
@@ -2602,7 +2672,7 @@ function initSearch() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 3파일(8.2MB)은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260716k");
+  const CB = "?b=" + (window.BUILD || "20260716m");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 경기·인천 법정동(동배지·드릴다운) — 도착 즉시 병합
   gj("capital_bdong.geojson").then(cap => {
