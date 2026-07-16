@@ -2247,22 +2247,20 @@ function renderRaw(more) {
 (async () => {
   const CB = "?b=" + (window.BUILD || "20260716g");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
-  const [dong, capitalDong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData, dartData, archData] = await Promise.all([
+  // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
+  const [dong, sgg, main, macro, rawData, autoData, apartments, regions, jeongbiData, railData, dartData, archData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
-    gj("capital_bdong.geojson").catch(() => ({ features: [] })),   // 경기·인천 법정동(VWorld WFS, sido 속성 포함)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
     gj("macro_signals_draft.json"),
     gj("capital_raw.json"),
     gj("signals_auto.json"),
     gj("apartments.json").catch(() => ({ apts: [] })),          // 강서 정밀본(도로수준 검수)
-    gj("apartments_all.json").catch(() => ({ apts: [] })),       // 전국(공동주택 API+브이월드)
     gj("regions.json").catch(() => null),
-    JEONGBI_LICENSED ? gj("signals_jeongbi_all.json").catch(() => ({ cands: [] })) : Promise.resolve({ cands: [] }),  // 정비사업 후보(정비몽땅+공공데이터) — 4유형, 이용허락 전 비공개
-    JEONGBI_LICENSED ? gj("jeongbi_poly_seoul.json").catch(() => ({ features: [] })) : Promise.resolve({ features: [] }),  // 정비구역 경계 폴리곤 — 4유형, 이용허락 전 비공개
-    RAIL_READY ? gj("rail_signals.json").catch(() => ({ features: [] })) : Promise.resolve({ features: [] }),  // 신규 철도 노선 — 시드 부정확(§4.1)로 비활성, 실제 노선 geometry 확보 후 재개
-    gj("dart_signals.json").catch(() => ({ signals: [] })),   // DART 신규시설투자·유형자산양수 → 일자리 후보
-    gj("arch_signals.json").catch(() => ({ signals: [] }))   // 건축인허가(건축HUB) 대형건물 → 인프라·일자리 후보(발견형)
+    JEONGBI_LICENSED ? gj("signals_jeongbi_all.json").catch(() => ({ cands: [] })) : Promise.resolve({ cands: [] }),  // 정비 후보 신호(카운트·배지용, 357KB — 폴리곤은 지연)
+    RAIL_READY ? gj("rail_signals.json").catch(() => ({ features: [] })) : Promise.resolve({ features: [] }),  // 신규 철도 노선
+    gj("dart_signals.json").catch(() => ({ signals: [] })),   // DART → 일자리 후보
+    gj("arch_signals.json").catch(() => ({ signals: [] }))   // 건축인허가 → 인프라·일자리 후보
   ]);
   RAIL = (railData && railData.features) || [];
   buildRailSignals();   // 계획/건설역 → 교통 신호(신설역 근처 아파트 호재 카운팅 기준좌표)
@@ -2274,23 +2272,14 @@ function renderRaw(more) {
   // 무관한 인접 신축건물을 '같은 시설'로 오판→포스코 1.6조·동국제강 등 최대 신호를 잘못 제거함.
   // 정확한 면적-우선은 DART 시설소재지(본사 아님) 확보 또는 기업↔건축허가 매칭 후 재개.
   REGIONS = regions;
-  DONG_GEO = dong;
-  // 경기·인천 법정동 병합(서울 feature엔 sido 없음 → 렌더/드릴다운서 sido||"서울" 폴백)
-  if (capitalDong && capitalDong.features && capitalDong.features.length)
-    DONG_GEO = { type: "FeatureCollection", features: dong.features.concat(capitalDong.features) };
+  DONG_GEO = dong;   // 초기=서울 467동. 경기·인천(capital_bdong)은 지연 로드 후 병합.
   SGG_GEO = sgg;
   RAW = rawData.rows;
   AUTO = autoData.candidates;
   JEONGBI = (jeongbiData && jeongbiData.cands) || [];
-  JEONGBI_POLY = (jeongbiPolyData && jeongbiPolyData.features) || [];
+  JEONGBI_POLY = [];   // 정비 폴리곤(1.9MB)은 지연 로드
   buildJeongbiSignals();   // 정비 후보 → 신호 어댑트(호재 카운팅 포함용)
-  // 전국 아파트 병합: 전국본을 베이스로, 강서 정밀본(검수)으로 덮어씀. 좌표 있는 것만.
-  {
-    const m = new Map();
-    ((apartmentsAll && apartmentsAll.apts) || []).forEach(a => { if (a.lat) m.set(a.n + "|" + a.dong, a); });
-    ((apartments && apartments.apts) || []).forEach(a => { if (a.lat) m.set(a.n + "|" + a.dong, a); });
-    APTS = [...m.values()];
-  }
+  APTS = ((apartments && apartments.apts) || []).filter(a => a.lat);   // 초기=강서 정밀본. 전국(apartments_all)은 지연 병합.
   // 상태 파생 (§3.1: 정체 = 6개월+ 무움직임). status_override는 공사 진행 등
   // "무공시가 정상인 단계"에 한해 명시 근거(status_note)와 함께 사용
   SIGNALS = main.signals.map(s => {
@@ -2307,7 +2296,35 @@ function renderRaw(more) {
   document.getElementById("v-raw").onclick = () => setView("raw");
   document.getElementById("v-undet").onclick = () => setView("undet");
   document.getElementById("v-radius").onclick = (e) => { e.stopPropagation(); openRadius(); };
+  loadDeferred();   // 큰 파일(경기·인천 동경계·전국 아파트·정비 폴리곤)은 초기 렌더 뒤 백그라운드 로드
 })();
+
+/* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 3파일(8.2MB)은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
+async function loadDeferred() {
+  const CB = "?b=" + (window.BUILD || "20260716g");
+  const gj = f => fetch(f + CB).then(r => r.json());
+  // 경기·인천 법정동(동배지·드릴다운) — 도착 즉시 병합
+  gj("capital_bdong.geojson").then(cap => {
+    if (cap && cap.features && cap.features.length) {
+      DONG_GEO = { type: "FeatureCollection", features: DONG_GEO.features.concat(cap.features) };
+      if (typeof syncRegionBar === "function") syncRegionBar();   // 드롭다운 경기/인천 읍면동 반영
+      window._dbg && window._dbg.applyLOD && window._dbg.applyLOD();
+    }
+  }).catch(() => {});
+  // 전국 아파트 — 전국본 베이스 + 강서 정밀본(현재 APTS) 덮어씀
+  gj("apartments_all.json").then(all => {
+    const m = new Map();
+    ((all && all.apts) || []).forEach(a => { if (a.lat) m.set(a.n + "|" + a.dong, a); });
+    APTS.forEach(a => { if (a.lat) m.set(a.n + "|" + a.dong, a); });   // 강서 정밀본 우선
+    APTS = [...m.values()];
+    window._dbg && window._dbg.applyLOD && window._dbg.applyLOD();
+  }).catch(() => {});
+  // 서울 정비 폴리곤(z12+ 경계) — 라이선스 켜진 경우만
+  if (JEONGBI_LICENSED) gj("jeongbi_poly_seoul.json").then(poly => {
+    JEONGBI_POLY = (poly && poly.features) || [];
+    window._dbg && window._dbg.applyLOD && window._dbg.applyLOD();
+  }).catch(() => {});
+}
 
 /* 헤더: 현재 지도 중심 동네 표시 (조회용, 필터 아님) */
 function updateCenterLabel() {
