@@ -249,6 +249,9 @@
   .leaflet-tooltip.rail-hover { background:#fff; border:1px solid var(--line); border-radius:8px; padding:3px 8px;
     font-size:12px; box-shadow:0 2px 8px rgba(0,0,0,.18); white-space:nowrap; }   /* 역·IC hover — 가장자리 세로붕괴 방지 */
   .leaflet-tooltip.rail-hover::before { display:none; }
+  .rail-name { font-size:10.5px; font-weight:700; color:#1a2b6b; background:rgba(255,255,255,.92);
+    border:1px solid #2e5ce6; border-radius:8px; padding:1px 5px; white-space:nowrap;
+    transform:translate(10px,-50%); box-shadow:0 1px 3px rgba(0,0,0,.18); }   /* z14+ 역명 라벨(원은 renderHojae) */
   .apt-pop { background:#fff; border-radius:12px; box-shadow:0 6px 22px rgba(0,0,0,.24); padding:11px 14px; min-width:180px; max-width:250px; }
   .apt-pop-nm { font-size:15px; font-weight:800; color:#1a1a1a; }
   .apt-pop-sub { font-size:11.5px; color:var(--muted); margin-top:3px; }
@@ -1910,7 +1913,9 @@ function initLeaflet() {
     const z = map.getZoom();
     const show = new Set(lodGrades(z));
     const bd = map.getBounds();
-    const pool = SIGNALS.concat(JEONGBI_SIG, DART_SIG, ARCH_SIG).filter(visible)
+    // 철도역·도로IC도 호재 원 체계로 일원화(2026-07-16 사용자 지적 — "역 생기는 곳이 호재인데 원이 없다").
+    // 도로 노선 신호(access_points 보유)는 선으로 렌더되므로 제외, IC 점만 포함.
+    const pool = SIGNALS.concat(JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG.filter(s => !s.access_points)).filter(visible)
       .filter(s => s.geometry && s.geometry.coordinates)   // 좌표 미확정 신호 제외(지도 미표시 — 카드에서 표기)
       .filter(s => show.has(levelOf(s)))
       .filter(s => { const c = s.geometry.coordinates; return bd.contains([c[1], c[0]]); })
@@ -1972,18 +1977,13 @@ function initLeaflet() {
           const flat = f.geometry.type === "MultiLineString" ? f.geometry.coordinates.flat() : f.geometry.coordinates;
           showSignal(railToSignal(p, flat[Math.floor(flat.length / 2)]), false); });
         railLayers.push(line);
-      } else if (f.geometry.type === "Point" && z >= 10) {
+      } else if (f.geometry.type === "Point" && z >= 14) {
+        // 역·IC 원은 renderHojae(호재 원 체계: 크기=등급·색=분류)로 일원화 — 여기선 z14+ 역명 상시 라벨만(뷰포트 내)
         const [x, y] = f.geometry.coordinates;
-        const rr = z >= 14 ? 5.5 : (z >= 12 ? 4.5 : 3.5);
-        // 지하철 노선도식 도넛(흰 속 + 색 링) — 어느 배경에서도 보이고 겹침 적음. 확정=실링/후보=점선링. 도로 IC=황갈 링
-        const m = L.circleMarker([y, x], { pane: "rail", radius: rr, color: col,
-          weight: 2.5, dashArray: p.confirmed ? null : "2 2",
-          fillColor: "#fff", fillOpacity: 1, opacity: 1 }).addTo(map);
-        m.bindTooltip(`${p.name} <span style="color:#8a90a0">· ${p.line || ""}${p.confirmed ? "" : isRoad ? " (계획 IC)" : " (후보역)"}</span>`,
-          { direction: "top", className: "rail-hover" });
-        if (z >= 14) m.bindTooltip(p.name, { permanent: true, direction: "right",
-          className: "rail-stlbl", offset: [rr + 3, 0] });   // 고배율(z14+)=역명 상시 라벨
-        railLayers.push(m);
+        if (!map.getBounds().contains([y, x])) continue;
+        const lb = L.marker([y, x], { pane: "rail", interactive: false,
+          icon: L.divIcon({ className: "", html: `<div class="rail-name">${p.name}</div>`, iconSize: null }) });
+        lb.addTo(map); railLayers.push(lb);
       }
     }
   };
