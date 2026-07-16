@@ -16,6 +16,22 @@
   header .logo { font-weight:800; font-size:17px; letter-spacing:-.3px; }
   header .logo small { font-weight:400; color:var(--muted); font-size:11px; margin-left:4px; }
   header .region { font-size:13px; border:1px solid var(--line); border-radius:8px; padding:4px 10px; background:#fff; }
+  /* ── 상단 통합 검색 (동·시군구·아파트·호재) ── */
+  .srch { position:relative; flex-shrink:0; }
+  .srch .srchicon { position:absolute; left:11px; top:50%; transform:translateY(-50%); font-size:12px; opacity:.55; pointer-events:none; }
+  .srch input { width:250px; font-size:13px; padding:8px 12px 8px 30px; border:1.5px solid #e3e6ec; border-radius:999px;
+                background:#fff; outline:none; transition:border-color .12s, box-shadow .12s; }
+  .srch input:focus { border-color:#2e5ce6; box-shadow:0 0 0 3px rgba(46,92,230,.12); }
+  .srchpanel { position:absolute; top:calc(100% + 6px); left:0; z-index:1500; background:#fff; border:1px solid #eceef2;
+               border-radius:14px; box-shadow:0 10px 34px rgba(0,0,0,.16); width:360px; max-height:440px; overflow-y:auto;
+               padding:6px; display:none; }
+  .srchhead { font-size:10.5px; color:#9aa0ad; font-weight:700; padding:7px 10px 3px; }
+  .srchitem { display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:9px; cursor:pointer; }
+  .srchitem:hover, .srchitem.act { background:#f2f6ff; }
+  .srchtag { font-size:10px; font-weight:800; border-radius:5px; padding:1px 6px; color:#fff; flex-shrink:0; }
+  .srchmain { font-size:13px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .srchsub { font-size:11px; color:var(--muted); margin-left:auto; flex-shrink:0; padding-left:8px; white-space:nowrap; max-width:45%; overflow:hidden; text-overflow:ellipsis; }
+  .srchempty { padding:14px; font-size:12px; color:var(--muted); text-align:center; }
   .chips { display:flex; gap:6px; flex-wrap:wrap; }
   .chip { font-size:12px; border:1px solid var(--line); border-radius:999px; padding:3px 10px; cursor:pointer; user-select:none; color:var(--muted); }
   .chip.on { border-color:var(--ink); color:var(--ink); font-weight:600; }
@@ -316,6 +332,11 @@
 <body>
 <header>
   <div class="logo">호재맵<small>가칭 · 신호 추적 미디어 (내부 v0)</small></div>
+  <div class="srch" id="srch">
+    <span class="srchicon">🔍</span>
+    <input id="srch-in" type="search" placeholder="동 · 아파트 · 호재 검색" autocomplete="off">
+    <div class="srchpanel" id="srch-panel"></div>
+  </div>
   <div class="regionbar" id="regionbar">
     <select id="r-sido"><option value="">시도 선택</option></select>
     <select id="r-sgg" disabled><option value="">시군구 선택</option></select>
@@ -2424,6 +2445,101 @@ function renderRaw(more) {
   document.getElementById("r-more").style.display = rows.length > rawShown ? "inline-block" : "none";
 }
 
+/* ══════════ 상단 통합 검색 (동·시군구·아파트·호재) — 지역 파라미터 없음, 로드된 전 데이터 대상 ══════════ */
+const SRCH_TAG = { dong: { t: "동", c: "#4460e0" }, sgg: { t: "지역", c: "#2c3fb5" }, apt: { t: "아파트", c: "#d6156d" } };
+const srchNorm = s => (s || "").toLowerCase().replace(/\s+/g, "");
+function srchHi(name, qRaw) {
+  const i = name.toLowerCase().indexOf(qRaw.toLowerCase());
+  if (i < 0) return name;   // 공백 무시 매칭 등으로 원문에 없으면 강조 생략
+  return name.slice(0, i) + `<b style="color:#2e5ce6">` + name.slice(i, i + qRaw.length) + "</b>" + name.slice(i + qRaw.length);
+}
+function srchResults(qRaw) {
+  const q = srchNorm(qRaw);
+  if (!q) return [];
+  const out = [];
+  const rank = name => srchNorm(name).startsWith(q) ? 0 : 1;   // 접두 일치 우선
+  // 동 (법정동 경계 보유 지역)
+  (DONG_GEO?.features || []).filter(f => srchNorm(f.properties.EMD_KOR_NM).includes(q))
+    .sort((a, b) => rank(a.properties.EMD_KOR_NM) - rank(b.properties.EMD_KOR_NM)
+      || a.properties.EMD_KOR_NM.localeCompare(b.properties.EMD_KOR_NM, "ko"))
+    .slice(0, 5)
+    .forEach(f => out.push({ kind: "dong", name: f.properties.EMD_KOR_NM,
+      sub: `${f.properties.sido || "서울"} ${f.properties.sgg}`, run: () => showDong(f) }));
+  // 시군구 (전국 251)
+  [...new Set((SGG_GEO?.features || []).map(f => `${f.properties.sido} ${sggDisplayName(f.properties.name)}`))]
+    .filter(d => srchNorm(d).includes(q)).sort((a, b) => rank(a) - rank(b)).slice(0, 3)
+    .forEach(d => out.push({ kind: "sgg", name: d, sub: "시군구", run: () => showSgg(d) }));
+  // 아파트 (전국, 큰 단지 우선)
+  APTS.filter(a => srchNorm(a.n).includes(q))
+    .sort((a, b) => rank(a.n) - rank(b.n) || (b.hh || 0) - (a.hh || 0)).slice(0, 6)
+    .forEach(a => out.push({ kind: "apt", name: a.n,
+      sub: `${a.sd || ""} ${a.sg || ""} ${a.dong || ""}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : ""}`.trim(),
+      run: () => showApt(a) }));
+  // 호재 신호 (확정+정비+철도+도로+DART+건축 — 필터 무관 전체 검색, 등급순)
+  const LVO = { A: 0, B: 1, C: 2, "미정": 3 };
+  allSignalsFlat().filter(s => s.title && srchNorm(s.title).includes(q))
+    .sort((a, b) => rank(a.title) - rank(b.title) || LVO[levelOf(a)] - LVO[levelOf(b)]).slice(0, 8)
+    .forEach(s => out.push({ kind: "sig", name: s.title, color: colorOf(s),
+      sub: `${catOf(s)} · ${LEVEL_NAME[levelOf(s)]}${s.sg ? " · " + `${s.sd || ""} ${s.sg}`.trim() : ""}`,
+      run: () => srchGoSignal(s) }));
+  return out;
+}
+function srchGoSignal(s) {
+  const pts = signalPoints(s);
+  if (pts.length && window._map)
+    window._map.setView([pts[0].coord[1], pts[0].coord[0]], Math.max(window._map.getZoom(), 14));
+  showSignal(s);   // 상세 패널 + 영향 반경 (좌표 미확정 신호는 패널만)
+}
+let srchItems = [], srchIdx = -1;
+function initSearch() {
+  const inp = document.getElementById("srch-in"), panel = document.getElementById("srch-panel");
+  if (!inp || !panel) return;
+  const HEAD = { dong: "동 (법정동)", sgg: "시군구", apt: "아파트", sig: "호재 신호" };
+  const close = () => { panel.style.display = "none"; srchIdx = -1; };
+  const pick = i => { const it = srchItems[i]; if (!it) return; inp.value = it.name; close(); inp.blur(); it.run(); };
+  const move = d => {
+    if (!srchItems.length) return;
+    srchIdx = (srchIdx + d + srchItems.length) % srchItems.length;
+    srchItems.forEach((it, i) => it.el && it.el.classList.toggle("act", i === srchIdx));
+    srchItems[srchIdx].el?.scrollIntoView({ block: "nearest" });
+  };
+  const render = () => {
+    const qRaw = inp.value.trim();
+    srchItems = srchResults(qRaw); srchIdx = -1;
+    if (!qRaw) return close();
+    if (!srchItems.length) {
+      panel.innerHTML = `<div class="srchempty">검색 결과 없음 — 동·시군구·아파트·호재 이름으로 검색됩니다</div>`;
+      panel.style.display = "block"; return;
+    }
+    panel.innerHTML = "";
+    let lastKind = null;
+    srchItems.forEach((it, i) => {
+      if (it.kind !== lastKind) {
+        lastKind = it.kind;
+        const h = document.createElement("div"); h.className = "srchhead"; h.textContent = HEAD[it.kind]; panel.appendChild(h);
+      }
+      const el = document.createElement("div"); el.className = "srchitem";
+      const tag = it.kind === "sig"
+        ? `<span class="srchtag" style="background:${it.color}">호재</span>`
+        : `<span class="srchtag" style="background:${SRCH_TAG[it.kind].c}">${SRCH_TAG[it.kind].t}</span>`;
+      el.innerHTML = `${tag}<span class="srchmain">${srchHi(it.name, qRaw)}</span><span class="srchsub">${it.sub}</span>`;
+      el.onmousedown = e => e.preventDefault();   // blur보다 클릭이 먼저 처리되도록
+      el.onclick = () => pick(i);
+      it.el = el; panel.appendChild(el);
+    });
+    panel.style.display = "block";
+  };
+  inp.oninput = render;
+  inp.onfocus = () => { if (inp.value.trim()) render(); };
+  inp.onkeydown = e => {
+    if (e.key === "ArrowDown") { e.preventDefault(); move(1); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); move(-1); }
+    else if (e.key === "Enter") { e.preventDefault(); pick(srchIdx >= 0 ? srchIdx : 0); }
+    else if (e.key === "Escape") close();
+  };
+  document.addEventListener("click", e => { if (!e.target.closest("#srch")) close(); });
+}
+
 /* ══════════ 부트 ══════════ */
 (async () => {
   const CB = "?b=" + (window.BUILD || "20260716k");   // 배포마다 갱신 → 데이터 캐시 무효화
@@ -2474,6 +2590,7 @@ function renderRaw(more) {
   MACRO = macro.signals;
   renderChips();
   initRegionBar();
+  initSearch();
   renderPanel();
   bootMap();
   document.getElementById("v-map").onclick = () => setView("map");
