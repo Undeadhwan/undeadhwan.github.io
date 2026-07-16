@@ -200,6 +200,7 @@
   .card:hover { border-color:#b0b0b6; }
   .card .tags { font-size:11px; color:var(--muted); margin-bottom:4px; }
   .gbasis { color:#e0761e; font-weight:600; }
+  .gbasis.undet { color:#a08a5a; font-weight:600; font-style:italic; }
   .card .title { font-size:14px; font-weight:600; margin-bottom:5px; }
   .card .stage { font-size:12px; }
   .card .watch { font-size:12px; color:var(--muted); margin-top:4px; }
@@ -232,6 +233,9 @@
   /* 아파트 hover 팝업 (호갱노노식 카드 — 실거래가 제외) */
   .leaflet-tooltip.apt-tip { background:transparent; border:none; box-shadow:none; padding:0; white-space:normal; }
   .leaflet-tooltip.apt-tip::before { display:none; }
+  .leaflet-popup.apt-pop-wrap .leaflet-popup-content-wrapper { background:transparent; box-shadow:none; padding:0; }
+  .leaflet-popup.apt-pop-wrap .leaflet-popup-content { margin:0; width:auto !important; }
+  .leaflet-popup.apt-pop-wrap .leaflet-popup-tip-container, .leaflet-popup.apt-pop-wrap .leaflet-popup-tip { display:none; }
   .leaflet-tooltip.rail-stlbl { background:rgba(255,255,255,.92); border:1px solid #2e5ce6; color:#1a2b6b;
     font-size:11px; font-weight:700; padding:1px 5px; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,.18); white-space:nowrap; }
   .leaflet-tooltip.rail-stlbl::before { display:none; }
@@ -245,6 +249,8 @@
   .apt-pop-cmp { margin-top:9px; text-align:center; font-size:12px; font-weight:700; border:1.5px solid #1a1a1a; border-radius:8px; padding:5px 0; cursor:pointer; color:#1a1a1a; background:#fff; }
   .apt-pop-cmp:hover { background:#f3f4f6; }
   .apt-pop-cmp.in { background:#1a1a1a; color:#fff; }
+  .copyaddr { cursor:pointer; font-size:11px; padding:1px 4px; border-radius:5px; background:#eef1fb; margin-left:3px; user-select:none; }
+  .copyaddr:hover { background:#dde3f7; }
   /* 레이더 파동 (크게) */
   .radar { position:relative; width:0; height:0; pointer-events:none; }
   .radar span { position:absolute; border:3px solid #2e5ce6; border-radius:50%; left:0; top:0; transform:translate(-50%,-50%);
@@ -301,6 +307,7 @@
   <div class="chips" id="f-view">
     <span class="chip on" id="v-map">지도</span>
     <span class="chip" id="v-raw">수도권 데이터</span>
+    <span class="chip" id="v-undet" title="등급 기준(면적·금액·세대수 등)에 매칭 안 돼 등급 미판정인 호재 목록">❓ 미판정 목록</span>
     <span class="chip" id="v-radius" title="호재 유형별 영향 반경 직접 설정">⚙ 반경 설정</span>
     <span class="chip" onclick="window.open('rail_reference.html','_blank')" title="신규 철도 노선·역사 좌표 대장 (영향권 기준)">🚈 노선·역 대장</span>
     <span class="chip" onclick="window.open('methodology.html','_blank')" title="데이터 소스·추출·가공·매핑 방법 (운영 문서)">📄 데이터·방법론</span>
@@ -351,6 +358,20 @@
     <div class="ps" id="r-count" style="margin-top:10px"></div>
     <div id="r-list"></div>
     <div style="text-align:center; margin:14px 0;"><span class="chip" id="r-more" style="display:none">더 보기</span></div>
+  </div>
+</div>
+<div id="undet" style="display:none; height:calc(100vh - 87px); overflow-y:auto; padding:16px 20px 80px;">
+  <div style="max-width:1080px; margin:0 auto;">
+    <div class="pt">등급 미판정 목록</div>
+    <div class="ps">우리가 정한 등급 기준(<b>일자리=연면적·투자액 / 주거개발=세대수 / 교통=노선종류</b>)에 필요한 데이터가 없어 <b>등급을 매기지 않은(미정)</b> 호재입니다. 임의 등급을 부여하지 않고 미정으로 두는 게 원칙(P2·P5). 아래를 보고 소스·기준을 보완하면 등급이 채워집니다.</div>
+    <div class="rawctl">
+      <select id="u-cat"><option value="">분류: 전체</option></select>
+      <select id="u-sido"><option value="">시도: 전체</option></select>
+      <input id="u-q" type="search" placeholder="이름 검색">
+    </div>
+    <div class="ps" id="u-count" style="margin-top:10px"></div>
+    <div id="u-list"></div>
+    <div style="text-align:center; margin:14px 0;"><span class="chip" id="u-more" style="display:none">더 보기</span></div>
   </div>
 </div>
 <style>
@@ -484,7 +505,8 @@ const CLASSES_DEFAULT = {
 const CAT_KEYS = ["교통", "일자리", "인프라", "주거개발"];
 const DISPLAY_CAT_KEYS = ["교통", "일자리", "인프라", "주거개발", "기타"];
 const LEVELS = ["A", "B", "C"];
-const LEVEL_NAME = { A: "A급", B: "B급", C: "C급" };
+const GRADES_DISP = ["A", "B", "C", "미정"];   // 배지·매트릭스 표시용(미정 포함)
+const LEVEL_NAME = { A: "A급", B: "B급", C: "C급", "미정": "미정" };
 const SUB_KEYS = { "교통": ["철도", "도로"], "일자리": ["면적", "금액"] };   // 세부 축 있는 대분류(교통=철도/도로 반경, 일자리=면적/금액 등급기준)
 const CAT_SUB = { "교통": "철도 / 도로", "일자리": "면적기준 / 금액기준", "인프라": "쇼핑 / 병원 / 녹지", "주거개발": "신도시 / 택지 / 재개발 / 재건축" };
 const LEVEL_DESC = {
@@ -510,9 +532,10 @@ function lvStyle(cat, lvl) {
   return `background:${tint[0]};color:${tint[1]};`;
 }
 /* 등급(A/B/C) 공통 색 — 카테고리 무관. A=보라(핵심)/B=청록(중대형)/C=슬레이트(일반). 각 화면 등급 그루핑 */
-const LVL_COLOR = { A: "#d6156d", B: "#7c3aed", C: "#94a3b8" };   // A=마젠타(핵심·최선명)/B=보라/C=슬레이트
-const LVL_STYLE = { A: "background:#d6156d;color:#fff;", B: "background:#7c3aed;color:#fff;", C: "background:#94a3b8;color:#fff;" };
+const LVL_COLOR = { A: "#d6156d", B: "#7c3aed", C: "#94a3b8", "미정": "#c3b091" };   // A=마젠타/B=보라/C=슬레이트/미정=베이지(미판정)
+const LVL_STYLE = { A: "background:#d6156d;color:#fff;", B: "background:#7c3aed;color:#fff;", C: "background:#94a3b8;color:#fff;", "미정": "background:#fff;color:#8a7a56;border:1.5px dashed #c3b091;" };
 const LVL_TXT = LVL_COLOR;
+const LVL_LETTER = { A: "A", B: "B", C: "C", "미정": "?" };   // 배지 글자(미정=?)
 function lvlPill(l) { return `<span class="lvtag" style="${LVL_STYLE[l]}">${LEVEL_NAME[l]}</span>`; }
 function levelPill(s) { return lvlPill(levelOf(s)); }
 // 세부 축 라벨: 교통=철도/도로, 일자리=면적/금액(등급 산정 기준)
@@ -522,23 +545,33 @@ function subLabel(s) {
   if (c === "일자리" && s.sub) return " · " + s.sub + "기준";
   return "";
 }
-// 일자리 등급 근거값(사실): 면적기준=연면적, 금액기준=투자액. 데이터 소스 최대 활용 + 근거 투명(P2)
+// 대지위치 주소 복사 (건축인허가=세움터 조회용)
+function copyAddr(el, addr) {
+  if (navigator.clipboard) { navigator.clipboard.writeText(addr); const o = el.textContent; el.textContent = "✓"; setTimeout(() => el.textContent = o, 1200); }
+}
+// 등급 근거값(사실): 일자리=연면적/투자액, 주거개발=세대수. 근거 데이터 없으면 '미상'(→등급 미정, P2)
 function gradeBasisHtml(s) {
-  if (catOf(s) !== "일자리") return "";
-  if (s.sub === "면적" && s.area_m2) return `<span class="gbasis">연면적 ${(s.area_m2 / 10000).toFixed(1).replace(".0", "")}만㎡</span> · `;
-  if (s.sub === "금액" && s.amount_eok) return `<span class="gbasis">투자 ${Number(s.amount_eok).toLocaleString()}억</span> · `;
+  const c = catOf(s);
+  if (c === "일자리") {
+    if (s.sub === "면적" && s.area_m2) return `<span class="gbasis">연면적 ${(s.area_m2 / 10000).toFixed(1).replace(".0", "")}만㎡</span> · `;
+    if (s.sub === "금액" && s.amount_eok) return `<span class="gbasis">투자 ${Number(s.amount_eok).toLocaleString()}억</span> · `;
+    return "";
+  }
+  if (c === "주거개발")
+    return s.hh ? `<span class="gbasis" style="color:#c4392f">${Number(s.hh).toLocaleString()}세대</span> · `
+                : `<span class="gbasis undet">세대수 미상</span> · `;
   return "";
 }
 /* 등급별 집계 (교통·일자리 등 카테고리 pooling) */
 function levelCounts(sigs) {
-  const m = { A: { total: 0, cats: {} }, B: { total: 0, cats: {} }, C: { total: 0, cats: {} }, _total: 0 };
+  const m = { A: { total: 0, cats: {} }, B: { total: 0, cats: {} }, C: { total: 0, cats: {} }, "미정": { total: 0, cats: {} }, _total: 0 };
   sigs.forEach(x => { const s = x.s || x; const l = levelOf(s), c = catOf(s); if (!m[l]) return; m[l].total++; m[l].cats[c] = (m[l].cats[c] || 0) + 1; m._total++; });
   return m;
 }
 /* 지도 배지용: 등급별 건수. 등급=색 칩(letter), 건수=중립 검정(number) 분리 */
 function gradeBadgeHtml(m) {
-  const inner = LEVELS.filter(l => m[l].total).map(l =>
-    `<span class="g"><b class="gl" style="background:${LVL_COLOR[l]}">${l}</b><span class="gn">${m[l].total}</span></span>`).join("");
+  const inner = GRADES_DISP.filter(l => m[l] && m[l].total).map(l =>
+    `<span class="g"><b class="gl" style="${l === "미정" ? "background:#fff;color:#8a7a56;border:1.2px dashed #c3b091" : "background:" + LVL_COLOR[l] + ";color:#fff"}">${LVL_LETTER[l]}</b><span class="gn">${m[l].total}</span></span>`).join("");
   return inner ? `<div class="grades">${inner}</div>` : "";
 }
 /* 사용자 오버라이드 로드 (localStorage) — 편집 시 저장, 즉시 반영. 교통은 {철도/도로:{A/B/C}} 중첩 */
@@ -556,7 +589,10 @@ function saveRadii() { localStorage.setItem("hojae_radii4", JSON.stringify(CLASS
 /* 신호 → 대분류/레벨. cat·lvl 명시 우선, 없으면 레거시 template_type 폴백 */
 const CAT_LEGACY = { "철도": "교통", "도로": "교통", "기업이전": "일자리", "정비사업": "주거개발", "공공시설": "인프라" };
 const catOf = s => s.cat || CAT_LEGACY[s.template_type] || "기타";
-const levelOf = s => s.lvl || "C";
+// 등급 = 우리가 정한 기준(일자리 면적/금액·주거개발 세대수·교통 노선종류)에 매칭될 때만 A/B/C.
+// 기준 데이터 없으면 "미정"(미판정) — 임의 등급 부여 금지(P2·P5). 미정은 미판정 목록에서 보완.
+const levelOf = s => { const l = s.lvl; return (l === "A" || l === "B" || l === "C") ? l : "미정"; };
+const isGraded = s => { const l = s.lvl; return l === "A" || l === "B" || l === "C"; };
 /* 교통 세부(철도/도로) — 반경만 좌우, 표시 분류는 여전히 교통. sub 명시 우선, 없으면 template_type→기본 철도 */
 const subOf = s => s.sub || (s.template_type === "도로" ? "도로" : (SUB_KEYS[catOf(s)] ? SUB_KEYS[catOf(s)][0] : "철도"));   // 세부 없으면 첫 축(교통=철도, 일자리=면적)
 const getRadius = s => {
@@ -586,7 +622,8 @@ function hojaeMatrixHtml(sigs) {
   panelGrade = null;   // 새 패널 렌더 = 등급 필터 초기화
   const m = levelCounts(sigs);
   if (!m._total) return `<div class="hmatrix"><div class="pickhint" style="padding:14px 8px">반경 내 호재 없음</div></div>`;
-  const rows = LEVELS.map(l => {
+  const shown = [...LEVELS, ...(m["미정"].total ? ["미정"] : [])];   // 미정은 있을 때만 행 노출
+  const rows = shown.map(l => {
     const g = m[l];
     const cats = CAT_KEYS.filter(c => g.cats[c])
       .map(c => `<span style="color:${CAT_COLOR[c]};font-weight:700">${CAT_SHORT[c]}${g.cats[c]}</span>`).join(" ");
@@ -597,7 +634,7 @@ function hojaeMatrixHtml(sigs) {
       <span class="hmpills">${cats || '<span class="hmz">없음</span>'}</span>
       <span class="hmtot">${g.total || ""}</span></div>`;
   }).join("");
-  return `<div class="hmatrix"><div class="hmhead">호재 <b>${m._total}</b>건 · 등급별 (A핵심 / B중대형 / C일반) <span class="hmhint">— 등급 클릭 시 그 급만</span></div>${rows}</div>`;
+  return `<div class="hmatrix"><div class="hmhead">호재 <b>${m._total}</b>건 · 등급별 (A핵심 / B중대형 / C일반${m["미정"].total ? " / 미정=미판정" : ""}) <span class="hmhint">— 등급 클릭 시 그 급만</span></div>${rows}</div>`;
 }
 
 /* ══════════ 상태 ══════════ */
@@ -624,7 +661,7 @@ function buildArchSignals() {
   ARCH_SIG = (ARCH || []).filter(s => s.geometry && s.geometry.coordinates).map(s => ({
     _arch: true, title: s.title, cat: s.cat || "인프라", sub: s.cat === "일자리" ? "면적" : undefined, lvl: s.lvl || "C", template_type: s.cat === "일자리" ? "기업이전" : "생활인프라",
     current_stage: s.current_stage || "인허가", phase: s.phase || "계획", status: s.status || "활성", confirmed: false,
-    sd: s.sd, sg: s.sg, dong: s.dong || null, area_m2: s.area_m2, purp: s.purp,
+    sd: s.sd, sg: s.sg, dong: s.dong || null, addr: s.addr || null, area_m2: s.area_m2, purp: s.purp,
     last_movement: s.rcept_dt && s.rcept_dt.length === 8 ? `${s.rcept_dt.slice(0,4)}-${s.rcept_dt.slice(4,6)}-${s.rcept_dt.slice(6,8)}` : null,
     target_completion: null, sources: s.src ? [s.src] : [],
     geometry: { coordinates: s.geometry.coordinates }
@@ -661,7 +698,7 @@ function buildRailSignals() {
    phaseOf가 명시 phase 우선 사용, radius_type로 catOf(정비)·getRadius 결정. */
 function buildJeongbiSignals() {
   JEONGBI_SIG = JEONGBI.filter(c => c.lat && c.lon).map(c => ({
-    _jb: true, title: c.n, cat: "주거개발", lvl: (c.hh >= 5000 ? "A" : c.hh >= 1500 ? "B" : "C"),
+    _jb: true, title: c.n, cat: "주거개발", lvl: (c.hh ? (c.hh >= 5000 ? "A" : c.hh >= 1500 ? "B" : "C") : "미정"),   // 세대수 있어야 등급, 없으면 미정(미판정)
     template_type: "정비사업", current_stage: c.stage, phase: c.phase, status: c.drop ? "종결" : "활성", confirmed: false,
     sd: c.sd, sg: c.sg, dong: c.dong, hh: c.hh, last_movement: null, target_completion: null,
     geometry: { coordinates: [c.lon, c.lat] }
@@ -1273,6 +1310,7 @@ function renderDetail(s) {
       ${tr ? `<div class="subtrack">유형 세부단계 · ${s.template_type}: ${tr.map(([lb]) =>
         lb === s.current_stage ? `<b class="subcur">${lb}</b>` : lb).join(" › ")}</div>` : ""}
       <div class="kv"><b>영향 반경</b> ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km — 유형 기준표(§3.3.1) 가안, 지도에 점선 원으로 표시</div>
+      ${s.addr ? `<div class="kv"><b>대지위치</b> ${s.addr} <span class="copyaddr" onclick="copyAddr(this,'${s.addr.replace(/'/g, "\\'")}')" title="주소 복사">📋</span></div>` : ""}
       ${(s.access_points || []).length ? `<div class="kv"><b>접근점</b> ${s.access_points.map(a =>
         `${a.name}${a.coordinates ? "" : " (좌표 미확보)"} — ${a.status || ""}`).join(" · ")}</div>` : ""}
       ${(s.stage_history || []).length ? `<div class="kv"><b>단계 이력</b> ${s.stage_history.map(h =>
@@ -1283,7 +1321,7 @@ function renderDetail(s) {
       <div class="kv"><b>근거 원문</b> <span class="src">${(s.sources || []).map((u, i) => {
         const lbl = /eais\.go\.kr/.test(u) ? "세움터(건축행정시스템) — 주소로 조회" : /opendart\.fss/.test(u) ? "DART 공시" : /g2b|nara/.test(u) ? "나라장터 공고" : `공시/공고 ${i + 1}`;
         return `<a href="${u}" target="_blank">${lbl}</a>`;
-      }).join(" · ")}</span>${/eais\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 건축HUB API는 개별 허가 딥링크를 제공하지 않아 출처 시스템(세움터)으로 연결됩니다 — 해당 대지주소로 조회</div>' : ""}</div>
+      }).join(" · ")}</span>${/eais\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 건축HUB API는 개별 허가 딥링크가 없어 세움터 홈으로 연결됩니다 — <b>위 대지위치</b>로 세움터에서 조회하세요</div>' : ""}</div>
       <div class="note">지도 표기 근거: ${s.position_confidence || "확정 좌표"} · 미래 단계는 목표/미정이며 진척률(%) 없음</div>
     </div>`;
 }
@@ -1641,12 +1679,13 @@ function initLeaflet() {
         + (n ? `<div class="apt-pop-cats"><span class="tot">반경 내 호재 ${n}건 · 등급별</span>${gradeHtml}</div>`
              : `<div class="apt-pop-cats none">반경 내 호재 없음</div>`)
         + `<div class="apt-pop-cmp${inCmp ? " in" : ""}">${inCmp ? "✓ 비교함" : "＋ 비교담기"}</div></div>`;
-      m.bindTooltip(pop, { direction: "top", offset: [0, n ? -12 : -6], className: "apt-tip", sticky: false, interactive: true });
-      // hover 툴팁 내 비교담기 버튼 클릭 → 지도에서 바로 비교 담기(패널 진입 없이). 마커 클릭(showApt)과 분리.
-      m.on("tooltipopen", ev => {
-        const el = ev.tooltip.getElement(); if (!el) return;
-        const btn = el.querySelector(".apt-pop-cmp"); if (!btn) return;
-        L.DomEvent.on(btn, "click", e => {
+      // hover 시 팝업으로 표시(툴팁은 마커 벗어나면 닫혀 버튼 클릭 불가 → 팝업은 열린 채 유지되어 비교담기 클릭 가능).
+      // 마커 클릭은 showApt(패널). 팝업은 다른 마커 hover나 지도 클릭 시 닫힘.
+      m.on("mouseover", () => {
+        const pu = L.popup({ className: "apt-pop-wrap", closeButton: false, autoPan: false, offset: [0, n ? -10 : -4] })
+          .setLatLng([a.lat, a.lon]).setContent(pop).openOn(map);
+        const el = pu.getElement(); const btn = el && el.querySelector(".apt-pop-cmp");
+        if (btn) L.DomEvent.on(btn, "click", e => {
           L.DomEvent.stop(e); toggleCompare(a);
           const on = compareSet.some(x => x.n === a.n && x.dong === a.dong);
           btn.classList.toggle("in", on); btn.textContent = on ? "✓ 비교함" : "＋ 비교담기";
@@ -2096,10 +2135,60 @@ function setView(mode) {
   if (mode === "gantt") mode = "map";   // 타임라인 뷰 제거 — 연도필터는 우측 목록에 통합
   document.getElementById("wrap").style.display = mode === "map" ? "flex" : "none";
   document.getElementById("raw").style.display = mode === "raw" ? "block" : "none";
+  document.getElementById("undet").style.display = mode === "undet" ? "block" : "none";
   const g = document.getElementById("gantt"); if (g) g.style.display = "none";
-  for (const v of ["map", "raw"])
+  for (const v of ["map", "raw", "undet"])
     document.getElementById("v-" + v).classList.toggle("on", mode === v);
   if (mode === "raw") initRaw();
+  if (mode === "undet") initUndet();
+}
+/* ══════════ 등급 미판정(미정) 목록 ══════════ */
+// 모든 신호 통합 후 등급 미판정(levelOf==="미정")만 — 결측 사유 표기. 사용자가 보고 소스·기준 보완.
+function allSignalsFlat() {
+  return [].concat(SIGNALS, JEONGBI_SIG, RAIL_SIG, DART_SIG, ARCH_SIG).filter(s => s && s.geometry);
+}
+function undetReason(s) {
+  const c = catOf(s);
+  if (c === "주거개발") return "세대수 미확보 (정비 추진현황에 세대수 없음)";
+  if (c === "일자리") return "연면적·투자액 미확보";
+  if (c === "교통") return "노선종류 미상";
+  return "등급 기준 데이터 미확보";
+}
+let undetReady = false;
+function initUndet() {
+  const rows = allSignalsFlat().filter(s => !isGraded(s));
+  if (!undetReady) {
+    undetReady = true;
+    const cats = [...new Set(rows.map(catOf))].sort();
+    const cs = document.getElementById("u-cat"); cats.forEach(c => cs.appendChild(new Option(c, c)));
+    const ss = document.getElementById("u-sido"); [...new Set(rows.map(r => r.sd).filter(Boolean))].sort().forEach(s => ss.appendChild(new Option(s, s)));
+    ["u-cat", "u-sido"].forEach(id => document.getElementById(id).onchange = () => renderUndet());
+    document.getElementById("u-q").oninput = () => { clearTimeout(window._uq); window._uq = setTimeout(renderUndet, 200); };
+    document.getElementById("u-more").onclick = () => renderUndet(true);
+  }
+  window._undetShown = 0;
+  renderUndet();
+}
+const UNDET_PAGE = 200;
+function renderUndet(more) {
+  const cat = document.getElementById("u-cat").value, sido = document.getElementById("u-sido").value, q = document.getElementById("u-q").value.trim();
+  let rows = allSignalsFlat().filter(s => !isGraded(s))
+    .filter(s => (!cat || catOf(s) === cat) && (!sido || s.sd === sido) && (!q || (s.title || "").includes(q)));
+  window._undetShown = more ? window._undetShown + UNDET_PAGE : UNDET_PAGE;
+  const byCat = {}; rows.forEach(s => byCat[catOf(s)] = (byCat[catOf(s)] || 0) + 1);
+  const total = allSignalsFlat().length, undet = allSignalsFlat().filter(s => !isGraded(s)).length;
+  document.getElementById("u-count").innerHTML =
+    `<b>${rows.length.toLocaleString()}건</b> 미판정 (전체 신호 ${total.toLocaleString()}건 중 미판정 ${undet.toLocaleString()}건) — `
+    + CAT_KEYS.filter(c => byCat[c]).map(c => `<span style="color:${CAT_COLOR[c]};font-weight:700">${c} ${byCat[c]}</span>`).join(" · ");
+  document.getElementById("u-list").innerHTML = rows.slice(0, window._undetShown).map(s => {
+    const loc = [s.sd, s.sg, s.dong].filter(Boolean).join(" ");
+    const src = (s.sources || [])[0];
+    return `<div class="rrow">
+      <div class="rt"><span style="color:${CAT_COLOR[catOf(s)]};font-weight:700">● ${catOf(s)}</span> · ${s.title || "(제목 없음)"}</div>
+      <div class="rm">${loc || "위치 미상"} · <b style="color:#a08a5a">미판정 사유: ${undetReason(s)}</b>${src ? ` · <a href="${src}" target="_blank">원문</a>` : ""}</div>
+    </div>`;
+  }).join("") || `<div class="pickhint" style="padding:20px">해당 조건의 미판정 호재 없음</div>`;
+  document.getElementById("u-more").style.display = rows.length > window._undetShown ? "inline-block" : "none";
 }
 
 /* ══════════ 수도권 원시 데이터 탐색 ══════════ */
@@ -2156,7 +2245,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260716f");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260716g");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, capitalDong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData, dartData, archData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
@@ -2216,6 +2305,7 @@ function renderRaw(more) {
   bootMap();
   document.getElementById("v-map").onclick = () => setView("map");
   document.getElementById("v-raw").onclick = () => setView("raw");
+  document.getElementById("v-undet").onclick = () => setView("undet");
   document.getElementById("v-radius").onclick = (e) => { e.stopPropagation(); openRadius(); };
 })();
 
