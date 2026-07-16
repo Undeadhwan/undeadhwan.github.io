@@ -242,6 +242,9 @@
   .apt-pop-cats span { font-weight:700; }
   .apt-pop-cats .tot { color:var(--ink); font-weight:800; width:100%; margin-bottom:1px; }
   .apt-pop-cats.none { color:var(--muted); font-weight:400; }
+  .apt-pop-cmp { margin-top:9px; text-align:center; font-size:12px; font-weight:700; border:1.5px solid #1a1a1a; border-radius:8px; padding:5px 0; cursor:pointer; color:#1a1a1a; background:#fff; }
+  .apt-pop-cmp:hover { background:#f3f4f6; }
+  .apt-pop-cmp.in { background:#1a1a1a; color:#fff; }
   /* 레이더 파동 (크게) */
   .radar { position:relative; width:0; height:0; pointer-events:none; }
   .radar span { position:absolute; border:3px solid #2e5ce6; border-radius:50%; left:0; top:0; transform:translate(-50%,-50%);
@@ -471,7 +474,10 @@ const CLASSES_DEFAULT = {
     "철도": { A: 3.0, B: 1.5, C: 0.8 },
     "도로": { A: 5.0, B: 3.0, C: 1.5 }
   },
-  "일자리":   { A: 4.0, B: 2.0, C: 1.0 },
+  "일자리": {   // 세부: 면적기준(건축인허가 연면적)/금액기준(DART 투자액) — 등급 산정 기준 이원화(반경 기본값 동일)
+    "면적": { A: 4.0, B: 2.0, C: 1.0 },
+    "금액": { A: 4.0, B: 2.0, C: 1.0 }
+  },
   "인프라":   { A: 3.0, B: 1.5, C: 0.5 },
   "주거개발": { A: 3.0, B: 2.0, C: 0.8 }
 };
@@ -479,14 +485,17 @@ const CAT_KEYS = ["교통", "일자리", "인프라", "주거개발"];
 const DISPLAY_CAT_KEYS = ["교통", "일자리", "인프라", "주거개발", "기타"];
 const LEVELS = ["A", "B", "C"];
 const LEVEL_NAME = { A: "A급", B: "B급", C: "C급" };
-const SUB_KEYS = { "교통": ["철도", "도로"] };   // 세부 반경 축 있는 대분류
-const CAT_SUB = { "교통": "철도 / 도로", "일자리": "업무 / R&D", "인프라": "쇼핑 / 병원 / 녹지", "주거개발": "신도시 / 택지 / 재개발 / 재건축" };
+const SUB_KEYS = { "교통": ["철도", "도로"], "일자리": ["면적", "금액"] };   // 세부 축 있는 대분류(교통=철도/도로 반경, 일자리=면적/금액 등급기준)
+const CAT_SUB = { "교통": "철도 / 도로", "일자리": "면적기준 / 금액기준", "인프라": "쇼핑 / 병원 / 녹지", "주거개발": "신도시 / 택지 / 재개발 / 재건축" };
 const LEVEL_DESC = {
   "교통": {
     "철도": { A: "핵심 광역철도 (GTX·신분당·지하화)", B: "일반 지하철 신설·연장", C: "지선·경전철·트램" },
     "도로": { A: "핵심 지하고속도로·주요 고속도로 IC 신설", B: "외곽순환 등 일반 IC·대형 터널", C: "일반 우회도로·진출입로 개선" }
   },
-  "일자리": { A: "메가 업무타운 (연면적 10만㎡↑ 또는 투자 5,000억↑)", B: "중대형 업무·지식산업센터 (연면적 3~10만㎡ 또는 투자 1,000~5,000억)", C: "일반 오피스·지산 (연면적 1~3만㎡ 또는 투자 300~1,000억)" },
+  "일자리": {
+    "면적": { A: "메가 업무타운 (연면적 10만㎡↑)", B: "중대형 업무·지식산업센터 (연면적 3~10만㎡)", C: "일반 오피스·지산 (연면적 1~3만㎡)" },
+    "금액": { A: "메가 투자 (투자 5,000억↑)", B: "대형 투자 (투자 1,000~5,000억)", C: "일반 투자 (투자 300~1,000억)" }
+  },
   "인프라": { A: "랜드마크급 (복합몰·상급종합병원·대형공원)", B: "중대형 (대형마트·종합병원·근린공원)", C: "근린 생활 (준종합병원·소공원·문화체육센터)" },
   "주거개발": { A: "도시급 대형 (5천 세대↑)", B: "지역 대장주급 (1,500~5천 세대)", C: "일반 단지급 (500~1,500 세대)" }
 };
@@ -536,20 +545,20 @@ function gradeBadgeHtml(m) {
 function loadRadii() {
   const merged = JSON.parse(JSON.stringify(CLASSES_DEFAULT));
   try {
-    const saved = JSON.parse(localStorage.getItem("hojae_radii3") || "{}");
+    const saved = JSON.parse(localStorage.getItem("hojae_radii4") || "{}");
     const deep = (m, s) => { for (const k in s) { if (m[k] && typeof s[k] === "object" && typeof m[k] === "object") deep(m[k], s[k]); else if (m[k] != null && typeof s[k] === "number") m[k] = s[k]; } };
     deep(merged, saved);
   } catch (e) {}
   return merged;
 }
 let CLASSES = loadRadii();
-function saveRadii() { localStorage.setItem("hojae_radii3", JSON.stringify(CLASSES)); }
+function saveRadii() { localStorage.setItem("hojae_radii4", JSON.stringify(CLASSES)); }
 /* 신호 → 대분류/레벨. cat·lvl 명시 우선, 없으면 레거시 template_type 폴백 */
 const CAT_LEGACY = { "철도": "교통", "도로": "교통", "기업이전": "일자리", "정비사업": "주거개발", "공공시설": "인프라" };
 const catOf = s => s.cat || CAT_LEGACY[s.template_type] || "기타";
 const levelOf = s => s.lvl || "C";
 /* 교통 세부(철도/도로) — 반경만 좌우, 표시 분류는 여전히 교통. sub 명시 우선, 없으면 template_type→기본 철도 */
-const subOf = s => s.sub || (s.template_type === "도로" ? "도로" : "철도");
+const subOf = s => s.sub || (s.template_type === "도로" ? "도로" : (SUB_KEYS[catOf(s)] ? SUB_KEYS[catOf(s)][0] : "철도"));   // 세부 없으면 첫 축(교통=철도, 일자리=면적)
 const getRadius = s => {
   if (s.radius_m) return s.radius_m;
   const c = catOf(s), l = levelOf(s);
@@ -641,7 +650,8 @@ function buildRailSignals() {
   RAIL.filter(f => f.properties.kind === "line").forEach(f =>
     lvlByLine[f.properties.name] = railLevelOf(f.properties.name, f.properties.linekind));
   RAIL_SIG = RAIL.filter(f => f.properties.kind === "station").map(f => ({
-    _rail: true, title: f.properties.name, cat: "교통", sub: "철도", lvl: lvlByLine[f.properties.line] || "B",
+    _rail: true, title: f.properties.line && f.properties.line !== f.properties.name ? `${f.properties.name} (${f.properties.line})` : f.properties.name,
+    line: f.properties.line, cat: "교통", sub: "철도", lvl: lvlByLine[f.properties.line] || "B",
     template_type: "철도", current_stage: f.properties.status, phase: f.properties.confirmed ? "착공" : "계획",
     status: "활성", confirmed: f.properties.confirmed, sd: "수도권",
     geometry: { coordinates: f.geometry.coordinates }
@@ -825,7 +835,8 @@ function openRadius() {
     if (SUB_KEYS[cat]) {   // 교통: 철도/도로 세부
       for (const sub of SUB_KEYS[cat]) {
         const sh = document.createElement("div"); sh.className = "rmsub";
-        sh.textContent = cat === "교통" && sub === "철도" ? "🚈 철도 (역세권 중심)" : "🛣 도로 (차량 이동 중심)";
+        sh.textContent = cat === "교통" ? (sub === "철도" ? "🚈 철도 (역세권 중심)" : "🛣 도로 (차량 이동 중심)")
+          : cat === "일자리" ? (sub === "면적" ? "📐 면적기준 (건축인허가 연면적)" : "💰 금액기준 (DART 투자 공시)") : sub;
         body.appendChild(sh);
         for (const lv of LEVELS) body.appendChild(rmRow(LEVEL_NAME[lv], LEVEL_DESC[cat][sub][lv], CLASSES[cat][sub], lv));
       }
@@ -837,7 +848,7 @@ function openRadius() {
 }
 function closeRadius() { document.getElementById("radiusModal").style.display = "none"; }
 function resetRadius() {
-  localStorage.removeItem("hojae_radii3");
+  localStorage.removeItem("hojae_radii4");
   CLASSES = loadRadii();
   openRadius(); renderAll();
 }
@@ -1625,10 +1636,22 @@ function initLeaflet() {
       const gradeHtml = LEVELS.filter(l => lc[l].total).map(l =>
         `<span style="color:${LVL_COLOR[l]};font-weight:800">${LEVEL_NAME[l]} ${lc[l].total}</span>`).join(" · ");
       const sub = `${a.sg} ${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : ""}${a.built ? " · 준공 " + a.built : ""}`;
+      const inCmp = compareSet.some(x => x.n === a.n && x.dong === a.dong);
       const pop = `<div class="apt-pop"><div class="apt-pop-nm">${a.n}</div><div class="apt-pop-sub">${sub}</div>`
         + (n ? `<div class="apt-pop-cats"><span class="tot">반경 내 호재 ${n}건 · 등급별</span>${gradeHtml}</div>`
-             : `<div class="apt-pop-cats none">반경 내 호재 없음</div>`) + `</div>`;
-      m.bindTooltip(pop, { direction: "top", offset: [0, n ? -12 : -6], className: "apt-tip", sticky: false });
+             : `<div class="apt-pop-cats none">반경 내 호재 없음</div>`)
+        + `<div class="apt-pop-cmp${inCmp ? " in" : ""}">${inCmp ? "✓ 비교함" : "＋ 비교담기"}</div></div>`;
+      m.bindTooltip(pop, { direction: "top", offset: [0, n ? -12 : -6], className: "apt-tip", sticky: false, interactive: true });
+      // hover 툴팁 내 비교담기 버튼 클릭 → 지도에서 바로 비교 담기(패널 진입 없이). 마커 클릭(showApt)과 분리.
+      m.on("tooltipopen", ev => {
+        const el = ev.tooltip.getElement(); if (!el) return;
+        const btn = el.querySelector(".apt-pop-cmp"); if (!btn) return;
+        L.DomEvent.on(btn, "click", e => {
+          L.DomEvent.stop(e); toggleCompare(a);
+          const on = compareSet.some(x => x.n === a.n && x.dong === a.dong);
+          btn.classList.toggle("in", on); btn.textContent = on ? "✓ 비교함" : "＋ 비교담기";
+        });
+      });
       m.on("click", () => { treeState.selKey = `apt|${a.n}|${a.dong}`; buildTree(); showApt(a); });
       aptDots.push(m);
     }
