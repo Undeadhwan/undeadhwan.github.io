@@ -93,7 +93,7 @@
   <tr><td><span class="tag live">가동</span><b>DART 공시 API</b></td><td><code>opendart.fss.or.kr/api</code></td><td>전국</td><td>유형자산 취득·신규시설투자 = 기업이전/사옥·공장 신호</td><td><code>collect_capital.py</code></td></tr>
   <tr><td><span class="tag live">가동</span><b>공동주택 관리정보 API</b></td><td><code>apis.data.go.kr/1613000/AptListService3</code> + <code>AptBasisInfoServiceV4</code></td><td><b>전국 22,235단지</b></td><td>단지명·법정동코드·세대수·준공년월·도로명주소 (아파트는 신호의 파생 참조 정보, P4)</td><td><code>apt_list_all.py</code> → <code>build_apts_all.py</code></td></tr>
   <tr><td><span class="tag live">가동</span><b>건축HUB 건축인허가 API</b></td><td><code>apis.data.go.kr/1613000/ArchPmsHubService/getApBasisOulnInfo</code> <span class="note">⚠ Accept 헤더 필수(없으면 빈 200 응답)</span></td><td>전국 (현재 서울 467동)</td><td><b>신축</b> 대형건물(연면적1만㎡↑, 업무·판매·의료·공장·교육연구 등)의 주용도·연면적·허가/착공/사용승인일 → <b>인프라·일자리 발견형 후보</b>(confirmed:false). 최근성 게이트(허가/착공/준공 최근분)+신축만으로 <b>delta</b>만 남김(증축=totArea가 증축후 전체라 면적뻥튀기, 용도변경/대수선=리모델 → 제외). 서울 326건</td><td><code>arch_fetch.py</code></td></tr>
-    <tr><td><span class="tag live">가동</span><b>OSM 신규 도로</b></td><td><code>overpass-api.de</code> (highway=construction/proposed × motorway·trunk·primary)</td><td>수도권 30노선</td><td><b>고속도로·간선 신설/확장/지하화</b> 실선형(ODbL). 등급=도로등급(고속=A/간선·터널=B/일반=C, §3.3.1 교통>도로 일치). <b>노선 자체가 호재</b>(~1.2km 샘플 다점 신호, 노선당 1건 집계) + IC·JC=점 관리(철도 역 개념, OSM 태깅 확보 시). 건설중=실선/계획=점선(§7)</td><td><code>build_road.py</code> → <code>gen_reference.py</code>(대장 도로 탭)</td></tr>
+    <tr><td><span class="tag live">가동</span><b>OSM 신규 도로</b></td><td><code>overpass-api.de</code> (highway=construction/proposed × motorway·trunk·primary)</td><td>수도권 30노선</td><td><b>고속도로·간선 신설/확장/지하화</b> 실선형(ODbL). 등급=도로등급(고속=A/간선·터널=B/일반=C, §3.3.1 교통>도로 일치). <b>노선 자체가 호재</b>(~1.2km 샘플 다점 신호, 노선당 1건 집계) + IC·JC=점 관리(철도 역 개념, OSM 태깅 확보 시). 건설중=실선/계획=점선(§7). <b>영향권은 이원 관리(§6-2)</b>: 일반도로=선 회랑 / 전용도로=IC 점만. 수기 확정 신호와 같은 사업이면 <code>road_ref</code>로 병합(확정이 선형 승계, 이중 카운트 방지)</td><td><code>build_road.py</code> → <code>gen_reference.py</code>(대장 도로 탭)</td></tr>
   <tr><td><span class="tag live">가동</span><b>브이월드 지오코더 2.0</b></td><td><code>api.vworld.kr/req/address</code></td><td>전국</td><td>도로명/지번 주소 → 좌표 (도로명 road 우선, 지번 parcel 폴백)</td><td><code>build_apts_all.py</code>, <code>geocode_vworld.py</code></td></tr>
   <tr><td><span class="tag live">가동</span><b>행정경계 geojson</b></td><td>시군구=공공 경계(SGIS/행안부) · 법정동=브이월드 WFS <code>lt_c_ademd</code>(읍면동경계, 자유이용)</td><td>시군구 251 전국 / 법정동 <b>수도권 1,363</b>(서울 467·경기 747·인천 149)</td><td>지도 폴리곤·집계 단위. 법정동은 정centroid에 동배지·<code>dongRelation</code> 소재/반경 판정. <b>지방 법정동 확장이 남은 과제</b>(같은 WFS 방식으로 시도 추가)</td><td><code>sgg_all.geojson</code>, <code>seoul_bdong.geojson</code>, <code>capital_bdong.geojson</code> (<code>build_seoul_bdong.py</code>/<code>build_capital_bdong.py</code>)</td></tr>
   <tr><td><span class="tag live">가동</span><b>서울 의제처리구역 SHP</b> <span class="tag manual">4유형</span></td><td>서울 열린데이터광장 OA-20957 (원본 서울도시공간포털)</td><td>서울 정비구역 2,626개</td><td>정비구역 <b>경계 폴리곤</b> + 유형·면적·고시일. 진척도는 정비몽땅 신호와 이름·좌표 매칭(§6). <b>4유형=상업화 전 이용허락 필요</b></td><td><code>build_jeongbi_polygons.py</code></td></tr>
@@ -156,6 +156,11 @@
 <p><code>regions.json</code>(17시도·251시군구·신도시별칭·기관규칙 SSOT) + <code>region_util.py</code>(공용 함수). 수집범위는 <code>active_scope.collect</code>로만 제어 — 코드 수정 없이 전국 전환.</p>
 <h3>6-2. 분류·반경 매핑</h3>
 <p>신호의 <code>radius_type</code>(세부유형) 하나가 <b>4분류</b>(교통/일자리/정비/생활인프라)와 <b>영향반경</b>을 동시에 결정. 반경은 사용자 편집 가능(사이트 ⚙ 반경 설정). 점수·가중치 합산은 금지(P3) — 분류·개수·거리만.</p>
+<p><b>도로 이원 관리(2026-07-16 확정)</b> — 영향권 기준점이 도로 성격에 따라 다르다:
+<b>일반도로</b>(간선·주요 일반도로)=노선 <b>선(Line) 전체</b> 기준 양측 회랑 버퍼(연도 접근 가능) /
+<b>전용도로</b>(고속도로·고속화·자동차전용·지하화)=<b>진출입 IC·JC(Point)</b> 반경만(출입제한 — 선 자체는 영향권을 만들지 않음).
+전용도로의 IC 좌표가 미확보면 <b>영향권 미산정</b>으로 정직 표기하고 선형만 표시(P2 — 근거 없는 수혜권 생성 금지).
+분류 규칙: OSM linekind=고속도로 또는 명칭에 고속화·자동차전용·지하화 포함 → 전용, 그 외 일반 (<code>roadKindOf</code>).</p>
 <h3>6-3. 단계 매핑 (이중 관리: 소스단계 → 4단계 백본)</h3>
 <p>모든 신호는 소스단계(<code>current_stage</code>)를 원문 용어로 보존하고, 아래 규칙으로 4단계 백본(<code>phase</code>)에 매핑해 둘 다 기록한다. 우선순위: <b>① 확정층 명시 phase → ② 유형 트랙 매칭 → ③ 키워드 폴백</b>.</p>
 <table>
