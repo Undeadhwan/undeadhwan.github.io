@@ -744,8 +744,10 @@ function buildRailSignals() {
   RAIL_SIG = RAIL.filter(f => f.properties.kind === "station").map(f => ({
     _rail: true, title: f.properties.line && f.properties.line !== f.properties.name ? `${f.properties.name} (${f.properties.line})` : f.properties.name,
     line: f.properties.line, cat: "교통", sub: "철도", lvl: lvlByLine[f.properties.line] || "B",
-    template_type: "철도", current_stage: f.properties.status, phase: f.properties.confirmed ? "착공" : "계획",
-    status: "활성", confirmed: f.properties.confirmed, sd: "수도권",
+    template_type: "철도", current_stage: f.properties.status,
+    phase: f.properties.phase || (f.properties.confirmed ? "착공" : "계획"),   // 전수검사('26.7)부터 명시 phase 우선(인가 등)
+    status: f.properties.drop ? "종결" : "활성",   // 무산 노선(인동선 지선 등) = 종결 표식(P5 — 숨기지 않고 표시)
+    confirmed: f.properties.confirmed, sd: "수도권",
     geometry: { coordinates: f.geometry.coordinates }
   }));
 }
@@ -2066,7 +2068,7 @@ function initLeaflet() {
   // 철도 노선 → 신호 상세 어댑트(우측 패널)
   const railToSignal = (p, cen) => ({
     _rail: true, title: p.full || p.name, cat: "교통", sub: "철도", lvl: railLevelOf(p.full || p.name, p.linekind),
-    template_type: "철도", current_stage: p.status, phase: p.phase, status: "활성", confirmed: p.confirmed,
+    template_type: "철도", current_stage: p.status, phase: p.phase, status: p.drop ? "종결" : "활성", confirmed: p.confirmed,
     sd: "수도권", geometry: { coordinates: cen },
     sources: p.src_url ? [p.src_url] : [], stage_note: `${p.linekind} · ${p.status}${p.note ? " · " + p.note : ""}`,
   });
@@ -2607,7 +2609,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260716n");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260716p");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions, jeongbiData, railData, roadData, dartData, archData] = await Promise.all([
@@ -2681,7 +2683,7 @@ function initSearch() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 3파일(8.2MB)은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260716n");
+  const CB = "?b=" + (window.BUILD || "20260716p");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 경기·인천 법정동(동배지·드릴다운) — 도착 즉시 병합
   gj("capital_bdong.geojson").then(cap => {
