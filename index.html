@@ -1269,7 +1269,10 @@ function renderDetail(s) {
       ${s.stage_note ? `<div class="kv"><b>단계 근거</b> ${s.stage_note}</div>` : ""}
       ${s.status_note ? `<div class="kv"><b>상태 판단</b> ${s.status_note}</div>` : ""}
       ${s.side_effects?.length ? `<div class="kv"><b>역효과 표기</b> ${s.side_effects.join(", ")}</div>` : ""}
-      <div class="kv"><b>근거 원문</b> <span class="src">${(s.sources || []).map((u, i) => `<a href="${u}" target="_blank">공시/공고 ${i + 1}</a>`).join(" · ")}</span></div>
+      <div class="kv"><b>근거 원문</b> <span class="src">${(s.sources || []).map((u, i) => {
+        const lbl = /eais\.go\.kr/.test(u) ? "세움터(건축행정시스템) — 주소로 조회" : /opendart\.fss/.test(u) ? "DART 공시" : /g2b|nara/.test(u) ? "나라장터 공고" : `공시/공고 ${i + 1}`;
+        return `<a href="${u}" target="_blank">${lbl}</a>`;
+      }).join(" · ")}</span>${/eais\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 건축HUB API는 개별 허가 딥링크를 제공하지 않아 출처 시스템(세움터)으로 연결됩니다 — 해당 대지주소로 조회</div>' : ""}</div>
       <div class="note">지도 표기 근거: ${s.position_confidence || "확정 좌표"} · 미래 단계는 목표/미정이며 진척률(%) 없음</div>
     </div>`;
 }
@@ -2130,7 +2133,7 @@ function renderRaw(more) {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260716e");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260716f");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   const [dong, capitalDong, sgg, main, macro, rawData, autoData, apartments, apartmentsAll, regions, jeongbiData, jeongbiPolyData, railData, dartData, archData] = await Promise.all([
     gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
