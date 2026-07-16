@@ -1353,7 +1353,7 @@ function renderDetail(s) {
       ${s.status_note ? `<div class="kv"><b>상태 판단</b> ${s.status_note}</div>` : ""}
       ${s.side_effects?.length ? `<div class="kv"><b>역효과 표기</b> ${s.side_effects.join(", ")}</div>` : ""}
       <div class="kv"><b>근거 원문</b> <span class="src">${(s.sources || []).map((u, i) => {
-        const lbl = /hub\.go\.kr/.test(u) ? "건축HUB 열람 (로그인 불필요) — 대지위치로 조회" : /eais\.go\.kr/.test(u) ? "세움터(건축행정시스템) — 주소로 조회" : /opendart\.fss/.test(u) ? "DART 공시" : /g2b|nara/.test(u) ? "나라장터 공고" : /cleanup\.seoul/.test(u) ? "정비몽땅(서울 정비사업) — 사업장명으로 조회" : /gg\.go\.kr/.test(u) ? "경기 정비사업 현황 — 사업장명으로 조회" : /data\.go\.kr/.test(u) ? "공공데이터포털 정비사업 — 사업장명으로 조회" : `공시/공고 ${i + 1}`;
+        const lbl = /hub\.go\.kr/.test(u) ? "건축HUB 열람 — 대지위치로 조회" : /eais\.go\.kr/.test(u) ? "세움터(건축행정시스템) — 주소로 조회" : /opendart\.fss/.test(u) ? "DART 공시" : /g2b|nara/.test(u) ? "나라장터 공고" : /cleanup\.seoul/.test(u) ? "정비몽땅(서울 정비사업) — 사업장명으로 조회" : /gg\.go\.kr/.test(u) ? "경기 정비사업 현황 — 사업장명으로 조회" : /data\.go\.kr/.test(u) ? "공공데이터포털 정비사업 — 사업장명으로 조회" : `공시/공고 ${i + 1}`;
         return `<a href="${u}" target="_blank">${lbl}</a>`;
       }).join(" · ")}</span>${/hub\.go\.kr|eais\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 원본 수치는 <b>위 팩트시트</b>에 그대로 표기했습니다. 교차확인 시 링크에서 <b>대지위치의 시도·시군구·법정동·번지</b> 선택(로그인 불필요, 딥링크 미지원)</div>' : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 정비 추진현황엔 개별 딥링크가 없어 포털로 연결됩니다 — <b>위 사업장명</b>으로 조회하세요</div>' : ""}</div>
       <div class="note">지도 표기 근거: ${s.position_confidence || "확정 좌표"} · 미래 단계는 목표/미정이며 진척률(%) 없음</div>
