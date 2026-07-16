@@ -89,6 +89,13 @@
   .hj-box.sgg.zero::after { border-top-color:#f1f3f7; }
   .hj-box.apt { padding:3px 7px 4px; }
   .hj-box.apt.sel { border-color:#d6156d; box-shadow:0 0 0 2px rgba(214,21,109,.32), 0 2px 8px rgba(30,45,90,.25); }
+  .dong-lbl { font-size:11.5px; font-weight:700; color:#3a4358; text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff;
+    white-space:nowrap; cursor:pointer; transform:translate(-50%,-50%); }
+  .dong-lbl:hover { color:#2e5ce6; text-decoration:underline; }
+  .apt-house-s { font-size:15px; line-height:1; filter:grayscale(1) opacity(.75); cursor:pointer;
+    transform:translate(-50%,-50%); text-shadow:0 0 2px #fff; }
+  .apt-house-s:hover { filter:grayscale(.3) opacity(1); }
+  .apt-house-s.sel { filter:none; opacity:1; font-size:18px; }
   .apt-dot { width:8px; height:8px; border-radius:50%; background:#b4bccc; border:1.5px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.25); }
   .apt-dot.sel { background:#d6156d; border-color:#fff; box-shadow:0 0 0 3px rgba(214,21,109,.3); }
   .hmatrix { border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin:2px 0 14px; background:#fbfcfe; }
@@ -313,6 +320,7 @@
   </div>
   <div class="chips" id="f-dd"></div>
   <div class="chips" id="f-view">
+    <select id="apt-hh" title="아파트 표시 세대수 필터 (아파트는 z14+ 집 아이콘)" style="font-size:12px;padding:4px 6px;border:1px solid var(--line);border-radius:8px;background:#fff"></select>
     <span class="chip on" id="v-map">지도</span>
     <span class="chip" id="v-raw">수도권 데이터</span>
     <span class="chip" id="v-undet" title="등급 기준(면적·금액·세대수 등)에 매칭 안 돼 등급 미판정인 호재 목록">❓ 미판정 목록</span>
@@ -777,6 +785,7 @@ const filter = {
   cat: new Set(DISPLAY_CAT_KEYS),
   scale: new Set(["광역", "지구", "근린"]),
   phase: new Set(PHASES),   // 조회축 = 4단계 백본(계획/인가/착공/준공·개통). 정체·무산은 필터 아닌 항상표시 표식
+  lvl: new Set(GRADES_DISP),   // 등급 조회축(A/B/C/미정) — 지도 원·카드·집계 전 화면 일관(호재 중심 개편 2026-07-16)
   region: "",   // "" = 전체, "서울 강서구" 형태
   year: null    // null = 전체, 아니면 그 해까지 완료 범위 도달분만
 };
@@ -786,6 +795,7 @@ let mapApi = null;   // {panTo(lnglat), refreshPins()}
 /* ══════════ 유틸 ══════════ */
 const visible = s => filter.cat.has(catOf(s))   // 기타도 정식 분류 — 우회 제거(필터가 전 화면 일관 적용)
   && filter.phase.has(phaseOf(s))                // 4단계 백본 조회축
+  && filter.lvl.has(levelOf(s))                  // 등급 조회축(A/B/C/미정)
   && (!filter.region || `${s.sd} ${s.sg}` === filter.region);
 /* 연도 기준선(전역): 목록을 숨기지 않고 각 카드의 미니 진행바에 기준선·시점상태 표시 */
 let YEAR_SEL = null;
@@ -877,8 +887,9 @@ function animateCards(container) {
 let openDD = null;
 const DD_DEFS = () => [
   { id: "cat", label: "분류", title: "호재 분류", keys: DISPLAY_CAT_KEYS, set: filter.cat },
+  { id: "lvl", label: "등급", title: "호재 등급 (A/B/C/미정)", keys: GRADES_DISP, set: filter.lvl },
   { id: "phase", label: "단계", title: "진행 단계", keys: PHASES, set: filter.phase },
-];  // 조회축: 분류(4) + 단계(4단계 백본). '상태'(활성/정체/종결)는 필터에서 뺌 — 정체·무산은 카드·지도에 항상 표시(P5)
+];  // 조회축: 분류(4) + 등급(A/B/C/미정) + 단계(4단계 백본). '상태'는 필터에서 뺌 — 정체·무산은 항상 표시(P5)
 function renderChips() {
   const host = document.getElementById("f-dd");
   host.innerHTML = "";
@@ -1498,7 +1509,8 @@ function showDong(f) {
   mapApi?.clearRadius(); mapApi?.clearAptMarker?.();
   mapApi?.highlightRings?.(ringsOf(f));   // 선택한 동 경계만 강조
   const c = ringCentroid(ringsOf(f)[0]);  // 동 중심에서 레이더 파동
-  if (window._map) window._map.panTo([c[1], c[0]]);
+  // 동 클릭 = 해당 동으로 줌업(영역 fit — 호재 중심 개편)
+  if (window._map) { const bb = dongBB(f); window._map.fitBounds([[bb[1], bb[0]], [bb[3], bb[2]]], { padding: [30, 30], maxZoom: 15 }); }
   mapApi?.radarPulse?.(c[0], c[1]);
   mapApi?.refreshPins?.();   // 이 동 호재만 등장(애니메이션)
   ANIMATE = false;
@@ -1740,35 +1752,36 @@ function initLeaflet() {
   const clearAptDots = () => { aptDots.forEach(m => map.removeLayer(m)); aptDots = []; };
   // 아파트 집모양 마커: 확대 시 뷰포트 내 단지. 신호 있는 단지만 호재 건수 표시(§7 절충, A안), 0건=흐린 점.
   // 이동/줌마다 applyLOD→여기서 재계산 → 건수 자동 갱신(호갱노노식). 필터 변경 시도 renderAll→refreshPins→applyLOD로 갱신.
+  // 세대수 필터(호재 중심 개편): 기본 500세대+ — 아파트는 조연(무채 집 아이콘, 카운트 없음 §7)
+  const APT_HH_STEPS = [["all", "전체"], ["300", "300세대+"], ["500", "500세대+"], ["1000", "1,000세대+"], ["3000", "3,000세대+"]];
+  let APT_HH_MIN = +(localStorage.getItem("hojae_apt_hh") || 500);
   const renderAptDots = () => {
     clearAptDots();
     if (map.getZoom() < APT_ZOOM) return;
     const bd = map.getBounds();
     const cands = APTS.filter(a => bd.contains([a.lat, a.lon]))
-      .map(a => { const near = signalsNearPoint([a.lon, a.lat]); return { a, near, n: near.length }; });
-    cands.sort((x, y) => y.n - x.n);   // 신호 있는 단지 우선(겹칠 때 이긴다 → 0건은 양보)
+      .filter(a => !APT_HH_MIN || (a.hh || 0) >= APT_HH_MIN)   // 세대수 필터(미상=0 취급 → '전체'에서만 표시)
+      .map(a => ({ a, hh: a.hh || 0 }));
+    cands.sort((x, y) => y.hh - x.hh);   // 큰 단지 우선(겹칠 때 이긴다)
     const placed = [];
-    for (const { a, near, n } of cands) {
-      if (placed.length > 170) break;
+    for (const { a } of cands) {
+      if (placed.length > 200) break;
       const pt = map.latLngToContainerPoint([a.lat, a.lon]);
-      if (collides(placed, pt, n ? 54 : 14, n ? 28 : 14)) continue;   // 겹치면 숨김
+      if (collides(placed, pt, 20, 18)) continue;
       placed.push({ x: pt.x, y: pt.y });
       const sel = treeState.selKey === `apt|${a.n}|${a.dong}`;
-      const lc = levelCounts(near);
-      const html = n
-        ? `<div class="hj-box apt${sel ? " sel" : ""}">${gradeBadgeHtml(lc)}</div>`
-        : `<div class="apt-dot${sel ? " sel" : ""}"></div>`;
-      const m = L.marker([a.lat, a.lon], { pane: "badge", zIndexOffset: n ? 1000 : 0,
-        icon: L.divIcon({ className: "", html, iconSize: null }) }).addTo(map);
-      // hover 팝업: 이름·세대수·준공년월 + 비교담기. 등급별 건수는 마커 배지에 이미 있어 중복 → 생략.
-      const sub = `${a.sg} ${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : ""}${a.built ? " · 준공 " + a.built : ""}`;
-      const inCmp = compareSet.some(x => x.n === a.n && x.dong === a.dong);
-      const pop = `<div class="apt-pop"><div class="apt-pop-nm">${a.n}</div><div class="apt-pop-sub">${sub}</div>`
-        + `<div class="apt-pop-cnt">반경 내 호재 <b>${n}</b>건</div>`
-        + `<div class="apt-pop-cmp${inCmp ? " in" : ""}">${inCmp ? "✓ 비교함" : "＋ 비교담기"}</div></div>`;
+      // 집 아이콘 = 무채색(조연). 호재 원(컬러)이 주인공 — 숫자·배지 없음(§7 상시배지 금지 완전 준수)
+      const m = L.marker([a.lat, a.lon], { pane: "badge", zIndexOffset: sel ? 1000 : 0,
+        icon: L.divIcon({ className: "", html: `<div class="apt-house-s${sel ? " sel" : ""}">🏠</div>`, iconSize: null }) }).addTo(map);
+      const near = () => signalsNearPoint([a.lon, a.lat]);   // 팝업 열 때만 계산(렌더 비용 절감)
+      const sub = `${a.sg} ${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : " · 세대수 미상"}${a.built ? " · 준공 " + a.built : ""}`;
       // hover 팝업: 마커 벗어나 빈 공간 가면 닫힘(300ms 유예 — 그 사이 팝업 위로 이동하면 유지 → 비교담기 클릭 가능).
-      // 위치 = 배지 바로 위 중앙(divIcon 앵커가 좌상단이라 배지 절반폭만큼 x 보정).
+      // 위치 = 아이콘 바로 위 중앙. 호재 건수는 열 때만 계산.
       m.on("mouseover", () => {
+        const inCmp = compareSet.some(x => x.n === a.n && x.dong === a.dong);
+        const pop = `<div class="apt-pop"><div class="apt-pop-nm">${a.n}</div><div class="apt-pop-sub">${sub}</div>`
+          + `<div class="apt-pop-cnt">반경 내 호재 <b>${near().length}</b>건</div>`
+          + `<div class="apt-pop-cmp${inCmp ? " in" : ""}">${inCmp ? "✓ 비교함" : "＋ 비교담기"}</div></div>`;
         const me = m.getElement(); const halfW = me ? Math.round(me.offsetWidth / 2) : 0;
         const pu = L.popup({ className: "apt-pop-wrap", closeButton: false, autoPan: false, offset: [halfW, -6] })
           .setLatLng([a.lat, a.lon]).setContent(pop).openOn(map);
@@ -1789,6 +1802,16 @@ function initLeaflet() {
       aptDots.push(m);
     }
   };
+  // 헤더 세대수 셀렉트 배선(기본 500+)
+  {
+    const sel = document.getElementById("apt-hh");
+    if (sel && !sel.options.length) {
+      APT_HH_STEPS.forEach(([v, lb]) => sel.appendChild(new Option("🏠 " + lb, v)));
+      sel.value = APT_HH_MIN ? String(APT_HH_MIN) : "all";
+      sel.onchange = () => { APT_HH_MIN = sel.value === "all" ? 0 : +sel.value;
+        localStorage.setItem("hojae_apt_hh", APT_HH_MIN); renderAptDots(); };
+    }
+  }
   // 정비구역 경계 폴리곤(서울 의제처리구역 SHP → geojson): 지정고시된 개별 구역 = 실선 폴리곤(사실, P2·P5).
   // 색 = 분류색 단일(주거개발) — 단계별 색은 과다해 제외(사용자 확정 2026-07-16). 단계는 툴팁·상세·카드에서.
   // 범례 — 동 레벨 이상, 폴리곤 데이터 있을 때만 노출
@@ -1827,7 +1850,7 @@ function initLeaflet() {
   const renderJeongbiPoly = () => {
     clearJeongbiPoly();
     // 분류 필터: '정비' 꺼져 있으면 폴리곤 전체 숨김(전 화면 필터 일관)
-    if (map.getZoom() < DONG_ZOOM || !JEONGBI_POLY.length || !filter.cat.has("정비")) { toggleJbLegend(false); return; }
+    if (map.getZoom() < DONG_ZOOM || !JEONGBI_POLY.length || !filter.cat.has("주거개발")) { toggleJbLegend(false); return; }   // (분류 재정의: 정비→주거개발)
     const phaseFiltering = filter.phase.size < PHASES.length;   // 단계 조회축이 부분선택이면 4단계 필터 적용
     const b = map.getBounds(), bx0 = b.getWest(), by0 = b.getSouth(), bx1 = b.getEast(), by1 = b.getNorth();
     let n = 0;
@@ -1864,27 +1887,42 @@ function initLeaflet() {
     toggleJbLegend(n > 0);   // 화면에 폴리곤이 있을 때만 범례 노출
   };
   // 정비 추진 신호 마커(정비몽땅+공공데이터): 폴리곤 없는 추진건만 점선 표시(폴리곤과 겹치면 억제 = 중복 방지)
-  let jbDots = [];
-  const clearJeongbi = () => { jbDots.forEach(m => map.removeLayer(m)); jbDots = []; };
-  const renderJeongbi = () => {
-    clearJeongbi();
-    if (map.getZoom() < DONG_ZOOM || !JEONGBI.length || !filter.cat.has("정비")) return;   // 분류 필터
-    const phaseFiltering = filter.phase.size < PHASES.length;
+  /* ══ 호재 상시 표시(호재 중심 개편 2026-07-16) — 모든 점 신호를 원으로. 크기=등급, 색=분류, 미확정=점선(§7).
+     등급 LOD: z<12=A만 → z12~13=A+B → z14+=C·미정까지. 뷰포트 컬링+상한. 철도역·도로는 renderRail(도넛·선)이 담당. */
+  let hjDots = [];
+  const clearHojae = () => { hjDots.forEach(m => map.removeLayer(m)); hjDots = []; };
+  const HJ_R = { A: 11, B: 8, C: 6, "미정": 4.5 };   // 크기=등급
+  const lodGrades = z => z >= 14 ? ["A", "B", "C", "미정"] : z >= 12 ? ["A", "B"] : ["A"];
+  const renderHojae = () => {
+    clearHojae();
+    const z = map.getZoom();
+    const show = new Set(lodGrades(z));
     const bd = map.getBounds();
-    JEONGBI.filter(c => bd.contains([c.lat, c.lon]))
-      .filter(c => !phaseFiltering || filter.phase.has(c.phase))   // 4단계 조회축
-      .filter(c => !jbDrawnRings.some(r => ptInRing(c.lon, c.lat, r)))   // 이미 폴리곤으로 표시된 구역이면 마커 생략
-      .slice(0, 280).forEach(c => {
-      const col = c.drop ? "#9aa3b2" : CAT_COLOR["주거개발"];   // 분류색 단일(단계색 제외 — 사용자 확정)
-      const m = L.circleMarker([c.lat, c.lon], { pane: "cand", radius: 5, color: col, weight: 2,
-        dashArray: "2 2", fillColor: "#fff", fillOpacity: .9, opacity: c.drop ? .5 : .95 }).addTo(map);
-      m.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${c.n}</div>`
-        + `<div class="apt-pop-sub">정비 후보 · ${c.type || ""} · ${c.sg || ""} ${c.dong || ""}${c.hh ? " · " + c.hh + "세대" : ""}</div>`
-        + `<div class="apt-pop-cats"><span style="color:${col}">● ${c.stage || "추진 중"}</span>${c.drop ? '<span style="color:#b3251e">· 종결·무산</span>' : ""}</div></div>`,
+    const pool = SIGNALS.concat(JEONGBI_SIG, DART_SIG, ARCH_SIG).filter(visible)
+      .filter(s => s.geometry && s.geometry.coordinates)   // 좌표 미확정 신호 제외(지도 미표시 — 카드에서 표기)
+      .filter(s => show.has(levelOf(s)))
+      .filter(s => { const c = s.geometry.coordinates; return bd.contains([c[1], c[0]]); })
+      .filter(s => !(s._jb && jbDrawnRings.some(r => ptInRing(s.geometry.coordinates[0], s.geometry.coordinates[1], r))));   // 폴리곤 표시 구역은 원 생략
+    let n = 0;
+    for (const s of pool) {
+      if (++n > 600) break;   // 성능 상한
+      const [x, y] = s.geometry.coordinates;
+      const col = s.status === "종결" ? "#9aa3b2" : colorOf(s);
+      const lv = levelOf(s);
+      const m = L.circleMarker([y, x], { pane: "cand", radius: HJ_R[lv] || 5,
+        color: col, weight: lv === "A" ? 2.6 : 2,
+        dashArray: s.confirmed ? null : "4 3",           // 미확정=점선(§7)
+        fillColor: col, fillOpacity: .18,                // 낮은 채움 — 밀집=자연 히트맵
+        opacity: s.status === "종결" ? .45 : .9 }).addTo(map);
+      m.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${s.title}</div>`
+        + `<div class="apt-pop-sub"><span style="color:${col};font-weight:700">● ${catOf(s)}</span> · ${lvlPill(lv)} ${gradeBasisHtml(s).replace(/ · $/, "")}</div>`
+        + `<div class="apt-pop-cats"><span>단계 ${phaseOf(s)}${s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : ""}</span></div></div>`,
         { direction: "top", offset: [0, -6], className: "apt-tip", sticky: true });
-      jbDots.push(m);
-    });
+      m.on("click", (e) => { L.DomEvent.stopPropagation(e); showSignal(s, false); });
+      hjDots.push(m);
+    }
   };
+  const renderJeongbi = () => {};   // (구) 정비 마커 — renderHojae로 통합, 자리만 유지
   // 신규 철도 노선(호재) §7 렌더: 확정/건설중=실선, 미확정(계획·구상)=점선. 후보역=점. 교통 분류·4단계 필터 반응.
   let railLayers = [];
   const clearRail = () => { railLayers.forEach(l => map.removeLayer(l)); railLayers = []; };
@@ -1943,20 +1981,35 @@ function initLeaflet() {
     sd: "수도권", geometry: { coordinates: cen },
     sources: p.src_url ? [p.src_url] : [], stage_note: `${p.linekind} · ${p.status}${p.note ? " · " + p.note : ""}`,
   });
-  // 호갱노노식 LOD: 축소=시군구 박스 → 중간=동 박스 → 확대=아파트(동 박스 숨김, 동 대신 아파트)
-  const HIDE_BADGES_WHEN_SELECTED = true;   // 동/아파트 선택 중엔 카운트 배지 숨김(선택 호재 핀 부각). 원복=false
+  /* 호재 중심 LOD(2026-07-16 대개편): 카운트 배지(동·시군구) 전면 제거 —
+     상시 = 호재 원(등급 LOD) + 철도/도로 선. z12+=동 이름 라벨(클릭 앵커), z14+=아파트 집 아이콘. */
+  const renderDongLabels = () => {
+    clearBadges();
+    if (map.getZoom() < DONG_ZOOM) return;
+    const bd = map.getBounds();
+    const placed = [];
+    for (const f of DONG_GEO.features) {
+      const c = ringCentroid(ringsOf(f)[0]);
+      if (!bd.contains([c[1], c[0]])) continue;
+      const pt = map.latLngToContainerPoint([c[1], c[0]]);
+      if (collides(placed, pt, 46, 20)) continue;
+      placed.push({ x: pt.x, y: pt.y });
+      if (placed.length > 120) break;
+      const b = L.marker([c[1], c[0]], { pane: "badge",
+        icon: L.divIcon({ className: "", html: `<div class="dong-lbl">${dongName(f)}</div>`, iconSize: null }) }).addTo(map);
+      b.on("click", () => showDong(f));   // 동 라벨 클릭 → 동 줌업+영역 표시
+      badges.push(b);
+    }
+  };
   const applyLOD = () => {
     const z = map.getZoom();
     if (z >= DONG_ZOOM) { if (!map.hasLayer(dongLayer)) map.addLayer(dongLayer); }   // 동 경계 폴리곤 문맥
     else { if (map.hasLayer(dongLayer)) map.removeLayer(dongLayer); }
-    if (HIDE_BADGES_WHEN_SELECTED && ["dong", "apt", "dongsig", "detail"].includes(view.mode)) {
-      clearBadges(); clearAptDots();   // 선택 컨텍스트: 배지 없이 호재 핀(refreshPins)만 — 홈 복귀 시 자동 복원
-    }
-    else if (z >= APT_ZOOM) { clearBadges(); renderAptDots(); }        // 아파트 노출 = 동/시군구 박스 제거
-    else { clearAptDots(); (z >= DONG_ZOOM ? renderDongBadges : renderSggBadges)(); }
-    renderJeongbiPoly();   // 정비구역 경계 폴리곤 먼저(고시 사실) — jbDrawnRings 채워짐
-    renderJeongbi();       // 그다음 추진 신호 마커(폴리곤과 겹치면 억제)
-    renderRail();          // 신규 철도 노선(§7 실선/점선)
+    renderDongLabels();                                   // z12+ 동 이름 라벨(카운트 없음, 클릭 앵커)
+    if (z >= APT_ZOOM) renderAptDots(); else clearAptDots();   // z14+ 아파트 집 아이콘
+    renderJeongbiPoly();   // 정비구역 경계 폴리곤(고시 사실) — jbDrawnRings 채워짐
+    renderHojae();         // ★ 모든 호재 원(크기=등급·색=분류·미확정=점선, 등급 LOD)
+    renderRail();          // 철도/도로 노선·역(§7 실선/점선)
   };
   map.on("zoomend moveend", applyLOD);
   map.on("moveend", () => { try { updateCenterLabel(); } catch (e) {} });
@@ -1969,7 +2022,7 @@ function initLeaflet() {
     goHome();
   });
   refreshJeongbiPoly = renderJeongbiPoly;   // 시점 슬라이더 → 폴리곤 재렌더 브리지
-  window._dbg = { applyLOD, renderSggBadges, renderDongBadges, get badges() { return badges; }, map, get jbPoly() { return JEONGBI_POLY; }, get jbPolys() { return jbPolys; } };
+  window._dbg = { applyLOD, renderDongLabels, renderHojae, renderAptDots, get badges() { return badges; }, get hjDots() { return hjDots; }, map, get jbPoly() { return JEONGBI_POLY; }, get jbPolys() { return jbPolys; } };
 
   let lines = [];
   const clearLines = () => { lines.forEach(l => map.removeLayer(l)); lines = []; };
