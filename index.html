@@ -1325,9 +1325,10 @@ function renderDetail(s) {
       <h2>${s.title}</h2>
       ${freshness(s)}
       <ul class="track">${PHASES.map((P, i) => {
-        const cls = dropped && i >= pIdx ? "todo" : i < pIdx ? "done" : i === pIdx ? "now" : "todo";
-        const dot = i < pIdx ? "●" : i === pIdx ? (dropped ? "✕" : "◎") : "○";
-        const sub = i === pIdx ? ` — <b>${s.current_stage || "단계 미지정"}</b>${dropped ? " (무산)" : s.last_movement ? ` (${s.last_movement})` : ""}`
+        const finished = ph === "준공·개통" && !dropped;   // 종결 단계 도달 = 진행중(◎) 아닌 완료(●)
+        const cls = dropped && i >= pIdx ? "todo" : i < pIdx ? "done" : i === pIdx ? (finished ? "done" : "now") : "todo";
+        const dot = i < pIdx ? "●" : i === pIdx ? (dropped ? "✕" : finished ? "●" : "◎") : "○";
+        const sub = i === pIdx ? ` — <b>${s.current_stage || "단계 미지정"}</b>${dropped ? " (무산)" : finished ? " ✓ 완료" : s.last_movement ? ` (${s.last_movement})` : ""}`
           : i > pIdx ? " — 미도래" : "";
         return `<li class="${cls}"><span class="dot">${dot}</span>${P}${sub}</li>`;
       }).join("")}</ul>
