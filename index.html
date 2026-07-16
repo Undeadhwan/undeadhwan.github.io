@@ -747,7 +747,7 @@ function buildRailSignals() {
     template_type: "철도", current_stage: f.properties.status,
     phase: f.properties.phase || (f.properties.confirmed ? "착공" : "계획"),   // 전수검사('26.7)부터 명시 phase 우선(인가 등)
     status: f.properties.drop ? "종결" : "활성",   // 무산 노선(인동선 지선 등) = 종결 표식(P5 — 숨기지 않고 표시)
-    confirmed: f.properties.confirmed, sd: "수도권",
+    confirmed: f.properties.confirmed, sd: null,   // 소재 시도·시군구는 ensureRailSgg가 좌표로 산출(전국)
     geometry: { coordinates: f.geometry.coordinates }
   }));
 }
@@ -780,7 +780,7 @@ function buildRoadSignals() {
     if (p.kind === "station") {   // IC·JC 점
       ROAD_SIG.push({ _road: true, title: p.name, cat: "교통", sub: "도로", lvl: p.lvl || "A",
         template_type: "도로", current_stage: p.status, phase: p.confirmed ? "착공" : "계획",
-        status: "활성", confirmed: !!p.confirmed, sd: "수도권",
+        status: "활성", confirmed: !!p.confirmed, sd: null,   // 소재 시도=_sggs(buildSggIndex 좌표 귀속)
         geometry: { coordinates: f.geometry.coordinates } });
       continue;
     }
@@ -788,7 +788,7 @@ function buildRoadSignals() {
     if (!pts.length) continue;
     ROAD_SIG.push({ _road: true, title: `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: "도로", lvl: p.lvl || "C",
       template_type: "도로", current_stage: p.status, phase: p.confirmed ? "착공" : "계획",
-      status: "활성", confirmed: !!p.confirmed, sd: "수도권", road_kind: roadKindOf(p),
+      status: "활성", confirmed: !!p.confirmed, sd: null, road_kind: roadKindOf(p),   // 소재 시도=_sggs(다중 귀속)
       sources: p.src_url ? [p.src_url] : [],
       stage_note: `${p.linekind || "도로"} · ${p.status} · 선형=OSM(ODbL)`,
       geometry: { coordinates: pts[0] },
@@ -1045,11 +1045,13 @@ function fillRegionSelect() {
 
 /* ══════════ 좌측 4레벨 선택 (아실식 브레드크럼 + 격자): 시도>시군구>동>단지 ══════════ */
 const SIDO_LONG = { "서울": "서울특별시", "경기": "경기도", "인천": "인천광역시", "부산": "부산광역시",
-  "대구": "대구광역시", "광주": "광주광역시", "대전": "대전광역시", "울산": "울산광역시", "세종": "세종특별자치시",
-  "강원": "강원특별자치도", "충북": "충청북도", "충남": "충청남도", "전북": "전북특별자치도", "전남": "전라남도",
+  "대구": "대구광역시", "대전": "대전광역시", "울산": "울산광역시", "세종": "세종특별자치시",
+  // 2026-07-01 광역행정통합: 전라남도+광주광역시 폐지 → 전남광주통합특별시(27개 시군구). 경계·명칭 SSOT = VWorld full_nm
+  "전남광주": "전남광주통합특별시",
+  "강원": "강원특별자치도", "충북": "충청북도", "충남": "충청남도", "전북": "전북특별자치도",
   "경북": "경상북도", "경남": "경상남도", "제주": "제주특별자치도" };
-const SIDO_ORDER = ["서울", "인천", "경기", "부산", "대구", "광주", "대전", "울산", "세종",
-  "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주"];
+const SIDO_ORDER = ["서울", "인천", "경기", "부산", "대구", "전남광주", "대전", "울산", "세종",
+  "강원", "충북", "충남", "전북", "경북", "경남", "제주"];   // 16개 — 2026-07-01 전남·광주 통합 반영
 const treeState = { selKey: null };        // 지도 마커 연동용(기존 참조 유지)
 const nav = { sd: null, sg: null, dong: null };   // 현재 드릴다운 위치(상단 드롭다운)
 function dongsOfSgg(sd, sg) {
@@ -1057,11 +1059,16 @@ function dongsOfSgg(sd, sg) {
     .map(f => f.properties.EMD_KOR_NM).sort((a, b) => a.localeCompare(b, "ko"));
 }
 /* ══════════ 상단 지역 드롭다운 (시도 > 시군구 > 읍면동, 조회조건) ══════════ */
-const SIDO_CENTER = { "서울":[37.556,126.99],"인천":[37.46,126.70],"경기":[37.41,127.10],"부산":[35.18,129.07],"대구":[35.87,128.60],"광주":[35.16,126.85],"대전":[36.35,127.38],"울산":[35.54,129.31],"세종":[36.56,127.26],"강원":[37.77,128.15],"충북":[36.80,127.70],"충남":[36.60,126.90],"전북":[35.72,127.15],"전남":[34.90,126.95],"경북":[36.30,128.80],"경남":[35.35,128.30],"제주":[33.43,126.55] };
+const SIDO_CENTER = { "서울":[37.556,126.99],"인천":[37.46,126.70],"경기":[37.41,127.10],"부산":[35.18,129.07],"대구":[35.87,128.60],"대전":[36.35,127.38],"울산":[35.54,129.31],"세종":[36.56,127.26],"강원":[37.77,128.15],"충북":[36.80,127.70],"충남":[36.60,126.90],"전북":[35.72,127.15],"전남광주":[35.05,126.90],"경북":[36.30,128.80],"경남":[35.35,128.30],"제주":[33.43,126.55] };
+/* 시군구 목록: 법정동 경계(현행 행정구역 SSOT)가 로드된 시도는 거기서 — 행정개편(인천 서해구·검단구 등)이 자동 반영.
+   아직 지연 로드 전이면 sgg_all.geojson 폴백(기준연도가 옛것일 수 있음). 옛 서울 브랜치는 sido 필터가 없어
+   전국 병합 후 타 시도 시군구까지 노출되던 버그 → sido 일치로 통일. */
 function sggListOf(sd) {
-  return sd === "서울"
-    ? [...new Set(DONG_GEO.features.map(f => f.properties.sgg))].sort((a, b) => a.localeCompare(b, "ko"))
-    : [...new Set(SGG_GEO.features.filter(f => f.properties.sido === sd).map(f => sggDisplayName(f.properties.name)))].sort((a, b) => a.localeCompare(b, "ko"));
+  const fromDong = [...new Set(DONG_GEO.features.filter(f => (f.properties.sido || "서울") === sd)
+    .map(f => f.properties.sgg).filter(Boolean))];
+  if (fromDong.length) return fromDong.sort((a, b) => a.localeCompare(b, "ko"));
+  return [...new Set(SGG_GEO.features.filter(f => f.properties.sido === sd)
+    .map(f => sggDisplayName(f.properties.name)))].sort((a, b) => a.localeCompare(b, "ko"));
 }
 function fillRegion(id, items, placeholder) {
   const s = document.getElementById(id); if (!s) return;
@@ -1079,6 +1086,7 @@ function initRegionBar() {
 }
 function selectSido(sd) {
   nav.sd = sd || null; nav.sg = null; nav.dong = null;
+  if (sd) loadBdongFor(sd);   // 그 시도 법정동 경계 지연 로드(전국 분할) — 도착 시 syncRegionBar가 읍면동 채움
   fillRegion("r-sgg", sd ? sggListOf(sd) : [], "시군구 선택");
   fillRegion("r-dong", [], "읍면동 선택");
   closePanel();
@@ -1133,6 +1141,8 @@ function ensureRailSgg() {
         if (bd && !bd.contains([y, x])) continue;   // bbox 프리필터
         if (rings.some(r => pointInRing(x, y, r))) { s._sgg = disp; break; }
       }
+      // 실제 소재 시도·시군구 부여 (전국 확장 2026-07-17: 옛 sd:"수도권" 하드코딩 → 좌표 기준 산출)
+      if (s._sgg) { const p = s._sgg.split(" "); s.sd = p[0]; s.sg = p.slice(1).join(" "); }
     });
   }
   return true;
@@ -2069,7 +2079,7 @@ function initLeaflet() {
   const railToSignal = (p, cen) => ({
     _rail: true, title: p.full || p.name, cat: "교통", sub: "철도", lvl: railLevelOf(p.full || p.name, p.linekind),
     template_type: "철도", current_stage: p.status, phase: p.phase, status: p.drop ? "종결" : "활성", confirmed: p.confirmed,
-    sd: "수도권", geometry: { coordinates: cen },
+    sd: null, geometry: { coordinates: cen },   // 노선은 여러 시도 경유 — 단일 sd 미표기
     sources: p.src_url ? [p.src_url] : [], stage_note: `${p.linekind} · ${p.status}${p.note ? " · " + p.note : ""}`,
   });
   /* 호재 중심 LOD(2026-07-16 대개편): 카운트 배지(동·시군구) 전면 제거 —
@@ -2101,6 +2111,7 @@ function initLeaflet() {
     renderJeongbiPoly();   // 정비구역 경계 폴리곤(고시 사실) — jbDrawnRings 채워짐
     renderHojae();         // ★ 모든 호재 원(크기=등급·색=분류·미확정=점선, 등급 LOD)
     renderRail();          // 철도/도로 노선·역(§7 실선/점선)
+    if (z >= DONG_ZOOM) loadBdongVisible();   // 동 라벨이 필요한 줌부터 화면에 걸친 시도 경계 로드(전국 분할)
   };
   map.on("zoomend moveend", applyLOD);
   map.on("moveend", () => { try { updateCenterLabel(); } catch (e) {} });
@@ -2609,11 +2620,11 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260717a");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260717b");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions, jeongbiData, railData, roadData, dartData, archData] = await Promise.all([
-    gj("seoul_bdong.geojson"),     // 서울 전체 법정동 467 (§3.1 법정동 기준)
+    gj("bdong/서울.geojson"),      // 초기 = 서울 467동(§3.1 법정동). 나머지 15시도는 뷰포트·선택 시 지연 로드(bdong/index.json)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
     gj("macro_signals_draft.json"),
@@ -2639,7 +2650,7 @@ function initSearch() {
   // 무관한 인접 신축건물을 '같은 시설'로 오판→포스코 1.6조·동국제강 등 최대 신호를 잘못 제거함.
   // 정확한 면적-우선은 DART 시설소재지(본사 아님) 확보 또는 기업↔건축허가 매칭 후 재개.
   REGIONS = regions;
-  DONG_GEO = dong;   // 초기=서울 467동. 경기·인천(capital_bdong)은 지연 로드 후 병합.
+  DONG_GEO = dong;   // 초기=서울 467동. 나머지 15시도는 loadBdongFor/loadBdongVisible이 병합(전국 분할).
   SGG_GEO = sgg;
   RAW = rawData.rows;
   AUTO = autoData.candidates;
@@ -2681,17 +2692,49 @@ function initSearch() {
   loadDeferred();   // 큰 파일(경기·인천 동경계·전국 아파트·정비 폴리곤)은 초기 렌더 뒤 백그라운드 로드
 })();
 
-/* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 3파일(8.2MB)은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
+/* ══════════ 법정동 경계 시도별 지연 로드 (전국 확장 2026-07-17) ══════════
+   전국 법정동은 20MB+ → 한 번에 싣지 않는다. bdong/index.json(시도별 bbox 카탈로그)만 먼저 받고,
+   지도 뷰포트가 걸치는 시도 / 드롭다운으로 고른 시도의 파일만 fetch → DONG_GEO에 병합.
+   경계가 없어도 신호·호재 원은 이미 뜬다(경계는 동 라벨·드릴다운·소재 판정 문맥). */
+let BDONG_IDX = null;
+const bdongLoaded = new Set(["서울"]);   // 서울은 부트에서 블로킹 로드됨
+const bdongLoading = new Set();
+function loadBdongFor(sd) {
+  if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
+  bdongLoading.add(sd);
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260717b"}` : "")
+    .then(r => r.json())
+    .then(d => {
+      if (d && d.features && d.features.length) {
+        DONG_GEO = { type: "FeatureCollection", features: DONG_GEO.features.concat(d.features) };
+        bdongLoaded.add(sd);
+        if (typeof syncRegionBar === "function") syncRegionBar();   // 드롭다운 읍면동 채움
+        window._dbg && window._dbg.applyLOD && window._dbg.applyLOD();
+      }
+    })
+    .catch(() => {})
+    .finally(() => bdongLoading.delete(sd));
+}
+/* 현재 지도 뷰포트에 bbox가 걸치는 시도 파일 로드 (지도 이동·줌 때 호출) */
+function loadBdongVisible() {
+  if (!BDONG_IDX || !window._map) return;
+  const b = window._map.getBounds();
+  for (const [sd, v] of Object.entries(BDONG_IDX)) {
+    if (bdongLoaded.has(sd) || !v.bbox) continue;
+    const [x0, y0, x1, y1] = v.bbox;
+    if (b.getWest() <= x1 && b.getEast() >= x0 && b.getSouth() <= y1 && b.getNorth() >= y0) loadBdongFor(sd);
+  }
+}
+
+/* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260717a");
+  const CB = "?b=" + (window.BUILD || "20260717b");
   const gj = f => fetch(f + CB).then(r => r.json());
-  // 경기·인천 법정동(동배지·드릴다운) — 도착 즉시 병합
-  gj("capital_bdong.geojson").then(cap => {
-    if (cap && cap.features && cap.features.length) {
-      DONG_GEO = { type: "FeatureCollection", features: DONG_GEO.features.concat(cap.features) };
-      if (typeof syncRegionBar === "function") syncRegionBar();   // 드롭다운 경기/인천 읍면동 반영
-      window._dbg && window._dbg.applyLOD && window._dbg.applyLOD();
-    }
+  // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
+  gj("bdong/index.json").then(idx => {
+    BDONG_IDX = idx || null;
+    loadBdongVisible();                       // 현재 화면에 걸치는 시도부터
+    if (nav.sd) loadBdongFor(nav.sd);
   }).catch(() => {});
   // 전국 아파트 — 전국본 베이스 + 강서 정밀본(현재 APTS) 덮어씀
   gj("apartments_all.json").then(all => {
