@@ -252,6 +252,10 @@
   .apt-pop-cmp.in { background:#1a1a1a; color:#fff; }
   .copyaddr { cursor:pointer; font-size:11px; padding:1px 4px; border-radius:5px; background:#eef1fb; margin-left:3px; user-select:none; }
   .copyaddr:hover { background:#dde3f7; }
+  .factsheet { border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin:8px 0; background:#fbfcfe; }
+  .fs-h { font-size:11px; font-weight:700; color:var(--muted); margin-bottom:7px; }
+  .fs-grid { display:grid; grid-template-columns:auto 1fr auto 1fr; gap:4px 10px; font-size:12.5px; }
+  .fs-grid span { color:var(--muted); } .fs-grid b { color:var(--ink); }
   /* 레이더 파동 (크게) */
   .radar { position:relative; width:0; height:0; pointer-events:none; }
   .radar span { position:absolute; border:3px solid #2e5ce6; border-radius:50%; left:0; top:0; transform:translate(-50%,-50%);
@@ -546,6 +550,8 @@ function subLabel(s) {
   if (c === "일자리" && s.sub) return " · " + s.sub + "기준";
   return "";
 }
+// YYYYMMDD → YYYY-MM-DD (팩트시트 표기)
+function fmtDay(d) { d = (d || "").trim(); return d.length === 8 ? `${d.slice(0,4)}-${d.slice(4,6)}-${d.slice(6,8)}` : (d || "—"); }
 // 대지위치 주소 복사 (건축인허가=세움터 조회용)
 function copyAddr(el, addr) {
   if (navigator.clipboard) { navigator.clipboard.writeText(addr); const o = el.textContent; el.textContent = "✓"; setTimeout(() => el.textContent = o, 1200); }
@@ -663,6 +669,7 @@ function buildArchSignals() {
     _arch: true, title: s.title, cat: s.cat || "인프라", sub: s.cat === "일자리" ? "면적" : undefined, lvl: s.lvl || "C", template_type: s.cat === "일자리" ? "기업이전" : "생활인프라",
     current_stage: s.current_stage || "인허가", phase: s.phase || "계획", status: s.status || "활성", confirmed: false,
     sd: s.sd, sg: s.sg, dong: s.dong || null, addr: s.addr || null, area_m2: s.area_m2, purp: s.purp,
+    arch_gb: s.arch_gb || null, arch_pms_day: s.arch_pms_day || null, real_stcns_day: s.real_stcns_day || null, use_apr_day: s.use_apr_day || null,   // 원본 팩트시트(상세 표기용)
     last_movement: s.rcept_dt && s.rcept_dt.length === 8 ? `${s.rcept_dt.slice(0,4)}-${s.rcept_dt.slice(4,6)}-${s.rcept_dt.slice(6,8)}` : null,
     target_completion: null, sources: s.src ? [s.src] : [],
     geometry: { coordinates: s.geometry.coordinates }
@@ -1328,6 +1335,15 @@ function renderDetail(s) {
         lb === s.current_stage ? `<b class="subcur">${lb}</b>` : lb).join(" › ")}</div>` : ""}
       <div class="kv"><b>영향 반경</b> ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km — 유형 기준표(§3.3.1) 가안, 지도에 점선 원으로 표시</div>
       ${s.addr ? `<div class="kv"><b>대지위치</b> ${s.addr} <span class="copyaddr" onclick="copyAddr(this,'${s.addr.replace(/'/g, "\\'")}')" title="주소 복사">📋</span></div>` : ""}
+      ${s._arch ? `<div class="factsheet"><div class="fs-h">허가 원본 사실 (건축HUB API 수신값 그대로)</div>
+        <div class="fs-grid">
+          <span>건축구분</span><b>${s.arch_gb || "-"}</b>
+          <span>주용도</span><b>${s.purp || "-"}</b>
+          <span>연면적</span><b>${s.area_m2 ? s.area_m2.toLocaleString() + "㎡" : "-"}</b>
+          <span>허가일</span><b>${fmtDay(s.arch_pms_day)}</b>
+          <span>착공일</span><b>${fmtDay(s.real_stcns_day)}</b>
+          <span>사용승인일</span><b>${fmtDay(s.use_apr_day)}</b>
+        </div></div>` : ""}
       ${(s.access_points || []).length ? `<div class="kv"><b>접근점</b> ${s.access_points.map(a =>
         `${a.name}${a.coordinates ? "" : " (좌표 미확보)"} — ${a.status || ""}`).join(" · ")}</div>` : ""}
       ${(s.stage_history || []).length ? `<div class="kv"><b>단계 이력</b> ${s.stage_history.map(h =>
@@ -1338,7 +1354,7 @@ function renderDetail(s) {
       <div class="kv"><b>근거 원문</b> <span class="src">${(s.sources || []).map((u, i) => {
         const lbl = /hub\.go\.kr/.test(u) ? "건축HUB 열람 (로그인 불필요) — 대지위치로 조회" : /eais\.go\.kr/.test(u) ? "세움터(건축행정시스템) — 주소로 조회" : /opendart\.fss/.test(u) ? "DART 공시" : /g2b|nara/.test(u) ? "나라장터 공고" : /cleanup\.seoul/.test(u) ? "정비몽땅(서울 정비사업) — 사업장명으로 조회" : /gg\.go\.kr/.test(u) ? "경기 정비사업 현황 — 사업장명으로 조회" : /data\.go\.kr/.test(u) ? "공공데이터포털 정비사업 — 사업장명으로 조회" : `공시/공고 ${i + 1}`;
         return `<a href="${u}" target="_blank">${lbl}</a>`;
-      }).join(" · ")}</span>${/hub\.go\.kr|eais\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 열린 화면에서 <b>위 대지위치의 시도·시군구·법정동·번지</b>를 선택하면 로그인 없이 해당 허가 원본을 볼 수 있습니다 (📋로 주소 복사)</div>' : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 정비 추진현황엔 개별 딥링크가 없어 포털로 연결됩니다 — <b>위 사업장명</b>으로 조회하세요</div>' : ""}</div>
+      }).join(" · ")}</span>${/hub\.go\.kr|eais\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 원본 수치는 <b>위 팩트시트</b>에 그대로 표기했습니다. 교차확인 시 링크에서 <b>대지위치의 시도·시군구·법정동·번지</b> 선택(로그인 불필요, 딥링크 미지원)</div>' : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 정비 추진현황엔 개별 딥링크가 없어 포털로 연결됩니다 — <b>위 사업장명</b>으로 조회하세요</div>' : ""}</div>
       <div class="note">지도 표기 근거: ${s.position_confidence || "확정 좌표"} · 미래 단계는 목표/미정이며 진척률(%) 없음</div>
     </div>`;
 }
@@ -1687,10 +1703,11 @@ function initLeaflet() {
       const pop = `<div class="apt-pop"><div class="apt-pop-nm">${a.n}</div><div class="apt-pop-sub">${sub}</div>`
         + `<div class="apt-pop-cnt">반경 내 호재 <b>${n}</b>건</div>`
         + `<div class="apt-pop-cmp${inCmp ? " in" : ""}">${inCmp ? "✓ 비교함" : "＋ 비교담기"}</div></div>`;
-      // hover 시 팝업으로 표시(툴팁은 마커 벗어나면 닫혀 버튼 클릭 불가 → 팝업은 열린 채 유지되어 비교담기 클릭 가능).
-      // 마커 클릭은 showApt(패널). 팝업은 다른 마커 hover나 지도 클릭 시 닫힘.
+      // hover 팝업: 마커 벗어나 빈 공간 가면 닫힘(300ms 유예 — 그 사이 팝업 위로 이동하면 유지 → 비교담기 클릭 가능).
+      // 위치 = 배지 바로 위 중앙(divIcon 앵커가 좌상단이라 배지 절반폭만큼 x 보정).
       m.on("mouseover", () => {
-        const pu = L.popup({ className: "apt-pop-wrap", closeButton: false, autoPan: false, offset: [0, n ? 14 : 8] })
+        const me = m.getElement(); const halfW = me ? Math.round(me.offsetWidth / 2) : 0;
+        const pu = L.popup({ className: "apt-pop-wrap", closeButton: false, autoPan: false, offset: [halfW, -6] })
           .setLatLng([a.lat, a.lon]).setContent(pop).openOn(map);
         const el = pu.getElement(); const btn = el && el.querySelector(".apt-pop-cmp");
         if (btn) L.DomEvent.on(btn, "click", e => {
@@ -1698,6 +1715,12 @@ function initLeaflet() {
           const on = compareSet.some(x => x.n === a.n && x.dong === a.dong);
           btn.classList.toggle("in", on); btn.textContent = on ? "✓ 비교함" : "＋ 비교담기";
         });
+        let overPopup = false;
+        if (el) {
+          L.DomEvent.on(el, "mouseenter", () => overPopup = true);
+          L.DomEvent.on(el, "mouseleave", () => { overPopup = false; if (map._popup === pu) map.closePopup(pu); });
+        }
+        m.once("mouseout", () => setTimeout(() => { if (!overPopup && map._popup === pu) map.closePopup(pu); }, 300));
       });
       m.on("click", () => { treeState.selKey = `apt|${a.n}|${a.dong}`; buildTree(); showApt(a); });
       aptDots.push(m);
@@ -1850,11 +1873,15 @@ function initLeaflet() {
     sources: p.src_url ? [p.src_url] : [], stage_note: `${p.linekind} · ${p.status}${p.note ? " · " + p.note : ""}`,
   });
   // 호갱노노식 LOD: 축소=시군구 박스 → 중간=동 박스 → 확대=아파트(동 박스 숨김, 동 대신 아파트)
+  const HIDE_BADGES_WHEN_SELECTED = true;   // 동/아파트 선택 중엔 카운트 배지 숨김(선택 호재 핀 부각). 원복=false
   const applyLOD = () => {
     const z = map.getZoom();
     if (z >= DONG_ZOOM) { if (!map.hasLayer(dongLayer)) map.addLayer(dongLayer); }   // 동 경계 폴리곤 문맥
     else { if (map.hasLayer(dongLayer)) map.removeLayer(dongLayer); }
-    if (z >= APT_ZOOM) { clearBadges(); renderAptDots(); }        // 아파트 노출 = 동/시군구 박스 제거
+    if (HIDE_BADGES_WHEN_SELECTED && ["dong", "apt", "dongsig", "detail"].includes(view.mode)) {
+      clearBadges(); clearAptDots();   // 선택 컨텍스트: 배지 없이 호재 핀(refreshPins)만 — 홈 복귀 시 자동 복원
+    }
+    else if (z >= APT_ZOOM) { clearBadges(); renderAptDots(); }        // 아파트 노출 = 동/시군구 박스 제거
     else { clearAptDots(); (z >= DONG_ZOOM ? renderDongBadges : renderSggBadges)(); }
     renderJeongbiPoly();   // 정비구역 경계 폴리곤 먼저(고시 사실) — jbDrawnRings 채워짐
     renderJeongbi();       // 그다음 추진 신호 마커(폴리곤과 겹치면 억제)
