@@ -1,5 +1,5 @@
 {
- "_note": "공식 도로사업 목록(2026-07-17 조사, 2차 병합) — OSM 노선의 존재·진척단계 검증 SSOT. opened=개통완료(level, 호재 아님). SSOT 커넥터 후보: 한국도로공사 계약정보(ex.co.kr/portal/biz/contSct/contSctInfo.do?cnstSm=연번 — 공식 공사명·읍면동·공정률+기준시점) / 서울시 건설알림이(cis.seoul.go.kr — 착공일·준공예정·공정률)",
+ "_note": "공식 도로사업 목록(2026-07-17 조사, 2차 병합) — OSM 노선의 존재·진척단계 검증 SSOT. opened=개통완료(level, 호재 아님). SSOT 커넥터 후보: 한국도로공사 계약정보(ex.co.kr/portal/biz/contSct/contSctInfo.do?cnstSm=연번 — 공식 공사명·읍면동·공정률+기준시점) / 서울시 건설알림이(cis.seoul.go.kr — 착공일·준공예정·공정률) | IC 명단(고시·보도)이 존재하면 그 사업의 존재가 공식 확인된 것으로 본다(2026-07-17) — ic_evidence:true",
  "roads": [
   {
    "name": "세종~안성 고속도로(세종포천선)",
@@ -566,6 +566,68 @@
    ],
    "opened": true,
    "src": ""
+  },
+  {
+   "name": "서울~양주 고속도로",
+   "phase": "계획",
+   "stage": "실시계획 승인 전 — IC 명단(광백IC·은현JC 등) 보도 기준",
+   "owner": "국토부",
+   "type": "고속도로",
+   "match": [
+    "서울양주"
+   ],
+   "src": "https://pimac.kdi.re.kr/notice/accept_view.jsp?seq_no=22191",
+   "ic_evidence": true
+  },
+  {
+   "name": "서울~양주 고속도로 장암연결구간",
+   "phase": "계획",
+   "stage": "실시계획 승인 전 — 장암(동부간선도로) 접속부",
+   "owner": "국토부",
+   "type": "고속도로",
+   "match": [
+    "서울양주장암",
+    "장암연결"
+   ],
+   "src": "https://www.kyeonggi.com/article/20240111580005",
+   "ic_evidence": true
+  },
+  {
+   "name": "서울~양주 고속도로 송추연결구간",
+   "phase": "계획",
+   "stage": "실시계획 승인 전 — 송추(수도권제1순환) 분기",
+   "owner": "국토부",
+   "type": "고속도로",
+   "match": [
+    "서울양주송추",
+    "송추연결"
+   ],
+   "src": "https://www.kyeonggi.com/article/20240111580005",
+   "ic_evidence": true
+  },
+  {
+   "name": "양주~연천 고속도로",
+   "phase": "계획",
+   "stage": "은현분기점~군남분기점 — IC 명단 보도 기준",
+   "owner": "국토부",
+   "type": "고속도로",
+   "match": [
+    "양주연천"
+   ],
+   "src": "https://www.newsro.kr/article243/728232/",
+   "ic_evidence": true
+  },
+  {
+   "name": "문산~개성 고속도로(평택파주선 문산~도라산)",
+   "phase": "계획",
+   "stage": "산단JC·도라산IC — IC 명단 보도 기준",
+   "owner": "국토부",
+   "type": "고속도로",
+   "match": [
+    "문산개성"
+   ],
+   "src": "https://www.newspim.com/news/view/20190509000761",
+   "ic_evidence": true
   }
  ]
 }
