@@ -809,9 +809,11 @@ function buildRoadSignals() {
     }
     const pts = sample(f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates]);
     if (!pts.length) continue;
-    ROAD_SIG.push({ _road: true, title: `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: "도로", lvl: p.lvl || "C",
+    // 표시명 = 공식 사업명 우선(OSM 이름은 선형 매칭용일 뿐 — 공식 SSOT 사상 2026-07-17)
+    ROAD_SIG.push({ _road: true, title: p.official_name || `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: "도로", lvl: p.lvl || "C",
       template_type: "도로", current_stage: p.status, phase: p.confirmed ? "착공" : "계획",
       status: "활성", confirmed: !!p.confirmed, sd: null, road_kind: roadKindOf(p), src_tier: p.src_tier,   // 소재 시도=_sggs(다중 귀속)
+      owner: p.owner, osm_name: p.name, geom_src: p.geom_src,
       sources: p.src_url ? [p.src_url] : [],
       stage_note: `${p.linekind || "도로"} · ${p.status} · 선형=OSM(ODbL)`,
       geometry: { coordinates: pts[0] },
@@ -2647,7 +2649,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260717e");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260717f");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions, jeongbiData, railData, roadData, dartData, archData] = await Promise.all([
@@ -2729,7 +2731,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260717e"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260717f"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -2755,7 +2757,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260717e");
+  const CB = "?b=" + (window.BUILD || "20260717f");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {

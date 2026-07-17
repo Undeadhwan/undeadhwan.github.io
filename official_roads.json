@@ -1,0 +1,571 @@
+{
+ "_note": "공식 도로사업 목록(2026-07-17 조사, 2차 병합) — OSM 노선의 존재·진척단계 검증 SSOT. opened=개통완료(level, 호재 아님). SSOT 커넥터 후보: 한국도로공사 계약정보(ex.co.kr/portal/biz/contSct/contSctInfo.do?cnstSm=연번 — 공식 공사명·읍면동·공정률+기준시점) / 서울시 건설알림이(cis.seoul.go.kr — 착공일·준공예정·공정률)",
+ "roads": [
+  {
+   "name": "세종~안성 고속도로(세종포천선)",
+   "phase": "착공",
+   "stage": "'19.12 착공·공사중 (개통목표 공식 미확인)",
+   "owner": "국토부/도로공사",
+   "type": "고속도로",
+   "match": [
+    "세종포천",
+    "안성",
+    "세종"
+   ],
+   "src": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156751468"
+  },
+  {
+   "name": "안성~구리 고속도로(세종포천선)",
+   "phase": "준공",
+   "stage": "'25.1.1 개통 완료",
+   "owner": "국토부/도로공사",
+   "type": "고속도로",
+   "match": [
+    "안성구리"
+   ],
+   "opened": true,
+   "src": "https://korea.kr/briefing/pressReleaseView.do?newsId=156668267"
+  },
+  {
+   "name": "세종~청주 고속도로",
+   "phase": "인가",
+   "stage": "예타면제('19.1) · 보상 중 — 착공 미확정",
+   "owner": "국토부",
+   "type": "고속도로",
+   "match": [
+    "세종청주"
+   ],
+   "src": "https://www.sejong.go.kr/bbs/R0071/view.do?nttId=B000000027893Kt2qW4j"
+  },
+  {
+   "name": "제천~영월 고속도로(평택영월선)",
+   "phase": "인가",
+   "stage": "타당성재조사 통과('24.12)·보상/시공사 선정 — 미착공",
+   "owner": "국토부/도로공사",
+   "type": "고속도로",
+   "match": [
+    "평택제천",
+    "제천영월",
+    "평택영월"
+   ],
+   "src": "https://www.yw.go.kr/www/selectBbsNttView.do?bbsNo=17&key=273&nttNo=147104"
+  },
+  {
+   "name": "국도3호선 성남~장호원(잔여 6공구)",
+   "phase": "착공",
+   "stage": "성남~이천 개통('17.12) · 이천~장호원 공사중",
+   "owner": "국토부",
+   "type": "자동차전용",
+   "match": [
+    "국도3",
+    "성남장호원"
+   ],
+   "src": "https://www.korea.kr/news/policyNewsView.do?newsId=148846292"
+  },
+  {
+   "name": "새만금~전주 고속도로",
+   "phase": "준공",
+   "stage": "'25.11.22 개통 완료",
+   "owner": "국토부/도로공사",
+   "type": "고속도로",
+   "match": [
+    "새만금전주"
+   ],
+   "opened": true,
+   "src": "https://www.saemangeum.go.kr/sda/content.do?key=2009163941914"
+  },
+  {
+   "name": "함양울산선(함양~창녕)",
+   "phase": "착공",
+   "stage": "공사중 — '26 순차 개통 목표(창녕~밀양 '24.12 선개통)",
+   "owner": "국토부/도로공사",
+   "type": "고속도로",
+   "match": [
+    "함양울산"
+   ],
+   "src": "https://www.korea.kr/news/policyNewsView.do?newsId=148937983"
+  },
+  {
+   "name": "강진~광주 고속도로(광주해남완도 1단계)",
+   "phase": "착공",
+   "stage": "공사중 — '26 개통 목표",
+   "owner": "도로공사",
+   "type": "고속도로",
+   "match": [
+    "강진광주"
+   ],
+   "src": "https://www.ex.co.kr/portal/biz/contSct/contSctInfo.do?cnstSm=5384"
+  },
+  {
+   "name": "포항~영덕 고속도로",
+   "phase": "준공",
+   "stage": "'25.11.8 개통 완료",
+   "owner": "국토부/도로공사",
+   "type": "고속도로",
+   "match": [
+    "포항영덕"
+   ],
+   "opened": true,
+   "src": "https://www.korea.kr/news/policyNewsView.do?newsId=148954552"
+  },
+  {
+   "name": "계양~강화 고속도로",
+   "phase": "착공",
+   "stage": "'26.3.12 착공식 — '32 준공목표 · 3조2,629억",
+   "owner": "국토부/도로공사",
+   "type": "고속도로",
+   "match": [
+    "계양강화"
+   ],
+   "src": "http://www.incheon.go.kr/IC010205/view?repSeq=DOM_0000000014327277"
+  },
+  {
+   "name": "서창~김포 고속도로(민자)",
+   "phase": "계획",
+   "stage": "우선협상자 지정('20.7) — **실시협약 미체결·미착공**",
+   "owner": "민자",
+   "type": "고속도로",
+   "match": [
+    "서창김포"
+   ],
+   "src": "http://www.incheon.go.kr/mayor_9/MA0202010100/2105344"
+  },
+  {
+   "name": "광명~서울 고속도로(민자)",
+   "phase": "착공",
+   "stage": "공사중 (개통목표 공식 미확인 — 언론 '27~28)",
+   "owner": "민자(서서울고속도로㈜)",
+   "type": "고속도로",
+   "match": [
+    "광명서울",
+    "평택파주",
+    "수원문산"
+   ],
+   "src": "https://eminwon.guro.go.kr/emwp/jsp/ofr/FileDown.jsp"
+  },
+  {
+   "name": "서울~양평 고속도로",
+   "phase": "계획",
+   "stage": "'26.3.20 재개 결정 — 신규 타당성조사 후 '29말 착공 목표",
+   "owner": "국토부",
+   "type": "고속도로",
+   "match": [
+    "서울양평"
+   ],
+   "src": "https://www.korea.kr/briefing/presidentView.do?newsId=148961210"
+  },
+  {
+   "name": "평택~부여~익산 1단계(서부내륙·민자)",
+   "phase": "준공",
+   "stage": "'24.12.10 개통 완료",
+   "owner": "민자",
+   "type": "고속도로",
+   "match": [
+    "서부내륙",
+    "평택부여"
+   ],
+   "opened": true,
+   "src": "https://www.korea.kr/news/policyNewsView.do?newsId=148937177"
+  },
+  {
+   "name": "평택~부여~익산 2단계(부여~익산)",
+   "phase": "계획",
+   "stage": "미착공",
+   "owner": "민자",
+   "type": "고속도로",
+   "match": [
+    "부여익산"
+   ],
+   "src": "https://www.korea.kr/news/pressReleaseView.do?newsId=156364106"
+  },
+  {
+   "name": "부산신항~김해 고속도로",
+   "phase": "착공",
+   "stage": "'25.6 착공 — '31 개통목표 · 1조3,025억",
+   "owner": "도로공사",
+   "type": "고속도로",
+   "match": [
+    "부산신항",
+    "신항김해"
+   ],
+   "src": "https://www.gimhae.go.kr/03360/00023/00025.web?gcode=1172&idx=2575445&amode=view"
+  },
+  {
+   "name": "남해~여수 국도77호선 해저터널",
+   "phase": "착공",
+   "stage": "'23 착공 — '31 개통목표 · 7,544억",
+   "owner": "국토부",
+   "type": "일반국도",
+   "match": [
+    "남해여수",
+    "국도77"
+   ],
+   "src": "https://www.namhae.go.kr/portal/Index.do?c=WW0401040900"
+  },
+  {
+   "name": "만덕~센텀 도시고속화도로",
+   "phase": "준공",
+   "stage": "'26.2.10 전면 개통 완료",
+   "owner": "부산시+민자",
+   "type": "도시고속화",
+   "match": [
+    "만덕센텀"
+   ],
+   "opened": true,
+   "src": "https://www.busan.go.kr/nbnews/1718299"
+  },
+  {
+   "name": "김포~파주 고속도로(수도권제2순환)",
+   "phase": "착공",
+   "stage": "'19.2 착공 — '27말 개통목표(1년 연기) · 한강하저터널",
+   "owner": "국토부",
+   "type": "고속도로",
+   "match": [
+    "수도권제2순환",
+    "김포파주"
+   ],
+   "src": ""
+  },
+  {
+   "name": "인천~안산 고속도로(수도권제2순환)",
+   "phase": "인가",
+   "stage": "착공 여부 소스 상충 — 람사르습지 통과로 지연",
+   "owner": "국토부",
+   "type": "고속도로",
+   "match": [
+    "인천안산"
+   ],
+   "src": ""
+  },
+  {
+   "name": "영동고속도로 확장(안산JC~북수원)",
+   "phase": "착공",
+   "stage": "'22.5 착공 — '27.12 준공목표",
+   "owner": "도로공사",
+   "type": "고속도로",
+   "match": [
+    "영동고속"
+   ],
+   "src": ""
+  },
+  {
+   "name": "대산~당진 고속도로",
+   "phase": "착공",
+   "stage": "'24.11 착공 — '30 개통목표 (공식 근거 미확보)",
+   "owner": "국토부/도로공사",
+   "type": "고속도로",
+   "match": [
+    "대산당진"
+   ],
+   "src": ""
+  },
+  {
+   "name": "고속국도 제255호선 강진~광주간 건설공사",
+   "phase": "착공",
+   "stage": "공사중 7개 공구 · '26 개통목표 (도로공사 계약정보)",
+   "owner": "도로공사",
+   "type": "고속도로",
+   "match": [
+    "강진광주"
+   ],
+   "src": "https://www.ex.co.kr/portal/biz/contSct/contSctInfo.do?cnstSm=5380"
+  },
+  {
+   "name": "고속국도 제14호선 함양~창녕간 건설공사",
+   "phase": "착공",
+   "stage": "공사중 12개 공구 · '26 개통목표",
+   "owner": "도로공사",
+   "type": "고속도로",
+   "match": [
+    "함양울산",
+    "함양창녕"
+   ],
+   "src": "https://www.ex.co.kr/portal/biz/contSct/contSctInfo.do?cnstSm=5446"
+  },
+  {
+   "name": "고속국도 제30호선 대산~당진간 건설공사",
+   "phase": "착공",
+   "stage": "공사중 4개 공구 · '30 개통목표",
+   "owner": "도로공사",
+   "type": "고속도로",
+   "match": [
+    "대산당진"
+   ],
+   "src": "https://www.ex.co.kr/portal/biz/contSct/contSctInfo.do?cnstSm=5802"
+  },
+  {
+   "name": "고속국도 제400호선 김포~파주간 건설공사",
+   "phase": "착공",
+   "stage": "공사중 5개 공구 · '27말 개통목표",
+   "owner": "도로공사",
+   "type": "고속도로",
+   "match": [
+    "수도권제2순환",
+    "김포파주"
+   ],
+   "src": "https://www.ex.co.kr/portal/biz/contSct/contSctInfo.do?cnstSm=5509"
+  },
+  {
+   "name": "고속국도 제400호선 양평~이천간 건설공사",
+   "phase": "착공",
+   "stage": "공사중 4개 공구",
+   "owner": "도로공사",
+   "type": "고속도로",
+   "match": [
+    "양평이천",
+    "양평광주"
+   ],
+   "src": "https://www.ex.co.kr/portal/biz/contSct/contSctInfo.do?cnstSm=5622"
+  },
+  {
+   "name": "고속국도 제292호선 오송지선 건설공사",
+   "phase": "착공",
+   "stage": "공사중",
+   "owner": "도로공사",
+   "type": "고속도로",
+   "match": [
+    "오송지선"
+   ],
+   "src": "https://www.ex.co.kr/portal/biz/contSct/contSctInfo.do?cnstSm=5557"
+  },
+  {
+   "name": "고속국도 제32호선 인주~염치간 건설공사(아산청주선)",
+   "phase": "착공",
+   "stage": "공사중 2개 공구",
+   "owner": "도로공사",
+   "type": "고속도로",
+   "match": [
+    "아산청주",
+    "인주염치"
+   ],
+   "src": "https://www.ex.co.kr/portal/biz/contSct/contSctInfo.do?cnstSm=5635"
+  },
+  {
+   "name": "고속국도 제50호선 영동선 서창~안산 확장",
+   "phase": "착공",
+   "stage": "공사중",
+   "owner": "도로공사",
+   "type": "고속도로",
+   "match": [
+    "서창안산"
+   ],
+   "src": "https://www.ex.co.kr/portal/biz/contSct/contSctInfo.do?cnstSm=5612"
+  },
+  {
+   "name": "고속국도 제50호선 영동선 안산~북수원 확장",
+   "phase": "착공",
+   "stage": "공사중 2개 공구 · '27.12 준공목표",
+   "owner": "도로공사",
+   "type": "고속도로",
+   "match": [
+    "영동고속",
+    "안산북수원"
+   ],
+   "src": "https://www.ex.co.kr/portal/biz/contSct/contSctInfo.do?cnstSm=5614"
+  },
+  {
+   "name": "성남~서초 고속도로(민자)",
+   "phase": "계획",
+   "stage": "우선협상자 선정('26.6.22) — '29 착공·'34 개통 목표",
+   "owner": "민자",
+   "type": "고속도로",
+   "match": [
+    "성남서초"
+   ],
+   "src": "https://www.molit.go.kr/USR/NEWS/m_71/dtl.jsp?id=95092143"
+  },
+  {
+   "name": "평택~시흥 고속도로 확장(민자)",
+   "phase": "계획",
+   "stage": "우선협상자 선정('25.12) — '28 착공·'33 개통 목표",
+   "owner": "민자",
+   "type": "고속도로",
+   "match": [
+    "평택시흥"
+   ],
+   "src": "https://www.molit.go.kr/USR/NEWS/m_71/dtl.jsp?id=95091530"
+  },
+  {
+   "name": "오산~용인 고속도로(민자)",
+   "phase": "계획",
+   "stage": "실시협약 협상 중 — '28 착공목표",
+   "owner": "민자",
+   "type": "고속도로",
+   "match": [
+    "오산용인"
+   ],
+   "src": ""
+  },
+  {
+   "name": "사상~해운대 고속도로(대심도·민자)",
+   "phase": "인가",
+   "stage": "민투심 통과·실시협약 협상 — '28 착공·'33 개통 목표",
+   "owner": "민자",
+   "type": "고속도로",
+   "match": [
+    "사상해운대"
+   ],
+   "src": "https://www.busan.go.kr/depart/sh-expressway"
+  },
+  {
+   "name": "경부 지하고속도로(용인~서울)",
+   "phase": "계획",
+   "stage": "예타 단계 — '27 하반기 착공 목표",
+   "owner": "도로공사",
+   "type": "고속도로",
+   "match": [
+    "경부지하",
+    "용인서울"
+   ],
+   "src": "https://www.molit.go.kr/USR/NEWS/m_71/dtl.jsp?lcmspage=16&id=95087848"
+  },
+  {
+   "name": "경인고속도로 연장·지하화",
+   "phase": "인가",
+   "stage": "예타 통과('25.1)·타당성평가 중 — '27 착공목표",
+   "owner": "도로공사",
+   "type": "고속도로",
+   "match": [
+    "경인고속",
+    "경인지하"
+   ],
+   "src": "https://www.incheon.go.kr/IC010205/view?repSeq=DOM_0000000014051380"
+  },
+  {
+   "name": "국회대로 지하차도·상부공원화(1·2단계)",
+   "phase": "착공",
+   "stage": "공사중 — '27.12 준공예정 (서울시 건설알림이)",
+   "owner": "서울시",
+   "type": "자동차전용",
+   "match": [
+    "국회대로"
+   ],
+   "src": "https://cis.seoul.go.kr/TotalAlimi_new/PopInfo.action?cmd=info1&pjt_cd=1112018080298"
+  },
+  {
+   "name": "동부간선도로 지하화(민자 1공구)",
+   "phase": "착공",
+   "stage": "'24.9 착공 — '29.9 준공예정 (공정 지연)",
+   "owner": "민자",
+   "type": "자동차전용",
+   "match": [
+    "동부간선"
+   ],
+   "src": "https://cis.seoul.go.kr/TotalAlimi_new/PopInfo.action?cmd=info1&pjt_cd=1112024082395"
+  },
+  {
+   "name": "동부간선도로 창동~상계 지하차도",
+   "phase": "착공",
+   "stage": "'20.8 착공 — '27.8 준공예정",
+   "owner": "서울시",
+   "type": "자동차전용",
+   "match": [
+    "창동상계"
+   ],
+   "src": "https://cis.seoul.go.kr/TotalAlimi_new/PopInfo.action?cmd=info1&pjt_cd=1112020082899"
+  },
+  {
+   "name": "영동대로 지하공간 복합개발",
+   "phase": "착공",
+   "stage": "'21.2 착공 — '28.10 준공예정",
+   "owner": "서울시",
+   "type": "자동차전용",
+   "match": [
+    "영동대로"
+   ],
+   "src": "https://cis.seoul.go.kr/TotalAlimi_new/PopInfo.action?cmd=info1&pjt_cd=1112021020999"
+  },
+  {
+   "name": "경부간선도로 지하화(양재~한남)",
+   "phase": "계획",
+   "stage": "민자적격성 조사 — **국토부·서울시 '확정된 계획 아님' 명시**",
+   "owner": "서울시",
+   "type": "자동차전용",
+   "match": [
+    "경부간선"
+   ],
+   "src": "https://korea.kr/news/actuallyView.do?newsId=148827671"
+  },
+  {
+   "name": "강변북로 지하화(가양~영동대교)",
+   "phase": "계획",
+   "stage": "타당성조사·기본계획 용역 — 투자심사 미완",
+   "owner": "서울시",
+   "type": "자동차전용",
+   "match": [
+    "강변북로"
+   ],
+   "src": "https://mediahub.seoul.go.kr/archives/2006005"
+  },
+  {
+   "name": "인천대로 일반화·지하차도(2단계)",
+   "phase": "착공",
+   "stage": "우선시공 '25.10 — '30 준공목표",
+   "owner": "인천시",
+   "type": "일반국도",
+   "match": [
+    "인천대로"
+   ],
+   "src": "https://www.incheon.go.kr/IC010205/view?repSeq=DOM_0000000013168116"
+  },
+  {
+   "name": "국도77호선 노을대교",
+   "phase": "인가",
+   "stage": "실시설계 중 — '26 하반기 착공·'30.12 완료 목표",
+   "owner": "국토부",
+   "type": "일반국도",
+   "match": [
+    "노을대교"
+   ],
+   "src": ""
+  },
+  {
+   "name": "공주 국도대체우회도로(봉정~방문)",
+   "phase": "착공",
+   "stage": "공사중 — '27 완공목표",
+   "owner": "국토부",
+   "type": "일반국도",
+   "match": [
+    "봉정방문",
+    "공주우회"
+   ],
+   "src": "https://www.molit.go.kr/drocm/USR/BORD0201/m_16064/DTL.jsp?id=dcmo0402&mode=view&idx=13792"
+  },
+  {
+   "name": "서부간선지하도로",
+   "phase": "준공",
+   "stage": "개통 완료",
+   "owner": "서울시",
+   "type": "자동차전용",
+   "match": [
+    "서부간선"
+   ],
+   "opened": true,
+   "src": ""
+  },
+  {
+   "name": "신월여의지하도로",
+   "phase": "준공",
+   "stage": "개통 완료",
+   "owner": "서울시",
+   "type": "자동차전용",
+   "match": [
+    "신월여의"
+   ],
+   "opened": true,
+   "src": ""
+  },
+  {
+   "name": "파주~양주 고속도로(수도권제2순환)",
+   "phase": "준공",
+   "stage": "'24.12 개통 완료",
+   "owner": "도로공사",
+   "type": "고속도로",
+   "match": [
+    "파주양주"
+   ],
+   "opened": true,
+   "src": ""
+  }
+ ]
+}
