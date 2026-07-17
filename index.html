@@ -231,6 +231,25 @@
   .fresh.stall { color:var(--stall); font-weight:700; }
   .fresh.done { color:#2e8b57; font-weight:600; }
   .badge-draft { display:inline-block; font-size:10px; background:#fff3cd; color:#856404; border-radius:4px; padding:1px 5px; margin-left:4px; }
+  /* ── 마일스톤 트랙 (DATA_STANDARD §3b) — "지금 어디까지 왔고, 다음은 언제" ── */
+  .mstrack { margin:10px 0 4px; }
+  .msrow { display:flex; align-items:flex-start; gap:9px; padding:5px 0; position:relative; }
+  .msrow:not(:last-child)::before { content:""; position:absolute; left:5.5px; top:19px; bottom:-5px; width:2px; background:#e2e5ec; }
+  .msrow.done::before, .msrow.stalled::before { background:#12263f; }
+  .msdot { width:13px; height:13px; border-radius:50%; flex-shrink:0; margin-top:3px; border:2.5px solid #d3d7e0; background:#fff; z-index:1; }
+  .msrow.done .msdot { background:#12263f; border-color:#12263f; }
+  .msrow.current .msdot { background:#fff; border-color:#5b3fd4; box-shadow:0 0 0 3px rgba(91,63,212,.18); }
+  .msrow.stalled .msdot { background:#b8860b; border-color:#b8860b; }
+  .msrow.target .msdot { border-color:#c4392f; border-style:dashed; }
+  .msbody { flex:1; min-width:0; }
+  .msttl { font-size:12.5px; font-weight:700; color:#1c1c1e; }
+  .msrow.future .msttl { color:#a9adb6; font-weight:600; }
+  .msmeta { font-size:11px; color:var(--muted); margin-top:1px; }
+  .msdate { font-size:11.5px; font-weight:800; color:#12263f; }
+  .msrow.target .msdate { color:#c4392f; }
+  .msrow.stalled .msdate { color:#b8860b; }
+  .mseta { font-size:11.5px; font-weight:700; color:#c4392f; }
+  .msnone { font-size:11.5px; color:var(--muted); padding:8px 2px; }
   /* 출처 등급 배지 (2026-07-17 사용자 확정 사상: 정확한 발굴·단계·위치가 핵심 — 근거의 공식성을 1급으로 표시) */
   .badge-src { display:inline-block; font-size:10px; border-radius:4px; padding:1px 5px; margin-left:4px; font-weight:700; }
   .badge-src.notice { background:#e7f3ea; color:#1c6b3a; }        /* 고시·기본계획 */
@@ -605,6 +624,22 @@ function precNote(s) {
   const v = GEO_PREC[s.geo_prec];
   return v ? `<b>${v.t}</b> — ${v.d}` : (s.approx ? "근사 — 위치 미확정" : "확정 좌표");
 }
+
+/* 마일스톤 트랙 (DATA_STANDARD §3b): 완료=날짜(사실) / 미래=목표·미정(추정 금지) / 진척률 % 없음(§7) */
+const MS_STATE = { done:"완료", current:"현재", next:"다음", future:"미도래", target:"목표", stalled:"정체·중지" };
+function msTrack(s) {
+  const ms = s.milestones || [];
+  if (!ms.length) return `<div class="msnone">일정 정보 없음 — 소스가 단계별 시점을 제공하지 않습니다(추정하지 않음)</div>`;
+  return `<div class="mstrack">` + ms.map(m => {
+    const when = m.date ? `<span class="msdate">${m.date}</span>`
+              : m.eta ? `<span class="mseta">${m.eta} ${m.state === "target" ? "목표" : "예정"}</span>`
+              : `<span class="msmeta">${m.state === "future" ? "미도래" : "시기 미정"}</span>`;
+    return `<div class="msrow ${m.state}"><span class="msdot"></span><div class="msbody">
+      <div class="msttl">${m.phase} — ${m.stage || ""} ${m.state === "stalled" ? "⚠" : ""}</div>
+      <div class="msmeta">${when}${m.src ? ` · 근거: ${m.src}` : ""}${m.state === "current" ? " · <b>현재</b>" : ""}</div>
+    </div></div>`;
+  }).join("") + `</div>`;
+}
 function srcBadge(s) {
   const v = SRC_TIER[s.src_tier];
   if (!v) return "";
@@ -735,7 +770,7 @@ let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS =
 /* DART(신규시설투자·유형자산양수) → 일자리 후보 신호 어댑트. 위치=회사 소재지 근사(§ 후보층, confirmed:false) */
 function buildDartSignals() {   // DART 전자공시 = 법정 공시 → official_report
   DART_SIG = (DART || []).filter(s => s.geometry && s.geometry.coordinates).map(s => ({
-    _dart: true, src_tier: "official_report", title: s.title, cat: "일자리", sub: "금액", lvl: s.lvl || "C", template_type: "기업이전",
+    _dart: true, src_tier: "official_report", milestones: s.milestones, title: s.title, cat: "일자리", sub: "금액", lvl: s.lvl || "C", template_type: "기업이전",
     current_stage: s.current_stage || "공시", phase: s.phase || "계획", status: "활성", confirmed: false,
     sd: s.sd, sg: s.sg, dong: s.dong || null, amount_eok: s.amount_eok,
     last_movement: s.rcept_dt && s.rcept_dt.length === 8 ? `${s.rcept_dt.slice(0,4)}-${s.rcept_dt.slice(4,6)}-${s.rcept_dt.slice(6,8)}` : null,
@@ -746,7 +781,7 @@ function buildDartSignals() {   // DART 전자공시 = 법정 공시 → officia
 /* 건축인허가(건축HUB) → 인프라·일자리 후보 어댑트. 위치=대지위치 지오코딩, 연면적→레벨(§ 후보층, confirmed:false, 발견형) */
 function buildArchSignals() {
   ARCH_SIG = (ARCH || []).filter(s => s.geometry && s.geometry.coordinates).map(s => ({
-    _arch: true, src_tier: "official_report", title: s.title, cat: s.cat || "인프라", sub: s.cat === "일자리" ? "면적" : undefined, lvl: s.lvl || "C", template_type: s.cat === "일자리" ? "기업이전" : "생활인프라",
+    _arch: true, src_tier: "official_report", milestones: s.milestones, title: s.title, cat: s.cat || "인프라", sub: s.cat === "일자리" ? "면적" : undefined, lvl: s.lvl || "C", template_type: s.cat === "일자리" ? "기업이전" : "생활인프라",
     current_stage: s.current_stage || "인허가", phase: s.phase || "계획", status: s.status || "활성", confirmed: false,
     sd: s.sd, sg: s.sg, dong: s.dong || null, addr: s.addr || null, area_m2: s.area_m2, purp: s.purp,
     arch_gb: s.arch_gb || null, arch_pms_day: s.arch_pms_day || null, real_stcns_day: s.real_stcns_day || null, use_apr_day: s.use_apr_day || null,   // 원본 팩트시트(상세 표기용)
@@ -782,7 +817,7 @@ function buildRailSignals() {
     status: f.properties.drop ? "종결" : "활성",   // 무산 노선(인동선 지선 등) = 종결 표식(P5 — 숨기지 않고 표시)
     confirmed: f.properties.confirmed, sd: null,   // 소재 시도·시군구는 ensureRailSgg가 좌표로 산출(전국)
     src_tier: f.properties.src_tier, st_status: f.properties.st_status, approx: f.properties.approx, note: f.properties.note,
-    pt_type: f.properties.pt_type, geo_prec: f.properties.geo_prec,
+    pt_type: f.properties.pt_type, geo_prec: f.properties.geo_prec, milestones: f.properties.milestones,
     geometry: { coordinates: f.geometry.coordinates }
   }));
 }
@@ -815,7 +850,8 @@ function buildRoadSignals() {
     if (p.kind === "station") {   // IC·JC 점
       ROAD_SIG.push({ _road: true, title: p.name, cat: "교통", sub: "도로", lvl: p.lvl || "A",
         template_type: "도로", current_stage: p.status, phase: p.confirmed ? "착공" : "계획",
-        src_tier: p.src_tier, ic_loc: p.loc, ic_status: p.ic_status, pt_type: p.pt_type, geo_prec: p.geo_prec,
+        src_tier: p.src_tier, ic_loc: p.loc, ic_status: p.ic_status, pt_type: p.pt_type, geo_prec: p.geo_prec, milestones: p.milestones,
+        line: p.line,   // 소속 노선명 — 전용도로 ic_points 매칭 기준
         sources: p.src_url ? [p.src_url] : [],
         status: "활성", confirmed: !!p.confirmed, sd: null,   // 소재 시도=_sggs(buildSggIndex 좌표 귀속)
         geometry: { coordinates: f.geometry.coordinates } });
@@ -827,17 +863,19 @@ function buildRoadSignals() {
     ROAD_SIG.push({ _road: true, title: p.official_name || `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: "도로", lvl: p.lvl || "C",
       template_type: "도로", current_stage: p.status, phase: p.confirmed ? "착공" : "계획",
       status: "활성", confirmed: !!p.confirmed, sd: null, road_kind: roadKindOf(p), src_tier: p.src_tier,   // 소재 시도=_sggs(다중 귀속)
-      owner: p.owner, osm_name: p.name, geom_src: p.geom_src,
+      owner: p.owner, osm_name: p.name, geom_src: p.geom_src, milestones: p.milestones,
       sources: p.src_url ? [p.src_url] : [],
       stage_note: `${p.linekind || "도로"} · ${p.status} · 선형=OSM(ODbL)`,
       geometry: { coordinates: pts[0] },
       access_points: pts.slice(1).map(c => ({ coordinates: c, name: null, status: "노선 경유" }))
     });
   }
-  // 전용도로 ↔ 근접 IC 연결(표시·반경 렌더용): IC 점 신호가 영향권(버퍼)의 주체 — 노선 상세엔 접속 IC로 나열만(이중 카운트 없음)
+  // 전용도로 ↔ 소속 IC 연결(표시·반경 렌더용): IC 점 신호가 영향권(버퍼)의 주체 — 노선 상세엔 접속 IC로 나열만(이중 카운트 없음).
+  // 매칭 기준 = **소속 노선명**(데이터 사실). 거리 매칭은 IC 좌표가 동 대표점(500m~2km 오차)이면 실패한다
+  // — 2026-07-17 사고: 강서IC가 노선에서 1.5km 밖으로 계산돼 광명서울고속도로 영향권이 통째로 비었음.
   const ics = ROAD_SIG.filter(s => !s.access_points);
   ROAD_SIG.filter(s => s.access_points && s.road_kind === "전용").forEach(ln => {
-    ln.ic_points = ics.filter(ic => roadLinePoints(ln).some(pt => meters(pt.coord, ic.geometry.coordinates) < 1500))
+    ln.ic_points = ics.filter(ic => ic.line && (ic.line === ln.osm_name || ic.line === ln.title))
       .map(ic => ({ coordinates: ic.geometry.coordinates, name: ic.title, status: ic.current_stage }));
   });
 }
@@ -1530,6 +1568,8 @@ function renderDetail(s) {
       }).join("")}</ul>
       ${tr ? `<div class="subtrack">유형 세부단계 · ${s.template_type}: ${tr.map(([lb]) =>
         lb === s.current_stage ? `<b class="subcur">${lb}</b>` : lb).join(" › ")}</div>` : ""}
+      <div class="kv" style="border:none;padding-bottom:0"><b>진행 이력·일정</b> <span class="hmhint">완료=날짜(사실) · 미래=목표/미정 · 진척률(%) 없음</span></div>
+      ${msTrack(s)}
       <div class="kv"><b>영향 반경</b> ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km — 유형 기준표(§3.3.1) 가안, 지도에 점선 원으로 표시</div>
       ${s.addr ? `<div class="kv"><b>대지위치</b> ${s.addr} <span class="copyaddr" onclick="copyAddr(this,'${s.addr.replace(/'/g, "\\'")}')" title="주소 복사">📋</span></div>` : ""}
       ${s._arch ? `<div class="factsheet"><div class="fs-h">허가 원본 사실 (건축HUB API 수신값 그대로)</div>
@@ -1741,9 +1781,11 @@ function initLeaflet() {
   // 신호 핀이 동 폴리곤에 클릭을 뺏기지 않도록 전용 상위 pane
   map.createPane("jbpoly").style.zIndex = 635;   // 정비구역 경계 폴리곤(고시 사실) — 마커(cand)보다 아래
   map.createPane("rail").style.zIndex = 638;     // 신규 철도 노선(§7 실선/점선) — 정비폴리곤 위, 마커 아래
-  map.createPane("cand").style.zIndex = 640;
-  map.createPane("sig").style.zIndex = 650;
-  map.createPane("badge").style.zIndex = 660;    // 시군구/동 카운트 배지 — 철도·도로 노선 위에 표시
+  // pane 순서 = 우선순위 원칙: **호재가 주인공**(P4). 동 라벨·아파트가 호재 원의 클릭을 가로채면 안 된다
+  // (2026-07-17 사용자 지적: 외발산동 라벨이 강서IC를 덮어 클릭 불가).
+  map.createPane("badge").style.zIndex = 639;    // 동 이름 라벨·아파트 — 호재 원 아래
+  map.createPane("cand").style.zIndex = 641;     // ★ 호재 원
+  map.createPane("sig").style.zIndex = 650;      // 선택 핀
   map.getPane("tooltipPane").style.zIndex = 720;   // 팝업(아파트 hover 카드 등)은 항상 핀·영향원 위에
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     { maxZoom: 19, attribution: "&copy; OpenStreetMap — 임시 베이스맵 (카카오맵 승인 시 전환)" }).addTo(map);
@@ -2139,7 +2181,11 @@ function initLeaflet() {
     clearBadges();
     if (map.getZoom() < DONG_ZOOM) return;
     const bd = map.getBounds();
-    const placed = [];
+    // 이미 그려진 호재 원의 화면 좌표를 회피 대상에 선점 등록 — 라벨이 호재를 덮지 않게(P4)
+    const placed = hjDots.filter(m => m.getLatLng).map(m => {
+      const q = map.latLngToContainerPoint(m.getLatLng());
+      return { x: q.x, y: q.y, w: 30, h: 30 };
+    });
     for (const f of DONG_GEO.features) {
       const c = ringCentroid(ringsOf(f)[0]);
       if (!bd.contains([c[1], c[0]])) continue;
@@ -2157,10 +2203,10 @@ function initLeaflet() {
     const z = map.getZoom();
     if (z >= DONG_ZOOM) { if (!map.hasLayer(dongLayer)) map.addLayer(dongLayer); }   // 동 경계 폴리곤 문맥
     else { if (map.hasLayer(dongLayer)) map.removeLayer(dongLayer); }
-    renderDongLabels();                                   // z12+ 동 이름 라벨(카운트 없음, 클릭 앵커)
-    if (z >= APT_ZOOM) renderAptDots(); else clearAptDots();   // z14+ 아파트 집 아이콘
     renderJeongbiPoly();   // 정비구역 경계 폴리곤(고시 사실) — jbDrawnRings 채워짐
-    renderHojae();         // ★ 모든 호재 원(크기=등급·색=분류·미확정=점선, 등급 LOD)
+    renderHojae();         // ★ 모든 호재 원 — 라벨보다 **먼저** 그려 위치를 확보(라벨이 이를 회피)
+    renderDongLabels();                                   // z12+ 동 이름 라벨 — 호재 원과 겹치면 회피
+    if (z >= APT_ZOOM) renderAptDots(); else clearAptDots();   // z14+ 아파트 집 아이콘
     renderRail();          // 철도/도로 노선·역(§7 실선/점선)
     if (z >= DONG_ZOOM) loadBdongVisible();   // 동 라벨이 필요한 줌부터 화면에 걸친 시도 경계 로드(전국 분할)
   };
@@ -2671,7 +2717,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260717h");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260717k");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions, jeongbiData, railData, roadData, dartData, archData, archJibang, archJnkj] = await Promise.all([
@@ -2724,7 +2770,9 @@ function initSearch() {
   // 자동(OSM) 신호는 제거 — 같은 사업 이중 카운트 방지 + 양쪽 계보(sources) 보존 (SSOT: 후보→확정 승격 지점)
   SIGNALS.forEach(s => {
     if (!s.road_ref) return;
-    const i = ROAD_SIG.findIndex(r => r.access_points && r.title.includes(s.road_ref));
+    // 매칭은 **내부 수집명(osm_name)** 기준 — title은 공식 사업명으로 바뀌므로 매칭 키로 쓰면 깨진다
+    // (2026-07-17 사고: 표시명 공식화 후 광명서울 IC 6개가 통째로 유실됨)
+    const i = ROAD_SIG.findIndex(r => r.access_points && (r.osm_name || r.title || "").includes(s.road_ref));
     if (i < 0) return;   // 매칭 실패 시 양쪽 그대로(정직)
     const rd = ROAD_SIG.splice(i, 1)[0];
     s._road = true; s.road_kind = rd.road_kind;
@@ -2756,7 +2804,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260717h"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260717k"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -2782,7 +2830,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260717h");
+  const CB = "?b=" + (window.BUILD || "20260717k");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {

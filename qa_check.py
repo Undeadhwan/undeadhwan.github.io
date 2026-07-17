@@ -74,6 +74,14 @@ def main():
         p = f["properties"]
         if p.get("phase") == "준공" or "개통 완료" in (p.get("status") or ""):
             warn("개통혼입", f"{p.get('official_name') or p.get('name')} — 준공/개통 완료가 delta층에 존재")
+    # ── 7b. road_ref 병합 무결성: 확정 신호가 가리키는 도로가 실제로 존재하는가
+    road_names = [(f["properties"].get("name") or "") + "|" + (f["properties"].get("official_name") or "")
+                  for f in dlines]
+    for s_ in sigs:
+        rr = s_.get("road_ref")
+        if rr and not any(rr in n for n in road_names):
+            err("병합실패", f"확정신호 {s_.get('id')} road_ref='{rr}' — 매칭되는 도로 노선 없음(IC·선형 유실)")
+
     # ── 8. 확정 신호 필수 근거
     for s in sigs:
         if not s.get("src_tier"): warn("필수필드", f"확정신호 {s.get('id')} src_tier 없음")
