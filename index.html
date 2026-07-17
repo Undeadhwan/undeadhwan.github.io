@@ -592,7 +592,7 @@ const LEVELS = ["A", "B", "C"];
 const GRADES_DISP = ["A", "B", "C", "미정"];   // 배지·매트릭스 표시용(미정 포함)
 const LEVEL_NAME = { A: "A급", B: "B급", C: "C급", "미정": "미정" };
 const SUB_KEYS = { "교통": ["철도", "도로"], "일자리": ["면적", "금액"] };   // 세부 축 있는 대분류(교통=철도/도로 반경, 일자리=면적/금액 등급기준)
-const CAT_SUB = { "교통": "철도 / 도로", "일자리": "면적기준 / 금액기준", "인프라": "쇼핑 / 병원 / 녹지", "주거개발": "신도시 / 택지 / 재개발 / 재건축" };
+const CAT_SUB = { "교통": "철도 / 도로", "일자리": "면적기준 / 금액기준", "인프라": "병원 / 공원·녹지 / 판매 / 문화·체육 / 학교(특목)", "주거개발": "신도시 / 택지 / 재개발 / 재건축" };
 const LEVEL_DESC = {
   "교통": {
     "철도": { A: "핵심 광역철도 (GTX·신분당·지하화)", B: "일반 지하철 신설·연장", C: "지선·경전철·트램" },
@@ -602,7 +602,10 @@ const LEVEL_DESC = {
     "면적": { A: "메가 업무타운 (연면적 10만㎡↑)", B: "중대형 업무·지식산업센터 (연면적 3~10만㎡)", C: "일반 오피스·지산 (연면적 1~3만㎡)" },
     "금액": { A: "메가 투자 (투자 5,000억↑)", B: "대형 투자 (투자 1,000~5,000억)", C: "일반 투자 (투자 300~1,000억)" }
   },
-  "인프라": { A: "랜드마크급 (복합몰·상급종합병원·대형공원)", B: "중대형 (대형마트·종합병원·근린공원)", C: "근린 생활 (준종합병원·소공원·문화체육센터)" },
+  // §7b 생활인프라 편입 기준(2026-07-17 사용자 확정): 병원 100병상+/공원 5만㎡+/판매 3천㎡+/문화체육 1만㎡+/학교는 특목급만
+  "인프라": { A: "상급종합·대학병원(500병상+) · 복합몰·백화점(연면적 15만㎡+) · 대형공원(30만㎡+) · 전국모집 특목(영재·국제학교)",
+              B: "종합병원(300병상+) · 대형몰·창고형마트(5~15만㎡) · 근린공원(10만㎡+) · 광역모집 특목(과학고·외고)",
+              C: "종합병원(100~300병상) · 대형마트급(1~5만㎡) · 공원(5~10만㎡) · 근린 문화체육 복합센터" },
   "주거개발": { A: "도시급 대형 (5천 세대↑)", B: "지역 대장주급 (1,500~5천 세대)", C: "일반 단지급 (500~1,500 세대)" }
 };
 // 주거개발 = 마젠타(#c2255c) — 종전 레드(#c4392f)가 일자리 오렌지와 원 크기에서 구분 안 됨(사용자 지적 2026-07-17)
@@ -925,7 +928,7 @@ function buildRoadSignals() {
     const p = f.properties;
     if (p.kind === "station") {   // IC·JC 점
       ROAD_SIG.push({ _road: true, title: p.name, cat: "교통", sub: "도로", lvl: p.lvl || "A",
-        template_type: "도로", current_stage: p.status, phase: p.confirmed ? "착공" : "계획",
+        template_type: "도로", current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
         src_tier: p.src_tier, ic_loc: p.loc, ic_status: p.ic_status, pt_type: p.pt_type, geo_prec: p.geo_prec, milestones: p.milestones,
         line: p.line,   // 소속 노선명 — 전용도로 ic_points 매칭 기준
         // JC(분기점)=고속도로끼리 연결, 일반 차량 진출입 불가 → **그 동네 호재 아님**(2026-07-17 사용자 지적, §7 거리≠수혜).
@@ -940,7 +943,7 @@ function buildRoadSignals() {
     if (!pts.length) continue;
     // 표시명 = 공식 사업명 우선(OSM 이름은 선형 매칭용일 뿐 — 공식 SSOT 사상 2026-07-17)
     ROAD_SIG.push({ _road: true, title: p.official_name || `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: "도로", lvl: p.lvl || "C",
-      template_type: "도로", current_stage: p.status, phase: p.confirmed ? "착공" : "계획",
+      template_type: "도로", current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
       status: "활성", confirmed: !!p.confirmed, sd: null, road_kind: roadKindOf(p), src_tier: p.src_tier,   // 소재 시도=_sggs(다중 귀속)
       owner: p.owner, osm_name: p.name, line: p.name, geom_src: p.geom_src, milestones: p.milestones,   // line=노선 하이라이트 키
       official_type: p.official_type, official_name: p.official_name, access: p.access, access_note: p.access_note, ic_note: p.ic_note,
@@ -2090,7 +2093,7 @@ function initLeaflet() {
     const div = L.DomUtil.create("div", "jb-legend");
     div.innerHTML = "<b>정비구역</b>"
       + JB_LEGEND_ITEMS.map(([n, c]) => `<span class="jl"><i style="background:${c}"></i>${n}</span>`).join("")
-      + `<div class="jhint">진행 단계는 구역 클릭·툴팁에서 확인 (색은 4대 분류 통일 — 교통 파랑 / 주거 빨강).<br>출처: 서울특별시 도시공간본부(공공누리 4유형)</div>`;
+      + `<div class="jhint">진행 단계는 구역 클릭·툴팁에서 확인 (색은 4대 분류 통일 — 교통 파랑 / 주거 마젠타).<br>출처: 서울특별시 도시공간본부(공공누리 4유형)</div>`;
     return div;
   };
   let jbLegendOn = false;
@@ -2439,7 +2442,7 @@ function initLeaflet() {
       // 흰 글로우 케이싱 + 본선 굵게 — 색은 분류색 유지(표식 문법 v1.7), 미확정 선형은 점선 유지(§7)
       routeHl.push(L.polyline(ll, { pane: "sig", color: "#fff", weight: 11, opacity: .85, interactive: false }).addTo(map));
       routeHl.push(L.polyline(ll, { pane: "sig", color: col, weight: 5.5, opacity: .95,
-        dashArray: (p.dashed || p.approx) ? "10 8" : null, lineCap: "round", interactive: false }).addTo(map));
+        dashArray: (!["착공", "준공"].some(k => (p.phase || "").startsWith(k)) || p.approx) ? "10 8" : null, lineCap: "round", interactive: false }).addTo(map));
     }
     for (const f of RAIL.concat(ROADF)) {   // 소속 역·IC 강조 링
       const p = f.properties;
@@ -2851,7 +2854,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260717ac");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260718a");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions, jeongbiData, railData, roadData, dartData, archData, archJibang, archJnkj] = await Promise.all([
@@ -2938,7 +2941,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260717ac"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260718a"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -2964,7 +2967,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260717ac");
+  const CB = "?b=" + (window.BUILD || "20260718a");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {

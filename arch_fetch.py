@@ -25,9 +25,12 @@ HDRS = {"User-Agent": "hojaemap/1.0", "Accept": "*/*"}   # ★ Accept 필수(없
 JOB = ("업무", "공장", "교육연구", "연구소", "지식산업")
 INFRA = ("판매", "의료", "문화 및 집회", "운수", "위락", "관광", "숙박", "근린생활", "방송통신", "종교", "장례")
 PHASE_RANK = {"계획": 0, "착공": 1, "준공·개통": 2}
-# 연면적(㎡) → 레벨 (스펙: 인프라 A5만/B1만/C, 일자리 A10만/B3만/C1만)
-def level_of(cat, area):
-    if cat == "인프라": return "A" if area >= 50000 else "B" if area >= 10000 else "C"
+# 연면적(㎡) → 레벨. §7b(2026-07-17 확정): 판매시설은 A15만/B5만/C1만(복합몰~대형마트급).
+# 의료는 병상 기준이 정식이나 건축HUB에 병상 없음 → 연면적 프록시(A5만/B1만) 유지, 개설허가 커넥터 도입 시 교체.
+def level_of(cat, area, purp=""):
+    if cat == "인프라":
+        if "판매" in purp: return "A" if area >= 150000 else "B" if area >= 50000 else "C"
+        return "A" if area >= 50000 else "B" if area >= 10000 else "C"
     return "A" if area >= 100000 else "B" if area >= 30000 else "C"   # 일자리
 # 학교 처리(§7b 사용자 확정 2026-07-17): 일반 초중고·특수학교 = 배제(신도시 부속시설 + 학군 서열화 P1),
 # 특목·자사·국제학교급 = 인프라. '교육연구시설' 용도가 일자리로 뭉뚱그려지던 것을 명칭으로 분기.
@@ -160,7 +163,7 @@ def main():
         dt = r["useapr"] or r["stcns"] or r["pms"]
         sigs.append({
             "title": f"{r['dong']} {r['nm']} ({r['purp']}, 연면적 {int(r['area']/1000)}천㎡)",
-            "cat": r["cat"], "lvl": level_of(r["cat"], r["area"]), "area_m2": int(r["area"]), "purp": r["purp"], "arch_gb": r["gb"],
+            "cat": r["cat"], "lvl": level_of(r["cat"], r["area"], r["purp"]), "area_m2": int(r["area"]), "purp": r["purp"], "arch_gb": r["gb"],
             "sd": r["sido"], "sg": r["sgg"], "dong": r["dong"], "addr": r["addr"], "confirmed": False,
             "current_stage": r["_ph"], "phase": r["_ph"], "status": "활성",
             "arch_pms_day": r["pms"], "real_stcns_day": r["stcns"], "use_apr_day": r["useapr"],

@@ -94,6 +94,7 @@ def main():
             "owner": o.get("owner"), "src_tier": "official_report",
             "src_name": f"{o.get('owner','')} 공식 — {o['name']}", "src_url": o.get("src") or "",
             "geom_src": "공식 경유 대표점 연결(근사) — 미착공이라 실선형 미존재", "approx": True,
+            "route_verified": o.get("route_verified"),   # §3c — 급반전이 실제 선형임을 확인한 경우 QA 억제
             "pt_type": "road_line", "has_official_ic": o["name"] in ic_lines,
             "note": o.get("anchor_note"),
             "milestones": [{"phase": o["phase"], "stage": (o["stage"] or "")[:44], "state": "current", "src": o.get("owner")}],
@@ -122,6 +123,7 @@ def main():
             "kind": "station", "mode": "road", "name": x["name"], "line": lp["name"],   # 노선 키로 정규화
             "line_official": x["line"],
             "lvl": lp.get("lvl", "A"), "status": lp.get("status"), "confirmed": lp.get("confirmed"),
+            "phase": lp.get("phase"),   # 소속 노선의 4단계 백본 — UI가 confirmed로 유도하던 것 폐기(인가가 '계획'으로 오표시되던 문제, 2026-07-18)
             "linekind": "IC" if is_sig else "JC(분기점)", "name_src": x.get("src", "국토부 고시·보도"),
             "ic_status": x.get("status"), "loc": x.get("loc"),
             "signal": is_sig,                                        # False = 지도·영향권 제외(호재 아님)
@@ -153,7 +155,7 @@ def main():
             feats.append({"type": "Feature", "properties": {
                 "kind": "station", "mode": "road", "name": f"{(lp.get('official_name') or r['line'])[:22]} 진입로(이름 미상)",
                 "line": r["line"], "lvl": lp.get("lvl", "A"), "status": lp.get("status"),
-                "confirmed": lp.get("confirmed"), "linekind": "진입로", "name_src": "OSM 연결로 클러스터",
+                "confirmed": lp.get("confirmed"), "phase": lp.get("phase"), "linekind": "진입로", "name_src": "OSM 연결로 클러스터",
                 "signal": True, "pt_role": "ramp", "pt_type": "road_ic",
                 "geo_prec": "landmark", "src_tier": "osm_geom",   # 위치는 사실(연결로), 이름만 미상
                 "milestones": lp.get("milestones") or [], "ramps": r.get("ramps"), "audited": "2026-07-17"},
