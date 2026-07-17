@@ -335,6 +335,13 @@
     header { padding:8px 10px; gap:8px; }
     .chips { flex-wrap:nowrap; overflow-x:auto; max-width:100%; -webkit-overflow-scrolling:touch; }
     .chip { flex-shrink:0; }
+    /* 드롭다운 패널이 .chips의 overflow-x:auto에 잘려 안 보이던 문제(2026-07-17 모바일 제보):
+       열린 동안 스크롤 컨테이너를 풀고, 패널은 화면 기준(fixed)으로 띄워 잘림을 원천 차단 */
+    .chips.dd-open { overflow:visible; }
+    .dd { position:static; }
+    .ddpanel { position:fixed; left:8px; right:8px; top:auto; width:auto; min-width:0;
+               max-height:60vh; overflow-y:auto; z-index:3000; }
+    .ddtog { padding:12px 16px; font-size:14px; }   /* 터치 타깃 확대 */
     #wrap { flex-direction:column; height:auto; }
     #map { flex:none; height:46vh; width:100%; order:0; }
     #panel { width:100%; border-right:none; border-top:1px solid var(--line); order:1;
@@ -852,6 +859,9 @@ function buildRoadSignals() {
         template_type: "도로", current_stage: p.status, phase: p.confirmed ? "착공" : "계획",
         src_tier: p.src_tier, ic_loc: p.loc, ic_status: p.ic_status, pt_type: p.pt_type, geo_prec: p.geo_prec, milestones: p.milestones,
         line: p.line,   // 소속 노선명 — 전용도로 ic_points 매칭 기준
+        // JC(분기점)=고속도로끼리 연결, 일반 차량 진출입 불가 → **그 동네 호재 아님**(2026-07-17 사용자 지적, §7 거리≠수혜).
+        // 노선의 접속 구조 사실로만 보존 — 지도 원·영향권·집계에서 제외.
+        signal: p.signal !== false, pt_role: p.pt_role,
         sources: p.src_url ? [p.src_url] : [],
         status: "활성", confirmed: !!p.confirmed, sd: null,   // 소재 시도=_sggs(buildSggIndex 좌표 귀속)
         geometry: { coordinates: f.geometry.coordinates } });
@@ -875,8 +885,11 @@ function buildRoadSignals() {
   // — 2026-07-17 사고: 강서IC가 노선에서 1.5km 밖으로 계산돼 광명서울고속도로 영향권이 통째로 비었음.
   const ics = ROAD_SIG.filter(s => !s.access_points);
   ROAD_SIG.filter(s => s.access_points && s.road_kind === "전용").forEach(ln => {
-    ln.ic_points = ics.filter(ic => ic.line && (ic.line === ln.osm_name || ic.line === ln.title))
+    // 영향권 = **IC(진출입 가능)만**. JC는 분기점이라 그 지점에서 지역으로 나갈 수 없다 → 영향권 없음
+    ln.ic_points = ics.filter(ic => ic.signal !== false && ic.line && (ic.line === ln.osm_name || ic.line === ln.title))
       .map(ic => ({ coordinates: ic.geometry.coordinates, name: ic.title, status: ic.current_stage }));
+    ln.jc_points = ics.filter(ic => ic.signal === false && ic.line && (ic.line === ln.osm_name || ic.line === ln.title))
+      .map(ic => ({ coordinates: ic.geometry.coordinates, name: ic.title }));   // 구조 정보(상세 표기용)
   });
 }
 /* 정비(JEONGBI) 후보를 신호 형태로 어댑트 → 아파트 호재 카운팅·카드·4단계 필터에 정비 포함(분류=정비).
@@ -1039,6 +1052,7 @@ function ddAfter(d) {
 function renderChips() {
   const host = document.getElementById("f-dd");
   host.innerHTML = "";
+  host.classList.toggle("dd-open", !!openDD);   // 열린 동안 overflow 해제(모바일 잘림 방지)
   DD_DEFS().forEach(d => {
     const wrap = document.createElement("div");
     wrap.className = "dd";
@@ -1054,6 +1068,13 @@ function renderChips() {
       const panel = document.createElement("div");
       panel.className = "ddpanel";
       panel.onclick = e => e.stopPropagation();
+      // 모바일: 화면 기준으로 버튼 바로 아래에 띄움(가로 스크롤 컨테이너에 잘리지 않게)
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        requestAnimationFrame(() => {
+          const r = btn.getBoundingClientRect();
+          panel.style.top = Math.round(r.bottom + 6) + "px";
+        });
+      }
       const tg = document.createElement("div");
       tg.className = "ddtoggles";
       d.keys.forEach(k => {
@@ -1200,7 +1221,9 @@ function signalsNearPoint(coord) {
   const dartLocal = DART_SIG.filter(near);   // DART 일자리 후보
   const archLocal = ARCH_SIG.filter(near);   // 건축인허가 인프라·일자리 후보
   // 도로: 30여 개 다점 신호 — bbox 프리필터 없이 전체 평가(signalPoints가 샘플점 전부 검사, 노선당 1건 집계)
-  return SIGNALS.concat(jbLocal, railLocal, dartLocal, archLocal, ROAD_SIG).filter(visible).map(s => {
+  return SIGNALS.concat(jbLocal, railLocal, dartLocal, archLocal, ROAD_SIG)
+    .filter(s => s.signal !== false)   // JC 제외(호재 아님)
+    .filter(visible).map(s => {
     const d = Math.min(...(signalPoints(s).map(p => meters(coord, p.coord)) || [Infinity]));
     return { s, dist: d, within: d <= getRadius(s) };
   }).filter(x => x.within && isFinite(x.dist)).sort((a, b) => a.dist - b.dist);
@@ -1584,6 +1607,8 @@ function renderDetail(s) {
       ${(s.access_points || []).filter(a => a.name).concat(s.ic_points || []).length ? `<div class="kv"><b>접근점</b> ${
         (s.access_points || []).filter(a => a.name).concat(s.ic_points || []).map(a =>
         `${a.name}${a.coordinates ? "" : " (좌표 미확보)"} — ${a.status || ""}`).join(" · ")}</div>` : ""}
+      ${(s.jc_points || []).length ? `<div class="kv"><b>분기점(JC)</b> ${s.jc_points.map(j => j.name).join(" · ")}
+        <span class="hmhint">— 고속도로 간 연결 지점으로 일반 차량 진출입 불가 · 지역 호재 아님(구조 정보)</span></div>` : ""}
       ${s._road && (s.access_points || []).length ? (s.road_kind === "전용"
         ? `<div class="kv"><b>영향권</b> ${(s.ic_points || []).length
             ? `진출입 IC ${s.ic_points.length}개소 반경 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km (전용도로 — 선 자체는 영향권 미산정)`
@@ -2086,7 +2111,9 @@ function initLeaflet() {
     // 철도역·도로IC도 호재 원 체계로 일원화(2026-07-16 사용자 지적 — "역 생기는 곳이 호재인데 원이 없다").
     // 도로 노선 신호(access_points 보유)는 선으로 렌더되므로 제외(확정 병합분 포함), IC 점만 포함.
     const pool = SIGNALS.concat(JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG)
-      .filter(s => !(s._road && s.access_points)).filter(visible)
+      .filter(s => !(s._road && s.access_points))
+      .filter(s => s.signal !== false)   // JC(분기점) 제외 — 진출입 불가라 호재 아님
+      .filter(visible)
       .filter(s => s.geometry && s.geometry.coordinates)   // 좌표 미확정 신호 제외(지도 미표시 — 카드에서 표기)
       .filter(s => show.has(levelOf(s)))
       .filter(s => { const c = s.geometry.coordinates; return bd.contains([c[1], c[0]]); })
