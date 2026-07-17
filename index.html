@@ -2163,8 +2163,9 @@ function initLeaflet() {
   // 신규 철도 노선(호재) §7 렌더: 확정/건설중=실선, 미확정(계획·구상)=점선. 후보역=점. 교통 분류·4단계 필터 반응.
   let railLayers = [];
   const clearRail = () => { railLayers.forEach(l => map.removeLayer(l)); railLayers = []; };
-  // 공식 IC 보유 도로의 OSM 선형 숨김 (원복하려면 false)
-  const ROAD_LINE_HIDE_WHEN_IC = true;
+  // 공식 IC 보유 도로의 OSM 선형: 숨김(true) → 감쇠 병행 표시(false)로 전환 (2026-07-17 재검토 — 대형 노선 13건이 통째로 안 보이는 부작용).
+  // IC 점이 여전히 1차 표현이고, 선형은 저채도 참고선으로 깔린다(철도의 선+역 문법과 통일).
+  const ROAD_LINE_HIDE_WHEN_IC = false;
   const ROAD_COL = "#b45309";   // 도로=황갈(철도 파랑과 구분). §7 문법 동일: 건설중=실선/계획=점선
   const renderRail = () => {
     clearRail();
@@ -2176,23 +2177,27 @@ function initLeaflet() {
       const p = f.properties;
       const isRoad = p.mode === "road";
       const col = isRoad ? ROAD_COL : railCol;
-      const dashed = isRoad ? !p.confirmed : p.dashed;
+      // approx(공식 경유 대표점 근사)는 착공 여부와 무관하게 점선 — 선형 자체가 실측이 아니므로 (§4.1 지도 정직성)
+      const dashed = isRoad ? (!p.confirmed || p.approx) : p.dashed;
       if (phaseFiltering && p.phase && !filter.phase.has(p.phase)) continue;
       if (YEAR_SEL && false) continue;   // (철도 고시연도 필터는 추후)
       if (f.geometry.type === "LineString" || f.geometry.type === "MultiLineString") {
         // 노선 선형 표시 토글(헤더 '노선') — 선만 숨김, 역·IC 라벨과 호재 원·집계는 불변
         if (isRoad ? !filter.lines.has("도로선") : !filter.lines.has("철도선")) continue;
-        // **공식 IC가 존재하는 도로는 OSM 선형을 그리지 않는다** (사용자 확정 2026-07-17):
-        // IC의 존재가 공식 확인된 사업은 IC 점이 그 사업의 정확한 표현이고, OSM 선형은 비공식 근사라
-        // 둘을 겹쳐 그리면 서로 어긋나 보인다(매핑 불일치). 공식 데이터가 있으면 그것만 쓴다.
+        // **공식 IC가 존재하는 도로**: IC 점이 1차 표현(사용자 확정 2026-07-17), 선형은 감쇠 참고선으로 병행
+        // (2026-07-17 재검토 — 숨김은 수도권제2순환 등 13건이 통째로 안 보이는 부작용. OSM 선형과 IC가
+        //  어긋나 보이는 문제는 저채도·세선으로 완화).
         if (isRoad && p.has_official_ic && ROAD_LINE_HIDE_WHEN_IC) continue;
+        const subdued = isRoad && p.has_official_ic;
         const ll = f.geometry.type === "MultiLineString"
           ? f.geometry.coordinates.map(seg => seg.map(([x, y]) => [y, x]))   // 다중 세그먼트
           : f.geometry.coordinates.map(([x, y]) => [y, x]);
-        const line = L.polyline(ll, { pane: "rail", color: col, weight: dashed ? 3 : 4,
-          opacity: isRoad ? .8 : .9, dashArray: dashed ? "8 7" : null, lineCap: "round" }).addTo(map);
+        const line = L.polyline(ll, { pane: "rail", color: col,
+          weight: subdued ? 2.5 : dashed ? 3 : 4,
+          opacity: subdued ? .45 : isRoad ? .8 : .9,
+          dashArray: dashed ? "8 7" : null, lineCap: "round" }).addTo(map);
         line.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${isRoad ? "🛣" : "🚈"} ${p.full || p.name}</div>`
-          + `<div class="apt-pop-sub">${p.linekind || ""} · <span style="color:${col}">${p.status}</span>${dashed ? " (미확정 — 점선)" : ""}</div>`
+          + `<div class="apt-pop-sub">${p.linekind || ""} · <span style="color:${col}">${p.status}</span>${p.approx ? " (근사 선형 — 공식 경유지 연결, 실선형 아님)" : dashed ? " (미확정 — 점선)" : ""}</div>`
           + `<div class="apt-pop-cats"><span style="color:${col}">● 단계 ${p.phase || (p.confirmed ? "착공" : "계획")}</span>${p.note ? " · " + p.note : ""}${p.src_name ? ` · 출처: ${p.src_name}` : isRoad ? " · 선형: OSM(ODbL)" : ""}</div></div>`,
           { sticky: true, className: "apt-tip" });
         line.on("click", (e) => { L.DomEvent.stopPropagation(e);
@@ -2764,7 +2769,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260717z");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260717aa");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions, jeongbiData, railData, roadData, dartData, archData, archJibang, archJnkj] = await Promise.all([
@@ -2851,7 +2856,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260717z"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260717aa"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -2877,7 +2882,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260717z");
+  const CB = "?b=" + (window.BUILD || "20260717aa");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {

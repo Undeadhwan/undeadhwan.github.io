@@ -101,6 +101,22 @@ def main():
             warn("영향권없음", f"{(p.get('official_name') or p['name'])[:44]} [{p.get('phase')}] — "
                               f"전용도로인데 진출입 지점(IC·진입로) 0 → 영향권 미산정(집계에서 빠짐)")
 
+    # ── 7d. 공식 사업의 지도 부재: official_roads의 비개통 사업인데 road_signals에 피처가 0개.
+    #        미착공이라 OSM 선형이 없고 anchors도 없으면 선도 점도 없이 통째로 사라진다(2026-07-17 발견: 29건).
+    #        '공식 확인된 사업이 지도에 없다'는 조용한 탈락이므로 반드시 노출한다.
+    offd = load("official_roads.json") or {}
+    if offd:
+        on_map = set()
+        for f in (road or {}).get("features", []):
+            p = f["properties"]
+            for k in (p.get("official_name"), p.get("name"), p.get("line_official")):
+                if k: on_map.add(k)
+        for o in offd.get("roads", []):
+            if o.get("opened"): continue
+            if o["name"] not in on_map:
+                warn("지도부재", f"{o['name'][:44]} [{o.get('phase')}] — 공식 사업인데 지도 피처 0 "
+                                f"(OSM 선형·anchors 모두 없음 → official_roads.json에 anchors 추가)")
+
     # ── 8. 확정 신호 필수 근거
     for s in sigs:
         if not s.get("src_tier"): warn("필수필드", f"확정신호 {s.get('id')} src_tier 없음")

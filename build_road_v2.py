@@ -10,7 +10,7 @@
 규칙(DATA_STANDARD):
   · 공식 목록에 없는 OSM 노선 = 지도에 올리지 않는다 → road_unverified_queue.json (§2)
   · 개통완료(_opened_not_delta)는 호재 아님 → 제외 (§7 delta만)
-  · **공식 IC가 존재하는 노선은 OSM 선형 미표시**(has_official_ic) — IC 점이 정확한 표현 (§2b)
+  · **공식 IC가 존재하는 노선은 IC 점이 1차 표현, 선형은 감쇠 참고선**(has_official_ic → UI 감쇠 렌더) (§2b v1.5 — 숨김은 폐기)
 
 사용: python3 build_road_v2.py
 """
@@ -38,10 +38,15 @@ def main():
     ic_lines = {x["line"] for x in ics}
 
     def match(nm):
+        # 2단 매칭: ① match 패턴(정밀) 전체 순회 → ② 이름 부분일치(폴백) 전체 순회.
+        # 한 패스로 섞으면 자식 항목(장암연결구간 등)의 이름 부분일치가 부모 OSM 선형을 흡수한다
+        # (2026-07-17: '서울양주' ⊂ '서울양주장암연결' 때문에 부모 선형이 자식에 붙어 광백IC 고아화).
         n = norm(nm)
         for o in off:
             for m in o.get("match", []):
-                if m in n or n in norm(o["name"]): return o
+                if m in n: return o
+        for o in off:
+            if n and (n in norm(o["name"])): return o
         return None
 
     feats, ref, queue = [], [], []
@@ -177,7 +182,7 @@ def main():
         ref.append({"name": p.get("official_name") or p["name"],
                     "kind": (p.get("linekind") or "도로") + (f" · {p.get('owner')}" if p.get("owner") else ""),
                     "phase": p.get("phase"), "stage": p.get("status"),
-                    "geom": "IC 점 기준(공식) — OSM 선형 미표시" if p.get("has_official_ic") else "실선형(OSM 참고) · 위치·단계=공식",
+                    "geom": "IC 점 기준(공식) + 참고 선형 병행" if p.get("has_official_ic") else "실선형(OSM 참고) · 위치·단계=공식",
                     "src": p.get("src_name") or "공식", "stations": st})
     json.dump({"_note": "도로 대장 — build_road_v2.py 생성", "lines": ref}, open(REF, "w"), ensure_ascii=False, indent=1)
     json.dump({"_note": "OSM 수집분 중 공식 근거 미확인·개통완료 — 지도 미표시. 공식 확인 시 official_roads.json 등재 후 자동 복귀.",
@@ -185,7 +190,7 @@ def main():
 
     nl = sum(1 for f in feats if f["properties"]["kind"] == "line")
     print(f"road_signals.json 재생성: 노선 {nl} · **IC(호재) {n_ic}** · JC(제외) {n_jc} · **진입로(OSM) {n_ramp}**")
-    print(f"  공식 IC 보유(선형 숨김) {sum(1 for f in feats if f['properties'].get('has_official_ic'))} · 큐 {len(queue)}")
+    print(f"  공식 IC 보유(선형 감쇠 표시) {sum(1 for f in feats if f['properties'].get('has_official_ic'))} · 큐 {len(queue)}")
 
 if __name__ == "__main__":
     main()
