@@ -1459,7 +1459,7 @@ function cardHtml(s, extra = "") {
       ${s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>'}
       ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}
       ${noCoord ? '<span class="badge-near">위치 미확정 — 지도 미표시</span>' : ""}
-      ${icMissing ? '<span class="badge-near">전용도로 · IC 미확보 — 영향권 미산정</span>' : ""}${srcBadge(s)} ${extra}</div>
+      ${icMissing ? '<span class="badge-near" title="이 도로는 진출입 지점(IC·진입로)에서만 타고 내립니다. 공식 IC 위치가 아직 확정·공개되지 않아 영향권을 산정하지 않습니다(근거 없는 범위를 만들지 않음).">진출입 지점 미확정 — 영향권 미산정</span>' : ""}${srcBadge(s)} ${extra}</div>
     <div class="title">${s.title}</div>
     <div class="stage">단계: <b>${ph}</b> <span class="pmini">(${pIdx + 1}/${PHASES.length})</span>${detail} · ${freshness(s)}</div>
     ${miniBarHtml(s)}`;
@@ -1626,7 +1626,7 @@ function renderDetail(s) {
       ${s._road && (s.access_points || []).length ? (s.road_kind === "전용"
         ? `<div class="kv"><b>영향권</b> ${(s.ic_points || []).length
             ? `진출입 IC ${s.ic_points.length}개소 반경 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km (전용도로 — 선 자체는 영향권 미산정)`
-            : `진출입 IC 좌표 미확보 — 영향권 미산정 (전용도로는 IC 접속점 기준, 선형만 표시)`}</div>`
+            : `<b>진출입 지점 미확정 — 영향권 미산정</b> · 이 도로는 IC·진입로에서만 타고 내리므로 그 위치 없이는 수혜 범위를 정할 수 없습니다. ${s.phase === "계획" || s.phase === "인가" ? "미착공 사업이라 IC 위치가 공식 확정 전입니다." : "공식 IC 명단 확인 중입니다."} 근거 없는 범위는 만들지 않습니다(§P2)`}</div>`
         : `<div class="kv"><b>영향권</b> 노선 양측 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km 회랑 (선 전체 기준)</div>`) : ""}
       ${(s.stage_history || []).length ? `<div class="kv"><b>단계 이력</b> ${s.stage_history.map(h =>
         `${h.stage} ${h.date}${h.end ? "~" + h.end : ""}`).join(" → ")}</div>` : ""}

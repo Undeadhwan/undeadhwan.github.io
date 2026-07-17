@@ -83,6 +83,24 @@ def main():
         if rr and not any(rr in n for n in road_names):
             err("병합실패", f"확정신호 {s_.get('id')} road_ref='{rr}' — 매칭되는 도로 노선 없음(IC·선형 유실)")
 
+    # ── 7c. 전용도로 영향권 미산정: 진출입 지점(IC·진입로)이 없으면 그 호재는 집계에서 통째로 빠진다.
+    #        지도엔 보이는데 아파트 카운팅엔 안 잡히는 '죽은 신호' — 조용히 넘어가면 못 찾으므로 경고로 노출.
+    EX_TYPES = ("고속도로", "자동차전용", "도시고속화")
+    sig_pts = {}
+    for f in ric:
+        p = f["properties"]
+        if p.get("signal") is not False:
+            sig_pts.setdefault(p.get("line"), 0)
+            sig_pts[p["line"]] += 1
+    for f in dlines:
+        p = f["properties"]
+        acc = p.get("access")
+        is_ramp = acc == "ramp" if acc else any(k in (p.get("official_type") or p.get("linekind") or "") for k in EX_TYPES)
+        if not is_ramp: continue
+        if not sig_pts.get(p["name"]):
+            warn("영향권없음", f"{(p.get('official_name') or p['name'])[:44]} [{p.get('phase')}] — "
+                              f"전용도로인데 진출입 지점(IC·진입로) 0 → 영향권 미산정(집계에서 빠짐)")
+
     # ── 8. 확정 신호 필수 근거
     for s in sigs:
         if not s.get("src_tier"): warn("필수필드", f"확정신호 {s.get('id')} src_tier 없음")
