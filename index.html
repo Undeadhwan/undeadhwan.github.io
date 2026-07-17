@@ -232,6 +232,18 @@
   .fresh.done { color:#2e8b57; font-weight:600; }
   .badge-draft { display:inline-block; font-size:10px; background:#fff3cd; color:#856404; border-radius:4px; padding:1px 5px; margin-left:4px; }
   /* ── 마일스톤 트랙 (DATA_STANDARD §3b) — "지금 어디까지 왔고, 다음은 언제" ── */
+  /* 노선 바 + 지점 칩 (표준 양식 v2 — 노선 전체 하이라이트 동선) */
+  .linebar { margin:10px 0 6px; padding:9px 11px; background:#f4f6fb; border:1px solid #dfe5f2; border-radius:10px; }
+  .linebar .lb-h { font-size:12.5px; margin-bottom:6px; }
+  .lb-chips { display:flex; flex-wrap:wrap; gap:4px; }
+  .stchip { font-size:11px; padding:2px 8px; border-radius:20px; border:1px solid #c7d2ea; background:#fff;
+            color:#2545a8; cursor:pointer; white-space:nowrap; }
+  .stchip:hover { background:#e9eefb; }
+  .stchip.on { background:#2e5ce6; color:#fff; border-color:#2e5ce6; font-weight:700; }
+  .nextwatch { margin:2px 0 8px; font-size:12px; color:#444; background:#fffbea; border:1px solid #efe3ae;
+               border-radius:8px; padding:5px 10px; display:inline-block; }
+  .msrow.future .msdot { border-color:#c4c9d4; }
+  .msrow.future .msttl { color:#8a8f9c; font-weight:400; }
   .mstrack { margin:10px 0 4px; }
   .msrow { display:flex; align-items:flex-start; gap:9px; padding:5px 0; position:relative; }
   .msrow:not(:last-child)::before { content:""; position:absolute; left:5.5px; top:19px; bottom:-5px; width:2px; background:#e2e5ec; }
@@ -635,17 +647,56 @@ function precNote(s) {
 /* 마일스톤 트랙 (DATA_STANDARD §3b): 완료=날짜(사실) / 미래=목표·미정(추정 금지) / 진척률 % 없음(§7) */
 const MS_STATE = { done:"완료", current:"현재", next:"다음", future:"미도래", target:"목표", stalled:"정체·중지" };
 function msTrack(s) {
+  // 표준 양식 v2 (2026-07-17): 4단계 백본 목록과 이력 타임라인을 **하나로 통합**.
+  // 완료·현재·정체 = 개별 행(날짜=사실), 미도래·목표 = **한 행으로 압축**("인가 → 착공 → 개통 '33 목표") — 중복 제거.
   const ms = s.milestones || [];
   if (!ms.length) return `<div class="msnone">일정 정보 없음 — 소스가 단계별 시점을 제공하지 않습니다(추정하지 않음)</div>`;
-  return `<div class="mstrack">` + ms.map(m => {
+  const out = []; let fut = [];
+  const flush = () => {
+    if (!fut.length) return;
+    const eta = fut.map(m => m.eta).filter(Boolean).pop();
+    out.push(`<div class="msrow future"><span class="msdot"></span><div class="msbody">
+      <div class="msttl">${fut.map(m => (m.stage && m.stage !== m.phase) ? m.stage : m.phase).join(" → ")}</div>
+      <div class="msmeta">${eta ? `최종 ${eta} 목표` : "미도래 — 시기 미정"}</div></div></div>`);
+    fut = [];
+  };
+  for (const m of ms) {
+    if ((m.state === "future" || m.state === "next" || m.state === "target") && !m.date) { fut.push(m); continue; }
+    flush();
     const when = m.date ? `<span class="msdate">${m.date}</span>`
-              : m.eta ? `<span class="mseta">${m.eta} ${m.state === "target" ? "목표" : "예정"}</span>`
-              : `<span class="msmeta">${m.state === "future" ? "미도래" : "시기 미정"}</span>`;
-    return `<div class="msrow ${m.state}"><span class="msdot"></span><div class="msbody">
+              : m.eta ? `<span class="mseta">${m.eta} 목표</span>` : `<span class="msmeta">시기 미정</span>`;
+    out.push(`<div class="msrow ${m.state}"><span class="msdot"></span><div class="msbody">
       <div class="msttl">${m.phase} — ${m.stage || ""} ${m.state === "stalled" ? "⚠" : ""}</div>
       <div class="msmeta">${when}${m.src ? ` · 근거: ${m.src}` : ""}${m.state === "current" ? " · <b>현재</b>" : ""}</div>
-    </div></div>`;
-  }).join("") + `</div>`;
+    </div></div>`);
+  }
+  flush();
+  return `<div class="mstrack">` + out.join("") + `</div>`;
+}
+/* 다음 관찰 포인트(§7 문법: 매수의견 대신 "다음 관찰") — 유형 세부단계 트랙에서 현재의 다음 항목 */
+function nextWatch(s) {
+  if (s.status === "종결") return "";
+  const tr = trackOf(s);
+  if (!tr) return "";
+  const i = tr.findIndex(([lb]) => lb === s.current_stage);
+  const nx = i >= 0 && tr[i + 1] ? tr[i + 1][0] : null;
+  return nx ? `<div class="nextwatch">🔭 다음 관찰 — <b>${nx}</b></div>` : "";
+}
+/* 노선 바: 역/IC/노선 신호 → 소속 노선 전체 + 지점 칩(클릭 이동, 아실·호갱노노 동선 — 2026-07-17) */
+function chipName(t) { return (t || "").split("(")[0].trim() || t; }
+function chipGo(i) { const x = window._chipSigs?.[i]; if (x) showSignal(x, false); }
+function lineBar(s) {
+  if (!s.line) return "";
+  const pool = s._rail ? RAIL_SIG : s._road ? ROAD_SIG : [];
+  const stations = pool.filter(x => x.line === s.line && x.signal !== false && x.geometry
+    && (x.pt_type === "rail_station" || x.pt_type === "road_ic"));
+  if (!stations.length) return "";
+  window._chipSigs = stations;
+  const chips = stations.map((x, i) =>
+    `<span class="stchip${x === s ? " on" : ""}" onclick="chipGo(${i})">${chipName(x.title)}</span>`).join("");
+  return `<div class="linebar"><div class="lb-h">${s._road ? "🛣" : "🚈"} <b>${s.line}</b>
+    <span class="hmhint">노선 전체 하이라이트 중 · 지점 ${stations.length}</span></div>
+    <div class="lb-chips">${chips}</div></div>`;
 }
 function srcBadge(s) {
   const v = SRC_TIER[s.src_tier];
@@ -890,7 +941,7 @@ function buildRoadSignals() {
     ROAD_SIG.push({ _road: true, title: p.official_name || `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: "도로", lvl: p.lvl || "C",
       template_type: "도로", current_stage: p.status, phase: p.confirmed ? "착공" : "계획",
       status: "활성", confirmed: !!p.confirmed, sd: null, road_kind: roadKindOf(p), src_tier: p.src_tier,   // 소재 시도=_sggs(다중 귀속)
-      owner: p.owner, osm_name: p.name, geom_src: p.geom_src, milestones: p.milestones,
+      owner: p.owner, osm_name: p.name, line: p.name, geom_src: p.geom_src, milestones: p.milestones,   // line=노선 하이라이트 키
       official_type: p.official_type, official_name: p.official_name, access: p.access, access_note: p.access_note, ic_note: p.ic_note,
       sources: p.src_url ? [p.src_url] : [],
       stage_note: `${p.linekind || "도로"} · ${p.status} · 선형=OSM(ODbL)`,
@@ -1595,23 +1646,13 @@ function renderDetail(s) {
     <div class="detail">
       <div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}${subLabel(s)}</span>
         · ${levelPill(s)} · ${gradeBasisHtml(s)}영향 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km
-        ${s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>'}
+        ${phaseSolid(s) ? "" : '<span class="badge-draft">계획 — 미확정</span>'}
         ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}</div>
       <h2>${s.title}</h2>
       ${freshness(s)}
-      <ul class="track">${PHASES.map((P, i) => {
-        const finished = ph === "준공·개통" && !dropped;   // 종결 단계 도달 = 진행중(◎) 아닌 완료(●)
-        const cls = dropped && i >= pIdx ? "todo" : i < pIdx ? "done" : i === pIdx ? (finished ? "done" : "now") : "todo";
-        const dot = i < pIdx ? "●" : i === pIdx ? (dropped ? "✕" : finished ? "●" : "◎") : "○";
-        const sub = i === pIdx ? ` — <b>${s.current_stage || "단계 미지정"}</b>${dropped ? " (무산)" : finished ? " ✓ 완료" : s.last_movement ? ` (${s.last_movement})` : ""}`
-          : i > pIdx ? " — 미도래" : "";
-        return `<li class="${cls}"><span class="dot">${dot}</span>${P}${sub}</li>`;
-      }).join("")}</ul>
-      ${tr ? `<div class="subtrack">유형 세부단계 · ${s.template_type}: ${tr.map(([lb]) =>
-        lb === s.current_stage ? `<b class="subcur">${lb}</b>` : lb).join(" › ")}</div>` : ""}
-      <div class="kv" style="border:none;padding-bottom:0"><b>진행 이력·일정</b> <span class="hmhint">완료=날짜(사실) · 미래=목표/미정 · 진척률(%) 없음</span></div>
+      ${lineBar(s)}
       ${msTrack(s)}
-      <div class="kv"><b>영향 반경</b> ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km — 유형 기준표(§3.3.1) 가안, 지도에 점선 원으로 표시</div>
+      ${nextWatch(s)}
       ${s.addr ? `<div class="kv"><b>대지위치</b> ${s.addr} <span class="copyaddr" onclick="copyAddr(this,'${s.addr.replace(/'/g, "\\'")}')" title="주소 복사">📋</span></div>` : ""}
       ${s._arch ? `<div class="factsheet"><div class="fs-h">허가 원본 사실 (건축HUB API 수신값 그대로)</div>
         <div class="fs-grid">
@@ -1622,32 +1663,28 @@ function renderDetail(s) {
           <span>착공일</span><b>${fmtDay(s.real_stcns_day)}</b>
           <span>사용승인일</span><b>${fmtDay(s.use_apr_day)}</b>
         </div></div>` : ""}
-      ${(s.access_points || []).filter(a => a.name).concat(s.ic_points || []).length ? `<div class="kv"><b>접근점</b> ${
-        (s.access_points || []).filter(a => a.name).concat(s.ic_points || []).map(a =>
-        `${a.name}${a.coordinates ? "" : " (좌표 미확보)"} — ${a.status || ""}`).join(" · ")}</div>` : ""}
-      ${(s.jc_points || []).length ? `<div class="kv"><b>분기점(JC)</b> ${s.jc_points.map(j => j.name).join(" · ")}
-        <span class="hmhint">— 고속도로 간 연결 지점으로 일반 차량 진출입 불가 · 지역 호재 아님(구조 정보)</span></div>` : ""}
-      ${s.access_note ? `<div class="kv"><b>영향권 방식</b> ${s.access_note}</div>` : ""}
       ${s._road && (s.access_points || []).length ? (s.road_kind === "전용"
         ? `<div class="kv"><b>영향권</b> ${(s.ic_points || []).length
             ? `진출입 IC ${s.ic_points.length}개소 반경 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km (전용도로 — 선 자체는 영향권 미산정)`
-            : `<b>진출입 지점 미확정 — 영향권 미산정</b> · 이 도로는 IC·진입로에서만 타고 내리므로 그 위치 없이는 수혜 범위를 정할 수 없습니다. ${s.ic_note || (s.phase === "계획" || s.phase === "인가" ? "미착공 사업이라 IC 위치가 공식 확정 전입니다." : "공식 IC 명단 확인 중입니다.")} 근거 없는 범위는 만들지 않습니다(§P2)`}</div>`
-        : `<div class="kv"><b>영향권</b> 노선 양측 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km 회랑 (선 전체 기준)</div>`) : ""}
-      ${(s.stage_history || []).length ? `<div class="kv"><b>단계 이력</b> ${s.stage_history.map(h =>
-        `${h.stage} ${h.date}${h.end ? "~" + h.end : ""}`).join(" → ")}</div>` : ""}
-      ${s.stage_note ? `<div class="kv"><b>단계 근거</b> ${s.stage_note}</div>` : ""}
-      ${s.status_note ? `<div class="kv"><b>상태 판단</b> ${s.status_note}</div>` : ""}
+            : `<b>진출입 지점 미확정 — 영향권 미산정</b> · ${s.ic_note || (s.phase === "계획" || s.phase === "인가" ? "미착공 사업이라 IC 위치가 공식 확정 전입니다." : "공식 IC 명단 확인 중입니다.")}`}${s.access_note ? ` · ${s.access_note}` : ""}</div>`
+        : `<div class="kv"><b>영향권</b> 노선 양측 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km 회랑 (선 전체 기준)${s.access_note ? ` · ${s.access_note}` : ""}</div>`) : ""}
+      ${(s.access_points || []).filter(a => a.name).concat(s.ic_points || []).length ? `<div class="kv"><b>접근점</b> ${
+        (s.access_points || []).filter(a => a.name).concat(s.ic_points || []).map(a =>
+        `${a.name}${a.coordinates ? "" : " (좌표 미확보)"}`).join(" · ")}</div>` : ""}
+      ${(s.jc_points || []).length ? `<div class="kv"><b>분기점(JC)</b> ${s.jc_points.map(j => j.name).join(" · ")}
+        <span class="hmhint">— 차량 진출입 불가, 호재 아님(구조 정보)</span></div>` : ""}
       ${s.side_effects?.length ? `<div class="kv"><b>역효과 표기</b> ${s.side_effects.join(", ")}</div>` : ""}
-      <div class="kv"><b>근거 원문</b> <span class="src">${(s.sources || []).map((u, i) => {
-        const lbl = /hub\.go\.kr/.test(u) ? "건축HUB 열람 — 대지위치로 조회" : /eais\.go\.kr/.test(u) ? "세움터(건축행정시스템) — 주소로 조회" : /opendart\.fss/.test(u) ? "DART 공시" : /g2b|nara/.test(u) ? "나라장터 공고" : /cleanup\.seoul/.test(u) ? "정비몽땅(서울 정비사업) — 사업장명으로 조회" : /gg\.go\.kr/.test(u) ? "경기 정비사업 현황 — 사업장명으로 조회" : /data\.go\.kr/.test(u) ? "공공데이터포털 정비사업 — 사업장명으로 조회" : `공시/공고 ${i + 1}`;
+      <div class="kv"><b>위치</b> ${precNote(s)}${
+        s.st_status && s.st_status !== "확정" && s.st_status !== "기존" ? ` · <b>${s.st_status}</b>(명칭·위치 미확정)` : ""}${
+        s.pt_type === "road_ic" ? " · 도로 IC(철도역 아님)" : ""}</div>
+      <div class="kv"><b>근거</b> ${srcBadge(s)} <span class="src">${(s.sources || []).map((u, i) => {
+        const lbl = /hub\.go\.kr/.test(u) ? "건축HUB 열람" : /eais\.go\.kr/.test(u) ? "세움터" : /opendart\.fss/.test(u) ? "DART 공시" : /g2b|nara/.test(u) ? "나라장터 공고" : /cleanup\.seoul/.test(u) ? "정비몽땅" : /gg\.go\.kr/.test(u) ? "경기 정비현황" : /data\.go\.kr/.test(u) ? "공공데이터포털" : `원문 ${i + 1}`;
         return `<a href="${u}" target="_blank">${lbl}</a>`;
-      }).join(" · ")}</span>${/hub\.go\.kr|eais\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 원본 수치는 <b>위 팩트시트</b>에 그대로 표기했습니다. 교차확인 시 링크에서 <b>대지위치의 시도·시군구·법정동·번지</b> 선택(로그인 불필요, 딥링크 미지원)</div>' : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 정비 추진현황엔 개별 딥링크가 없어 포털로 연결됩니다 — <b>위 사업장명</b>으로 조회하세요</div>' : ""}</div>
-      <div class="kv"><b>근거 등급</b> ${srcBadge(s)} ${SRC_TIER[s.src_tier]?.tip || "미분류"}${
-        s.src_tier === "osm" ? ' — <b>이 신호의 진행단계·명칭은 공식 확인 전</b>입니다(선형은 OSM 참고).' : ""}${
-        s.st_status && s.st_status !== "확정" && s.st_status !== "기존" ? ` · 이 지점: <b>${s.st_status}</b>(위치·명칭 미확정)` : ""}</div>
-      <div class="kv"><b>좌표 정밀도</b> ${precNote(s)}${s.pt_type === "road_ic" ? " · 지점 유형: <b>도로 IC·JC</b>(철도역 아님)" : ""}</div>
-      <div class="note">지도 표기 근거: ${s.position_confidence || (s.approx ? "대표점 근사 — 위치 미확정" : "확정 좌표")}${
-        s.note ? " · " + s.note : ""} · 미래 단계는 목표/미정이며 진척률(%) 없음</div>
+      }).join(" · ") || "원문 링크 없음"}</span>${
+        s.src_tier === "osm" ? ' · <b>진행단계·명칭은 공식 확인 전</b>(선형만 OSM 참고)' : ""}${
+        /hub\.go\.kr|eais\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 원본 수치는 위 팩트시트 그대로 — 교차확인 시 링크에서 대지위치(시도·시군구·법정동·번지)로 조회</div>' : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 개별 딥링크가 없어 포털 연결 — 위 사업장명으로 조회</div>' : ""}</div>
+      ${[s.stage_note, s.status_note, s.note].filter(Boolean).length ? `<div class="kv"><b>비고</b> ${[s.stage_note, s.status_note, s.note].filter(Boolean).join(" · ")}</div>` : ""}
+      <div class="note">완료=날짜(사실) · 미래=목표/미정 · 진척률(%) 없음 · 영향 반경은 유형 기준표 가안 — <a href="methodology.html" target="_blank">기준 전문</a></div>
     </div>`;
 }
 
@@ -1656,7 +1693,7 @@ function showSgg(disp) {
   view = { mode: "sgg", sgg: disp };
   const dp = disp.split(" "); nav.sd = dp[0]; nav.sg = dp.slice(1).join(" "); nav.dong = null; syncRegionBar();
   ANIMATE = true;
-  renderPanel(); mapApi?.clearRadius(); mapApi?.clearAptMarker?.();
+  renderPanel(); mapApi?.clearRadius(); mapApi?.clearRoute?.(); mapApi?.clearAptMarker?.();
   mapApi?.refreshPins?.();
   mapApi?.highlightRings?.((window._sggRings || {})[disp]);   // 선택 시군구 경계 강조
   const bd = window._sggBounds?.[disp];
@@ -1717,14 +1754,14 @@ function goHome() {
   if (typeof buildTree === "function" && DONG_GEO) buildTree();
   renderPanel();
   mapApi?.refreshPins?.();   // 선택 해제 → 호재 핀 사라짐(카운트 박스만)
-  mapApi?.clearRadius(); mapApi?.clearHighlight?.(); mapApi?.clearAptMarker?.();
+  mapApi?.clearRadius(); mapApi?.clearHighlight?.(); mapApi?.clearRoute?.(); mapApi?.clearAptMarker?.();
 }
 function showDong(f) {
   view = { mode: "dong", dong: f };
   nav.sd = f.properties.sido || "서울"; nav.sg = f.properties.sgg; nav.dong = f.properties.EMD_KOR_NM; syncRegionBar();
   ANIMATE = true;
   renderPanel();
-  mapApi?.clearRadius(); mapApi?.clearAptMarker?.();
+  mapApi?.clearRadius(); mapApi?.clearRoute?.(); mapApi?.clearAptMarker?.();
   mapApi?.highlightRings?.(ringsOf(f));   // 선택한 동 경계만 강조
   const c = ringCentroid(ringsOf(f)[0]);  // 동 중심에서 레이더 파동
   // 동 클릭 = 해당 동으로 줌업(영역 fit — 호재 중심 개편)
@@ -1738,7 +1775,7 @@ function showDongSig(sd, sg, dong, sigs) {
   view = { mode: "dongsig", sd, sg, dong, sigs };
   nav.sd = sd; nav.sg = sg; nav.dong = null; syncRegionBar();
   ANIMATE = true; renderPanel();
-  mapApi?.clearRadius?.(); mapApi?.clearAptMarker?.(); mapApi?.refreshPins?.();
+  mapApi?.clearRadius?.(); mapApi?.clearRoute?.(); mapApi?.clearAptMarker?.(); mapApi?.refreshPins?.();
   ANIMATE = false;
 }
 function renderDongSig(v) {
@@ -1769,6 +1806,8 @@ function showSignal(s, pan) {
   mapApi?.refreshPins?.();
   if (pan && s._pan) s._pan();
   mapApi?.showRadius(s);   // 영향 반경 원 표시 (§3.3.1 기준표)
+  // 노선 소속 신호(역·IC·노선 자체)면 소속 노선 전체를 하이라이트하고 노선 전체가 보이게 맞춤(아실·호갱노노 동선)
+  if (s.line) mapApi?.highlightRoute?.(s.line, true); else mapApi?.clearRoute?.();
 }
 /* 닫기: 신호 상세는 왔던 피드(동/구/단지)로 복귀(경계 강조 유지), 피드는 홈으로 */
 function closePanel() {
@@ -2232,7 +2271,7 @@ function initLeaflet() {
   };
   // 철도 노선 → 신호 상세 어댑트(우측 패널)
   const railToSignal = (p, cen) => ({
-    _rail: true, title: p.full || p.name, cat: "교통", sub: "철도", lvl: railLevelOf(p.full || p.name, p.linekind),
+    _rail: true, title: p.full || p.name, line: p.name, cat: "교통", sub: "철도", lvl: railLevelOf(p.full || p.name, p.linekind),
     template_type: "철도", current_stage: p.status, phase: p.phase, status: p.drop ? "종결" : "활성", confirmed: p.confirmed,
     sd: null, geometry: { coordinates: cen },   // 노선은 여러 시도 경유 — 단일 sd 미표기
     sources: p.src_url ? [p.src_url] : [], stage_note: `${p.linekind} · ${p.status}${p.note ? " · " + p.note : ""}`,
@@ -2382,6 +2421,37 @@ function initLeaflet() {
   };
   const showRadius = s => { clearRadius(); addRadius(s); };
   const showRadiusMany = list => { clearRadius(); list.forEach(addRadius); };
+  // ── 노선 전체 하이라이트 (2026-07-17 사용자 요청 — 역/IC 선택 시 소속 노선 강조 + 전체 뷰) ──
+  let routeHl = [];
+  const clearRoute = () => { routeHl.forEach(l => map.removeLayer(l)); routeHl = []; };
+  const highlightRoute = (lineName, fit) => {
+    clearRoute();
+    if (!lineName) return;
+    const col = CAT_COLOR["교통"];
+    for (const f of RAIL.concat(ROADF)) {
+      const p = f.properties;
+      if (f.geometry.type === "Point") continue;
+      if (p.name !== lineName && p.full !== lineName && p.official_name !== lineName) continue;
+      const ll = f.geometry.type === "MultiLineString"
+        ? f.geometry.coordinates.map(seg => seg.map(([x, y]) => [y, x]))
+        : f.geometry.coordinates.map(([x, y]) => [y, x]);
+      // 흰 글로우 케이싱 + 본선 굵게 — 색은 분류색 유지(표식 문법 v1.7), 미확정 선형은 점선 유지(§7)
+      routeHl.push(L.polyline(ll, { pane: "sig", color: "#fff", weight: 11, opacity: .85, interactive: false }).addTo(map));
+      routeHl.push(L.polyline(ll, { pane: "sig", color: col, weight: 5.5, opacity: .95,
+        dashArray: (p.dashed || p.approx) ? "10 8" : null, lineCap: "round", interactive: false }).addTo(map));
+    }
+    for (const f of RAIL.concat(ROADF)) {   // 소속 역·IC 강조 링
+      const p = f.properties;
+      if (p.kind !== "station" || p.signal === false) continue;
+      if (p.line !== lineName && p.line_official !== lineName) continue;
+      const [x, y] = f.geometry.coordinates;
+      routeHl.push(L.circleMarker([y, x], { pane: "sig", radius: 9, color: "#fff", weight: 3.5, fill: false, opacity: .95, interactive: false }).addTo(map));
+      routeHl.push(L.circleMarker([y, x], { pane: "sig", radius: 9, color: col, weight: 1.5, fill: false, opacity: .9, interactive: false }).addTo(map));
+    }
+    if (fit && routeHl.length) {
+      try { map.fitBounds(L.featureGroup(routeHl).getBounds().pad(0.12)); } catch (e) {}
+    }
+  };
   let aptMarker = null;
   const showAptAnchor = a => {
     if (aptMarker) map.removeLayer(aptMarker);
@@ -2399,7 +2469,8 @@ function initLeaflet() {
     setTimeout(() => { if (radarM) { map.removeLayer(radarM); radarM = null; } }, 2600);
   };
   mapApi = { refreshPins, panTo: ll => map.panTo([ll[1], ll[0]]), showRadius, showRadiusMany, clearRadius, showAptAnchor,
-             highlightRings, clearHighlight, clearAptMarker, emphasizePin, radarPulse, sggRings: () => window._sggRings };
+             highlightRings, clearHighlight, clearAptMarker, emphasizePin, radarPulse, sggRings: () => window._sggRings,
+             highlightRoute, clearRoute };
   refreshPins();
 }
 function initKakao() {
