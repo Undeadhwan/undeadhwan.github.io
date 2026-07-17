@@ -30,7 +30,8 @@
    "radius_type": "도시재생",
    "phase": "인가",
    "cat": "주거개발",
-   "lvl": "C"
+   "lvl": "C",
+   "src_tier": "official_report"
   },
   {
    "id": "S-0002",
@@ -61,7 +62,8 @@
    "phase": "인가",
    "cat": "교통",
    "lvl": "C",
-   "sub": "철도"
+   "sub": "철도",
+   "src_tier": "official_report"
   },
   {
    "id": "S-0003",
@@ -107,7 +109,8 @@
    "radius_type": "대형업무·산업단지",
    "phase": "준공·개통",
    "cat": "일자리",
-   "lvl": "B"
+   "lvl": "B",
+   "src_tier": "official_report"
   },
   {
    "id": "S-0004",
@@ -138,7 +141,8 @@
    "radius_type": "중소기업이전",
    "phase": "계획",
    "cat": "일자리",
-   "lvl": "C"
+   "lvl": "C",
+   "src_tier": "official_report"
   },
   {
    "id": "S-0005",
@@ -231,20 +235,15 @@
    "phase": "착공",
    "cat": "교통",
    "lvl": "B",
-   "sub": "철도"
+   "sub": "철도",
+   "src_tier": "official_report"
   },
   {
    "id": "S-0006",
    "title": "광명~서울 고속도로 (강서IC 접속)",
    "geometry": null,
-   "access_points": [
-    {
-     "name": "강서IC (신설)",
-     "coordinates": null,
-     "status": "위치 미확정 — 공식 도면 미확보(외발산동~방화대로 축)"
-    }
-   ],
-   "position_confidence": "선형=OSM(ODbL) 승계 — 강서IC 좌표는 미확보",
+   "access_points": [],
+   "position_confidence": "선형=OSM(참고) · IC=국토부고시 제2018-112호 좌표",
    "scale": "광역",
    "value_tags": [
     "교통"
@@ -276,7 +275,8 @@
    "cat": "교통",
    "lvl": "B",
    "sub": "도로",
-   "road_ref": "광명서울고속도로"
+   "road_ref": "광명서울고속도로",
+   "src_tier": "official_report"
   },
   {
    "id": "S-0007",
@@ -321,7 +321,8 @@
    "radius_type": "공공청사",
    "phase": "착공",
    "cat": "인프라",
-   "lvl": "B"
+   "lvl": "B",
+   "src_tier": "official_report"
   },
   {
    "id": "S-0008",
@@ -369,7 +370,8 @@
    "radius_type": "대규모복합개발",
    "phase": "인가",
    "cat": "일자리",
-   "lvl": "A"
+   "lvl": "A",
+   "src_tier": "official_report"
   },
   {
    "id": "S-0009",
@@ -402,7 +404,8 @@
    "radius_type": "지구단위·도시개발",
    "phase": "인가",
    "cat": "일자리",
-   "lvl": "B"
+   "lvl": "B",
+   "src_tier": "official_report"
   },
   {
    "id": "S-0010",
@@ -454,7 +457,8 @@
    "radius_type": "지구단위·도시개발",
    "phase": "착공",
    "cat": "주거개발",
-   "lvl": "B"
+   "lvl": "B",
+   "src_tier": "official_report"
   },
   {
    "id": "S-0011",
@@ -487,7 +491,8 @@
    "radius_type": "정비구역(재건축·재개발)",
    "phase": "계획",
    "cat": "주거개발",
-   "lvl": "A"
+   "lvl": "A",
+   "src_tier": "official_report"
   },
   {
    "id": "S-0012",
@@ -528,7 +533,8 @@
    "radius_type": "도서관·문화시설",
    "phase": "인가",
    "cat": "인프라",
-   "lvl": "C"
+   "lvl": "C",
+   "src_tier": "official_report"
   },
   {
    "id": "S-0013",
@@ -581,7 +587,8 @@
    "phase": "계획",
    "cat": "교통",
    "lvl": "C",
-   "sub": "철도"
+   "sub": "철도",
+   "src_tier": "official_report"
   },
   {
    "id": "S-0014",
@@ -635,7 +642,8 @@
    "radius_type": "대규모복합개발",
    "phase": "착공",
    "cat": "주거개발",
-   "lvl": "A"
+   "lvl": "A",
+   "src_tier": "official_report"
   },
   {
    "id": "S-0015",
@@ -663,7 +671,8 @@
    "phase": "계획",
    "cat": "교통",
    "lvl": "C",
-   "sub": "철도"
+   "sub": "철도",
+   "src_tier": "official_report"
   },
   {
    "id": "S-0016",
@@ -697,7 +706,8 @@
    "radius_type": "공공주택공급",
    "phase": "준공·개통",
    "cat": "주거개발",
-   "lvl": "C"
+   "lvl": "C",
+   "src_tier": "official_report"
   }
  ]
 }

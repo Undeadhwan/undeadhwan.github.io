@@ -2,22 +2,56 @@
  "_note": "도로 대장 — gen_reference.py가 rail_reference.html 도로 탭으로 렌더",
  "lines": [
   {
-   "name": "西九州自動車道 (佐々佐世保道路)",
-   "kind": "고속도로",
-   "phase": "착공",
-   "stage": "건설중",
-   "geom": "실선형(OSM)",
-   "src": "OpenStreetMap(ODbL)",
-   "stations": []
-  },
-  {
    "name": "강진광주고속도로",
    "kind": "고속도로",
    "phase": "착공",
    "stage": "건설중",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "강진광주고속도로 접속부 (이름 미상)",
+     "lng": 126.751558,
+     "lat": 34.698362,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    },
+    {
+     "name": "강진광주고속도로 접속부 (이름 미상)",
+     "lng": 126.740156,
+     "lat": 34.821142,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    },
+    {
+     "name": "강진광주고속도로 접속부 (이름 미상)",
+     "lng": 126.741534,
+     "lat": 34.77952,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    },
+    {
+     "name": "강진광주고속도로 접속부 (이름 미상)",
+     "lng": 126.823195,
+     "lat": 35.085639,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    },
+    {
+     "name": "강진광주고속도로 접속부 (이름 미상)",
+     "lng": 126.838698,
+     "lat": 35.128105,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    },
+    {
+     "name": "강진광주고속도로 접속부 (이름 미상)",
+     "lng": 126.820664,
+     "lat": 35.018708,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    }
+   ]
   },
   {
    "name": "마산거제간도로",
@@ -26,43 +60,15 @@
    "stage": "계획(OSM proposed)",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
-  },
-  {
-   "name": "西九州自動車道（松浦佐々道路）",
-   "kind": "고속도로",
-   "phase": "착공",
-   "stage": "건설중",
-   "geom": "실선형(OSM)",
-   "src": "OpenStreetMap(ODbL)",
-   "stations": []
-  },
-  {
-   "name": "江迎3号トンネル・西九州自動車道（松浦佐々道路）",
-   "kind": "고속도로 · 지하화/터널",
-   "phase": "착공",
-   "stage": "건설중",
-   "geom": "실선형(OSM)",
-   "src": "OpenStreetMap(ODbL)",
-   "stations": []
-  },
-  {
-   "name": "西九州自動車道",
-   "kind": "고속도로",
-   "phase": "착공",
-   "stage": "건설중",
-   "geom": "실선형(OSM)",
-   "src": "OpenStreetMap(ODbL)",
-   "stations": []
-  },
-  {
-   "name": "厳原豆酘美津島線",
-   "kind": "일반도로(주요)",
-   "phase": "착공",
-   "stage": "건설중",
-   "geom": "실선형(OSM)",
-   "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "마산거제간도로 접속부 (이름 미상)",
+     "lng": 128.617228,
+     "lat": 35.069752,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    }
+   ]
   },
   {
    "name": "함양울산고속도로",
@@ -73,14 +79,53 @@
    "src": "OpenStreetMap(ODbL)",
    "stations": [
     {
-     "name": "북함양분기점",
-     "lat": 35.593851,
-     "lng": 127.773815
+     "name": "북함양JC (가칭)",
+     "lng": 127.73426,
+     "lat": 35.53396,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
     },
     {
-     "name": "북함양 분기점",
-     "lat": 35.589714,
-     "lng": 127.767261
+     "name": "거창JC (가칭)",
+     "lng": 127.90878,
+     "lat": 35.71045,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "남거창IC (가칭)",
+     "lng": 127.95076,
+     "lat": 35.6459,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "합천호IC (가칭)",
+     "lng": 127.98612,
+     "lat": 35.54029,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "합천IC (가칭)",
+     "lng": 128.17955,
+     "lat": 35.59268,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "의령IC (가칭)",
+     "lng": 128.29715,
+     "lat": 35.28693,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "창녕JC (가칭)",
+     "lng": 128.49211,
+     "lat": 35.54455,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
     }
    ]
   },
@@ -100,7 +145,15 @@
    "stage": "건설중",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "서낙동로 접속부 (이름 미상)",
+     "lng": 128.990528,
+     "lat": 35.233928,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    }
+   ]
   },
   {
    "name": "용진-우아간",
@@ -109,7 +162,29 @@
    "stage": "건설중",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "용진-우아간 접속부 (이름 미상)",
+     "lng": 127.160602,
+     "lat": 35.883266,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    },
+    {
+     "name": "용진-우아간 접속부 (이름 미상)",
+     "lng": 127.172113,
+     "lat": 35.84799,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    },
+    {
+     "name": "용진-우아간 접속부 (이름 미상)",
+     "lng": 127.170048,
+     "lat": 35.863579,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    }
+   ]
   },
   {
    "name": "계백로",
@@ -136,7 +211,15 @@
    "stage": "건설중",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "울산외곽순환고속도로 접속부 (이름 미상)",
+     "lng": 129.353859,
+     "lat": 35.617739,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    }
+   ]
   },
   {
    "name": "농소~강동 도로",
@@ -154,7 +237,22 @@
    "stage": "건설중",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "다사~왜관간 광역도로 접속부 (이름 미상)",
+     "lng": 128.410335,
+     "lat": 35.905758,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    },
+    {
+     "name": "다사~왜관간 광역도로 접속부 (이름 미상)",
+     "lng": 128.431871,
+     "lat": 35.895716,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    }
+   ]
   },
   {
    "name": "다사-왜관간 광역도로",
@@ -163,7 +261,15 @@
    "stage": "건설중",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "다사-왜관간 광역도로 접속부 (이름 미상)",
+     "lng": 128.481344,
+     "lat": 35.876415,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    }
+   ]
   },
   {
    "name": "상화로 지하도로",
@@ -172,7 +278,22 @@
    "stage": "건설중",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "상화로 지하도로 접속부 (이름 미상)",
+     "lng": 128.530084,
+     "lat": 35.808185,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    },
+    {
+     "name": "상화로 지하도로 접속부 (이름 미상)",
+     "lng": 128.553315,
+     "lat": 35.808219,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    }
+   ]
   },
   {
    "name": "마산거제간도로",
@@ -190,7 +311,15 @@
    "stage": "계획(OSM proposed)",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "익산평택고속도로 접속부 (이름 미상)",
+     "lng": 127.088704,
+     "lat": 35.943478,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    }
+   ]
   },
   {
    "name": "동해고속도로",
@@ -199,7 +328,15 @@
    "stage": "계획(OSM proposed)",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "동해고속도로 접속부 (이름 미상)",
+     "lng": 129.34998,
+     "lat": 36.379913,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    }
+   ]
   },
   {
    "name": "외동~농소 국도",
@@ -208,7 +345,15 @@
    "stage": "건설중",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "외동~농소 국도 접속부 (이름 미상)",
+     "lng": 129.32135,
+     "lat": 35.650478,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    }
+   ]
   },
   {
    "name": "다사~왜관간 광역도로 (2026년)",
@@ -289,7 +434,92 @@
    "stage": "계획(OSM proposed)",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "서김포통진IC",
+     "lng": 126.63162,
+     "lat": 37.62612,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "하성IC (가칭)",
+     "lng": 126.60142,
+     "lat": 37.75434,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "송촌IC (가칭)",
+     "lng": 126.68927,
+     "lat": 37.75638,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "파주JC (가칭)",
+     "lng": 126.78326,
+     "lat": 37.83414,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "도내IC (가칭)",
+     "lng": 126.82523,
+     "lat": 37.80544,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "법원IC",
+     "lng": 126.87232,
+     "lat": 37.8634,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "곤지암JC",
+     "lng": 127.39808,
+     "lat": 37.4033,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "남정IC (가칭)",
+     "lng": 127.39141,
+     "lat": 37.29604,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "산북IC (가칭)",
+     "lng": 127.44058,
+     "lat": 37.42458,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "남양평JC (가칭)",
+     "lng": 127.51266,
+     "lat": 37.50944,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "운정IC (가칭)",
+     "lng": 126.72406,
+     "lat": 37.71145,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "신촌IC (가칭)",
+     "lng": 127.25143,
+     "lat": 37.40122,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    }
+   ]
   },
   {
    "name": "행복대로",
@@ -298,7 +528,22 @@
    "stage": "건설중",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "행복대로 접속부 (이름 미상)",
+     "lng": 127.271345,
+     "lat": 36.54229,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    },
+    {
+     "name": "행복대로 접속부 (이름 미상)",
+     "lng": 127.299864,
+     "lat": 36.543292,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    }
+   ]
   },
   {
    "name": "세종포천고속도로",
@@ -307,7 +552,43 @@
    "stage": "건설중",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "세종JC (가칭)",
+     "lng": 127.24091,
+     "lat": 36.46469,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "연기JC (가칭)",
+     "lng": 127.26388,
+     "lat": 36.5516,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "동천안JC (가칭)",
+     "lng": 127.19899,
+     "lat": 36.78823,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "서운입장IC (가칭)",
+     "lng": 127.20963,
+     "lat": 36.93797,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "금광IC (가칭)",
+     "lng": 127.30562,
+     "lat": 36.98177,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    }
+   ]
   },
   {
    "name": "서산영덕고속도로",
@@ -316,7 +597,22 @@
    "stage": "건설중",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "서산영덕고속도로 접속부 (이름 미상)",
+     "lng": 127.183842,
+     "lat": 36.501857,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    },
+    {
+     "name": "서산영덕고속도로 접속부 (이름 미상)",
+     "lng": 126.617204,
+     "lat": 36.851666,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    }
+   ]
   },
   {
    "name": "세종포천고속도로오송지선",
@@ -325,7 +621,15 @@
    "stage": "건설중",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "세종포천고속도로오송지선 접속부 (이름 미상)",
+     "lng": 127.241952,
+     "lat": 36.648628,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    }
+   ]
   },
   {
    "name": "동탄-천리 지방도",
@@ -343,7 +647,36 @@
    "stage": "건설중",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "동부대로 접속부 (이름 미상)",
+     "lng": 127.077547,
+     "lat": 37.106842,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    },
+    {
+     "name": "동부대로 접속부 (이름 미상)",
+     "lng": 127.120908,
+     "lat": 37.015688,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    },
+    {
+     "name": "동부대로 접속부 (이름 미상)",
+     "lng": 127.095853,
+     "lat": 37.064386,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    },
+    {
+     "name": "동부대로 접속부 (이름 미상)",
+     "lng": 127.113569,
+     "lat": 37.042549,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    }
+   ]
   },
   {
    "name": "평택제천고속도로",
@@ -379,7 +712,22 @@
    "stage": "건설중",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "당진청주고속도로 접속부 (이름 미상)",
+     "lng": 126.915401,
+     "lat": 36.86242,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    },
+    {
+     "name": "당진청주고속도로 접속부 (이름 미상)",
+     "lng": 126.974581,
+     "lat": 36.821865,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    }
+   ]
   },
   {
    "name": "당진청주고속도로",
@@ -397,13 +745,7 @@
    "stage": "건설중",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": [
-    {
-     "name": "신촌IC",
-     "lat": 37.323367,
-     "lng": 127.388269
-    }
-   ]
+   "stations": []
   },
   {
    "name": "와룡~법전 국도건설공사 2공구",
@@ -466,7 +808,50 @@
    "stage": "건설중",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "남광명JC",
+     "lng": 126.86995,
+     "lat": 37.42379,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "가학IC",
+     "lng": 126.85595,
+     "lat": 37.45307,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "광명JC",
+     "lng": 126.83902,
+     "lat": 37.45491,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "동부천IC",
+     "lng": 126.82165,
+     "lat": 37.52018,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "강서IC",
+     "lng": 126.82065,
+     "lat": 37.54708,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "88JC",
+     "lng": 126.81154,
+     "lat": 37.57683,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    }
+   ]
   },
   {
    "name": "문산개성고속도로",
@@ -475,7 +860,22 @@
    "stage": "계획(OSM proposed)",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "산단JC (가칭)",
+     "lng": 126.78326,
+     "lat": 37.83414,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "도라산IC (가칭)",
+     "lng": 126.7394,
+     "lat": 37.92612,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    }
+   ]
   },
   {
    "name": "39번 국도 연장 (구상)",
@@ -502,7 +902,22 @@
    "stage": "계획(OSM proposed)",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "광백IC (가칭·위치 미확정)",
+     "lng": 127.01034,
+     "lat": 37.82984,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "은현JC (가칭)",
+     "lng": 127.05818,
+     "lat": 37.87168,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    }
+   ]
   },
   {
    "name": "서울양주고속도로 장암연결구간",
@@ -511,7 +926,15 @@
    "stage": "계획(OSM proposed)",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "장암 접속부 (명칭 미확정)",
+     "lng": 127.06555,
+     "lat": 37.70641,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    }
+   ]
   },
   {
    "name": "서울양주고속도로 송추연결구간",
@@ -520,7 +943,15 @@
    "stage": "계획(OSM proposed)",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "송추 분기점 (명칭 미확정)",
+     "lng": 126.99468,
+     "lat": 37.69531,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    }
+   ]
   },
   {
    "name": "구 국도 제3호선 장래 구간 (현재 단절)",
@@ -538,7 +969,15 @@
    "stage": "계획(OSM proposed)",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "동해고속도로(속초-고성) 접속부 (이름 미상)",
+     "lng": 128.523162,
+     "lat": 38.201572,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    }
+   ]
   },
   {
    "name": "통일로 우회도로",
@@ -565,7 +1004,15 @@
    "stage": "건설중",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "국도47호선 지하화 이설구간 접속부 (이름 미상)",
+     "lng": 127.157904,
+     "lat": 37.649595,
+     "src": "OSM 연결로 클러스터",
+     "tier": "osm"
+    }
+   ]
   },
   {
    "name": "계양강화고속도로",
@@ -574,7 +1021,78 @@
    "stage": "건설중",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "계양JC (가칭)",
+     "lng": 126.78739,
+     "lat": 37.57551,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "이화IC(가칭 풍무IC) (가칭)",
+     "lng": 126.71959,
+     "lat": 37.61318,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "고촌JC (가칭)",
+     "lng": 126.76893,
+     "lat": 37.61097,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "양촌IC (가칭)",
+     "lng": 126.63162,
+     "lat": 37.62612,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "통진JC (가칭)",
+     "lng": 126.60755,
+     "lat": 37.68401,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "고막IC (가칭)",
+     "lng": 126.57388,
+     "lat": 37.72781,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "월곶IC (가칭)",
+     "lng": 126.58002,
+     "lat": 37.71817,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "강화IC (가칭)",
+     "lng": 126.51666,
+     "lat": 37.73358,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "감정IC (가칭)",
+     "lng": 126.69489,
+     "lat": 37.62519,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "서암IC (가칭)",
+     "lng": 126.60038,
+     "lat": 37.69863,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    }
+   ]
   },
   {
    "name": "양주연천고속도로",
@@ -583,7 +1101,22 @@
    "stage": "계획(OSM proposed)",
    "geom": "실선형(OSM)",
    "src": "OpenStreetMap(ODbL)",
-   "stations": []
+   "stations": [
+    {
+     "name": "은현분기점 (가칭)",
+     "lng": 127.01925,
+     "lat": 37.86374,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    },
+    {
+     "name": "군남분기점 (가칭)",
+     "lng": 127.05293,
+     "lat": 38.02437,
+     "src": "국토부 고시·보도(2026-07 조사)",
+     "tier": "official_notice"
+    }
+   ]
   },
   {
    "name": "국회대로",
