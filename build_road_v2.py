@@ -19,6 +19,7 @@ import json, os, re
 SNAP = "road_osm_geom.json"
 OFFICIAL = "official_roads.json"
 ICS = "ic_names.json"
+RAMPS = "road_ramps.json"
 OUT = "road_signals.json"
 REF = "road_reference.json"
 QUEUE = "road_unverified_queue.json"
@@ -57,7 +58,10 @@ def main():
         used_official.add(o["name"])
         feats.append({"type": "Feature", "properties": {
             "kind": "line", "mode": "road", "name": nm, "official_name": o["name"],
-            "linekind": v.get("linekind") or o.get("type", "도로"), "lvl": v.get("lvl", "C"),
+            "linekind": v.get("linekind") or o.get("type", "도로"),
+            "official_type": o.get("type"),      # 접근 유형 판정 기준(전용/일반) — OSM 이름보다 정확
+            "access": o.get("access"), "access_note": o.get("access_note"),   # 영향권 방식 명시(ramp/line) — type 추론의 예외
+            "lvl": v.get("lvl", "C"),
             "status": o["stage"], "phase": o["phase"], "confirmed": o["phase"] in ("착공", "준공"),
             "owner": o.get("owner"),
             "src_tier": "official_notice" if any(k in (o.get("src") or "") for k in ("ex.co.kr", "molit", "고시")) else "official_report",
@@ -77,7 +81,9 @@ def main():
         if len(a) < 2: continue
         feats.append({"type": "Feature", "properties": {
             "kind": "line", "mode": "road", "name": o["name"], "official_name": o["name"],
-            "linekind": o.get("type", "도로"), "lvl": "A" if o.get("type") == "고속도로" else "B",
+            "linekind": o.get("type", "도로"), "official_type": o.get("type"),
+            "access": o.get("access"), "access_note": o.get("access_note"),
+            "lvl": "A" if o.get("type") == "고속도로" else "B",
             "status": o["stage"], "phase": o["phase"], "confirmed": o["phase"] in ("착공", "준공"),
             "owner": o.get("owner"), "src_tier": "official_report",
             "src_name": f"{o.get('owner','')} 공식 — {o['name']}", "src_url": o.get("src") or "",
@@ -115,9 +121,34 @@ def main():
         if is_sig: n_ic += 1
         else: n_jc += 1
 
+    # ── 진입로(OSM 연결로 클러스터) 병합 — 공식 IC 명단이 없는 **전용도로**의 영향권 주체 ──
+    # 전용도로(고속도로·자동차전용·고속화도로)는 진출입 지점에서만 타고 내린다. 공식 IC 명단이 없으면
+    # 영향권이 통째로 죽으므로(2026-07-17 점검: 24개 중 16개), OSM 연결로가 모이는 지점 = 진입로(위치=사실)로 채운다.
+    # 이름은 미상 → "…진입로(이름 미상)"로 정직 표기(§P2).
+    n_ramp = 0
+    if os.path.exists(RAMPS):
+        EXCL = ("고속도로", "자동차전용", "도시고속화")
+        for r in json.load(open(RAMPS))["ramps"]:
+            lp = line_by_name.get(r["line"])
+            if not lp: continue
+            if r["line"] in ic_lines: continue            # 공식 IC 명단이 있으면 그쪽이 SSOT
+            acc = lp.get("access")
+            t = (lp.get("official_type") or lp.get("linekind") or "")
+            is_ramp = acc == "ramp" if acc else any(k in t for k in EXCL)
+            if not is_ramp: continue    # 선 회랑이 영향권인 도로는 진입로 점 불필요
+            feats.append({"type": "Feature", "properties": {
+                "kind": "station", "mode": "road", "name": f"{(lp.get('official_name') or r['line'])[:22]} 진입로(이름 미상)",
+                "line": r["line"], "lvl": lp.get("lvl", "A"), "status": lp.get("status"),
+                "confirmed": lp.get("confirmed"), "linekind": "진입로", "name_src": "OSM 연결로 클러스터",
+                "signal": True, "pt_role": "ramp", "pt_type": "road_ic",
+                "geo_prec": "landmark", "src_tier": "osm_geom",   # 위치는 사실(연결로), 이름만 미상
+                "milestones": lp.get("milestones") or [], "ramps": r.get("ramps"), "audited": "2026-07-17"},
+                "geometry": {"type": "Point", "coordinates": [r["lng"], r["lat"]]}})
+            n_ramp += 1
+
     json.dump({"type": "FeatureCollection",
                "_note": "신규 도로 — 공식 소스(official_roads.json)로 존재·단계가 확인된 사업만. 선형=OSM 스냅샷(그림). "
-                        "공식 IC가 있으면 IC 점이 기준(has_official_ic). build_road_v2.py 생성(백지 재현).",
+                        "전용도로는 진출입 지점(공식 IC 또는 OSM 진입로)이 영향권 주체. build_road_v2.py 생성(백지 재현).",
                "features": feats}, open(OUT, "w"), ensure_ascii=False, separators=(",", ":"))
 
     # 대장
@@ -144,7 +175,7 @@ def main():
                "queue": queue}, open(QUEUE, "w"), ensure_ascii=False, indent=1)
 
     nl = sum(1 for f in feats if f["properties"]["kind"] == "line")
-    print(f"road_signals.json 재생성: 노선 {nl} · **IC(호재) {n_ic}** · JC(분기점, 호재 아님) {n_jc}")
+    print(f"road_signals.json 재생성: 노선 {nl} · **IC(호재) {n_ic}** · JC(제외) {n_jc} · **진입로(OSM) {n_ramp}**")
     print(f"  공식 IC 보유(선형 숨김) {sum(1 for f in feats if f['properties'].get('has_official_ic'))} · 큐 {len(queue)}")
 
 if __name__ == "__main__":

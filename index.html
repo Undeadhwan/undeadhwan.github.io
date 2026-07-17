@@ -835,8 +835,20 @@ function buildRailSignals() {
    등급 = OSM 도로등급(motorway=A/trunk=B/primary=C, LEVEL_DESC 교통>도로와 일치). 반경 = CLASSES.교통.도로
    ── 도로 이원 관리(사용자 확정 2026-07-16): 일반도로=선(Line) 회랑 버퍼 / 고속·고속화·전용도로=진출입 IC(Point) 버퍼만.
    전용도로는 연도(沿道) 접근이 불가하므로 선 자체는 영향권을 만들지 않는다 — IC 좌표 미확보 시 영향권 미산정으로 정직 표기(P2) */
-function roadKindOf(p) {   // "전용"=출입제한(IC 접속만) / "일반"=연도 접근 가능
-  return p.linekind === "고속도로" || /고속화|자동차전용|지하차도|지하화|지하도로/.test(p.name || "") ? "전용" : "일반";
+/* 도로 접근 유형 (2026-07-17 사용자 확정 보강):
+   "전용" = 출입제한 → **진출입 지점(IC·진입로)만** 영향권. 고속도로뿐 아니라 **고속화도로**(올림픽대로·내부순환로·
+            지하화 간선 등)도 포함 — IC라 부르지 않아도 진입로에서만 타고 내리므로 접근 구조가 같다.
+   "일반" = 연도(沿道) 접근 가능 → 선(Line) 회랑 전체가 영향권.
+   판정 기준 = **공식 도로 유형(official type)** 우선. OSM 이름은 부정확해 폴백으로만 쓴다
+   (국회대로·동부간선 지하화가 이름 때문에 '일반'으로 오분류되던 문제). */
+const ROAD_EXCLUSIVE_TYPES = ["고속도로", "자동차전용", "도시고속화"];
+function roadKindOf(p) {
+  if (p.access === "ramp") return "전용";      // 공식 데이터가 명시한 영향권 방식이 최우선
+  if (p.access === "line") return "일반";      // 예: 지하화+상부공원화 — 지상 공원이 연도 수혜
+  const t = p.official_type || p.linekind || "";
+  if (ROAD_EXCLUSIVE_TYPES.some(k => t.includes(k))) return "전용";
+  if (/고속화|자동차전용|지하차도|지하화|지하도로|고가|램프/.test((p.official_name || "") + (p.name || ""))) return "전용";
+  return "일반";
 }
 function buildRoadSignals() {
   const SAMPLE_M = 1200;
@@ -874,6 +886,7 @@ function buildRoadSignals() {
       template_type: "도로", current_stage: p.status, phase: p.confirmed ? "착공" : "계획",
       status: "활성", confirmed: !!p.confirmed, sd: null, road_kind: roadKindOf(p), src_tier: p.src_tier,   // 소재 시도=_sggs(다중 귀속)
       owner: p.owner, osm_name: p.name, geom_src: p.geom_src, milestones: p.milestones,
+      official_type: p.official_type, official_name: p.official_name, access: p.access, access_note: p.access_note,
       sources: p.src_url ? [p.src_url] : [],
       stage_note: `${p.linekind || "도로"} · ${p.status} · 선형=OSM(ODbL)`,
       geometry: { coordinates: pts[0] },
@@ -1609,6 +1622,7 @@ function renderDetail(s) {
         `${a.name}${a.coordinates ? "" : " (좌표 미확보)"} — ${a.status || ""}`).join(" · ")}</div>` : ""}
       ${(s.jc_points || []).length ? `<div class="kv"><b>분기점(JC)</b> ${s.jc_points.map(j => j.name).join(" · ")}
         <span class="hmhint">— 고속도로 간 연결 지점으로 일반 차량 진출입 불가 · 지역 호재 아님(구조 정보)</span></div>` : ""}
+      ${s.access_note ? `<div class="kv"><b>영향권 방식</b> ${s.access_note}</div>` : ""}
       ${s._road && (s.access_points || []).length ? (s.road_kind === "전용"
         ? `<div class="kv"><b>영향권</b> ${(s.ic_points || []).length
             ? `진출입 IC ${s.ic_points.length}개소 반경 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km (전용도로 — 선 자체는 영향권 미산정)`

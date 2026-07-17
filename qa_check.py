@@ -53,6 +53,7 @@ def main():
         if miss:
             warn("필수필드", f"{p.get('name','?')[:26]} ({p.get('line','')[:18]}) — 누락: {','.join(miss)}")
     # ── 4. OSM 단독 근거가 지도층에 존재
+    # osm = 존재·단계의 근거가 OSM뿐 → 오류. osm_geom = 공식 확인된 사업의 '위치'만 OSM(연결로 실측) → 허용
     for f in dlines + rlines:
         if f["properties"].get("src_tier") == "osm":
             err("OSM단독", f"지도층에 비공식 근거: {f['properties'].get('name')}")

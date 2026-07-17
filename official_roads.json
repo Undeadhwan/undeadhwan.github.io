@@ -459,7 +459,9 @@
    "match": [
     "국회대로"
    ],
-   "src": "https://cis.seoul.go.kr/TotalAlimi_new/PopInfo.action?cmd=info1&pjt_cd=1112018080298"
+   "src": "https://cis.seoul.go.kr/TotalAlimi_new/PopInfo.action?cmd=info1&pjt_cd=1112018080298",
+   "access": "line",
+   "access_note": "지하차도(통과) + **상부 공원화** — 지상 녹지가 연도 수혜 → 선 회랑"
   },
   {
    "name": "동부간선도로 지하화(민자 1공구)",
@@ -470,7 +472,9 @@
    "match": [
     "동부간선"
    ],
-   "src": "https://cis.seoul.go.kr/TotalAlimi_new/PopInfo.action?cmd=info1&pjt_cd=1112024082395"
+   "src": "https://cis.seoul.go.kr/TotalAlimi_new/PopInfo.action?cmd=info1&pjt_cd=1112024082395",
+   "access": "line",
+   "access_note": "지하화(통과) + **지상부 수변공원화** — 연도 수혜 → 선 회랑"
   },
   {
    "name": "동부간선도로 창동~상계 지하차도",
@@ -481,7 +485,9 @@
    "match": [
     "창동상계"
    ],
-   "src": "https://cis.seoul.go.kr/TotalAlimi_new/PopInfo.action?cmd=info1&pjt_cd=1112020082899"
+   "src": "https://cis.seoul.go.kr/TotalAlimi_new/PopInfo.action?cmd=info1&pjt_cd=1112020082899",
+   "access": "line",
+   "access_note": "지하차도 + 지상부 개선 — 연도 수혜"
   },
   {
    "name": "영동대로 지하공간 복합개발",
@@ -492,7 +498,9 @@
    "match": [
     "영동대로"
    ],
-   "src": "https://cis.seoul.go.kr/TotalAlimi_new/PopInfo.action?cmd=info1&pjt_cd=1112021020999"
+   "src": "https://cis.seoul.go.kr/TotalAlimi_new/PopInfo.action?cmd=info1&pjt_cd=1112021020999",
+   "access": "line",
+   "access_note": "지하 복합개발 — 지상 광장·환승 연계, 연도 수혜"
   },
   {
    "name": "경부간선도로 지하화(양재~한남)",
@@ -525,7 +533,9 @@
    "match": [
     "인천대로"
    ],
-   "src": "https://www.incheon.go.kr/IC010205/view?repSeq=DOM_0000000013168116"
+   "src": "https://www.incheon.go.kr/IC010205/view?repSeq=DOM_0000000013168116",
+   "access": "line",
+   "access_note": "**일반화**(고속도로→일반도로 전환) — 연도 접근 가능 → 선 회랑"
   },
   {
    "name": "국도77호선 노을대교",
@@ -780,7 +790,9 @@
    "match": [
     "상화로"
    ],
-   "src": "https://mbiz.heraldcorp.com/view.php?ud=20220315000040"
+   "src": "https://mbiz.heraldcorp.com/view.php?ud=20220315000040",
+   "access": "ramp",
+   "access_note": "대심도 지하도로 — 진출입 지점에서만 접근"
   },
   {
    "name": "농소~강동 도로",
@@ -837,7 +849,9 @@
     "국도47",
     "47호선"
    ],
-   "src": "http://www.nyjnews.net/45660"
+   "src": "http://www.nyjnews.net/45660",
+   "access": "ramp",
+   "access_note": "지상국도 지하 이설 — 진출입 지점 기준"
   },
   {
    "name": "국도38호선 미개통 구간(삼척 신기 등)",
@@ -865,5 +879,6 @@
    "송산비봉로",
    "신경춘로"
   ]
- }
+ },
+ "_access_note": "access: 영향권 산정 방식. ramp=진출입 지점 기준(전용도로 — 출입제한) / line=선 회랑(연도 수혜). 미지정 시 type으로 추론(고속도로·자동차전용·도시고속화→ramp, 그 외→line). **지하화+상부공원화는 line** — 지상이 공원으로 바뀌어 연도 전체가 수혜이기 때문(2026-07-17)."
 }
