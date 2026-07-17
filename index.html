@@ -592,6 +592,19 @@ const SRC_TIER = {
   osm: { cls: "osm", t: "비공식(OSM)", tip: "OpenStreetMap 유래 — 선형(그림) 참고용. 진행단계·명칭의 공식 근거 아님" },
   unverified: { cls: "unver", t: "출처 미상", tip: "근거 출처 미확인" },
 };
+
+/* 좌표 정밀도 표기 (DATA_STANDARD §3) — "좌표가 있다"와 "정확하다"는 다르다. 사용자가 신뢰도를 알아야 한다. */
+const GEO_PREC = {
+  exact:    { t: "정확 좌표", d: "고시 도면·실측 지점" },
+  parcel:   { t: "지번 기준", d: "지번 주소 지오코딩 (~50m)" },
+  landmark: { t: "지물 기준(근사)", d: "교차로·시설 등 인근 지물 기준 (~200m) — 정거장 확정 위치 아님" },
+  dong:     { t: "동 대표점(근사)", d: "읍면동 중심점 (500m~2km) — 실제 위치 아님, 위치 미확정" },
+  sgg:      { t: "시군구 대표점(근사)", d: "시군구 중심점 (2km+) — 실제 위치 아님" },
+};
+function precNote(s) {
+  const v = GEO_PREC[s.geo_prec];
+  return v ? `<b>${v.t}</b> — ${v.d}` : (s.approx ? "근사 — 위치 미확정" : "확정 좌표");
+}
 function srcBadge(s) {
   const v = SRC_TIER[s.src_tier];
   if (!v) return "";
@@ -769,6 +782,7 @@ function buildRailSignals() {
     status: f.properties.drop ? "종결" : "활성",   // 무산 노선(인동선 지선 등) = 종결 표식(P5 — 숨기지 않고 표시)
     confirmed: f.properties.confirmed, sd: null,   // 소재 시도·시군구는 ensureRailSgg가 좌표로 산출(전국)
     src_tier: f.properties.src_tier, st_status: f.properties.st_status, approx: f.properties.approx, note: f.properties.note,
+    pt_type: f.properties.pt_type, geo_prec: f.properties.geo_prec,
     geometry: { coordinates: f.geometry.coordinates }
   }));
 }
@@ -801,7 +815,7 @@ function buildRoadSignals() {
     if (p.kind === "station") {   // IC·JC 점
       ROAD_SIG.push({ _road: true, title: p.name, cat: "교통", sub: "도로", lvl: p.lvl || "A",
         template_type: "도로", current_stage: p.status, phase: p.confirmed ? "착공" : "계획",
-        src_tier: p.src_tier, ic_loc: p.loc, ic_status: p.ic_status,
+        src_tier: p.src_tier, ic_loc: p.loc, ic_status: p.ic_status, pt_type: p.pt_type, geo_prec: p.geo_prec,
         sources: p.src_url ? [p.src_url] : [],
         status: "활성", confirmed: !!p.confirmed, sd: null,   // 소재 시도=_sggs(buildSggIndex 좌표 귀속)
         geometry: { coordinates: f.geometry.coordinates } });
@@ -1547,6 +1561,7 @@ function renderDetail(s) {
       <div class="kv"><b>근거 등급</b> ${srcBadge(s)} ${SRC_TIER[s.src_tier]?.tip || "미분류"}${
         s.src_tier === "osm" ? ' — <b>이 신호의 진행단계·명칭은 공식 확인 전</b>입니다(선형은 OSM 참고).' : ""}${
         s.st_status && s.st_status !== "확정" && s.st_status !== "기존" ? ` · 이 지점: <b>${s.st_status}</b>(위치·명칭 미확정)` : ""}</div>
+      <div class="kv"><b>좌표 정밀도</b> ${precNote(s)}${s.pt_type === "road_ic" ? " · 지점 유형: <b>도로 IC·JC</b>(철도역 아님)" : ""}</div>
       <div class="note">지도 표기 근거: ${s.position_confidence || (s.approx ? "대표점 근사 — 위치 미확정" : "확정 좌표")}${
         s.note ? " · " + s.note : ""} · 미래 단계는 목표/미정이며 진척률(%) 없음</div>
     </div>`;
@@ -2041,11 +2056,18 @@ function initLeaflet() {
       const unk = basisUnknown(s);   // 근거 미상(미정 포함) = 회색 원·C급 크기(사용자 확정)
       const col = s.status === "종결" ? "#9aa3b2" : unk ? "#8a93a3" : colorOf(s);
       const lv = levelOf(s);
+      const isIC = s.pt_type === "road_ic";             // 도로 IC = 역과 시각 구분(DATA_STANDARD §4)
       const m = L.circleMarker([y, x], { pane: "cand", radius: unk ? HJ_R.C : (HJ_R[lv] || 5),
         color: col, weight: !unk && lv === "A" ? 2.6 : 2,
         dashArray: s.confirmed ? null : "4 3",           // 미확정=점선(§7)
-        fillColor: col, fillOpacity: unk ? .12 : .18,    // 낮은 채움 — 밀집=자연 히트맵
+        fillColor: isIC ? "#fff" : col,                  // IC=흰 속(도넛) / 역·시설=분류색 채움
+        fillOpacity: isIC ? .95 : (unk ? .12 : .18),     // 낮은 채움 — 밀집=자연 히트맵
         opacity: s.status === "종결" ? .45 : unk ? .75 : .9 }).addTo(map);
+      if (isIC) {                                        // IC 이중 테두리(내부 링)
+        const inner = L.circleMarker([y, x], { pane: "cand", radius: Math.max(2, (HJ_R[lv] || 5) - 3.5),
+          color: col, weight: 1.6, fill: false, opacity: .85, interactive: false }).addTo(map);
+        hjDots.push(inner);
+      }
       m.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${s.title}</div>`
         + `<div class="apt-pop-sub"><span style="color:${col};font-weight:700">● ${catOf(s)}</span> · ${lvlPill(lv)} ${gradeBasisHtml(s).replace(/ · $/, "")}</div>`
         + `<div class="apt-pop-cats"><span>단계 ${phaseOf(s)}${s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : ""}</span></div></div>`,
@@ -2649,7 +2671,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260717f");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260717g");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions, jeongbiData, railData, roadData, dartData, archData] = await Promise.all([
@@ -2731,7 +2753,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260717f"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260717g"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -2757,7 +2779,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260717f");
+  const CB = "?b=" + (window.BUILD || "20260717g");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {

@@ -154,6 +154,23 @@
 <h2 id="mapping">6. 매핑 방법</h2>
 <h3>6-1. 지역 매핑</h3>
 <p><code>regions.json</code>(17시도·251시군구·신도시별칭·기관규칙 SSOT) + <code>region_util.py</code>(공용 함수). 수집범위는 <code>active_scope.collect</code>로만 제어 — 코드 수정 없이 전국 전환.</p>
+<div class="box warn"><b>📐 <a href="https://github.com/Undeadhwan/hojaemap-pilot/blob/main/DATA_STANDARD.md" target="_blank">데이터 표준 v1.0</a> (2026-07-17 제정)</b> —
+근거 등급·좌표 정밀도·지점 유형·승격 게이트·QA 검사를 규정한 <b>규범 문서</b>. 배포 전 <code>qa_check.py</code>가 자동 검사하며 <b>오류 0이어야 배포</b>한다.
+제정 계기: 5호선 S02역과 계양강화고속도로 고촌JC가 <b>같은 좌표(0m)</b>에 찍힌 사고 — 서로 다른 시설을 각각 "고촌읍 대표점"으로 지오코딩했기 때문.
+<b>좌표가 "있다"는 것과 "정확하다"는 것은 다르다.</b></div>
+
+<h3>6-1a. 좌표 정밀도 (geo_prec) — 필수</h3>
+<table>
+  <tr><th>등급</th><th>뜻</th><th>오차</th><th>표기</th></tr>
+  <tr><td><code>exact</code></td><td>고시 도면·실측 지점</td><td>~0</td><td>확정 좌표</td></tr>
+  <tr><td><code>parcel</code></td><td>지번 주소 지오코딩</td><td>~50m</td><td>지번 기준</td></tr>
+  <tr><td><code>landmark</code></td><td>교차로·시설 등 인근 지물</td><td>~200m</td><td><b>지물 기준(근사)</b> — 확정 위치 아님</td></tr>
+  <tr><td><code>dong</code></td><td>읍면동 대표점</td><td><b>500m~2km</b></td><td><b>동 대표점(근사)</b> — 실제 위치 아님</td></tr>
+  <tr><td><code>sgg</code></td><td>시군구 대표점</td><td><b>2km+</b></td><td>시군구 대표점(근사)</td></tr>
+</table>
+<p class="note"><b>충돌 금지</b>: 서로 다른 시설이 같은 대표점을 공유하면 안 된다. 충돌 시 ①더 정밀한 좌표를 찾고 ②못 찾으면 하나만 남기고 나머지는 "위치 미확정(미표시)". 정밀도를 올릴 때 <b>의미가 다른 지물로 대체하지 않는다</b>(철도역 자리에 도로 IC를 쓰는 식 금지).</p>
+<p class="note"><b>지점 유형(pt_type)</b>: <code>rail_station</code>(철도역·원) / <code>road_ic</code>(도로 IC·JC — <b>도넛+이중테두리로 역과 구분</b>) / <code>facility</code> / <code>zone</code>. 교통 분류라는 이유로 역과 IC가 같은 모양이면 사용자가 구별할 수 없다.</p>
+
 <h3>6-1b. 근거 등급 (src_tier) — 공식 소스 SSOT 원칙 (2026-07-17 확정)</h3>
 <p><b>우리 핵심은 호재를 정확히 발굴하고 진척단계·위치를 정확히 아는 것</b>이다. 따라서 <b>사실의 근거는 공식 소스만</b> 인정한다.
 모든 신호는 근거 등급을 1급 속성으로 갖고, 사이트 카드·상세에 배지로 노출된다.</p>
