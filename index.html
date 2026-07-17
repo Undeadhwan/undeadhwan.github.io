@@ -594,6 +594,7 @@ const LEVEL_DESC = {
   "주거개발": { A: "도시급 대형 (5천 세대↑)", B: "지역 대장주급 (1,500~5천 세대)", C: "일반 단지급 (500~1,500 세대)" }
 };
 const CAT_COLOR = { "교통": "#2e5ce6", "일자리": "#e0761e", "인프라": "#2e8b57", "주거개발": "#c4392f", "기타": "#6e6e73" };
+const ROAD_COL = "#b45309";   // 교통 내 도로=황갈(철도 파랑과 구분) — 선·점·카드 전 화면 공통(기준 일원화)
 /* 레벨 pill: 분류색 강도로 등급화 (A=진한 채움/B=중간 채움/C=연한). A급이 확 띔 */
 const CAT_TINT = { "교통": ["#e7ecfc", "#1c3aa8"], "일자리": ["#fbebdb", "#8a4a12"], "인프라": ["#e2f1e8", "#1d6b40"], "주거개발": ["#f8e3e0", "#9a2c22"], "기타": ["#ececf0", "#55555a"] };
 const CAT_MID = { "교통": "#6f8cec", "일자리": "#e79f5a", "인프라": "#5aab84", "주거개발": "#d67e75", "기타": "#a2a7b5" };
@@ -731,7 +732,10 @@ const getRadius = s => {
   if (SUB_KEYS[c]) tbl = (tbl[subOf(s)] || tbl[SUB_KEYS[c][0]]);   // 교통=철도/도로 세부표
   return ((tbl && tbl[l]) || 0.8) * 1000;
 };
-const colorOf = s => CAT_COLOR[catOf(s)] || "#12263f";
+const colorOf = s => (catOf(s) === "교통" && subOf(s) === "도로") ? ROAD_COL : (CAT_COLOR[catOf(s)] || "#12263f");
+/* 지도 확정 문법(전 화면 공통): 실선 = 인가(고시)·착공·준공 — 정부가 확정한 사실 이상. 점선 = 계획(구상·검토·예타).
+   과거엔 소스별 confirmed 필드를 썼으나 의미가 제각각이라(확정층·정비·건축이 착공인데도 false) phase 백본으로 일원화(2026-07-17). */
+const phaseSolid = s => (PHASE_IDX[phaseOf(s)] ?? 0) >= 1;
 /* ── 호재 카운트: 대분류×레벨 집계 + 표현 헬퍼 ── */
 function catLevelCounts(sigs) {
   const m = {}; DISPLAY_CAT_KEYS.forEach(c => m[c] = { A: 0, B: 0, C: 0, total: 0 });
@@ -2140,17 +2144,14 @@ function initLeaflet() {
       const col = s.status === "종결" ? "#9aa3b2" : unk ? "#8a93a3" : colorOf(s);
       const lv = levelOf(s);
       const isIC = s.pt_type === "road_ic";             // 도로 IC = 역과 시각 구분(DATA_STANDARD §4)
+      const solid = phaseSolid(s);                       // 실선=인가·착공·준공 / 점선=계획 (phase 백본 — confirmed 필드는 소스별 의미가 달라 폐기)
       const m = L.circleMarker([y, x], { pane: "cand", radius: unk ? HJ_R.C : (HJ_R[lv] || 5),
         color: col, weight: !unk && lv === "A" ? 2.6 : 2,
-        dashArray: s.confirmed ? null : "4 3",           // 미확정=점선(§7)
-        fillColor: isIC ? "#fff" : col,                  // IC=흰 속(도넛) / 역·시설=분류색 채움
-        fillOpacity: isIC ? .95 : (unk ? .12 : .18),     // 낮은 채움 — 밀집=자연 히트맵
+        dashArray: solid ? null : "4 3",                 // 미확정=점선(§7)
+        fillColor: isIC ? "#fff" : col,                  // IC=흰 속 도넛(황갈 테두리 — 도로 선형과 같은 색) / 역·시설=분류색 채움
+        // 점선+옅은 채움 동시 적용 — 줌아웃에서 점선이 뭉개져도 "미완성" 느낌 유지 (2026-07-17)
+        fillOpacity: isIC ? .95 : (unk ? .10 : solid ? .22 : .10),
         opacity: s.status === "종결" ? .45 : unk ? .75 : .9 }).addTo(map);
-      if (isIC) {                                        // IC 이중 테두리(내부 링)
-        const inner = L.circleMarker([y, x], { pane: "cand", radius: Math.max(2, (HJ_R[lv] || 5) - 3.5),
-          color: col, weight: 1.6, fill: false, opacity: .85, interactive: false }).addTo(map);
-        hjDots.push(inner);
-      }
       m.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${s.title}</div>`
         + `<div class="apt-pop-sub"><span style="color:${col};font-weight:700">● ${catOf(s)}</span> · ${lvlPill(lv)} ${gradeBasisHtml(s).replace(/ · $/, "")}</div>`
         + `<div class="apt-pop-cats"><span>단계 ${phaseOf(s)}${s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : ""}</span></div></div>`,
@@ -2166,7 +2167,7 @@ function initLeaflet() {
   // 공식 IC 보유 도로의 OSM 선형: 숨김(true) → 감쇠 병행 표시(false)로 전환 (2026-07-17 재검토 — 대형 노선 13건이 통째로 안 보이는 부작용).
   // IC 점이 여전히 1차 표현이고, 선형은 저채도 참고선으로 깔린다(철도의 선+역 문법과 통일).
   const ROAD_LINE_HIDE_WHEN_IC = false;
-  const ROAD_COL = "#b45309";   // 도로=황갈(철도 파랑과 구분). §7 문법 동일: 건설중=실선/계획=점선
+  // ROAD_COL(도로=황갈)은 상단 공통 상수 사용 — 선·점·카드 색 일치(기준 일원화)
   const renderRail = () => {
     clearRail();
     if ((!RAIL.length && !ROADF.length) || !filter.cat.has("교통")) return;
@@ -2178,7 +2179,8 @@ function initLeaflet() {
       const isRoad = p.mode === "road";
       const col = isRoad ? ROAD_COL : railCol;
       // approx(공식 경유 대표점 근사)는 착공 여부와 무관하게 점선 — 선형 자체가 실측이 아니므로 (§4.1 지도 정직성)
-      const dashed = isRoad ? (!p.confirmed || p.approx) : p.dashed;
+      // 확정 경계는 마커와 동일하게 phase 백본: 인가(고시)부터 실선 (2026-07-17 일원화)
+      const dashed = isRoad ? (!["인가", "착공", "준공"].some(k => (p.phase || "").startsWith(k)) || p.approx) : p.dashed;
       if (phaseFiltering && p.phase && !filter.phase.has(p.phase)) continue;
       if (YEAR_SEL && false) continue;   // (철도 고시연도 필터는 추후)
       if (f.geometry.type === "LineString" || f.geometry.type === "MultiLineString") {
