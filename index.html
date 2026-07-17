@@ -2671,10 +2671,10 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260717g");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260717h");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
-  const [dong, sgg, main, macro, rawData, autoData, apartments, regions, jeongbiData, railData, roadData, dartData, archData] = await Promise.all([
+  const [dong, sgg, main, macro, rawData, autoData, apartments, regions, jeongbiData, railData, roadData, dartData, archData, archJibang, archJnkj] = await Promise.all([
     gj("bdong/서울.geojson"),      // 초기 = 서울 467동(§3.1 법정동). 나머지 15시도는 뷰포트·선택 시 지연 로드(bdong/index.json)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
@@ -2687,7 +2687,9 @@ function initSearch() {
     RAIL_READY ? gj("rail_signals.json").catch(() => ({ features: [] })) : Promise.resolve({ features: [] }),  // 신규 철도 노선
     gj("road_signals.json").catch(() => ({ features: [] })),   // 신규 도로(고속·간선 신설/확장/지하화, OSM) — IC=점·노선=다점 신호
     gj("dart_signals.json").catch(() => ({ signals: [] })),   // DART → 일자리 후보
-    gj("arch_signals.json").catch(() => ({ signals: [] }))   // 건축인허가 → 인프라·일자리 후보
+    gj("arch_signals.json").catch(() => ({ signals: [] })),   // 건축인허가(서울·수도권) → 인프라·일자리 후보
+    gj("arch_signals_jibang.json").catch(() => ({ signals: [] })),   // 건축인허가(지방 12시도)
+    gj("arch_signals_jnkj.json").catch(() => ({ signals: [] }))      // 건축인허가(전남광주통합특별시)
   ]);
   RAIL = (railData && railData.features) || [];
   buildRailSignals();   // 계획/건설역 → 교통 신호(신설역 근처 아파트 호재 카운팅 기준좌표)
@@ -2695,7 +2697,8 @@ function initSearch() {
   buildRoadSignals();   // 도로 노선(다점)·IC(점) → 교통·도로 신호
   DART = (dartData && dartData.signals) || [];
   buildDartSignals();   // DART → 일자리 후보 신호(호재 카운팅 포함)
-  ARCH = (archData && archData.signals) || [];
+  // 전국 건축인허가 = 서울·수도권 + 지방12 + 전남광주 (지역별 분할 수집 → 병합. 지역-무관 원칙: 파일만 추가)
+  ARCH = [].concat((archData && archData.signals) || [], (archJibang && archJibang.signals) || [], (archJnkj && archJnkj.signals) || []);
   buildArchSignals();   // 건축인허가 → 인프라·일자리 후보 신호(호재 카운팅 포함)
   // dedupJobByArea() 비활성(2026-07-16): DART 위치가 본사-근사라 거리(250m) 기반 면적-우선 dedup이
   // 무관한 인접 신축건물을 '같은 시설'로 오판→포스코 1.6조·동국제강 등 최대 신호를 잘못 제거함.
@@ -2753,7 +2756,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260717g"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260717h"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -2779,7 +2782,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260717g");
+  const CB = "?b=" + (window.BUILD || "20260717h");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
