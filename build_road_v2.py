@@ -54,13 +54,14 @@ def main():
             queue.append({"osm_name": nm, "reason": "공식 미확인 — 조사 대상"}); continue
         if o.get("opened"):
             queue.append({"osm_name": nm, "reason": f"개통완료 → {o['name']}"}); continue
-        has_ic = nm in ic_lines
+        has_ic = nm in ic_lines or o["name"] in ic_lines
         used_official.add(o["name"])
         feats.append({"type": "Feature", "properties": {
             "kind": "line", "mode": "road", "name": nm, "official_name": o["name"],
             "linekind": v.get("linekind") or o.get("type", "도로"),
             "official_type": o.get("type"),      # 접근 유형 판정 기준(전용/일반) — OSM 이름보다 정확
             "access": o.get("access"), "access_note": o.get("access_note"),   # 영향권 방식 명시(ramp/line) — type 추론의 예외
+            "ic_note": o.get("ic_note"),        # IC 미정·부재 사유(§P2 — '없음'과 '미정'을 구분)
             "lvl": v.get("lvl", "C"),
             "status": o["stage"], "phase": o["phase"], "confirmed": o["phase"] in ("착공", "준공"),
             "owner": o.get("owner"),
@@ -82,7 +83,7 @@ def main():
         feats.append({"type": "Feature", "properties": {
             "kind": "line", "mode": "road", "name": o["name"], "official_name": o["name"],
             "linekind": o.get("type", "도로"), "official_type": o.get("type"),
-            "access": o.get("access"), "access_note": o.get("access_note"),
+            "access": o.get("access"), "access_note": o.get("access_note"), "ic_note": o.get("ic_note"),
             "lvl": "A" if o.get("type") == "고속도로" else "B",
             "status": o["stage"], "phase": o["phase"], "confirmed": o["phase"] in ("착공", "준공"),
             "owner": o.get("owner"), "src_tier": "official_report",
@@ -98,7 +99,14 @@ def main():
     # **JC(분기점)는 호재가 아니다**(2026-07-17 사용자 지적): 고속도로끼리 연결하는 지점이라
     # 일반 차량이 진출입할 수 없다 → 그 동네의 접근성을 개선하지 않는다(§7 거리≠수혜).
     # IC(나들목)만 진출입 가능 = 호재. JC는 노선의 접속 구조 사실로만 보존(signal:false → 지도·영향권 제외).
-    line_by_name = {f["properties"]["name"]: f["properties"] for f in feats}
+    # IC 명단의 line 값이 **공식 사업명**일 수도 OSM 수집명일 수도 있다 → 둘 다 키로 등록.
+    # (2026-07-17: 조사로 추가한 IC를 공식명으로 넣었더니 OSM명 키와 안 맞아 영향권이 안 붙던 버그)
+    line_by_name = {}
+    for f in feats:
+        if f["properties"].get("kind") == "station": continue
+        line_by_name[f["properties"]["name"]] = f["properties"]
+        if f["properties"].get("official_name"):
+            line_by_name.setdefault(f["properties"]["official_name"], f["properties"])
     n_ic = n_jc = 0
     for x in ics:
         lp = line_by_name.get(x["line"])
@@ -106,7 +114,8 @@ def main():
             continue   # 노선이 지도에 없으면 IC도 생략(고아 방지)
         is_sig = x.get("signal", True)          # JC=False → 호재 아님
         feats.append({"type": "Feature", "properties": {
-            "kind": "station", "mode": "road", "name": x["name"], "line": x["line"],
+            "kind": "station", "mode": "road", "name": x["name"], "line": lp["name"],   # 노선 키로 정규화
+            "line_official": x["line"],
             "lvl": lp.get("lvl", "A"), "status": lp.get("status"), "confirmed": lp.get("confirmed"),
             "linekind": "IC" if is_sig else "JC(분기점)", "name_src": x.get("src", "국토부 고시·보도"),
             "ic_status": x.get("status"), "loc": x.get("loc"),

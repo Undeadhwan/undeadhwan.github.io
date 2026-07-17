@@ -886,7 +886,7 @@ function buildRoadSignals() {
       template_type: "도로", current_stage: p.status, phase: p.confirmed ? "착공" : "계획",
       status: "활성", confirmed: !!p.confirmed, sd: null, road_kind: roadKindOf(p), src_tier: p.src_tier,   // 소재 시도=_sggs(다중 귀속)
       owner: p.owner, osm_name: p.name, geom_src: p.geom_src, milestones: p.milestones,
-      official_type: p.official_type, official_name: p.official_name, access: p.access, access_note: p.access_note,
+      official_type: p.official_type, official_name: p.official_name, access: p.access, access_note: p.access_note, ic_note: p.ic_note,
       sources: p.src_url ? [p.src_url] : [],
       stage_note: `${p.linekind || "도로"} · ${p.status} · 선형=OSM(ODbL)`,
       geometry: { coordinates: pts[0] },
@@ -1626,7 +1626,7 @@ function renderDetail(s) {
       ${s._road && (s.access_points || []).length ? (s.road_kind === "전용"
         ? `<div class="kv"><b>영향권</b> ${(s.ic_points || []).length
             ? `진출입 IC ${s.ic_points.length}개소 반경 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km (전용도로 — 선 자체는 영향권 미산정)`
-            : `<b>진출입 지점 미확정 — 영향권 미산정</b> · 이 도로는 IC·진입로에서만 타고 내리므로 그 위치 없이는 수혜 범위를 정할 수 없습니다. ${s.phase === "계획" || s.phase === "인가" ? "미착공 사업이라 IC 위치가 공식 확정 전입니다." : "공식 IC 명단 확인 중입니다."} 근거 없는 범위는 만들지 않습니다(§P2)`}</div>`
+            : `<b>진출입 지점 미확정 — 영향권 미산정</b> · 이 도로는 IC·진입로에서만 타고 내리므로 그 위치 없이는 수혜 범위를 정할 수 없습니다. ${s.ic_note || (s.phase === "계획" || s.phase === "인가" ? "미착공 사업이라 IC 위치가 공식 확정 전입니다." : "공식 IC 명단 확인 중입니다.")} 근거 없는 범위는 만들지 않습니다(§P2)`}</div>`
         : `<div class="kv"><b>영향권</b> 노선 양측 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km 회랑 (선 전체 기준)</div>`) : ""}
       ${(s.stage_history || []).length ? `<div class="kv"><b>단계 이력</b> ${s.stage_history.map(h =>
         `${h.stage} ${h.date}${h.end ? "~" + h.end : ""}`).join(" → ")}</div>` : ""}
