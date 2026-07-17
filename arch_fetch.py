@@ -29,7 +29,15 @@ PHASE_RANK = {"계획": 0, "착공": 1, "준공·개통": 2}
 def level_of(cat, area):
     if cat == "인프라": return "A" if area >= 50000 else "B" if area >= 10000 else "C"
     return "A" if area >= 100000 else "B" if area >= 30000 else "C"   # 일자리
-def cat_of(purp):
+# 학교 처리(§7b 사용자 확정 2026-07-17): 일반 초중고·특수학교 = 배제(신도시 부속시설 + 학군 서열화 P1),
+# 특목·자사·국제학교급 = 인프라. '교육연구시설' 용도가 일자리로 뭉뚱그려지던 것을 명칭으로 분기.
+SCHOOL_SPECIAL = ("과학고", "외국어고", "외고", "국제고", "국제학교", "영재학교", "예술고", "자사고", "자율형사립")
+SCHOOL_GENERAL = ("초등학교", "중학교", "고등학교", "특수학교", "유치원")
+def cat_of(purp, name=""):
+    if "교육연구" in purp:
+        if any(k in name for k in SCHOOL_SPECIAL): return "인프라"
+        if any(k in name for k in SCHOOL_GENERAL): return None   # 일반 학교 배제
+        # 대학·연구소 등은 고용 시설 — 일자리 유지
     if any(k in purp for k in JOB): return "일자리"
     if any(k in purp for k in INFRA): return "인프라"
     return None
@@ -120,7 +128,7 @@ def main():
             except Exception: area = 0
             if area < MIN_AREA: continue
             purp = (it.get("mainPurpsCdNm") or "").strip()
-            cat = cat_of(purp)
+            cat = cat_of(purp, (it.get("bldNm") or "").strip())
             if not cat: continue   # 주거(공동주택 등)·미분류 스킵
             if (it.get("archGbCdNm") or "").strip() not in GB_OK: continue   # 신축·증축만(리모델·용도변경 제외)
             ph = phase_of(it)

@@ -184,7 +184,8 @@ OSM 51개 노선을 공식 사업목록과 대조한 결과: <b>실재 사업 20
   <tr><td><code>sgg</code></td><td>시군구 대표점</td><td><b>2km+</b></td><td>시군구 대표점(근사)</td></tr>
 </table>
 <p class="note"><b>충돌 금지</b>: 서로 다른 시설이 같은 대표점을 공유하면 안 된다. 충돌 시 ①더 정밀한 좌표를 찾고 ②못 찾으면 하나만 남기고 나머지는 "위치 미확정(미표시)". 정밀도를 올릴 때 <b>의미가 다른 지물로 대체하지 않는다</b>(철도역 자리에 도로 IC를 쓰는 식 금지).</p>
-<p class="note"><b>지점 유형(pt_type)</b>: <code>rail_station</code>(철도역·원) / <code>road_ic</code>(도로 IC·JC — <b>도넛+이중테두리로 역과 구분</b>) / <code>facility</code> / <code>zone</code>. 교통 분류라는 이유로 역과 IC가 같은 모양이면 사용자가 구별할 수 없다.</p>
+<p class="note"><b>지점 유형(pt_type)</b>: <code>rail_station</code>(철도역·원) / <code>road_ic</code>(도로 IC — <b>황갈 흰속 도넛으로 역과 구분</b>) / <code>facility</code> / <code>zone</code>. 교통 분류라는 이유로 역과 IC가 같은 모양이면 사용자가 구별할 수 없다.</p>
+<p class="note"><b>역(정거장) 좌표 결정 표준(§3c, 2026-07-17 제정 — 전국 공통)</b>: 모든 역 좌표는 5케이스(<code>coord_src</code>) 중 하나로만 결정한다 — ① <code>gosi</code> 고시 도면 좌표 ② <code>existing</code> 기존 역 접속=실좌표 차용 ③ <code>shared</code> 타 노선 신설역 접속=그 노선 좌표 재사용(같은 역이 노선마다 다른 좌표면 거짓) ④ <code>landmark</code> 공식 문서의 지물 서술=장소 검색(지역 검증) ⑤ <code>dong</code> 서술이 읍면동뿐=동 대표점+위치 미확정. <b>노선도 이미지 눈대중 금지</b> — 근거 서술이 없으면 dong으로 내려가는 것이 정직하다. 앵커 선형은 공식 정거장 순서로만 잇고, <b>급반전 QA</b>(연속 회전각 150°+·양변 1km+ = 좌표·순서 오류 신호)를 통과해야 한다. 실제 노선이 원래 꺾이는 경우는 확인 후 <code>route_verified</code>로 기록.</p>
 
 <h3>6-1b. 근거 등급 (src_tier) — 공식 소스 SSOT 원칙 (2026-07-17 확정)</h3>
 <p><b>우리 핵심은 호재를 정확히 발굴하고 진척단계·위치를 정확히 아는 것</b>이다. 따라서 <b>사실의 근거는 공식 소스만</b> 인정한다.

@@ -61,7 +61,8 @@ def main():
     for ln in off["lines"]:
         nm = ln["name"]
         sts = ln.get("stations") or []
-        pts = [[s["lng"], s["lat"]] for s in sts]
+        # 좌표 없는 역 = "위치 미확정(지도 미표시)"(§3) — 앵커 선형에서도 제외
+        pts = [[s["lng"], s["lat"]] for s in sts if s.get("lng") is not None]
 
         # ── 선형 결정: OSM(요청 시) → 기존 재사용 → 역 앵커 근사 ──
         geom = None
@@ -89,10 +90,12 @@ def main():
                 "note": ln.get("note"), "src_name": ln.get("src_name"), "src_url": ln.get("src_url"),
                 "src_tier": ln.get("src_tier") or "official_report",      # DATA_STANDARD §2
                 "milestones": ln.get("milestones") or [],                  # §3b
+                "route_verified": ln.get("route_verified"),                # §3c — 급반전이 실제 노선임을 사람이 확인(QA 억제)
                 "audited": ln.get("audited"), "geom_src": "OpenStreetMap(ODbL) — 선형 참고" if ln.get("geom") == "osm" else "역 앵커 연결(근사)"},
                 "geometry": geom})
 
         for s in sts:
+            if s.get("lng") is None: continue   # 위치 미확정 — 지도 미표시(§3), 대장·카드에서만 서술
             feats.append({"type": "Feature", "properties": {
                 "kind": "station", "name": s["name"], "line": nm,
                 "confirmed": ln.get("confirmed"), "status": ln.get("status"), "phase": ln.get("phase"),
@@ -108,7 +111,7 @@ def main():
         ref.append({"name": nm, "kind": ln.get("linekind"), "phase": ln.get("phase"), "stage": ln.get("status"),
                     "geom": "OSM 실선형" if ln.get("geom") == "osm" else ("근사 회랑(역 앵커 연결)" if len(pts) >= 2 else "대표점만"),
                     "src": ln.get("src_name") or "공식",
-                    "stations": [{"name": s["name"], "lng": s["lng"], "lat": s["lat"]} for s in sts]})
+                    "stations": [{"name": s["name"], "lng": s.get("lng"), "lat": s.get("lat")} for s in sts]})   # 좌표 미확정 역은 null — 대장에 서술만
 
     json.dump({"type": "FeatureCollection",
                "_note": "철도 신호 — rail_official.json(공식 SSOT) + 선형(OSM/앵커). build_rail_v2.py가 생성(백지 재현 가능).",

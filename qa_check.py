@@ -117,6 +117,23 @@ def main():
                 warn("지도부재", f"{o['name'][:44]} [{o.get('phase')}] — 공식 사업인데 지도 피처 0 "
                                 f"(OSM 선형·anchors 모두 없음 → official_roads.json에 anchors 추가)")
 
+    # ── 7e. 앵커 노선 급반전(지그재그): 근사 선형에서 연속 구간이 150° 이상 꺾이며 양변이 1km를 넘으면
+    #        역/경유점의 좌표·순서 오류 신호다(§3c). 2026-07-17 전수 스캔: 11개 노선 14건(5호선 김포검단 등).
+    import math
+    def _bear(a, b): return math.degrees(math.atan2(b[0] - a[0], b[1] - a[1]))
+    def _turn(a, b, c):
+        t = abs(_bear(b, c) - _bear(a, b)); return t if t <= 180 else 360 - t
+    for f in rlines + dlines:
+        p = f["properties"]
+        if not (p.get("approx") or "앵커" in (p.get("geom_src") or "") or "근사" in (p.get("geom_src") or "")): continue
+        if p.get("route_verified"): continue   # 사람이 "실제 노선이 원래 이렇게 꺾임"을 확인·기록한 경우(§3c)
+        cs = f["geometry"]["coordinates"]
+        if f["geometry"]["type"] == "MultiLineString": cs = [c for seg in cs for c in seg]
+        for i in range(1, len(cs) - 1):
+            if _turn(cs[i-1], cs[i], cs[i+1]) > 150 and meters(cs[i-1], cs[i]) > 1000 and meters(cs[i], cs[i+1]) > 1000:
+                warn("급반전", f"{(p.get('official_name') or p.get('name'))[:36]} — {i}번째 점에서 "
+                              f"{round(_turn(cs[i-1], cs[i], cs[i+1]))}° 반전 (좌표·순서 확인 필요, §3c)")
+
     # ── 8. 확정 신호 필수 근거
     for s in sigs:
         if not s.get("src_tier"): warn("필수필드", f"확정신호 {s.get('id')} src_tier 없음")

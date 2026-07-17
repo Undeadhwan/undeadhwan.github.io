@@ -1,8 +1,8 @@
 {
  "_note": "철도 공식 지식 SSOT (2026-07-17 분리) — 조사로 확보한 공식 사실을 **데이터로** 보관한다. build_rail_v2.py가 이 파일 + OSM 선형(있으면)으로 rail_signals.json을 재생성하므로 백지에서도 재현된다. 갱신: 공식 발표가 나오면 이 파일의 해당 노선을 고치고 build_rail_v2.py 재실행.",
  "_schema": {
-  "line": "노선 메타(공식): name·linekind·lvl·phase·status·milestones·src_*·note·drop",
-  "stations": "역 목록(공식): name·st_status(확정/가칭/미정)·geo_prec·lng·lat·note",
+  "line": "노선 메타(공식): name·linekind·lvl·phase·status·milestones·src_*·note·drop · route_verified(급반전이 실제 노선임을 확인 시 true)",
+  "stations": "역 목록(공식): name·st_status(확정/가칭/미정)·coord_src(§3c: gosi/existing/shared/landmark/dong)·geo_prec·lng·lat·note",
   "geom": "osm=OSM 선형 사용 / anchor=역 앵커 연결(근사)"
  },
  "lines": [
@@ -2379,7 +2379,7 @@
    "confirmed": false,
    "dashed": true,
    "drop": null,
-   "note": "복정~정부과천청사, 정거장 약 11개소 · 압구정 미경유(오류 정정) · 착공 '26말~'27 예상",
+   "note": "복정~정부과천청사, 정거장 약 11개소 · 압구정 미경유(오류 정정) · 착공 '26말~'27 예상 · 민자적격성 통과안은 Y자(압구정 축+문정 지선, 정거장 16 — 미고시·비공식)라 원안 축(정부과천청사~복정)만 표시 · 순서 수정 2026-07-17",
    "src_name": "과천시·국토교통부",
    "src_url": "https://www.gccity.go.kr/portal/contents.do?mId=0305020400",
    "src_tier": "official_notice",
@@ -2455,18 +2455,9 @@
    "geom": "anchor",
    "stations": [
     {
-     "name": "우면역",
-     "lng": 127.03501,
-     "lat": 37.46003,
-     "st_status": null,
-     "geo_prec": "dong",
-     "approx": true,
-     "note": null
-    },
-    {
-     "name": "주암역",
-     "lng": 127.02246,
-     "lat": 37.4556,
+     "name": "정부과천청사역",
+     "lng": 126.98964,
+     "lat": 37.42604,
      "st_status": null,
      "geo_prec": "dong",
      "approx": true,
@@ -2482,12 +2473,30 @@
      "note": null
     },
     {
-     "name": "정부과천청사역",
-     "lng": 126.98964,
-     "lat": 37.42604,
+     "name": "주암역",
+     "lng": 127.02246,
+     "lat": 37.4556,
      "st_status": null,
      "geo_prec": "dong",
      "approx": true,
+     "note": null
+    },
+    {
+     "name": "우면역",
+     "lng": 127.03501,
+     "lat": 37.46003,
+     "st_status": null,
+     "geo_prec": "dong",
+     "approx": true,
+     "note": null
+    },
+    {
+     "name": "수서역",
+     "lng": 127.10166,
+     "lat": 37.48732,
+     "st_status": null,
+     "geo_prec": "parcel",
+     "approx": null,
      "note": null
     },
     {
@@ -2498,15 +2507,6 @@
      "geo_prec": "landmark",
      "approx": true,
      "note": "기존역 — 동 대표점 근사 · 기존 역(복정역) 위치로 정밀화(동 대표점→지물, 이동 1291m)"
-    },
-    {
-     "name": "수서역",
-     "lng": 127.10166,
-     "lat": 37.48732,
-     "st_status": null,
-     "geo_prec": "parcel",
-     "approx": null,
-     "note": null
     }
    ]
   },
@@ -3184,7 +3184,7 @@
    "confirmed": true,
    "dashed": true,
    "drop": null,
-   "note": "선형 근사(계획 역 연결) · 착공 2025-11 · 공기 79개월 · 총연장 3.94km · 사업비 4,690억",
+   "note": "선형 근사(계획 역 연결) · 착공 2025-11 · 공기 79개월 · 총연장 3.94km · 사업비 4,690억 · 솔밭공원 분기→쌍문(선덕고)→성원아파트사거리→방학역 북동진(급반전 없음) — 순서 수정 2026-07-17",
    "src_name": "서울시 착공 보도(2025-11)",
    "src_url": "https://news.seoul.go.kr/citybuild/archives/528900",
    "src_tier": "official_report",
@@ -3217,21 +3217,13 @@
     },
     {
      "name": "101정거장(가칭 선덕고교입구교차로)",
-     "lng": 127.02845,
-     "lat": 37.65773,
+     "lng": 127.02672,
+     "lat": 37.65448,
      "st_status": "미정",
-     "geo_prec": "dong",
+     "geo_prec": "landmark",
      "approx": true,
-     "note": "역명 미정 · 역명 미확정"
-    },
-    {
-     "name": "방학역",
-     "lng": 127.04449,
-     "lat": 37.66636,
-     "st_status": "확정",
-     "geo_prec": "parcel",
-     "approx": null,
-     "note": "1호선 환승·종점 · 공식 확정"
+     "note": "가칭 · 선덕고 사거리(쌍문동 263) — 위치 미고시",
+     "coord_src": "landmark"
     },
     {
      "name": "102정거장(가칭 성원아파트교차로)",
@@ -3241,6 +3233,15 @@
      "geo_prec": "landmark",
      "approx": true,
      "note": "역명 미정 · 성원아파트교차로 근사"
+    },
+    {
+     "name": "방학역",
+     "lng": 127.04449,
+     "lat": 37.66636,
+     "st_status": "확정",
+     "geo_prec": "parcel",
+     "approx": null,
+     "note": "1호선 환승·종점 · 공식 확정"
     }
    ]
   },
@@ -3850,7 +3851,7 @@
    "confirmed": false,
    "dashed": true,
    "drop": null,
-   "note": "정거장 10개소(서울1·김포7·인천2) · 총연장 25.8km · 3.3조 · 역명 전부 미확정(S01~S10) · 검단 경유 U자 선형(대광위 중재안) · 선형·역 위치는 근사",
+   "note": "정거장 10개소(서울1·인천2·김포7, 환승 5) + 차량기지 1 · 25.8km · 3.3조 · 역명 전부 미확정(S01~S10) · 검단 경유 U자(대광위 중재안 '24.1, 조정안 고시 '24.8): 풍무→아라→신검단중앙→감정 복귀 · 정거장별 위치는 기본계획에서 확정 예정(김포시 공식) — 추가역 요구(인천 원당, 김포 통진 등)로 역수 유동 · §3c 표준 재부여 2026-07-17",
    "src_name": "국토부 고시 2024-422호 · 기재부 예타(26.3) · 김포시",
    "src_url": "https://www.gimpo.go.kr/portal/contents.do?key=5779",
    "src_tier": "official_notice",
@@ -3885,93 +3886,103 @@
    "stations": [
     {
      "name": "S01 (방화차량기지 일대)",
-     "lng": 126.80868,
-     "lat": 37.58785,
+     "lng": 126.8081,
+     "lat": 37.58821,
      "st_status": "미정",
-     "geo_prec": "landmark",
+     "coord_src": "landmark",
+     "geo_prec": "parcel",
      "approx": true,
-     "note": "역명 미확정(공식문서 S01~S10 코드) · 기점 · 방화차량기지(개화동 293) — 공식 '방화차량기지 부지' · 5호선 방화역 접속"
+     "note": "역명 미확정 · 기점 — 공식 '방화차량기지 부지'(개화동 293, 지번 지오코딩) · 5호선 방화역 접속"
     },
     {
-     "name": "S02 (고촌 신곡IC·아라뱃길 일대)",
-     "lng": 126.7841,
-     "lat": 37.60497,
+     "name": "S02 (고촌 정거장)",
+     "lng": 126.76344,
+     "lat": 37.60994,
      "st_status": "미정",
-     "geo_prec": "landmark",
+     "coord_src": "dong",
+     "geo_prec": "dong",
      "approx": true,
-     "note": "역명 미확정(공식문서 S01~S10 코드) · 신곡IC(고촌읍 신곡리 150-7) 인근 — 노선도 분석 기준, 정거장 위치 미확정"
+     "note": "역명·위치 미확정 — 위치 서술 공식 미공개(신곡·전호 등 후보 보도만) · 고촌읍 대표점 · 장래역 편입 논의 유동"
     },
     {
      "name": "S03 (고촌 시네폴리스 일대)",
      "lng": 126.7549,
      "lat": 37.61383,
      "st_status": "미정",
+     "coord_src": "landmark",
      "geo_prec": "landmark",
      "approx": true,
-     "note": "역명 미확정(공식문서 S01~S10 코드) · 김포한강시네폴리스(고촌읍 풍곡리) — 개발지구 연계, 정거장 위치 미확정"
+     "note": "역명 미확정 · 한강시네폴리스 지구(고촌읍 향산·풍곡리) 연계 — 지구는 공식, 정거장 위치 미확정"
     },
     {
-     "name": "S04 (풍무 일대)",
+     "name": "S04 (풍무 환승)",
      "lng": 126.73261,
      "lat": 37.6124,
      "st_status": "미정",
-     "geo_prec": "landmark",
+     "coord_src": "existing",
+     "geo_prec": "parcel",
      "approx": true,
-     "note": "역명 미확정(공식문서 S01~S10 코드) · 기존 풍무역(김포골드라인) 인근 — 환승 계획"
+     "note": "역명 미확정 · 기존 김포골드라인 풍무역 실좌표 차용 — 환승(대광위 중재안)"
     },
     {
-     "name": "S05 (검단 101역 일대)",
-     "lng": 126.6636,
-     "lat": 37.59894,
+     "name": "S05 (아라역 환승·검단)",
+     "lng": 126.71347,
+     "lat": 37.59058,
      "st_status": "미정",
-     "geo_prec": "landmark",
+     "coord_src": "shared",
+     "geo_prec": "parcel",
      "approx": true,
-     "note": "역명 미확정(공식문서 S01~S10 코드) · 인천1호선 검단연장 101역(아라역, '25.6 개통) 인근"
+     "note": "역명 미확정 · 인천1호선 검단연장 아라역('25.6 개통, 당하동 1238) 실좌표 — 환승 · U자 남측 꼭짓점"
     },
     {
-     "name": "S06 (검단 102역 일대)",
-     "lng": 126.70946,
-     "lat": 37.59583,
+     "name": "S06 (신검단중앙역 환승·검단)",
+     "lng": 126.70798,
+     "lat": 37.59511,
      "st_status": "미정",
+     "coord_src": "dong",
      "geo_prec": "dong",
      "approx": true,
-     "note": "역명 미확정(공식문서 S01~S10 코드) · 인천 검단구 원당동 대표점 — 102역 예정지, 위치 미확정"
+     "note": "역명 미확정 · 인천1호선 신검단중앙역(원당동 651-1) 환승 — 신설역이라 지오코딩 미반영, 원당동 대표점 근사"
     },
     {
      "name": "S07 (감정 일대)",
-     "lng": 126.70628,
-     "lat": 37.63193,
+     "lng": 126.69167,
+     "lat": 37.62401,
      "st_status": "미정",
-     "geo_prec": "landmark",
+     "coord_src": "dong",
+     "geo_prec": "dong",
      "approx": true,
-     "note": "역명 미확정(공식문서 S01~S10 코드) · 걸포북변역·홈플러스 방면(감정동 나진감정 인근) — 대광위 중재로 인천 불로역을 김포 감정동으로 이설(인천시 이견 존속)"
+     "note": "역명 미확정 · 대광위 중재안: 인천안 '불로역'을 김포 감정동으로 이전 확정 — 동 대표점"
     },
     {
-     "name": "S08 (장기 일대)",
+     "name": "S08 (장기 환승)",
      "lng": 126.66898,
      "lat": 37.64425,
      "st_status": "미정",
-     "geo_prec": "landmark",
+     "coord_src": "existing",
+     "geo_prec": "parcel",
      "approx": true,
-     "note": "역명 미확정(공식문서 S01~S10 코드) · 기존 장기역(김포골드라인) 인근 — 환승 계획"
+     "note": "역명 미확정 · 기존 김포골드라인 장기역 실좌표 차용 — 환승 · GTX-D 연계 구상"
     },
     {
-     "name": "S09 (김포한강2 마산 일대)",
-     "lng": 126.64355,
-     "lat": 37.64059,
+     "name": "S09 (김포한강2 정거장)",
+     "lng": 126.655,
+     "lat": 37.66686,
      "st_status": "미정",
-     "geo_prec": "landmark",
+     "coord_src": "dong",
+     "geo_prec": "dong",
      "approx": true,
-     "note": "역명 미확정(공식문서 S01~S10 코드) · 기존 마산역 인근 — 한강2 콤팩트시티, 정거장 위치 미확정"
+     "note": "역명·위치 미확정 — 공식은 '한강2 콤팩트시티 정거장'까지만 · 석모리 서술(보도·참고 수준)의 리 대표점"
     },
     {
-     "name": "S10 (김포한강2 종점 일대)",
-     "lng": 126.61445,
-     "lat": 37.64194,
+     "name": "S10 (김포한강2 종점)",
+     "lng": 126.63888,
+     "lat": 37.67027,
      "st_status": "미정",
-     "geo_prec": "landmark",
+     "coord_src": "dong",
+     "geo_prec": "dong",
      "approx": true,
-     "note": "역명 미확정(공식문서 S01~S10 코드) · 기존 양촌역 인근 — 종점·차량기지 병설, 위치 미확정"
+     "note": "역명·위치 미확정 · 종점·차량기지 병설(누산리 후보 거론) — 공식 위치 미공개, 리 대표점"
     }
    ]
   },
@@ -3985,7 +3996,7 @@
    "confirmed": true,
    "dashed": true,
    "drop": null,
-   "note": "'21 착공 · 중앙보훈병원~고덕강일1지구 4.12km · 선형 근사(앵커 연결)",
+   "note": "'21 착공 · 중앙보훈병원~고덕강일1지구 4.12km · 선형 근사(앵커 연결) · 선형=L자(동남로 북진→고덕역서 아리수로 동진, 서울시 공식) — §3c 재부여 2026-07-17",
    "src_name": "서울시",
    "src_url": "https://mediahub.seoul.go.kr/archives/2006605",
    "src_tier": "official_report",
@@ -4027,12 +4038,13 @@
     },
     {
      "name": "940 한영외고(가칭)",
-     "lng": 127.16415,
-     "lat": 37.57423,
+     "lng": 127.15777,
+     "lat": 37.54882,
      "st_status": "가칭",
-     "geo_prec": "dong",
+     "geo_prec": "landmark",
      "approx": true,
-     "note": "역명 미확정"
+     "note": "가칭 · 한영외고 정문(상일동 166) — 공식 발표 지물 · 종전 동대표점 오좌표(2km N) 수정 2026-07-17",
+     "coord_src": "landmark"
     },
     {
      "name": "941 고덕",
@@ -4045,12 +4057,13 @@
     },
     {
      "name": "942 고덕강일1지구(가칭)",
-     "lng": 127.17628,
-     "lat": 37.57971,
+     "lng": 127.16235,
+     "lat": 37.56088,
      "st_status": "가칭",
-     "geo_prec": "dong",
+     "geo_prec": "landmark",
      "approx": true,
-     "note": "종점 · 역명 미확정"
+     "note": "가칭 · 기본계획(2020.4) 서술 \"샘터~동명근린공원 중간\"(아리수로 지하) 좌표 · 위치 미확정",
+     "coord_src": "landmark"
     }
    ]
   },
@@ -6411,7 +6424,7 @@
    "confirmed": true,
    "dashed": true,
    "drop": null,
-   "note": "정거장 7개소(신설 6) · 502~506 가칭 · 선형 근사(정거장 연결)",
+   "note": "정거장 7개소(신설 6) · 502~506 가칭 · 선형 근사(정거장 연결) · 새벽로→낙동대로 남진 일자형(공식 서술) — 순서·역 보강 2026-07-17",
    "src_name": "부산교통공사",
    "src_url": "https://www.humetro.busan.kr",
    "src_tier": "official_report",
@@ -6443,6 +6456,24 @@
      "note": "공식 확정"
     },
     {
+     "name": "502 새벽시장(가칭)",
+     "lng": 128.98243,
+     "lat": 35.15433,
+     "st_status": "가칭",
+     "coord_src": "landmark",
+     "geo_prec": "landmark",
+     "approx": true,
+     "note": "부산새벽시장(감전동) 앞 새벽로변 — 위치 미고시(북측 조정 이력 보도)"
+    },
+    {
+     "name": "504 학장(가칭)",
+     "st_status": "가칭",
+     "geo_prec": null,
+     "approx": true,
+     "note": "역명·위치 미확정 — 동 대표점이 노선축(새벽로~낙동대로 서측)과 어긋나 지도 미표시(§3) · 서술상 학장동 서측 대로변",
+     "coord_src": "dong"
+    },
+    {
      "name": "505 엄궁(가칭)",
      "lng": 128.97698,
      "lat": 35.13534,
@@ -6452,6 +6483,16 @@
      "note": "역명·위치 미확정"
     },
     {
+     "name": "506 동아대(가칭)",
+     "lng": 128.96751,
+     "lat": 35.11613,
+     "st_status": "가칭",
+     "coord_src": "landmark",
+     "geo_prec": "landmark",
+     "approx": true,
+     "note": "동아대 승학캠퍼스(하단동) 인근 — 위치 미고시"
+    },
+    {
      "name": "507 하단",
      "lng": 128.96645,
      "lat": 35.10621,
@@ -6459,15 +6500,6 @@
      "geo_prec": "parcel",
      "approx": null,
      "note": "공식 확정"
-    },
-    {
-     "name": "504 학장(가칭)",
-     "lng": 128.99013,
-     "lat": 35.13536,
-     "st_status": "가칭",
-     "geo_prec": "dong",
-     "approx": true,
-     "note": "역명 미확정 · 동 대표점 근사"
     }
    ]
   },
@@ -7567,7 +7599,7 @@
    "confirmed": true,
    "dashed": true,
    "drop": null,
-   "note": "서대구~대구국가산단 36.4km · 정거장 8개소 · 선형 근사(앵커 연결)",
+   "note": "서대구~대구국가산단 36.4km · 정거장 8개소 · 선형 근사(앵커 연결) · 서대구→서재세천 V자(금호강 재횡단)는 실제 기본계획 선형(route_verified) — §3c 재부여 2026-07-17",
    "src_name": "국토부",
    "src_url": "https://www.molit.go.kr/USR/NEWS/m_71/dtl.jsp?id=95086603",
    "src_tier": "official_notice",
@@ -7618,12 +7650,13 @@
     },
     {
      "name": "성서산단역(가칭)",
-     "lng": 128.4803,
-     "lat": 35.89335,
+     "lng": 128.50086,
+     "lat": 35.85168,
      "st_status": "가칭",
-     "geo_prec": "dong",
+     "geo_prec": "landmark",
      "approx": true,
-     "note": "'21 추가 · 역명·위치 미확정(가칭)"
+     "note": "가칭 · 성서일반산업단지(이곡동) — 종전 오좌표(북쪽 5km) 수정 2026-07-17",
+     "coord_src": "landmark"
     },
     {
      "name": "설화명곡역",
@@ -7644,6 +7677,16 @@
      "note": "역명·위치 미확정(가칭)"
     },
     {
+     "name": "달성산단역(가칭)",
+     "lng": 128.45223,
+     "lat": 35.72941,
+     "st_status": "가칭",
+     "coord_src": "landmark",
+     "geo_prec": "landmark",
+     "approx": true,
+     "note": "달성1차산업단지(논공읍 북리) — 기본계획 고시 신설 8개소 중 1"
+    },
+    {
      "name": "테크노폴리스역(가칭)",
      "lng": 128.50286,
      "lat": 35.66139,
@@ -7654,14 +7697,16 @@
     },
     {
      "name": "대구국가산단역(가칭)",
-     "lng": 128.44624,
-     "lat": 35.67282,
+     "lng": 128.40527,
+     "lat": 35.65762,
      "st_status": "가칭",
      "geo_prec": "dong",
      "approx": true,
-     "note": "종점 · 역명·위치 미확정(가칭)"
+     "note": "가칭 · 구지면 대표점(대구국가산단 일원) — 종점",
+     "coord_src": "dong"
     }
-   ]
+   ],
+   "route_verified": true
   },
   {
    "name": "문경~김천선(중부내륙선 연장)",
@@ -8095,7 +8140,7 @@
    "confirmed": true,
    "dashed": true,
    "drop": null,
-   "note": "정거장 18개소(220~237) · 역명 제정 미착수 = 전부 가칭 · 선형 근사(정거장 연결)",
+   "note": "정거장 18개소(220~237) · 역명 제정 미착수 = 전부 가칭 · 선형 근사(정거장 연결) · 순환 상단 꼭짓점(일곡·첨단)의 예각은 실제 선형(공사 공식 노선도, route_verified) — 역번순 정렬 2026-07-17",
    "src_name": "보도 종합",
    "src_url": "https://www.khan.co.kr/article/202507062019015",
    "src_tier": "official_report",
@@ -8145,6 +8190,15 @@
      "note": "역명·위치 미확정"
     },
     {
+     "name": "232 첨단(가칭)",
+     "lng": 126.83963,
+     "lat": 35.21141,
+     "st_status": "가칭",
+     "geo_prec": "dong",
+     "approx": true,
+     "note": "역명 미확정 · 동 대표점 근사"
+    },
+    {
      "name": "235 수완(가칭)",
      "lng": 126.84254,
      "lat": 35.20215,
@@ -8161,17 +8215,9 @@
      "geo_prec": "dong",
      "approx": true,
      "note": "역명·위치 미확정"
-    },
-    {
-     "name": "232 첨단(가칭)",
-     "lng": 126.83963,
-     "lat": 35.21141,
-     "st_status": "가칭",
-     "geo_prec": "dong",
-     "approx": true,
-     "note": "역명 미확정 · 동 대표점 근사"
     }
-   ]
+   ],
+   "route_verified": true
   },
   {
    "name": "호남고속철도 2단계",
@@ -8401,7 +8447,7 @@
    "confirmed": true,
    "dashed": true,
    "drop": null,
-   "note": "정거장 45개소 전부 명칭 확정·고시('25.10) — 좌표 확보분만 표시(순환선) · 선형 근사(정거장 연결)",
+   "note": "정거장 45개소 전부 명칭 확정·고시('25.10) — 좌표 확보분만 표시(순환선) · 선형 근사(정거장 연결) · 본선 순환만(연축지선 분리) · 정부청사~유성 구간의 갑천 V자(엑스포·카이스트)는 실제 선형(route_verified) · 역번순 정렬 2026-07-17",
    "src_name": "보도 종합",
    "src_url": "https://www.redaily.co.kr/news/articleView.html?idxno=14885",
    "src_tier": "official_report",
@@ -8442,6 +8488,33 @@
      "note": "공식 확정"
     },
     {
+     "name": "205 인동(동부경찰서)",
+     "lng": 127.43958,
+     "lat": 36.32253,
+     "st_status": "확정",
+     "geo_prec": "dong",
+     "approx": true,
+     "note": "공식 확정 역명 · 동 대표점 근사"
+    },
+    {
+     "name": "206 대전역(중앙시장)",
+     "lng": 127.43496,
+     "lat": 36.3275,
+     "st_status": "확정",
+     "geo_prec": "dong",
+     "approx": true,
+     "note": "공식 확정 역명 · 동 대표점 근사"
+    },
+    {
+     "name": "207 대전역(혁신도시)",
+     "lng": 127.43834,
+     "lat": 36.32942,
+     "st_status": "확정",
+     "geo_prec": "dong",
+     "approx": true,
+     "note": "공식 확정 역명 · 동 대표점 근사"
+    },
+    {
      "name": "208 대동(하늘공원)",
      "lng": 127.45101,
      "lat": 36.331,
@@ -8478,6 +8551,24 @@
      "note": "공식 확정"
     },
     {
+     "name": "212 용전(연축지선 분기)",
+     "lng": 127.43546,
+     "lat": 36.35533,
+     "st_status": "확정",
+     "geo_prec": "dong",
+     "approx": true,
+     "note": "공식 확정 역명 · 동 대표점 근사"
+    },
+    {
+     "name": "213 중리(중리시장)",
+     "lng": 127.42635,
+     "lat": 36.36078,
+     "st_status": "확정",
+     "geo_prec": "dong",
+     "approx": true,
+     "note": "공식 확정 역명 · 동 대표점 근사"
+    },
+    {
      "name": "215 오정농수산물시장",
      "lng": 127.4196,
      "lat": 36.35722,
@@ -8485,6 +8576,24 @@
      "geo_prec": "parcel",
      "approx": null,
      "note": "공식 확정"
+    },
+    {
+     "name": "216 둔산",
+     "lng": 127.38096,
+     "lat": 36.35351,
+     "st_status": "확정",
+     "geo_prec": "landmark",
+     "approx": true,
+     "note": "공식 확정 역명 · 동 대표점 근사 · 둔산동주민센터 기준 정밀화"
+    },
+    {
+     "name": "218 정부청사",
+     "lng": 127.38831,
+     "lat": 36.36407,
+     "st_status": "확정",
+     "geo_prec": "landmark",
+     "approx": true,
+     "note": "공식 확정 역명 · 동 대표점 근사 · 정부대전청사 기준 정밀화"
     },
     {
      "name": "219 둔산선사유적지",
@@ -8523,6 +8632,15 @@
      "note": "공식 확정"
     },
     {
+     "name": "223 유성구청",
+     "lng": 127.35627,
+     "lat": 36.37031,
+     "st_status": "확정",
+     "geo_prec": "dong",
+     "approx": true,
+     "note": "공식 확정 역명 · 동 대표점 근사"
+    },
+    {
      "name": "224 궁동(충남대)",
      "lng": 127.35145,
      "lat": 36.36351,
@@ -8539,6 +8657,25 @@
      "geo_prec": "parcel",
      "approx": null,
      "note": "공식 확정"
+    },
+    {
+     "name": "226 상대",
+     "lng": 127.33104,
+     "lat": 36.34144,
+     "st_status": "확정",
+     "geo_prec": "dong",
+     "approx": true,
+     "note": "공식 확정 역명 · 동 대표점 근사"
+    },
+    {
+     "name": "229 도안(목원대)",
+     "lng": 127.33881,
+     "lat": 36.32971,
+     "st_status": "확정",
+     "geo_prec": "landmark",
+     "approx": true,
+     "note": "가칭 · 목원대(도안동 800) — 종전 오좌표(동쪽 13km) 수정 2026-07-17",
+     "coord_src": "landmark"
     },
     {
      "name": "231 대정",
@@ -8577,132 +8714,6 @@
      "note": "공식 확정"
     },
     {
-     "name": "240 유천(유천시장)",
-     "lng": 127.39512,
-     "lat": 36.31707,
-     "st_status": "확정",
-     "geo_prec": "landmark",
-     "approx": null,
-     "note": "공식 확정 · 유천시장 기준 정밀화"
-    },
-    {
-     "name": "242 법동(연축지선)",
-     "lng": 127.44199,
-     "lat": 36.37484,
-     "st_status": "확정",
-     "geo_prec": "parcel",
-     "approx": null,
-     "note": "공식 확정"
-    },
-    {
-     "name": "243 읍내(계족산)",
-     "lng": 127.43251,
-     "lat": 36.3826,
-     "st_status": "확정",
-     "geo_prec": "parcel",
-     "approx": null,
-     "note": "공식 확정"
-    },
-    {
-     "name": "244 연축(대덕구청·종점)",
-     "lng": 127.43571,
-     "lat": 36.39463,
-     "st_status": "확정",
-     "geo_prec": "parcel",
-     "approx": null,
-     "note": "공식 확정"
-    },
-    {
-     "name": "205 인동(동부경찰서)",
-     "lng": 127.43958,
-     "lat": 36.32253,
-     "st_status": "확정",
-     "geo_prec": "dong",
-     "approx": true,
-     "note": "공식 확정 역명 · 동 대표점 근사"
-    },
-    {
-     "name": "206 대전역(중앙시장)",
-     "lng": 127.43496,
-     "lat": 36.3275,
-     "st_status": "확정",
-     "geo_prec": "dong",
-     "approx": true,
-     "note": "공식 확정 역명 · 동 대표점 근사"
-    },
-    {
-     "name": "207 대전역(혁신도시)",
-     "lng": 127.43834,
-     "lat": 36.32942,
-     "st_status": "확정",
-     "geo_prec": "dong",
-     "approx": true,
-     "note": "공식 확정 역명 · 동 대표점 근사"
-    },
-    {
-     "name": "212 용전(연축지선 분기)",
-     "lng": 127.43546,
-     "lat": 36.35533,
-     "st_status": "확정",
-     "geo_prec": "dong",
-     "approx": true,
-     "note": "공식 확정 역명 · 동 대표점 근사"
-    },
-    {
-     "name": "213 중리(중리시장)",
-     "lng": 127.42635,
-     "lat": 36.36078,
-     "st_status": "확정",
-     "geo_prec": "dong",
-     "approx": true,
-     "note": "공식 확정 역명 · 동 대표점 근사"
-    },
-    {
-     "name": "216 둔산",
-     "lng": 127.38096,
-     "lat": 36.35351,
-     "st_status": "확정",
-     "geo_prec": "landmark",
-     "approx": true,
-     "note": "공식 확정 역명 · 동 대표점 근사 · 둔산동주민센터 기준 정밀화"
-    },
-    {
-     "name": "218 정부청사",
-     "lng": 127.38831,
-     "lat": 36.36407,
-     "st_status": "확정",
-     "geo_prec": "landmark",
-     "approx": true,
-     "note": "공식 확정 역명 · 동 대표점 근사 · 정부대전청사 기준 정밀화"
-    },
-    {
-     "name": "223 유성구청",
-     "lng": 127.35627,
-     "lat": 36.37031,
-     "st_status": "확정",
-     "geo_prec": "dong",
-     "approx": true,
-     "note": "공식 확정 역명 · 동 대표점 근사"
-    },
-    {
-     "name": "226 상대",
-     "lng": 127.33104,
-     "lat": 36.34144,
-     "st_status": "확정",
-     "geo_prec": "dong",
-     "approx": true,
-     "note": "공식 확정 역명 · 동 대표점 근사"
-    },
-    {
-     "name": "229 도안(목원대)",
-     "lng": 127.48704,
-     "lat": 36.37318,
-     "st_status": "확정",
-     "geo_prec": "dong",
-     "approx": true,
-     "note": "공식 확정 역명 · 동 대표점 근사"
-    },
-    {
      "name": "237 도마·복수",
      "lng": 127.37079,
      "lat": 36.32055,
@@ -8710,8 +8721,18 @@
      "geo_prec": "dong",
      "approx": true,
      "note": "공식 확정 역명 · 동 대표점 근사"
+    },
+    {
+     "name": "240 유천(유천시장)",
+     "lng": 127.39512,
+     "lat": 36.31707,
+     "st_status": "확정",
+     "geo_prec": "landmark",
+     "approx": null,
+     "note": "공식 확정 · 유천시장 기준 정밀화"
     }
-   ]
+   ],
+   "route_verified": true
   },
   {
    "name": "충청권 광역철도 1단계",
@@ -9817,6 +9838,75 @@
      "geo_prec": "parcel",
      "approx": null,
      "note": null
+    }
+   ]
+  },
+  {
+   "name": "대전 2호선 연축지선",
+   "full": "대전 도시철도 2호선 연축지선",
+   "linekind": "트램",
+   "lvl": null,
+   "phase": "착공",
+   "status": "28년말 개통목표 (14개 공구 공사중 — '30 연기 전망 보도)",
+   "confirmed": true,
+   "dashed": true,
+   "note": "본선 212 분기 → 법동·읍내·연축(혁신도시) 3.9km — 본선과 분리 표기(한 선으로 이으면 인공 급반전, §3c) · 분기역 번호는 소스 간 상충(212 용전 vs 중리) 기록",
+   "src_name": "보도 종합",
+   "src_url": "https://www.redaily.co.kr/news/articleView.html?idxno=14885",
+   "src_tier": "official_report",
+   "audited": "2026-07-17",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "28년말 개통목표 (14개 공구 공사중 — '30 연기 전망 보도)",
+     "state": "current",
+     "src": "보도 종합"
+    },
+    {
+     "phase": "준공",
+     "stage": "개통 목표",
+     "eta": "2028",
+     "state": "target",
+     "src": "보도 종합"
+    }
+   ],
+   "geom": "anchor",
+   "stations": [
+    {
+     "name": "212 용전(연축지선 분기)",
+     "lng": 127.43546,
+     "lat": 36.35533,
+     "st_status": "확정",
+     "geo_prec": "dong",
+     "approx": true,
+     "note": "공식 확정 역명 · 동 대표점 근사 · 지선 분기(본선과 공유)"
+    },
+    {
+     "name": "242 법동(연축지선)",
+     "lng": 127.44199,
+     "lat": 36.37484,
+     "st_status": "확정",
+     "geo_prec": "parcel",
+     "approx": null,
+     "note": "공식 확정"
+    },
+    {
+     "name": "243 읍내(계족산)",
+     "lng": 127.43251,
+     "lat": 36.3826,
+     "st_status": "확정",
+     "geo_prec": "parcel",
+     "approx": null,
+     "note": "공식 확정"
+    },
+    {
+     "name": "244 연축(대덕구청·종점)",
+     "lng": 127.43571,
+     "lat": 36.39463,
+     "st_status": "확정",
+     "geo_prec": "parcel",
+     "approx": null,
+     "note": "공식 확정"
     }
    ]
   }
