@@ -605,10 +605,11 @@ const LEVEL_DESC = {
   "인프라": { A: "랜드마크급 (복합몰·상급종합병원·대형공원)", B: "중대형 (대형마트·종합병원·근린공원)", C: "근린 생활 (준종합병원·소공원·문화체육센터)" },
   "주거개발": { A: "도시급 대형 (5천 세대↑)", B: "지역 대장주급 (1,500~5천 세대)", C: "일반 단지급 (500~1,500 세대)" }
 };
-const CAT_COLOR = { "교통": "#2e5ce6", "일자리": "#e0761e", "인프라": "#2e8b57", "주거개발": "#c4392f", "기타": "#6e6e73" };
+// 주거개발 = 마젠타(#c2255c) — 종전 레드(#c4392f)가 일자리 오렌지와 원 크기에서 구분 안 됨(사용자 지적 2026-07-17)
+const CAT_COLOR = { "교통": "#2e5ce6", "일자리": "#e0761e", "인프라": "#2e8b57", "주거개발": "#c2255c", "기타": "#6e6e73" };
 /* 레벨 pill: 분류색 강도로 등급화 (A=진한 채움/B=중간 채움/C=연한). A급이 확 띔 */
-const CAT_TINT = { "교통": ["#e7ecfc", "#1c3aa8"], "일자리": ["#fbebdb", "#8a4a12"], "인프라": ["#e2f1e8", "#1d6b40"], "주거개발": ["#f8e3e0", "#9a2c22"], "기타": ["#ececf0", "#55555a"] };
-const CAT_MID = { "교통": "#6f8cec", "일자리": "#e79f5a", "인프라": "#5aab84", "주거개발": "#d67e75", "기타": "#a2a7b5" };
+const CAT_TINT = { "교통": ["#e7ecfc", "#1c3aa8"], "일자리": ["#fbebdb", "#8a4a12"], "인프라": ["#e2f1e8", "#1d6b40"], "주거개발": ["#f9e0ec", "#8f1e4c"], "기타": ["#ececf0", "#55555a"] };
+const CAT_MID = { "교통": "#6f8cec", "일자리": "#e79f5a", "인프라": "#5aab84", "주거개발": "#d56a9a", "기타": "#a2a7b5" };
 function lvStyle(cat, lvl) {
   const base = CAT_COLOR[cat] || "#6e6e73", tint = CAT_TINT[cat] || CAT_TINT["기타"], mid = CAT_MID[cat] || "#a2a7b5";
   if (lvl === "A") return `background:${base};color:#fff;`;
@@ -738,7 +739,7 @@ function gradeBasisHtml(s) {
     return "";
   }
   if (c === "주거개발")
-    return s.hh ? `<span class="gbasis" style="color:#c4392f">${Number(s.hh).toLocaleString()}세대</span> · `
+    return s.hh ? `<span class="gbasis" style="color:#c2255c">${Number(s.hh).toLocaleString()}세대</span> · `
                 : `<span class="gbasis undet">세대수 미상</span> · `;
   return "";
 }
@@ -785,9 +786,9 @@ const getRadius = s => {
 // 색 = 4대 분류만 인코딩(사용자 확정 2026-07-17 전면 재검토 — 도로=황갈 예외는 일자리 오렌지와 혼동돼 폐기).
 // 교통 내 철도/도로 세부 구분은 색이 아니라 **형태**: 철도=채움(채운 원·실선) / 도로=중공(흰속 도넛·흰 심선).
 const colorOf = s => CAT_COLOR[catOf(s)] || "#12263f";
-/* 지도 확정 문법(전 화면 공통): 실선 = 인가(고시)·착공·준공 — 정부가 확정한 사실 이상. 점선 = 계획(구상·검토·예타).
-   과거엔 소스별 confirmed 필드를 썼으나 의미가 제각각이라(확정층·정비·건축이 착공인데도 false) phase 백본으로 일원화(2026-07-17). */
-const phaseSolid = s => (PHASE_IDX[phaseOf(s)] ?? 0) >= 1;
+/* 지도 확정 문법(전 화면 공통, 사용자 확정 2026-07-17): 실선 = **착공·준공(공사라는 물리적 실체)**.
+   점선 = 계획·인가(서류 단계 — 인가돼도 아직 땅 위에 없음). 판정은 phase 백본만(confirmed 필드 폐기). */
+const phaseSolid = s => (PHASE_IDX[phaseOf(s)] ?? 0) >= 2;
 /* ── 호재 카운트: 대분류×레벨 집계 + 표현 헬퍼 ── */
 function catLevelCounts(sigs) {
   const m = {}; DISPLAY_CAT_KEYS.forEach(c => m[c] = { A: 0, B: 0, C: 0, total: 0 });
@@ -990,7 +991,7 @@ function sggDisplayName(name) {
   return m ? m[1] : name;
 }
 const filter = {
-  cat: new Set(DISPLAY_CAT_KEYS),
+  cat: new Set(CAT_KEYS),   // '기타'는 안전망(0건) — 필터 축에서 제외(v1.8)
   scale: new Set(["광역", "지구", "근린"]),
   phase: new Set(PHASES),   // 조회축 = 4단계 백본(계획/인가/착공/준공·개통). 정체·무산은 필터 아닌 항상표시 표식
   lvl: new Set(GRADES_DISP),   // 등급 조회축(A/B/C/미정) — 지도 원·카드·집계 전 화면 일관(호재 중심 개편 2026-07-16)
@@ -1106,7 +1107,7 @@ function animateCards(container) {
 /* 필터 3종을 드롭다운 멀티체크로 통합 */
 let openDD = null;
 const DD_DEFS = () => [
-  { id: "cat", label: "분류", title: "호재 분류", keys: DISPLAY_CAT_KEYS, set: filter.cat },
+  { id: "cat", label: "분류", title: "호재 분류", keys: CAT_KEYS, set: filter.cat },   // '기타'는 분류 실패 안전망(현재 0건) — 필터 UI 미노출, 생기면 QA로 잡는다
   { id: "lvl", label: "등급", title: "호재 등급 (A/B/C/미정)", keys: GRADES_DISP, set: filter.lvl },
   { id: "phase", label: "단계", title: "진행 단계", keys: PHASES, set: filter.phase },
   // 노선 = 표시 토글(신호·집계 불변, 지도 위 선만) — 호재 원에 집중용
@@ -1646,7 +1647,7 @@ function renderDetail(s) {
     <div class="detail">
       <div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}${subLabel(s)}</span>
         · ${levelPill(s)} · ${gradeBasisHtml(s)}영향 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km
-        ${phaseSolid(s) ? "" : '<span class="badge-draft">계획 — 미확정</span>'}
+        ${phaseSolid(s) ? "" : `<span class="badge-draft">착공 전 (${phaseOf(s)})</span>`}
         ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}</div>
       <h2>${s.title}</h2>
       ${freshness(s)}
@@ -2220,9 +2221,9 @@ function initLeaflet() {
       // 색 = 4대 분류만(교통=파랑, 사용자 확정 2026-07-17 — 황갈은 일자리 오렌지와 혼동돼 폐기).
       // 교통 내 철도/도로 구분은 형태로: 철도=채움(실선·채운 원) / 도로=중공(속 빈 선·흰속 도넛)
       const col = railCol;
-      // approx(공식 경유 대표점 근사)는 착공 여부와 무관하게 점선 — 선형 자체가 실측이 아니므로 (§4.1 지도 정직성)
-      // 확정 경계는 마커와 동일하게 phase 백본: 인가(고시)부터 실선 (2026-07-17 일원화)
-      const dashed = isRoad ? (!["인가", "착공", "준공"].some(k => (p.phase || "").startsWith(k)) || p.approx) : p.dashed;
+      // 실선 경계 = **착공**(물리 실체, 사용자 확정 2026-07-17) — 철도·도로 공통 phase 백본.
+      // approx(대표점 근사 선형)는 단계와 무관하게 점선(§4.1 — 선 자체가 실측이 아님).
+      const dashed = !["착공", "준공"].some(k => (p.phase || "").startsWith(k)) || !!p.approx;
       if (phaseFiltering && p.phase && !filter.phase.has(p.phase)) continue;
       if (YEAR_SEL && false) continue;   // (철도 고시연도 필터는 추후)
       if (f.geometry.type === "LineString" || f.geometry.type === "MultiLineString") {
@@ -2456,7 +2457,7 @@ function initLeaflet() {
   const showAptAnchor = a => {
     if (aptMarker) map.removeLayer(aptMarker);
     aptMarker = L.marker([a.lat, a.lon], { pane: "sig",
-      icon: L.divIcon({ className: "", html: `<div class="dong-badge" style="border-color:#c4392f;color:#c4392f">◎ ${a.n}</div>`, iconSize: null }) }).addTo(map);
+      icon: L.divIcon({ className: "", html: `<div class="dong-badge" style="border-color:#c2255c;color:#c2255c">◎ ${a.n}</div>`, iconSize: null }) }).addTo(map);
     clearRadius(); clearHighlight();   // 앵커 마커만
   };
   const clearAptMarker = () => { if (aptMarker) { map.removeLayer(aptMarker); aptMarker = null; } };
@@ -2850,7 +2851,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260717ab");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260717ac");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions, jeongbiData, railData, roadData, dartData, archData, archJibang, archJnkj] = await Promise.all([
@@ -2937,7 +2938,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260717ab"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260717ac"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -2963,7 +2964,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260717ab");
+  const CB = "?b=" + (window.BUILD || "20260717ac");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
