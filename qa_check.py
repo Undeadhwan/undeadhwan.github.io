@@ -134,6 +134,22 @@ def main():
                 warn("급반전", f"{(p.get('official_name') or p.get('name'))[:36]} — {i}번째 점에서 "
                               f"{round(_turn(cs[i-1], cs[i], cs[i+1]))}° 반전 (좌표·순서 확인 필요, §3c)")
 
+    # ── 7f. 공원(시설) 신호 품질 — 2026-07-18 오탐 사고 절차화(사용자 지적).
+    #        ① 공원명 미추출(유형라벨만) ② 좌표 없음 ③ 근거고시가 공원 고유 고시 아님(개발고시 재기록 오탐)
+    park = load("park_signals.json")
+    if park:
+        GENERIC = ("근린공원 (", "문화공원 (", "체육공원 (", "수변공원 (", "역사공원 (", "공원 (")
+        DEV = ("재개발", "재건축", "정비사업", "지적재조사", "철도", "급행", "역세권", "산업단지", "산단", "공공주택지구")
+        for f in park.get("features", []):
+            p = f["properties"]; t = p.get("title", "")
+            if any(t.startswith(g) for g in GENERIC):
+                warn("공원명", f"{t} — 공원 고유명 미추출(고시 제목에 이름 없음). 유형라벨로 표시 중")
+            if not (f.get("geometry") or {}).get("coordinates"):
+                err("공원좌표", f"{t} — 좌표 없음(지도 표시 불가)")
+            note = p.get("note", "")
+            if any(k in note for k in DEV):
+                warn("공원오탐", f"{t} — 근거가 개발고시({[k for k in DEV if k in note]}) — 공원 고유 고시 아님, 오탐 의심")
+
     # ── 8. 확정 신호 필수 근거
     for s in sigs:
         if not s.get("src_tier"): warn("필수필드", f"확정신호 {s.get('id')} src_tier 없음")

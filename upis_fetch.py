@@ -116,13 +116,21 @@ def collect(cfg):
         gm, ti = hh.index("고시관리코드"), hh.index("제목")
         for row in rd:
             if len(row) > ti: title[row[gm]] = row[ti]
-        CHG = re.compile(r"변경|실효|폐지|정정|해제")
+        # 공원 '조성' 고유 고시만 = 진짜 신규(확장 포함). 개발 고시(재개발·산단·철도 등)가 공원 폴리곤을
+        # 재기록한 오탐(2026-07-18 사용자 발견 — GTX-B가 부천종합운동장 공원 ntfc 재기록: 34건 중 44% 오탐)을 배제.
+        # 신설·실시계획인가만(불확실한 변경 제외 — 확장은 V-World ntfc가 낡아 어차피 못 잡음 → gosi_fetch 몫).
+        # 개발고시 재기록 오탐(GTX·재개발·산단 등)도 배제 — 2026-07-18 사용자 발견(34건 중 44% 오탐).
+        CREATE = re.compile(r"공원.*조성계획.*(결정|인가)|도시.*계획시설.*공원.*결정|군계획시설.*공원.*(결정|인가)|공원조성계획.*결정")
+        EXCLUDE = re.compile(r"재개발|재건축|정비사업|정비구역|지적재조사|철도|급행|역세권|장기전세|복합지구|주거형|산업단지|산단|물류단지|공공주택지구|실효|폐지|정정|경미|변경")
+        NAMERE = re.compile(r"([가-힣0-9]{2,}(?:근린공원|문화공원|체육공원|수변공원|역사공원|생태공원|도시농업공원|공원))")
         for x in delta:
-            t = title.get(x["ntfc"])
-            x["first"] = None if t is None else not bool(CHG.search(t))
-            if t: x["gosi_title"] = t[:70]
+            t = title.get(x["ntfc"]) or ""
+            x["gosi_title"] = t[:70]
+            x["first"] = bool(CREATE.search(t)) and not bool(EXCLUDE.search(t))
+            nm = NAMERE.search(t)   # 고시 제목에서 진짜 공원명 추출
+            if nm: x["park_name"] = nm.group(1)
         first = [x for x in delta if x.get("first")]
-        print(f"  고시 조인: 최초(신설) {len(first)} / 변경·미매칭 {len(delta)-len(first)}")
+        print(f"  고시 조인: 공원조성 고시(진짜 신규·확장) {len(first)} / 개발고시 재기록 오탐 제외 {len(delta)-len(first)}")
         delta = first
     else:
         print("  ⚠ GOSI_CSV 미지정 → 최초/변경 판별 불가(변경 포함)")
@@ -135,13 +143,16 @@ def build_signals(cfg, delta):
     for p in delta:
         if not p.get("coord"): continue
         gd = p["gosi"] if len(p["gosi"]) == 10 and "00" not in p["gosi"][5:] else (p["gosi_yr"] + "-01")
+        # 표시명: 고시 제목의 실제 공원명 > dgm_nm 괄호 이름 > 유형라벨
+        paren = re.search(r"\(([^)]*공원[^)]*)\)", p["name"])
+        pname = p.get("park_name") or (paren.group(1) if paren else None) or p["name"].split("/")[0]
         feats.append({"type": "Feature", "properties": {
-            "kind": "facility", "cat": cfg["cat"], "sub": cfg["sub"], "title": f"{p['name']} ({p['area_m2']:,}㎡)",
+            "kind": "facility", "cat": cfg["cat"], "sub": cfg["sub"], "title": f"{pname} ({p['area_m2']:,}㎡)",
             "lvl": p["grade"], "template_type": "생활인프라", "current_stage": cfg["stage"], "phase": "인가",
             "status": "활성", "confirmed": False, "purp": cfg["purp"], "area_m2": p["area_m2"],
             "pt_type": "facility", "geo_prec": "parcel", "src_tier": "official_notice",
             "src_name": "국토부 도시계획 결정고시(브이월드)", "sources": [],
-            "note": f"{cfg['label']} 결정 · {p.get('gosi_title','')[:40]}",
+            "note": f"{cfg['label']}({pname}) · 결정고시 {gd}",
             "milestones": [{"phase": "인가", "stage": cfg["stage"], "date": gd, "state": "current", "src": "국토부 결정고시"},
                            {"phase": "착공", "stage": "조성·건립", "state": "future"},
                            {"phase": "준공", "stage": "개장·개원", "state": "future"}],
@@ -149,12 +160,96 @@ def build_signals(cfg, delta):
             "geometry": {"type": "Point", "coordinates": p["coord"]}})
     return feats
 
+def collect_all(cfg):
+    """delta·최초 필터 없이 min_area 이상 전체 인벤토리(좌표 포함) — 주간 self-diff 기준선용."""
+    from collections import Counter
+    seen, items, nb = {}, [], 0
+    lat = LAT0
+    while lat < LAT1:
+        lng = LNG0
+        while lng < LNG1:
+            box = f"BOX({lng:.3f},{lat:.3f},{lng+STEP:.3f},{lat+STEP:.3f})"
+            page = 1
+            while True:
+                feats, total = fetch_box(cfg["code"], cfg["min_area"], box, page)
+                if not feats: break
+                for f in feats:
+                    p = f["properties"]; nm = p.get("dgm_nm", "") or ""
+                    if not any(k in nm for k in cfg["kw"]) or any(k in nm for k in cfg["no"]): continue
+                    try: area = int(float(p.get("dgm_ar") or 0))
+                    except: area = 0
+                    if area < cfg["min_area"]: continue
+                    key = p.get("ntfc_sn") or p.get("present_sn") or (nm + str(area))
+                    if key in seen: continue
+                    seen[key] = 1
+                    c = centroid(f.get("geometry", {}))
+                    m = re.search(r"NTC(\d{8})", p.get("ntfc_sn", "") or "")
+                    gy = (m.group(1) if m else "")
+                    if c: items.append({"name": nm, "area_m2": area, "grade": grade_of(cfg["grade"], area),
+                                        "gosi": f"{gy[:4]}-{gy[4:6]}-{gy[6:8]}" if len(gy) == 8 else "",
+                                        "gosi_yr": gy[:4], "ntfc": p.get("ntfc_sn", ""), "coord": c})
+                if page * 1000 >= total: break
+                page += 1
+            nb += 1; lng += STEP
+        lat += STEP
+    return items, nb
+
+def weekly(cfg):
+    """좌표 기반 self-diff — 지난 기준선에 없던 좌표의 공원 = 신규(고시파일 의존 없음).
+    첫 실행은 기준선만 확립(신규 0). 이후 매주 새 좌표만 신규로 append."""
+    import math
+    base_path = f"{BASE}/upis_{cfg['sub'].split('·')[0]}_baseline.json"
+    prev = json.load(open(base_path)) if os.path.exists(base_path) else None
+    items, nb = collect_all(cfg)
+    def near(c, coords):   # 300m 내 기존 좌표 있으면 동일 시설(변경)로 간주
+        for x, y in coords:
+            if abs(x-c[0]) < 0.004 and abs(y-c[1]) < 0.004 and math.hypot((x-c[0])*88800, (y-c[1])*111000) < 300:
+                return True
+        return False
+    snapshot = {tuple(p["coord"]): p["area_m2"] for p in items}
+    if prev is None:
+        json.dump({"collected": datetime.date.today().isoformat(),
+                   "parks": [[p["coord"][0], p["coord"][1], p["area_m2"]] for p in items]},
+                  open(base_path, "w"), ensure_ascii=False)
+        print(f"  [주간] 기준선 확립: {len(items)}건 · 신규 0 (다음 실행부터 diff)")
+        return []
+    # 좌표+면적 diff: 새 좌표=신설 / 기존 좌표인데 면적 20%+ 증가=확장 — 둘 다 신규 호재
+    base = [(x, y, a) for x, y, a in prev.get("parks", [])] or [(x, y, 0) for x, y in prev.get("coords", [])]
+    base_coords = [(x, y) for x, y, _ in base]
+    def base_area(c):
+        for x, y, a in base:
+            if abs(x-c[0]) < 0.004 and abs(y-c[1]) < 0.004 and math.hypot((x-c[0])*88800, (y-c[1])*111000) < 300:
+                return a
+        return None
+    new = []
+    for p in items:
+        ba = base_area(p["coord"])
+        if ba is None: p["_why"] = "신설"; new.append(p)                     # 새 좌표 = 신설
+        elif ba and p["area_m2"] > ba * 1.2: p["_why"] = "확장"; new.append(p)  # 면적 20%+ 증가 = 확장
+    json.dump({"collected": datetime.date.today().isoformat(),
+               "parks": [[p["coord"][0], p["coord"][1], p["area_m2"]] for p in items]},
+              open(base_path, "w"), ensure_ascii=False)
+    print(f"  [주간] 인벤토리 {len(items)} · 기준선 {len(base)} → 신규 {len(new)}(신설 {sum(1 for p in new if p.get('_why')=='신설')}·확장 {sum(1 for p in new if p.get('_why')=='확장')})")
+    return new
+
 def main():
     from collections import Counter
     if not KEY: print("❌ VWORLD_KEY 필요"); sys.exit(1)
     t = sys.argv[sys.argv.index("--type") + 1] if "--type" in sys.argv else "park"
     if t not in TYPES: print(f"❌ 유형 미정의: {t} (가능: {list(TYPES)})"); sys.exit(1)
     cfg = TYPES[t]
+
+    # ── 주간 self-diff 모드: 좌표 diff로 신규만 park_signals에 append (고시파일 불필요) ──
+    if "--weekly" in sys.argv:
+        print(f"브이월드 {cfg['label']} 주간 self-diff ...")
+        new = weekly(cfg)
+        if not new: return
+        existing = json.load(open(f"{BASE}/{cfg['out']}")) if os.path.exists(f"{BASE}/{cfg['out']}") else {"type": "FeatureCollection", "features": []}
+        existing["features"] += build_signals(cfg, new)
+        existing["weekly_updated"] = datetime.date.today().isoformat()
+        json.dump(existing, open(f"{BASE}/{cfg['out']}", "w"), ensure_ascii=False, indent=1)
+        print(f"  → {cfg['out']}에 신규 {len(new)}건 추가 (총 {len(existing['features'])})")
+        return
     print(f"브이월드 도시계획 {cfg['label']} 전국 순회 — {cfg['sub']} {cfg['min_area']:,}㎡+ · 결정고시 {SINCE}+ ...")
     items, delta, nb = collect(cfg)
     feats = build_signals(cfg, delta)

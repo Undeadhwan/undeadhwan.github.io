@@ -1,15 +1,9 @@
 {
  "type": "FeatureCollection",
- "_note": "신규 대형공원(공원·녹지 50,000㎡+·최초결정 2023+) — 브이월드 도시계획 API 자동수집+고시파일 최초판별. upis_fetch.py --type park.",
+ "_note": "신규+확장 대형공원(5만㎡+, 2025+) — 신설=V-World 도시계획 API(공원조성 고시 필터)·확장=고시파일+V-World 이름매칭. upis_fetch+gosi_park.",
  "collected": "2026-07-18",
- "boxes": 182,
- "all_over_min": 1559,
- "delta_new": 14,
- "by_grade": {
-  "B": 2,
-  "C": 10,
-  "A": 2
- },
+ "신설": 8,
+ "확장추가": 16,
  "features": [
   {
    "type": "Feature",
@@ -417,197 +411,48 @@
     "kind": "facility",
     "cat": "인프라",
     "sub": "공원·녹지",
-    "title": "근린공원 (58,044㎡)",
-    "lvl": "C",
-    "template_type": "생활인프라",
-    "current_stage": "도시계획시설(공원) 결정",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "공원",
-    "area_m2": 58044,
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "note": "신규 대형공원(근린공원) · 결정고시 2024-11-20",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(공원) 결정",
-      "date": "2024-11-20",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-07-18"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.29427,
-     36.749998
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "공원·녹지",
-    "title": "상부공원 (83,992㎡)",
-    "lvl": "C",
-    "template_type": "생활인프라",
-    "current_stage": "도시계획시설(공원) 결정",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "공원",
-    "area_m2": 83992,
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "note": "신규 대형공원(상부공원) · 결정고시 2024-09-10",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(공원) 결정",
-      "date": "2024-09-10",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-07-18"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.853613,
-     37.528481
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "공원·녹지",
-    "title": "문화공원 (82,890㎡)",
-    "lvl": "C",
-    "template_type": "생활인프라",
-    "current_stage": "도시계획시설(공원) 결정",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "공원",
-    "area_m2": 82890,
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "note": "신규 대형공원(문화공원) · 결정고시 2024-05-27",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(공원) 결정",
-      "date": "2024-05-27",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-07-18"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.87346,
-     37.428899
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "공원·녹지",
-    "title": "수변공원 (557,632㎡)",
+    "title": "오동근린공원 (1,294,186㎡)",
     "lvl": "A",
     "template_type": "생활인프라",
-    "current_stage": "도시계획시설(공원) 결정",
+    "current_stage": "도시계획시설(공원) 조성 확장 결정",
     "phase": "인가",
     "status": "활성",
     "confirmed": false,
     "purp": "공원",
-    "area_m2": 557632,
+    "area_m2": 1294186,
     "pt_type": "facility",
     "geo_prec": "parcel",
     "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "src_name": "국토부 도시계획 결정고시",
     "sources": [],
-    "note": "신규 대형공원(수변공원) · 결정고시 2024-01-24",
+    "note": "신규·확장 대형공원(오동근린공원) · 결정고시 2025-12-04",
     "milestones": [
      {
       "phase": "인가",
-      "stage": "도시계획시설(공원) 결정",
-      "date": "2024-01-24",
+      "stage": "공원조성계획 확장 결정",
+      "date": "2025-12-04",
       "state": "current",
       "src": "국토부 결정고시"
      },
      {
       "phase": "착공",
-      "stage": "조성·건립",
+      "stage": "조성",
       "state": "future"
      },
      {
       "phase": "준공",
-      "stage": "개장·개원",
+      "stage": "개장",
       "state": "future"
      }
     ],
+    "expand": true,
     "audited": "2026-07-18"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.851406,
-     37.26418
+     127.0378,
+     37.622611
     ]
    }
   },
@@ -617,47 +462,48 @@
     "kind": "facility",
     "cat": "인프라",
     "sub": "공원·녹지",
-    "title": "근린공원 (66,703㎡)",
-    "lvl": "C",
+    "title": "봉제산근린공원 (905,280㎡)",
+    "lvl": "A",
     "template_type": "생활인프라",
-    "current_stage": "도시계획시설(공원) 결정",
+    "current_stage": "도시계획시설(공원) 조성 확장 결정",
     "phase": "인가",
     "status": "활성",
     "confirmed": false,
     "purp": "공원",
-    "area_m2": 66703,
+    "area_m2": 905280,
     "pt_type": "facility",
     "geo_prec": "parcel",
     "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "src_name": "국토부 도시계획 결정고시",
     "sources": [],
-    "note": "신규 대형공원(근린공원) · 결정고시 2023-08-23",
+    "note": "신규·확장 대형공원(봉제산근린공원) · 결정고시 2025-03-27",
     "milestones": [
      {
       "phase": "인가",
-      "stage": "도시계획시설(공원) 결정",
-      "date": "2023-08-23",
+      "stage": "공원조성계획 확장 결정",
+      "date": "2025-03-27",
       "state": "current",
       "src": "국토부 결정고시"
      },
      {
       "phase": "착공",
-      "stage": "조성·건립",
+      "stage": "조성",
       "state": "future"
      },
      {
       "phase": "준공",
-      "stage": "개장·개원",
+      "stage": "개장",
       "state": "future"
      }
     ],
+    "expand": true,
     "audited": "2026-07-18"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.888951,
-     37.415897
+     126.856002,
+     37.543018
     ]
    }
   },
@@ -667,47 +513,711 @@
     "kind": "facility",
     "cat": "인프라",
     "sub": "공원·녹지",
-    "title": "수달생태공원 (69,963㎡)",
-    "lvl": "C",
+    "title": "갓바위근린공원 (808,951㎡)",
+    "lvl": "A",
     "template_type": "생활인프라",
-    "current_stage": "도시계획시설(공원) 결정",
+    "current_stage": "도시계획시설(공원) 조성 확장 결정",
     "phase": "인가",
     "status": "활성",
     "confirmed": false,
     "purp": "공원",
-    "area_m2": 69963,
+    "area_m2": 808951,
     "pt_type": "facility",
     "geo_prec": "parcel",
     "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "src_name": "국토부 도시계획 결정고시",
     "sources": [],
-    "note": "신규 대형공원(수달생태공원) · 결정고시 2023-01",
+    "note": "신규·확장 대형공원(갓바위근린공원) · 결정고시 2025-09-04",
     "milestones": [
      {
       "phase": "인가",
-      "stage": "도시계획시설(공원) 결정",
-      "date": "2023-01",
+      "stage": "공원조성계획 확장 결정",
+      "date": "2025-09-04",
       "state": "current",
       "src": "국토부 결정고시"
      },
      {
       "phase": "착공",
-      "stage": "조성·건립",
+      "stage": "조성",
       "state": "future"
      },
      {
       "phase": "준공",
-      "stage": "개장·개원",
+      "stage": "개장",
       "state": "future"
      }
     ],
+    "expand": true,
     "audited": "2026-07-18"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.548167,
-     35.186999
+     126.418584,
+     34.795558
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "공원·녹지",
+    "title": "노작공원 (671,957㎡)",
+    "lvl": "A",
+    "template_type": "생활인프라",
+    "current_stage": "도시계획시설(공원) 조성 확장 결정",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "공원",
+    "area_m2": 671957,
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시",
+    "sources": [],
+    "note": "신규·확장 대형공원(노작공원) · 결정고시 2025-12-08",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "공원조성계획 확장 결정",
+      "date": "2025-12-08",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장",
+      "state": "future"
+     }
+    ],
+    "expand": true,
+    "audited": "2026-07-18"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.078412,
+     37.202408
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "공원·녹지",
+    "title": "불암산근린공원 (374,293㎡)",
+    "lvl": "A",
+    "template_type": "생활인프라",
+    "current_stage": "도시계획시설(공원) 조성 확장 결정",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "공원",
+    "area_m2": 374293,
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시",
+    "sources": [],
+    "note": "신규·확장 대형공원(불암산근린공원) · 결정고시 2025-08-07",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "공원조성계획 확장 결정",
+      "date": "2025-08-07",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장",
+      "state": "future"
+     }
+    ],
+    "expand": true,
+    "audited": "2026-07-18"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.080685,
+     37.65026
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "공원·녹지",
+    "title": "도당근린공원 (351,446㎡)",
+    "lvl": "A",
+    "template_type": "생활인프라",
+    "current_stage": "도시계획시설(공원) 조성 확장 결정",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "공원",
+    "area_m2": 351446,
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시",
+    "sources": [],
+    "note": "신규·확장 대형공원(도당근린공원) · 결정고시 2025-12-01",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "공원조성계획 확장 결정",
+      "date": "2025-12-01",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장",
+      "state": "future"
+     }
+    ],
+    "expand": true,
+    "audited": "2026-07-18"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.789891,
+     37.511187
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "공원·녹지",
+    "title": "부흥산근린공원 (336,988㎡)",
+    "lvl": "A",
+    "template_type": "생활인프라",
+    "current_stage": "도시계획시설(공원) 조성 확장 결정",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "공원",
+    "area_m2": 336988,
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시",
+    "sources": [],
+    "note": "신규·확장 대형공원(부흥산근린공원) · 결정고시 2025-04-17",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "공원조성계획 확장 결정",
+      "date": "2025-04-17",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장",
+      "state": "future"
+     }
+    ],
+    "expand": true,
+    "audited": "2026-07-18"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.442164,
+     34.807328
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "공원·녹지",
+    "title": "개운산근린공원 (297,475㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "도시계획시설(공원) 조성 확장 결정",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "공원",
+    "area_m2": 297475,
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시",
+    "sources": [],
+    "note": "신규·확장 대형공원(개운산근린공원) · 결정고시 2025-07-24",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "공원조성계획 확장 결정",
+      "date": "2025-07-24",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장",
+      "state": "future"
+     }
+    ],
+    "expand": true,
+    "audited": "2026-07-18"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.02489,
+     37.603184
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "공원·녹지",
+    "title": "비봉체육공원 (177,738㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "도시계획시설(공원) 조성 확장 결정",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "공원",
+    "area_m2": 177738,
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시",
+    "sources": [],
+    "note": "신규·확장 대형공원(비봉체육공원) · 결정고시 2026-02-11",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "공원조성계획 확장 결정",
+      "date": "2026-02-11",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장",
+      "state": "future"
+     }
+    ],
+    "expand": true,
+    "audited": "2026-07-18"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.846872,
+     37.26085
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "공원·녹지",
+    "title": "오정근린공원 (119,615㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "도시계획시설(공원) 조성 확장 결정",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "공원",
+    "area_m2": 119615,
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시",
+    "sources": [],
+    "note": "신규·확장 대형공원(오정근린공원) · 결정고시 2025-05-26",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "공원조성계획 확장 결정",
+      "date": "2025-05-26",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장",
+      "state": "future"
+     }
+    ],
+    "expand": true,
+    "audited": "2026-07-18"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.793685,
+     37.530626
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "공원·녹지",
+    "title": "불광근린공원 (119,263㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "도시계획시설(공원) 조성 확장 결정",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "공원",
+    "area_m2": 119263,
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시",
+    "sources": [],
+    "note": "신규·확장 대형공원(불광근린공원) · 결정고시 2025-09-11",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "공원조성계획 확장 결정",
+      "date": "2025-09-11",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장",
+      "state": "future"
+     }
+    ],
+    "expand": true,
+    "audited": "2026-07-18"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.930011,
+     37.618432
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "공원·녹지",
+    "title": "독립근린공원 (112,869㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "도시계획시설(공원) 조성 확장 결정",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "공원",
+    "area_m2": 112869,
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시",
+    "sources": [],
+    "note": "신규·확장 대형공원(독립근린공원) · 결정고시 2025-03-27",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "공원조성계획 확장 결정",
+      "date": "2025-03-27",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장",
+      "state": "future"
+     }
+    ],
+    "expand": true,
+    "audited": "2026-07-18"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.956689,
+     37.573849
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "공원·녹지",
+    "title": "유달근린공원 (97,425㎡)",
+    "lvl": "C",
+    "template_type": "생활인프라",
+    "current_stage": "도시계획시설(공원) 조성 확장 결정",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "공원",
+    "area_m2": 97425,
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시",
+    "sources": [],
+    "note": "신규·확장 대형공원(유달근린공원) · 결정고시 2025-09-04",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "공원조성계획 확장 결정",
+      "date": "2025-09-04",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장",
+      "state": "future"
+     }
+    ],
+    "expand": true,
+    "audited": "2026-07-18"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.3684,
+     34.786249
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "공원·녹지",
+    "title": "고강선사유적공원 (79,502㎡)",
+    "lvl": "C",
+    "template_type": "생활인프라",
+    "current_stage": "도시계획시설(공원) 조성 확장 결정",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "공원",
+    "area_m2": 79502,
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시",
+    "sources": [],
+    "note": "신규·확장 대형공원(고강선사유적공원) · 결정고시 2025-06-16",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "공원조성계획 확장 결정",
+      "date": "2025-06-16",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장",
+      "state": "future"
+     }
+    ],
+    "expand": true,
+    "audited": "2026-07-18"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.818589,
+     37.524586
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "공원·녹지",
+    "title": "와동공원 (63,396㎡)",
+    "lvl": "C",
+    "template_type": "생활인프라",
+    "current_stage": "도시계획시설(공원) 조성 확장 결정",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "공원",
+    "area_m2": 63396,
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시",
+    "sources": [],
+    "note": "신규·확장 대형공원(와동공원) · 결정고시 2025-09-08",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "공원조성계획 확장 결정",
+      "date": "2025-09-08",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장",
+      "state": "future"
+     }
+    ],
+    "expand": true,
+    "audited": "2026-07-18"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.832205,
+     37.343329
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "공원·녹지",
+    "title": "어린이대공원 (54,166㎡)",
+    "lvl": "C",
+    "template_type": "생활인프라",
+    "current_stage": "도시계획시설(공원) 조성 확장 결정",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "공원",
+    "area_m2": 54166,
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시",
+    "sources": [],
+    "note": "신규·확장 대형공원(어린이대공원) · 결정고시 2025-05-28",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "공원조성계획 확장 결정",
+      "date": "2025-05-28",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장",
+      "state": "future"
+     }
+    ],
+    "expand": true,
+    "audited": "2026-07-18"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.040545,
+     35.186626
     ]
    }
   }
