@@ -21,15 +21,23 @@ _t = datetime.date.today(); _m = _t.year * 12 + (_t.month - 1) - DONE_MONTHS
 DONE_CUT = f"{_m // 12:04d}{_m % 12 + 1:02d}{_t.day:02d}"   # 오늘 - N개월 (YYYYMMDD)
 GB_OK = set((os.environ.get("ARCH_GB", "신축")).split(","))   # 건축구분: 신축만. 용도변경·대수선=기존건물 리모델(노이즈), 증축=totArea가 증축후 건물전체 면적이라 작은 증축이 A급 뻥튀기(§P2/P5 위반, 예: 대학 계단교실 증축이 84만㎡) → 신축만 채택(신축 totArea=실제 신규건물 면적, 정직)
 HDRS = {"User-Agent": "hojaemap/1.0", "Accept": "*/*"}   # ★ Accept 필수(없으면 빈 응답)
-# 주용도 → 분류. 일자리 우선 매칭 후 인프라. 나머지(공동주택·단독주택 등 주거)는 스킵(정비·주거개발 소관)
-JOB = ("업무", "공장", "교육연구", "연구소", "지식산업")
-INFRA = ("판매", "의료", "문화 및 집회", "운수", "위락", "관광", "숙박", "근린생활", "방송통신", "종교", "장례")
+# 주용도 → 분류 (§7b 용도 전수 판정 2026-07-18 사용자 확정):
+#  방송통신(데이터센터)→일자리·면적 / 운수→교통(환승·터미널, 차량기지 배제) / 근생→판매 흡수 /
+#  숙박→3만㎡+·생숙 배제만 인프라(문화·관광·체육) / 종교·장례·위락=배제 / 운동 수집 추가(경기장 누수 방지)
+JOB = ("업무", "공장", "교육연구", "연구소", "지식산업", "방송통신")
+INFRA = ("판매", "의료", "문화 및 집회", "운동", "관광", "숙박", "근린생활")
+TRANSIT = ("운수",)                        # 버스터미널·복합환승센터 = 교통 호재
+LODGING_EXCLUDE = ("생활숙박", "레지던스", "생숙")   # 분양 상품 — §5 배제
+DEPOT_EXCLUDE = ("차량기지", "기지창")               # 단순 기지창은 접근성 호재 아님
 PHASE_RANK = {"계획": 0, "착공": 1, "준공·개통": 2}
-# 연면적(㎡) → 레벨. §7b(2026-07-17 확정): 판매시설은 A15만/B5만/C1만(복합몰~대형마트급).
-# 의료는 병상 기준이 정식이나 건축HUB에 병상 없음 → 연면적 프록시(A5만/B1만) 유지, 개설허가 커넥터 도입 시 교체.
+# 연면적(㎡) → 레벨. §7b: 판매(근생 포함) A15만/B5만/C1만 · 숙박 A10만/B5만/C(3~5만) ·
+# 의료는 병상 기준이 정식이나 건축HUB에 병상 없음 → 연면적 프록시(A5만/B1만), 개설허가 커넥터 도입 시 교체.
 def level_of(cat, area, purp=""):
+    if cat == "교통":   # 환승·터미널
+        return "A" if area >= 100000 else "B" if area >= 30000 else "C"
     if cat == "인프라":
-        if "판매" in purp: return "A" if area >= 150000 else "B" if area >= 50000 else "C"
+        if "판매" in purp or "근린생활" in purp: return "A" if area >= 150000 else "B" if area >= 50000 else "C"
+        if "숙박" in purp: return "A" if area >= 100000 else "B" if area >= 50000 else "C"
         return "A" if area >= 50000 else "B" if area >= 10000 else "C"
     return "A" if area >= 100000 else "B" if area >= 30000 else "C"   # 일자리
 # 학교 처리(§7b 사용자 확정 2026-07-17): 일반 초중고·특수학교 = 배제(신도시 부속시설 + 학군 서열화 P1),
@@ -42,8 +50,15 @@ def cat_of(purp, name=""):
         if any(k in name for k in SCHOOL_GENERAL): return None   # 일반 학교 배제
         # 대학·연구소 등은 고용 시설 — 일자리 유지
     if any(k in purp for k in JOB): return "일자리"
+    if any(k in purp for k in TRANSIT):
+        if any(k in name for k in DEPOT_EXCLUDE): return None   # 차량기지·기지창 배제
+        return "교통"
+    if "숙박" in purp:
+        if any(k in name for k in LODGING_EXCLUDE): return None   # 생숙·레지던스 배제
+        return "인프라"   # 연면적 3만+ 컷은 수집 루프에서 (LODGING_MIN)
     if any(k in purp for k in INFRA): return "인프라"
     return None
+LODGING_MIN = 30000   # §7b 숙박 편입 문턱(㎡) — 관광 거점급만
 def phase_of(it):
     if (it.get("useAprDay") or "").strip(): return "준공·개통"
     if (it.get("realStcnsDay") or "").strip(): return "착공"
@@ -132,7 +147,8 @@ def main():
             if area < MIN_AREA: continue
             purp = (it.get("mainPurpsCdNm") or "").strip()
             cat = cat_of(purp, (it.get("bldNm") or "").strip())
-            if not cat: continue   # 주거(공동주택 등)·미분류 스킵
+            if not cat: continue   # 주거(공동주택 등)·배제 용도(종교·장례·위락·생숙·차량기지)·미분류 스킵
+            if "숙박" in purp and area < LODGING_MIN: continue   # §7b 숙박 문턱 3만㎡
             if (it.get("archGbCdNm") or "").strip() not in GB_OK: continue   # 신축·증축만(리모델·용도변경 제외)
             ph = phase_of(it)
             rd = rel_date(it, ph)
