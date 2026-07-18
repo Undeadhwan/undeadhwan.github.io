@@ -924,6 +924,8 @@ function buildArchSignals() {
     current_stage: s.current_stage || "인허가", phase: s.phase || "계획", status: s.status || "활성", confirmed: false,
     sd: s.sd, sg: s.sg, dong: s.dong || null, addr: s.addr || null, area_m2: s.area_m2, purp: s.purp,
     arch_gb: s.arch_gb || null, arch_pms_day: s.arch_pms_day || null, real_stcns_day: s.real_stcns_day || null, use_apr_day: s.use_apr_day || null,   // 원본 팩트시트(상세 표기용)
+    // 생애주기 이력(lifecycle.py가 부착) — 어댑터가 필드를 골라 복사하므로 명시하지 않으면 화면까지 안 온다(2026-07-18)
+    stage_history: s.stage_history || null, first_seen: s.first_seen || null, pk: s.pk || null,
     last_movement: s.rcept_dt && s.rcept_dt.length === 8 ? `${s.rcept_dt.slice(0,4)}-${s.rcept_dt.slice(4,6)}-${s.rcept_dt.slice(6,8)}` : null,
     target_completion: null, sources: s.src ? [s.src] : [],
     geometry: { coordinates: s.geometry.coordinates }
@@ -2950,7 +2952,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260718l");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260718n");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
   const [dong, sgg, main, macro, rawData, autoData, apartments, regions, jeongbiData, railData, roadData, dartData, archData, archCapital, archJibang, archJnkj, parkData, dpsData] = await Promise.all([
@@ -3047,7 +3049,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260718l"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260718n"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3073,7 +3075,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260718l");
+  const CB = "?b=" + (window.BUILD || "20260718n");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
