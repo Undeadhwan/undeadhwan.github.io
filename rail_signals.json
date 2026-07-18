@@ -2569,8 +2569,6 @@
     "route_verified": null,
     "audited": "2026-07-16",
     "geom_src": "OpenStreetMap(ODbL) — 선형 참고",
-    "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 4/14개가 표시 선형 밖(최대 18.9km, 마석역, 평내호평역, 왕숙역). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
     "geo_prec": "none",
     "geo_approx": true,
     "geometry": {
@@ -10024,8 +10022,6 @@
     "route_verified": null,
     "audited": "2026-07-16",
     "geom_src": "OpenStreetMap(ODbL) — 선형 참고",
-    "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 1/3개가 표시 선형 밖(최대 0.8km, 서울역). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
     "geo_prec": "none",
     "geo_approx": true,
     "geometry": {
@@ -10766,8 +10762,6 @@
     "route_verified": null,
     "audited": "2026-07-16",
     "geom_src": "OpenStreetMap(ODbL) — 선형 참고",
-    "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 6/13개가 표시 선형 밖(최대 16.0km, 덕정역, 수원역, 의왕역). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
     "geo_prec": "none",
     "geo_approx": true,
     "geometry": {
@@ -62550,6 +62544,366 @@
      127.43571,
      36.39463
     ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      127.103375,
+      37.610801
+     ],
+     [
+      127.12655,
+      37.64189
+     ],
+     [
+      127.16545,
+      37.65549
+     ],
+     [
+      127.24493,
+      37.65323
+     ],
+     [
+      127.31063,
+      37.65287
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "line",
+    "name": "GTX B",
+    "full": "GTX B",
+    "linekind": "광역급행철도",
+    "lvl": null,
+    "phase": "착공",
+    "status": "31년 개통목표",
+    "confirmed": true,
+    "dashed": false,
+    "approx": true,
+    "drop": null,
+    "note": "선형 미확보 구간 보완: 별내역 → 왕숙역 → 평내호평역 → 마석역. 실제 경로가 아니라 정거장을 잇는 회랑이며, 정확한 선형은 기본계획 고시 확보 시 대체된다",
+    "src_name": "국토부·보도 종합",
+    "src_url": "https://www.khan.co.kr/article/202512221052001",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "31년 개통목표",
+      "state": "current",
+      "src": "국토부·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2031",
+      "state": "target",
+      "src": "국토부·보도 종합"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-07-16",
+    "geom_src": "공식 정거장 좌표 연결(근사 회랑) — 실선형 아님",
+    "geom_filled": true,
+    "geo_prec": "none",
+    "geo_approx": true,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       127.103375,
+       37.610801
+      ],
+      [
+       127.12655,
+       37.64189
+      ],
+      [
+       127.16545,
+       37.65549
+      ],
+      [
+       127.24493,
+       37.65323
+      ],
+      [
+       127.31063,
+       37.65287
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-07-18"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      126.973077,
+      37.548968
+     ],
+     [
+      126.97268,
+      37.55604
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "line",
+    "name": "GTX A",
+    "full": "GTX A",
+    "linekind": "광역급행철도",
+    "lvl": null,
+    "phase": "착공",
+    "status": "부분개통 — 서울~수서 '26.8 연결(삼성 무정차)·삼성 정차 '28",
+    "confirmed": true,
+    "dashed": false,
+    "approx": true,
+    "drop": null,
+    "note": "선형 미확보 구간 보완: 서울역. 실제 경로가 아니라 정거장을 잇는 회랑이며, 정확한 선형은 기본계획 고시 확보 시 대체된다",
+    "src_name": "GTX-A 공식·국토부",
+    "src_url": "https://www.gtx-a.com/releaseDetail.do?boardId=148",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "부분개통 — 서울~수서 '26.8 연결(삼성 무정차)·삼성 정차 '28",
+      "state": "current",
+      "src": "GTX-A 공식·국토부"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-07-16",
+    "geom_src": "공식 정거장 좌표 연결(근사 회랑) — 실선형 아님",
+    "geom_filled": true,
+    "geo_prec": "none",
+    "geo_approx": true,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       126.973077,
+       37.548968
+      ],
+      [
+       126.97268,
+       37.55604
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-07-18"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      127.04603,
+      37.699202
+     ],
+     [
+      127.04591,
+      37.73879
+     ],
+     [
+      127.06154,
+      37.84325
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "line",
+    "name": "GTX C",
+    "full": "GTX C",
+    "linekind": "광역급행철도",
+    "lvl": null,
+    "phase": "착공",
+    "status": "31년 개통목표 ('26.4 실착공)",
+    "confirmed": true,
+    "dashed": false,
+    "approx": true,
+    "drop": null,
+    "note": "선형 미확보 구간 보완: 의정부역 → 덕정역. 실제 경로가 아니라 정거장을 잇는 회랑이며, 정확한 선형은 기본계획 고시 확보 시 대체된다",
+    "src_name": "의왕시 GTX-C",
+    "src_url": "https://www.uiwang.go.kr/GTXC",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "실착공",
+      "date": "2026-04",
+      "state": "done",
+      "src": "의왕시 GTX-C"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2031",
+      "state": "target",
+      "src": "의왕시 GTX-C"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-07-16",
+    "geom_src": "공식 정거장 좌표 연결(근사 회랑) — 실선형 아님",
+    "geom_filled": true,
+    "geo_prec": "none",
+    "geo_approx": true,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       127.04603,
+       37.699202
+      ],
+      [
+       127.04591,
+       37.73879
+      ],
+      [
+       127.06154,
+       37.84325
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-07-18"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      126.978278,
+      37.407167
+     ],
+     [
+      126.97655,
+      37.40162
+     ],
+     [
+      126.94306,
+      37.37312
+     ],
+     [
+      126.94798,
+      37.32036
+     ],
+     [
+      126.99929,
+      37.26701
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "line",
+    "name": "GTX C",
+    "full": "GTX C",
+    "linekind": "광역급행철도",
+    "lvl": null,
+    "phase": "착공",
+    "status": "31년 개통목표 ('26.4 실착공)",
+    "confirmed": true,
+    "dashed": false,
+    "approx": true,
+    "drop": null,
+    "note": "선형 미확보 구간 보완: 인덕원역 → 금정역 → 의왕역 → 수원역. 실제 경로가 아니라 정거장을 잇는 회랑이며, 정확한 선형은 기본계획 고시 확보 시 대체된다",
+    "src_name": "의왕시 GTX-C",
+    "src_url": "https://www.uiwang.go.kr/GTXC",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "실착공",
+      "date": "2026-04",
+      "state": "done",
+      "src": "의왕시 GTX-C"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2031",
+      "state": "target",
+      "src": "의왕시 GTX-C"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-07-16",
+    "geom_src": "공식 정거장 좌표 연결(근사 회랑) — 실선형 아님",
+    "geom_filled": true,
+    "geo_prec": "none",
+    "geo_approx": true,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       126.978278,
+       37.407167
+      ],
+      [
+       126.97655,
+       37.40162
+      ],
+      [
+       126.94306,
+       37.37312
+      ],
+      [
+       126.94798,
+       37.32036
+      ],
+      [
+       126.99929,
+       37.26701
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-07-18"
    }
   }
  ]
