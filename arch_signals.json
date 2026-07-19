@@ -20750,7 +20750,7 @@
    "block_unresolved": true,
    "block": "A-2 블록",
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "당동 트리아츠 (공장, 연면적 244천㎡)",
@@ -20762,8 +20762,8 @@
    "arch_gb": "신축",
    "pk": "1000000000000000061612",
    "splot": "군포역세권복합개발지구",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "parcel_base",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 1286,
    "sd": "경기",
@@ -20805,12 +20805,13 @@
    "rcept_dt": "20260424",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     126.941076,
-     37.348315
+     126.950661,
+     37.3511
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -20830,10 +20831,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-04-24",
-   "block_unresolved": true,
    "block": "A-1",
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "geo_basis": "보정 대장: 지번 경기도 군포시 당동 150 · 종전 좌표에서 0m 이동. 근거: \"군포역세권복합개발지구 / 위치: 당동 150-1번지 일원 / 면적: 48,121㎡ / 군포시고시 제2021-8호(2021.1.27)\" (https://www.gunpo.go.kr/www/contents.do?key=4437)"
   },
   {
    "title": "당동 당동 군포역세권 복합개발지구 B-1블럭 지식산업센터 (공장, 연면적 53천㎡)",
@@ -20902,7 +20901,7 @@
    "block_unresolved": true,
    "block": "B-1블럭",
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "당정동 군포 당정지구 일반공업지역 I BL 지식산업센터 신축공사 (공장, 연면적 99천㎡)",
