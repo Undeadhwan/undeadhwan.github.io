@@ -689,7 +689,7 @@ const SRC_TIER = {
 /* 좌표 정밀도 표기 (DATA_STANDARD §3) — "좌표가 있다"와 "정확하다"는 다르다. 사용자가 신뢰도를 알아야 한다. */
 const GEO_PREC = {
   // ⚠ 등급을 추가하면 **반드시 여기에도 넣는다**. 표에 없는 등급은 종전에 "확정 좌표"로 표시됐다
-  // (2026-07-19 발견 — unknown 1,228건·none 148건이 정확한 핀처럼 보이던 P5 위반).
+  // (2026-07-19 발견 — unknown·none이 정확한 핀처럼 보이던 P5 위반).
   exact:       { t: "정확 좌표", d: "고시 도면·실측 지점" },
   parcel:      { t: "지번 기준", d: "지번 주소 지오코딩 (~50m)" },
   parcel_base: { t: "본번 기준(근사)", d: "부번 필지 조회 실패로 본번 대체 (~260m)" },
@@ -704,590 +704,9 @@ const GEO_PREC = {
   unknown:     { t: "근거 미기록(근사)", d: "좌표 출처가 기록되지 않음 — 근사로 취급" },
   none:        { t: "좌표 없음", d: "위치 미확보 — 지도에 정식 핀으로 표시하지 않음" },
 };
-  .hj-box.sgg.zero::after { border-top-color:#f1f3f7; }
-  .hj-box.apt { padding:3px 7px 4px; }
-  .hj-box.apt.sel { border-color:#d6156d; box-shadow:0 0 0 2px rgba(214,21,109,.32), 0 2px 8px rgba(30,45,90,.25); }
-  .dong-lbl { font-size:11.5px; font-weight:700; color:#3a4358; text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff;
-    white-space:nowrap; cursor:pointer; transform:translate(-50%,-50%); }
-  .dong-lbl:hover { color:#2e5ce6; text-decoration:underline; }
-  .apt-house-s { font-size:16px; line-height:1; cursor:pointer; transform:translate(-50%,-50%);
-    filter:drop-shadow(0 1px 2px rgba(0,0,0,.35)); }   /* 컬러 이모지 그대로(선명) — 호재 원과 형태로 구분 */
-  .apt-house-s:hover { font-size:18px; }
-  .apt-house-s.sel { font-size:20px; filter:drop-shadow(0 0 4px #d6156d); }
-  .apt-dot { width:8px; height:8px; border-radius:50%; background:#b4bccc; border:1.5px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.25); }
-  .apt-dot.sel { background:#d6156d; border-color:#fff; box-shadow:0 0 0 3px rgba(214,21,109,.3); }
-  .hmatrix { border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin:2px 0 14px; background:#fbfcfe; }
-  .hmhead { font-size:12px; color:var(--muted); margin-bottom:5px; }
-  .hmhead b { color:var(--ink); font-size:15px; font-weight:800; }
-  .hmrow { display:flex; align-items:center; gap:8px; padding:7px 6px; margin:0 -6px; border-bottom:1px solid var(--line); border-radius:7px; }
-  .hmrow:last-child { border-bottom:none; }
-  .hmrow.z { opacity:.4; }
-  .hmrow[role=button] { cursor:pointer; }
-  .hmrow[role=button]:hover { background:#eef1fb; }
-  .hmatrix.filtering .hmrow { opacity:.4; }
-  .hmatrix.filtering .hmrow.sel { opacity:1; background:#eef1fb; box-shadow:inset 0 0 0 1.5px #5b3fd4; }
-  .hmhint { font-size:10.5px; color:#a0a4ad; font-weight:500; }
-  .hmc { font-size:13px; font-weight:700; width:66px; flex-shrink:0; display:flex; align-items:center; gap:6px; }
-  .hdot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
-  .hmpills { display:flex; gap:5px; flex:1; flex-wrap:wrap; }
-  .lvpill { font-size:11px; font-weight:800; padding:2px 8px; border-radius:20px; white-space:nowrap; }
-  .lvtag { font-size:11px; font-weight:800; padding:2px 8px; border-radius:6px; white-space:nowrap; display:inline-block; letter-spacing:.02em; vertical-align:1px; }
-  .hmz { font-size:11px; color:var(--muted); }
-  .hmtot { font-size:13px; color:var(--muted); font-weight:700; min-width:18px; text-align:right; }
-  .cmplv { font-size:10.5px; font-weight:700; padding:1px 6px; border-radius:10px; white-space:nowrap; display:inline-block; margin:1px 1px; }
-  /* ── 시점 드래그 슬라이더 ── */
-  .yslide { position:sticky; top:0; z-index:6; background:#fff; margin:0 -16px 12px; padding:10px 16px 8px; border-bottom:1px solid var(--line); }
-  .yslide .yhead { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; }
-  .yslide .ylbl { font-size:11px; color:var(--muted); }
-  .yslide .yval { font-size:13px; font-weight:800; color:#5b3fd4; }
-  .yslide .yval.all { color:var(--muted); font-weight:600; }
-  /* 슬라이더·눈금을 카드 padding(12px)만큼 inset → 카드 미니바 연도축과 수평 정렬 */
-  .yslide input[type=range] { -webkit-appearance:none; appearance:none; width:calc(100% - 24px); height:6px; border-radius:3px;
-     background:linear-gradient(90deg,#12263f 0 var(--fill,0%),#e7e9ef var(--fill,0%) 100%); outline:none; margin:4px 12px 2px; cursor:pointer; }
-  .yslide input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; border-radius:50%;
-     background:#fff; border:3px solid #5b3fd4; box-shadow:0 1px 4px rgba(0,0,0,.25); cursor:grab; margin-top:0; }
-  .yslide input[type=range]::-webkit-slider-thumb:active { cursor:grabbing; transform:scale(1.12); }
-  .yslide .yticks { display:flex; justify-content:space-between; font-size:9.5px; color:var(--muted); margin:2px 12px 0; }
-  .yslide .yhead .yr-right { display:flex; align-items:center; gap:7px; }
-  .yslide .ychip { font-size:10.5px; font-weight:700; color:var(--muted); border:1px solid var(--line); border-radius:8px; padding:1px 8px; cursor:pointer; }
-  .yslide .ychip.on { border-color:#5b3fd4; color:#5b3fd4; background:#f3f0ff; }
-  /* ── 아파트 비교 (§4.5 가드레일: 점수·승자 없음, 컬럼 등가) ── */
-  .cmpbar { position:fixed; left:50%; bottom:16px; transform:translateX(-50%); z-index:3000; background:#1a1a1a; color:#fff;
-            border-radius:14px; padding:9px 12px; display:flex; align-items:center; gap:8px; box-shadow:0 8px 26px rgba(0,0,0,.32); max-width:92vw; }
-  .cmpbar .cchip { background:#333; border-radius:8px; padding:5px 8px; font-size:12px; display:flex; align-items:center; gap:6px; white-space:nowrap; }
-  .cmpbar .cchip .x { cursor:pointer; opacity:.7; } .cmpbar .cchip .x:hover { opacity:1; }
-  .cmpbar .cgo { background:#fff; color:#1a1a1a; font-weight:800; border-radius:9px; padding:7px 13px; cursor:pointer; font-size:13px; white-space:nowrap; }
-  .cmpbar .cgo.dim { opacity:.4; pointer-events:none; }
-  .cmpAdd { display:inline-block; font-size:11px; font-weight:700; border:1.5px solid #1a1a1a; border-radius:8px; padding:3px 9px; cursor:pointer; background:#fff; color:#1a1a1a; }
-  .cmpAdd.in { background:#1a1a1a; color:#fff; }
-  #cmpModal .rmpanel { max-width:min(880px,94vw); }
-  .cmptable { width:100%; border-collapse:collapse; font-size:12.5px; }
-  .cmptable th, .cmptable td { border:1px solid var(--line); padding:9px 10px; text-align:center; vertical-align:middle; width:calc((100% - 120px)/4); }
-  .cmptable th.rowh, .cmptable td.rowh { width:120px; text-align:left; background:#fafbfc; font-weight:700; color:var(--muted); font-size:11.5px; white-space:nowrap; }
-  .cmptable thead th { background:#f4f6fa; font-weight:800; color:var(--ink); font-size:13px; }
-  .cmptable thead th small { display:block; font-weight:500; color:var(--muted); font-size:10.5px; margin-top:2px; }
-  .cmptable .catrow td { font-weight:700; }
-  .cmpnote { font-size:11px; color:var(--muted); margin-top:10px; line-height:1.6; }
-  /* 연도 버튼 + 카드 미니 진행바 */
-  .ybar { display:flex; align-items:center; gap:4px; flex-wrap:nowrap; overflow-x:auto;
-          position:sticky; top:0; z-index:6; background:#fff; margin:0 -16px 12px; padding:8px 16px; border-bottom:1px solid var(--line); }
-  .ybar .ylbl { font-size:11px; color:var(--muted); margin-right:2px; flex-shrink:0; }
-  .ybtn { flex-shrink:0; }
-  .ybtn { font-size:12px; padding:4px 9px; border:1px solid var(--line); border-radius:8px; cursor:pointer; background:#fff; color:var(--muted); }
-  .ybtn.on { border-color:#c4392f; color:#c4392f; font-weight:700; background:#fff5f4; }
-  .mbar { margin-top:8px; }
-  .mtrack { position:relative; height:8px; background:#f2f2f7; border-radius:4px; overflow:visible; }
-  .mseg { position:absolute; top:0; height:8px; border-radius:4px; }
-  .mseg.done { background:#12263f; }
-  .mseg.est { background:repeating-linear-gradient(-45deg, rgba(196,57,47,.45) 0 4px, rgba(196,57,47,.15) 4px 8px); }
-  .mnow { position:absolute; top:-3px; bottom:-3px; width:2px; background:#c4392f; opacity:.85; }
-  .mcur { position:absolute; top:-5px; bottom:-5px; width:2px; background:#5b3fd4; }
-  .mfin { position:absolute; top:-7px; font-size:10px; font-weight:800; transform:translateX(-50%); }
-  .mfin.confirmed { color:#c4392f; }
-  .mfin.range { color:#9a4038; }
-  .mmeta { display:flex; justify-content:space-between; font-size:10.5px; color:var(--muted); margin-top:3px; }
-  .mmeta b { color:#5b3fd4; }
-  .card.dimyr { opacity:.42; }
-  .phead { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
-  .closex { flex-shrink:0; width:26px; height:26px; border:1px solid var(--line); border-radius:50%;
-            display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--muted); font-size:15px; background:#fff; }
-  .closex:hover { color:var(--ink); border-color:var(--ink); }
-  .card.hl { border-color:#5b3fd4; box-shadow:0 0 0 2px rgba(91,63,212,.15); }
-  /* 반경 설정 모달 */
-  #radiusModal, #cmpModal { position:fixed; inset:0; z-index:3200; }
-  .rmbackdrop { position:absolute; inset:0; background:rgba(0,0,0,.35); }
-  .rmpanel { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; border-radius:14px;
-             width:min(460px,92vw); max-height:86vh; overflow-y:auto; box-shadow:0 12px 48px rgba(0,0,0,.28); padding:18px 20px; }
-  .rmhead { display:flex; justify-content:space-between; align-items:center; font-size:15px; margin-bottom:6px; }
-  .rmnote { font-size:11.5px; color:var(--muted); margin-bottom:14px; line-height:1.5; }
-  .rmcat { font-size:12px; font-weight:800; color:#2e5ce6; margin:14px 0 6px; }
-  .rmsub { font-size:11.5px; font-weight:700; color:#5a6478; margin:8px 0 3px 2px; }
-  .rmrow { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:7px 0; border-bottom:1px solid var(--line); }
-  .rmrow .rlabel { font-size:13px; }
-  .rmrow input { width:76px; font-size:13px; padding:5px 8px; border:1px solid var(--line); border-radius:7px; text-align:right; }
-  .rmrow .unit { font-size:11px; color:var(--muted); margin-left:4px; }
-  .rmfoot { margin-top:16px; text-align:right; }
-  /* 계층 트리 */
-  .tnode { user-select:none; }
-  .trow { display:flex; align-items:center; gap:4px; padding:5px 8px; cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-radius:6px; }
-  .trow:hover { background:#f2f2f7; }
-  .trow.sel { background:#e8f0fe; color:#1a4d8f; font-weight:600; }
-  .trow .tw { display:inline-block; width:12px; color:var(--muted); font-size:10px; }
-  .trow .tc { color:var(--muted); font-size:11px; margin-left:auto; padding-left:6px; }
-  .tchild { margin-left:10px; border-left:1px solid var(--line); }
-  .tapt { color:#555; }
-  .tapt::before { content:"◦ "; color:var(--muted); }
-  .pt { font-size:15px; font-weight:700; margin:4px 0 2px; }
-  .ps { font-size:12px; color:var(--muted); margin-bottom:10px; }
-  .back { font-size:12px; color:var(--accent); cursor:pointer; margin-bottom:8px; display:inline-block; }
-  .summary { border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:12.5px; margin-bottom:12px; background:#fafafa; }
-  .card { border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:10px; cursor:pointer; }
-  .card:hover { border-color:#b0b0b6; }
-  .card .tags { font-size:11px; color:var(--muted); margin-bottom:4px; }
-  .gbasis { color:#e0761e; font-weight:600; }
-  .gbasis.undet { color:#a08a5a; font-weight:600; font-style:italic; }
-  .card .title { font-size:14px; font-weight:600; margin-bottom:5px; }
-  .card .stage { font-size:12px; }
-  .card .watch { font-size:12px; color:var(--muted); margin-top:4px; }
-  .fresh { font-size:11px; color:var(--muted); }
-  .fresh.stall { color:var(--stall); font-weight:700; }
-  .fresh.done { color:#2e8b57; font-weight:600; }
-  .badge-draft { display:inline-block; font-size:10px; background:#fff3cd; color:#856404; border-radius:4px; padding:1px 5px; margin-left:4px; }
-  /* ── 마일스톤 트랙 (DATA_STANDARD §3b) — "지금 어디까지 왔고, 다음은 언제" ── */
-  /* 노선 바 + 지점 칩 (표준 양식 v2 — 노선 전체 하이라이트 동선) */
-  .linebar { margin:10px 0 6px; padding:9px 11px; background:#f4f6fb; border:1px solid #dfe5f2; border-radius:10px; }
-  .linebar .lb-h { font-size:12.5px; margin-bottom:6px; }
-  .lb-chips { display:flex; flex-wrap:wrap; gap:4px; }
-  .stchip { font-size:11px; padding:2px 8px; border-radius:20px; border:1px solid #c7d2ea; background:#fff;
-            color:#2545a8; cursor:pointer; white-space:nowrap; }
-  .stchip:hover { background:#e9eefb; }
-  .stchip.on { background:#2e5ce6; color:#fff; border-color:#2e5ce6; font-weight:700; }
-  .nextwatch { margin:2px 0 8px; font-size:12px; color:#444; background:#fffbea; border:1px solid #efe3ae;
-               border-radius:8px; padding:5px 10px; display:inline-block; }
-  .msrow.future .msdot { border-color:#c4c9d4; }
-  .msrow.future .msttl { color:#8a8f9c; font-weight:400; }
-  .mstrack { margin:10px 0 4px; }
-  .msrow { display:flex; align-items:flex-start; gap:9px; padding:5px 0; position:relative; }
-  .msrow:not(:last-child)::before { content:""; position:absolute; left:5.5px; top:19px; bottom:-5px; width:2px; background:#e2e5ec; }
-  .msrow.done::before, .msrow.stalled::before { background:#12263f; }
-  .msdot { width:13px; height:13px; border-radius:50%; flex-shrink:0; margin-top:3px; border:2.5px solid #d3d7e0; background:#fff; z-index:1; }
-  .msrow.done .msdot { background:#12263f; border-color:#12263f; }
-  .msrow.current .msdot { background:#fff; border-color:#5b3fd4; box-shadow:0 0 0 3px rgba(91,63,212,.18); }
-  .msrow.stalled .msdot { background:#b8860b; border-color:#b8860b; }
-  .msrow.target .msdot { border-color:#c4392f; border-style:dashed; }
-  .msbody { flex:1; min-width:0; }
-  .msttl { font-size:12.5px; font-weight:700; color:#1c1c1e; }
-  .msrow.future .msttl { color:#a9adb6; font-weight:600; }
-  .msmeta { font-size:11px; color:var(--muted); margin-top:1px; }
-  .msdate { font-size:11.5px; font-weight:800; color:#12263f; }
-  .msrow.target .msdate { color:#c4392f; }
-  .msrow.stalled .msdate { color:#b8860b; }
-  .mseta { font-size:11.5px; font-weight:700; color:#c4392f; }
-  .msnone { font-size:11.5px; color:var(--muted); padding:8px 2px; }
-  /* 출처 등급 배지 (2026-07-17 사용자 확정 사상: 정확한 발굴·단계·위치가 핵심 — 근거의 공식성을 1급으로 표시) */
-  .badge-src { display:inline-block; font-size:10px; border-radius:4px; padding:1px 5px; margin-left:4px; font-weight:700; }
-  .badge-src.notice { background:#e7f3ea; color:#1c6b3a; }        /* 고시·기본계획 */
-  .badge-src.report { background:#eef1fb; color:#3a4a8f; }        /* 공식 보도·발표 */
-  .badge-src.osm    { background:#fdecec; color:#9b2226; border:1px dashed #d98a8a; }  /* 비공식(OSM) — 단계·명칭 근거 없음 */
-  .badge-src.unver  { background:#f2f2f7; color:#6e6e73; }
-  .badge-host { display:inline-block; font-size:10px; background:#e8f0fe; color:#1a4d8f; border-radius:4px; padding:1px 5px; }
-  .badge-near { display:inline-block; font-size:10px; background:#f2f2f7; color:#6e6e73; border-radius:4px; padding:1px 5px; }
-  .badge-drop { display:inline-block; font-size:10px; background:#e5e5ea; color:#3a3a3c; border:1px dashed #8e8e93; border-radius:4px; padding:0 5px; margin-left:4px; }
-  .pmini { font-size:11px; color:var(--muted); font-weight:400; }
-  .subtrack { font-size:11px; color:var(--muted); margin:2px 0 8px; line-height:1.5; }
-  .subtrack .subcur { color:var(--ink); background:#fff3cd; border-radius:3px; padding:0 3px; }
-  .dong-badge { background:#fff; border:1.5px solid var(--navy); border-radius:12px; padding:1px 8px; font-size:11px; font-weight:600; white-space:nowrap; cursor:pointer; }
-  /* 아파트 이름 라벨 (조회 진입점용 — §4.1 허용, 배지·개수 없음) */
-  /* 호갱노노식 아파트 집모양 마커 — 신호 있는 단지만 호재 건수(§7 절충), 0건은 흐린 집(숫자 없음) */
-  .apt-house { position:relative; display:inline-block; background:#4460e0; color:#fff; border-radius:6px;
-    min-width:24px; padding:6px 8px 5px; text-align:center; font-weight:800; line-height:1;
-    box-shadow:0 2px 6px rgba(40,60,160,.42); cursor:pointer; }
-  .apt-house::before { content:""; position:absolute; top:-8px; left:50%; transform:translateX(-50%);
-    border-left:12px solid transparent; border-right:12px solid transparent; border-bottom:9px solid #4460e0; }
-  .apt-house::after { content:""; position:absolute; bottom:-6px; left:50%; transform:translateX(-50%);
-    border-left:6px solid transparent; border-right:6px solid transparent; border-top:7px solid #4460e0; }
-  .apt-house .hc { font-size:13px; white-space:nowrap; } .apt-house .hc small { font-size:8.5px; font-weight:600; opacity:.85; margin-left:1px; }
-  .apt-house:hover { filter:brightness(1.09); z-index:600; }
-  .apt-house.sel { background:#c4392f; } .apt-house.sel::before { border-bottom-color:#c4392f; } .apt-house.sel::after { border-top-color:#c4392f; }
-  .apt-house.zero { background:#a7afc4; box-shadow:0 1px 3px rgba(0,0,0,.2); min-width:0; width:9px; height:9px; padding:0; border-radius:3px; opacity:.85; }
-  .apt-house.zero::before { border-bottom-color:#a7afc4; border-left-width:7px; border-right-width:7px; top:-6px; }
-  .apt-house.zero::after { border-top-color:#a7afc4; border-left-width:4px; border-right-width:4px; bottom:-4px; }
-  /* 아파트 hover 팝업 (호갱노노식 카드 — 실거래가 제외) */
-  .leaflet-tooltip.apt-tip { background:transparent; border:none; box-shadow:none; padding:0; white-space:normal; }
-  .leaflet-tooltip.apt-tip::before { display:none; }
-  .leaflet-popup.apt-pop-wrap .leaflet-popup-content-wrapper { background:transparent; box-shadow:none; padding:0; }
-  .leaflet-popup.apt-pop-wrap .leaflet-popup-content { margin:0; width:auto !important; }
-  .leaflet-popup.apt-pop-wrap .leaflet-popup-tip-container, .leaflet-popup.apt-pop-wrap .leaflet-popup-tip { display:none; }
-  .leaflet-tooltip.rail-stlbl { background:rgba(255,255,255,.92); border:1px solid #2e5ce6; color:#1a2b6b;
-    font-size:11px; font-weight:700; padding:1px 5px; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,.18); white-space:nowrap; }
-  .leaflet-tooltip.rail-stlbl::before { display:none; }
-  .leaflet-tooltip.rail-hover { background:#fff; border:1px solid var(--line); border-radius:8px; padding:3px 8px;
-    font-size:12px; box-shadow:0 2px 8px rgba(0,0,0,.18); white-space:nowrap; }   /* 역·IC hover — 가장자리 세로붕괴 방지 */
-  .leaflet-tooltip.rail-hover::before { display:none; }
-  .rail-name { font-size:10.5px; font-weight:700; color:#1a2b6b; background:rgba(255,255,255,.92);
-    border:1px solid #2e5ce6; border-radius:8px; padding:1px 5px; white-space:nowrap;
-    transform:translate(10px,-50%); box-shadow:0 1px 3px rgba(0,0,0,.18); }   /* z14+ 역명 라벨(원은 renderHojae) */
-  .apt-pop { background:#fff; border-radius:12px; box-shadow:0 6px 22px rgba(0,0,0,.24); padding:11px 14px; min-width:180px; max-width:250px; }
-  .apt-pop-nm { font-size:15px; font-weight:800; color:#1a1a1a; }
-  .apt-pop-sub { font-size:11.5px; color:var(--muted); margin-top:3px; }
-  .apt-pop-cats { font-size:12px; margin-top:8px; display:flex; flex-wrap:wrap; gap:4px 10px; border-top:1px solid var(--line); padding-top:7px; }
-  .apt-pop-cats span { font-weight:700; }
-  .apt-pop-cats .tot { color:var(--ink); font-weight:800; width:100%; margin-bottom:1px; }
-  .apt-pop-cats.none { color:var(--muted); font-weight:400; }
-  .apt-pop-cnt { font-size:12px; color:var(--muted); margin-top:6px; } .apt-pop-cnt b { color:var(--ink); }
-  .apt-pop-cmp { margin-top:9px; text-align:center; font-size:12px; font-weight:700; border:1.5px solid #1a1a1a; border-radius:8px; padding:5px 0; cursor:pointer; color:#1a1a1a; background:#fff; }
-  .apt-pop-cmp:hover { background:#f3f4f6; }
-  .apt-pop-cmp.in { background:#1a1a1a; color:#fff; }
-  .copyaddr { cursor:pointer; font-size:11px; padding:1px 4px; border-radius:5px; background:#eef1fb; margin-left:3px; user-select:none; }
-  .copyaddr:hover { background:#dde3f7; }
-  .factsheet { border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin:8px 0; background:#fbfcfe; }
-  .fs-h { font-size:11px; font-weight:700; color:var(--muted); margin-bottom:7px; }
-  .fs-grid { display:grid; grid-template-columns:auto 1fr auto 1fr; gap:4px 10px; font-size:12.5px; }
-  .fs-grid span { color:var(--muted); } .fs-grid b { color:var(--ink); }
-  /* 레이더 파동 (크게) */
-  .radar { position:relative; width:0; height:0; pointer-events:none; }
-  .radar span { position:absolute; border:3px solid #2e5ce6; border-radius:50%; left:0; top:0; transform:translate(-50%,-50%);
-    width:0; height:0; opacity:.7; animation:radarPulse 2.2s ease-out forwards; box-shadow:0 0 12px rgba(46,92,230,.4); }
-  .radar span:nth-child(2){ animation-delay:.45s; } .radar span:nth-child(3){ animation-delay:.9s; }
-  @keyframes radarPulse { 0%{width:0;height:0;opacity:.7;} 100%{width:560px;height:560px;opacity:0;} }
-  .detail h2 { font-size:17px; margin:2px 0 8px; }
-  .track { list-style:none; margin:10px 0; }
-  .track li { display:flex; gap:8px; font-size:13px; padding:4px 0; align-items:baseline; }
-  .track .dot { width:16px; text-align:center; }
-  .track .done { color:var(--ink); }
-  .track .now { font-weight:800; }
-  .track .todo { color:var(--muted); }
-  .kv { font-size:12.5px; margin:6px 0; }
-  .kv b { display:inline-block; min-width:86px; color:var(--muted); font-weight:500; }
-  .src a { font-size:12px; color:var(--accent); text-decoration:none; }
-  .note { font-size:11px; color:var(--muted); border-top:1px dashed var(--line); margin-top:10px; padding-top:8px; }
-  .group-h { font-size:12px; color:var(--muted); margin:16px 0 6px; font-weight:600; }
-  footer { position:fixed; left:0; right:0; bottom:0; background:rgba(255,255,255,.95); border-top:1px solid var(--line);
-           font-size:11px; color:var(--muted); padding:6px 16px; z-index:1000; }
-  /* ── 모바일: 지도 위 + 패널 아래 세로 배치, 필터는 가로 스크롤 ── */
-  @media (max-width: 768px) {
-    header { padding:8px 10px; gap:8px; }
-    .chips { flex-wrap:nowrap; overflow-x:auto; max-width:100%; -webkit-overflow-scrolling:touch; }
-    .chip { flex-shrink:0; }
-    /* 드롭다운 패널이 .chips의 overflow-x:auto에 잘려 안 보이던 문제(2026-07-17 모바일 제보):
-       열린 동안 스크롤 컨테이너를 풀고, 패널은 화면 기준(fixed)으로 띄워 잘림을 원천 차단 */
-    .chips.dd-open { overflow:visible; }
-    .dd { position:static; }
-    .ddpanel { position:fixed; left:8px; right:8px; top:auto; width:auto; min-width:0;
-               max-height:60vh; overflow-y:auto; z-index:3000; }
-    .ddtog { padding:12px 16px; font-size:14px; }   /* 터치 타깃 확대 */
-    #wrap { flex-direction:column; height:auto; }
-    #map { flex:none; height:46vh; width:100%; order:0; }
-    #panel { width:100%; border-right:none; border-top:1px solid var(--line); order:1;
-             flex:none; height:auto; overflow:visible; padding-bottom:80px; }
-    #gantt { height:auto; padding:14px 10px 90px; }
-    #raw { height:auto; padding:12px 10px 90px; }
-  }
-  /* 폴리곤 클릭 시 브라우저 기본 포커스 외곽선(bounding box 검은 네모) 제거 */
-  .leaflet-interactive:focus, .leaflet-container path:focus, .leaflet-interactive:focus-visible { outline: none !important; }
-  /* 정비구역 유형 범례 (지도 좌하단, 동 레벨 이상에서만) */
-  .jb-legend { background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:8px;
-    padding:7px 9px 8px; box-shadow:0 1px 6px rgba(0,0,0,.14); font-size:11px; line-height:1.5;
-    max-width:150px; }
-  .jb-legend b { display:block; font-size:10.5px; color:#555; margin-bottom:3px; font-weight:700; letter-spacing:.2px; }
-  .jb-legend .jl { display:flex; align-items:center; gap:5px; white-space:nowrap; color:#333; }
-  .jb-legend .jl i { width:11px; height:11px; border-radius:2px; flex-shrink:0; opacity:.85; border:1px solid rgba(0,0,0,.15); }
-  .jb-legend .jhint { margin-top:4px; padding-top:4px; border-top:1px solid var(--line); color:#8a90a0; font-size:9.5px; line-height:1.35; }
-  /* 호재 범례 (지도 우하단 상시) — 색=분류 / 선=단계 / 크기=등급. 지도의 문법 전체를 한 장에 (2026-07-18 사용자 요청:
-     "가장 중요한 정보인데 나조차 볼 때마다 헷갈린다"). 접을 수 있게 해 지도를 가리지 않는다. */
-  .hj-legend { background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:9px;
-    padding:8px 10px 9px; box-shadow:0 1px 7px rgba(0,0,0,.15); font-size:11px; line-height:1.55; max-width:186px; }
-  .hj-legend .hlt { display:flex; align-items:center; justify-content:space-between; gap:8px; cursor:pointer;
-    font-size:11px; font-weight:800; color:#333; letter-spacing:.2px; user-select:none; }
-  .hj-legend .hlt .car { color:#9aa0aa; font-size:9px; }
-  .hj-legend .sec { margin-top:6px; }
-  .hj-legend .sec > b { display:block; font-size:9.5px; color:#7a8090; font-weight:700; margin-bottom:3px; letter-spacing:.3px; }
-  .hj-legend .row { display:flex; align-items:center; gap:6px; white-space:nowrap; color:#333; }
-  .hj-legend .dot { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
-  .hj-legend .ln { width:22px; height:0; flex-shrink:0; border-top-width:2.5px; border-top-color:#2e5ce6; }
-  .hj-legend .sz { display:flex; align-items:center; gap:4px; }
-  .hj-legend .sz i { border-radius:50%; background:#2e5ce6; display:inline-block; }
-  .hj-legend .hnote { margin-top:6px; padding-top:5px; border-top:1px solid var(--line); color:#8a90a0; font-size:9.5px; line-height:1.4; }
-  .hj-legend.collapsed .sec, .hj-legend.collapsed .hnote { display:none; }
-  @media (max-width: 768px) { .hj-legend { max-width:158px; font-size:10.5px; padding:7px 8px 8px; } }
-</style>
-</head>
-<body>
-<header>
-  <div class="logo">호재맵<small>가칭 · 신호 추적 미디어 (내부 v0)</small></div>
-  <div class="srch" id="srch">
-    <span class="srchicon">🔍</span>
-    <input id="srch-in" type="search" placeholder="동 · 아파트 · 호재 검색" autocomplete="off">
-    <div class="srchpanel" id="srch-panel"></div>
-  </div>
-  <div class="regionbar" id="regionbar">
-    <select id="r-sido"><option value="">시도 선택</option></select>
-    <select id="r-sgg" disabled><option value="">시군구 선택</option></select>
-    <select id="r-dong" disabled><option value="">읍면동 선택</option></select>
-  </div>
-  <div class="chips" id="f-dd"></div>
-  <div class="chips" id="f-view">
-    <select id="apt-hh" title="아파트 표시 세대수 필터 (아파트는 z14+ 집 아이콘)" style="font-size:12px;padding:4px 6px;border:1px solid var(--line);border-radius:8px;background:#fff"></select>
-    <span class="chip on" id="v-map">지도</span>
-    <span class="chip" id="v-raw">수도권 데이터</span>
-    <span class="chip" id="v-undet" title="등급 기준(면적·금액·세대수 등)에 매칭 안 돼 등급 미판정인 호재 목록">❓ 미판정 목록</span>
-    <span class="chip" id="v-radius" title="호재 유형별 영향 반경 직접 설정">⚙ 반경 설정</span>
-    <span class="chip" onclick="window.open('rail_reference.html','_blank')" title="신규 철도 노선·역사 좌표 대장 (영향권 기준)">🚈 노선·역 대장</span>
-    <span class="chip" onclick="window.open('methodology.html','_blank')" title="데이터 소스·추출·가공·매핑 방법 (운영 문서)">📄 데이터·방법론</span>
-  </div>
-</header>
-<div id="radiusModal" style="display:none;">
-  <div class="rmbackdrop" onclick="closeRadius()"></div>
-  <div class="rmpanel">
-    <div class="rmhead"><b>호재 유형별 영향 반경 설정</b><span class="closex" onclick="closeRadius()">✕</span></div>
-    <div class="rmnote">유형별 "이내" 반경(km). 값을 바꾸면 지도·목록·건수에 즉시 반영됩니다. 항목은 데이터에 유형이 추가되면 자동으로 늘어납니다.</div>
-    <div id="rmbody"></div>
-    <div class="rmfoot"><span class="chip" onclick="resetRadius()">기본값 복원</span></div>
-  </div>
-</div>
-<div id="wrap">
-  <aside id="panel"></aside>
-  <div id="map"></div>
-</div>
-<div id="cmpBar"></div>
-<div id="cmpModal" style="display:none;">
-  <div class="rmbackdrop" onclick="closeCompare()"></div>
-  <div class="rmpanel">
-    <div class="rmhead"><b>아파트 비교 — 호재 신호 기준</b><span class="closex" onclick="closeCompare()">✕</span></div>
-    <div class="rmnote">단지를 <b>가격·등급으로 줄 세우지 않습니다</b>(P4/§7). 각 단지 반경 내 <b>호재 신호의 개수·분류·최근접 거리·단계</b>만 사실로 나열합니다. 해석은 사용자 몫.</div>
-    <div id="cmpBody" style="overflow-x:auto;"></div>
-  </div>
-</div>
-
-<div id="raw" style="display:none; height:calc(100vh - 87px); overflow-y:auto; padding:16px 20px 80px;">
-  <div style="max-width:1080px; margin:0 auto;">
-    <div class="pt">수도권 원시 신호 탐색 (최근 1년)</div>
-    <div class="ps">수집·필터 통과한 <b>원시 공고/공시</b>층입니다 — 아직 신호(§3.1) 아님. 큐레이션 판단용.
-      나라장터: 수도권 기관 + 키워드(타당성·기본계획·실시설계·지구단위·정비계획·조성·건립·신설·확장) / DART: 수도권 소재지 언급 공시</div>
-    <div class="rawctl">
-      <select id="r-sido"><option value="">시도: 전체</option></select>
-      <select id="r-sgg"><option value="">시군구: 전체</option></select>
-      <select id="r-price">
-        <option value="0">금액: 전체</option>
-        <option value="100000000">1억+</option>
-        <option value="300000000">3억+</option>
-        <option value="500000000" selected>5억+ (권장 컷)</option>
-        <option value="1000000000">10억+</option>
-        <option value="3000000000">30억+</option>
-      </select>
-      <select id="r-src"><option value="">소스: 전체</option><option>G2B</option><option>DART</option></select>
-      <input id="r-q" type="search" placeholder="제목 검색 (예: 지구단위, 돔구장)">
-    </div>
-    <div class="ps" id="r-count" style="margin-top:10px"></div>
-    <div id="r-list"></div>
-    <div style="text-align:center; margin:14px 0;"><span class="chip" id="r-more" style="display:none">더 보기</span></div>
-  </div>
-</div>
-<div id="undet" style="display:none; height:calc(100vh - 87px); overflow-y:auto; padding:16px 20px 80px;">
-  <div style="max-width:1080px; margin:0 auto;">
-    <div class="pt">등급 미판정 목록</div>
-    <div class="ps">우리가 정한 등급 기준(<b>일자리=연면적·투자액 / 주거개발=세대수 / 교통=노선종류</b>)에 필요한 데이터가 없어 <b>등급을 매기지 않은(미정)</b> 호재입니다. 임의 등급을 부여하지 않고 미정으로 두는 게 원칙(P2·P5). 아래를 보고 소스·기준을 보완하면 등급이 채워집니다.</div>
-    <div class="rawctl">
-      <select id="u-cat"><option value="">분류: 전체</option></select>
-      <select id="u-sido"><option value="">시도: 전체</option></select>
-      <input id="u-q" type="search" placeholder="이름 검색">
-    </div>
-    <div class="ps" id="u-count" style="margin-top:10px"></div>
-    <div id="u-list"></div>
-    <div style="text-align:center; margin:14px 0;"><span class="chip" id="u-more" style="display:none">더 보기</span></div>
-  </div>
-</div>
-<style>
-  .rawctl { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
-  .rawctl select, .rawctl input { font-size:13px; padding:6px 8px; border:1px solid var(--line); border-radius:8px; background:#fff; }
-  .rawctl input { flex:1; min-width:180px; }
-  .rrow { border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin-bottom:8px; }
-  .rrow .rt { font-size:13.5px; font-weight:600; }
-  .rrow .rm { font-size:11.5px; color:var(--muted); margin-top:3px; }
-  .rrow .rm b { color:var(--ink); font-weight:600; }
-  .rrow a { color:var(--accent); text-decoration:none; font-size:11.5px; }
-</style>
-
-<div id="gantt" style="display:none; height:calc(100vh - 87px); overflow-y:auto; padding:20px 24px 70px;">
-  <div style="max-width:980px; margin:0 auto;">
-    <div class="pt">강서구 · 신호 타임라인</div>
-    <div class="ps">완료 구간은 사실(실선·날짜), 미래 구간은 절차 통계 기반 추정(빗금·범위). 소요기간 수치는 가안 — 파일럿 캘리브레이션 대상.</div>
-    <div class="timectrl">
-      <div class="trow">
-        <label>시점 필터</label>
-        <input type="range" id="yr" min="2026" max="2033" step="1" value="2033">
-        <span class="yr" id="yrLabel">전체 보기</span>
-      </div>
-      <p class="tdesc" id="yrDesc"></p>
-    </div>
-    <div class="gpaper">
-      <div class="g-inner">
-        <div class="g-head" id="ghead"></div>
-        <div id="grows"></div>
-        <div class="nogroup" id="nogroup"></div>
-      </div>
-      <div class="legend">
-        <span><span class="sw" style="background:#1E2A38"></span>완료 구간 (사실·날짜)</span>
-        <span><span class="sw" style="background:#C4392F"></span>현재 진행 단계</span>
-        <span><span class="sw" style="background:repeating-linear-gradient(-45deg,rgba(196,57,47,.28) 0 5px,rgba(196,57,47,.1) 5px 10px);border:1px dashed rgba(196,57,47,.6)"></span>추정 구간 (절차 통계 가안)</span>
-        <span>◆ 확정·고시 시점 (사실)</span><span>◇ 추정 완료 범위 (±)</span>
-      </div>
-    </div>
-  </div>
-</div>
-<style>
-  .timectrl { background:#fff; border:1px solid var(--line); padding:14px 18px; margin:12px 0 16px; border-radius:10px; }
-  .timectrl .trow { display:flex; align-items:center; gap:14px; }
-  .timectrl label { font-size:13px; font-weight:700; white-space:nowrap; }
-  .timectrl input[type=range] { flex:1; accent-color:#C4392F; }
-  .timectrl .yr { font-size:16px; font-weight:800; color:#C4392F; width:110px; text-align:right; }
-  .timectrl .tdesc { font-size:11.5px; color:var(--muted); margin-top:8px; }
-  .gpaper { background:#fff; border:1px solid var(--line); border-radius:10px; padding:18px 20px 12px; overflow-x:auto; }
-  .g-inner { min-width:760px; }
-  .g-head { display:flex; margin-left:230px; border-bottom:2px solid var(--ink); position:relative; }
-  .g-head span { flex:1; font-size:11px; font-weight:700; color:var(--muted); padding:0 0 6px 5px; border-left:1px solid var(--line); }
-  .g-head span:first-child { border-left:none; }
-  .g-row { display:flex; align-items:center; min-height:60px; border-bottom:1px dashed var(--line); position:relative; }
-  .g-row.dim { opacity:.32; }
-  .g-label { width:230px; flex-shrink:0; padding-right:14px; }
-  .g-label h4 { font-size:13px; font-weight:800; }
-  .g-label .m { font-size:10.5px; color:var(--muted); }
-  .g-badge { display:inline-block; font-size:9.5px; font-weight:700; padding:1px 6px; border-radius:2px; margin-left:4px; background:#F5EDD8; color:#B08A2E; }
-  .g-track { flex:1; position:relative; height:52px; }
-  .gridline { position:absolute; top:-1px; bottom:-1px; width:1px; background:var(--line); }
-  .gbar { position:absolute; top:8px; height:18px; border-radius:2px; }
-  .gbar.done { background:#1E2A38; }
-  .gbar.now { background:#C4392F; }
-  .gbar.est { background:repeating-linear-gradient(-45deg,rgba(196,57,47,.28) 0 5px,rgba(196,57,47,.10) 5px 10px); border:1px dashed rgba(196,57,47,.6); }
-  .gbar.stalldone { background:#B08A2E; }
-  .fin { position:absolute; top:2px; font-size:9.5px; font-weight:800; white-space:nowrap; color:#C4392F; }
-  .fin.range { color:#9A4038; font-weight:700; }
-  .fin.confirmed::before { content:"◆ "; }
-  .fin.range::before { content:"◇ "; }
-  .stageLbl { position:absolute; top:28px; font-size:9px; color:var(--muted); white-space:nowrap; }
-  .nowline { position:absolute; top:-6px; bottom:-6px; width:2px; background:#C4392F; opacity:.8; z-index:2; }
-  .nowline::after { content:"오늘"; position:absolute; top:-13px; left:-11px; font-size:9px; font-weight:800; color:#C4392F; }
-  .pickline { position:absolute; top:-6px; bottom:-6px; width:2px; background:#4A6E93; z-index:2; }
-  .pickline::after { content:attr(data-yr); position:absolute; top:-13px; left:-13px; font-size:9px; font-weight:800; color:#4A6E93; }
-  .nogroup { margin-top:14px; border-top:2px solid var(--line); padding-top:10px; }
-  .nogroup h5 { font-size:11px; letter-spacing:.08em; color:#B08A2E; font-weight:800; margin-bottom:6px; }
-  .nogroup .why { font-size:11px; color:var(--muted); margin:2px 0 10px 230px; }
-  .legend { display:flex; gap:16px; flex-wrap:wrap; font-size:11px; color:var(--muted); margin-top:14px; }
-  .legend .sw { display:inline-block; width:20px; height:11px; vertical-align:-1px; margin-right:5px; border-radius:2px; }
-</style>
-<footer>투자 권유 아님 · 모든 신호는 미확정 — 사실(단계·날짜·거리)만 표시하며 매수/매도 판단은 다루지 않습니다.</footer>
-
-<script>
-/* ══════════ 상수 (기획서 §3.2, §4.1 v1.2) ══════════ */
-const KAKAO_JS_KEY = "33bf168e1a0f3295c36b53c1add1b69e";
-const TODAY = new Date("2026-07-13");
-/* 공통 4단계 백본 — 전 호재 기본. 유형별 세부단계는 각자 이 4국면 중 하나에 매핑(라벨·의미는 유형별 유연). */
-const PHASES = ["계획", "인가", "착공", "준공·개통"];
-const PHASE_IDX = Object.fromEntries(PHASES.map((p, i) => [p, i]));
-/* 유형별 세부 마일스톤 트랙 (기획서 §3.2) — [세부단계, 소속 국면].
-   정비사업(재건축·재개발)은 이주·철거를 별도 추가단계로 분리(사용자 요청). */
-const STAGE_TRACKS = {
-  "철도":   [["계획반영","계획"],["예타/민자적격성","계획"],["기본계획","계획"],["실시계획 승인","인가"],["착공","착공"],["개통","준공·개통"]],
-  "도로":   [["계획반영","계획"],["타당성","계획"],["설계","인가"],["착공","착공"],["개통","준공·개통"]],
-  "공공시설": [["예산반영","계획"],["설계용역","인가"],["공사입찰","인가"],["착공","착공"],["준공","준공·개통"]],
-  "기업이전": [["토지취득","계획"],["인허가","인가"],["착공","착공"],["입주","준공·개통"]],
-  "정비사업": [["구역지정","계획"],["조합설립","인가"],["사업시행인가","인가"],["관리처분","인가"],["이주","착공"],["철거","착공"],["착공","착공"],["준공","준공·개통"]]
-};
-/* current_stage → 국면. 우선순위: 신호 명시 phase → 트랙 내 매칭 → 키워드 분류 → 계획(기본).
-   유형별 세부단계 이름이 자유로워도 4국면 필터가 항상 성립하도록 하는 매핑층. */
-const PHASE_KEYWORDS = [
-  ["준공·개통", /준공|개통|입주|완공|공급·모집|분양/],
-  ["착공", /착공|이주|철거/],
-  ["인가", /인가|승인|지정|가결|고시|허가|입찰|설계|관리처분|조합설립/],
-  ["계획", /계획|구상|반영|타당성|검토|수립|예타|취득/]
-];
-function trackOf(s) { return STAGE_TRACKS[s.template_type] || null; }
-function phaseOf(s) {
-  if (s.phase && PHASE_IDX[s.phase] != null) return s.phase;   // 확정층 명시값 우선
-  const tr = trackOf(s);
-  if (tr) { const hit = tr.find(([lb]) => lb === s.current_stage); if (hit) return hit[1]; }
-  for (const [ph, re] of PHASE_KEYWORDS) if (re.test(s.current_stage || "")) return ph;
-  return "계획";
-}
-/* ══════════ 4분류 + 세분 반경 유형 (사용자 편집 가능, 즉시 적용) ══════════
-   RADIUS_TYPES: {분류: {세부유형: 기본반경km}} — 항목 추가로 무한 세분화 가능.
-   세부유형이 곧 신호의 radius_type이며, 그것이 분류(catOf)와 반경(getRadius) 둘 다 결정. */
-/* 4대분류 × 레벨(A핵심/B중대형/C일반). 각 신호=cat(대분류)+lvl. 반경=CLASSES[cat][lvl]. */
-const CLASSES_DEFAULT = {
-  "교통": {   // 세부: 철도(역세권)/도로(차량 이동)/환승·터미널(버스터미널·복합환승센터, §7b 운수 이관 2026-07-18)
-    "철도": { A: 3.0, B: 1.5, C: 0.8 },
-    "도로": { A: 5.0, B: 3.0, C: 1.5 },
-    "환승·터미널": { A: 3.0, B: 1.5, C: 0.8 }
-  },
-  "일자리": {   // 세부 = **시설 종류**(2026-07-18 사용자 확정). 종전 면적/금액 축은 폐기 — 그 둘은 축이 아니라
-                // **등급 산정 근거**로만 남는다(연면적=건축인허가, 투자액=DART). 지산은 통근 유발이 오피스보다 낮아 반경 축소.
-    "오피스": { A: 4.0, B: 2.0, C: 1.0 },
-    "지식산업센터": { A: 3.0, B: 1.5, C: 0.8 },
-    "공장": { A: 3.0, B: 1.5, C: 0.8 }
-  },
-  "인프라": {   // §7b 유형별 세분(2026-07-18) — 유형마다 이용 행태가 달라 반경 분리(병원=차량권, 공원=도보권). 값은 가안·모달에서 조정
-    "병원":       { A: 3.0, B: 1.5, C: 1.0 },
-    "공원·녹지":   { A: 1.5, B: 1.0, C: 0.5 },
-    "판매":       { A: 3.0, B: 1.5, C: 1.0 },
-    "문화·관광·체육": { A: 2.0, B: 1.0, C: 0.5 },   // 문화·집회·운동·관광휴게·숙박(관광거점) 통합(§7b 2026-07-18)
-    "학교":       { A: 2.0, B: 1.5, C: 0.5 },
-    "공공시설":    { A: 2.0, B: 1.0, C: 0.5 },   // 구청·시청·복합청사·경찰서 등 행정청사(2026-07-18 신설 — 종전 '업무시설'→일자리 오분류 교정)
-    "기타시설":    { A: 2.0, B: 1.0, C: 0.5 }
-  },
-  "주거개발": { A: 3.0, B: 2.0, C: 0.8 }
-};
-const CAT_KEYS = ["교통", "일자리", "인프라", "주거개발"];
-const DISPLAY_CAT_KEYS = ["교통", "일자리", "인프라", "주거개발", "기타"];
-const LEVELS = ["A", "B", "C"];
-const GRADES_DISP = ["A", "B", "C", "미정"];   // 배지·매트릭스 표시용(미정 포함)
-const LEVEL_NAME = { A: "A급", B: "B급", C: "C급", "미정": "미정" };
-const SUB_KEYS = { "교통": ["철도", "도로", "환승·터미널"], "일자리": ["오피스", "지식산업센터", "공장"],
-  "인프라": ["병원", "공원·녹지", "판매", "문화·관광·체육", "학교", "공공시설", "기타시설"] };   // 세부 축 있는 대분류 — 인프라는 §7b 유형별(2026-07-18)
-// 중분류 조회축 전체 키(대분류 순서 유지). 이름은 대분류를 넘나들어 겹치지 않으므로 평면 Set으로 관리한다.
-const ALL_SUBS = CAT_KEYS.flatMap(c => SUB_KEYS[c] || []);
-const CAT_SUB = { "교통": "철도 / 도로 / 환승·터미널", "일자리": "오피스 / 지식산업센터 / 공장", "인프라": "병원 / 공원·녹지 / 판매 / 문화·관광·체육 / 학교(특목) / 공공시설 / 기타시설", "주거개발": "신도시 / 택지 / 재개발 / 재건축" };
-const LEVEL_DESC = {
-  "교통": {
-    "철도": { A: "핵심 광역철도 (GTX·신분당·지하화)", B: "일반 지하철 신설·연장", C: "지선·경전철·트램" },
-    "도로": { A: "핵심 지하고속도로·주요 고속도로 IC 신설", B: "외곽순환 등 일반 IC·대형 터널", C: "일반 우회도로·진출입로 개선" },
-    "환승·터미널": { A: "복합환승센터·대형 버스터미널 (연면적 10만㎡+)", B: "시외버스터미널급 (3~10만㎡)", C: "일반 터미널·환승시설 (1~3만㎡)" }
-  },
-  // 축은 시설 종류지만 **등급 근거는 그대로 면적·금액**(2026-07-18 — "면적이나 금액은 내부적으로 판단하는 근거").
-  // 건축인허가 신호=연면적, DART 신호=투자액. 근거가 뭐였는지는 상세 패널의 gradeBasisHtml이 그대로 표기한다(P2).
-  "일자리": {
-    "오피스":      { A: "메가 업무타운 (연면적 10만㎡↑)", B: "중대형 업무시설 (3~10만㎡)", C: "일반 오피스 (1~3만㎡)" },
-    "지식산업센터": { A: "대형 지산 (연면적 10만㎡↑)", B: "중대형 지산 (3~10만㎡)", C: "일반 지산 (1~3만㎡)" },
-    "공장":        { A: "대규모 생산·데이터센터 (연면적 10만㎡↑ 또는 투자 5,000억↑)", B: "중대형 (3~10만㎡ / 1,000~5,000억)", C: "일반 (1~3만㎡ / 300~1,000억)" }
-  },
-  // §7b 생활인프라 편입 기준(2026-07-17 확정 · 2026-07-18 유형별 반경 분리): 병원 100병상+/공원 5만㎡+/판매 3천㎡+/문화체육 1만㎡+/학교는 특목급만
-  "인프라": {
-    "병원":     { A: "상급종합·대학병원 (500병상+)", B: "종합병원 (300병상+)", C: "종합병원 (100~300병상)" },
-    "공원·녹지": { A: "대형공원 (30만㎡+)", B: "근린공원 (10만㎡+)", C: "공원 (5~10만㎡ — 편입 문턱)" },
-    "판매":     { A: "복합쇼핑몰·백화점 (연면적 15만㎡+)", B: "대형몰·창고형마트 (5~15만㎡)", C: "대형마트급 (1~5만㎡)" },
-    "문화·관광·체육": { A: "광역급 (아레나·컨벤션·관광거점 호텔 10만㎡+)", B: "시군구 대표급 (5~10만㎡)", C: "근린 복합센터·문화체육 (연면적 1만㎡+)" },
-    "학교":     { A: "전국모집 특목 (영재·전국자사고·국제학교)", B: "광역모집 특목 (과학고·외고·예술고)", C: "기준 없음 (§7b — 일반 초중고는 배제)" },
-    "공공시설": { A: "광역 행정거점 (연면적 5만㎡+ — 시청·통합청사)", B: "구청·복합청사급 (1~5만㎡)", C: "일반 청사·지구대 (1만㎡ 내외)" },
-    "기타시설": { A: "대형 (연면적 5만㎡+)", B: "중대형 (1~5만㎡)", C: "일반 — §7b 유형표 미정의 용도(기준 보완 대상)" }
-  },
-  "주거개발": { A: "도시급 대형 (5천 세대↑)", B: "지역 대장주급 (1,500~5천 세대)", C: "일반 단지급 (500~1,500 세대)" }
-};
-// 주거개발 = 마젠타(#c2255c) — 종전 레드(#c4392f)가 일자리 오렌지와 원 크기에서 구분 안 됨(사용자 지적 2026-07-17)
-const CAT_COLOR = { "교통": "#2e5ce6", "일자리": "#e0761e", "인프라": "#2e8b57", "주거개발": "#c2255c", "기타": "#6e6e73" };
-/* 레벨 pill: 분류색 강도로 등급화 (A=진한 채움/B=중간 채움/C=연한). A급이 확 띔 */
-const CAT_TINT = { "교통": ["#e7ecfc", "#1c3aa8"], "일자리": ["#fbebdb", "#8a4a12"], "인프라": ["#e2f1e8", "#1d6b40"], "주거개발": ["#f9e0ec", "#8f1e4c"], "기타": ["#ececf0", "#55555a"] };
-const CAT_MID = { "교통": "#6f8cec", "일자리": "#e79f5a", "인프라": "#5aab84", "주거개발": "#d56a9a", "기타": "#a2a7b5" };
-function lvStyle(cat, lvl) {
-  const base = CAT_COLOR[cat] || "#6e6e73", tint = CAT_TINT[cat] || CAT_TINT["기타"], mid = CAT_MID[cat] || "#a2a7b5";
-  if (lvl === "A") return `background:${base};color:#fff;`;
-  if (lvl === "B") return `background:${mid};color:#fff;`;
-  return `background:${tint[0]};color:${tint[1]};`;
-}
-/* 등급(A/B/C) 공통 색 — 카테고리 무관. A=보라(핵심)/B=청록(중대형)/C=슬레이트(일반). 각 화면 등급 그루핑 */
-const LVL_COLOR = { A: "#d6156d", B: "#7c3aed", C: "#94a3b8", "미정": "#c3b091" };   // A=마젠타/B=보라/C=슬레이트/미정=베이지(미판정)
-const LVL_STYLE = { A: "background:#d6156d;color:#fff;", B: "background:#7c3aed;color:#fff;", C: "background:#94a3b8;color:#fff;", "미정": "background:#fff;color:#8a7a56;border:1.5px dashed #c3b091;" };
-const LVL_TXT = LVL_COLOR;
-const LVL_LETTER = { A: "A", B: "B", C: "C", "미정": "?" };   // 배지 글자(미정=?)
-function lvlPill(l) { return `<span class="lvtag" style="${LVL_STYLE[l]}">${LEVEL_NAME[l]}</span>`; }
-
-/* 출처 등급 배지 (사용자 확정 사상 2026-07-17: "핵심은 호재를 정확히 발굴하고 단계·위치를 정확히 아는 것 — OSM은 가비지").
-   근거의 공식성을 신호의 1급 속성으로 노출한다. OSM 유래는 선형(그림)만 참고이며 단계·명칭의 근거가 아님을 명시. */
-const SRC_TIER = {
-  official_notice: { cls: "notice", t: "고시·기본계획", tip: "국토부·지자체 고시/기본계획/예타 등 공식 문서 근거" },
-  official_report: { cls: "report", t: "공식 발표", tip: "정부·지자체 보도자료·공식 발표 근거" },
-  osm: { cls: "osm", t: "비공식(OSM)", tip: "OpenStreetMap 유래 — 선형(그림) 참고용. 진행단계·명칭의 공식 근거 아님" },
-  unverified: { cls: "unver", t: "출처 미상", tip: "근거 출처 미확인" },
-};
-
-/* 좌표 정밀도 표기 (DATA_STANDARD §3) — "좌표가 있다"와 "정확하다"는 다르다. 사용자가 신뢰도를 알아야 한다. */
-const GEO_PREC = {
-  exact:    { t: "정확 좌표", d: "고시 도면·실측 지점" },
-  parcel:   { t: "지번 기준", d: "지번 주소 지오코딩 (~50m)" },
-  landmark: { t: "지물 기준(근사)", d: "교차로·시설 등 인근 지물 기준 (~200m) — 정거장 확정 위치 아님" },
-  dong:     { t: "동 대표점(근사)", d: "읍면동 중심점 (500m~2km) — 실제 위치 아님, 위치 미확정" },
-  sgg:      { t: "시군구 대표점(근사)", d: "시군구 중심점 (2km+) — 실제 위치 아님" },
-};
 function precNote(s) {
   const v = GEO_PREC[s.geo_prec];
+  // 필드명은 geo_approx다. 종전엔 s.approx를 보고 있어 등급표에 없는 값이 "확정 좌표"로 나왔다.
   return v ? `<b>${v.t}</b> — ${v.d}` : (s.geo_approx || s.approx ? "근사 — 위치 미확정" : "등급 미상 — 근사로 취급");
 }
 
@@ -3605,7 +3024,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260719h");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260719f");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
   const [dong, sgg, main, macro, rawData, autoData, regions, jeongbiData, railData, roadData, dartData, archData, parkData, dpsData] = await Promise.all([
@@ -3620,7 +3039,7 @@ function initSearch() {
     RAIL_READY ? gj("rail_signals.json").catch(() => ({ features: [] })) : Promise.resolve({ features: [] }),  // 신규 철도 노선
     gj("road_signals.json").catch(() => ({ features: [] })),   // 신규 도로(고속·간선 신설/확장/지하화, OSM) — IC=점·노선=다점 신호
     gj("dart_signals.json").catch(() => ({ signals: [] })),   // DART → 일자리 후보
-    gj("arch_signals.json").catch(() => ({ signals: [] })),   // 건축인허가(전국) → 인프라·일자리 후보. 2026-07-19: 권역 4분할 삭제(신호의 sd가 권역을 담음)
+    gj("arch_signals.json").catch(() => ({ signals: [] })),   // 건축인허가(전국). 2026-07-19: 권역 4분할 삭제 — 신호의 sd가 권역을 담는다
     gj("park_signals.json").catch(() => ({ features: [] })),          // 신규 대형공원(브이월드 도시계획 API 자동수집)
     gj("dps_signals.json").catch(() => ({ signals: [] }))             // 공공건축 설계공모(건축HUB) — 계획단계 후보
   ]);
@@ -3651,8 +3070,7 @@ function initSearch() {
   JEONGBI = (jeongbiData && jeongbiData.cands) || [];
   JEONGBI_POLY = [];   // 정비 폴리곤(1.9MB)은 지연 로드
   buildJeongbiSignals();   // 정비 후보 → 신호 어댑트(호재 카운팅 포함용)
-  APTS = [];   // 2026-07-19: 강서 정밀본 삭제 — 좌표가 Nominatim(OSM) 산출이라
-               // 브이월드 공식 좌표를 덮어쓰고 있었다(OSM 전면 금지 위반). 전국본 지연 로드로 채운다.
+  APTS = [];   // 2026-07-19: 강서 정밀본 삭제 — Nominatim(OSM) 좌표가 브이월드 공식 좌표를 덮어쓰고 있었다. 전국본 지연 로드로 채운다.
   // 상태 파생 (§3.1: 정체 = 6개월+ 무움직임). status_override는 공사 진행 등
   // "무공시가 정상인 단계"에 한해 명시 근거(status_note)와 함께 사용
   SIGNALS = main.signals.map(s => {
@@ -3699,7 +3117,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260719h"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260719f"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3725,7 +3143,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260719h");
+  const CB = "?b=" + (window.BUILD || "20260719f");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
@@ -3733,10 +3151,10 @@ async function loadDeferred() {
     loadBdongVisible();                       // 현재 화면에 걸치는 시도부터
     if (nav.sd) loadBdongFor(nav.sd);
   }).catch(() => {});
-  // 전국 아파트(브이월드 좌표) — 단일 소스. 종전엔 강서 211건을 Nominatim(OSM) 좌표로 **덮어썼는데**,
-  // 실측 결과 그쪽이 25건을 11개 지점에 뭉쳐 놓았고(브이월드 10건) 최대 6,188m 어긋났다
-  // (방화동 단지가 등촌동 좌표를 받는 등 — Nominatim 지오코딩 실패 시 대표점). 2026-07-19 제거.
+  // 전국 아파트 — 전국본 베이스 + 강서 정밀본(현재 APTS) 덮어씀
   gj("apartments_all.json").then(all => {
+    // 브이월드 좌표 단일 소스. 종전엔 강서 211건을 Nominatim(OSM) 좌표로 덮어썼는데 실측 결과
+    // 25건이 11개 지점에 뭉치고 최대 6,188m 어긋났다(방화동 단지가 등촌동 좌표) — 2026-07-19 제거.
     APTS = ((all && all.apts) || []).filter(a => a.lat);
     window._dbg && window._dbg.applyLOD && window._dbg.applyLOD();
   }).catch(() => {});
