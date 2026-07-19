@@ -3024,7 +3024,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260719k");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260719l");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
   const [dong, sgg, main, macro, rawData, autoData, regions, jeongbiData, railData, roadData, dartData, archData, parkData, dpsData] = await Promise.all([
@@ -3047,16 +3047,16 @@ function initSearch() {
   buildRailSignals();   // 계획/건설역 → 교통 신호(신설역 근처 아파트 호재 카운팅 기준좌표)
   ROADF = (roadData && roadData.features) || [];
   buildRoadSignals();   // 도로 노선(다점)·IC(점) → 교통·도로 신호
-  DART = (dartData && dartData.signals) || [];
+  DART = ((dartData && dartData.signals) || []).filter(s => !s.superseded_by);   // 승격 중복 제외
   buildDartSignals();   // DART → 일자리 후보 신호(호재 카운팅 포함)
   // 전국 건축인허가 = 서울·수도권 + 지방12 + 전남광주 (지역별 분할 수집 → 병합. 지역-무관 원칙: 파일만 추가)
   // 수도권(경기·인천) 파일 누락 교정(2026-07-18) — 종전엔 로드 목록에 없어 서울 파일에 섞인 분만 우연히 보였다
-  ARCH = (archData && archData.signals) || [];   // 2026-07-19: 권역 4분할 삭제 — 병합 코드가 통째로 없어졌다
+  ARCH = ((archData && archData.signals) || []).filter(s => !s.superseded_by);   // 권역 4분할 삭제 + 확정층 승격분 제외(핀 중복 방지) — 2026-07-19
   buildArchSignals();   // 건축인허가 → 인프라·일자리 후보 신호(호재 카운팅 포함)
   // 신규 대형공원(브이월드 도시계획 API) — feature 형식이 이미 신호 어댑트와 동일(cat/lvl/geometry)라 그대로 pool 투입
   PARK_SIG = ((parkData && parkData.features) || []).map(f => Object.assign({ _park: true, geometry: f.geometry }, f.properties));
   // 공공건축 설계공모(2026-07-18) — 계획 단계 후보. 건축HUB 인허가가 놓치는 공공건축·중형(1만㎡ 미만)을 보완.
-  DPS_SIG = ((dpsData && dpsData.signals) || []).map(s => Object.assign({
+  DPS_SIG = ((dpsData && dpsData.signals) || []).filter(s => !s.superseded_by).map(s => Object.assign({
     _dps: true, template_type: "공공시설", confirmed: false, status: s.status || "활성"
   }, s));
   // dedupJobByArea() 비활성(2026-07-16): DART 위치가 본사-근사라 거리(250m) 기반 면적-우선 dedup이
@@ -3117,7 +3117,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260719k"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260719l"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3143,7 +3143,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260719k");
+  const CB = "?b=" + (window.BUILD || "20260719l");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
