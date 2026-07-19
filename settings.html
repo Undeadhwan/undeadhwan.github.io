@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>호재 기준 설정 — 호재맵</title>
+<style>
+  :root { --line:#e6e9f0; --muted:#6b7488; --bg:#f7f8fb; --ink:#1a2233; --accent:#2e5ce6;
+          --A:#e0342b; --B:#e08a1e; --C:#3c8f4a; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.6 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif;
+         color:var(--ink); background:var(--bg); }
+  header { position:sticky; top:0; z-index:20; background:#fff; border-bottom:1px solid var(--line);
+           padding:9px 18px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+           box-shadow:0 1px 8px rgba(0,0,0,.04); }
+  header h1 { font-size:17px; margin:0; font-weight:800; }
+  .src { font-size:12px; color:var(--muted); background:var(--bg); border:1px solid var(--line);
+         border-radius:7px; padding:3px 9px; font-family:ui-monospace,Menlo,monospace; }
+  .grow { flex:1; }
+  button { font:inherit; font-weight:700; border-radius:9px; padding:8px 15px; cursor:pointer; border:1.5px solid var(--line);
+           background:#fff; color:var(--ink); }
+  button.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  button:disabled { opacity:.45; cursor:not-allowed; }
+  main { max-width:1320px; margin:0 auto; padding:14px 18px; }
+  .intro { background:#fff; border:1px solid var(--line); border-radius:12px; padding:11px 15px; margin-bottom:11px; font-size:13px; }
+  .intro p { margin:0 0 7px; }
+  .intro code { background:var(--bg); padding:1px 6px; border-radius:5px; font-size:12.5px; }
+  .rules { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:9px; margin-top:11px; }
+  .rule { background:var(--bg); border-radius:9px; padding:9px 12px; font-size:12.5px; }
+  .rule b { color:var(--accent); }
+
+  .cat { background:#fff; border:1px solid var(--line); border-radius:12px; margin-bottom:10px; overflow:hidden; }
+  .cathead { padding:8px 14px; font-weight:800; font-size:14px; display:flex; align-items:center; gap:9px;
+             border-bottom:1px solid var(--line); background:linear-gradient(#fff,#fcfdff); }
+  .dot { width:11px; height:11px; border-radius:50%; }
+  .catsub { font-size:12px; color:var(--muted); font-weight:600; }
+
+  table { width:100%; border-collapse:collapse; }
+  th { font-size:11px; color:var(--muted); font-weight:700; text-align:left; padding:6px 8px;
+       border-bottom:1px solid var(--line); background:#fbfcfe; white-space:nowrap; }
+  td { padding:5px 7px; border-bottom:1px solid #f1f3f8; vertical-align:middle; }
+  td.cell { white-space:nowrap; border-left:1px solid #f1f3f8; }
+  td.cell i { font-style:normal; font-size:10.5px; color:var(--muted); margin:0 5px 0 2px; }
+  tr:last-child td { border-bottom:none; }
+  .subname { font-weight:700; white-space:nowrap; font-size:13px; }
+  .basis { font-size:11px; color:var(--muted); font-family:ui-monospace,Menlo,monospace; }
+  .lv { font-size:11px; font-weight:800; color:#fff; border-radius:5px; padding:1px 7px; display:inline-block; min-width:20px; text-align:center; }
+  .lv.A { background:var(--A); } .lv.B { background:var(--B); } .lv.C { background:var(--C); }
+  .desc { font-size:12.5px; color:#48506180; color:#4a5364; }
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
+  input[type=number] { -moz-appearance:textfield; width:74px; font:inherit; font-size:12.5px; font-weight:700; text-align:right; padding:3px 6px;
+                       border:1.5px solid #e3e6ec; border-radius:6px; background:#fff; }
+  input.rad { width:46px; background:#fbfcff; }
+  input.zero { color:#9aa3b2; }
+  input[data-t="면적_눈금_㎡"] { width:80px; }
+  input[type=number]:focus { outline:none; border-color:var(--accent); }
+  input.dirty { border-color:var(--accent); background:#f4f7ff; }
+  input[disabled] { background:#f4f5f8; color:#aab; border-style:dashed; }
+  .unit { font-size:11.5px; color:var(--muted); margin-left:5px; }
+  .qual { font-size:11.5px; color:var(--muted); font-style:italic; }
+
+  .bar { position:sticky; bottom:0; background:#fff; border-top:1px solid var(--line); padding:12px 22px;
+         display:flex; align-items:center; gap:12px; box-shadow:0 -2px 12px rgba(0,0,0,.05); }
+  .cnt { font-size:13px; font-weight:700; color:var(--accent); }
+  .warn { background:#fff8e6; border:1px solid #f0d9a0; border-radius:9px; padding:10px 13px; font-size:12.5px; margin-top:11px; }
+  dialog { border:none; border-radius:14px; padding:0; max-width:760px; width:92vw; box-shadow:0 20px 60px rgba(0,0,0,.3); }
+  dialog header { position:static; box-shadow:none; }
+  dialog .body { padding:16px 20px; }
+  textarea { width:100%; height:340px; font:12px/1.5 ui-monospace,Menlo,monospace; border:1px solid var(--line);
+             border-radius:9px; padding:11px; resize:vertical; }
+</style>
+</head>
+<body>
+<header>
+  <h1>⚙ 호재 기준 설정</h1>
+  <span class="src">thresholds.json</span>
+  <span class="grow"></span>
+  <span class="cnt" id="cnt"></span>
+  <button id="reset">되돌리기</button>
+  <button class="primary" id="save">변경사항 저장</button>
+</header>
+
+<main>
+  <div class="intro">
+    <p><b>이 페이지가 유일한 기준 입력 지점입니다.</b> 등급 눈금(면적·금액·세대수)과 영향 반경을 한 곳에서 정합니다.
+       값은 <code>thresholds.json</code>에 저장되고, 파이프라인(<code>grade.py</code>)과 지도가 같은 파일을 읽습니다.</p>
+    <p class="qual">종전엔 금액 눈금이 파이썬 4곳, 반경·세대수 눈금이 <code>index.html</code>에 흩어져 있어
+       같은 사업이 소스마다 다른 등급을 받았습니다.</p>
+    <div class="rules" id="rules"></div>
+  </div>
+
+  <div id="ro"></div>
+  <div id="cats"></div>
+
+  <div class="cat" id="mins"></div>
+  <div class="warn" id="warn"></div>
+</main>
+
+<div class="bar">
+  <span class="qual">값을 바꾸면 <b>다음 수집부터</b> 적용됩니다. 이미 만들어진 신호의 등급은 재수집 시 갱신됩니다.</span>
+  <span class="grow"></span>
+  <span class="cnt" id="cnt2"></span>
+  <button class="primary" id="save2">변경사항 저장</button>
+</div>
+
+<dialog id="dlg">
+  <header><h1>저장할 내용</h1></header>
+  <div class="body">
+    <p class="qual">프로토타입 단계라 파일 쓰기는 아직 배선되지 않았습니다. 아래 내용을
+       <code>thresholds.json</code>에 붙여넣거나, 다운로드해 교체하세요.</p>
+    <textarea id="out" readonly></textarea>
+    <div style="margin-top:12px; display:flex; gap:9px;">
+      <button class="primary" id="dl">파일 다운로드</button>
+      <button id="copy">클립보드 복사</button>
+      <button id="btnClose" style="margin-left:auto">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+const COLOR = { "교통":"#2e5ce6", "일자리":"#e07b1e", "인프라":"#1f9e6e", "주거개발":"#8b5cf6" };
+const LEVELS = ["A","B","C"];
+let CFG = null, ORIG = null;
+
+const clean = o => Object.fromEntries(Object.entries(o).filter(([k]) => !k.startsWith("_")));
+
+// 등급근거 문자열("면적:인프라|금액:생활SOC") → 실제 눈금을 가리키는 참조 목록
+function parseBasis(b) {
+  if (!b || b === "정성") return [];
+  return b.split("|").map(part => {
+    const i = part.indexOf(":");
+    return { kind: part.slice(0, i), key: part.slice(i + 1) };
+  });
+}
+const TABLE = { "면적":"면적_눈금_㎡", "금액":"금액_눈금_억원", "세대수":"세대수_눈금_세대" };
+const UNIT  = { "면적":"㎡", "금액":"억", "세대수":"세대" };
+
+function render() {
+  document.getElementById("rules").innerHTML = CFG._판정규칙
+    .map(r => `<div class="rule">${r.replace(/^(\d)\.\s*/, "<b>$1</b> ")}</div>`).join("");
+
+  const wrap = document.getElementById("cats");
+  wrap.innerHTML = "";
+  for (const [cat, subs] of Object.entries(clean(CFG.유형별_설정))) {
+    const list = clean(subs);
+    const flat = subs._중분류없음;
+    const el = document.createElement("div");
+    el.className = "cat";
+    el.innerHTML = `<div class="cathead"><span class="dot" style="background:${COLOR[cat]}"></span>${cat}
+        <span class="catsub">${flat ? "중분류 없음" : Object.keys(list).join(" · ")}</span></div>
+      <table><thead><tr><th style="width:15%">중분류</th>
+        <th>A급 — 기준 / 반경</th><th>B급</th><th>C급</th>
+      </tr></thead><tbody></tbody></table>`;
+    const tb = el.querySelector("tbody");
+
+    for (const [sub, s2] of Object.entries(list)) {
+      const refs = parseBasis(s2.등급근거);
+      const cell = lv => {
+        const basis = refs.length ? refs.map(r => {
+          const row = (CFG[TABLE[r.kind]] || {})[r.key] || {};
+          const has = row[lv] !== undefined;
+          const zero = has && Number(row[lv]) === 0;
+          return `<input type="number" step="any" ${has ? "" : "disabled"} value="${has ? row[lv] : ""}"
+                    data-t="${TABLE[r.kind]}" data-k="${r.key}" data-lv="${lv}"
+                    class="${zero ? "zero" : ""}"
+                    title="${zero ? "0 = 하한 없음. 실질 하한은 아래 '수집 문턱'이다" : r.kind + " 눈금 · " + r.key}"
+                    ><i>${zero ? "하한없음" : UNIT[r.kind]}</i>`;
+        }).join("") : `<span class="qual">정성</span>`;
+        return `<td class="cell"><span class="lv ${lv}">${lv}</span>${basis}
+          <input class="rad" type="number" step="0.1" min="0" value="${s2.반경_km[lv]}"
+                 data-r="${cat}" data-rs="${sub}" data-lv="${lv}" title="영향 반경"><i>km</i></td>`;
+      };
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td class="subname">${flat ? cat : sub}
+          <div class="basis" title="${s2.등급근거}">${s2.등급근거.replace(/면적:|금액:|세대수:/g, "").replace("|", " + ")}</div></td>`
+        + LEVELS.map(cell).join("");
+      tr.title = LEVELS.map(l => `${l}: ${s2.등급설명[l]}`).join("\n");
+      tb.appendChild(tr);
+    }
+    wrap.appendChild(el);
+  }
+
+  // ── 수집 문턱 — 등급 이전에 "수집할지"를 가르는 값. C가 0인 눈금의 **실질 하한**이 여기다.
+  const mn = clean(CFG["수집_문턱_㎡"]);
+  document.getElementById("mins").innerHTML =
+    `<div class="cathead"><span class="dot" style="background:#64748b"></span>수집 문턱
+       <span class="catsub">이 값 미만은 아예 수집하지 않는다 — 등급 눈금과 다른 축</span></div>
+     <table><tbody>` +
+    Object.entries(mn).map(([k, v]) =>
+      `<tr><td class="subname" style="width:15%">${k.replace("_", " · ")}
+             <div class="basis">${v._설명 || ""}</div></td>
+           <td class="cell"><input type="number" step="any" value="${v.값}"
+                 data-m="${k}"><i>㎡ 이상만 수집</i></td><td></td><td></td></tr>`).join("") +
+    `</tbody></table>`;
+
+  // 공유 눈금 안내 — 한 눈금을 여러 중분류가 함께 쓰면 한 곳을 고치면 같이 움직인다
+  const uses = {};
+  for (const [cat, subs] of Object.entries(clean(CFG.유형별_설정)))
+    for (const [sub, s] of Object.entries(clean(subs)))
+      parseBasis(s.등급근거).forEach(r => (uses[`${r.kind}:${r.key}`] ??= []).push(`${cat}/${sub}`));
+  const shared = Object.entries(uses).filter(([, v]) => v.length > 1);
+  document.getElementById("warn").innerHTML =
+    `<b>⚠ 공유 눈금</b> — 아래는 여러 유형이 <b>같은 눈금</b>을 씁니다. 한 곳을 고치면 함께 바뀝니다.<br>` +
+    shared.map(([k, v]) => `<code>${k}</code> → ${v.join(", ")}`).join("<br>");
+
+  document.querySelectorAll("input").forEach(inp => inp.addEventListener("input", onEdit));
+  count();
+}
+
+function onEdit(e) {
+  const inp = e.target, v = parseFloat(inp.value);
+  if (Number.isNaN(v)) return;
+  if (inp.dataset.m) CFG["수집_문턱_㎡"][inp.dataset.m].값 = v;
+  else if (inp.dataset.r) CFG.유형별_설정[inp.dataset.r][inp.dataset.rs].반경_km[inp.dataset.lv] = v;
+  else CFG[inp.dataset.t][inp.dataset.k][inp.dataset.lv] = v;
+  // 같은 눈금을 가리키는 다른 칸도 즉시 동기화 — 화면 안에서 SSOT가 깨지지 않게
+  if (inp.dataset.t) document.querySelectorAll(
+      `input[data-t="${inp.dataset.t}"][data-k="${inp.dataset.k}"][data-lv="${inp.dataset.lv}"]`
+    ).forEach(o => { if (o !== inp) o.value = inp.value; });
+  count();
+}
+
+function count() {
+  const n = diffCount();
+  const txt = n ? `${n}개 변경됨` : "";
+  cnt.textContent = cnt2.textContent = txt;
+  document.querySelectorAll("input").forEach(i => {
+    const pick = o => i.dataset.m ? o["수집_문턱_㎡"][i.dataset.m].값
+      : i.dataset.r ? o.유형별_설정[i.dataset.r][i.dataset.rs].반경_km[i.dataset.lv]
+      : o[i.dataset.t]?.[i.dataset.k]?.[i.dataset.lv];
+    const cur = pick(CFG), was = pick(ORIG);
+    i.classList.toggle("dirty", cur !== was);
+  });
+}
+function diffCount() {
+  let n = 0;
+  const walk = (a, b) => {
+    for (const k of Object.keys(a || {})) {
+      if (k.startsWith("_")) continue;
+      if (typeof a[k] === "object" && a[k] !== null) walk(a[k], b?.[k]);
+      else if (a[k] !== b?.[k]) n++;
+    }
+  };
+  walk(CFG, ORIG);
+  return n;
+}
+
+async function doSave(btn) {
+  if (!diffCount()) return;
+  const label = btn.textContent;
+  btn.disabled = true; btn.textContent = "저장 중…";
+  try {
+    const r = await fetch("/api/thresholds", { method: "POST",
+      headers: { "Content-Type": "application/json" }, body: JSON.stringify(CFG, null, 2) });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || "저장 실패");
+    ORIG = structuredClone(CFG);          // 저장 성공 = 이제 이것이 원본
+    count();
+    toast(`저장됨 ${j.saved} · 백업 ${j.backup}`, true);
+  } catch (e) {
+    // 저장 서버가 아니면(정적 서버) 파일을 못 쓴다 — 그때만 수동 경로를 연다.
+    toast("자동 저장 불가 — " + e.message, false);
+    out.value = JSON.stringify(CFG, null, 2); dlg.showModal();
+  } finally { btn.disabled = false; btn.textContent = label; }
+}
+save.onclick = () => doSave(save);
+save2.onclick = () => doSave(save2);
+
+function toast(msg, ok) {
+  let t = document.getElementById("toast");
+  if (!t) { t = document.createElement("div"); t.id = "toast"; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.style.cssText = `position:fixed;left:50%;bottom:64px;transform:translateX(-50%);z-index:99;
+    background:${ok ? "#1f7a4d" : "#a33"};color:#fff;font-weight:700;font-size:13px;
+    padding:10px 18px;border-radius:10px;box-shadow:0 6px 22px rgba(0,0,0,.25)`;
+  clearTimeout(t._h); t._h = setTimeout(() => t.remove(), 4000);
+}
+btnClose.onclick = () => dlg.close();
+copy.onclick = () => navigator.clipboard.writeText(out.value).then(() => copy.textContent = "복사됨 ✓");
+dl.onclick = () => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([out.value], { type: "application/json" }));
+  a.download = "thresholds.json"; a.click();
+};
+reset.onclick = () => { CFG = structuredClone(ORIG); render(); };
+
+// 저장 서버(settings_server.py)가 있는지 **먼저** 확인한다. 없으면 편집 전에 알린다 —
+// 다 고쳐놓고 저장 단계에서 실패를 알게 되는 것이 가장 나쁜 순서다.
+fetch("/api/health").then(r => r.ok ? r.json() : null).then(j => !!(j && j.save)).catch(() => false)
+  .then(ok => {
+    if (ok) return;
+    document.getElementById("ro").innerHTML =
+      `<div class="warn" style="margin:0 0 11px"><b>읽기 전용 환경입니다.</b>
+       이 주소에는 저장 서버가 없어 <b>저장 버튼이 파일에 쓰지 못합니다</b>(정적 호스팅).
+       값을 바꾸면 JSON을 내려받아 <code>thresholds.json</code>을 교체하거나,
+       로컬에서 <code>python3 settings_server.py</code> 를 띄우고
+       <a href="http://localhost:8778/settings.html">localhost:8778</a> 로 여세요.</div>`;
+  });
+
+fetch("thresholds.json?" + Date.now())
+  .then(r => r.json())
+  .then(j => { CFG = j; ORIG = structuredClone(j); render(); })
+  .catch(e => { document.getElementById("cats").innerHTML =
+    `<div class="warn">thresholds.json을 읽지 못했습니다 — 로컬 서버로 열어야 합니다.<br><code>${e}</code></div>`; });
+</script>
+</body>
+</html>

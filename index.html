@@ -420,7 +420,7 @@
     <span class="chip" id="v-raw">수도권 데이터</span>
     <span class="chip" id="v-undet" title="등급 기준(면적·금액·세대수 등)에 매칭 안 돼 등급 미판정인 호재 목록">❓ 미판정 목록</span>
     <span class="chip" id="v-radius" title="호재 유형별 영향 반경 직접 설정">⚙ 반경 설정</span>
-    <span class="chip" id="v-settings" style="display:none" onclick="window.open('settings.html','_blank')" title="등급 눈금(면적·금액·세대수)과 영향 반경을 thresholds.json에 직접 설정 — 운영자 전용">⚙ 기준 설정</span>
+    <span class="chip" id="v-settings" onclick="window.open('settings.html','_blank')" title="등급 눈금(면적·금액·세대수)과 영향 반경을 thresholds.json에 직접 설정 — 운영자 전용">⚙ 기준 설정</span>
     <span class="chip" onclick="window.open('rail_reference.html','_blank')" title="신규 철도 노선·역사 좌표 대장 (영향권 기준)">🚈 노선·역 대장</span>
     <span class="chip" onclick="window.open('methodology.html','_blank')" title="데이터 소스·추출·가공·매핑 방법 (운영 문서)">📄 데이터·방법론</span>
   </div>
@@ -3060,7 +3060,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260719z");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260720a");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3156,7 +3156,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260719z"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260720a"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3182,7 +3182,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260719z");
+  const CB = "?b=" + (window.BUILD || "20260720a");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
@@ -3221,14 +3221,10 @@ function updateCenterLabel() {
 }
 </script>
 <script>
-// 기준 설정 진입점은 **로컬(운영자)에서만** 보인다.
-// 공개본에는 settings_server.py가 없어 저장이 안 되고, 등급 기준은 방문자가 정할 것이 아니다.
-// (settings.html 자체도 배포 목록에 넣지 않는다 — site_manifest는 index.html이 참조하는 파일을 읽으므로
-//  이 링크가 window.open 문자열이라 자동 수집되지 않는다. 의도된 것이다.)
-if (["localhost", "127.0.0.1", ""].includes(location.hostname)) {
-  const _s = document.getElementById("v-settings");
-  if (_s) _s.style.display = "";
-}
+// 기준 설정 진입점 — 어디서든 보인다(2026-07-19 사용자 지시 "등급 셋팅하는 페이지도 연결해줘야지").
+// ⚠ **공개본에서는 저장이 안 된다**(정적 호스팅은 파일을 못 쓴다). settings.html이 그 사실을
+//    페이지 상단 배너로 먼저 알린다 — 편집 다 하고 나서 저장 실패를 알게 되면 안 되므로.
+document.getElementById("v-settings")?.style.removeProperty("display");
 </script>
 </body>
 </html>
