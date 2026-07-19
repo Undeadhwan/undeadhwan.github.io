@@ -16176,9 +16176,7 @@
    "last_movement": "2024-02-21",
    "block_unresolved": true,
    "block": "3",
-   "lot": "2",
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "lot": "2"
   },
   {
    "title": "당수동 수원당수 성산타워 (제1종근린생활시설, 연면적 17천㎡)",
@@ -16190,8 +16188,8 @@
    "arch_gb": "신축",
    "pk": "1000000000000000425051",
    "splot": "수원당수공공주택지구",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "경기",
@@ -16233,12 +16231,13 @@
    "rcept_dt": "20251209",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     126.941387,
-     37.288887
+     126.943143,
+     37.28518
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -16258,10 +16257,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-12-09",
-   "block_unresolved": true,
    "block": "상업용지3-1",
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "geo_basis": "택지정보 가구획지 — 41113LH2018001 블록 상업3 필지 1 (상업시설) · 종전 좌표에서 438m 이동"
   },
   {
    "title": "삼동 의왕시 삼동 641 지식산업센터 (공장, 연면적 44천㎡)",
@@ -24861,8 +24858,8 @@
    "arch_gb": "신축",
    "pk": "1000000000000000671742",
    "splot": "성남금토 공공주택지구",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "경기",
@@ -24902,12 +24899,13 @@
    "rcept_dt": "20250729",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     127.075674,
-     37.408792
+     127.098075,
+     37.40782
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -24922,8 +24920,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-07-29",
-   "block_unresolved": true,
-   "block": "상업 1-9"
+   "block": "상업 1-9",
+   "geo_basis": "택지정보 가구획지 — 41130LH2018002 블록 상1 필지 9 (상업시설) · 종전 좌표에서 1983m 이동"
   },
   {
    "title": "금토동 성남금토 공공주택지구 상업시설용지 1-2,3BL (업무시설, 연면적 18천㎡)",
