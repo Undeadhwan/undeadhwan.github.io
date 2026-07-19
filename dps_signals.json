@@ -1,6 +1,6 @@
 {
- "_note": "공공건축 설계공모(건축HUB 설계공모 정보서비스) → 계획단계 후보. 위치·연면적·총사업비는 공고 원문값. 등급=총사업비(A500억/B200억/C100억) 또는 연면적 중 높은 쪽 — 문턱 가안(DPS_COST_A/B/C로 조정). 지자체 자체 공모는 미등록될 수 있어 커버리지 100% 아님(정직 표기).",
- "generated": "2026-07-19 00:55",
+ "_note": "공공건축 설계공모(건축HUB 설계공모 정보서비스) → 계획단계 후보. 위치·연면적·총사업비는 공고 원문값. 등급=**금액 우선**(총사업비 있으면 사업비, 없으면 연면적) — 눈금 SSOT: grade.py [인프라 A500억/B150억/C30억]. 지자체 자체 공모는 미등록될 수 있어 커버리지 100% 아님(정직 표기).",
+ "generated": "2026-07-19 18:06",
  "signals": [
   {
    "title": "[1단계] 보령 원산도 해양레포츠센터 조성사업 2단계공모",
@@ -179,7 +179,7 @@
    "title": "옹진군 농업기술센터 신축사업 제안공모",
    "cat": "인프라",
    "sub": "공공시설",
-   "lvl": "C",
+   "lvl": "B",
    "geometry": {
     "type": "Point",
     "coordinates": [
@@ -265,7 +265,7 @@
    "title": "주민 복합커뮤니티센터 건립사업 설계공모",
    "cat": "인프라",
    "sub": "문화·관광·체육",
-   "lvl": "C",
+   "lvl": "B",
    "geometry": {
     "type": "Point",
     "coordinates": [
@@ -351,7 +351,7 @@
    "title": "아산시 장애인복지관 건립사업",
    "cat": "인프라",
    "sub": "문화·관광·체육",
-   "lvl": "C",
+   "lvl": "B",
    "geometry": {
     "type": "Point",
     "coordinates": [
@@ -735,49 +735,6 @@
    "first_seen": "2026-07-18"
   },
   {
-   "title": "학성동 주민자치센터 건립사업 설계공모",
-   "cat": "인프라",
-   "sub": "공공시설",
-   "lvl": "C",
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     127.944841,
-     37.353399
-    ]
-   },
-   "sd": "강원",
-   "sg": "원주시",
-   "addr": "강원특별자치도 원주시 학성동 223-75, 223-77",
-   "area_m2": 450,
-   "cost_won": 2300800000,
-   "purp": "제1종근린생활시설",
-   "arch_act": "신축",
-   "order_inst": "강원특별자치도 원주시",
-   "inst_type": "지자체",
-   "phase": "계획",
-   "current_stage": "설계공모 완료·심사결과등록",
-   "status": "활성",
-   "confirmed": false,
-   "notice_day": "2025-11-03",
-   "last_movement": "2025-11-03",
-   "pt_type": "facility",
-   "geo_prec": "parcel",
-   "src_tier": "official_notice",
-   "src": "https://www.hub.go.kr/portal/dps/dsr/idx-dsr-selectDesignPbpPbancList.do",
-   "pbanc_no": "D254301068C",
-   "_dps": true,
-   "geo_approx": false,
-   "stage_history": [
-    {
-     "stage": "계획",
-     "date": "2025-11-03",
-     "basis": "source"
-    }
-   ],
-   "first_seen": "2026-07-18"
-  },
-  {
    "title": "풍산농공단지 청년문화센터 건립 일반설계공모",
    "cat": "인프라",
    "sub": "문화·관광·체육",
@@ -1125,7 +1082,7 @@
    "title": "전북연구원 건립사업(국산목재 목조건축 실연사업) 건축설계공모",
    "cat": "인프라",
    "sub": "공공시설",
-   "lvl": "C",
+   "lvl": "B",
    "geometry": {
     "type": "Point",
     "coordinates": [
@@ -1211,7 +1168,7 @@
    "title": "내포-서산 공연예술지원센터(복합문화공간) 건립사업 설계공모",
    "cat": "인프라",
    "sub": "문화·관광·체육",
-   "lvl": "C",
+   "lvl": "B",
    "geometry": {
     "type": "Point",
     "coordinates": [
@@ -1423,49 +1380,6 @@
    "first_seen": "2026-07-18"
   },
   {
-   "title": "예산군 대흥면 기초생활거점조성사업 의좋은 문화뜨락 설계공모(제안공모)",
-   "cat": "인프라",
-   "sub": "문화·관광·체육",
-   "lvl": "C",
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.791284,
-     36.606285
-    ]
-   },
-   "sd": "충남",
-   "sg": "예산군",
-   "addr": "충청남도 예산군 대흥면 상중리 274-3",
-   "area_m2": 530,
-   "cost_won": 2993200000,
-   "purp": "제1종근린생활시설",
-   "arch_act": "신축",
-   "order_inst": "충청남도",
-   "inst_type": "지자체",
-   "phase": "계획",
-   "current_stage": "설계공모 완료·심사결과등록",
-   "status": "활성",
-   "confirmed": false,
-   "notice_day": "2025-06-26",
-   "last_movement": "2025-06-26",
-   "pt_type": "facility",
-   "geo_prec": "parcel",
-   "src_tier": "official_notice",
-   "src": "https://www.hub.go.kr/portal/dps/dsr/idx-dsr-selectDesignPbpPbancList.do",
-   "pbanc_no": "D252600912C",
-   "_dps": true,
-   "geo_approx": false,
-   "stage_history": [
-    {
-     "stage": "계획",
-     "date": "2025-06-26",
-     "basis": "source"
-    }
-   ],
-   "first_seen": "2026-07-18"
-  },
-  {
    "title": "내수면 창업지원 비즈니스센터 건립사업 건축설계공모",
    "cat": "인프라",
    "sub": "공공시설",
@@ -1598,7 +1512,7 @@
    "title": "보령 문화테마파크 조성사업 설계공모",
    "cat": "인프라",
    "sub": "문화·관광·체육",
-   "lvl": "C",
+   "lvl": "B",
    "geometry": {
     "type": "Point",
     "coordinates": [
@@ -1718,49 +1632,6 @@
     {
      "stage": "계획",
      "date": "2025-04-14",
-     "basis": "source"
-    }
-   ],
-   "first_seen": "2026-07-18"
-  },
-  {
-   "title": "추자 보물섬 실크로드 조성사업",
-   "cat": "인프라",
-   "sub": "공공시설",
-   "lvl": "C",
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.323104,
-     33.939606
-    ]
-   },
-   "sd": "제주",
-   "sg": "제주시",
-   "addr": "제주특별자치도 제주시 추자면 신양리 874-1번지 외 6필지",
-   "area_m2": 584,
-   "cost_won": 2820580000,
-   "purp": "제1종근린생활시설",
-   "arch_act": "신축",
-   "order_inst": "제주특별자치도",
-   "inst_type": "지자체",
-   "phase": "계획",
-   "current_stage": "설계공모 완료·심사결과등록",
-   "status": "활성",
-   "confirmed": false,
-   "notice_day": "2025-02-28",
-   "last_movement": "2025-02-28",
-   "pt_type": "facility",
-   "geo_prec": "parcel",
-   "src_tier": "official_notice",
-   "src": "https://www.hub.go.kr/portal/dps/dsr/idx-dsr-selectDesignPbpPbancList.do",
-   "pbanc_no": "D250900680C",
-   "_dps": true,
-   "geo_approx": false,
-   "stage_history": [
-    {
-     "stage": "계획",
-     "date": "2025-02-28",
      "basis": "source"
     }
    ],
@@ -2028,7 +1899,7 @@
    "title": "보령 지식산업센터 건립사업 설계공모",
    "cat": "일자리",
    "sub": "지식산업센터",
-   "lvl": "C",
+   "lvl": "B",
    "geometry": {
     "type": "Point",
     "coordinates": [
@@ -2114,7 +1985,7 @@
    "title": "가칭)경상북도교육청 독도교육원 건립공사",
    "cat": "인프라",
    "sub": "공공시설",
-   "lvl": "C",
+   "lvl": "B",
    "geometry": {
     "type": "Point",
     "coordinates": [
@@ -2157,7 +2028,7 @@
    "title": "연동주민센터 청사 신축사업",
    "cat": "인프라",
    "sub": "공공시설",
-   "lvl": "C",
+   "lvl": "B",
    "geometry": {
     "type": "Point",
     "coordinates": [
@@ -2243,7 +2114,7 @@
    "title": "가칭)경상북도교육청 영천도서관 건립공사 설계용역",
    "cat": "인프라",
    "sub": "문화·관광·체육",
-   "lvl": "C",
+   "lvl": "B",
    "geometry": {
     "type": "Point",
     "coordinates": [
@@ -2544,7 +2415,7 @@
    "title": "보령 스포츠파크 에어돔 건립사업 제안설계공모",
    "cat": "인프라",
    "sub": "문화·관광·체육",
-   "lvl": "B",
+   "lvl": "C",
    "geometry": {
     "type": "Point",
     "coordinates": [
@@ -2673,7 +2544,7 @@
    "title": "가칭)경상북도교육청 유아교육진흥원 신축공사 설계공모",
    "cat": "인프라",
    "sub": "공공시설",
-   "lvl": "C",
+   "lvl": "B",
    "geometry": {
     "type": "Point",
     "coordinates": [
@@ -2888,7 +2759,7 @@
    "title": "문화의 거리 공영주차장 조성사업 설계공모",
    "cat": "인프라",
    "sub": "문화·관광·체육",
-   "lvl": "C",
+   "lvl": "B",
    "geometry": {
     "type": "Point",
     "coordinates": [
@@ -3017,7 +2888,7 @@
    "title": "거룡어울림센터 조성사업",
    "cat": "인프라",
    "sub": "문화·관광·체육",
-   "lvl": "C",
+   "lvl": "B",
    "geometry": {
     "type": "Point",
     "coordinates": [

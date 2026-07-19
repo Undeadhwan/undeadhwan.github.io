@@ -92,8 +92,8 @@
   <tr><td><span class="tag live">가동</span><b>나라장터 입찰공고 API</b></td><td><code>apis.data.go.kr/1230000/ad/BidPublicInfoService</code></td><td>전국 (현재 active_scope=수도권)</td><td>용역·공사 입찰공고 = 사업의 "움직임" (타당성→설계→공사 단계 증거)</td><td><code>collect_capital.py</code></td></tr>
   <tr><td><span class="tag live">가동</span><b>DART 공시 API</b></td><td><code>opendart.fss.or.kr/api</code></td><td>전국</td><td>유형자산 취득·신규시설투자 = 기업이전/사옥·공장 신호</td><td><code>collect_capital.py</code></td></tr>
   <tr><td><span class="tag live">가동</span><b>공동주택 관리정보 API</b></td><td><code>apis.data.go.kr/1613000/AptListService3</code> + <code>AptBasisInfoServiceV4</code></td><td><b>전국 22,235단지</b></td><td>단지명·법정동코드·세대수·준공년월·도로명주소 (아파트는 신호의 파생 참조 정보, P4)</td><td><code>apt_list_all.py</code> → <code>build_apts_all.py</code></td></tr>
-  <tr><td><span class="tag live">가동</span><b>건축HUB 건축인허가 API</b></td><td><code>apis.data.go.kr/1613000/ArchPmsHubService/getApBasisOulnInfo</code> <span class="note">⚠ Accept 헤더 필수(없으면 빈 200 응답)</span></td><td>전국 (현재 서울 467동)</td><td><b>신축</b> 대형건물(연면적1만㎡↑, 업무·판매·의료·공장·교육연구·방송통신·운수·숙박·근생·문화체육 등)의 주용도·연면적·허가/착공/사용승인일 → <b>인프라·일자리 발견형 후보</b>(confirmed:false). 최근성 게이트(허가/착공/준공 최근분)+신축만으로 <b>delta</b>만 남김(증축=totArea가 증축후 전체라 면적뻥튀기, 용도변경/대수선=리모델 → 제외). 서울 326건</td><td><code>arch_fetch.py</code></td></tr>
-  <tr><td><span class="tag live">가동</span><b>공공건축 설계공모</b> <span class="note">(건축HUB 설계공모 정보서비스)</span></td><td><code>hub.go.kr/portal/dps/dsr/…</code> <span class="note">⚠ 공식 OpenAPI 없음 — 포털 폼(CSRF+세션) 재현</span></td><td><b>전국 17시도 균일</b></td><td><b>계획 단계</b> 공공건축(설계공모 공고·당선). 위치(지번)·건축물규모·총사업비·주용도·발주기관 = 공고 원문값. <b>건축허가보다 이른 단계라 delta 순도 최고</b>, 또한 공공건축물은 허가가 아닌 <b>협의</b> 대상이라 건축인허가 DB에 안 잡히는 경우를 보완(어울림플라자 누락 사고가 계기). 연면적 1만㎡ 미만 중형 공공시설도 여기서만 포착. 등급=총사업비(A500억/B200억/C100억) 또는 연면적 중 높은 쪽 — <b>문턱 가안</b>. <b>한계</b>: 지자체 자체 공모(서울시 PROJECT SEOUL 등) 미등록 가능 → 커버리지 100% 아님</td><td><code>dps_fetch.py</code></td></tr>
+  <tr><td><span class="tag live">가동</span><b>건축HUB 건축인허가 API</b></td><td><code>apis.data.go.kr/1613000/ArchPmsHubService/getApBasisOulnInfo</code> <span class="note">⚠ Accept 헤더 필수(없으면 빈 200 응답)</span></td><td>전국 <b>5,057개 동</b></td><td><b>신축</b> 대형건물(연면적 <b>1만㎡↑</b>, 단 <b>생활SOC·공공생활시설은 3천㎡↑</b> — 2026-07-19, 업무·판매·의료·공장·교육연구·방송통신·운수·숙박·근생·문화체육 등)의 주용도·연면적·허가/착공/사용승인일 → <b>인프라·일자리 발견형 후보</b>(confirmed:false). 생활SOC는 주용도가 업무·교육연구여도 <b>일자리가 아니라 인프라</b>로 분류한다(구립도서관·복합문화센터가 '직장·산업' 축에 얹히던 것을 교정 — 서울 실측 29건 중 7건). 최근성 게이트(허가/착공/준공 최근분)+신축만으로 <b>delta</b>만 남김(증축=totArea가 증축후 전체라 면적뻥튀기, 용도변경/대수선=리모델 → 제외). 서울 326건</td><td><code>arch_fetch.py</code></td></tr>
+  <tr><td><span class="tag live">가동</span><b>공공건축 설계공모</b> <span class="note">(건축HUB 설계공모 정보서비스)</span></td><td><code>hub.go.kr/portal/dps/dsr/…</code> <span class="note">⚠ 공식 OpenAPI 없음 — 포털 폼(CSRF+세션) 재현</span></td><td><b>전국 17시도 균일</b></td><td><b>계획 단계</b> 공공건축(설계공모 공고·당선). 위치(지번)·건축물규모·총사업비·주용도·발주기관 = 공고 원문값. <b>건축허가보다 이른 단계라 delta 순도 최고</b>, 또한 공공건축물은 허가가 아닌 <b>협의</b> 대상이라 건축인허가 DB에 안 잡히는 경우를 보완(어울림플라자 누락 사고가 계기). 연면적 1만㎡ 미만 중형 공공시설도 여기서만 포착. 등급=<b>금액 우선</b> — 총사업비가 있으면 사업비로, 없으면 연면적으로(2026-07-19 사용자 확정 "금액 우선으로 하자"). 눈금은 <code>grade.py</code> SSOT(인프라 A500억/B150억/C30억)에 위임 — 종전엔 여기만 별도 눈금(A500/B200/C100억)과 <i>높은 쪽</i> 규칙을 써서 같은 건물이 소스에 따라 다른 등급을 받았다(기준 일원화 위반, 실측 14건 등급 변동·탈락 0). <b>한계</b>: 지자체 자체 공모(서울시 PROJECT SEOUL 등) 미등록 가능 → 커버리지 100% 아님</td><td><code>dps_fetch.py</code></td></tr>
     <tr><td><span class="tag live">가동</span><b>OSM 신규 도로</b></td><td><code>overpass-api.de</code> (highway=construction/proposed × motorway·trunk·primary)</td><td>수도권 30노선</td><td><b>고속도로·간선 신설/확장/지하화</b> 실선형(ODbL). 등급=도로등급(고속=A/간선·터널=B/일반=C, §3.3.1 교통>도로 일치). <b>노선 자체가 호재</b>(~1.2km 샘플 다점 신호, 노선당 1건 집계) + IC·JC=점 관리(철도 역 개념, OSM 태깅 확보 시). 건설중=실선/계획=점선(§7). <b>영향권은 이원 관리(§6-2)</b>: 일반도로=선 회랑 / 전용도로=IC 점만. 수기 확정 신호와 같은 사업이면 <code>road_ref</code>로 병합(확정이 선형 승계, 이중 카운트 방지)</td><td><code>build_road.py</code> → <code>gen_reference.py</code>(대장 도로 탭)</td></tr>
   <tr><td><span class="tag live">가동</span><b>브이월드 지오코더 2.0</b></td><td><code>api.vworld.kr/req/address</code></td><td>전국</td><td>도로명/지번 주소 → 좌표 (도로명 road 우선, 지번 parcel 폴백)</td><td><code>build_apts_all.py</code>, <code>geocode_vworld.py</code></td></tr>
   <tr><td><span class="tag live">가동</span><b>행정경계 geojson</b></td><td>시군구=공공 경계(SGIS/행안부) · 법정동=브이월드 WFS <code>lt_c_ademd</code>(읍면동경계, 자유이용)</td><td>시군구 251 전국 / 법정동 <b>수도권 1,363</b>(서울 467·경기 747·인천 149)</td><td>지도 폴리곤·집계 단위. 법정동은 정centroid에 동배지·<code>dongRelation</code> 소재/반경 판정. <b>지방 법정동 확장이 남은 과제</b>(같은 WFS 방식으로 시도 추가)</td><td><code>sgg_all.geojson</code>, <code>seoul_bdong.geojson</code>, <code>capital_bdong.geojson</code> (<code>build_seoul_bdong.py</code>/<code>build_capital_bdong.py</code>)</td></tr>
@@ -271,8 +271,26 @@ DART 투자공시는 목적물 용도가 공시에 없어 <b>중분류 미상</b
   <tr><td><b>인프라·생활SOC (2026-07-19 신설)</b></td><td>500억</td><td>150억</td><td>30억</td></tr>
 </table>
 <p class="note">⚠ 유형별 A/B/C <b>비율은 맞추지 않는다</b>(사용자 지시 "각 유형별 A,B,C가 같을 필요없어. 심플한 기준으로").
-⚠ 생활SOC 눈금은 표본이 얇다(나라장터 30일 8건, 57~170억) — 365일 표본 확보 후 재검토 대상.
-검증: 공항동 생활SOC(346억)→B · 관음 행정복지센터(170억)→B · 오룡 복합문화센터(132억)→C.</p>
+✅ 생활SOC 눈금 <b>365일 표본으로 재검토 완료</b>(2026-07-19): 나라장터 전국 365일 146,708건 → 생활SOC 70건
+(A 1 · B 10 · C 59, 사업비 중앙값 65억·최대 944억). 30일 8건 표본으로 잡은 눈금이 실표본에서 유지된다.
+검증: 공항동 생활SOC(346억)→B · 관음 행정복지센터(170.1억)→B · 오룡 복합문화센터(132.1억)→C
+— 뒤 두 건은 <b>실제 공고로 확인</b>(관음더하모니센터·오룡 복합문화센터).</p>
+
+<h3>§등급 판정 4규칙 (2026-07-19 사용자 확정 — <code>grade.py</code> 단일 SSOT)</h3>
+<p>종전엔 눈금이 <code>arch_fetch</code>·<code>dart_fetch</code>·<code>road_bid_fetch</code>·<code>dps_fetch</code> <b>네 곳</b>에 흩어져
+같은 사업이 소스에 따라 다른 등급을 받았다. 판정 규칙도 파일마다 달랐다(높은 쪽 / 금액 우선 / 면적 폴백).
+아래 4줄이 <b>전 소스 공통</b>이며 <code>grade.py</code>가 유일한 구현이다.</p>
+<table>
+  <tr><th>#</th><th>규칙</th><th>근거</th></tr>
+  <tr><td>1</td><td><b>금액 우선</b> — 사업비가 있으면 사업비로 판정</td><td>"보통 금액이 와닿거든" — 사용자가 보는 근거와 등급이 같아야 한다</td></tr>
+  <tr><td>2</td><td><b>사업비가 문턱 미달이면 탈락</b> — 면적으로 구제하지 않는다</td><td>"사업비에서 미달이면 탈락이지". 폴백하면 20억짜리가 연면적 5만㎡라는 이유로 A가 된다</td></tr>
+  <tr><td>3</td><td><b>금액이 없으면 면적으로</b> — 3천㎡ 이상이면 최소 C</td><td>건축HUB는 사업비가 없다 → 면적이 유일한 근거</td></tr>
+  <tr><td>4</td><td><b>둘 다 없으면 미정</b> — 버리지 않고 미정으로 표시</td><td>"면적이 없으면 미정". 모르는 것을 '작다'고 부르지 않는다(P2·P5). 사이트 등급축 A/B/C/<b>미정</b>과 일치</td></tr>
+</table>
+<p class="note">⚠ 규칙 4의 함의: 근거가 없는 신호를 <b>QA가 오류로 막으면 안 된다</b>(살리기로 한 것을 QA가 죽이는 모순).
+<code>qa_check</code> §7g는 "근거 없음"이 아니라 <b>"근거가 없는데 등급을 매긴 경우"</b>만 오류로 잡는다.
+⚠ 같은 사업이 소스에 따라 등급이 갈릴 수 있다 — 나라장터·설계공모는 사업비(규칙 1), 건축HUB는 면적(규칙 3).
+근거가 다른 것이지 규칙이 다른 것이 아니다.</p>
 <h3>§7b 보강 — 생활SOC 문턱 3,000㎡ (2026-07-19 사용자 확정)</h3>
 <p>계기: <b>'공항동 생활SOC 복합화 시설'</b>(연면적 5,886㎡·총사업비 346억·2028.8 준공)이 신호에 없었다.
 원인이 <b>세 겹</b>이었다.</p>
