@@ -829,7 +829,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-06-15",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "복합용지2"
   },
   {
    "title": "고척동 고척동 지식산업센터 (공장, 연면적 18천㎡)",
@@ -5209,8 +5210,8 @@
    "arch_gb": "신축",
    "pk": "1000000000000000388627",
    "splot": "CJ공장부지 특별계획구역",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "parcel",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "서울",
@@ -5250,12 +5251,13 @@
    "rcept_dt": "20250321",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     126.849794,
-     37.568446
+     126.844377,
+     37.568281
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -5271,8 +5273,8 @@
    "first_seen": "2026-07-18",
    "last_movement": "2025-03-21",
    "block_unresolved": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "block": "2블록",
+   "geo_basis": "보정 대장: 지번 서울특별시 강서구 가양동 92-1 · 종전 좌표에서 0m 이동. 근거: \"가양동 CJ공장부지 특별계획구역 2BL … 위 치 : 강서구 가양동 92-1번지 일대(대지면적 27,983㎡)\" (https://opengov.seoul.go.kr/sanction/26665560)"
   },
   {
    "title": "가양동 가양동 CJ공장부지 특별계획구역 3블록 (공장, 연면적 355천㎡)",
@@ -5284,8 +5286,8 @@
    "arch_gb": "신축",
    "pk": "1000000000000000421531",
    "splot": "CJ공장부지 특별계획구역",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "parcel",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "서울",
@@ -5325,12 +5327,13 @@
    "rcept_dt": "20250321",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     126.849794,
-     37.568446
+     126.846104,
+     37.56728
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -5346,8 +5349,8 @@
    "first_seen": "2026-07-18",
    "last_movement": "2025-03-21",
    "block_unresolved": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "block": "3블록",
+   "geo_basis": "보정 대장: 지번 서울특별시 강서구 가양동 63-1 · 종전 좌표에서 0m 이동. 근거: \"가양동 CJ공장부지 특별계획구역 3BL … 위 치 : 강서구 가양동 63-1번지 일대(대지면적 45,209㎡) … 연면적 355,740.35㎡\" (https://opengov.seoul.go.kr/sanction/26665560)"
   },
   {
    "title": "가양동 가양동 CJ공장부지 특별계획구역 1블록 (판매시설, 연면적 198천㎡)",
@@ -5359,8 +5362,8 @@
    "arch_gb": "신축",
    "pk": "1000000000000000434059",
    "splot": "CJ공장부지 특별계획구역",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "parcel",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "서울",
@@ -5400,12 +5403,13 @@
    "rcept_dt": "20250321",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     126.849794,
-     37.568446
+     126.843866,
+     37.567504
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -5421,8 +5425,8 @@
    "first_seen": "2026-07-18",
    "last_movement": "2025-03-21",
    "block_unresolved": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "block": "1블록",
+   "geo_basis": "보정 대장: 지번 서울특별시 강서구 가양동 100-1 · 종전 좌표에서 0m 이동. 근거: \"가양동 CJ공장부지 특별계획구역 1BL … 위 치 : 강서구 가양동 100-1번지 일대(대지면적 20,494㎡)\" (https://opengov.seoul.go.kr/sanction/26665560)"
   },
   {
    "title": "마곡동 대웅 마곡연구소 (교육연구시설, 연면적 49천㎡)",
@@ -5817,8 +5821,8 @@
    "arch_gb": "신축",
    "pk": "1000000000000000539249",
    "splot": "특별계획구역5",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "서울",
@@ -5856,12 +5860,13 @@
    "rcept_dt": "20240619",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     126.828405,
-     37.573369
+     126.831552,
+     37.572321
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "계획",
@@ -5871,9 +5876,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "block_unresolved": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "block": "DSP1-1,2",
+   "geo_basis": "택지정보 가구획지 — 11500DA2010001 블록 지DSP1 필지 1 (지원시설) · 종전 좌표에서 300m 이동"
   },
   {
    "title": "마곡동 마곡동 특별계획구역6 DSP2블록 (업무시설, 연면적 54천㎡)",
@@ -5885,8 +5889,8 @@
    "arch_gb": "신축",
    "pk": "1000000000000000504262",
    "splot": "특별계획구역6",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "서울",
@@ -5924,12 +5928,13 @@
    "rcept_dt": "20240425",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     126.828405,
-     37.573369
+     126.826478,
+     37.563738
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "계획",
@@ -5939,9 +5944,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "block_unresolved": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "block": "DSP2블록",
+   "geo_basis": "택지정보 가구획지 — 11500DA2010001 블록 업CP2 필지 2 (업무시설) · 종전 좌표에서 1078m 이동"
   },
   {
    "title": "마곡동 강서구 통합신청사 (업무시설, 연면적 59천㎡)",
@@ -6016,7 +6020,8 @@
    "last_movement": "2023-07-06",
    "block_unresolved": true,
    "superseded_by": "S-0007",
-   "superseded_note": "확정 신호 S-0007로 승격됨 — 지도·목록에서 제외(계보는 보존). 후보 좌표는 확정본에서 426m 떨어져 있었다. ⚠ 등급 불일치(확정 B ↔ 후보 A) — 기준 확인 필요."
+   "superseded_note": "확정 신호 S-0007로 승격됨 — 지도·목록에서 제외(계보는 보존). 후보 좌표는 확정본에서 426m 떨어져 있었다. ⚠ 등급 불일치(확정 B ↔ 후보 A) — 기준 확인 필요.",
+   "block": "공공F7"
   },
   {
    "title": "마곡동 공공형 지식산업센터 (업무시설, 연면적 46천㎡)",
@@ -6091,7 +6096,8 @@
    "first_seen": "2026-07-18",
    "last_movement": "2024-01-08",
    "geo_basis": "보정 대장: 마곡 도시개발구역 산업시설용지 D15 + 지원시설용지 Ds13 (5필지 통합 중심). 블록 근거: 서울시 보도자료 원문(2020-12-10, HWPX) — \"대상지는 강서구에 위치한 마곡도시개발사업 지구단위계획구역 내 산업시설용지(D15, 9,080㎡) 및 지원시설용지(Ds13, 3,869㎡)\". 사업 실재·발주처 확인: 서울시 건설알림이(발주 서울주택도시공사, 착공 2023-11-09). 동일 사업 확증: 건축HUB 연면적 46,304㎡. 좌표 출처: 국토부 택지정보시스템 가구및획지경계도(2026-07-08). 종전 지구명 POI 좌표에서 1,828m 이동. (https://opengov.seoul.go.kr/press/21803760)",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "D15"
   },
   {
    "title": "마곡동 마곡동 특별계획구역5 DSP1-3~6 (제2종근린생활시설, 연면적 21천㎡)",
@@ -6158,8 +6164,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
    "block_unresolved": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "block": "DSP1-3~6"
   },
   {
    "title": "신촌동 제 5공학관 (교육연구시설, 연면적 15천㎡)",
@@ -9081,6 +9086,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
    "block_unresolved": true,
+   "block": "2-2",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -9162,7 +9168,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-11-28",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "2-5"
   },
   {
    "title": "고덕동 아산 바이오메디컬 클러스터 (업무시설, 연면적 15천㎡)",
@@ -9236,6 +9243,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-06-10",
    "block_unresolved": true,
+   "block": "5-1블록",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -10017,8 +10025,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2025-11-04",
    "block_unresolved": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "block": "산업 21-2"
   },
   {
    "title": "가재동 송탄농협 종합타운 (판매시설, 연면적 12천㎡)",
@@ -10424,6 +10431,8 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
    "block_unresolved": true,
+   "block": "산업9BL",
+   "lot": "1획지",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -10492,6 +10501,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
    "block_unresolved": true,
+   "block": "산업12-4블록",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -10573,7 +10583,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-10-17",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "산업",
+   "lot": "8-1"
   },
   {
    "title": "도일동 DOOSAN 두산테스나 (공장, 연면적 49천㎡)",
@@ -10585,8 +10597,8 @@
    "arch_gb": "신축",
    "pk": "1000000000000000495014",
    "splot": "브레인시티 일반산업단지",
-   "geo_prec": "zone_poi",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "경기",
@@ -10626,12 +10638,13 @@
    "rcept_dt": "20260610",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     127.087248,
-     37.038635
+     127.092949,
+     37.039487
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -10646,9 +10659,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-06-10",
-   "block_unresolved": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "block": "산업18-1",
+   "geo_basis": "택지정보 가구획지 — 41220PV2016002 블록 산업18 필지 1 (산업용지) · 종전 좌표에서 515m 이동"
   },
   {
    "title": "신모산동 미코세라믹스 안성 E동 (공장, 연면적 19천㎡)",
@@ -10872,7 +10884,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-10-25",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "A15블록"
   },
   {
    "title": "오산동 오산동 881-1 근린생활시설 및 업무시설 (제2종근린생활시설, 연면적 32천㎡)",
@@ -12238,8 +12251,8 @@
    "arch_gb": "신축",
    "pk": "1124100298085",
    "splot": "화성동탄2택지개발예정지구",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "경기",
@@ -12277,12 +12290,13 @@
    "rcept_dt": "20220908",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     127.098646,
-     37.188058
+     127.099434,
+     37.166626
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "계획",
@@ -12292,7 +12306,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "block_unresolved": true
+   "block": "근상32",
+   "lot": "2",
+   "geo_basis": "택지정보 가구획지 — 41590MX2008001 블록 D32-2 필지 1 (단독주택) · 종전 좌표에서 2370m 이동"
   },
   {
    "title": "산척동 제2종근린생활시설 (제2종근린생활시설, 연면적 17천㎡)",
@@ -12769,7 +12785,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "1-",
+   "lot": "1"
   },
   {
    "title": "세류동 세류동 1154-19 (업무시설, 연면적 10천㎡)",
@@ -13879,7 +13897,9 @@
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18"
+   "last_movement": "2026-07-18",
+   "block": "27",
+   "lot": "5"
   },
   {
    "title": "영천동 영천동 동탄2 택지개발예정지구 52 1 (공장, 연면적 80천㎡)",
@@ -13944,7 +13964,9 @@
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18"
+   "last_movement": "2026-07-18",
+   "block": "52",
+   "lot": "1"
   },
   {
    "title": "영천동 동탄2신도시 지원시설용지 50-1BL 지식산업센터(동탄 금강 펜테리움IT타워 4차) (공장, 연면적 29천㎡)",
@@ -14009,7 +14031,9 @@
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18"
+   "last_movement": "2026-07-18",
+   "block": "50",
+   "lot": "1"
   },
   {
    "title": "영천동 동탄2신도시 지원 27-1BL 지식산업센터 (공장, 연면적 24천㎡)",
@@ -14074,7 +14098,8 @@
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18"
+   "last_movement": "2026-07-18",
+   "block": "지원 27-1블록"
   },
   {
    "title": "보라동 업무시설 (업무시설, 연면적 33천㎡)",
@@ -16010,8 +16035,8 @@
    "arch_gb": "신축",
    "pk": "1000000000000000394344",
    "splot": "수원당수지구",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 196,
    "sd": "경기",
@@ -16053,12 +16078,13 @@
    "rcept_dt": "20250721",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     126.941387,
-     37.288887
+     126.943143,
+     37.28518
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -16078,9 +16104,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-07-21",
-   "block_unresolved": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "block": "상업3",
+   "lot": "3",
+   "geo_basis": "택지정보 가구획지 — 41113LH2018001 블록 상업3 필지 1 (상업시설) · 종전 좌표에서 438m 이동"
   },
   {
    "title": "당수동 더드림 (제2종근린생활시설, 연면적 18천㎡)",
@@ -16154,8 +16180,10 @@
    "first_seen": "2026-07-18",
    "last_movement": "2024-02-21",
    "block_unresolved": true,
+   "block": "3",
+   "lot": "2",
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "당수동 수원당수 성산타워 (제1종근린생활시설, 연면적 17천㎡)",
@@ -16236,8 +16264,9 @@
    "first_seen": "2026-07-18",
    "last_movement": "2025-12-09",
    "block_unresolved": true,
+   "block": "상업용지3-1",
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "삼동 의왕시 삼동 641 지식산업센터 (공장, 연면적 44천㎡)",
@@ -16786,7 +16815,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "B1-1,2,3"
   },
   {
    "title": "정자동 정자동 마이온프라자 (제1종근린생활시설, 연면적 16천㎡)",
@@ -16982,7 +17012,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "A-2 블록"
   },
   {
    "title": "상현동 상현동 상현4지구 A1블록 (공장, 연면적 191천㎡)",
@@ -17049,7 +17080,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "geo_basis": "택지정보 가구획지 — 41460DA2021001 블록 A1 필지 A1 (공동주택) · 종전 좌표에서 0m 이동"
+   "geo_basis": "택지정보 가구획지 — 41460DA2021001 블록 A1 필지 A1 (공동주택) · 종전 좌표에서 0m 이동",
+   "block": "A1블록"
   },
   {
    "title": "영덕동 산업시설용지2,3 지식산업센터 (공장, 연면적 152천㎡)",
@@ -19189,7 +19221,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-06-26",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "전기1"
   },
   {
    "title": "고잔동 남동 bt타워 지식산업센터 (공장, 연면적 24천㎡)",
@@ -19941,6 +19974,8 @@
    "first_seen": "2026-07-18",
    "last_movement": "2023-07-14",
    "block_unresolved": true,
+   "block": "8블록",
+   "lot": "1로트",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -20016,6 +20051,8 @@
    "first_seen": "2026-07-18",
    "last_movement": "2023-07-14",
    "block_unresolved": true,
+   "block": "8블록",
+   "lot": "2로트",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -20101,8 +20138,8 @@
    "arch_gb": "신축",
    "pk": "1112100149695",
    "splot": "시흥장현지구",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 240,
    "sd": "경기",
@@ -20140,12 +20177,13 @@
    "rcept_dt": "20220317",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     126.796537,
-     37.380956
+     126.800803,
+     37.370296
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "계획",
@@ -20155,7 +20193,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "block_unresolved": true
+   "block": "자족2-1",
+   "geo_basis": "택지정보 가구획지 — 41390KH2006001 블록 자족2 필지 1 (자족기능확보시설) · 종전 좌표에서 1237m 이동"
   },
   {
    "title": "박달동 박달 하이테크 지식산업센터 (공장, 연면적 70천㎡)",
@@ -20438,6 +20477,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
    "block_unresolved": true,
+   "block": "업무12",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -20506,6 +20546,8 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
    "block_unresolved": true,
+   "block": "자족시설용지",
+   "lot": "4블럭",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -20711,6 +20753,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
    "block_unresolved": true,
+   "block": "A-2 블록",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -20793,6 +20836,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-04-24",
    "block_unresolved": true,
+   "block": "A-1",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -20861,6 +20905,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
    "block_unresolved": true,
+   "block": "B-1블럭",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -23468,8 +23513,8 @@
    "arch_gb": "신축",
    "pk": "1000000000000000642121",
    "splot": "대야3지구 오복동",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 196,
    "sd": "경기",
@@ -23507,12 +23552,13 @@
    "rcept_dt": "20241224",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     126.787987,
-     37.457091
+     126.798279,
+     37.451887
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "계획",
@@ -23522,9 +23568,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "block_unresolved": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "block": "B-1",
+   "geo_basis": "택지정보 가구획지 — 41390LH2009001 블록 B-1 필지 B-1 (공동주택) · 종전 좌표에서 1076m 이동"
   },
   {
    "title": "대야동 신천 센트럴프라자 (제1종근린생활시설, 연면적 13천㎡)",
@@ -23536,8 +23581,8 @@
    "arch_gb": "신축",
    "pk": "1112100141672",
    "splot": "대야3지구 오복동",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 68,
    "sd": "경기",
@@ -23577,12 +23622,13 @@
    "rcept_dt": "20241031",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     126.787987,
-     37.457091
+     126.802676,
+     37.433682
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -23597,9 +23643,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-10-31",
-   "block_unresolved": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "block": "B-5",
+   "geo_basis": "택지정보 가구획지 — 41390LH2009001 블록 B-5 필지 B-5 (공동주택) · 종전 좌표에서 2894m 이동"
   },
   {
    "title": "매화동 매화산업단지 A4-1BL 지식산업센터 건립사업 신축공사 (공장, 연면적 54천㎡)",
@@ -24077,6 +24122,8 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
    "block_unresolved": true,
+   "block": "4",
+   "lot": "3",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -24159,6 +24206,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2025-09-16",
    "block_unresolved": true,
+   "block": "1-A-3BL",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -24227,7 +24275,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "geo_basis": "택지정보 가구획지 — 41290LH2011001 블록 상2 필지 1 (상업시설) · 종전 좌표에서 0m 이동"
+   "geo_basis": "택지정보 가구획지 — 41290LH2011001 블록 상2 필지 1 (상업시설) · 종전 좌표에서 0m 이동",
+   "block": "상업 2"
   },
   {
    "title": "갈현동 과천지식정보타운 지식기반산업용지 9BL(과천 지타운) 신축공사 (업무시설, 연면적 135천㎡)",
@@ -24301,6 +24350,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2024-07-22",
    "block_unresolved": true,
+   "block": "9",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -24369,6 +24419,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
    "block_unresolved": true,
+   "block": "상업2블록",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -24584,8 +24635,8 @@
    "arch_gb": "신축",
    "pk": "1000000000000000223359",
    "splot": "과천지식정보타운 공공주택지구",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 68,
    "sd": "경기",
@@ -24627,12 +24678,13 @@
    "rcept_dt": "20260225",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     127.003147,
-     37.416895
+     126.99053,
+     37.413546
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -24652,7 +24704,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-02-25",
-   "block_unresolved": true
+   "block": "지식 11-3",
+   "geo_basis": "택지정보 가구획지 — 41290LH2011001 블록 지식11 필지 3 (산업시설기타) · 종전 좌표에서 1175m 이동"
   },
   {
    "title": "금토동 CGB(CELL GENE BIOPLATFORM) (공장, 연면적 63천㎡)",
@@ -24805,8 +24858,9 @@
    "first_seen": "2026-07-18",
    "last_movement": "2025-12-31",
    "block_unresolved": true,
+   "block": "자족 7-3블록",
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "금토동 업무시설 (업무시설, 연면적 11천㎡)",
@@ -24880,8 +24934,9 @@
    "first_seen": "2026-07-18",
    "last_movement": "2025-07-29",
    "block_unresolved": true,
+   "block": "상업 1-9",
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "금토동 성남금토 공공주택지구 상업시설용지 1-2,3BL (업무시설, 연면적 18천㎡)",
@@ -24955,7 +25010,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-07-29",
-   "geo_basis": "택지정보 가구획지 — 41130LH2018002 블록 상1 필지 2 (상업시설) · 종전 좌표에서 0m 이동"
+   "geo_basis": "택지정보 가구획지 — 41130LH2018002 블록 상1 필지 2 (상업시설) · 종전 좌표에서 0m 이동",
+   "block": "상업 1-2,3"
   },
   {
    "title": "금토동 업무시설 (업무시설, 연면적 28천㎡)",
@@ -25022,8 +25078,9 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
    "block_unresolved": true,
+   "block": "자족 5-2블럭",
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "금토동 금토동 성남금토공공주택지구 상업 1-6BL (업무시설, 연면적 12천㎡)",
@@ -25090,7 +25147,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "geo_basis": "택지정보 가구획지 — 41130LH2018002 블록 상1 필지 6 (상업시설) · 종전 좌표에서 0m 이동"
+   "geo_basis": "택지정보 가구획지 — 41130LH2018002 블록 상1 필지 6 (상업시설) · 종전 좌표에서 0m 이동",
+   "block": "상업 1-6BL"
   },
   {
    "title": "금토동 켐트로닉스 타워 (업무시설, 연면적 44천㎡)",
@@ -25164,8 +25222,9 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-03-30",
    "block_unresolved": true,
+   "block": "자족시설용지 3BL",
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "금토동 업무시설 (업무시설, 연면적 56천㎡)",
@@ -25177,8 +25236,8 @@
    "arch_gb": "신축",
    "pk": "1000000000000000857751",
    "splot": "성남금토공공주택지구",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "경기",
@@ -25216,12 +25275,13 @@
    "rcept_dt": "20251210",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     127.075674,
-     37.408792
+     127.078828,
+     37.404887
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "계획",
@@ -25231,9 +25291,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "block_unresolved": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "block": "자족4-1,2블럭",
+   "geo_basis": "택지정보 가구획지 — 41130LH2018002 블록 자족4 필지 1 (자족기능확보시설) · 종전 좌표에서 513m 이동"
   },
   {
    "title": "금토동 성남금토 공공주택지구 상업시설용지 1-1BL (업무시설, 연면적 16천㎡)",
@@ -25307,7 +25366,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-07-29",
-   "geo_basis": "택지정보 가구획지 — 41130LH2018002 블록 상1 필지 1 (상업시설) · 종전 좌표에서 0m 이동"
+   "geo_basis": "택지정보 가구획지 — 41130LH2018002 블록 상1 필지 1 (상업시설) · 종전 좌표에서 0m 이동",
+   "block": "상업 1-1"
   },
   {
    "title": "금토동 성남금토 공공주택지구 상업시설용지 1-10,11BL (업무시설, 연면적 22천㎡)",
@@ -25381,7 +25441,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-07-29",
-   "geo_basis": "택지정보 가구획지 — 41130LH2018002 블록 상1 필지 10 (상업시설) · 종전 좌표에서 0m 이동"
+   "geo_basis": "택지정보 가구획지 — 41130LH2018002 블록 상1 필지 10 (상업시설) · 종전 좌표에서 0m 이동",
+   "block": "상업 1-10,11"
   },
   {
    "title": "금토동 성남금토 공공주택지구 상업시설용지 1-7,8BL (업무시설, 연면적 17천㎡)",
@@ -25455,7 +25516,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-07-29",
-   "geo_basis": "택지정보 가구획지 — 41130LH2018002 블록 상1 필지 7 (상업시설) · 종전 좌표에서 0m 이동"
+   "geo_basis": "택지정보 가구획지 — 41130LH2018002 블록 상1 필지 7 (상업시설) · 종전 좌표에서 0m 이동",
+   "block": "상업 1-7,8"
   },
   {
    "title": "창곡동 창곡동 594-1 (운동시설, 연면적 55천㎡)",
@@ -25586,7 +25648,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "도시지원시설용지",
+   "lot": "지원2"
   },
   {
    "title": "상대원동 하이콘빌딩 (공장, 연면적 42천㎡)",
@@ -25828,8 +25892,8 @@
    "arch_gb": "신축",
    "pk": "1000000000000000614086",
    "splot": "성남복정1 공공주택지구",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "경기",
@@ -25869,12 +25933,13 @@
    "rcept_dt": "20260529",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     127.13283,
-     37.459191
+     127.133545,
+     37.464372
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -25889,7 +25954,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-05-29",
-   "block_unresolved": true
+   "block": "업무1-1블록",
+   "geo_basis": "택지정보 가구획지 — 41130LH2018001 블록 D1-1 필지 4 (단독주택) · 종전 좌표에서 576m 이동"
   },
   {
    "title": "하대원동 주식회사 제이비케이랩 (공장, 연면적 11천㎡)",
@@ -27706,7 +27772,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "업무1"
   },
   {
    "title": "향동동 DMC 시티워크 (공장, 연면적 94천㎡)",
@@ -29221,7 +29288,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-04-16",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "상업2-7"
   },
   {
    "title": "원흥동 유익타워 (제2종근린생활시설, 연면적 18천㎡)",
@@ -29418,7 +29486,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "geo_basis": "택지정보 가구획지 — 41281KL2006002 블록 B2-1 필지 1 (도시지원시설용지) · 종전 좌표에서 0m 이동"
+   "geo_basis": "택지정보 가구획지 — 41281KL2006002 블록 B2-1 필지 1 (도시지원시설용지) · 종전 좌표에서 0m 이동",
+   "block": "B2-1"
   },
   {
    "title": "오금동 삼송IDC (방송통신시설, 연면적 78천㎡)",
@@ -31682,6 +31751,8 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-06-02",
    "block_unresolved": true,
+   "block": "관광",
+   "lot": "2-2",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -31750,6 +31821,8 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
    "block_unresolved": true,
+   "block": "상업시설용지",
+   "lot": "상업1",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -33181,6 +33254,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
    "block_unresolved": true,
+   "block": "도시6-1블록",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -33256,6 +33330,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-01-12",
    "block_unresolved": true,
+   "block": "산업19블록",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -33331,6 +33406,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2023-06-21",
    "block_unresolved": true,
+   "block": "도시5블록",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -33399,6 +33475,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
    "block_unresolved": true,
+   "block": "복합5블록",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -33474,6 +33551,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2024-12-26",
    "block_unresolved": true,
+   "block": "산업33블록",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -33549,6 +33627,8 @@
    "first_seen": "2026-07-18",
    "last_movement": "2025-01-08",
    "block_unresolved": true,
+   "block": "변전소1블록",
+   "lot": "T5-1",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -35123,7 +35203,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "I1-1BL"
   },
   {
    "title": "대저2동 부산아울렛(에코델타시티 프로젝트) 신축공사 (판매시설, 연면적 198천㎡)",
@@ -35135,8 +35216,8 @@
    "arch_gb": "신축",
    "pk": "1000000000000000662426",
    "splot": "부산 에코델타시티",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "부산",
@@ -35176,12 +35257,13 @@
    "rcept_dt": "20251204",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     128.940146,
-     35.164793
+     128.923069,
+     35.135223
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -35196,7 +35278,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-12-04",
-   "block_unresolved": true
+   "block": "판매1,2,5",
+   "geo_basis": "택지정보 가구획지 — 26440MX2016001 블록 판매1 필지 판매1 (판매및영업시설) · 종전 좌표에서 3619m 이동"
   },
   {
    "title": "미음동 (주)와이지에스 미음공장 (공장, 연면적 20천㎡)",
@@ -36710,7 +36793,8 @@
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2025-11-14"
+   "last_movement": "2025-11-14",
+   "block": "마리나(I-1)"
   },
   {
    "title": "연산동 연산동 1338-10 (의료시설, 연면적 10천㎡)",
@@ -42071,7 +42155,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "공공1블록"
   },
   {
    "title": "대흥동 대흥동 843 (업무시설, 연면적 12천㎡)",
@@ -42422,8 +42507,8 @@
    "arch_gb": "신축",
    "pk": "1000000000000000380681",
    "splot": "경산대임공공주택지구",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "경북",
@@ -42463,12 +42548,13 @@
    "rcept_dt": "20251104",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     128.74496,
-     35.84312
+     128.746163,
+     35.834635
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -42483,7 +42569,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-11-04",
-   "block_unresolved": true
+   "block": "자족2",
+   "lot": "1",
+   "geo_basis": "택지정보 가구획지 — 47290LH2018001 블록 자족2 필지 3 (자족기능확보시설) · 종전 좌표에서 944m 이동"
   },
   {
    "title": "계양동 계양동 718,719 제1종근린생활시설 (제1종근린생활시설, 연면적 17천㎡)",
@@ -42974,7 +43062,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-03-13",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "산업1"
   },
   {
    "title": "검단동 검단동 1878 (공장, 연면적 14천㎡)",
@@ -45288,7 +45377,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-05-30",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "2-4생활권",
+   "lot": "관2-1-3"
   },
   {
    "title": "반곡동 반곡동 890 (교육연구시설, 연면적 27천㎡)",
@@ -45426,7 +45517,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-10-04",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "3-1생활권",
+   "lot": "청3-14"
   },
   {
    "title": "둔곡동 공장 (공장, 연면적 23천㎡)",
@@ -45911,6 +46004,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2022-04-27",
    "block_unresolved": true,
+   "block": "복합4-7-1",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -45986,6 +46080,8 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-01-16",
    "block_unresolved": true,
+   "block": "4-2생활권",
+   "lot": "대학4-14",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -46054,6 +46150,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
    "block_unresolved": true,
+   "block": "복합4-4-1",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -46129,6 +46226,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2024-07-05",
    "block_unresolved": true,
+   "block": "산업4-10- 2",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -46211,6 +46309,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2025-12-23",
    "block_unresolved": true,
+   "block": "청4-4",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -46286,6 +46385,8 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-01-16",
    "block_unresolved": true,
+   "block": "내 공동캠퍼스 부지",
+   "lot": "(대학-4-12)",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -46361,6 +46462,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2024-02-23",
    "block_unresolved": true,
+   "block": "청6-3",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -46443,6 +46545,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2025-09-04",
    "block_unresolved": true,
+   "block": "청6-5",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -46583,6 +46686,8 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-01-13",
    "block_unresolved": true,
+   "block": "D14-1 블럭",
+   "lot": "로트",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -46658,6 +46763,8 @@
    "first_seen": "2026-07-18",
    "last_movement": "2024-09-13",
    "block_unresolved": true,
+   "block": "5B",
+   "lot": "4L",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -46733,6 +46840,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-02-19",
    "block_unresolved": true,
+   "block": "청5-11",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -46801,6 +46909,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
    "block_unresolved": true,
+   "block": "청5-6",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -46876,6 +46985,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2023-08-30",
    "block_unresolved": true,
+   "block": "청5-1블록",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -46943,7 +47053,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "청5-2"
   },
   {
    "title": "옥산면 센트럴밸리일반산업단지 (주)엠플러스 공장 (공장, 연면적 59천㎡)",
@@ -47010,6 +47121,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
    "block_unresolved": true,
+   "block": "산업4-1 블록",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -47085,6 +47197,7 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-02-10",
    "block_unresolved": true,
+   "block": "산업3-1",
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
@@ -47663,7 +47776,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2023-11-01",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "G1",
+   "lot": "사회복지시설 용지"
   },
   {
    "title": "실옥동 (주)경보제약 ADC공장 (공장, 연면적 13천㎡)",
@@ -48277,7 +48392,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-04-25",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "RD1-3",
+   "lot": "2"
   },
   {
    "title": "원성동 천안오룡지구 민관협력형 도시재생리츠사업 (체육시설) (운동시설, 연면적 20천㎡)",
@@ -48559,7 +48676,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-06-23",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "3B",
+   "lot": "3,4L"
   },
   {
    "title": "이월면 (주)에이치에프엠 진천공장 (공장, 연면적 11천㎡)",
@@ -48632,7 +48751,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-05-21",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "B5"
   },
   {
    "title": "음성읍 진양 폴리우레탄 음성캠퍼스 (공장, 연면적 46천㎡)",
@@ -48644,8 +48764,8 @@
    "arch_gb": "신축",
    "pk": "1000000000000000748920",
    "splot": "용산산업단지",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "충북",
@@ -48685,12 +48805,13 @@
    "rcept_dt": "20250925",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     127.652896,
-     36.943897
+     127.676552,
+     36.937857
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -48705,9 +48826,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-09-25",
-   "block_unresolved": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "block": "산업1-1",
+   "geo_basis": "택지정보 가구획지 — 43770PV2020001 블록 산업1 필지 1 (산업용지) · 종전 좌표에서 2208m 이동"
   },
   {
    "title": "음성읍 (주)디에스피이노베이션 음성공장 (공장, 연면적 17천㎡)",
@@ -48781,8 +48901,8 @@
    "first_seen": "2026-07-18",
    "last_movement": "2025-05-16",
    "block_unresolved": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "block": "8",
+   "lot": "1"
   },
   {
    "title": "왕암동 샘표식품 제천공장 (공장, 연면적 50천㎡)",
@@ -50422,7 +50542,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "block_unresolved": true
+   "block_unresolved": true,
+   "block": "B6-1블럭",
+   "splot": "기아자동차부지 특별계획구역"
   },
   {
    "title": "신림동 하프학당빌딩 (교육연구시설, 연면적 15천㎡)",
@@ -51332,8 +51454,10 @@
    "first_seen": "2026-07-18",
    "last_movement": "2024-10-10",
    "block_unresolved": true,
+   "block": "B1-4블록",
+   "splot": "수서역세권 공공주택지구 업무시설용지",
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "자곡동 수서역세권개발 업무시설 B1-2 (업무시설, 연면적 38천㎡)",
@@ -51344,8 +51468,8 @@
    "purp": "업무시설",
    "arch_gb": "신축",
    "pk": "1000000000000000486339",
-   "geo_prec": "zone_poi",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "서울",
@@ -51385,12 +51509,13 @@
    "rcept_dt": "20260430",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     127.106788,
-     37.481539
+     127.105522,
+     37.481043
     ]
    },
-   "geo_approx": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -51405,9 +51530,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-04-30",
-   "block_unresolved": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "block": "B1-2",
+   "splot": "수서역세권 공공주택지구",
+   "geo_basis": "택지정보 가구획지 — 11680MX2018001 블록 B1 필지 2 (유통업무시설) · 종전 좌표에서 124m 이동"
   },
   {
    "title": "자곡동 수서역세권 공공주택지구 업무시설용지 B1-3블록 업무시설 (업무시설, 연면적 41천㎡)",
@@ -51480,8 +51605,10 @@
    "first_seen": "2026-07-18",
    "last_movement": "2025-04-02",
    "block_unresolved": true,
+   "block": "B1-3블록",
+   "splot": "수서역세권 공공주택지구 업무시설용지",
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "도곡동 도곡동 914-1 (업무시설, 연면적 49천㎡)",
@@ -51999,7 +52126,9 @@
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2025-07-18"
+   "last_movement": "2025-07-18",
+   "block": "지원60-4BL",
+   "splot": "화성 동탄2 택지개발지구"
   }
  ]
 }
