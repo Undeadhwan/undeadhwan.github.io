@@ -46,8 +46,10 @@
     "route_verified": null,
     "audited": "2026-07-16",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geom_partial": true,
+    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 2/18개가 표시 선형 밖(최대 4.0km, 영종역, 청라국제도시역). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -290,7 +292,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -319,29 +321,31 @@
     "note": null,
     "audited": "2026-07-16",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '인천공항1터미널역' — 현재 좌표에서 50m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.45277,
-      37.44715
+      126.45239,
+      37.447495
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.45277,
-     37.44715
+     126.45239,
+     37.447495
     ]
    }
   },
@@ -422,7 +426,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -451,29 +455,31 @@
     "note": null,
     "audited": "2026-07-16",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '영종역' — 현재 좌표에서 4476m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.56339,
-      37.48637
+      126.524251,
+      37.512093
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.56339,
-     37.48637
+     126.524251,
+     37.512093
     ]
    }
   },
@@ -488,7 +494,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -517,29 +523,31 @@
     "note": null,
     "audited": "2026-07-16",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '청라국제도시역' — 현재 좌표에서 3598m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.64952,
-      37.52984
+      126.626711,
+      37.556824
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.64952,
-     37.52984
+     126.626711,
+     37.556824
     ]
    }
   },
@@ -554,7 +562,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -583,29 +591,31 @@
     "note": null,
     "audited": "2026-07-16",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '가정역' — 현재 좌표에서 10m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.67537,
-      37.52471
+      126.675387,
+      37.524805
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.67537,
-     37.52471
+     126.675387,
+     37.524805
     ]
    }
   },
@@ -620,7 +630,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -649,29 +659,31 @@
     "note": null,
     "audited": "2026-07-16",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '작전역' — 현재 좌표에서 14m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.7226,
-      37.5304
+      126.722548,
+      37.530271
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.7226,
-     37.5304
+     126.722548,
+     37.530271
     ]
    }
   },
@@ -884,7 +896,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -913,29 +925,31 @@
     "note": null,
     "audited": "2026-07-16",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '연신내역' — 현재 좌표에서 35m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.92048,
-      37.61863
+      126.920816,
+      37.618813
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.92048,
-     37.61863
+     126.920816,
+     37.618813
     ]
    }
   },
@@ -1148,7 +1162,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "landmark",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -1177,12 +1191,14 @@
     "note": null,
     "audited": "2026-07-16",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "동일 지점명 내부 참조(신내역) — 다른 노선·사업에서 확보된 좌표",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      127.10334,
-      37.6131
+      127.10322,
+      37.61279
      ]
     },
     "stage_history": [
@@ -1198,8 +1214,8 @@
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.10334,
-     37.6131
+     127.10322,
+     37.61279
     ]
    }
   },
@@ -1453,8 +1469,10 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geom_partial": true,
+    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 1/13개가 표시 선형 밖(최대 1.5km, 교산역). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -1591,7 +1609,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -1628,29 +1646,31 @@
     "note": null,
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '장기역' — 현재 좌표에서 23m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.66906,
-      37.64405
+      126.668978,
+      37.644252
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.66906,
-     37.64405
+     126.668978,
+     37.644252
     ]
    }
   },
@@ -1739,7 +1759,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -1776,29 +1796,31 @@
     "note": null,
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '계양역' — 현재 좌표에서 25m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.73618,
-      37.5718
+      126.736023,
+      37.571609
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.73618,
-     37.5718
+     126.736023,
+     37.571609
     ]
    }
   },
@@ -1878,7 +1900,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "parcel",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -1915,29 +1937,36 @@
     "note": null,
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "동일 지점명 내부 참조(부천종합운동장역) — 다른 노선·사업에서 확보된 좌표",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.7973,
-      37.50541
+      126.79725,
+      37.50549
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
+      "date": "2026-07-19",
+      "basis": "observed"
+     },
+     {
+      "stage": "착공",
       "date": "2026-07-18",
       "basis": "observed"
      }
     ],
     "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.7973,
-     37.50541
+     126.79725,
+     37.50549
     ]
    }
   },
@@ -2248,7 +2277,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "parcel",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -2285,29 +2314,36 @@
     "note": null,
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "동일 지점명 내부 참조(삼성역) — 다른 노선·사업에서 확보된 좌표",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      127.06319,
-      37.50892
+      127.06314,
+      37.50886
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
+      "date": "2026-07-19",
+      "basis": "observed"
+     },
+     {
+      "stage": "착공",
       "date": "2026-07-18",
       "basis": "observed"
      }
     ],
     "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.06319,
-     37.50892
+     127.06314,
+     37.50886
     ]
    }
   },
@@ -2470,7 +2506,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "parcel",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -2507,29 +2543,36 @@
     "note": null,
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "동일 지점명 내부 참조(교산역) — 다른 노선·사업에서 확보된 좌표",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      127.20462,
-      37.52753
+      127.19629,
+      37.51438
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
+      "date": "2026-07-19",
+      "basis": "observed"
+     },
+     {
+      "stage": "인가",
       "date": "2026-07-18",
       "basis": "observed"
      }
     ],
     "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.20462,
-     37.52753
+     127.19629,
+     37.51438
     ]
    }
   },
@@ -2746,16 +2789,7 @@
       126.79725,
       37.50549
      ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    }
    },
    "geometry": {
     "type": "Point",
@@ -3381,8 +3415,8 @@
     "route_verified": null,
     "audited": "2026-07-16",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -3555,7 +3589,7 @@
     "phase": "착공",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_report",
     "milestones": [
@@ -3576,29 +3610,31 @@
     "note": null,
     "audited": "2026-07-16",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '어천역' — 현재 좌표에서 44m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.90877,
-      37.25005
+      126.909266,
+      37.249975
      ]
     },
     "stage_history": [
      {
       "stage": "착공",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.90877,
-     37.25005
+     126.909266,
+     37.249975
     ]
    }
   },
@@ -4388,6 +4424,8 @@
     "note": "독골사거리 · 1단계 · 역명 미확정",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -4446,6 +4484,8 @@
     "note": "루원시티 · 1단계 · 역명 미확정",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -4504,6 +4544,8 @@
     "note": "봉수대로 삼거리 · 1단계 · 역명 미확정",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -4562,6 +4604,8 @@
     "note": "중봉교 하부 · 1단계 · 역명 미확정",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -4620,6 +4664,8 @@
     "note": "청라시티타워 측면 · 1단계 · 역명 미확정",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -4678,6 +4724,8 @@
     "note": "청라5교 하부 · 1단계 · 역명 미확정",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -4736,6 +4784,8 @@
     "note": "스타필드 청라 · 2단계 · 역명 미확정",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -4794,6 +4844,8 @@
     "note": "공항철도 환승 · 2단계 · 역명 미확정",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -4892,8 +4944,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -4958,7 +5010,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -5015,29 +5067,31 @@
     "note": null,
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '독정역' — 현재 좌표에서 7m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.67599,
-      37.58486
+      126.675981,
+      37.584927
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.67599,
-     37.58486
+     126.675981,
+     37.584927
     ]
    }
   },
@@ -5052,7 +5106,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -5109,29 +5163,31 @@
     "note": null,
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '걸포북변역' — 현재 좌표에서 52m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.70581,
-      37.63164
+      126.706277,
+      37.631929
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.70581,
-     37.63164
+     126.706277,
+     37.631929
     ]
    }
   },
@@ -5416,16 +5472,7 @@
       127.06314,
       37.50886
      ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    }
    },
    "geometry": {
     "type": "Point",
@@ -8696,8 +8743,8 @@
     "route_verified": null,
     "audited": "2026-07-16",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -8820,7 +8867,7 @@
     "phase": "착공",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "parcel",
     "pt_type": "rail_station",
     "src_tier": "official_report",
     "milestones": [
@@ -8841,29 +8888,22 @@
     "note": null,
     "audited": "2026-07-16",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "동일 지점명 내부 참조(학온역) — 다른 노선·사업에서 확보된 좌표",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.85332,
-      37.40947
+      126.85782,
+      37.40991
      ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    }
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.85332,
-     37.40947
+     126.85782,
+     37.40991
     ]
    }
   },
@@ -8878,7 +8918,7 @@
     "phase": "착공",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "parcel",
     "pt_type": "rail_station",
     "src_tier": "official_report",
     "milestones": [
@@ -8899,29 +8939,22 @@
     "note": null,
     "audited": "2026-07-16",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "동일 지점명 내부 참조(매화역) — 다른 노선·사업에서 확보된 좌표",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.81922,
-      37.40637
+      126.82519,
+      37.40764
      ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    }
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.81922,
-     37.40637
+     126.82519,
+     37.40764
     ]
    }
   },
@@ -8936,7 +8969,7 @@
     "phase": "착공",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "parcel",
     "pt_type": "rail_station",
     "src_tier": "official_report",
     "milestones": [
@@ -8957,29 +8990,22 @@
     "note": null,
     "audited": "2026-07-16",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "동일 지점명 내부 참조(시흥시청역) — 다른 노선·사업에서 확보된 좌표",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.80588,
-      37.38165
+      126.8063,
+      37.3805
      ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    }
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.80588,
-     37.38165
+     126.8063,
+     37.3805
     ]
    }
   },
@@ -9027,8 +9053,8 @@
     "route_verified": null,
     "audited": "2026-07-16",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -9641,8 +9667,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -9818,7 +9844,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -9876,29 +9902,31 @@
     "note": null,
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '신대방역' — 현재 좌표에서 53m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.91362,
-      37.48717
+      126.913362,
+      37.487604
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.91362,
-     37.48717
+     126.913362,
+     37.487604
     ]
    }
   },
@@ -10348,8 +10376,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -10454,7 +10482,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -10505,29 +10533,31 @@
     "note": null,
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '마곡나루역' — 현재 좌표에서 54m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.82787,
-      37.56659
+      126.827292,
+      37.566769
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.82787,
-     37.56659
+     126.827292,
+     37.566769
     ]
    }
   },
@@ -11149,7 +11179,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -11200,29 +11230,31 @@
     "note": null,
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '당산역' — 현재 좌표에서 56m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.90193,
-      37.53393
+      126.902424,
+      37.534258
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.90193,
-     37.53393
+     126.902424,
+     37.534258
     ]
    }
   },
@@ -11270,8 +11302,8 @@
     "route_verified": null,
     "audited": "2026-07-16",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -11607,7 +11639,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_report",
     "milestones": [
@@ -11636,29 +11668,31 @@
     "note": null,
     "audited": "2026-07-16",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '장승배기역' — 현재 좌표에서 37m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.93919,
-      37.50461
+      126.938862,
+      37.504821
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.93919,
-     37.50461
+     126.938862,
+     37.504821
     ]
    }
   },
@@ -11673,7 +11707,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "parcel",
     "pt_type": "rail_station",
     "src_tier": "official_report",
     "milestones": [
@@ -11702,7 +11736,9 @@
     "note": null,
     "audited": "2026-07-16",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "동일 지점명 내부 참조(서울대입구역) — 다른 노선·사업에서 확보된 좌표",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -11801,8 +11837,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -11899,7 +11935,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "parcel",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -11957,7 +11993,9 @@
     "note": null,
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "동일 지점명 내부 참조(목동역) — 다른 노선·사업에서 확보된 좌표",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -12719,8 +12757,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -12801,7 +12839,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "parcel",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -12875,29 +12913,22 @@
     "note": null,
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "동일 지점명 내부 참조(정부과천청사역) — 다른 노선·사업에서 확보된 좌표",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.98964,
-      37.42604
+      126.98985,
+      37.42645
      ]
-    },
-    "stage_history": [
-     {
-      "stage": "계획",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    }
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.98964,
-     37.42604
+     126.98985,
+     37.42645
     ]
    }
   },
@@ -12912,7 +12943,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -12986,29 +13017,31 @@
     "note": null,
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '경마공원역' — 현재 좌표에서 20m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      127.00776,
-      37.44414
+      127.007899,
+      37.443987
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.00776,
-     37.44414
+     127.007899,
+     37.443987
     ]
    }
   },
@@ -13522,8 +13555,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -13806,7 +13839,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -13866,29 +13899,31 @@
     "note": null,
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '학여울역' — 현재 좌표에서 32m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      127.0712,
-      37.49682
+      127.071368,
+      37.496554
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.0712,
-     37.49682
+     127.071368,
+     37.496554
     ]
    }
   },
@@ -13903,7 +13938,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "parcel",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -13963,29 +13998,22 @@
     "note": null,
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "동일 지점명 내부 참조(삼성역) — 다른 노선·사업에서 확보된 좌표",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      127.06316,
-      37.50892
+      127.06314,
+      37.50886
      ]
-    },
-    "stage_history": [
-     {
-      "stage": "계획",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    }
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.06316,
-     37.50892
+     127.06314,
+     37.50886
     ]
    }
   },
@@ -14000,7 +14028,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -14060,29 +14088,31 @@
     "note": null,
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '봉은사역' — 현재 좌표에서 8m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      127.06025,
-      37.51429
+      127.060309,
+      37.514231
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.06025,
-     37.51429
+     127.060309,
+     37.514231
     ]
    }
   },
@@ -14194,7 +14224,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -14254,29 +14284,31 @@
     "note": null,
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '신사역' — 현재 좌표에서 31m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      127.02031,
-      37.51647
+      127.020327,
+      37.516188
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.02031,
-     37.51647
+     127.020327,
+     37.516188
     ]
    }
   },
@@ -14478,6 +14510,8 @@
     "note": "역명 미정 · 역명 미확정",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -14534,6 +14568,8 @@
     "note": "역명 미정 · 역명 미확정",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -14646,6 +14682,8 @@
     "note": "역명 미정 · 역명 미확정",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -14702,6 +14740,8 @@
     "note": "역명 미정 · 역명 미확정",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -14758,6 +14798,8 @@
     "note": "역명 제정 중 · 역명 미확정",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -14926,6 +14968,8 @@
     "note": "역명 제정 중 · 역명 미확정",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -14982,6 +15026,8 @@
     "note": "역명 제정 중 · 역명 미확정",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -15038,6 +15084,8 @@
     "note": "역명 제정 중 · 역명 미확정",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -15150,6 +15198,8 @@
     "note": "역명 미정 · 동 대표점",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -15236,8 +15286,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -15375,7 +15425,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -15420,29 +15470,31 @@
     "note": null,
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '면목역' — 현재 좌표에서 18m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      127.08757,
-      37.5884
+      127.087425,
+      37.588524
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.08757,
-     37.5884
+     127.087425,
+     37.588524
     ]
    }
   },
@@ -15591,16 +15643,7 @@
       127.10322,
       37.61279
      ]
-    },
-    "stage_history": [
-     {
-      "stage": "계획",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    }
    },
    "geometry": {
     "type": "Point",
@@ -15654,8 +15697,8 @@
     "route_verified": null,
     "audited": "2026-07-16",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -15852,7 +15895,7 @@
     "phase": "인가",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "parcel",
     "pt_type": "rail_station",
     "src_tier": "official_report",
     "milestones": [
@@ -15881,7 +15924,9 @@
     "note": null,
     "audited": "2026-07-16",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "동일 지점명 내부 참조(삼동역) — 다른 노선·사업에서 확보된 좌표",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -15918,7 +15963,7 @@
     "phase": "인가",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_report",
     "milestones": [
@@ -15947,29 +15992,31 @@
     "note": null,
     "audited": "2026-07-16",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '경기광주역' — 현재 좌표에서 4m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      127.25319,
-      37.39901
+      127.253201,
+      37.398974
      ]
     },
     "stage_history": [
      {
       "stage": "인가",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.25319,
-     37.39901
+     127.253201,
+     37.398974
     ]
    }
   },
@@ -16209,8 +16256,8 @@
     "route_verified": null,
     "audited": "2026-07-16",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -16259,7 +16306,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "parcel",
     "pt_type": "rail_station",
     "src_tier": "official_report",
     "milestones": [
@@ -16288,7 +16335,9 @@
     "note": null,
     "audited": "2026-07-16",
     "drop": true,
-    "geo_approx": true,
+    "geo_basis": "동일 지점명 내부 참조(반송역) — 다른 노선·사업에서 확보된 좌표",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -16408,8 +16457,8 @@
     "route_verified": null,
     "audited": "2026-07-16",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -16458,7 +16507,7 @@
     "phase": "착공",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_report",
     "milestones": [
@@ -16480,29 +16529,31 @@
     "note": null,
     "audited": "2026-07-16",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '여주역' — 현재 좌표에서 11m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      127.62864,
-      37.28284
+      127.628506,
+      37.282838
      ]
     },
     "stage_history": [
      {
       "stage": "착공",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.62864,
-     37.28284
+     127.628506,
+     37.282838
     ]
    }
   },
@@ -16601,8 +16652,8 @@
     "route_verified": null,
     "audited": null,
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -17395,6 +17446,8 @@
     "note": "동 대표점 근사 — 위치 미확정(가칭)",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -17454,6 +17507,8 @@
     "note": "동 대표점 근사 — 위치 미확정(가칭)",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -17513,6 +17568,8 @@
     "note": "동 대표점 근사 — 위치 미확정(가칭)",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -17572,6 +17629,8 @@
     "note": "동 대표점 근사 — 위치 미확정(가칭)",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -17631,6 +17690,8 @@
     "note": "동 대표점 근사 — 위치 미확정(가칭)",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -17690,6 +17751,8 @@
     "note": "동 대표점 근사 — 위치 미확정(가칭)",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -17749,6 +17812,8 @@
     "note": "동 대표점 근사 — 위치 미확정(가칭)",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -17808,6 +17873,8 @@
     "note": "동 대표점 근사 — 위치 미확정(가칭)",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -17867,6 +17934,8 @@
     "note": "동 대표점 근사 — 위치 미확정(가칭)",
     "audited": "2026-07-16",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -18002,16 +18071,7 @@
       127.19629,
       37.51438
      ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    }
    },
    "geometry": {
     "type": "Point",
@@ -18868,8 +18928,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -19083,6 +19143,8 @@
     "note": "역명·위치 미확정 — 위치 서술 공식 미공개(신곡·전호 등 후보 보도만) · 고촌읍 대표점 · 장래역 편입 논의 유동",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -19359,6 +19421,8 @@
     "note": "역명 미확정 · 인천1호선 신검단중앙역(원당동 651-1) 환승 — 신설역이라 지오코딩 미반영, 원당동 대표점 근사",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -19428,6 +19492,8 @@
     "note": "역명 미확정 · 대광위 중재안: 인천안 '불로역'을 김포 감정동으로 이전 확정 — 동 대표점",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -19566,6 +19632,8 @@
     "note": "역명·위치 미확정 — 공식은 '한강2 콤팩트시티 정거장'까지만 · 석모리 서술(보도·참고 수준)의 리 대표점",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -19635,6 +19703,8 @@
     "note": "역명·위치 미확정 · 종점·차량기지 병설(누산리 후보 거론) — 공식 위치 미공개, 리 대표점",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -19697,8 +19767,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -19850,6 +19920,8 @@
     "note": "길동생태공원사거리 · 역명 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -20086,8 +20158,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -20285,8 +20357,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -20621,8 +20693,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -20818,8 +20890,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -21246,8 +21318,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -21480,8 +21552,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -21844,8 +21916,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -21923,6 +21995,8 @@
     "note": "동 대표점/근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -21989,6 +22063,8 @@
     "note": "동 대표점/근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -22094,8 +22170,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -22208,6 +22284,8 @@
     "note": "동 대표점/근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -22370,8 +22448,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -22659,8 +22737,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -22812,6 +22890,8 @@
     "note": "동 대표점/근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -22878,6 +22958,8 @@
     "note": "동 대표점/근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -22948,8 +23030,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -23158,8 +23240,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -23418,8 +23500,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -23624,8 +23706,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -23833,8 +23915,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -24042,8 +24124,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -24372,8 +24454,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -24619,6 +24701,8 @@
     "note": "동 대표점/근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -24822,8 +24906,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -25110,8 +25194,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -25372,8 +25456,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -25602,8 +25686,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -25834,8 +25918,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -26052,8 +26136,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -26336,8 +26420,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -26543,8 +26627,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -26775,8 +26859,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -27059,8 +27143,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -27298,8 +27382,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -27478,6 +27562,8 @@
     "note": "동 대표점/근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -27548,8 +27634,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -27901,8 +27987,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -28146,8 +28232,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -28478,8 +28564,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -28696,8 +28782,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -28905,8 +28991,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -29116,6 +29202,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -29298,8 +29386,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -29397,6 +29485,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -29705,8 +29795,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -29854,6 +29944,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -29910,6 +30002,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -29966,6 +30060,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -30022,6 +30118,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -30104,8 +30202,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -30195,6 +30293,8 @@
     "note": "대표점/장소검색 근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -30365,8 +30465,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -30744,8 +30844,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -30863,6 +30963,8 @@
     "note": "대표점/장소검색 근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -31211,8 +31313,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -31261,7 +31363,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -31307,12 +31409,14 @@
     "note": "대표점/장소검색 근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '장산역' — 현재 좌표에서 0m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      129.17699,
-      35.16991
+      129.176986,
+      35.169914
      ]
     },
     "stage_history": [
@@ -31328,8 +31432,8 @@
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.17699,
-     35.16991
+     129.176986,
+     35.169914
     ]
    }
   },
@@ -31484,8 +31588,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -31542,7 +31646,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -31595,29 +31699,31 @@
     "note": "대표점/장소검색 근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '노포역' — 현재 좌표에서 0m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      129.09526,
-      35.28397
+      129.095265,
+      35.283973
      ]
     },
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-19",
+    "last_movement": "2026-07-19"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.09526,
-     35.28397
+     129.095265,
+     35.283973
     ]
    }
   },
@@ -31685,6 +31791,8 @@
     "note": "대표점/장소검색 근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -31843,8 +31951,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -32044,8 +32152,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -32094,7 +32202,7 @@
     "phase": "착공",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_report",
     "milestones": [
@@ -32113,20 +32221,22 @@
     "note": "대표점/장소검색 근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '태화강역' — 현재 좌표에서 0m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      129.35489,
-      35.54029
+      129.354892,
+      35.540291
      ]
     }
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.35489,
-     35.54029
+     129.354892,
+     35.540291
     ]
    }
   },
@@ -32220,8 +32330,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -32779,8 +32889,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -32902,6 +33012,8 @@
     "note": "대표점/장소검색 근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -33012,6 +33124,8 @@
     "note": "대표점/장소검색 근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -33082,8 +33196,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -33659,8 +33773,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -33870,6 +33984,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -33928,6 +34044,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -33986,6 +34104,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -34048,8 +34168,8 @@
     "route_verified": true,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -34233,6 +34353,8 @@
     "note": "'21 추가 · 역명·위치 미확정(가칭)",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -34291,6 +34413,8 @@
     "note": "대구2호선 환승 · 역명·위치 미확정(가칭)",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -34465,6 +34589,8 @@
     "note": "역명·위치 미확정(가칭)",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -34581,6 +34707,8 @@
     "note": "역명·위치 미확정(가칭)",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -34639,6 +34767,8 @@
     "note": "가칭 · 구지면 대표점(대구국가산단 일원) — 종점",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -34705,8 +34835,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -34796,6 +34926,8 @@
     "note": "대표점/장소검색 근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -35064,8 +35196,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -35354,6 +35486,8 @@
     "note": "대표점/장소검색 근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -35441,6 +35575,8 @@
     "note": "대표점/장소검색 근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -35540,8 +35676,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -35854,6 +35990,8 @@
     "note": "대표점/장소검색 근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -35891,7 +36029,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "parcel",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -35949,7 +36087,9 @@
     "note": "대표점/장소검색 근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "동일 지점명 내부 참조(서대구역) — 다른 노선·사업에서 확보된 좌표",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -36002,8 +36142,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -36153,6 +36293,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -36211,6 +36353,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -36327,6 +36471,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -36385,6 +36531,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -36443,6 +36591,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -36501,6 +36651,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -36617,6 +36769,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -36675,6 +36829,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -36733,6 +36889,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -36791,6 +36949,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -36853,8 +37013,8 @@
     "route_verified": true,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -36956,6 +37116,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -37014,6 +37176,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -37072,6 +37236,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -37130,6 +37296,8 @@
     "note": "역명 미확정 · 동 대표점 근사",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -37188,6 +37356,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -37246,6 +37416,8 @@
     "note": "역명·위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -37308,8 +37480,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -37561,8 +37733,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -37854,8 +38026,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -37912,7 +38084,7 @@
     "phase": "계획",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [
@@ -37963,12 +38135,14 @@
     "note": "대표점/장소검색 근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '상무역' — 현재 좌표에서 0m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.84864,
-      35.14678
+      126.848641,
+      35.146784
      ]
     },
     "stage_history": [
@@ -37984,8 +38158,8 @@
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.84864,
-     35.14678
+     126.848641,
+     35.146784
     ]
    }
   },
@@ -38201,8 +38375,8 @@
     "route_verified": true,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -38604,6 +38778,8 @@
     "note": "공식 확정 역명 · 동 대표점 근사",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -38662,6 +38838,8 @@
     "note": "공식 확정 역명 · 동 대표점 근사",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -38720,6 +38898,8 @@
     "note": "공식 확정 역명 · 동 대표점 근사",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -39010,6 +39190,8 @@
     "note": "공식 확정 역명 · 동 대표점 근사",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -39068,6 +39250,8 @@
     "note": "공식 확정 역명 · 동 대표점 근사",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -39532,6 +39716,8 @@
     "note": "공식 확정 역명 · 동 대표점 근사",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -39706,6 +39892,8 @@
     "note": "공식 확정 역명 · 동 대표점 근사",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -40054,6 +40242,8 @@
     "note": "공식 확정 역명 · 동 대표점 근사",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -40175,8 +40365,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -40904,8 +41094,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -41118,8 +41308,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -41375,8 +41565,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -41817,8 +42007,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -42079,8 +42269,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -42288,6 +42478,8 @@
     "note": "대표점/장소검색 근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -42404,8 +42596,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -42586,8 +42778,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -42909,8 +43101,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -43061,6 +43253,8 @@
     "note": "위치 미확정 · 역명·위치 미확정(가칭)",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -43119,6 +43313,8 @@
     "note": "위치 미확정 · 역명·위치 미확정(가칭)",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -43177,6 +43373,8 @@
     "note": "위치 미확정 · 역명·위치 미확정(가칭)",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -43235,6 +43433,8 @@
     "note": "위치 미확정 · 역명·위치 미확정(가칭)",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -43355,8 +43555,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -43817,8 +44017,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -43978,6 +44178,8 @@
     "note": "대표점/장소검색 근사 — 위치 미확정",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -44055,8 +44257,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -44431,8 +44633,8 @@
     "route_verified": null,
     "audited": null,
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -44481,27 +44683,29 @@
     "phase": "인가",
     "st_status": null,
     "approx": true,
-    "geo_prec": "dong",
+    "geo_prec": "station_poi",
     "pt_type": "rail_station",
     "src_tier": "official_notice",
     "milestones": [],
     "note": "대표점/장소검색 근사 — 위치 미확정",
     "audited": null,
     "drop": null,
-    "geo_approx": true,
+    "geo_basis": "장소검색 '대야역' — 현재 좌표에서 0m 이내 확인",
+    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.82523,
-      35.94535
+      126.825228,
+      35.945352
      ]
     }
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.82523,
-     35.94535
+     126.825228,
+     35.945352
     ]
    }
   },
@@ -44523,6 +44727,8 @@
     "note": "대표점 근사 — 위치 미확정",
     "audited": null,
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -44664,8 +44870,8 @@
     "route_verified": null,
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -44751,6 +44957,8 @@
     "note": "공식 확정 역명 · 동 대표점 근사 · 지선 분기(본선과 공유)",
     "audited": "2026-07-17",
     "drop": null,
+    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
+    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
     "geo_approx": true,
     "geometry": {
      "type": "Point",
@@ -45040,8 +45248,8 @@
     "audited": "2026-07-16",
     "geom_src": "공식 정거장 좌표 연결(고시 정거장 순서 대장(국토부·보도 종합)) — 실선형 아님",
     "geom_rebuilt": true,
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -45204,8 +45412,8 @@
     "audited": "2026-07-16",
     "geom_src": "공식 정거장 좌표 연결(고시 정거장 순서 대장(국가철도공단·보도)) — 실선형 아님",
     "geom_rebuilt": true,
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -45348,8 +45556,8 @@
     "audited": "2026-07-16",
     "geom_src": "공식 정거장 좌표 연결(고시 정거장 순서 대장(인천시)) — 실선형 아님",
     "geom_rebuilt": true,
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -45454,8 +45662,8 @@
     "audited": "2026-07-16",
     "geom_src": "공식 정거장 좌표 연결(고시 정거장 순서 대장(GTX-A 공식·국토부)) — 실선형 아님",
     "geom_rebuilt": true,
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -45579,8 +45787,8 @@
     "audited": "2026-07-16",
     "geom_src": "공식 정거장 좌표 연결(고시 정거장 순서 대장(의왕시 GTX-C 공식 페이지 · 과천시 주요현안사업)) — 실선형 아님",
     "geom_rebuilt": true,
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -45755,8 +45963,8 @@
     "audited": "2026-07-16",
     "geom_src": "공식 정거장 좌표 연결(고시 정거장 순서 대장(국토부)) — 실선형 아님",
     "geom_rebuilt": true,
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -45899,8 +46107,8 @@
     "audited": "2026-07-16",
     "geom_src": "공식 정거장 좌표 연결(고시 정거장 순서 대장(보도 종합)) — 실선형 아님",
     "geom_rebuilt": true,
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -45991,8 +46199,8 @@
     "audited": "2026-07-16",
     "geom_src": "공식 정거장 좌표 연결(고시 정거장 순서 대장(보도 종합)) — 실선형 아님",
     "geom_rebuilt": true,
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -46139,8 +46347,8 @@
     "audited": "2026-07-16",
     "geom_src": "공식 정거장 좌표 연결(고시 정거장 순서 대장(보도 종합)) — 실선형 아님",
     "geom_rebuilt": true,
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -46329,8 +46537,8 @@
     "audited": "2026-07-16",
     "geom_src": "공식 정거장 좌표 연결(공식 정거장 번호순) — 실선형 아님",
     "geom_rebuilt": true,
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -46471,8 +46679,8 @@
     "audited": "2026-07-16",
     "geom_src": "공식 정거장 좌표 연결(고시 정거장 순서 대장(국토부)) — 실선형 아님",
     "geom_rebuilt": true,
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -46555,8 +46763,8 @@
     "audited": "2026-07-16",
     "geom_src": "공식 정거장 좌표 연결(고시 정거장 순서 대장(의정부시)) — 실선형 아님",
     "geom_rebuilt": true,
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -46643,8 +46851,8 @@
     "audited": "2026-07-17",
     "geom_src": "공식 정거장 좌표 연결(고시 정거장 순서 대장(국토교통부)) — 실선형 아님",
     "geom_rebuilt": true,
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -46760,8 +46968,8 @@
     "audited": "2026-07-16",
     "geom_src": "공식 정거장 좌표 연결(고시 정거장 순서 대장(부천시 대장~홍대선 공식 안내)) — 실선형 아님",
     "geom_rebuilt": true,
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -46890,8 +47098,8 @@
     "audited": "2026-07-16",
     "geom_src": "공식 정거장 좌표 연결(고시 정거장 순서 대장(대광위·경기도)) — 실선형 아님",
     "geom_rebuilt": true,
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
@@ -47012,8 +47220,8 @@
     "audited": "2026-07-16",
     "geom_src": "공식 정거장 좌표 연결(공식 정거장 번호순) — 실선형 아님",
     "geom_rebuilt": true,
-    "geo_prec": "none",
-    "geo_approx": true,
+    "geo_prec": "line",
+    "geo_approx": false,
     "geometry": {
      "type": "LineString",
      "coordinates": [
