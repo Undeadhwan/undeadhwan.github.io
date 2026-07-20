@@ -14472,7 +14472,7 @@
     "audited": "2026-07-17",
     "geom_src": "공식 구상 노선도(국토부 교통 분야 3대 혁신 전략 2024-01 — GTX-D) 좌표변환 — 선 픽셀 자동 추출 후 정거장 9점 닮음변환(회전·등방축척·이동) 정합 — **도면 형상을 변형하지 않는다**. 역은 잔차만큼 선에서 떨어질 수 있다. 실측 선형 아님(근사)",
     "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 3/13개가 표시 선형 밖(최대 1.1km, 잠실역, 가산디지털단지역, 강남역). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
+    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 3/14개가 표시 선형 밖(최대 1.1km, 잠실역, 가산디지털단지역, 강남역). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
@@ -24363,6 +24363,80 @@
     "coordinates": [
      126.88258,
      37.48122
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "신림역",
+    "line": "GTX D",
+    "confirmed": false,
+    "status": "서부권 예타통과('25.7) — 1단계 '35 목표",
+    "phase": "계획",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "예비타당성조사 대상 선정",
+      "date": "2023-05-09",
+      "state": "done",
+      "src": "기재부"
+     },
+     {
+      "phase": "계획",
+      "stage": "예비타당성조사 통과(서부권 장기~부천대장~청량리)",
+      "date": "2025-07-10",
+      "state": "current",
+      "src": "기재부 제7차 재정사업평가위"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "X408 · 남부광역급행 구간(가산디지털단지~사당) · 2호선/신림선 신림역 환승 예정",
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.929645,
+      37.484659
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-21",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-21",
+    "last_movement": "2026-07-21"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.929645,
+     37.484659
     ]
    }
   },
@@ -158063,7 +158137,7 @@
     "geom_src": "공식 정거장 좌표 연결(근사 회랑) — 실선형 아님",
     "geom_filled": true,
     "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 3/13개가 표시 선형 밖(최대 1.1km, 잠실역, 가산디지털단지역, 강남역). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
+    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 3/14개가 표시 선형 밖(최대 1.1km, 잠실역, 가산디지털단지역, 강남역). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
@@ -158148,7 +158222,7 @@
     "geom_src": "공식 정거장 좌표 연결(근사 회랑) — 실선형 아님",
     "geom_filled": true,
     "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 3/13개가 표시 선형 밖(최대 1.1km, 잠실역, 가산디지털단지역, 강남역). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
+    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 3/14개가 표시 선형 밖(최대 1.1km, 잠실역, 가산디지털단지역, 강남역). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
