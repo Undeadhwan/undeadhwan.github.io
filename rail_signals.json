@@ -152800,6 +152800,124 @@
   {
    "type": "Feature",
    "properties": {
+    "kind": "station",
+    "name": "도마역(신설)",
+    "line": "충청권 광역철도 1단계",
+    "confirmed": true,
+    "status": "26년말 개통목표 ('23.12 착공)",
+    "phase": "착공",
+    "st_status": "신설확정",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2023-12",
+      "state": "done",
+      "src": "국토부"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2026",
+      "state": "target",
+      "src": "국토부"
+     }
+    ],
+    "note": "공식 노선도(국토부 2021-04 보도자료 첨부 지형도)에 신설역으로 표기 — 우리 목록에 빠져 있었다",
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.373703,
+      36.310104
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-21",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-21",
+    "last_movement": "2026-07-21"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.373703,
+     36.310104
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "흑석리역",
+    "line": "충청권 광역철도 1단계",
+    "confirmed": true,
+    "status": "26년말 개통목표 ('23.12 착공)",
+    "phase": "착공",
+    "st_status": "기존",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2023-12",
+      "state": "done",
+      "src": "국토부"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2026",
+      "state": "target",
+      "src": "국토부"
+     }
+    ],
+    "note": "기존 호남선 역 · 공식 노선도에 개량역으로 표기 — 우리 목록에 빠져 있었다",
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.339466,
+      36.255434
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-21",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-21",
+    "last_movement": "2026-07-21"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.339466,
+     36.255434
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
     "kind": "line",
     "name": "대전~옥천 광역철도",
     "full": "대전~옥천 광역철도",
