@@ -264,8 +264,8 @@
     "approx": true,
     "route_verified": null,
     "pt_type": "road_line",
-    "has_official_ic": false,
-    "note": "경유지(보도) 법정동 대표점 연결 — 하남시 감일동→광주시 퇴촌면→광주시 남종면→양평군 강하면→양평군 양서면 · 노선 미확정(원안(예타 통과안 감일~양서 27km) 기준 — '26.3 재개 후 신규 타당성조사로 노선 재검토 중)",
+    "has_official_ic": true,
+    "note": "공식 IC·JC 순서 연결(근사) — 감일JCT→상사창IC→상산곡IC→남종IC→강하IC→양평JCT · 국토부 공고 제2023-525호(전략환경영향평가 항목 결정내용 공개) 「나들목 4개소(상사창·상산곡·남종·강하) / 분기점 3개소(감일·북광주·양평)」 기준 · 시점 하남시 감일동 ~ 종점 양평군 강상면(병산교), 연장 29.0㎞ · ⚠ 좌표는 각 IC가 속한 법정동/면 대표점(원문은 IC 명단만 주고 지점 좌표는 없음) · ⚠ 북광주JCT는 원문에 위치 서술이 없어 제외 · ⚠ **변경안** 기준이다 — 예타 통과 원안은 종점이 양서면(27㎞)이고, '23.7 백지화를 부른 노선 변경 논란의 대상이다. '26.3.20 재개 후 신규 타당성조사로 노선 재검토 중이라 원안·변경안 어느 쪽도 확정이 아니다",
     "milestones": [
      {
       "phase": "계획",
@@ -281,24 +281,28 @@
      "type": "LineString",
      "coordinates": [
       [
-       127.15512,
-       37.50984
+       127.147541,
+       37.50921
       ],
       [
-       127.33002,
-       37.44812
+       127.195295,
+       37.494916
       ],
       [
-       127.31994,
-       37.50362
+       127.232842,
+       37.490507
       ],
       [
-       127.40867,
-       37.46474
+       127.286614,
+       37.493189
       ],
       [
-       127.37496,
-       37.54088
+       127.408538,
+       37.465409
+      ],
+      [
+       127.485906,
+       37.477083
       ]
      ]
     },
@@ -316,24 +320,28 @@
     "type": "LineString",
     "coordinates": [
      [
-      127.15512,
-      37.50984
+      127.147541,
+      37.50921
      ],
      [
-      127.33002,
-      37.44812
+      127.195295,
+      37.494916
      ],
      [
-      127.31994,
-      37.50362
+      127.232842,
+      37.490507
      ],
      [
-      127.40867,
-      37.46474
+      127.286614,
+      37.493189
      ],
      [
-      127.37496,
-      37.54088
+      127.408538,
+      37.465409
+     ],
+     [
+      127.485906,
+      37.477083
      ]
     ]
    }
@@ -881,13 +889,13 @@
     "owner": "민자",
     "src_tier": "official_report",
     "src_name": "민자 공식 — 성남~서초 고속도로(민자)",
-    "src_url": "https://www.molit.go.kr/USR/NEWS/m_71/dtl.jsp?id=95092143",
+    "src_url": "https://www.molit.go.kr/USR/BORD0201/m_69/DTL.jsp?id=N01_B&mode=view&idx=266985",
     "geom_src": "공식 경유 대표점 연결(근사) — 미착공이라 실선형 미존재",
     "approx": true,
     "route_verified": true,
     "pt_type": "road_line",
     "has_official_ic": false,
-    "note": "경유지(보도) 법정동 대표점 연결 — 성남시 수정구 금토동→성남시 수정구 상적동→과천시 주암동→서초구 원지동→서초구 양재동 · 노선 미확정(전략환경영향평가 1안 기준 10.7km — 실시협약 전, 세부 노선 미고시) · 급반전 확인됨: 과천 주암동 경유가 공식 서술(환경영향평가 1안) — 실제 서측 우회",
+    "note": "공식 통과구간 순서 연결(근사) — 금토동(시점)→신원동→주암동→우면동(종점) · 국토부 공고 제2026-25호(제3자 제안공고, 2026-01-29) 「사업구간: 경기도 성남시 수정구 금토동 ∼ 서울특별시 서초구 우면동 / 연장 10.7km」 및 전략환경영향평가서 「1구간(신원동 통과구간) · 2구간(과천시 주암동 및 우면동 통과구간)」 기준 · ⚠ 좌표는 각 법정동 대표점(원문에 지점 좌표 없음) · ⚠ IC·JC 명칭은 **공식 원문에 없다** — 제3자 제안공고가 IC/JCT 위치·개소수를 사업제안자 자율 제시 사항으로 규정(개소수만 'JCT 3개소, IC 2개소'). 서울~양평과 달리 IC 기준 선형 구성 불가 · ⚠ 실시협약 전이라 세부 노선 미고시 · 정정 이력(2026-07-20): 종전 anchors는 보도 기반 '금토동→상적동→주암동→원지동→양재동'이었는데 **종점이 틀렸다**(공식은 양재동이 아니라 우면동). 상적동·원지동도 공식 통과구간 서술에 없어 제외",
     "milestones": [
      {
       "phase": "계획",
@@ -903,24 +911,20 @@
      "type": "LineString",
      "coordinates": [
       [
-       127.07236,
-       37.41065
+       127.072363,
+       37.410386
       ],
       [
-       127.06666,
-       37.42771
+       127.062146,
+       37.44419
       ],
       [
        127.02276,
        37.45195
       ],
       [
-       127.04958,
-       37.445
-      ],
-      [
-       127.03623,
-       37.46845
+       127.026918,
+       37.471752
       ]
      ]
     },
@@ -938,24 +942,20 @@
     "type": "LineString",
     "coordinates": [
      [
-      127.07236,
-      37.41065
+      127.072363,
+      37.410386
      ],
      [
-      127.06666,
-      37.42771
+      127.062146,
+      37.44419
      ],
      [
       127.02276,
       37.45195
      ],
      [
-      127.04958,
-      37.445
-     ],
-     [
-      127.03623,
-      37.46845
+      127.026918,
+      37.471752
      ]
     ]
    }
@@ -4985,12 +4985,12 @@
     "stage_history": [
      {
       "stage": "착공",
-      "date": "2026-07-19",
+      "date": "2026-07-18",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-19",
-    "last_movement": "2026-07-19"
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-07-18"
    },
    "geometry": {
     "type": "Point",
@@ -5743,6 +5743,342 @@
    "properties": {
     "kind": "station",
     "mode": "road",
+    "name": "감일JCT",
+    "line": "서울~양평 고속도로",
+    "line_official": "서울~양평 고속도로",
+    "lvl": "A",
+    "status": "'26.3.20 재개 결정 — 신규 타당성조사 후 '29말 착공 목표",
+    "confirmed": false,
+    "phase": "계획",
+    "linekind": "JC(분기점)",
+    "name_src": "국토교통부 공고 제2023-525호(전략환경영향평가 항목 등의 결정내용 공개, 2023-05-08)",
+    "ic_status": "가칭·위치 근사(법정동 대표점)",
+    "loc": "경기도 하남시 감일동",
+    "signal": false,
+    "pt_role": "jc",
+    "pt_type": "road_jc",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "'26.3.20 재개 결정 — 신규 타당성조사 후 '29말 착공 목표",
+      "state": "current",
+      "src": "국토부"
+     }
+    ],
+    "audited": "2026-07-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.147541,
+      37.50921
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-20",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-20",
+    "last_movement": "2026-07-20"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.147541,
+     37.50921
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "mode": "road",
+    "name": "상사창IC",
+    "line": "서울~양평 고속도로",
+    "line_official": "서울~양평 고속도로",
+    "lvl": "A",
+    "status": "'26.3.20 재개 결정 — 신규 타당성조사 후 '29말 착공 목표",
+    "confirmed": false,
+    "phase": "계획",
+    "linekind": "IC",
+    "name_src": "국토교통부 공고 제2023-525호(전략환경영향평가 항목 등의 결정내용 공개, 2023-05-08)",
+    "ic_status": "가칭·위치 근사(법정동 대표점)",
+    "loc": "경기도 하남시 상사창동",
+    "signal": true,
+    "pt_role": "ic",
+    "pt_type": "road_ic",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "'26.3.20 재개 결정 — 신규 타당성조사 후 '29말 착공 목표",
+      "state": "current",
+      "src": "국토부"
+     }
+    ],
+    "audited": "2026-07-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.195295,
+      37.494916
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-20",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-20",
+    "last_movement": "2026-07-20"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.195295,
+     37.494916
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "mode": "road",
+    "name": "상산곡IC",
+    "line": "서울~양평 고속도로",
+    "line_official": "서울~양평 고속도로",
+    "lvl": "A",
+    "status": "'26.3.20 재개 결정 — 신규 타당성조사 후 '29말 착공 목표",
+    "confirmed": false,
+    "phase": "계획",
+    "linekind": "IC",
+    "name_src": "국토교통부 공고 제2023-525호(전략환경영향평가 항목 등의 결정내용 공개, 2023-05-08)",
+    "ic_status": "가칭·위치 근사(법정동 대표점)",
+    "loc": "경기도 하남시 상산곡동",
+    "signal": true,
+    "pt_role": "ic",
+    "pt_type": "road_ic",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "'26.3.20 재개 결정 — 신규 타당성조사 후 '29말 착공 목표",
+      "state": "current",
+      "src": "국토부"
+     }
+    ],
+    "audited": "2026-07-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.232842,
+      37.490507
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-20",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-20",
+    "last_movement": "2026-07-20"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.232842,
+     37.490507
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "mode": "road",
+    "name": "남종IC",
+    "line": "서울~양평 고속도로",
+    "line_official": "서울~양평 고속도로",
+    "lvl": "A",
+    "status": "'26.3.20 재개 결정 — 신규 타당성조사 후 '29말 착공 목표",
+    "confirmed": false,
+    "phase": "계획",
+    "linekind": "IC",
+    "name_src": "국토교통부 공고 제2023-525호(전략환경영향평가 항목 등의 결정내용 공개, 2023-05-08)",
+    "ic_status": "가칭·위치 근사(법정동 대표점)",
+    "loc": "경기도 광주시 남종면",
+    "signal": true,
+    "pt_role": "ic",
+    "pt_type": "road_ic",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "'26.3.20 재개 결정 — 신규 타당성조사 후 '29말 착공 목표",
+      "state": "current",
+      "src": "국토부"
+     }
+    ],
+    "audited": "2026-07-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.286614,
+      37.493189
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-20",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-20",
+    "last_movement": "2026-07-20"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.286614,
+     37.493189
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "mode": "road",
+    "name": "강하IC",
+    "line": "서울~양평 고속도로",
+    "line_official": "서울~양평 고속도로",
+    "lvl": "A",
+    "status": "'26.3.20 재개 결정 — 신규 타당성조사 후 '29말 착공 목표",
+    "confirmed": false,
+    "phase": "계획",
+    "linekind": "IC",
+    "name_src": "국토교통부 공고 제2023-525호(전략환경영향평가 항목 등의 결정내용 공개, 2023-05-08)",
+    "ic_status": "가칭·위치 근사(법정동 대표점)",
+    "loc": "경기도 양평군 강하면",
+    "signal": true,
+    "pt_role": "ic",
+    "pt_type": "road_ic",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "'26.3.20 재개 결정 — 신규 타당성조사 후 '29말 착공 목표",
+      "state": "current",
+      "src": "국토부"
+     }
+    ],
+    "audited": "2026-07-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.408538,
+      37.465409
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-20",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-20",
+    "last_movement": "2026-07-20"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.408538,
+     37.465409
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "mode": "road",
+    "name": "양평JCT",
+    "line": "서울~양평 고속도로",
+    "line_official": "서울~양평 고속도로",
+    "lvl": "A",
+    "status": "'26.3.20 재개 결정 — 신규 타당성조사 후 '29말 착공 목표",
+    "confirmed": false,
+    "phase": "계획",
+    "linekind": "JC(분기점)",
+    "name_src": "국토교통부 공고 제2023-525호(전략환경영향평가 항목 등의 결정내용 공개, 2023-05-08)",
+    "ic_status": "가칭·위치 근사(법정동 대표점)",
+    "loc": "경기도 양평군 강상면",
+    "signal": false,
+    "pt_role": "jc",
+    "pt_type": "road_jc",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "'26.3.20 재개 결정 — 신규 타당성조사 후 '29말 착공 목표",
+      "state": "current",
+      "src": "국토부"
+     }
+    ],
+    "audited": "2026-07-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.485906,
+      37.477083
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-20",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-20",
+    "last_movement": "2026-07-20"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.485906,
+     37.477083
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "mode": "road",
     "name": "강진~광주 고속도로(광주해남완도 1단계) 진입로(이름 미상)",
     "line": "강진광주고속도로",
     "lvl": "A",
@@ -5827,16 +6163,7 @@
       126.740156,
       34.821142
      ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    }
    },
    "geometry": {
     "type": "Point",
@@ -5881,16 +6208,7 @@
       126.741534,
       34.77952
      ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    }
    },
    "geometry": {
     "type": "Point",
@@ -6097,16 +6415,7 @@
       126.823195,
       35.085639
      ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    }
    },
    "geometry": {
     "type": "Point",
@@ -6151,16 +6460,7 @@
       128.553315,
       35.808219
      ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    }
    },
    "geometry": {
     "type": "Point",
@@ -6205,16 +6505,7 @@
       126.838698,
       35.128105
      ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    }
    },
    "geometry": {
     "type": "Point",
@@ -6313,16 +6604,7 @@
       126.820664,
       35.018708
      ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    }
    },
    "geometry": {
     "type": "Point",
@@ -6529,16 +6811,7 @@
       127.299864,
       36.543292
      ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    }
    },
    "geometry": {
     "type": "Point",
@@ -6637,16 +6910,7 @@
       126.974581,
       36.821865
      ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    }
    },
    "geometry": {
     "type": "Point",
@@ -6691,16 +6955,7 @@
       126.617204,
       36.851666
      ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    }
    },
    "geometry": {
     "type": "Point",
