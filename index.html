@@ -2852,8 +2852,20 @@ function initKakao() {
       segs.forEach(seg => {
         const path = seg.map(([x, y]) => LL(x, y));
         objs.push(new K.Polyline({ path, strokeColor: col, strokeWeight: dashed ? 2.6 : 3.2, strokeOpacity: subdued ? .45 : isRoad ? .75 : .9, strokeStyle: dashed ? "shortdash" : "solid", zIndex: 3 }));
-        // 히트선은 정점 1/3만 — 14px 회랑 판정엔 충분하고, 줌 프레임당 벡터 재투영 비용을 줄인다
-        const hp = path.filter((_, i) => i % 3 === 0 || i === path.length - 1);
+        // 히트선 정점 다이어트(1/3) — 단 **꺾임 정점은 보존**한다. 종전 무조건 i%3은
+        // 정점이 몇 개 없는 앵커 노선에서 중간 경유점을 지워 히트선이 경로를 통째로
+        // 이탈시켰다(실측 최대 29km — "커서 대도 미리보기 안 되는 구간"의 원인, 2026-07-21).
+        // 성긴 경로(정점≤40)는 전량 유지, 긴 경로는 i%3 + 방향변화 12°+ 정점 유지.
+        const hp = path.length <= 40 ? path : path.filter((pt, i) => {
+          if (i === 0 || i === path.length - 1 || i % 3 === 0) return true;
+          const a = path[i - 1], b = path[i + 1];
+          const v1x = pt.getLng() - a.getLng(), v1y = pt.getLat() - a.getLat();
+          const v2x = b.getLng() - pt.getLng(), v2y = b.getLat() - pt.getLat();
+          const n1 = Math.hypot(v1x, v1y), n2 = Math.hypot(v2x, v2y);
+          if (!n1 || !n2) return false;
+          const cos = (v1x * v2x + v1y * v2y) / (n1 * n2);
+          return cos < 0.978;   // ≈12° 이상 꺾이는 정점은 남긴다
+        });
         const hit = new K.Polyline({ path: hp, strokeColor: "#000", strokeWeight: 14, strokeOpacity: 0.001, zIndex: 4 });
         K.event.addListener(hit, "click", clickHandler);
         K.event.addListener(hit, "mouseover", mev => showTip(html, evToClient(mev)));
@@ -3370,7 +3382,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260721bd");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260721be");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3466,7 +3478,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260721bd"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260721be"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3492,7 +3504,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260721bd");
+  const CB = "?b=" + (window.BUILD || "20260721be");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
