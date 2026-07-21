@@ -124,6 +124,9 @@
   .apt-house-s.sel { font-size:20px; filter:drop-shadow(0 0 4px #d6156d); }
   .apt-dot { width:8px; height:8px; border-radius:50%; background:#b4bccc; border:1.5px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.25); }
   .apt-dot.sel { background:#d6156d; border-color:#fff; box-shadow:0 0 0 3px rgba(214,21,109,.3); }
+  /* 상세 패널 등장 — 즉시 떠서 어색하다는 피드백(2026-07-21). innerHTML 교체마다 새 .detail이라 자동 재생 */
+  .detail { animation: panelIn .24s cubic-bezier(.2,.7,.3,1) both; }
+  @keyframes panelIn { from { opacity:0; transform:translateX(14px); } to { opacity:1; transform:none; } }
   .hmatrix { border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin:2px 0 14px; background:#fbfcfe; }
   .hmhead { font-size:12px; color:var(--muted); margin-bottom:5px; }
   .hmhead b { color:var(--ink); font-size:15px; font-weight:800; }
@@ -2769,35 +2772,55 @@ function initKakao() {
     }
   };
 
-  let hjDots = [];
-  const renderHojae = () => { hjDots.forEach(o => o.setMap(null)); hjDots = [];
+  /* 호재 마커: 신호 객체에 1회 캐시(_kmk) — 줌마다 최대 600개 Marker 파괴·재생성이 잔여 버벅임 원인이라
+     setMap 토글 + 스타일 바뀐 것만 setImage(사용자 "줌업 좀 더 부드럽게" 2026-07-21). 툴팁 HTML은 hover 시 계산. */
+  let hjShown = new Set();
+  const hjStyle = s => { const unk = basisUnknown(s);
+    const col = s.status === "종결" ? "#9aa3b2" : unk ? "#8a93a3" : colorOf(s); const lvl = levelOf(s); const solid = phaseSolid(s);
+    return { col, lvl, solid, unk, r: unk ? HJR.C : (HJR[lvl] || 5), bw: !unk && lvl === "A" ? 2.6 : 2,
+      alpha: s.status === "종결" ? .45 : unk ? .75 : .9, fillOp: unk ? .10 : solid ? .22 : .10 }; };
+  const hjHtml = s => { const t = hjStyle(s);
+    return '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + s.title + '</div><div class="apt-pop-sub"><span style="color:' + t.col + ';font-weight:700">● ' + catOf(s) + '</span> · ' + lvlPill(t.lvl) + ' ' + gradeBasisHtml(s).replace(/ · $/, "") + '</div><div class="apt-pop-cats"><span>단계 ' + phaseOf(s) + (s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : "") + '</span></div></div>'; };
+  const renderHojae = () => {
     const lv = map.getLevel(); const show = new Set(lodGrades(lv)); const b = map.getBounds();
     const pool = SIGNALS.concat(JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
       .filter(s => !(s._road && s.access_points)).filter(s => s.signal !== false).filter(visible)
       .filter(s => s.geometry && s.geometry.coordinates).filter(s => show.has(levelOf(s)))
       .filter(s => { const c = s.geometry.coordinates; return b.contain(LL(c[0], c[1])); });
-    let n = 0;
-    for (const s of pool) { if (++n > 600) break; const [x, y] = s.geometry.coordinates; const unk = basisUnknown(s);
-      const col = s.status === "종결" ? "#9aa3b2" : unk ? "#8a93a3" : colorOf(s); const lvl = levelOf(s); const solid = phaseSolid(s);
-      const r = unk ? HJR.C : (HJR[lvl] || 5); const bw = !unk && lvl === "A" ? 2.6 : 2;
-      const alpha = s.status === "종결" ? .45 : unk ? .75 : .9, fillOp = unk ? .10 : solid ? .22 : .10;
-      // Marker + 캐시이미지(성능) — CustomOverlay div는 드래그마다 개별 재배치돼 수백 개면 버벅인다
-      const mk = new K.Marker({ map, position: LL(x, y), image: hojaeMarkerImage(col, r, bw, solid, fillOp, alpha, s.geo_approx), zIndex: 10 });
-      const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + s.title + '</div><div class="apt-pop-sub"><span style="color:' + col + ';font-weight:700">● ' + catOf(s) + '</span> · ' + lvlPill(lvl) + ' ' + gradeBasisHtml(s).replace(/ · $/, "") + '</div><div class="apt-pop-cats"><span>단계 ' + phaseOf(s) + (s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : "") + '</span></div></div>';
-      K.event.addListener(mk, "mouseover", () => { const q = toPt(x, y); const rc = mapEl.getBoundingClientRect(); showTip(html, { clientX: rc.left + q.x, clientY: rc.top + q.y }); });
-      K.event.addListener(mk, "mouseout", hideTip);
-      K.event.addListener(mk, "click", () => { hideTip(); showSignal(s, false); });
-      hjDots.push(mk); } };
+    const next = new Set(); let n = 0;
+    for (const s of pool) { if (++n > 600) break;
+      const t = hjStyle(s);
+      const key = t.col + "|" + t.r + "|" + t.bw + "|" + t.solid + "|" + t.fillOp + "|" + t.alpha + "|" + (s.geo_approx ? 1 : 0);
+      if (!s._kmk) {
+        const [x, y] = s.geometry.coordinates;
+        const mk = new K.Marker({ position: LL(x, y), image: hojaeMarkerImage(t.col, t.r, t.bw, t.solid, t.fillOp, t.alpha, s.geo_approx), zIndex: 10 });
+        K.event.addListener(mk, "mouseover", () => { const q = toPt(x, y); const rc = mapEl.getBoundingClientRect(); showTip(hjHtml(s), { clientX: rc.left + q.x, clientY: rc.top + q.y }); });
+        K.event.addListener(mk, "mouseout", hideTip);
+        K.event.addListener(mk, "click", () => { hideTip(); showSignal(s, false); });
+        s._kmk = mk; s._kmkKey = key;
+      } else if (s._kmkKey !== key) { s._kmk.setImage(hojaeMarkerImage(t.col, t.r, t.bw, t.solid, t.fillOp, t.alpha, s.geo_approx)); s._kmkKey = key; }
+      s._kmk.setMap(map); next.add(s); hjShown.delete(s); }
+    hjShown.forEach(s => s._kmk && s._kmk.setMap(null));   // 이번에 빠진 것만 끔
+    hjShown = next; };
 
-  let dongLabels = [];
-  const renderDongLabels = () => { dongLabels.forEach(o => o.setMap(null)); dongLabels = [];
-    if (map.getLevel() > DONG_LV) return; const b = map.getBounds(); const placed = [];
-    hjDots.forEach(o => { if (o.getPosition) { const p = o.getPosition(); const q = toPt(p.getLng(), p.getLat()); placed.push({ x: q.x, y: q.y, w: 30, h: 30 }); } });
-    for (const f of DONG_GEO.features) { const c = ringCentroid(ringsOf(f)[0]); if (!b.contain(LL(c[0], c[1]))) continue;
-      const pt = toPt(c[0], c[1]); if (collides(placed, pt, 46, 20)) continue; placed.push({ x: pt.x, y: pt.y }); if (placed.length > 120) break;
-      const elx = document.createElement("div"); elx.className = "dong-lbl"; elx.textContent = dongName(f); elx.style.cursor = "pointer";
-      elx.addEventListener("click", e => { e.stopPropagation(); showDong(f); });
-      dongLabels.push(new K.CustomOverlay({ map, position: LL(c[0], c[1]), content: elx, zIndex: 8, yAnchor: .5, xAnchor: .5 })); } };
+  // 동 라벨: feature에 1회 캐시(_klbl) — 충돌 계산만 매번, DOM 생성은 안 한다
+  let lblShown = new Set();
+  const renderDongLabels = () => {
+    const next = new Set();
+    if (map.getLevel() <= DONG_LV) {
+      const b = map.getBounds(); const placed = [];
+      hjShown.forEach(s => { const c = s.geometry.coordinates; const q = toPt(c[0], c[1]); placed.push({ x: q.x, y: q.y, w: 30, h: 30 }); });
+      for (const f of DONG_GEO.features) { const c = ringCentroid(ringsOf(f)[0]); if (!b.contain(LL(c[0], c[1]))) continue;
+        const pt = toPt(c[0], c[1]); if (collides(placed, pt, 46, 20)) continue; placed.push({ x: pt.x, y: pt.y }); if (placed.length > 120) break;
+        if (!f._klbl) {
+          const elx = document.createElement("div"); elx.className = "dong-lbl"; elx.textContent = dongName(f); elx.style.cursor = "pointer";
+          elx.addEventListener("click", e => { e.stopPropagation(); showDong(f); });
+          f._klbl = new K.CustomOverlay({ position: LL(c[0], c[1]), content: elx, zIndex: 8, yAnchor: .5, xAnchor: .5 });
+        }
+        f._klbl.setMap(map); next.add(f); lblShown.delete(f); }
+    }
+    lblShown.forEach(f => f._klbl && f._klbl.setMap(null));
+    lblShown = next; };
 
   /* 노선 선형: 뷰포트와 무관하므로 **1회 생성 후 setMap 토글만**(줌마다 149개·수천 정점 재생성이 버벅임 주범).
      클릭 판정: 카카오는 히트 영역이 선 굵기 그대로라 3px 선은 못 누른다 → 투명 굵은 히트선(14px)을 위에 깔고
@@ -2897,17 +2920,28 @@ function initKakao() {
     mapEl.appendChild(aptPop); const btn = aptPop.querySelector(".apt-pop-cmp");
     if (btn) btn.addEventListener("click", e => { e.stopPropagation(); toggleCompare(a); const on = compareSet.some(x => x.n === a.n && x.dong === a.dong); btn.classList.toggle("in", on); btn.textContent = on ? "✓ 비교함" : "＋ 비교담기"; });
     aptPop.addEventListener("mouseenter", () => { if (aptPopTimer) clearTimeout(aptPopTimer); }); aptPop.addEventListener("mouseleave", () => closeAptPop()); };
-  const renderAptDots = () => { aptDots.forEach(o => o.setMap(null)); aptDots = [];
-    if (map.getLevel() > APT_LV) { closeAptPop(); return; } const b = map.getBounds();
-    const cands = APTS.filter(a => b.contain(LL(a.lon, a.lat))).filter(a => !aptHhMin || (a.hh || 0) >= aptHhMin).map(a => ({ a, hh: a.hh || 0 }));
-    cands.sort((x, y) => y.hh - x.hh); const placed = [];
-    for (const { a } of cands) { if (placed.length > 200) break; const pt = toPt(a.lon, a.lat); if (collides(placed, pt, 20, 18)) continue; placed.push({ x: pt.x, y: pt.y });
-      const sel = treeState.selKey === "apt|" + a.n + "|" + a.dong; const d = document.createElement("div"); d.className = "apt-dot" + (sel ? " sel" : "");   // 예전 회색 점 복원(🏠 폐기, 사용자 2026-07-21)
-      const sub = a.sg + " " + a.dong + (a.hh ? " · " + a.hh.toLocaleString() + "세대" : " · 세대수 미상") + (a.built ? " · 준공 " + a.built : "");
-      d.addEventListener("mouseenter", () => { if (aptPopTimer) clearTimeout(aptPopTimer); openAptPop(a, sub, toPt(a.lon, a.lat)); });
-      d.addEventListener("mouseleave", () => { aptPopTimer = setTimeout(closeAptPop, 300); });
-      d.addEventListener("click", e => { e.stopPropagation(); treeState.selKey = "apt|" + a.n + "|" + a.dong; buildTree(); showApt(a); });
-      aptDots.push(new K.CustomOverlay({ map, position: LL(a.lon, a.lat), content: d, zIndex: 8, yAnchor: .5, xAnchor: .5 })); } };
+  // 아파트 점: 단지 객체에 1회 캐시(_kdot) — setMap 토글 + 선택 상태만 className 갱신
+  let aptShown = new Set();
+  const renderAptDots = () => {
+    const next = new Set();
+    if (map.getLevel() <= APT_LV) {
+      const b = map.getBounds();
+      const cands = APTS.filter(a => b.contain(LL(a.lon, a.lat))).filter(a => !aptHhMin || (a.hh || 0) >= aptHhMin).map(a => ({ a, hh: a.hh || 0 }));
+      cands.sort((x, y) => y.hh - x.hh); const placed = [];
+      for (const { a } of cands) { if (placed.length > 200) break; const pt = toPt(a.lon, a.lat); if (collides(placed, pt, 20, 18)) continue; placed.push({ x: pt.x, y: pt.y });
+        if (!a._kdot) {
+          const d = document.createElement("div");   // 예전 회색 점(apt-dot, 2026-07-21)
+          const sub = a.sg + " " + a.dong + (a.hh ? " · " + a.hh.toLocaleString() + "세대" : " · 세대수 미상") + (a.built ? " · 준공 " + a.built : "");
+          d.addEventListener("mouseenter", () => { if (aptPopTimer) clearTimeout(aptPopTimer); openAptPop(a, sub, toPt(a.lon, a.lat)); });
+          d.addEventListener("mouseleave", () => { aptPopTimer = setTimeout(closeAptPop, 300); });
+          d.addEventListener("click", e => { e.stopPropagation(); treeState.selKey = "apt|" + a.n + "|" + a.dong; buildTree(); showApt(a); });
+          a._kdot = new K.CustomOverlay({ position: LL(a.lon, a.lat), content: d, zIndex: 8, yAnchor: .5, xAnchor: .5 });
+        }
+        a._kdot.getContent().className = "apt-dot" + (treeState.selKey === "apt|" + a.n + "|" + a.dong ? " sel" : "");
+        a._kdot.setMap(map); next.add(a); aptShown.delete(a); }
+    } else closeAptPop();
+    aptShown.forEach(a => a._kdot && a._kdot.setMap(null));
+    aptShown = next; };
   let aptHhMin = +(localStorage.getItem("hojae_apt_hh") || 500);
   { const sel = document.getElementById("apt-hh");
     if (sel) { if (!sel.options.length) { [["all", "전체"], ["300", "300세대+"], ["500", "500세대+"], ["1000", "1,000세대+"], ["3000", "3,000세대+"]].forEach(([v, lb]) => sel.appendChild(new Option("🏠 " + lb, v))); }
@@ -2936,7 +2970,7 @@ function initKakao() {
   try { new ResizeObserver(() => { try { map.relayout(); applyLOD(); } catch (e) {} }).observe(el); } catch (e) {}
   // 지도 빈 곳 클릭 = 홈 복귀. 단 선·폴리곤 클릭 직후의 이중 발화는 무시(상세가 열리자마자 닫히는 문제)
   K.event.addListener(map, "click", () => { if (Date.now() - _ovClickTs < 400) return; hideTip(); goHome(); });
-  window._dbg = { applyLOD, renderHojae, renderDongLabels, map, get hjDots() { return hjDots; }, get railLayers() { return railLineObjs ? railLineObjs.flatMap(o => o.objs) : []; }, get railLineObjs() { return railLineObjs; }, get dongLabels() { return dongLabels; }, get jbPolys() { return shownJb; }, get aptDots() { return aptDots; } };
+  window._dbg = { applyLOD, renderHojae, renderDongLabels, map, get hjDots() { return [...hjShown].map(s => s._kmk); }, get railLayers() { return railLineObjs ? railLineObjs.flatMap(o => o.objs) : []; }, get railLineObjs() { return railLineObjs; }, get dongLabels() { return [...lblShown].map(f => f._klbl); }, get jbPolys() { return shownJb; }, get aptDots() { return [...aptShown].map(a => a._kdot); } };
   refreshJeongbiPoly = renderJeongbiPoly;
 
   let lines = [], pins = [], circles = [];
