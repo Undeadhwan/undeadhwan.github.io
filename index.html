@@ -2483,12 +2483,7 @@ function initLeaflet() {
     }
   };
   // 철도 노선 → 신호 상세 어댑트(우측 패널)
-  const railToSignal = (p, cen) => ({
-    _rail: true, title: p.full || p.name, line: p.name, cat: "교통", sub: "철도", lvl: railLevelOf(p.full || p.name, p.linekind),
-    template_type: "철도", current_stage: p.status, phase: p.phase, status: p.drop ? "종결" : "활성", confirmed: p.confirmed,
-    sd: null, geometry: { coordinates: cen },   // 노선은 여러 시도 경유 — 단일 sd 미표기
-    sources: p.src_url ? [p.src_url] : [], stage_note: `${p.linekind} · ${p.status}${p.note ? " · " + p.note : ""}`,
-  });
+  // railToSignal은 전역 함수로 승격됨(카카오·Leaflet 공유, 2026-07-21) — 지역 정의 제거
   /* 호재 중심 LOD(2026-07-16 대개편): 카운트 배지(동·시군구) 전면 제거 —
      상시 = 호재 원(등급 LOD) + 철도/도로 선. z12+=동 이름 라벨(클릭 앵커), z14+=아파트 집 아이콘. */
   const renderDongLabels = () => {
@@ -2686,55 +2681,223 @@ function initLeaflet() {
              highlightRoute, clearRoute };
   refreshPins();
 }
+/* 노선 → 신호 상세 어댑트(우측 패널) — 전역(카카오·Leaflet 두 렌더러 공유, 2026-07-21) */
+function railToSignal(p, cen) {
+  return {
+    _rail: true, title: p.full || p.name, line: p.name, cat: "교통", sub: "철도", lvl: railLevelOf(p.full || p.name, p.linekind),
+    template_type: "철도", current_stage: p.status, phase: p.phase, status: p.drop ? "종결" : "활성", confirmed: p.confirmed,
+    sd: null, geometry: { coordinates: cen },   // 노선은 여러 시도 경유 — 단일 sd 미표기
+    sources: p.src_url ? [p.src_url] : [], stage_note: `${p.linekind} · ${p.status}${p.note ? " · " + p.note : ""}`,
+  };
+}
+/* hex → rgba: Leaflet fillColor+fillOpacity를 카카오 CustomOverlay div의 CSS 배경으로 */
+function hexA(hex, a) {
+  const h = (hex || "#12263f").replace("#", "");
+  const n = h.length === 3 ? h.split("").map(c => c + c).join("") : h;
+  return "rgba(" + parseInt(n.slice(0, 2), 16) + "," + parseInt(n.slice(2, 4), 16) + "," + parseInt(n.slice(4, 6), 16) + "," + a + ")";
+}
+/* ══════════ 카카오 SDK 렌더러 (initLeaflet 파리티, 2026-07-21 카카오맵 승인 적용) ══════════
+   카카오 level은 낮을수록 확대(1=최대,14=최소) — Leaflet zoom과 반대. DONG_LV=6(z12)·APT_LV=4(z14) 실측 보정.
+   circleMarker→CustomOverlay 고정픽셀 div, bindTooltip→공유 floating div, 반경 Circle은 meter(getRadius=meter) 직결. */
 function initKakao() {
-  const map = new kakao.maps.Map(document.getElementById("map"),
-    { center: new kakao.maps.LatLng(37.5568, 126.8397), level: 6 });
-  DONG_GEO.features.forEach(f => {
-    ringsOf(f).forEach(r => {
-      const poly = new kakao.maps.Polygon({
-        map, path: r.map(([x, y]) => new kakao.maps.LatLng(y, x)),
-        strokeWeight: 1.5, strokeColor: "#666", strokeOpacity: .7, fillColor: "#fff", fillOpacity: .02
-      });
-      kakao.maps.event.addListener(poly, "click", () => showDong(f));
-    });
-  });
-  let overlays = [];
-  const refreshPins = () => {
-    overlays.forEach(o => o.setMap(null)); overlays = [];
-    DONG_GEO.features.forEach(f => {
-      const n = SIGNALS.filter(visible).filter(s => dongRelation(s, f) === "소재").length;
-      const c = ringCentroid(ringsOf(f)[0]);
-      const el = document.createElement("div");
-      el.className = "dong-badge"; el.textContent = dongName(f) + (n ? " " + n : "");
-      el.onclick = () => showDong(f);
-      const ov = new kakao.maps.CustomOverlay({ map, position: new kakao.maps.LatLng(c[1], c[0]), content: el, yAnchor: .5 });
-      overlays.push(ov);
-    });
-    SIGNALS.filter(visible).forEach(sg => {
-      signalPoints(sg).forEach((p, k) => {
-        const pos = new kakao.maps.LatLng(p.coord[1], p.coord[0]);
-        const mk = new kakao.maps.Marker({ map, position: pos, opacity: sg.status === "정체" ? .5 : 1,
-          title: p.name ? `${sg.title} — ${p.name}${p.cand ? " (후보)" : ""}` : sg.title });
-        kakao.maps.event.addListener(mk, "click", () => showSignal(sg, false));
-        if (k === 0) sg._pan = () => map.panTo(pos);
-        overlays.push(mk);
-      });
-    });
-  };
-  let circles = [];
-  const clearRadius = () => { circles.forEach(c => c.setMap(null)); circles = []; };
-  const addRadius = s => {
-    signalPoints(s).forEach(p => {
-      circles.push(new kakao.maps.Circle({
-        map, center: new kakao.maps.LatLng(p.coord[1], p.coord[0]), radius: getRadius(s),
-        strokeWeight: 1.5, strokeColor: "#12263f", strokeStyle: "dash",
-        fillColor: "#12263f", fillOpacity: 0.07
-      }));
-    });
-  };
-  const showRadius = s => { clearRadius(); addRadius(s); };
-  const showRadiusMany = list => { clearRadius(); list.forEach(addRadius); };
-  mapApi = { refreshPins, panTo: ll => map.panTo(new kakao.maps.LatLng(ll[1], ll[0])), showRadius, showRadiusMany, clearRadius };
+  const K = kakao.maps;
+  const LL = (lng, lat) => new K.LatLng(lat, lng);   // [lng,lat] → LatLng
+  const el = document.getElementById("map"); el.style.position = "relative";
+  const map = new K.Map(el, { center: new K.LatLng(37.556, 126.95), level: 8 });
+  window._map = map; window._kmap = map; map.setMaxLevel(13);
+  map.addControl(new K.ZoomControl(), K.ControlPosition.LEFT);
+  const DONG_LV = 6, APT_LV = 4;
+  const lodGrades = lv => lv <= APT_LV ? ["A", "B", "C", "미정"] : lv <= DONG_LV ? ["A", "B"] : ["A"];
+  const HJR = { A: 11, B: 8, C: 6, "미정": 4.5 };   // 크기=등급(카카오 렌더러 로컬 — Leaflet HJ_R과 별개 스코프)
+  const mapEl = el;
+  let tip = document.getElementById("_ktip");
+  if (!tip) {
+    tip = document.createElement("div"); tip.id = "_ktip";
+    tip.style.cssText = "position:fixed;z-index:100000;pointer-events:none;display:none;max-width:300px;background:rgba(255,255,255,.97);border:1px solid #d3d7e0;border-radius:8px;padding:6px 9px;font-size:12px;line-height:1.4;box-shadow:0 4px 14px rgba(0,0,0,.16);color:#1a2233";
+    document.body.appendChild(tip);
+  }
+  const showTip = (html, ev) => { tip.innerHTML = html; tip.style.display = "block"; const x = ev ? ev.clientX : 0, y = ev ? ev.clientY : 0;
+    tip.style.left = Math.min(x + 14, window.innerWidth - 310) + "px"; tip.style.top = Math.max(8, y - 10) + "px"; };
+  const hideTip = () => { tip.style.display = "none"; };
+  const evToClient = mev => { const pt = mev && mev.point ? mev.point : null; const r = mapEl.getBoundingClientRect();
+    return pt ? { clientX: r.left + pt.x, clientY: r.top + pt.y } : { clientX: 0, clientY: 0 }; };
+  const toPt = (lng, lat) => map.getProjection().containerPointFromCoords(new K.LatLng(lat, lng));
+  const collides = (placed, pt, w, h) => placed.some(p => Math.abs(p.x - pt.x) < w && Math.abs(p.y - pt.y) < h);
+
+  let dongPolys = [];
+  const renderDongPoly = () => { dongPolys.forEach(p => p.setMap(null)); dongPolys = [];
+    if (map.getLevel() > DONG_LV) return; const b = map.getBounds();
+    for (const f of DONG_GEO.features) { const c = ringCentroid(ringsOf(f)[0]); if (!b.contain(LL(c[0], c[1]))) continue;
+      ringsOf(f).forEach(r => dongPolys.push(new K.Polygon({ map, path: r.map(([x, y]) => LL(x, y)), strokeWeight: 1, strokeColor: "#888", strokeOpacity: .45, strokeStyle: "solid", fillColor: "#fff", fillOpacity: 0, zIndex: 1 }))); } };
+
+  let hjDots = [];
+  const renderHojae = () => { hjDots.forEach(o => o.setMap(null)); hjDots = [];
+    const lv = map.getLevel(); const show = new Set(lodGrades(lv)); const b = map.getBounds();
+    const pool = SIGNALS.concat(JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
+      .filter(s => !(s._road && s.access_points)).filter(s => s.signal !== false).filter(visible)
+      .filter(s => s.geometry && s.geometry.coordinates).filter(s => show.has(levelOf(s)))
+      .filter(s => { const c = s.geometry.coordinates; return b.contain(LL(c[0], c[1])); });
+    let n = 0;
+    for (const s of pool) { if (++n > 600) break; const [x, y] = s.geometry.coordinates; const unk = basisUnknown(s);
+      const col = s.status === "종결" ? "#9aa3b2" : unk ? "#8a93a3" : colorOf(s); const lvl = levelOf(s); const solid = phaseSolid(s);
+      const r = unk ? HJR.C : (HJR[lvl] || 5); const bw = !unk && lvl === "A" ? 2.6 : 2;
+      if (s.geo_approx) { const halo = document.createElement("div"); const hr = (r + 9) * 2;
+        halo.style.cssText = "width:" + hr + "px;height:" + hr + "px;border-radius:50%;background:" + col + ";opacity:.13;pointer-events:none";
+        hjDots.push(new K.CustomOverlay({ map, position: LL(x, y), content: halo, zIndex: 9, yAnchor: .5, xAnchor: .5 })); }
+      const d = document.createElement("div"); const dia = r * 2;
+      d.style.cssText = "width:" + dia + "px;height:" + dia + "px;border-radius:50%;box-sizing:border-box;cursor:pointer;background:" + hexA(col, unk ? .10 : solid ? .22 : .10) + ";border:" + bw + "px " + (solid ? "solid" : "dashed") + " " + col + ";opacity:" + (s.status === "종결" ? .45 : unk ? .75 : .9);
+      const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + s.title + '</div><div class="apt-pop-sub"><span style="color:' + col + ';font-weight:700">● ' + catOf(s) + '</span> · ' + lvlPill(lvl) + ' ' + gradeBasisHtml(s).replace(/ · $/, "") + '</div><div class="apt-pop-cats"><span>단계 ' + phaseOf(s) + (s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : "") + '</span></div></div>';
+      d.addEventListener("mouseenter", e => showTip(html, e)); d.addEventListener("mousemove", e => showTip(html, e));
+      d.addEventListener("mouseleave", hideTip); d.addEventListener("click", e => { e.stopPropagation(); hideTip(); showSignal(s, false); });
+      hjDots.push(new K.CustomOverlay({ map, position: LL(x, y), content: d, zIndex: 10, yAnchor: .5, xAnchor: .5 })); } };
+
+  let dongLabels = [];
+  const renderDongLabels = () => { dongLabels.forEach(o => o.setMap(null)); dongLabels = [];
+    if (map.getLevel() > DONG_LV) return; const b = map.getBounds(); const placed = [];
+    hjDots.forEach(o => { if (o.getPosition) { const p = o.getPosition(); const q = toPt(p.getLng(), p.getLat()); placed.push({ x: q.x, y: q.y, w: 30, h: 30 }); } });
+    for (const f of DONG_GEO.features) { const c = ringCentroid(ringsOf(f)[0]); if (!b.contain(LL(c[0], c[1]))) continue;
+      const pt = toPt(c[0], c[1]); if (collides(placed, pt, 46, 20)) continue; placed.push({ x: pt.x, y: pt.y }); if (placed.length > 120) break;
+      const elx = document.createElement("div"); elx.className = "dong-lbl"; elx.textContent = dongName(f); elx.style.cursor = "pointer";
+      elx.addEventListener("click", e => { e.stopPropagation(); showDong(f); });
+      dongLabels.push(new K.CustomOverlay({ map, position: LL(c[0], c[1]), content: elx, zIndex: 8, yAnchor: .5, xAnchor: .5 })); } };
+
+  let railLayers = [];
+  const renderRail = () => { railLayers.forEach(o => o.setMap(null)); railLayers = [];
+    if ((!RAIL.length && !ROADF.length) || !filter.cat.has("교통")) return;
+    const phaseFiltering = filter.phase.size < PHASES.length; const col = CAT_COLOR["교통"]; const lv = map.getLevel(); const b = map.getBounds();
+    for (const f of RAIL.concat(ROADF)) { const p = f.properties; const isRoad = p.mode === "road";
+      const dashed = !["착공", "준공"].some(k => (p.phase || "").startsWith(k)) || !!p.approx;
+      if (!filter.sub.has(isRoad ? "도로" : "철도")) continue; if (phaseFiltering && p.phase && !filter.phase.has(p.phase)) continue;
+      if (f.geometry.type === "LineString" || f.geometry.type === "MultiLineString") {
+        if (isRoad ? !filter.lines.has("도로선") : !filter.lines.has("철도선")) continue;
+        const subdued = isRoad && p.has_official_ic; const segs = f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates];
+        const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + (isRoad ? "🛣" : "🚈") + " " + (p.full || p.name) + '</div><div class="apt-pop-sub">' + (p.linekind || "") + ' · <span style="color:' + col + '">' + p.status + '</span>' + (p.approx ? " (근사 선형 — 공식 경유지 연결, 실선형 아님)" : dashed ? " (미확정 — 점선)" : "") + '</div>' + (p.geom_partial ? '<div class="apt-pop-sub" style="color:#b3651e">⚠ ' + (p.geom_cover_note || "선형 일부 구간만 확보") + '</div>' : "") + '<div class="apt-pop-cats"><span style="color:' + col + '">● 단계 ' + (p.phase || (p.confirmed ? "착공" : "계획")) + '</span>' + (p.note ? " · " + p.note : "") + (p.src_name ? " · 출처: " + p.src_name : isRoad ? " · 선형: OSM(ODbL)" : "") + '</div></div>';
+        const clickHandler = () => { hideTip(); if (isRoad) { const sig = ROAD_SIG.find(s => s.title.startsWith(p.name)) || SIGNALS.find(s => s._road && s.road_ref && p.name.includes(s.road_ref)); if (sig) showSignal(sig, false); return; }
+          const flat = f.geometry.type === "MultiLineString" ? f.geometry.coordinates.flat() : f.geometry.coordinates; showSignal(railToSignal(p, flat[Math.floor(flat.length / 2)]), false); };
+        segs.forEach(seg => { const line = new K.Polyline({ map, path: seg.map(([x, y]) => LL(x, y)), strokeColor: col, strokeWeight: dashed ? 2.6 : 3.2, strokeOpacity: subdued ? .45 : isRoad ? .75 : .9, strokeStyle: dashed ? "shortdash" : "solid", zIndex: 3 });
+          K.event.addListener(line, "mouseover", mev => showTip(html, evToClient(mev))); K.event.addListener(line, "mouseout", hideTip); K.event.addListener(line, "click", clickHandler); railLayers.push(line); });
+      } else if (f.geometry.type === "Point" && lv <= APT_LV) { const [x, y] = f.geometry.coordinates; if (!b.contain(LL(x, y))) continue;
+        const elx = document.createElement("div"); elx.className = "rail-name"; elx.textContent = p.name; elx.style.pointerEvents = "none";
+        railLayers.push(new K.CustomOverlay({ map, position: LL(x, y), content: elx, zIndex: 7, yAnchor: .5, xAnchor: .5 })); } } };
+
+  // 정비구역 폴리곤 + 범례
+  const featBbox = f => { if (f._bb) return f._bb; let x0 = 180, y0 = 90, x1 = -180, y1 = -90;
+    f.geometry.coordinates.forEach(r => r.forEach(([x, y]) => { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; })); return (f._bb = [x0, y0, x1, y1]); };
+  let jbLegendEl = null;
+  const toggleJbLegend = show => { if (show && !jbLegendEl) { jbLegendEl = document.createElement("div"); jbLegendEl.className = "jb-legend"; jbLegendEl.style.cssText = "position:absolute;left:10px;bottom:26px;z-index:40";
+      const items = [["정비구역(주거개발)", CAT_COLOR["주거개발"]], ["단계 미상(고시 경계만)", "#aeb4c0"], ["종결·무산", "#9aa3b2"]];
+      jbLegendEl.innerHTML = "<b>정비구역</b>" + items.map(([n, c]) => '<span class="jl"><i style="background:' + c + '"></i>' + n + '</span>').join("") + '<div class="jhint">진행 단계는 구역 클릭·툴팁에서 확인 (색은 4대 분류 통일 — 교통 파랑 / 주거 마젠타).<br>출처: 서울특별시 도시공간본부(공공누리 4유형)</div>';
+      mapEl.appendChild(jbLegendEl); } else if (!show && jbLegendEl) { jbLegendEl.remove(); jbLegendEl = null; } };
+  let jbPolys = [];
+  const renderJeongbiPoly = () => { jbPolys.forEach(o => o.setMap(null)); jbPolys = [];
+    if (map.getLevel() > DONG_LV || !JEONGBI_POLY.length || !filter.cat.has("주거개발")) { toggleJbLegend(false); return; }
+    const phaseFiltering = filter.phase.size < PHASES.length; const b = map.getBounds(), sw = b.getSouthWest(), ne = b.getNorthEast();
+    const bx0 = sw.getLng(), by0 = sw.getLat(), bx1 = ne.getLng(), by1 = ne.getLat(); let n = 0;
+    for (const f of JEONGBI_POLY) { const [x0, y0, x1, y1] = featBbox(f); if (x1 < bx0 || x0 > bx1 || y1 < by0 || y0 > by1) continue;
+      const p = f.properties; if (YEAR_SEL && p.year && p.year > YEAR_SEL) continue; if (phaseFiltering && (!p.phase || !filter.phase.has(p.phase))) continue;
+      if (++n > 240) break; const tracked = !!p.phase; const col = tracked ? CAT_COLOR["주거개발"] : "#aeb4c0";
+      const path = f.geometry.coordinates.map(r => r.map(([x, y]) => LL(x, y)));
+      const poly = new K.Polygon({ map, path, strokeColor: col, strokeWeight: tracked ? 1.1 : 0.8, strokeOpacity: tracked ? .45 : .3, fillColor: col, fillOpacity: tracked ? .06 : .03, zIndex: 2 });
+      const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + (p.name || "정비구역") + '</div><div class="apt-pop-sub">정비구역 · ' + p.jtype + (p.area ? " · " + (p.area / 1e4).toFixed(1) + "만㎡" : "") + '</div><div class="apt-pop-cats">' + (tracked ? '<span style="color:' + col + '">● ' + (p.stage || "추진 중") + '</span>' + (p.psrc ? '<span style="color:#8a90a0"> · ' + p.psrc + ' 기준</span>' : "") : '<span style="color:#8a90a0">단계 미상 · 고시 경계</span>') + (p.date ? " · 고시 " + p.date : "") + '</div></div>';
+      K.event.addListener(poly, "mouseover", mev => showTip(html, evToClient(mev))); K.event.addListener(poly, "mousemove", mev => showTip(html, evToClient(mev))); K.event.addListener(poly, "mouseout", hideTip);
+      K.event.addListener(poly, "click", () => { hideTip(); const ring = f.geometry.coordinates[0]; let sx = 0, sy = 0; ring.forEach(([x, y]) => { sx += x; sy += y; }); showSignal(jeongbiPolyToSignal(p, [sx / ring.length, sy / ring.length]), false); });
+      jbPolys.push(poly); }
+    toggleJbLegend(n > 0); };
+
+  // 아파트 마커 + hover 팝업(비교담기)
+  let aptDots = [], aptPop = null, aptPopTimer = null;
+  const closeAptPop = () => { if (aptPop) { aptPop.remove(); aptPop = null; } };
+  const openAptPop = (a, sub, pt) => { closeAptPop(); const near = signalsNearPoint([a.lon, a.lat]); const inCmp = compareSet.some(x => x.n === a.n && x.dong === a.dong);
+    aptPop = document.createElement("div"); aptPop.style.cssText = "position:absolute;z-index:50;transform:translate(-50%,-100%);pointer-events:auto"; aptPop.style.left = pt.x + "px"; aptPop.style.top = (pt.y - 8) + "px";
+    aptPop.innerHTML = '<div class="apt-pop"><div class="apt-pop-nm">' + a.n + '</div><div class="apt-pop-sub">' + sub + '</div><div class="apt-pop-cnt">반경 내 호재 <b>' + near.length + '</b>건</div><div class="apt-pop-cmp' + (inCmp ? " in" : "") + '">' + (inCmp ? "✓ 비교함" : "＋ 비교담기") + '</div></div>';
+    mapEl.appendChild(aptPop); const btn = aptPop.querySelector(".apt-pop-cmp");
+    if (btn) btn.addEventListener("click", e => { e.stopPropagation(); toggleCompare(a); const on = compareSet.some(x => x.n === a.n && x.dong === a.dong); btn.classList.toggle("in", on); btn.textContent = on ? "✓ 비교함" : "＋ 비교담기"; });
+    aptPop.addEventListener("mouseenter", () => { if (aptPopTimer) clearTimeout(aptPopTimer); }); aptPop.addEventListener("mouseleave", () => closeAptPop()); };
+  const renderAptDots = () => { aptDots.forEach(o => o.setMap(null)); aptDots = [];
+    if (map.getLevel() > APT_LV) { closeAptPop(); return; } const b = map.getBounds();
+    const cands = APTS.filter(a => b.contain(LL(a.lon, a.lat))).filter(a => !aptHhMin || (a.hh || 0) >= aptHhMin).map(a => ({ a, hh: a.hh || 0 }));
+    cands.sort((x, y) => y.hh - x.hh); const placed = [];
+    for (const { a } of cands) { if (placed.length > 200) break; const pt = toPt(a.lon, a.lat); if (collides(placed, pt, 20, 18)) continue; placed.push({ x: pt.x, y: pt.y });
+      const sel = treeState.selKey === "apt|" + a.n + "|" + a.dong; const d = document.createElement("div"); d.className = "apt-house-s" + (sel ? " sel" : ""); d.textContent = "🏠";
+      const sub = a.sg + " " + a.dong + (a.hh ? " · " + a.hh.toLocaleString() + "세대" : " · 세대수 미상") + (a.built ? " · 준공 " + a.built : "");
+      d.addEventListener("mouseenter", () => { if (aptPopTimer) clearTimeout(aptPopTimer); openAptPop(a, sub, toPt(a.lon, a.lat)); });
+      d.addEventListener("mouseleave", () => { aptPopTimer = setTimeout(closeAptPop, 300); });
+      d.addEventListener("click", e => { e.stopPropagation(); treeState.selKey = "apt|" + a.n + "|" + a.dong; buildTree(); showApt(a); });
+      aptDots.push(new K.CustomOverlay({ map, position: LL(a.lon, a.lat), content: d, zIndex: 8, yAnchor: .5, xAnchor: .5 })); } };
+  let aptHhMin = +(localStorage.getItem("hojae_apt_hh") || 500);
+  { const sel = document.getElementById("apt-hh");
+    if (sel) { if (!sel.options.length) { [["all", "전체"], ["300", "300세대+"], ["500", "500세대+"], ["1000", "1,000세대+"], ["3000", "3,000세대+"]].forEach(([v, lb]) => sel.appendChild(new Option("🏠 " + lb, v))); }
+      sel.value = aptHhMin ? String(aptHhMin) : "all"; sel.onchange = () => { aptHhMin = sel.value === "all" ? 0 : +sel.value; localStorage.setItem("hojae_apt_hh", aptHhMin); renderAptDots(); }; } }
+
+  // 시도경계 지연로딩(카카오 bounds)
+  const loadBdong = () => { if (typeof BDONG_IDX === "undefined" || !BDONG_IDX || typeof loadBdongFor !== "function") return;
+    const b = map.getBounds(), sw = b.getSouthWest(), ne = b.getNorthEast(); const w = sw.getLng(), s = sw.getLat(), e2 = ne.getLng(), nn = ne.getLat();
+    for (const [sd, v] of Object.entries(BDONG_IDX)) { if (!v.bbox) continue; const [x0, y0, x1, y1] = v.bbox; if (w <= x1 && e2 >= x0 && s <= y1 && nn >= y0) loadBdongFor(sd); } };
+
+  // 호재 범례(우하단)
+  { const div = document.createElement("div"); div.className = "hj-legend"; div.style.cssText = "position:absolute;right:10px;bottom:26px;z-index:40";
+    const collapsed = localStorage.getItem("hojae_legend_off") === "1"; if (collapsed) div.classList.add("collapsed");
+    const cats = CAT_KEYS.map(c => '<span class="row"><i class="dot" style="background:' + CAT_COLOR[c] + '"></i>' + c + '</span>').join("");
+    const phase = '<span class="row"><i class="ln" style="border-top-style:dashed"></i>계획 · 인가 <span style="color:#8a90a0">(서류)</span></span><span class="row"><i class="ln" style="border-top-style:solid"></i>착공 · 준공 <span style="color:#8a90a0">(공사)</span></span>';
+    const size = '<span class="row sz">' + LEVELS.map(l => '<i style="width:' + (HJR[l] * 2) + 'px;height:' + (HJR[l] * 2) + 'px"></i>' + l).join("&nbsp;&nbsp;") + '</span>';
+    div.innerHTML = '<div class="hlt">지도 보는 법 <span class="car">' + (collapsed ? "▾" : "▴") + '</span></div><div class="sec"><b>색 = 분류</b>' + cats + '</div><div class="sec"><b>선 = 단계</b>' + phase + '</div><div class="sec"><b>크기 = 등급</b>' + size + '</div><div class="sec"><b>흐릿한 후광</b><span class="row"><i class="dot" style="background:' + CAT_COLOR['교통'] + ';box-shadow:0 0 0 6px ' + CAT_COLOR['교통'] + '22"></i>위치 근사 <span style="color:#8a90a0">(이 근처)</span></span></div><div class="hnote">회색 = 등급 근거 미상 또는 종결·무산.<br>후광이 있으면 정확한 지점이 아니라 <b>대략 위치</b>입니다.</div>';
+    div.querySelector(".hlt").addEventListener("click", () => { const off = div.classList.toggle("collapsed"); localStorage.setItem("hojae_legend_off", off ? "1" : "0"); div.querySelector(".car").textContent = off ? "▾" : "▴"; });
+    mapEl.appendChild(div); }
+
+  const applyLOD = () => { renderDongPoly(); renderJeongbiPoly(); renderHojae(); renderDongLabels(); renderAptDots(); renderRail(); loadBdong(); };
+  K.event.addListener(map, "idle", applyLOD);
+  // 컨테이너 크기 확정 대응(Leaflet invalidateSize에 해당) — 0크기로 시작한 로드·모바일 회전·패널 토글 시
+  // 카카오 투영이 0×0에 굳으면 getBounds()가 한 점이 돼 호재 원이 전부 걸러진다. relayout으로 재투영 후 재렌더.
+  setTimeout(() => { try { map.relayout(); applyLOD(); } catch (e) {} }, 300);
+  try { new ResizeObserver(() => { try { map.relayout(); applyLOD(); } catch (e) {} }).observe(el); } catch (e) {}
+  K.event.addListener(map, "click", () => { hideTip(); goHome(); });
+  window._dbg = { applyLOD, renderHojae, renderDongLabels, map, get hjDots() { return hjDots; }, get railLayers() { return railLayers; }, get dongLabels() { return dongLabels; }, get jbPolys() { return jbPolys; }, get aptDots() { return aptDots; } };
+  refreshJeongbiPoly = renderJeongbiPoly;
+
+  let lines = [], pins = [], circles = [];
+  const clearRadius = () => { circles.forEach(o => o.setMap(null)); circles = []; };
+  const drawLine = sg => { let path = null, approx = false;
+    if (sg.geometry && sg.geometry.type === "LineString") path = sg.geometry.coordinates;
+    else if (sg.corridor && sg.corridor.path) { path = sg.corridor.path; approx = sg.corridor.type === "approx"; }
+    if (!path || path.length < 2) return; const col = colorOf(sg); const ll = path.map(([x, y]) => LL(x, y));
+    if (approx) { lines.push(new K.Polyline({ map, path: ll, strokeColor: col, strokeWeight: 16, strokeOpacity: .12, zIndex: 18 }));
+      const dl = new K.Polyline({ map, path: ll, strokeColor: col, strokeWeight: 3, strokeOpacity: .85, strokeStyle: "shortdash", zIndex: 19 }); K.event.addListener(dl, "click", () => showSignal(sg, false)); lines.push(dl);
+    } else { lines.push(new K.Polyline({ map, path: ll, strokeColor: "#fff", strokeWeight: 6, strokeOpacity: .9, zIndex: 18 }));
+      const sl = new K.Polyline({ map, path: ll, strokeColor: col, strokeWeight: 3.5, strokeOpacity: .95, zIndex: 19 }); K.event.addListener(sl, "click", () => showSignal(sg, false)); lines.push(sl); } };
+  const refreshPins = () => { pins.forEach(o => o.setMap(null)); pins = []; lines.forEach(o => o.setMap(null)); lines = []; applyLOD();
+    const act = activeSignals(); act.forEach(sg => drawLine(sg));
+    act.forEach(sg => { const pts = sg._road ? signalPoints(sg).slice(0, 1) : signalPoints(sg); const col = colorOf(sg); const rKm = getRadius(sg) / 1000; const baseR = Math.max(6, Math.min(16, 5 + rKm * 1.4));
+      pts.forEach((p, k) => { const [x, y] = p.coord; const r = (p.name ? baseR * 0.8 : baseR); const d = document.createElement("div"); const dia = r * 2;
+        d.style.cssText = "width:" + dia + "px;height:" + dia + "px;border-radius:50%;box-sizing:border-box;cursor:pointer;background:#fff;border:" + (p.cand ? "2px dashed" : "3px solid") + " " + col + ";opacity:" + (sg.status === "정체" ? .45 : 1);
+        const label = p.name ? sg.title + " — " + p.name + (p.cand ? " (후보)" : "") : sg.title;
+        d.addEventListener("mouseenter", e => showTip(label, e)); d.addEventListener("mousemove", e => showTip(label, e)); d.addEventListener("mouseleave", hideTip); d.addEventListener("click", e => { e.stopPropagation(); showSignal(sg, false); });
+        const ov = new K.CustomOverlay({ map, position: LL(x, y), content: d, zIndex: 20, yAnchor: .5, xAnchor: .5 }); ov._sig = sg; ov._el = d; ov._baseR = r; ov._col = col; if (k === 0) sg._pan = () => map.panTo(LL(x, y)); pins.push(ov); }); }); };
+  const emphasizePin = s => { pins.forEach(ov => { const on = s && ov._sig === s; const r = on ? ov._baseR + 5 : ov._baseR, dia = r * 2;
+    ov._el.style.width = ov._el.style.height = dia + "px"; ov._el.style.borderColor = on ? "#5b3fd4" : (ov._col || "#12263f"); ov._el.style.borderWidth = on ? "4px" : "3px"; ov.setZIndex(on ? 30 : 20); }); };
+  const addRadius = s => { const col = colorOf(s);
+    if (s._road && s.access_points) { if (s.road_kind === "전용") { (s.ic_points || []).forEach(ap => circles.push(new K.Circle({ map, center: LL(ap.coordinates[0], ap.coordinates[1]), radius: getRadius(s), strokeWeight: 2, strokeColor: col, strokeOpacity: .9, fillColor: col, fillOpacity: .28, zIndex: 5 }))); return; }
+      roadLinePoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 0, strokeOpacity: 0, fillColor: col, fillOpacity: .05, zIndex: 5 }))); return; }
+    signalPoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 2, strokeColor: col, strokeOpacity: .9, fillColor: col, fillOpacity: .28, zIndex: 5 }))); };
+  const showRadius = s => { clearRadius(); addRadius(s); }; const showRadiusMany = list => { clearRadius(); list.forEach(addRadius); };
+  let routeHl = []; const clearRoute = () => { routeHl.forEach(o => o.setMap(null)); routeHl = []; };
+  const highlightRoute = (lineName, fit) => { clearRoute(); if (!lineName) return; const col = CAT_COLOR["교통"]; let bounds = new K.LatLngBounds();
+    for (const f of RAIL.concat(ROADF)) { const p = f.properties; if (f.geometry.type === "Point") continue; if (p.name !== lineName && p.full !== lineName && p.official_name !== lineName) continue;
+      const segs = f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates]; const dashed = (!["착공", "준공"].some(k => (p.phase || "").startsWith(k)) || p.approx);
+      segs.forEach(seg => { const ll = seg.map(([x, y]) => { const q = LL(x, y); bounds.extend(q); return q; }); routeHl.push(new K.Polyline({ map, path: ll, strokeColor: "#fff", strokeWeight: 11, strokeOpacity: .85, zIndex: 21 })); routeHl.push(new K.Polyline({ map, path: ll, strokeColor: col, strokeWeight: 5.5, strokeOpacity: .95, strokeStyle: dashed ? "shortdash" : "solid", zIndex: 22 })); }); }
+    for (const f of RAIL.concat(ROADF)) { const p = f.properties; if (p.kind !== "station" || p.signal === false) continue; if (p.line !== lineName && p.line_official !== lineName) continue; const [x, y] = f.geometry.coordinates;
+      const elx = document.createElement("div"); elx.style.cssText = "width:18px;height:18px;border-radius:50%;border:3.5px solid #fff;box-shadow:0 0 0 1.5px " + col + ";pointer-events:none"; routeHl.push(new K.CustomOverlay({ map, position: LL(x, y), content: elx, zIndex: 23, yAnchor: .5, xAnchor: .5 })); }
+    if (fit && !bounds.isEmpty()) { try { map.setBounds(bounds); } catch (e) {} } };
+  let aptMarker = null;
+  const showAptAnchor = a => { if (aptMarker) aptMarker.setMap(null); const elx = document.createElement("div"); elx.className = "dong-badge"; elx.style.cssText = "border-color:#c2255c;color:#c2255c"; elx.textContent = "◎ " + a.n;
+    aptMarker = new K.CustomOverlay({ map, position: LL(a.lon, a.lat), content: elx, zIndex: 24, yAnchor: .5, xAnchor: .5 }); clearRadius(); };
+  const clearAptMarker = () => { if (aptMarker) { aptMarker.setMap(null); aptMarker = null; } };
+  let radarM = null;
+  const radarPulse = (lng, lat) => { if (radarM) radarM.setMap(null); const elx = document.createElement("div"); elx.className = "radar"; elx.innerHTML = "<span></span><span></span><span></span>"; elx.style.pointerEvents = "none";
+    radarM = new K.CustomOverlay({ map, position: LL(lng, lat), content: elx, zIndex: 25, yAnchor: .5, xAnchor: .5 }); setTimeout(() => { if (radarM) { radarM.setMap(null); radarM = null; } }, 2600); };
+  let hlPolys = []; const clearHighlight = () => { hlPolys.forEach(o => o.setMap(null)); hlPolys = []; };
+  const highlightRings = ringsXY => { clearHighlight(); if (!ringsXY || !ringsXY.length) return; ringsXY.forEach(r => hlPolys.push(new K.Polygon({ map, path: r.map(([x, y]) => LL(x, y)), strokeWeight: 2.5, strokeColor: "#5b3fd4", strokeOpacity: .95, fillColor: "#5b3fd4", fillOpacity: .12, zIndex: 6 }))); };
+  const sggRingsFn = () => { if (window._sggRings) return window._sggRings; const m = {}; SGG_GEO.features.forEach(f => { const disp = f.properties.sido + " " + sggDisplayName(f.properties.name); ringsOf(f).forEach(r => (m[disp] = m[disp] || []).push(r)); }); return (window._sggRings = m); };
+  mapApi = { refreshPins, panTo: ll => map.panTo(LL(ll[0], ll[1])), showRadius, showRadiusMany, clearRadius, showAptAnchor, highlightRings, clearHighlight, clearAptMarker, emphasizePin, radarPulse, sggRings: sggRingsFn, highlightRoute, clearRoute };
   refreshPins();
 }
 
