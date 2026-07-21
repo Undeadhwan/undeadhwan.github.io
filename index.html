@@ -2969,11 +2969,12 @@ function initKakao() {
   const applyLOD = () => { renderDongPoly(); renderJeongbiPoly(); renderHojae(); renderDongLabels(); renderAptDots(); renderRail(); loadBdong(); };
   K.event.addListener(map, "idle", applyLOD);
   // 줌 애니메이션 프레임마다 카카오가 살아있는 벡터·DOM 오버레이 전부를 재투영한다 — 그게 "딱딱 끊김"의 원인.
-  // 애니메이션 동안 저가치 레이어(히트선·동/정비 폴리곤·라벨·아파트점)만 잠깐 내리고 idle의 applyLOD가 복귀시킨다.
-  // 호재 마커·노선 본선은 유지(화면 연속성 — 주인공은 안 깜빡인다).
+  // 애니메이션 동안 우리 오버레이 **전부**를 잠깐 내리고 idle의 applyLOD가 복귀시킨다(네이버지도 방식 —
+  // 저가치만 내려선 부족하다는 사용자 확인 2026-07-21). 선택 상태(핀·반경·노선 하이라이트)만 유지.
   K.event.addListener(map, "zoom_start", () => {
     hideTip();
-    if (railLineObjs) railLineObjs.forEach(o => o.hits.forEach(l => l.setMap(null)));
+    if (railLineObjs) railLineObjs.forEach(o => { o.objs.forEach(l => l.setMap(null)); o.hits.forEach(l => l.setMap(null)); });
+    hjShown.forEach(s => s._kmk && s._kmk.setMap(null));
     for (const f of DONG_GEO.features) if (f._kpolys) f._kpolys.forEach(pg => pg.setMap(null));
     shownJb.forEach(o => o.setMap(null));
     lblShown.forEach(f => f._klbl && f._klbl.setMap(null));
@@ -3361,7 +3362,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260721ar");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260721as");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3457,7 +3458,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260721ar"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260721as"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3483,7 +3484,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260721ar");
+  const CB = "?b=" + (window.BUILD || "20260721as");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
