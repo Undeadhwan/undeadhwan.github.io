@@ -122,7 +122,7 @@
     filter:drop-shadow(0 1px 2px rgba(0,0,0,.35)); }   /* 컬러 이모지 그대로(선명) — 호재 원과 형태로 구분 */
   .apt-house-s:hover { font-size:18px; }
   .apt-house-s.sel { font-size:20px; filter:drop-shadow(0 0 4px #d6156d); }
-  .apt-dot { width:8px; height:8px; border-radius:50%; background:#b4bccc; border:1.5px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.25); }
+  .apt-dot { width:11px; height:11px; border-radius:50%; background:#8f97a8; border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.4); }   /* 카카오 베이스맵 위 가시성 보강(2026-07-21 "아이콘이 없다") — 조연 무채색 유지 */
   .apt-dot.sel { background:#d6156d; border-color:#fff; box-shadow:0 0 0 3px rgba(214,21,109,.3); }
   /* 상세 패널 등장 — 네이버부동산풍: 느긋한 감속 슬라이드(사용자 2026-07-21 "훅 들어와 어색 → 속도 낮추고 부드럽게").
      innerHTML 교체마다 새 .detail이라 자동 재생 */
@@ -3363,7 +3363,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260721au");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260721av");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3459,7 +3459,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260721au"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260721av"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3485,7 +3485,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260721au");
+  const CB = "?b=" + (window.BUILD || "20260721av");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
