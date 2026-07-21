@@ -122,8 +122,14 @@
     filter:drop-shadow(0 1px 2px rgba(0,0,0,.35)); }   /* 컬러 이모지 그대로(선명) — 호재 원과 형태로 구분 */
   .apt-house-s:hover { font-size:18px; }
   .apt-house-s.sel { font-size:20px; filter:drop-shadow(0 0 4px #d6156d); }
-  .apt-dot { width:11px; height:11px; border-radius:50%; background:#8f97a8; border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.4); }   /* 카카오 베이스맵 위 가시성 보강(2026-07-21 "아이콘이 없다") — 조연 무채색 유지 */
-  .apt-dot.sel { background:#d6156d; border-color:#fff; box-shadow:0 0 0 3px rgba(214,21,109,.3); }
+  /* 아파트 = 깔끔한 집모양 SVG (2026-07-21 "집모양이 아니잖아" — 이모지도 점도 아님). 무채 조연 유지 */
+  .apt-dot { width:17px; height:17px; cursor:pointer; filter:drop-shadow(0 1px 2px rgba(0,0,0,.4)); }
+  .apt-dot svg { display:block; width:100%; height:100%; }
+  .apt-dot path { fill:#7e8698; stroke:#fff; stroke-width:1.7; stroke-linejoin:round; }
+  .apt-dot:hover path { fill:#5a6478; }
+  .apt-dot.sel { filter:drop-shadow(0 0 4px rgba(214,21,109,.55)); }
+  .apt-dot.sel path { fill:#d6156d; }
+  .apt-dot.lf { transform:translate(-50%,-50%); }   /* Leaflet divIcon은 좌상단 앵커 — 중심 보정 */
   /* 상세 패널 등장 — 네이버부동산풍: 느긋한 감속 슬라이드(사용자 2026-07-21 "훅 들어와 어색 → 속도 낮추고 부드럽게").
      innerHTML 교체마다 새 .detail이라 자동 재생 */
   .detail { animation: panelIn .38s cubic-bezier(.16,.84,.28,1) both; }
@@ -2231,7 +2237,7 @@ function initLeaflet() {
       const sel = treeState.selKey === `apt|${a.n}|${a.dong}`;
       // 집 아이콘 = 무채색(조연). 호재 원(컬러)이 주인공 — 숫자·배지 없음(§7 상시배지 금지 완전 준수)
       const m = L.marker([a.lat, a.lon], { pane: "badge", zIndexOffset: sel ? 1000 : 0,
-        icon: L.divIcon({ className: "", html: `<div class="apt-dot${sel ? " sel" : ""}"></div>`, iconSize: null }) }).addTo(map);
+        icon: L.divIcon({ className: "", html: `<div class="apt-dot lf${sel ? " sel" : ""}"><svg viewBox="0 0 24 24"><path d="M12 3.2 3.5 10.6V21h6.2v-5.6h4.6V21h6.2V10.6Z"/></svg></div>`, iconSize: null }) }).addTo(map);
       const near = () => signalsNearPoint([a.lon, a.lat]);   // 팝업 열 때만 계산(렌더 비용 절감)
       const sub = `${a.sg} ${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : " · 세대수 미상"}${a.built ? " · 준공 " + a.built : ""}`;
       // hover 팝업: 마커 벗어나 빈 공간 가면 닫힘(300ms 유예 — 그 사이 팝업 위로 이동하면 유지 → 비교담기 클릭 가능).
@@ -2935,7 +2941,8 @@ function initKakao() {
       cands.sort((x, y) => y.hh - x.hh); const placed = [];
       for (const { a } of cands) { if (placed.length > 200) break; const pt = toPt(a.lon, a.lat); if (collides(placed, pt, 20, 18)) continue; placed.push({ x: pt.x, y: pt.y });
         if (!a._kdot) {
-          const d = document.createElement("div");   // 예전 회색 점(apt-dot, 2026-07-21)
+          const d = document.createElement("div");   // 집모양 SVG(apt-dot, 2026-07-21)
+          d.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 3.2 3.5 10.6V21h6.2v-5.6h4.6V21h6.2V10.6Z"/></svg>';
           const sub = a.sg + " " + a.dong + (a.hh ? " · " + a.hh.toLocaleString() + "세대" : " · 세대수 미상") + (a.built ? " · 준공 " + a.built : "");
           d.addEventListener("mouseenter", () => { if (aptPopTimer) clearTimeout(aptPopTimer); openAptPop(a, sub, toPt(a.lon, a.lat)); });
           d.addEventListener("mouseleave", () => { aptPopTimer = setTimeout(closeAptPop, 300); });
@@ -3363,7 +3370,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260721av");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260721aw");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3459,7 +3466,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260721av"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260721aw"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3485,7 +3492,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260721av");
+  const CB = "?b=" + (window.BUILD || "20260721aw");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
