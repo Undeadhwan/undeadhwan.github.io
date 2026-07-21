@@ -124,9 +124,10 @@
   .apt-house-s.sel { font-size:20px; filter:drop-shadow(0 0 4px #d6156d); }
   .apt-dot { width:8px; height:8px; border-radius:50%; background:#b4bccc; border:1.5px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.25); }
   .apt-dot.sel { background:#d6156d; border-color:#fff; box-shadow:0 0 0 3px rgba(214,21,109,.3); }
-  /* 상세 패널 등장 — 즉시 떠서 어색하다는 피드백(2026-07-21). innerHTML 교체마다 새 .detail이라 자동 재생 */
-  .detail { animation: panelIn .24s cubic-bezier(.2,.7,.3,1) both; }
-  @keyframes panelIn { from { opacity:0; transform:translateX(14px); } to { opacity:1; transform:none; } }
+  /* 상세 패널 등장 — 네이버부동산풍: 느긋한 감속 슬라이드(사용자 2026-07-21 "훅 들어와 어색 → 속도 낮추고 부드럽게").
+     innerHTML 교체마다 새 .detail이라 자동 재생 */
+  .detail { animation: panelIn .38s cubic-bezier(.16,.84,.28,1) both; }
+  @keyframes panelIn { from { opacity:0; transform:translateX(34px); } to { opacity:1; transform:none; } }
   .hmatrix { border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin:2px 0 14px; background:#fbfcfe; }
   .hmhead { font-size:12px; color:var(--muted); margin-bottom:5px; }
   .hmhead b { color:var(--ink); font-size:15px; font-weight:800; }
@@ -2840,18 +2841,20 @@ function initKakao() {
       const clickHandler = () => { _ovClickTs = Date.now(); hideTip();
         if (isRoad) { const sig = ROAD_SIG.find(s => s.title.startsWith(p.name)) || SIGNALS.find(s => s._road && s.road_ref && p.name.includes(s.road_ref)); if (sig) showSignal(sig, false); return; }
         const flat = f.geometry.type === "MultiLineString" ? f.geometry.coordinates.flat() : f.geometry.coordinates; showSignal(railToSignal(p, flat[Math.floor(flat.length / 2)]), false); };
-      const objs = [];
+      const objs = [], hits = [];
       segs.forEach(seg => {
         const path = seg.map(([x, y]) => LL(x, y));
         objs.push(new K.Polyline({ path, strokeColor: col, strokeWeight: dashed ? 2.6 : 3.2, strokeOpacity: subdued ? .45 : isRoad ? .75 : .9, strokeStyle: dashed ? "shortdash" : "solid", zIndex: 3 }));
-        const hit = new K.Polyline({ path, strokeColor: "#000", strokeWeight: 14, strokeOpacity: 0.001, zIndex: 4 });
+        // 히트선은 정점 1/3만 — 14px 회랑 판정엔 충분하고, 줌 프레임당 벡터 재투영 비용을 줄인다
+        const hp = path.filter((_, i) => i % 3 === 0 || i === path.length - 1);
+        const hit = new K.Polyline({ path: hp, strokeColor: "#000", strokeWeight: 14, strokeOpacity: 0.001, zIndex: 4 });
         K.event.addListener(hit, "click", clickHandler);
         K.event.addListener(hit, "mouseover", mev => showTip(html, evToClient(mev)));
         K.event.addListener(hit, "mousemove", mev => showTip(html, evToClient(mev)));
         K.event.addListener(hit, "mouseout", hideTip);
-        objs.push(hit);
+        hits.push(hit);
       });
-      railLineObjs.push({ objs, isRoad, ph: p.phase || "계획" });
+      railLineObjs.push({ objs, hits, isRoad, ph: p.phase || "계획" });
     }
   };
   const renderRail = () => {
@@ -2866,6 +2869,7 @@ function initKakao() {
         && (o.isRoad ? filter.lines.has("도로선") : filter.lines.has("철도선"))
         && (!phaseFiltering || filter.phase.has(o.ph));
       o.objs.forEach(l => l.setMap(show ? map : null));
+      o.hits.forEach(l => l.setMap(show ? map : null));
     }
     // 역명 라벨(z<=APT_LV, 뷰포트 의존 — 매번 재계산)
     if (!catOn || map.getLevel() > APT_LV) return;
@@ -2964,6 +2968,18 @@ function initKakao() {
 
   const applyLOD = () => { renderDongPoly(); renderJeongbiPoly(); renderHojae(); renderDongLabels(); renderAptDots(); renderRail(); loadBdong(); };
   K.event.addListener(map, "idle", applyLOD);
+  // 줌 애니메이션 프레임마다 카카오가 살아있는 벡터·DOM 오버레이 전부를 재투영한다 — 그게 "딱딱 끊김"의 원인.
+  // 애니메이션 동안 저가치 레이어(히트선·동/정비 폴리곤·라벨·아파트점)만 잠깐 내리고 idle의 applyLOD가 복귀시킨다.
+  // 호재 마커·노선 본선은 유지(화면 연속성 — 주인공은 안 깜빡인다).
+  K.event.addListener(map, "zoom_start", () => {
+    hideTip();
+    if (railLineObjs) railLineObjs.forEach(o => o.hits.forEach(l => l.setMap(null)));
+    for (const f of DONG_GEO.features) if (f._kpolys) f._kpolys.forEach(pg => pg.setMap(null));
+    shownJb.forEach(o => o.setMap(null));
+    lblShown.forEach(f => f._klbl && f._klbl.setMap(null));
+    aptShown.forEach(a => a._kdot && a._kdot.setMap(null));
+    railLabels.forEach(o => o.setMap(null));
+  });
   // 컨테이너 크기 확정 대응(Leaflet invalidateSize에 해당) — 0크기로 시작한 로드·모바일 회전·패널 토글 시
   // 카카오 투영이 0×0에 굳으면 getBounds()가 한 점이 돼 호재 원이 전부 걸러진다. relayout으로 재투영 후 재렌더.
   setTimeout(() => { try { map.relayout(); applyLOD(); } catch (e) {} }, 300);
