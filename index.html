@@ -2452,7 +2452,7 @@ function initLeaflet() {
       const dashed = !["착공", "준공"].some(k => (p.phase || "").startsWith(k));   // 착공·준공=실선(범례 일치), 계획·인가=점선. 근사 선형은 툴팁으로만 고지(사용자 2026-07-21)
       // 중분류 조회축(2026-07-18): 선형·역 라벨도 철도/도로 필터에 반응해야 전 화면 일관(신호 목록·집계와 동일 기준)
       if (!filter.sub.has(isRoad ? "도로" : "철도")) continue;
-      if (phaseFiltering && p.phase && !filter.phase.has(p.phase)) continue;
+      if (phaseFiltering && !filter.phase.has(p.phase || "계획")) continue;   // phase 미상(예타 등 고시 전)=계획 취급 — 단계 필터에 반응(2026-07-21)
       if (YEAR_SEL && false) continue;   // (철도 고시연도 필터는 추후)
       if (f.geometry.type === "LineString" || f.geometry.type === "MultiLineString") {
         // 노선 선형 표시 토글(헤더 '노선') — 선만 숨김, 역·IC 라벨과 호재 원·집계는 불변
@@ -2713,6 +2713,21 @@ function hexA(hex, a) {
   const n = h.length === 3 ? h.split("").map(c => c + c).join("") : h;
   return "rgba(" + parseInt(n.slice(0, 2), 16) + "," + parseInt(n.slice(2, 4), 16) + "," + parseInt(n.slice(4, 6), 16) + "," + a + ")";
 }
+/* 호재 원 마커 이미지(스타일별 캐시) — CustomOverlay div 대신 Kakao Marker로 렌더해 드래그 성능 확보
+   (사용자 "부드럽게" 2026-07-21). 색=분류·크기=등급·점선=단계·후광=근사 를 SVG 하나에 담고 캐시. */
+const _hjImg = {};
+function hojaeMarkerImage(col, r, bw, solid, fillOp, alpha, halo) {
+  const key = col + "|" + r + "|" + bw + "|" + solid + "|" + fillOp + "|" + alpha + "|" + halo;
+  if (_hjImg[key]) return _hjImg[key];
+  const size = Math.ceil((halo ? r + 9 : r + bw + 1) * 2), c = size / 2;
+  let inner = halo ? '<circle cx="' + c + '" cy="' + c + '" r="' + (r + 9) + '" fill="' + col + '" opacity="0.13"/>' : "";
+  inner += '<circle cx="' + c + '" cy="' + c + '" r="' + r + '" fill="' + hexA(col, fillOp) + '" stroke="' + col + '" stroke-width="' + bw + '"' + (solid ? "" : ' stroke-dasharray="4 3"') + '/>';
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '"><g opacity="' + alpha + '">' + inner + '</g></svg>';
+  const img = new kakao.maps.MarkerImage("data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg),
+    new kakao.maps.Size(size, size), { offset: new kakao.maps.Point(c, c) });
+  _hjImg[key] = img;
+  return img;
+}
 /* ══════════ 카카오 SDK 렌더러 (initLeaflet 파리티, 2026-07-21 카카오맵 승인 적용) ══════════
    카카오 level은 낮을수록 확대(1=최대,14=최소) — Leaflet zoom과 반대. DONG_LV=6(z12)·APT_LV=4(z14) 실측 보정.
    circleMarker→CustomOverlay 고정픽셀 div, bindTooltip→공유 floating div, 반경 Circle은 meter(getRadius=meter) 직결. */
@@ -2741,11 +2756,18 @@ function initKakao() {
   const toPt = (lng, lat) => map.getProjection().containerPointFromCoords(new K.LatLng(lat, lng));
   const collides = (placed, pt, w, h) => placed.some(p => Math.abs(p.x - pt.x) < w && Math.abs(p.y - pt.y) < h);
 
-  let dongPolys = [];
-  const renderDongPoly = () => { dongPolys.forEach(p => p.setMap(null)); dongPolys = [];
-    if (map.getLevel() > DONG_LV) return; const b = map.getBounds();
-    for (const f of DONG_GEO.features) { const c = ringCentroid(ringsOf(f)[0]); if (!b.contain(LL(c[0], c[1]))) continue;
-      ringsOf(f).forEach(r => dongPolys.push(new K.Polygon({ map, path: r.map(([x, y]) => LL(x, y)), strokeWeight: 1, strokeColor: "#888", strokeOpacity: .45, strokeStyle: "solid", fillColor: "#fff", fillOpacity: 0, zIndex: 1 }))); } };
+  // 오버레이(선·폴리곤) 클릭이 지도 click(goHome)과 이중 발화하면 상세가 열리자마자 닫힌다 — 타임스탬프 가드
+  let _ovClickTs = 0;
+  // 동 경계: 폴리곤을 feature에 1회 캐시(_kpolys) — 줌/이동마다 파괴·재생성하지 않고 setMap 토글만(줌 버벅임 해소)
+  const renderDongPoly = () => {
+    const on = map.getLevel() <= DONG_LV; const b = on ? map.getBounds() : null;
+    for (const f of DONG_GEO.features) {
+      const c = ringCentroid(ringsOf(f)[0]);
+      const vis = on && b.contain(LL(c[0], c[1]));
+      if (vis && !f._kpolys) f._kpolys = ringsOf(f).map(r => new K.Polygon({ path: r.map(([x, y]) => LL(x, y)), strokeWeight: 1, strokeColor: "#888", strokeOpacity: .45, strokeStyle: "solid", fillColor: "#fff", fillOpacity: 0, zIndex: 1 }));
+      if (f._kpolys) f._kpolys.forEach(pg => pg.setMap(vis ? map : null));
+    }
+  };
 
   let hjDots = [];
   const renderHojae = () => { hjDots.forEach(o => o.setMap(null)); hjDots = [];
@@ -2758,15 +2780,14 @@ function initKakao() {
     for (const s of pool) { if (++n > 600) break; const [x, y] = s.geometry.coordinates; const unk = basisUnknown(s);
       const col = s.status === "종결" ? "#9aa3b2" : unk ? "#8a93a3" : colorOf(s); const lvl = levelOf(s); const solid = phaseSolid(s);
       const r = unk ? HJR.C : (HJR[lvl] || 5); const bw = !unk && lvl === "A" ? 2.6 : 2;
-      if (s.geo_approx) { const halo = document.createElement("div"); const hr = (r + 9) * 2;
-        halo.style.cssText = "width:" + hr + "px;height:" + hr + "px;border-radius:50%;background:" + col + ";opacity:.13;pointer-events:none";
-        hjDots.push(new K.CustomOverlay({ map, position: LL(x, y), content: halo, zIndex: 9, yAnchor: .5, xAnchor: .5 })); }
-      const d = document.createElement("div"); const dia = r * 2;
-      d.style.cssText = "width:" + dia + "px;height:" + dia + "px;border-radius:50%;box-sizing:border-box;cursor:pointer;background:" + hexA(col, unk ? .10 : solid ? .22 : .10) + ";border:" + bw + "px " + (solid ? "solid" : "dashed") + " " + col + ";opacity:" + (s.status === "종결" ? .45 : unk ? .75 : .9);
+      const alpha = s.status === "종결" ? .45 : unk ? .75 : .9, fillOp = unk ? .10 : solid ? .22 : .10;
+      // Marker + 캐시이미지(성능) — CustomOverlay div는 드래그마다 개별 재배치돼 수백 개면 버벅인다
+      const mk = new K.Marker({ map, position: LL(x, y), image: hojaeMarkerImage(col, r, bw, solid, fillOp, alpha, s.geo_approx), zIndex: 10 });
       const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + s.title + '</div><div class="apt-pop-sub"><span style="color:' + col + ';font-weight:700">● ' + catOf(s) + '</span> · ' + lvlPill(lvl) + ' ' + gradeBasisHtml(s).replace(/ · $/, "") + '</div><div class="apt-pop-cats"><span>단계 ' + phaseOf(s) + (s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : "") + '</span></div></div>';
-      d.addEventListener("mouseenter", e => showTip(html, e)); d.addEventListener("mousemove", e => showTip(html, e));
-      d.addEventListener("mouseleave", hideTip); d.addEventListener("click", e => { e.stopPropagation(); hideTip(); showSignal(s, false); });
-      hjDots.push(new K.CustomOverlay({ map, position: LL(x, y), content: d, zIndex: 10, yAnchor: .5, xAnchor: .5 })); } };
+      K.event.addListener(mk, "mouseover", () => { const q = toPt(x, y); const rc = mapEl.getBoundingClientRect(); showTip(html, { clientX: rc.left + q.x, clientY: rc.top + q.y }); });
+      K.event.addListener(mk, "mouseout", hideTip);
+      K.event.addListener(mk, "click", () => { hideTip(); showSignal(s, false); });
+      hjDots.push(mk); } };
 
   let dongLabels = [];
   const renderDongLabels = () => { dongLabels.forEach(o => o.setMap(null)); dongLabels = [];
@@ -2778,24 +2799,64 @@ function initKakao() {
       elx.addEventListener("click", e => { e.stopPropagation(); showDong(f); });
       dongLabels.push(new K.CustomOverlay({ map, position: LL(c[0], c[1]), content: elx, zIndex: 8, yAnchor: .5, xAnchor: .5 })); } };
 
-  let railLayers = [];
-  const renderRail = () => { railLayers.forEach(o => o.setMap(null)); railLayers = [];
-    if ((!RAIL.length && !ROADF.length) || !filter.cat.has("교통")) return;
-    const phaseFiltering = filter.phase.size < PHASES.length; const col = CAT_COLOR["교통"]; const lv = map.getLevel(); const b = map.getBounds();
-    for (const f of RAIL.concat(ROADF)) { const p = f.properties; const isRoad = p.mode === "road";
-      const dashed = !["착공", "준공"].some(k => (p.phase || "").startsWith(k));   // 착공·준공=실선(범례 일치), 계획·인가=점선. 근사 선형은 툴팁으로만 고지(사용자 2026-07-21)
-      if (!filter.sub.has(isRoad ? "도로" : "철도")) continue; if (phaseFiltering && p.phase && !filter.phase.has(p.phase)) continue;
-      if (f.geometry.type === "LineString" || f.geometry.type === "MultiLineString") {
-        if (isRoad ? !filter.lines.has("도로선") : !filter.lines.has("철도선")) continue;
-        const subdued = isRoad && p.has_official_ic; const segs = f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates];
-        const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + (isRoad ? "🛣" : "🚈") + " " + (p.full || p.name) + '</div><div class="apt-pop-sub">' + (p.linekind || "") + ' · <span style="color:' + col + '">' + p.status + '</span>' + (p.approx ? " (근사 선형 — 공식 경유지 연결, 실선형 아님)" : dashed ? " (미확정 — 점선)" : "") + '</div>' + (p.geom_partial ? '<div class="apt-pop-sub" style="color:#b3651e">⚠ ' + (p.geom_cover_note || "선형 일부 구간만 확보") + '</div>' : "") + '<div class="apt-pop-cats"><span style="color:' + col + '">● 단계 ' + (p.phase || (p.confirmed ? "착공" : "계획")) + '</span>' + (p.note ? " · " + p.note : "") + (p.src_name ? " · 출처: " + p.src_name : isRoad ? " · 선형: OSM(ODbL)" : "") + '</div></div>';
-        const clickHandler = () => { hideTip(); if (isRoad) { const sig = ROAD_SIG.find(s => s.title.startsWith(p.name)) || SIGNALS.find(s => s._road && s.road_ref && p.name.includes(s.road_ref)); if (sig) showSignal(sig, false); return; }
-          const flat = f.geometry.type === "MultiLineString" ? f.geometry.coordinates.flat() : f.geometry.coordinates; showSignal(railToSignal(p, flat[Math.floor(flat.length / 2)]), false); };
-        segs.forEach(seg => { const line = new K.Polyline({ map, path: seg.map(([x, y]) => LL(x, y)), strokeColor: col, strokeWeight: dashed ? 2.6 : 3.2, strokeOpacity: subdued ? .45 : isRoad ? .75 : .9, strokeStyle: dashed ? "shortdash" : "solid", zIndex: 3 });
-          K.event.addListener(line, "mouseover", mev => showTip(html, evToClient(mev))); K.event.addListener(line, "mouseout", hideTip); K.event.addListener(line, "click", clickHandler); railLayers.push(line); });
-      } else if (f.geometry.type === "Point" && lv <= APT_LV) { const [x, y] = f.geometry.coordinates; if (!b.contain(LL(x, y))) continue;
-        const elx = document.createElement("div"); elx.className = "rail-name"; elx.textContent = p.name; elx.style.pointerEvents = "none";
-        railLayers.push(new K.CustomOverlay({ map, position: LL(x, y), content: elx, zIndex: 7, yAnchor: .5, xAnchor: .5 })); } } };
+  /* 노선 선형: 뷰포트와 무관하므로 **1회 생성 후 setMap 토글만**(줌마다 149개·수천 정점 재생성이 버벅임 주범).
+     클릭 판정: 카카오는 히트 영역이 선 굵기 그대로라 3px 선은 못 누른다 → 투명 굵은 히트선(14px)을 위에 깔고
+     클릭·hover를 거기서 받는다. phase 미상(예타 등 고시 전) 노선은 "계획"으로 취급해 단계 필터에 반응(사용자 2026-07-21 — 5호선 김포연장이 필터에 안 죽던 원인). */
+  let railLabels = [], railLineObjs = null, _railCacheN = -1;
+  const buildRailLines = () => {
+    if (railLineObjs) railLineObjs.forEach(o => o.objs.forEach(l => l.setMap(null)));
+    railLineObjs = [];
+    const col = CAT_COLOR["교통"];
+    for (const f of RAIL.concat(ROADF)) {
+      if (f.geometry.type !== "LineString" && f.geometry.type !== "MultiLineString") continue;
+      const p = f.properties; const isRoad = p.mode === "road";
+      const dashed = !["착공", "준공"].some(k => (p.phase || "").startsWith(k));   // 착공·준공=실선(범례 일치)
+      const subdued = isRoad && p.has_official_ic;
+      const segs = f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates];
+      const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + (isRoad ? "🛣" : "🚈") + " " + (p.full || p.name) + '</div><div class="apt-pop-sub">' + (p.linekind || "") + ' · <span style="color:' + col + '">' + p.status + '</span>' + (p.approx ? " (근사 선형 — 공식 경유지 연결, 실선형 아님)" : dashed ? " (미확정 — 점선)" : "") + '</div>' + (p.geom_partial ? '<div class="apt-pop-sub" style="color:#b3651e">⚠ ' + (p.geom_cover_note || "선형 일부 구간만 확보") + '</div>' : "") + '<div class="apt-pop-cats"><span style="color:' + col + '">● 단계 ' + (p.phase || (p.confirmed ? "착공" : "계획")) + '</span>' + (p.note ? " · " + p.note : "") + (p.src_name ? " · 출처: " + p.src_name : isRoad ? " · 선형: OSM(ODbL)" : "") + '</div></div>';
+      const clickHandler = () => { _ovClickTs = Date.now(); hideTip();
+        if (isRoad) { const sig = ROAD_SIG.find(s => s.title.startsWith(p.name)) || SIGNALS.find(s => s._road && s.road_ref && p.name.includes(s.road_ref)); if (sig) showSignal(sig, false); return; }
+        const flat = f.geometry.type === "MultiLineString" ? f.geometry.coordinates.flat() : f.geometry.coordinates; showSignal(railToSignal(p, flat[Math.floor(flat.length / 2)]), false); };
+      const objs = [];
+      segs.forEach(seg => {
+        const path = seg.map(([x, y]) => LL(x, y));
+        objs.push(new K.Polyline({ path, strokeColor: col, strokeWeight: dashed ? 2.6 : 3.2, strokeOpacity: subdued ? .45 : isRoad ? .75 : .9, strokeStyle: dashed ? "shortdash" : "solid", zIndex: 3 }));
+        const hit = new K.Polyline({ path, strokeColor: "#000", strokeWeight: 14, strokeOpacity: 0.001, zIndex: 4 });
+        K.event.addListener(hit, "click", clickHandler);
+        K.event.addListener(hit, "mouseover", mev => showTip(html, evToClient(mev)));
+        K.event.addListener(hit, "mousemove", mev => showTip(html, evToClient(mev)));
+        K.event.addListener(hit, "mouseout", hideTip);
+        objs.push(hit);
+      });
+      railLineObjs.push({ objs, isRoad, ph: p.phase || "계획" });
+    }
+  };
+  const renderRail = () => {
+    railLabels.forEach(o => o.setMap(null)); railLabels = [];
+    const nData = RAIL.length + ROADF.length;
+    if (!nData) return;
+    if (nData !== _railCacheN) { buildRailLines(); _railCacheN = nData; }   // 지연 로드 대응 — 데이터가 바뀐 경우만 재생성
+    const catOn = filter.cat.has("교통");
+    const phaseFiltering = filter.phase.size < PHASES.length;
+    for (const o of railLineObjs) {
+      const show = catOn && filter.sub.has(o.isRoad ? "도로" : "철도")
+        && (o.isRoad ? filter.lines.has("도로선") : filter.lines.has("철도선"))
+        && (!phaseFiltering || filter.phase.has(o.ph));
+      o.objs.forEach(l => l.setMap(show ? map : null));
+    }
+    // 역명 라벨(z<=APT_LV, 뷰포트 의존 — 매번 재계산)
+    if (!catOn || map.getLevel() > APT_LV) return;
+    const b = map.getBounds();
+    for (const f of RAIL.concat(ROADF)) {
+      if (f.geometry.type !== "Point") continue;
+      const p = f.properties; const isRoad = p.mode === "road";
+      if (!filter.sub.has(isRoad ? "도로" : "철도")) continue;
+      if (phaseFiltering && !filter.phase.has(p.phase || "계획")) continue;
+      const [x, y] = f.geometry.coordinates; if (!b.contain(LL(x, y))) continue;
+      const elx = document.createElement("div"); elx.className = "rail-name"; elx.textContent = p.name; elx.style.pointerEvents = "none";
+      railLabels.push(new K.CustomOverlay({ map, position: LL(x, y), content: elx, zIndex: 7, yAnchor: .5, xAnchor: .5 }));
+    }
+  };
 
   // 정비구역 폴리곤 + 범례
   const featBbox = f => { if (f._bb) return f._bb; let x0 = 180, y0 = 90, x1 = -180, y1 = -90;
@@ -2805,20 +2866,26 @@ function initKakao() {
       const items = [["정비구역(주거개발)", CAT_COLOR["주거개발"]], ["단계 미상(고시 경계만)", "#aeb4c0"], ["종결·무산", "#9aa3b2"]];
       jbLegendEl.innerHTML = "<b>정비구역</b>" + items.map(([n, c]) => '<span class="jl"><i style="background:' + c + '"></i>' + n + '</span>').join("") + '<div class="jhint">진행 단계는 구역 클릭·툴팁에서 확인 (색은 4대 분류 통일 — 교통 파랑 / 주거 마젠타).<br>출처: 서울특별시 도시공간본부(공공누리 4유형)</div>';
       mapEl.appendChild(jbLegendEl); } else if (!show && jbLegendEl) { jbLegendEl.remove(); jbLegendEl = null; } };
-  let jbPolys = [];
-  const renderJeongbiPoly = () => { jbPolys.forEach(o => o.setMap(null)); jbPolys = [];
+  // 정비 폴리곤: feature에 1회 캐시(_kjb) — 줌/이동마다 재생성하지 않고 setMap 토글만(줌 버벅임 해소)
+  let shownJb = [];
+  const renderJeongbiPoly = () => {
+    shownJb.forEach(o => o.setMap(null)); shownJb = [];
     if (map.getLevel() > DONG_LV || !JEONGBI_POLY.length || !filter.cat.has("주거개발")) { toggleJbLegend(false); return; }
     const phaseFiltering = filter.phase.size < PHASES.length; const b = map.getBounds(), sw = b.getSouthWest(), ne = b.getNorthEast();
     const bx0 = sw.getLng(), by0 = sw.getLat(), bx1 = ne.getLng(), by1 = ne.getLat(); let n = 0;
     for (const f of JEONGBI_POLY) { const [x0, y0, x1, y1] = featBbox(f); if (x1 < bx0 || x0 > bx1 || y1 < by0 || y0 > by1) continue;
       const p = f.properties; if (_staleFin(p.stage, p.phase, null, p.date)) continue; if (YEAR_SEL && p.year && p.year > YEAR_SEL) continue; if (phaseFiltering && (!p.phase || !filter.phase.has(p.phase))) continue;
-      if (++n > 240) break; const tracked = !!p.phase; const col = tracked ? CAT_COLOR["주거개발"] : "#aeb4c0";
-      const path = f.geometry.coordinates.map(r => r.map(([x, y]) => LL(x, y)));
-      const poly = new K.Polygon({ map, path, strokeColor: col, strokeWeight: tracked ? 1.1 : 0.8, strokeOpacity: tracked ? .45 : .3, fillColor: col, fillOpacity: tracked ? .06 : .03, zIndex: 2 });
-      const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + (p.name || "정비구역") + '</div><div class="apt-pop-sub">정비구역 · ' + p.jtype + (p.area ? " · " + (p.area / 1e4).toFixed(1) + "만㎡" : "") + '</div><div class="apt-pop-cats">' + (tracked ? '<span style="color:' + col + '">● ' + (p.stage || "추진 중") + '</span>' + (p.psrc ? '<span style="color:#8a90a0"> · ' + p.psrc + ' 기준</span>' : "") : '<span style="color:#8a90a0">단계 미상 · 고시 경계</span>') + (p.date ? " · 고시 " + p.date : "") + '</div></div>';
-      K.event.addListener(poly, "mouseover", mev => showTip(html, evToClient(mev))); K.event.addListener(poly, "mousemove", mev => showTip(html, evToClient(mev))); K.event.addListener(poly, "mouseout", hideTip);
-      K.event.addListener(poly, "click", () => { hideTip(); const ring = f.geometry.coordinates[0]; let sx = 0, sy = 0; ring.forEach(([x, y]) => { sx += x; sy += y; }); showSignal(jeongbiPolyToSignal(p, [sx / ring.length, sy / ring.length]), false); });
-      jbPolys.push(poly); }
+      if (++n > 240) break;
+      if (!f._kjb) {
+        const tracked = !!p.phase; const col = tracked ? CAT_COLOR["주거개발"] : "#aeb4c0";
+        const path = f.geometry.coordinates.map(r => r.map(([x, y]) => LL(x, y)));
+        const poly = new K.Polygon({ path, strokeColor: col, strokeWeight: tracked ? 1.1 : 0.8, strokeOpacity: tracked ? .45 : .3, fillColor: col, fillOpacity: tracked ? .06 : .03, zIndex: 2 });
+        const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + (p.name || "정비구역") + '</div><div class="apt-pop-sub">정비구역 · ' + p.jtype + (p.area ? " · " + (p.area / 1e4).toFixed(1) + "만㎡" : "") + '</div><div class="apt-pop-cats">' + (tracked ? '<span style="color:' + col + '">● ' + (p.stage || "추진 중") + '</span>' + (p.psrc ? '<span style="color:#8a90a0"> · ' + p.psrc + ' 기준</span>' : "") : '<span style="color:#8a90a0">단계 미상 · 고시 경계</span>') + (p.date ? " · 고시 " + p.date : "") + '</div></div>';
+        K.event.addListener(poly, "mouseover", mev => showTip(html, evToClient(mev))); K.event.addListener(poly, "mousemove", mev => showTip(html, evToClient(mev))); K.event.addListener(poly, "mouseout", hideTip);
+        K.event.addListener(poly, "click", () => { _ovClickTs = Date.now(); hideTip(); const ring = f.geometry.coordinates[0]; let sx = 0, sy = 0; ring.forEach(([x, y]) => { sx += x; sy += y; }); showSignal(jeongbiPolyToSignal(p, [sx / ring.length, sy / ring.length]), false); });
+        f._kjb = poly;
+      }
+      f._kjb.setMap(map); shownJb.push(f._kjb); }
     toggleJbLegend(n > 0); };
 
   // 아파트 마커 + hover 팝업(비교담기)
@@ -2867,8 +2934,9 @@ function initKakao() {
   // 카카오 투영이 0×0에 굳으면 getBounds()가 한 점이 돼 호재 원이 전부 걸러진다. relayout으로 재투영 후 재렌더.
   setTimeout(() => { try { map.relayout(); applyLOD(); } catch (e) {} }, 300);
   try { new ResizeObserver(() => { try { map.relayout(); applyLOD(); } catch (e) {} }).observe(el); } catch (e) {}
-  K.event.addListener(map, "click", () => { hideTip(); goHome(); });
-  window._dbg = { applyLOD, renderHojae, renderDongLabels, map, get hjDots() { return hjDots; }, get railLayers() { return railLayers; }, get dongLabels() { return dongLabels; }, get jbPolys() { return jbPolys; }, get aptDots() { return aptDots; } };
+  // 지도 빈 곳 클릭 = 홈 복귀. 단 선·폴리곤 클릭 직후의 이중 발화는 무시(상세가 열리자마자 닫히는 문제)
+  K.event.addListener(map, "click", () => { if (Date.now() - _ovClickTs < 400) return; hideTip(); goHome(); });
+  window._dbg = { applyLOD, renderHojae, renderDongLabels, map, get hjDots() { return hjDots; }, get railLayers() { return railLineObjs ? railLineObjs.flatMap(o => o.objs) : []; }, get railLineObjs() { return railLineObjs; }, get dongLabels() { return dongLabels; }, get jbPolys() { return shownJb; }, get aptDots() { return aptDots; } };
   refreshJeongbiPoly = renderJeongbiPoly;
 
   let lines = [], pins = [], circles = [];
