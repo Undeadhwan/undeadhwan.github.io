@@ -1996,8 +1996,9 @@ function showSignal(s, pan) {
   mapApi?.refreshPins?.();
   if (pan && s._pan) s._pan();
   mapApi?.showRadius(s);   // 영향 반경 원 표시 (§3.3.1 기준표)
-  // 노선 소속 신호(역·IC·노선 자체)면 소속 노선 전체를 하이라이트하고 노선 전체가 보이게 맞춤(아실·호갱노노 동선)
-  if (s.line) mapApi?.highlightRoute?.(s.line, true); else mapApi?.clearRoute?.();
+  // 노선 소속 신호(역·IC·노선 자체)면 소속 노선 전체를 하이라이트. 전체경로 줌맞춤(fit)은 제거 —
+  // 보던 위치가 바뀌어 불편(사용자 2026-07-21). 하이라이트만 하고 지도는 그대로 둔다.
+  if (s.line) mapApi?.highlightRoute?.(s.line, false); else mapApi?.clearRoute?.();
 }
 /* 닫기: 신호 상세는 왔던 피드(동/구/단지)로 복귀(경계 강조 유지), 피드는 홈으로 */
 function closePanel() {
@@ -3362,7 +3363,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260721as");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260721at");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3458,7 +3459,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260721as"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260721at"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3484,7 +3485,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260721as");
+  const CB = "?b=" + (window.BUILD || "20260721at");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
