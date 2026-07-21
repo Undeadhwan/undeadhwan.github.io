@@ -45188,7 +45188,8 @@
      "geo_prec": "notice_map",
      "approx": true,
      "note": null,
-     "geo_basis": "부산 도시철도 사상~하단선 사업계획(변경)승인 고시(부산광역시 고시 2024-403호) 정거장 조서 지번 지오코딩 — 하단동 491 일원(조서 대표지번이 505·506 공통이라 504~하단 보간, 근사)"
+     "geo_basis": "부산 도시철도 사상~하단선 사업계획(변경)승인 고시(부산광역시 고시 2024-403호) 정거장 조서 지번 지오코딩 — 하단동 491 일원(조서 대표지번이 505·506 공통이라 504~하단 보간, 근사)",
+     "geo_hold": "조서 지번 '하단동 491'이 506정거장과 공통 — 그대로 쓰면 두 역이 한 점(QA 역중복). 504/505 번호↔역명 어긋남 판단 전까지 보간 좌표 유지(§4b 보류)"
     },
     {
      "name": "506정거장(가칭 동아대)",
@@ -65763,133 +65764,146 @@
    "stations": [
     {
      "name": "201정거장(한국은행 광주본)",
-     "lng": 126.849313,
-     "lat": 35.158507,
+     "lng": 126.848227,
+     "lat": 35.157815,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '서구 치평동 한국은행 광주본부' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 2건' → parcel(필지 2건 중앙값, p90 ±23m) (종전 좌표에서 124m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "202정거장(운천초등학교)",
-     "lng": 126.846745,
-     "lat": 35.152713,
+     "lng": 126.848228,
+     "lat": 35.15287,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '서구 치평동 운천초등학교' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 2건' → parcel(필지 2건 중앙값, p90 ±83m) (종전 좌표에서 136m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "상무역",
-     "lng": 126.848641,
-     "lat": 35.146784,
+     "lng": 126.84918,
+     "lat": 35.14513,
      "st_status": null,
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '서구 치평동 상무역' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 2건' → parcel(필지 2건 중앙값, p90 ±257m) (종전 좌표에서 189m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "204정거장(금호지구입구)",
-     "lng": 126.861812,
-     "lat": 35.137709,
+     "lng": 126.857381,
+     "lat": 35.143991,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '서구 쌍촌동 금호지구입구' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 803m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "205정거장",
-     "lng": 126.867232,
-     "lat": 35.13606,
+     "lng": 126.858881,
+     "lat": 35.138087,
      "st_status": "가칭",
-     "geo_prec": "notice_map",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주 2호선 고시 위치표(금호동) — 동명이물 POI 회피 위해 204~207 보간(근사)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 792m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "206정거장",
-     "lng": 126.872653,
-     "lat": 35.134412,
+     "lng": 126.860439,
+     "lat": 35.132476,
      "st_status": "가칭",
-     "geo_prec": "notice_map",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주 2호선 고시 위치표(금호동) — 동명이물 POI 회피 위해 204~207 보간(근사)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 2건' → parcel(필지 2건 중앙값, p90 ±241m) (종전 좌표에서 1132m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "207정거장(광주월드컵경기장)",
-     "lng": 126.878073,
-     "lat": 35.132763,
+     "lng": 126.877873,
+     "lat": 35.133347,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '서구 풍암동 광주월드컵경기장' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 67m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "208정거장(풍암대주2차아파)",
-     "lng": 126.876599,
-     "lat": 35.126027,
+     "lng": 126.877585,
+     "lat": 35.127246,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '서구 풍암동 풍암대주2차아파트' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 161m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "209정거장",
-     "lng": 126.88255,
-     "lat": 35.135509,
+     "lng": 126.88468,
+     "lat": 35.12907,
      "st_status": "가칭",
-     "geo_prec": "dong",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '서구 풍암동 원광대학교병원' 동 대표점(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 737m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "210정거장(주월2동주민센터)",
-     "lng": 126.894233,
-     "lat": 35.134669,
+     "lng": 126.896788,
+     "lat": 35.134157,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '남구 주월동 주월2동주민센터' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 239m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "211정거장(백운광장)",
-     "lng": 126.8996,
-     "lat": 35.13102,
+     "lng": 126.901146,
+     "lat": 35.132605,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '남구 주월동 백운광장' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 224m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "212정거장(미래아동병원)",
-     "lng": 126.910732,
-     "lat": 35.133693,
+     "lng": 126.906879,
+     "lat": 35.13334,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '남구 주월동 미래아동병원' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 2건' → parcel(필지 2건 중앙값, p90 ±527m) (종전 좌표에서 352m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "213정거장(방림휴먼시아)",
-     "lng": 126.91956,
-     "lat": 35.135644,
+     "lng": 126.917851,
+     "lat": 35.135472,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '남구 방림동 방림휴먼시아' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 156m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "남광주역",
@@ -65903,245 +65917,269 @@
     },
     {
      "name": "215정거장(조선대학교)",
-     "lng": 126.935423,
-     "lat": 35.139532,
+     "lng": 126.926214,
+     "lat": 35.144707,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '동구 서석동 조선대학교' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 1014m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "216정거장",
-     "lng": 126.949475,
-     "lat": 35.1489,
+     "lng": 126.930525,
+     "lat": 35.151355,
      "st_status": "가칭",
-     "geo_prec": "dong",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '동구 지산동 지산사거리' 동 대표점(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 1746m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "217정거장(두암지구)",
-     "lng": 126.930899,
-     "lat": 35.158815,
+     "lng": 126.931699,
+     "lat": 35.156318,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '동구 산수동 두암지구' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 285m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "218정거장(광주교육대학교)",
-     "lng": 126.926953,
-     "lat": 35.164716,
+     "lng": 126.919816,
+     "lat": 35.164608,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '북구 풍향동 광주교육대학교' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 2건' → parcel(필지 2건 중앙값, p90 ±29m) (종전 좌표에서 649m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "219정거장(중흥삼거리)",
-     "lng": 126.911397,
-     "lat": 35.166875,
+     "lng": 126.911546,
+     "lat": 35.171276,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '북구 중흥동 중흥삼거리' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 486m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "220정거장(북구청)",
-     "lng": 126.912127,
-     "lat": 35.174133,
+     "lng": 126.912369,
+     "lat": 35.176603,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '북구 용봉동 북구청' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 273m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "221정거장",
-     "lng": 126.913942,
-     "lat": 35.182857,
+     "lng": 126.904551,
+     "lat": 35.176945,
      "st_status": "가칭",
-     "geo_prec": "dong",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '북구 용봉동 전남대학교 광주생활관' 동 대표점(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 1075m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "222정거장",
-     "lng": 126.920467,
-     "lat": 35.194009,
+     "lng": 126.905388,
+     "lat": 35.184324,
      "st_status": "가칭",
-     "geo_prec": "dong",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '북구 오치동 한전 전남지사' 동 대표점(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 2건' → parcel(필지 2건 중앙값, p90 ±57m) (종전 좌표에서 1740m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "223정거장(광주공업고등학교)",
-     "lng": 126.896711,
-     "lat": 35.189778,
+     "lng": 126.899089,
+     "lat": 35.190117,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '북구 매곡동 광주공업고등학교' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 2건' → parcel(필지 2건 중앙값, p90 ±23m) (종전 좌표에서 219m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "224정거장(삼각그린타운아파)",
-     "lng": 126.89869,
-     "lat": 35.195367,
+     "lng": 126.899841,
+     "lat": 35.19561,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '북구 삼각동 삼각그린타운아파트' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 2건' → parcel(필지 2건 중앙값, p90 ±59m) (종전 좌표에서 108m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "225정거장(일곡병원)",
-     "lng": 126.897614,
-     "lat": 35.202854,
+     "lng": 126.894759,
+     "lat": 35.201725,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '북구 일곡동 일곡병원' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 288m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "226정거장",
-     "lng": 126.908639,
-     "lat": 35.218519,
+     "lng": 126.884443,
+     "lat": 35.197892,
      "st_status": "가칭",
-     "geo_prec": "dong",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '북구 일곡동 OB맥주 광주공장' 동 대표점(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 3168m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "227정거장(본촌산단)",
-     "lng": 126.874455,
-     "lat": 35.205847,
+     "lng": 126.876654,
+     "lat": 35.196349,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '북구 양산동 본촌산단' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 1068m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "228정거장",
-     "lng": 126.88629,
-     "lat": 35.210852,
+     "lng": 126.873374,
+     "lat": 35.206681,
      "st_status": "가칭",
-     "geo_prec": "dong",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '북구 양산동 양산우체국' 동 대표점(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 2건' → parcel(필지 2건 중앙값, p90 ±30m) (종전 좌표에서 1261m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "229정거장(양산타운아파트)",
-     "lng": 126.871439,
-     "lat": 35.212694,
+     "lng": 126.872016,
+     "lat": 35.212071,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '북구 용두동 양산타운아파트' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 86m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "230정거장",
-     "lng": 126.868807,
-     "lat": 35.213133,
+     "lng": 126.863168,
+     "lat": 35.214805,
      "st_status": "가칭",
-     "geo_prec": "dong",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '북구 신용동 부영아파트' 동 대표점(고시 명시: 입지 개략적)"
+     "geo_basis": "나무위키 「광주 도시철도 2호선/230정거장」 문서 지도 주소 '광주 북구 신용동 641-1' 지번 지오코딩(지도가 좌표가 아니라 주소일 때의 규칙, PROCEDURE §4c) · 종전 좌표에서 545m"
     },
     {
      "name": "231정거장(광주국토관리사무)",
-     "lng": 126.849952,
-     "lat": 35.218464,
+     "lng": 126.849482,
+     "lat": 35.217563,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '광산구 쌍암동 광주국토관리사무소' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 108m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "232정거장(첨단대주아파트)",
-     "lng": 126.841562,
-     "lat": 35.218716,
+     "lng": 126.842594,
+     "lat": 35.215616,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '광산구 월계동 첨단대주아파트' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 355m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "233정거장(응암공원)",
-     "lng": 126.833217,
-     "lat": 35.217433,
+     "lng": 126.836711,
+     "lat": 35.214916,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '광산구 월계동 응암공원' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 2건' → parcel(필지 2건 중앙값, p90 ±540m) (종전 좌표에서 422m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "234정거장(수완 우미린2차)",
-     "lng": 126.822236,
-     "lat": 35.201124,
+     "lng": 126.820877,
+     "lat": 35.199381,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '광산구 수완동 수완 우미린2차' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 228m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "235정거장(KB국민은행 수)",
-     "lng": 126.824366,
-     "lat": 35.191138,
+     "lng": 126.825682,
+     "lat": 35.190705,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '광산구 수완동 KB국민은행 수완지점' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 128m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "236정거장",
-     "lng": 126.835658,
-     "lat": 35.174608,
+     "lng": 126.817987,
+     "lat": 35.181825,
      "st_status": "가칭",
-     "geo_prec": "dong",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '광산구 신가동 중흥S클래스' 동 대표점(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 1794m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "237정거장(운남주공1단지)",
-     "lng": 126.82675,
-     "lat": 35.178002,
+     "lng": 126.825629,
+     "lat": 35.17903,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '광산구 운남동 운남주공1단지' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 2건' → parcel(필지 2건 중앙값, p90 ±42m) (종전 좌표에서 152m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "238정거장(유촌동)",
-     "lng": 126.852005,
-     "lat": 35.165236,
+     "lng": 126.84804,
+     "lat": 35.168046,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '서구 유촌동 유촌동' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 2건' → parcel(필지 2건 중앙값, p90 ±63m) (종전 좌표에서 476m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     }
-   ]
+   ],
+   "loop": true
   },
   {
    "name": "광주 2호선 2단계",
@@ -66177,13 +66215,14 @@
    "stations": [
     {
      "name": "211정거장(백운광장)",
-     "lng": 126.8996,
-     "lat": 35.13102,
+     "lng": 126.901146,
+     "lat": 35.132605,
      "st_status": "가칭",
-     "geo_prec": "landmark",
-     "approx": true,
+     "geo_prec": "parcel",
+     "approx": false,
      "note": null,
-     "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '남구 주월동 백운광장' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 224m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
     {
      "name": "239정거장(라인가든2차아파)",
@@ -66854,7 +66893,8 @@
      "geo_basis": "대전 도시철도 2호선 정거장 명칭 고시(대전시 고시 2025-249호) 조서 지번 '중구 유천동' 지오코딩 · 명칭=명칭확정고시"
     }
    ],
-   "route_verified": true
+   "route_verified": true,
+   "loop": true
   },
   {
    "name": "충청권 광역철도 1단계",
