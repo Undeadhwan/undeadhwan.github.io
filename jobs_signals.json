@@ -214,6 +214,154 @@
     }
    ],
    "first_seen": "2026-07-22"
+  },
+  {
+   "id": "J-seoulstn-north",
+   "title": "서울역 북부역세권 개발",
+   "cat": "일자리",
+   "sub": "복합단지",
+   "lvl": "S",
+   "lvl_basis": "연면적 337,000㎡ — 일자리:복합단지 S",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 337000,
+   "phase": "착공",
+   "current_stage": "착공('24.11) — 지하6~지상39층 5개동, 강북 첫 2천명급 MICE·전시·호텔·업무",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "사전협상·개발계획 확정",
+     "date": "2023-12",
+     "state": "done",
+     "src": "서울시"
+    },
+    {
+     "phase": "인가",
+     "stage": "건축허가·사업승인",
+     "date": "2024",
+     "state": "done",
+     "src": "서울시"
+    },
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2024-11",
+     "state": "current",
+     "src": "서울시"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "state": "future",
+     "eta": "2029"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "서울",
+   "sg": "중구",
+   "loc": "중구 봉래동2가 122 일원(서울역 북부 철도유휴부지)",
+   "last_movement": "2026-07-23",
+   "src_tier": "official_report",
+   "src_name": "서울시 도시공간본부 — 서울역 북부역세권 개발사업",
+   "sources": [
+    "https://news.seoul.go.kr/citybuild/archives/537222"
+   ],
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "지구 대표 좌표(공식 위치 근사 — 지구 크기만큼 오차)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.9696,
+     37.558063
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-23",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-23"
+  },
+  {
+   "id": "J-yongsan-park",
+   "title": "용산공원 조성",
+   "cat": "인프라",
+   "sub": "공원·녹지",
+   "lvl": "S",
+   "lvl_basis": "사업비 21,400억 — 인프라 S",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「기본계획」",
+   "amount_eok": 21400,
+   "area_m2": 3000000,
+   "area_kind": "부지",
+   "phase": "계획",
+   "current_stage": "종합기본계획 변경 고시('22.8) — 반환부지 순차(누적 76.4만㎡·31%) 정화·조성",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "용산공원정비구역 종합기본계획",
+     "date": "2011",
+     "state": "done",
+     "src": "국토부"
+    },
+    {
+     "phase": "계획",
+     "stage": "종합기본계획 변경(부지 300만㎡ 확대·사업비 2.14조)",
+     "date": "2021-12",
+     "state": "done",
+     "src": "국토부"
+    },
+    {
+     "phase": "계획",
+     "stage": "종합기본계획 3차 변경 고시(추가 반환부지 반영)",
+     "date": "2022-08",
+     "state": "current",
+     "src": "국토부"
+    },
+    {
+     "phase": "착공",
+     "stage": "반환부지 정화·조성 착공(순차)",
+     "state": "future"
+    },
+    {
+     "phase": "준공",
+     "stage": "개원(기본 틀)",
+     "state": "future"
+    }
+   ],
+   "template_type": "공공시설",
+   "sd": "서울",
+   "sg": "용산구",
+   "loc": "용산구 용산동 일원(주한미군기지 반환부지)",
+   "last_movement": "2026-07-23",
+   "src_tier": "official_report",
+   "src_name": "국토교통부 용산공원정비구역 종합기본계획(변경) 고시",
+   "sources": [
+    "https://www.korea.kr/news/policyNewsView.do?newsId=148904589"
+   ],
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "지구 대표 좌표(공식 위치 근사 — 지구 크기만큼 오차)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.9785,
+     37.5327
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-23",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-23"
   }
  ]
 }
