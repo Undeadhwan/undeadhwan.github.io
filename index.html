@@ -2377,7 +2377,7 @@ function initLeaflet() {
   const renderMasterArea = () => {};
   const HJ_R = { S: 21, A: 16, B: 12, C: 9, "미정": 6 };   // 크기=등급 (S=국가급 최대). 2026-07-22 상향 — 사용자 "작아서 잘 안보임(특히 C), 등급 차이도 구분 안 됨" → 전체 확대 + C 하한 상향 + 단차 벌림
   hjLegend.addTo(map);   // 범례가 HJ_R을 읽으므로 여기서 부착(위에서 부르면 TDZ 오류)
-  const lodGrades = z => z >= 14 ? ["S", "A", "B", "C", "미정"] : z >= 12 ? ["S", "A", "B", "C"] : z >= 11 ? ["S", "A", "B"] : z >= 9 ? ["S", "A"] : ["S"];   // B·C를 덜 확대해도 보이게 한 단계씩 앞당김(2026-07-22 사용자) · 최원경=S만
+  const lodGrades = z => z >= 14 ? ["S", "A", "B", "C", "미정"] : z >= 12 ? ["S", "A", "B", "C"] : z >= 11 ? ["S", "A", "B"] : z >= 10 ? ["S", "A"] : ["S"];   // 수도권-와이드(z<10)=S만(GTX 부각, 2026-07-22 사용자) · B·C는 z12/11부터
   const renderHojae = () => {
     clearHojae();
     const z = map.getZoom();
@@ -2746,7 +2746,7 @@ function initKakao() {
   window._map = map; window._kmap = map; map.setMaxLevel(13);
   map.addControl(new K.ZoomControl(), K.ControlPosition.LEFT);
   const DONG_LV = 6, APT_LV = 4;
-  const lodGrades = lv => lv <= APT_LV ? ["S", "A", "B", "C", "미정"] : lv <= 6 ? ["S", "A", "B", "C"] : lv <= 8 ? ["S", "A", "B"] : lv <= 10 ? ["S", "A"] : ["S"];   // B·C를 덜 확대해도 보이게 한 단계씩 앞당김(2026-07-22 사용자) · 최원경(lv11+)=S만
+  const lodGrades = lv => lv <= APT_LV ? ["S", "A", "B", "C", "미정"] : lv <= 6 ? ["S", "A", "B", "C"] : lv <= 8 ? ["S", "A", "B"] : lv <= 9 ? ["S", "A"] : ["S"];   // 수도권-와이드(lv10+)=S만(GTX 부각, 2026-07-22 사용자 "GTX가 S로 보여야") · B·C는 lv6/8부터
   const HJR = { S: 21, A: 16, B: 12, C: 9, "미정": 6 };   // 크기=등급(카카오 렌더러 로컬 — Leaflet HJ_R과 별개 스코프). 2026-07-22 상향(사용자) — Leaflet HJ_R과 동일값 유지
   const mapEl = el;
   let tip = document.getElementById("_ktip");
@@ -3389,7 +3389,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260722y");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260722z");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3490,7 +3490,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260722y"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260722z"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3516,7 +3516,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260722y");
+  const CB = "?b=" + (window.BUILD || "20260722z");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
