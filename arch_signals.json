@@ -35646,8 +35646,8 @@
    "splot": "지식정보타운 공공주택지구",
    "block": "4",
    "lot": "3",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "경기",
@@ -35685,13 +35685,13 @@
    "rcept_dt": "20260511",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     126.981015,
-     37.412879
+     126.988489,
+     37.412917
     ]
    },
-   "geo_approx": true,
-   "block_unresolved": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "계획",
@@ -35704,8 +35704,7 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 22,182㎡ — 일자리:오피스 C",
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "geo_basis": "택지정보 가구획지 — 41290LH2011001 블록 공공4 필지 공공4 (공공청사) · 종전 좌표에서 660m 이동"
   },
   {
    "title": "갈현동 과천플랫폼 (공장, 연면적 23천㎡)",
@@ -35792,7 +35791,7 @@
    "gate_basis": "절차 문서 확인 — 「준공」",
    "lvl_basis": "연면적 23,254㎡ — 일자리:공장 C",
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "갈현동 갈현동 근린공원4 (운동시설, 연면적 3천㎡)",
@@ -35872,7 +35871,7 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 3,438㎡ — 인프라:문화·관광·체육 C",
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "갈현동 과천지식정보타운 상업용지 2BL (업무시설, 연면적 29천㎡)",
@@ -35958,8 +35957,8 @@
    "splot": "지식기반산업용지",
    "block": "9",
    "lot": null,
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "경기",
@@ -35999,13 +35998,13 @@
    "rcept_dt": "20240722",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     126.981015,
-     37.412879
+     126.978667,
+     37.413155
     ]
    },
-   "geo_approx": true,
-   "block_unresolved": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -36023,8 +36022,7 @@
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 135,375㎡ — 일자리:오피스 A",
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "geo_basis": "택지정보 가구획지 — 41290LH2011001 블록 지식9 필지 1 (산업시설기타) · 종전 좌표에서 209m 이동"
   },
   {
    "title": "갈현동 과천시 갈현동 행정복지센터 (업무시설, 연면적 3천㎡)",
@@ -36104,7 +36102,7 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 3,733㎡ — 인프라:공공시설 C",
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "갈현동 과천지식정보타운 상업2블럭 복합시설 신축공사 (업무시설, 연면적 32천㎡)",
@@ -37532,8 +37530,8 @@
    "splot": "위례택지개발지구",
    "block": "도시지원시설용지",
    "lot": "지원2",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "경기",
@@ -37571,13 +37569,13 @@
    "rcept_dt": "20260409",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     127.150272,
-     37.465686
+     127.135372,
+     37.467238
     ]
    },
-   "geo_approx": true,
-   "block_unresolved": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "계획",
@@ -37590,6 +37588,7 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 254,026㎡ — 일자리:오피스 A",
+   "geo_basis": "택지정보 가구획지 — 11710KL2006001 블록 지원2 필지 지원2 (도시지원시설용지) · 종전 좌표에서 1327m 이동",
    "master_ref": {
     "id": "M-11710KL2006001",
     "title": "위례 택지개발사업 예정지구"
@@ -46738,9 +46737,7 @@
    "last_movement": "2026-06-02",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 66,599㎡ — 일자리:공장 B",
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "lvl_basis": "연면적 66,599㎡ — 일자리:공장 B"
   },
   {
    "title": "산곡동 의정부 복합문화융합단지 도시개발사업 상업시설용지 상업1 업무시설 (업무시설, 연면적 46천㎡)",
@@ -46754,8 +46751,8 @@
    "splot": "의정부 복합문화융합단지 도시개발사업",
    "block": "상업시설용지",
    "lot": "상업1",
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "경기",
@@ -46793,13 +46790,13 @@
    "rcept_dt": "20230821",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     127.107715,
-     37.71991
+     127.107338,
+     37.730523
     ]
    },
-   "geo_approx": true,
-   "block_unresolved": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "계획",
@@ -46812,8 +46809,7 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 46,448㎡ — 일자리:오피스 B",
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "geo_basis": "택지정보 가구획지 — 41150KH2008001 블록 상1 필지 1 (상업시설) · 종전 좌표에서 1173m 이동"
   },
   {
    "title": "금릉동 파주 반다비 체육센터 (운동시설, 연면적 3천㎡)",
