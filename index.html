@@ -212,7 +212,7 @@
   .closex:hover { color:var(--ink); border-color:var(--ink); }
   .card.hl { border-color:#5b3fd4; box-shadow:0 0 0 2px rgba(91,63,212,.15); }
   /* 반경 설정 모달 */
-  #radiusModal, #cmpModal { position:fixed; inset:0; z-index:3200; }
+  #cmpModal { position:fixed; inset:0; z-index:3200; }
   .rmbackdrop { position:absolute; inset:0; background:rgba(0,0,0,.35); }
   .rmpanel { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; border-radius:14px;
              width:min(460px,92vw); max-height:86vh; overflow-y:auto; box-shadow:0 12px 48px rgba(0,0,0,.28); padding:18px 20px; }
@@ -432,21 +432,11 @@
     <span class="chip on" id="v-map">지도</span>
     <span class="chip" id="v-raw">수도권 데이터</span>
     <span class="chip" id="v-undet" title="등급 기준(면적·금액·세대수 등)에 매칭 안 돼 등급 미판정인 호재 목록">❓ 미판정 목록</span>
-    <span class="chip" id="v-radius" title="호재 유형별 영향 반경 직접 설정">⚙ 반경 설정</span>
     <span class="chip" id="v-settings" onclick="window.open('settings.html','_blank')" title="등급 눈금(면적·금액·세대수)과 영향 반경을 thresholds.json에 직접 설정 — 운영자 전용">⚙ 기준 설정</span>
     <span class="chip" onclick="window.open('rail_reference.html','_blank')" title="신규 철도 노선·역사 좌표 대장 (영향권 기준)">🚈 노선·역 대장</span>
     <span class="chip" onclick="window.open('methodology.html','_blank')" title="데이터 소스·추출·가공·매핑 방법 (운영 문서)">📄 데이터·방법론</span>
   </div>
 </header>
-<div id="radiusModal" style="display:none;">
-  <div class="rmbackdrop" onclick="closeRadius()"></div>
-  <div class="rmpanel">
-    <div class="rmhead"><b>호재 유형별 영향 반경 설정</b><span class="closex" onclick="closeRadius()">✕</span></div>
-    <div class="rmnote">유형별 "이내" 반경(km). 값을 바꾸면 지도·목록·건수에 즉시 반영됩니다. 항목은 데이터에 유형이 추가되면 자동으로 늘어납니다.</div>
-    <div id="rmbody"></div>
-    <div class="rmfoot"><span class="chip" onclick="resetRadius()">기본값 복원</span></div>
-  </div>
-</div>
 <div id="wrap">
   <aside id="panel"></aside>
   <div id="map"></div>
@@ -892,7 +882,6 @@ function applyThresholds(TH) {
     return true;
   } catch (e) { console.warn("[기준] thresholds.json 적용 실패 — 기본값 사용", e); return false; }
 }
-function saveRadii() { localStorage.setItem("hojae_radii4", JSON.stringify(CLASSES)); }
 /* 신호 → 대분류/레벨. cat·lvl 명시 우선, 없으면 레거시 template_type 폴백 */
 const CAT_LEGACY = { "철도": "교통", "도로": "교통", "기업이전": "일자리", "정비사업": "주거개발", "공공시설": "인프라" };
 const catOf = s => s.cat || CAT_LEGACY[s.template_type] || "기타";
@@ -1385,42 +1374,8 @@ function renderChips() {
 }
 document.addEventListener("click", () => { if (openDD) { openDD = null; renderChips(); } });
 
-/* ══════════ 반경 설정 모달 (편집 → 즉시 적용) ══════════ */
-function openRadius() {
-  const body = document.getElementById("rmbody");
-  body.innerHTML = "";
-  const rmRow = (label, desc, tbl, lv) => {
-    const row = document.createElement("div"); row.className = "rmrow";
-    row.innerHTML = `<span class="rlabel"><b>${label}</b> <span style="color:#9aa0ad;font-size:11px">${desc}</span></span>`
-      + `<span style="white-space:nowrap"><input type="number" min="0.1" step="0.1" value="${tbl[lv]}"><span class="unit">km 이내</span></span>`;
-    const inp = row.querySelector("input");
-    inp.onchange = () => { const v = parseFloat(inp.value); if (v > 0) { tbl[lv] = v; saveRadii(); renderAll(); } };
-    return row;
-  };
-  for (const cat of CAT_KEYS) {
-    const h = document.createElement("div"); h.className = "rmcat";
-    h.innerHTML = `<span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${CAT_COLOR[cat]};margin-right:6px;vertical-align:1px"></span>${cat} <span style="color:#9aa0ad;font-weight:600">· ${CAT_SUB[cat]}</span>`;
-    body.appendChild(h);
-    if (SUB_KEYS[cat]) {   // 교통: 철도/도로 세부
-      for (const sub of SUB_KEYS[cat]) {
-        const sh = document.createElement("div"); sh.className = "rmsub";
-        sh.textContent = cat === "교통" ? (sub === "철도" ? "🚈 철도 (역세권 중심)" : sub === "도로" ? "🛣 도로 (차량 이동 중심)" : "🚏 환승·터미널 (버스터미널·복합환승센터)")
-          : cat === "일자리" ? ({ "오피스": "🏢 오피스", "지식산업센터": "🏭 지식산업센터", "공장": "⚙️ 공장·데이터센터" }[sub] || sub) : sub;
-        body.appendChild(sh);
-        for (const lv of LEVELS) body.appendChild(rmRow(LEVEL_NAME[lv], LEVEL_DESC[cat][sub][lv], CLASSES[cat][sub], lv));
-      }
-    } else {
-      for (const lv of LEVELS) body.appendChild(rmRow(LEVEL_NAME[lv], LEVEL_DESC[cat][lv], CLASSES[cat], lv));
-    }
-  }
-  document.getElementById("radiusModal").style.display = "block";
-}
-function closeRadius() { document.getElementById("radiusModal").style.display = "none"; }
-function resetRadius() {
-  localStorage.removeItem("hojae_radii4");
-  CLASSES = loadRadii();
-  openRadius(); renderAll();
-}
+/* 반경 설정 모달 폐기(2026-07-22 사용자 지시 "반경설정 필요없으니 없애") — 기준 설정(settings.html)이
+   반경까지 포함하므로 중복이었다. 반경은 thresholds.json이 SSOT(applyThresholds가 localStorage보다 우선). */
 function fillRegionSelect() {
   const sel = document.getElementById("f-region");
   const regions = [...new Set(SIGNALS.map(s => `${s.sd} ${s.sg}`))].sort((a, b) => a.localeCompare(b, "ko"));
@@ -3421,7 +3376,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260722u");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260722v");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3509,7 +3464,6 @@ function initSearch() {
   document.getElementById("v-map").onclick = () => setView("map");
   document.getElementById("v-raw").onclick = () => setView("raw");
   document.getElementById("v-undet").onclick = () => setView("undet");
-  document.getElementById("v-radius").onclick = (e) => { e.stopPropagation(); openRadius(); };
   loadDeferred();   // 큰 파일(경기·인천 동경계·전국 아파트·정비 폴리곤)은 초기 렌더 뒤 백그라운드 로드
 })();
 
@@ -3523,7 +3477,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260722u"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260722v"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3549,7 +3503,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260722u");
+  const CB = "?b=" + (window.BUILD || "20260722v");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
