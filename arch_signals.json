@@ -16591,8 +16591,8 @@
    "splot": "브레인시티 일반산업단지",
    "block": "산업 21-2",
    "lot": null,
-   "geo_prec": "zone_poi",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "경기",
@@ -16632,13 +16632,13 @@
    "rcept_dt": "20251104",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     127.087248,
-     37.038635
+     127.081038,
+     37.034081
     ]
    },
-   "geo_approx": true,
-   "block_unresolved": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -16656,6 +16656,7 @@
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 15,756㎡ — 일자리:공장 C",
+   "geo_basis": "택지정보 가구획지 — 41220PV2016002 블록 산업21 필지 2 (산업용지) · 종전 좌표에서 746m 이동",
    "master_ref": {
     "id": "M-41220PV2016002",
     "title": "평택 브레인시티 일반산업단지"
@@ -49284,8 +49285,8 @@
    "splot": "부산 에코델타시티",
    "block": "산업19블록",
    "lot": null,
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "부산",
@@ -49325,13 +49326,13 @@
    "rcept_dt": "20260112",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     128.919773,
-     35.104955
+     128.90893,
+     35.120548
     ]
    },
-   "geo_approx": true,
-   "block_unresolved": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -49349,8 +49350,11 @@
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 17,277㎡ — 일자리:공장 C",
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "geo_basis": "택지정보 가구획지 — 26440MX2016001 블록 산업19 필지 산업19 (산업용지) · 종전 좌표에서 1986m 이동",
+   "master_ref": {
+    "id": "M-26440MX2016001",
+    "title": "부산 에코델타시티 친수구역"
+   }
   },
   {
    "title": "명지동 명지동 부산에코델타시티 도시5BL (공장, 연면적 166천㎡)",
@@ -49666,9 +49670,7 @@
    "last_movement": "2025-01-08",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 18,608㎡ — 인프라:판매 C",
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "lvl_basis": "연면적 18,608㎡ — 인프라:판매 C"
   },
   {
    "title": "암남동 암남동 335-5 업무시설 ((주)에프엔엘파트너스) (업무시설, 연면적 14천㎡)",
@@ -51811,8 +51813,8 @@
    "splot": "부산 에코델타시티",
    "block": "판매1,2,5",
    "lot": null,
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "부산",
@@ -51852,13 +51854,13 @@
    "rcept_dt": "20251204",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     128.940146,
-     35.164793
+     128.923069,
+     35.135223
     ]
    },
-   "geo_approx": true,
-   "block_unresolved": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -51875,7 +51877,12 @@
    "last_movement": "2025-12-04",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 198,782㎡ — 인프라:판매 A"
+   "lvl_basis": "연면적 198,782㎡ — 인프라:판매 A",
+   "geo_basis": "택지정보 가구획지 — 26440MX2016001 블록 판매1 필지 판매1 (판매및영업시설) · 종전 좌표에서 3619m 이동",
+   "master_ref": {
+    "id": "M-26440MX2016001",
+    "title": "부산 에코델타시티 친수구역"
+   }
   },
   {
    "title": "미음동 (주)와이지에스 미음공장 (공장, 연면적 20천㎡)",
@@ -71492,8 +71499,8 @@
    "splot": "용산산업단지",
    "block": "산업1-1",
    "lot": null,
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "충북",
@@ -71533,13 +71540,13 @@
    "rcept_dt": "20250925",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     127.652896,
-     36.943897
+     127.676552,
+     36.937857
     ]
    },
-   "geo_approx": true,
-   "block_unresolved": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -71557,8 +71564,7 @@
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 46,196㎡ — 일자리:공장 B",
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "geo_basis": "택지정보 가구획지 — 43770PV2020001 블록 산업1 필지 1 (산업용지) · 종전 좌표에서 2208m 이동"
   },
   {
    "title": "음성읍 (주)디에스피이노베이션 음성공장 (공장, 연면적 17천㎡)",
@@ -71636,9 +71642,7 @@
    "last_movement": "2025-05-16",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 17,948㎡ — 일자리:공장 C",
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
+   "lvl_basis": "연면적 17,948㎡ — 일자리:공장 C"
   },
   {
    "title": "교현동 충주복합체육센터 (운동시설, 연면적 7천㎡)",
