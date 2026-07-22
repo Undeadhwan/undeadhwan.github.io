@@ -65740,28 +65740,46 @@
    "confirmed": true,
    "dashed": true,
    "drop": null,
-   "note": "순환선 38정거장(201~238, 41.9km 순환) — 대광위 기본계획 변경 고시(2023-02호) 위치표 기준. 공정 92%+, 27년말 개통목표. 입지 개략(고시 명시)",
-   "src_name": "보도 종합",
-   "src_url": "https://www.electimes.com/news/articleView.html?idxno=342147",
+   "note": "1단계 시청~광주역(남측 반원) 20개소 — 정거장 238·201~219. 순환 전체(201~238)는 1·2단계로 나뉜다(시청 노선도 기준: 1단계 빨강 238·201~219 / 2단계 파랑 220~237). 구간 도로개방 완료(2025-12-22). 좌표는 고시 2025-383호 조서 지번.",
+   "src_name": "광주시청 도시철도건설본부 · 보도 종합",
+   "src_url": "https://www.gwangju.go.kr/build/contentsView.do?pageId=build124",
    "src_tier": "official_report",
    "audited": "2026-07-17",
    "milestones": [
     {
      "phase": "착공",
-     "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+     "stage": "착공",
+     "date": "2019-10-21",
+     "state": "done",
+     "src": "광주시청 도시철도건설본부"
+    },
+    {
+     "phase": "착공",
+     "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
      "state": "current",
-     "src": "보도 종합"
+     "src": "광주시청·보도 종합"
     },
     {
      "phase": "준공",
      "stage": "개통 목표",
      "eta": "2027",
      "state": "target",
-     "src": "보도 종합"
+     "src": "광주시청 도시철도건설본부"
     }
    ],
    "geom": "anchor",
    "stations": [
+    {
+     "name": "238정거장(유촌동)",
+     "lng": 126.84804,
+     "lat": 35.168046,
+     "st_status": "가칭",
+     "geo_prec": "parcel",
+     "approx": false,
+     "note": null,
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 2건' → parcel(필지 2건 중앙값, p90 ±63m) (종전 좌표에서 476m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
+    },
     {
      "name": "201정거장(한국은행 광주본)",
      "lng": 126.848227,
@@ -65959,6 +65977,59 @@
      "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 2건' → parcel(필지 2건 중앙값, p90 ±29m) (종전 좌표에서 649m · 가드 5000m 이내 확인)",
      "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     },
+    {
+     "name": "219정거장(중흥삼거리)",
+     "lng": 126.911546,
+     "lat": 35.171276,
+     "st_status": "가칭",
+     "geo_prec": "parcel",
+     "approx": false,
+     "note": null,
+     "geo_basis": "고시 원문 정거장 조서 지번 '조서 필지 1건' → parcel(필지 1건 중앙값, p90 ±0m) (종전 좌표에서 486m · 가드 5000m 이내 확인)",
+     "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
+    }
+   ],
+   "official_km": 17.005
+  },
+  {
+   "name": "광주 2호선 2단계",
+   "full": "광주 2호선 2단계",
+   "linekind": "도시철도",
+   "lvl": null,
+   "phase": "착공",
+   "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
+   "confirmed": true,
+   "dashed": true,
+   "drop": null,
+   "note": "2단계 광주역~전남대~일곡~첨단~수완~운남~시청(북측 반원) 18개소 — 정거장 220~237. 양끝의 219·238은 1단계 정거장(순환 접속 앵커로만 포함 — 지선의 211과 같은 문법). 좌표는 고시 2025-383호 조서 지번.",
+   "src_name": "광주시청 도시철도건설본부 · 경향신문",
+   "src_url": "https://www.gwangju.go.kr/build/contentsView.do?pageId=build124",
+   "src_tier": "official_report",
+   "audited": "2026-07-17",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2024-01-24",
+     "state": "done",
+     "src": "광주시청 도시철도건설본부"
+    },
+    {
+     "phase": "착공",
+     "stage": "30년 개통목표 (공정 4% — 지연 전망)",
+     "state": "current",
+     "src": "경향신문 2025-07"
+    },
+    {
+     "phase": "준공",
+     "stage": "개통 목표",
+     "eta": "2030",
+     "state": "target",
+     "src": "광주시청 도시철도건설본부"
+    }
+   ],
+   "geom": "anchor",
+   "stations": [
     {
      "name": "219정거장(중흥삼거리)",
      "lng": 126.911546,
@@ -66179,36 +66250,35 @@
      "geo_src_doc": "files/gosi/gwangju2_2025-383.pdf"
     }
    ],
-   "loop": true
+   "official_km": 20.046
   },
   {
-   "name": "광주 2호선 2단계",
-   "full": "광주 2호선 2단계",
+   "name": "광주 2호선 3단계",
+   "full": "광주 2호선 3단계",
    "linekind": "도시철도",
    "lvl": null,
-   "phase": "착공",
-   "status": "30년 개통목표 (공정 4% — 지연 전망)",
+   "phase": "인가",
+   "status": "기본계획 반영(대광위 2023-02호) — 착공 미정",
    "confirmed": true,
    "dashed": true,
    "drop": null,
-   "note": "효천선 — 순환선 211(백운광장)에서 분기, 239~244(효천역) — 대광위 고시(2023-02호) 위치표 기준",
-   "src_name": "보도 종합",
-   "src_url": "https://www.khan.co.kr/article/202507062019015",
+   "note": "3단계 백운광장~진월~효천역 6개소 — 정거장 239~244, 순환선 211(백운광장)에서 분기(211은 1단계 정거장, 분기 앵커로만 포함). 주박기지 1개소. 사업계획 승인·착공 전 — 고시 2025-383호 조서에도 미포함(착공 후 지번 확보 대상).",
+   "src_name": "광주시청 도시철도건설본부",
+   "src_url": "https://www.gwangju.go.kr/build/contentsView.do?pageId=build124",
    "src_tier": "official_report",
    "audited": "2026-07-17",
    "milestones": [
     {
-     "phase": "착공",
-     "stage": "30년 개통목표 (공정 4% — 지연 전망)",
+     "phase": "인가",
+     "stage": "기본계획 반영(대광위 2023-02호)",
      "state": "current",
-     "src": "보도 종합"
+     "src": "광주시청 도시철도건설본부"
     },
     {
-     "phase": "준공",
-     "stage": "개통 목표",
-     "eta": "2030",
+     "phase": "착공",
+     "stage": "착공 시기 미정",
      "state": "target",
-     "src": "보도 종합"
+     "src": "광주시청 도시철도건설본부"
     }
    ],
    "geom": "anchor",
@@ -66275,17 +66345,18 @@
      "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '남구 송하동 송하아울렛' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
     },
     {
-     "name": "효천역",
+     "name": "244정거장(효천역)",
      "lng": 126.877038,
      "lat": 35.103312,
-     "st_status": null,
+     "st_status": "가칭",
      "geo_prec": "landmark",
      "approx": true,
      "note": null,
      "geo_basis": "광주도시철도 2호선 기본계획 변경 고시(대광위 2023-02호) 정거장 위치표 '남구 송하동 효천역' 랜드마크 지오코딩(고시 명시: 입지 개략적)"
     }
    ],
-   "route_verified": true
+   "route_verified": true,
+   "official_km": 4.84
   },
   {
    "name": "호남고속철도 2단계",

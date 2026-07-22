@@ -152185,23 +152185,30 @@
     "dashed": true,
     "approx": true,
     "drop": null,
-    "note": "순환선 38정거장(201~238, 41.9km 순환) — 대광위 기본계획 변경 고시(2023-02호) 위치표 기준. 공정 92%+, 27년말 개통목표. 입지 개략(고시 명시)",
-    "src_name": "보도 종합",
-    "src_url": "https://www.electimes.com/news/articleView.html?idxno=342147",
+    "note": "1단계 시청~광주역(남측 반원) 20개소 — 정거장 238·201~219. 순환 전체(201~238)는 1·2단계로 나뉜다(시청 노선도 기준: 1단계 빨강 238·201~219 / 2단계 파랑 220~237). 구간 도로개방 완료(2025-12-22). 좌표는 고시 2025-383호 조서 지번.",
+    "src_name": "광주시청 도시철도건설본부 · 보도 종합",
+    "src_url": "https://www.gwangju.go.kr/build/contentsView.do?pageId=build124",
     "src_tier": "official_report",
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "광주시청·보도 종합"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
       "eta": "2027",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "route_verified": null,
@@ -152212,6 +152219,10 @@
     "geometry": {
      "type": "LineString",
      "coordinates": [
+      [
+       126.84804,
+       35.168046
+      ],
       [
        126.848227,
        35.157815
@@ -152284,6 +152295,1461 @@
        126.919816,
        35.164608
       ],
+      [
+       126.911546,
+       35.171276
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-07-18"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      126.84804,
+      35.168046
+     ],
+     [
+      126.848227,
+      35.157815
+     ],
+     [
+      126.848228,
+      35.15287
+     ],
+     [
+      126.84918,
+      35.14513
+     ],
+     [
+      126.857381,
+      35.143991
+     ],
+     [
+      126.858881,
+      35.138087
+     ],
+     [
+      126.860439,
+      35.132476
+     ],
+     [
+      126.877873,
+      35.133347
+     ],
+     [
+      126.877585,
+      35.127246
+     ],
+     [
+      126.88468,
+      35.12907
+     ],
+     [
+      126.896788,
+      35.134157
+     ],
+     [
+      126.901146,
+      35.132605
+     ],
+     [
+      126.906879,
+      35.13334
+     ],
+     [
+      126.917851,
+      35.135472
+     ],
+     [
+      126.921807,
+      35.147853
+     ],
+     [
+      126.926214,
+      35.144707
+     ],
+     [
+      126.930525,
+      35.151355
+     ],
+     [
+      126.931699,
+      35.156318
+     ],
+     [
+      126.919816,
+      35.164608
+     ],
+     [
+      126.911546,
+      35.171276
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "238정거장(유촌동)",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.84804,
+      35.168046
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.84804,
+     35.168046
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "201정거장(한국은행 광주본)",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.848227,
+      35.157815
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.848227,
+     35.157815
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "202정거장(운천초등학교)",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.848228,
+      35.15287
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.848228,
+     35.15287
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "상무역",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": null,
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.84918,
+      35.14513
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-18",
+      "basis": "observed"
+     },
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.84918,
+     35.14513
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "204정거장(금호지구입구)",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.857381,
+      35.143991
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.857381,
+     35.143991
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "205정거장",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.858881,
+      35.138087
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.858881,
+     35.138087
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "206정거장",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.860439,
+      35.132476
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.860439,
+     35.132476
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "207정거장(광주월드컵경기장)",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.877873,
+      35.133347
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.877873,
+     35.133347
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "208정거장(풍암대주2차아파)",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.877585,
+      35.127246
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.877585,
+     35.127246
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "209정거장",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.88468,
+      35.12907
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.88468,
+     35.12907
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "210정거장(주월2동주민센터)",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.896788,
+      35.134157
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.896788,
+     35.134157
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "211정거장(백운광장)",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.901146,
+      35.132605
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.901146,
+     35.132605
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "212정거장(미래아동병원)",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.906879,
+      35.13334
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.906879,
+     35.13334
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "213정거장(방림휴먼시아)",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.917851,
+      35.135472
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.917851,
+     35.135472
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "남광주역",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": null,
+    "approx": true,
+    "geo_prec": "landmark",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.921807,
+      35.147853
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.921807,
+     35.147853
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "215정거장(조선대학교)",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.926214,
+      35.144707
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.926214,
+     35.144707
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "216정거장",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.930525,
+      35.151355
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.930525,
+     35.151355
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "217정거장(두암지구)",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.931699,
+      35.156318
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.931699,
+     35.156318
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "218정거장(광주교육대학교)",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.919816,
+      35.164608
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.919816,
+     35.164608
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "219정거장(중흥삼거리)",
+    "line": "광주 2호선 1단계",
+    "confirmed": true,
+    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2019-10-21",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+ · 구간 도로개방 완료 '25.12)",
+      "state": "current",
+      "src": "광주시청·보도 종합"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "note": null,
+    "audited": "2026-07-17",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.911546,
+      35.171276
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-22",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.911546,
+     35.171276
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "광주 2호선 2단계",
+    "full": "광주 2호선 2단계",
+    "linekind": "도시철도",
+    "lvl": null,
+    "phase": "착공",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
+    "confirmed": true,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "2단계 광주역~전남대~일곡~첨단~수완~운남~시청(북측 반원) 18개소 — 정거장 220~237. 양끝의 219·238은 1단계 정거장(순환 접속 앵커로만 포함 — 지선의 211과 같은 문법). 좌표는 고시 2025-383호 조서 지번.",
+    "src_name": "광주시청 도시철도건설본부 · 경향신문",
+    "src_url": "https://www.gwangju.go.kr/build/contentsView.do?pageId=build124",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
+      "state": "current",
+      "src": "경향신문 2025-07"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2030",
+      "state": "target",
+      "src": "광주시청 도시철도건설본부"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-07-17",
+    "geom_src": "역 앵커 연결(근사)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
       [
        126.911546,
        35.171276
@@ -152363,10 +153829,6 @@
       [
        126.84804,
        35.168046
-      ],
-      [
-       126.848227,
-       35.157815
       ]
      ]
     },
@@ -152383,78 +153845,6 @@
    "geometry": {
     "type": "LineString",
     "coordinates": [
-     [
-      126.848227,
-      35.157815
-     ],
-     [
-      126.848228,
-      35.15287
-     ],
-     [
-      126.84918,
-      35.14513
-     ],
-     [
-      126.857381,
-      35.143991
-     ],
-     [
-      126.858881,
-      35.138087
-     ],
-     [
-      126.860439,
-      35.132476
-     ],
-     [
-      126.877873,
-      35.133347
-     ],
-     [
-      126.877585,
-      35.127246
-     ],
-     [
-      126.88468,
-      35.12907
-     ],
-     [
-      126.896788,
-      35.134157
-     ],
-     [
-      126.901146,
-      35.132605
-     ],
-     [
-      126.906879,
-      35.13334
-     ],
-     [
-      126.917851,
-      35.135472
-     ],
-     [
-      126.921807,
-      35.147853
-     ],
-     [
-      126.926214,
-      35.144707
-     ],
-     [
-      126.930525,
-      35.151355
-     ],
-     [
-      126.931699,
-      35.156318
-     ],
-     [
-      126.919816,
-      35.164608
-     ],
      [
       126.911546,
       35.171276
@@ -152534,1060 +153924,7 @@
      [
       126.84804,
       35.168046
-     ],
-     [
-      126.848227,
-      35.157815
      ]
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "201정거장(한국은행 광주본)",
-    "line": "광주 2호선 1단계",
-    "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-    "phase": "착공",
-    "st_status": "가칭",
-    "approx": false,
-    "geo_prec": "parcel",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-      "state": "current",
-      "src": "보도 종합"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2027",
-      "state": "target",
-      "src": "보도 종합"
-     }
-    ],
-    "note": null,
-    "audited": "2026-07-17",
-    "drop": null,
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.848227,
-      35.157815
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-22",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-22",
-    "last_movement": "2026-07-22"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.848227,
-     35.157815
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "202정거장(운천초등학교)",
-    "line": "광주 2호선 1단계",
-    "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-    "phase": "착공",
-    "st_status": "가칭",
-    "approx": false,
-    "geo_prec": "parcel",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-      "state": "current",
-      "src": "보도 종합"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2027",
-      "state": "target",
-      "src": "보도 종합"
-     }
-    ],
-    "note": null,
-    "audited": "2026-07-17",
-    "drop": null,
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.848228,
-      35.15287
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-22",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-22",
-    "last_movement": "2026-07-22"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.848228,
-     35.15287
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "상무역",
-    "line": "광주 2호선 1단계",
-    "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-    "phase": "착공",
-    "st_status": null,
-    "approx": false,
-    "geo_prec": "parcel",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-      "state": "current",
-      "src": "보도 종합"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2027",
-      "state": "target",
-      "src": "보도 종합"
-     }
-    ],
-    "note": null,
-    "audited": "2026-07-17",
-    "drop": null,
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.84918,
-      35.14513
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "계획",
-      "date": "2026-07-18",
-      "basis": "observed"
-     },
-     {
-      "stage": "착공",
-      "date": "2026-07-22",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-22"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.84918,
-     35.14513
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "204정거장(금호지구입구)",
-    "line": "광주 2호선 1단계",
-    "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-    "phase": "착공",
-    "st_status": "가칭",
-    "approx": false,
-    "geo_prec": "parcel",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-      "state": "current",
-      "src": "보도 종합"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2027",
-      "state": "target",
-      "src": "보도 종합"
-     }
-    ],
-    "note": null,
-    "audited": "2026-07-17",
-    "drop": null,
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.857381,
-      35.143991
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-22",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-22",
-    "last_movement": "2026-07-22"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.857381,
-     35.143991
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "205정거장",
-    "line": "광주 2호선 1단계",
-    "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-    "phase": "착공",
-    "st_status": "가칭",
-    "approx": false,
-    "geo_prec": "parcel",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-      "state": "current",
-      "src": "보도 종합"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2027",
-      "state": "target",
-      "src": "보도 종합"
-     }
-    ],
-    "note": null,
-    "audited": "2026-07-17",
-    "drop": null,
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.858881,
-      35.138087
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-22",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-22",
-    "last_movement": "2026-07-22"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.858881,
-     35.138087
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "206정거장",
-    "line": "광주 2호선 1단계",
-    "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-    "phase": "착공",
-    "st_status": "가칭",
-    "approx": false,
-    "geo_prec": "parcel",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-      "state": "current",
-      "src": "보도 종합"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2027",
-      "state": "target",
-      "src": "보도 종합"
-     }
-    ],
-    "note": null,
-    "audited": "2026-07-17",
-    "drop": null,
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.860439,
-      35.132476
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-22",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-22",
-    "last_movement": "2026-07-22"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.860439,
-     35.132476
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "207정거장(광주월드컵경기장)",
-    "line": "광주 2호선 1단계",
-    "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-    "phase": "착공",
-    "st_status": "가칭",
-    "approx": false,
-    "geo_prec": "parcel",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-      "state": "current",
-      "src": "보도 종합"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2027",
-      "state": "target",
-      "src": "보도 종합"
-     }
-    ],
-    "note": null,
-    "audited": "2026-07-17",
-    "drop": null,
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.877873,
-      35.133347
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-22",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-22",
-    "last_movement": "2026-07-22"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.877873,
-     35.133347
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "208정거장(풍암대주2차아파)",
-    "line": "광주 2호선 1단계",
-    "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-    "phase": "착공",
-    "st_status": "가칭",
-    "approx": false,
-    "geo_prec": "parcel",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-      "state": "current",
-      "src": "보도 종합"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2027",
-      "state": "target",
-      "src": "보도 종합"
-     }
-    ],
-    "note": null,
-    "audited": "2026-07-17",
-    "drop": null,
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.877585,
-      35.127246
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-22",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-22",
-    "last_movement": "2026-07-22"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.877585,
-     35.127246
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "209정거장",
-    "line": "광주 2호선 1단계",
-    "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-    "phase": "착공",
-    "st_status": "가칭",
-    "approx": false,
-    "geo_prec": "parcel",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-      "state": "current",
-      "src": "보도 종합"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2027",
-      "state": "target",
-      "src": "보도 종합"
-     }
-    ],
-    "note": null,
-    "audited": "2026-07-17",
-    "drop": null,
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.88468,
-      35.12907
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-22",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-22",
-    "last_movement": "2026-07-22"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.88468,
-     35.12907
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "210정거장(주월2동주민센터)",
-    "line": "광주 2호선 1단계",
-    "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-    "phase": "착공",
-    "st_status": "가칭",
-    "approx": false,
-    "geo_prec": "parcel",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-      "state": "current",
-      "src": "보도 종합"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2027",
-      "state": "target",
-      "src": "보도 종합"
-     }
-    ],
-    "note": null,
-    "audited": "2026-07-17",
-    "drop": null,
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.896788,
-      35.134157
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-22",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-22",
-    "last_movement": "2026-07-22"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.896788,
-     35.134157
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "211정거장(백운광장)",
-    "line": "광주 2호선 1단계",
-    "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-    "phase": "착공",
-    "st_status": "가칭",
-    "approx": false,
-    "geo_prec": "parcel",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-      "state": "current",
-      "src": "보도 종합"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2027",
-      "state": "target",
-      "src": "보도 종합"
-     }
-    ],
-    "note": null,
-    "audited": "2026-07-17",
-    "drop": null,
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.901146,
-      35.132605
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-22",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-22",
-    "last_movement": "2026-07-22"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.901146,
-     35.132605
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "212정거장(미래아동병원)",
-    "line": "광주 2호선 1단계",
-    "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-    "phase": "착공",
-    "st_status": "가칭",
-    "approx": false,
-    "geo_prec": "parcel",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-      "state": "current",
-      "src": "보도 종합"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2027",
-      "state": "target",
-      "src": "보도 종합"
-     }
-    ],
-    "note": null,
-    "audited": "2026-07-17",
-    "drop": null,
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.906879,
-      35.13334
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-22",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-22",
-    "last_movement": "2026-07-22"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.906879,
-     35.13334
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "213정거장(방림휴먼시아)",
-    "line": "광주 2호선 1단계",
-    "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-    "phase": "착공",
-    "st_status": "가칭",
-    "approx": false,
-    "geo_prec": "parcel",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-      "state": "current",
-      "src": "보도 종합"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2027",
-      "state": "target",
-      "src": "보도 종합"
-     }
-    ],
-    "note": null,
-    "audited": "2026-07-17",
-    "drop": null,
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.917851,
-      35.135472
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-22",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-22",
-    "last_movement": "2026-07-22"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.917851,
-     35.135472
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "남광주역",
-    "line": "광주 2호선 1단계",
-    "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-    "phase": "착공",
-    "st_status": null,
-    "approx": true,
-    "geo_prec": "landmark",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-      "state": "current",
-      "src": "보도 종합"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2027",
-      "state": "target",
-      "src": "보도 종합"
-     }
-    ],
-    "note": null,
-    "audited": "2026-07-17",
-    "drop": null,
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.921807,
-      35.147853
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-22",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-22",
-    "last_movement": "2026-07-22"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.921807,
-     35.147853
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "215정거장(조선대학교)",
-    "line": "광주 2호선 1단계",
-    "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-    "phase": "착공",
-    "st_status": "가칭",
-    "approx": false,
-    "geo_prec": "parcel",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-      "state": "current",
-      "src": "보도 종합"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2027",
-      "state": "target",
-      "src": "보도 종합"
-     }
-    ],
-    "note": null,
-    "audited": "2026-07-17",
-    "drop": null,
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.926214,
-      35.144707
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-22",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-22",
-    "last_movement": "2026-07-22"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.926214,
-     35.144707
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "216정거장",
-    "line": "광주 2호선 1단계",
-    "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-    "phase": "착공",
-    "st_status": "가칭",
-    "approx": false,
-    "geo_prec": "parcel",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-      "state": "current",
-      "src": "보도 종합"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2027",
-      "state": "target",
-      "src": "보도 종합"
-     }
-    ],
-    "note": null,
-    "audited": "2026-07-17",
-    "drop": null,
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.930525,
-      35.151355
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-22",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-22",
-    "last_movement": "2026-07-22"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.930525,
-     35.151355
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "217정거장(두암지구)",
-    "line": "광주 2호선 1단계",
-    "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-    "phase": "착공",
-    "st_status": "가칭",
-    "approx": false,
-    "geo_prec": "parcel",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-      "state": "current",
-      "src": "보도 종합"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2027",
-      "state": "target",
-      "src": "보도 종합"
-     }
-    ],
-    "note": null,
-    "audited": "2026-07-17",
-    "drop": null,
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.931699,
-      35.156318
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-22",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-22",
-    "last_movement": "2026-07-22"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.931699,
-     35.156318
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "218정거장(광주교육대학교)",
-    "line": "광주 2호선 1단계",
-    "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-    "phase": "착공",
-    "st_status": "가칭",
-    "approx": false,
-    "geo_prec": "parcel",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
-      "state": "current",
-      "src": "보도 종합"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2027",
-      "state": "target",
-      "src": "보도 종합"
-     }
-    ],
-    "note": null,
-    "audited": "2026-07-17",
-    "drop": null,
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.919816,
-      35.164608
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-22",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-22",
-    "last_movement": "2026-07-22"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.919816,
-     35.164608
     ]
    }
   },
@@ -153596,9 +153933,9 @@
    "properties": {
     "kind": "station",
     "name": "219정거장(중흥삼거리)",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -153608,16 +153945,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -153654,9 +153998,9 @@
    "properties": {
     "kind": "station",
     "name": "220정거장(북구청)",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -153666,16 +154010,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -153712,9 +154063,9 @@
    "properties": {
     "kind": "station",
     "name": "221정거장",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -153724,16 +154075,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -153770,9 +154128,9 @@
    "properties": {
     "kind": "station",
     "name": "222정거장",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -153782,16 +154140,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -153828,9 +154193,9 @@
    "properties": {
     "kind": "station",
     "name": "223정거장(광주공업고등학교)",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -153840,16 +154205,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -153886,9 +154258,9 @@
    "properties": {
     "kind": "station",
     "name": "224정거장(삼각그린타운아파)",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -153898,16 +154270,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -153944,9 +154323,9 @@
    "properties": {
     "kind": "station",
     "name": "225정거장(일곡병원)",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -153956,16 +154335,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -154002,9 +154388,9 @@
    "properties": {
     "kind": "station",
     "name": "226정거장",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -154014,16 +154400,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -154060,9 +154453,9 @@
    "properties": {
     "kind": "station",
     "name": "227정거장(본촌산단)",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -154072,16 +154465,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -154118,9 +154518,9 @@
    "properties": {
     "kind": "station",
     "name": "228정거장",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -154130,16 +154530,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -154176,9 +154583,9 @@
    "properties": {
     "kind": "station",
     "name": "229정거장(양산타운아파트)",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -154188,16 +154595,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -154234,9 +154648,9 @@
    "properties": {
     "kind": "station",
     "name": "230정거장",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -154246,16 +154660,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -154292,9 +154713,9 @@
    "properties": {
     "kind": "station",
     "name": "231정거장(광주국토관리사무)",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -154304,16 +154725,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -154350,9 +154778,9 @@
    "properties": {
     "kind": "station",
     "name": "232정거장(첨단대주아파트)",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -154362,16 +154790,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -154408,9 +154843,9 @@
    "properties": {
     "kind": "station",
     "name": "233정거장(응암공원)",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -154420,16 +154855,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -154466,9 +154908,9 @@
    "properties": {
     "kind": "station",
     "name": "234정거장(수완 우미린2차)",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -154478,16 +154920,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -154524,9 +154973,9 @@
    "properties": {
     "kind": "station",
     "name": "235정거장(KB국민은행 수)",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -154536,16 +154985,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -154582,9 +155038,9 @@
    "properties": {
     "kind": "station",
     "name": "236정거장",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -154594,16 +155050,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -154640,9 +155103,9 @@
    "properties": {
     "kind": "station",
     "name": "237정거장(운남주공1단지)",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -154652,16 +155115,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -154698,9 +155168,9 @@
    "properties": {
     "kind": "station",
     "name": "238정거장(유촌동)",
-    "line": "광주 2호선 1단계",
+    "line": "광주 2호선 2단계",
     "confirmed": true,
-    "status": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+    "status": "30년 개통목표 (착공 2024-01 — 공정 4%, 지연 전망)",
     "phase": "착공",
     "st_status": "가칭",
     "approx": false,
@@ -154710,16 +155180,23 @@
     "milestones": [
      {
       "phase": "착공",
-      "stage": "27년말 개통목표 (3차 연기 — 공정 92%+)",
+      "stage": "착공",
+      "date": "2024-01-24",
+      "state": "done",
+      "src": "광주시청 도시철도건설본부"
+     },
+     {
+      "phase": "착공",
+      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "경향신문 2025-07"
      },
      {
       "phase": "준공",
       "stage": "개통 목표",
-      "eta": "2027",
+      "eta": "2030",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -154755,33 +155232,32 @@
    "type": "Feature",
    "properties": {
     "kind": "line",
-    "name": "광주 2호선 2단계",
-    "full": "광주 2호선 2단계",
+    "name": "광주 2호선 3단계",
+    "full": "광주 2호선 3단계",
     "linekind": "도시철도",
     "lvl": null,
-    "phase": "착공",
-    "status": "30년 개통목표 (공정 4% — 지연 전망)",
+    "phase": "인가",
+    "status": "기본계획 반영(대광위 2023-02호) — 착공 미정",
     "confirmed": true,
     "dashed": true,
     "approx": true,
     "drop": null,
-    "note": "효천선 — 순환선 211(백운광장)에서 분기, 239~244(효천역) — 대광위 고시(2023-02호) 위치표 기준",
-    "src_name": "보도 종합",
-    "src_url": "https://www.khan.co.kr/article/202507062019015",
+    "note": "3단계 백운광장~진월~효천역 6개소 — 정거장 239~244, 순환선 211(백운광장)에서 분기(211은 1단계 정거장, 분기 앵커로만 포함). 주박기지 1개소. 사업계획 승인·착공 전 — 고시 2025-383호 조서에도 미포함(착공 후 지번 확보 대상).",
+    "src_name": "광주시청 도시철도건설본부",
+    "src_url": "https://www.gwangju.go.kr/build/contentsView.do?pageId=build124",
     "src_tier": "official_report",
     "milestones": [
      {
-      "phase": "착공",
-      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
+      "phase": "인가",
+      "stage": "기본계획 반영(대광위 2023-02호)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      },
      {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2030",
+      "phase": "착공",
+      "stage": "착공 시기 미정",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "route_verified": true,
@@ -154824,13 +155300,13 @@
     },
     "stage_history": [
      {
-      "stage": "착공",
-      "date": "2026-07-18",
+      "stage": "인가",
+      "date": "2026-07-22",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "first_seen": "2026-07-22",
+    "last_movement": "2026-07-22"
    },
    "geometry": {
     "type": "LineString",
@@ -154871,10 +155347,10 @@
    "properties": {
     "kind": "station",
     "name": "211정거장(백운광장)",
-    "line": "광주 2호선 2단계",
+    "line": "광주 2호선 3단계",
     "confirmed": true,
-    "status": "30년 개통목표 (공정 4% — 지연 전망)",
-    "phase": "착공",
+    "status": "기본계획 반영(대광위 2023-02호) — 착공 미정",
+    "phase": "인가",
     "st_status": "가칭",
     "approx": false,
     "geo_prec": "parcel",
@@ -154882,17 +155358,16 @@
     "src_tier": "official_report",
     "milestones": [
      {
-      "phase": "착공",
-      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
+      "phase": "인가",
+      "stage": "기본계획 반영(대광위 2023-02호)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      },
      {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2030",
+      "phase": "착공",
+      "stage": "착공 시기 미정",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -154908,7 +155383,7 @@
     },
     "stage_history": [
      {
-      "stage": "착공",
+      "stage": "인가",
       "date": "2026-07-22",
       "basis": "observed"
      }
@@ -154929,10 +155404,10 @@
    "properties": {
     "kind": "station",
     "name": "239정거장(라인가든2차아파)",
-    "line": "광주 2호선 2단계",
+    "line": "광주 2호선 3단계",
     "confirmed": true,
-    "status": "30년 개통목표 (공정 4% — 지연 전망)",
-    "phase": "착공",
+    "status": "기본계획 반영(대광위 2023-02호) — 착공 미정",
+    "phase": "인가",
     "st_status": "가칭",
     "approx": true,
     "geo_prec": "landmark",
@@ -154940,17 +155415,16 @@
     "src_tier": "official_report",
     "milestones": [
      {
-      "phase": "착공",
-      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
+      "phase": "인가",
+      "stage": "기본계획 반영(대광위 2023-02호)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      },
      {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2030",
+      "phase": "착공",
+      "stage": "착공 시기 미정",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -154966,7 +155440,7 @@
     },
     "stage_history": [
      {
-      "stage": "착공",
+      "stage": "인가",
       "date": "2026-07-22",
       "basis": "observed"
      }
@@ -154987,10 +155461,10 @@
    "properties": {
     "kind": "station",
     "name": "240정거장",
-    "line": "광주 2호선 2단계",
+    "line": "광주 2호선 3단계",
     "confirmed": true,
-    "status": "30년 개통목표 (공정 4% — 지연 전망)",
-    "phase": "착공",
+    "status": "기본계획 반영(대광위 2023-02호) — 착공 미정",
+    "phase": "인가",
     "st_status": "가칭",
     "approx": true,
     "geo_prec": "dong",
@@ -154998,17 +155472,16 @@
     "src_tier": "official_report",
     "milestones": [
      {
-      "phase": "착공",
-      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
+      "phase": "인가",
+      "stage": "기본계획 반영(대광위 2023-02호)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      },
      {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2030",
+      "phase": "착공",
+      "stage": "착공 시기 미정",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -155026,7 +155499,7 @@
     },
     "stage_history": [
      {
-      "stage": "착공",
+      "stage": "인가",
       "date": "2026-07-22",
       "basis": "observed"
      }
@@ -155047,10 +155520,10 @@
    "properties": {
     "kind": "station",
     "name": "241정거장(광주씨티병원)",
-    "line": "광주 2호선 2단계",
+    "line": "광주 2호선 3단계",
     "confirmed": true,
-    "status": "30년 개통목표 (공정 4% — 지연 전망)",
-    "phase": "착공",
+    "status": "기본계획 반영(대광위 2023-02호) — 착공 미정",
+    "phase": "인가",
     "st_status": "가칭",
     "approx": true,
     "geo_prec": "landmark",
@@ -155058,17 +155531,16 @@
     "src_tier": "official_report",
     "milestones": [
      {
-      "phase": "착공",
-      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
+      "phase": "인가",
+      "stage": "기본계획 반영(대광위 2023-02호)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      },
      {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2030",
+      "phase": "착공",
+      "stage": "착공 시기 미정",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -155084,7 +155556,7 @@
     },
     "stage_history": [
      {
-      "stage": "착공",
+      "stage": "인가",
       "date": "2026-07-22",
       "basis": "observed"
      }
@@ -155105,10 +155577,10 @@
    "properties": {
     "kind": "station",
     "name": "242정거장(광주대학교)",
-    "line": "광주 2호선 2단계",
+    "line": "광주 2호선 3단계",
     "confirmed": true,
-    "status": "30년 개통목표 (공정 4% — 지연 전망)",
-    "phase": "착공",
+    "status": "기본계획 반영(대광위 2023-02호) — 착공 미정",
+    "phase": "인가",
     "st_status": "가칭",
     "approx": true,
     "geo_prec": "landmark",
@@ -155116,17 +155588,16 @@
     "src_tier": "official_report",
     "milestones": [
      {
-      "phase": "착공",
-      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
+      "phase": "인가",
+      "stage": "기본계획 반영(대광위 2023-02호)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      },
      {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2030",
+      "phase": "착공",
+      "stage": "착공 시기 미정",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -155142,7 +155613,7 @@
     },
     "stage_history": [
      {
-      "stage": "착공",
+      "stage": "인가",
       "date": "2026-07-22",
       "basis": "observed"
      }
@@ -155163,10 +155634,10 @@
    "properties": {
     "kind": "station",
     "name": "243정거장(송하아울렛)",
-    "line": "광주 2호선 2단계",
+    "line": "광주 2호선 3단계",
     "confirmed": true,
-    "status": "30년 개통목표 (공정 4% — 지연 전망)",
-    "phase": "착공",
+    "status": "기본계획 반영(대광위 2023-02호) — 착공 미정",
+    "phase": "인가",
     "st_status": "가칭",
     "approx": true,
     "geo_prec": "landmark",
@@ -155174,17 +155645,16 @@
     "src_tier": "official_report",
     "milestones": [
      {
-      "phase": "착공",
-      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
+      "phase": "인가",
+      "stage": "기본계획 반영(대광위 2023-02호)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      },
      {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2030",
+      "phase": "착공",
+      "stage": "착공 시기 미정",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -155200,7 +155670,7 @@
     },
     "stage_history": [
      {
-      "stage": "착공",
+      "stage": "인가",
       "date": "2026-07-22",
       "basis": "observed"
      }
@@ -155220,29 +155690,28 @@
    "type": "Feature",
    "properties": {
     "kind": "station",
-    "name": "효천역",
-    "line": "광주 2호선 2단계",
+    "name": "244정거장(효천역)",
+    "line": "광주 2호선 3단계",
     "confirmed": true,
-    "status": "30년 개통목표 (공정 4% — 지연 전망)",
-    "phase": "착공",
-    "st_status": null,
+    "status": "기본계획 반영(대광위 2023-02호) — 착공 미정",
+    "phase": "인가",
+    "st_status": "가칭",
     "approx": true,
     "geo_prec": "landmark",
     "pt_type": "rail_station",
     "src_tier": "official_report",
     "milestones": [
      {
-      "phase": "착공",
-      "stage": "30년 개통목표 (공정 4% — 지연 전망)",
+      "phase": "인가",
+      "stage": "기본계획 반영(대광위 2023-02호)",
       "state": "current",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      },
      {
-      "phase": "준공",
-      "stage": "개통 목표",
-      "eta": "2030",
+      "phase": "착공",
+      "stage": "착공 시기 미정",
       "state": "target",
-      "src": "보도 종합"
+      "src": "광주시청 도시철도건설본부"
      }
     ],
     "note": null,
@@ -155258,7 +155727,7 @@
     },
     "stage_history": [
      {
-      "stage": "착공",
+      "stage": "인가",
       "date": "2026-07-22",
       "basis": "observed"
      }
