@@ -644,6 +644,7 @@ const CAT_KEYS = ["교통", "일자리", "인프라", "주거개발"];
 const DISPLAY_CAT_KEYS = ["교통", "일자리", "인프라", "주거개발", "기타"];
 const LEVELS = ["S", "A", "B", "C"];
 const GRADES_DISP = ["S", "A", "B", "C", "미정"];   // 배지·매트릭스 표시용(미정 포함)
+const GRADE_RANK = { S: 0, A: 1, B: 2, C: 3, "미정": 4 };   // 렌더 우선순위 — 600 상한이 걸려도 S/A(교통 역 등)가 살아남게(2026-07-22)
 const LEVEL_NAME = { S: "S급", A: "A급", B: "B급", C: "C급", "미정": "미정" };
 const SUB_KEYS = { "교통": ["철도", "도로", "환승·터미널"], "일자리": ["오피스", "지식산업센터", "공장", "복합단지"],
   "인프라": ["병원", "공원·녹지", "판매", "문화·관광·체육", "학교", "공공시설", "기타시설"] };   // 세부 축 있는 대분류 — 인프라는 §7b 유형별(2026-07-18)
@@ -773,7 +774,7 @@ function nextWatch(s) {
 }
 /* 노선 바: 역/IC/노선 신호 → 소속 노선 전체 + 지점 칩(클릭 이동, 아실·호갱노노 동선 — 2026-07-17) */
 function chipName(t) { return (t || "").split("(")[0].trim() || t; }
-function chipGo(i) { const x = window._chipSigs?.[i]; if (x) showSignal(x, false); }
+function chipGo(i) { const x = window._chipSigs?.[i]; if (!x) return; if (x.geometry?.coordinates) mapApi?.panTo?.(x.geometry.coordinates); showSignal(x, true); }   // 칩 클릭=그 지점으로 지도 이동(2026-07-22 — 종전 pan=false라 이동 안 됨)
 function lineBar(s) {
   if (!s.line) return "";
   const pool = s._rail ? RAIL_SIG : s._road ? ROAD_SIG : [];
@@ -2414,7 +2415,7 @@ function initLeaflet() {
      등급 LOD: z<12=A만 → z12~13=A+B → z14+=C·미정까지. 뷰포트 컬링+상한. 철도역·도로는 renderRail(선·라벨)이 담당. */
   let hjDots = [];
   const clearHojae = () => { hjDots.forEach(m => map.removeLayer(m)); hjDots = []; };
-  const HJ_R = { S: 13, A: 11, B: 8, C: 6, "미정": 4.5 };   // 크기=등급 (S=국가급 최대)
+  const HJ_R = { S: 21, A: 16, B: 12, C: 9, "미정": 6 };   // 크기=등급 (S=국가급 최대). 2026-07-22 상향 — 사용자 "작아서 잘 안보임(특히 C), 등급 차이도 구분 안 됨" → 전체 확대 + C 하한 상향 + 단차 벌림
   hjLegend.addTo(map);   // 범례가 HJ_R을 읽으므로 여기서 부착(위에서 부르면 TDZ 오류)
   const lodGrades = z => z >= 14 ? ["S", "A", "B", "C", "미정"] : z === 13 ? ["S", "A", "B", "C"] : z >= 12 ? ["S", "A", "B"] : z >= 10 ? ["S", "A"] : ["S"];   // 최원경=S만(2026-07-22 — 줌아웃 초기 화면은 국가급 신호만)
   const renderHojae = () => {
@@ -2431,7 +2432,8 @@ function initLeaflet() {
       .filter(s => s.geometry && s.geometry.coordinates)   // 좌표 미확정 신호 제외(지도 미표시 — 카드에서 표기)
       .filter(s => show.has(levelOf(s)))
       .filter(s => { const c = s.geometry.coordinates; return bd.contains([c[1], c[0]]); })
-      ;   // (구)폴리곤 구역 원 생략 규칙 제거 — 호재 원이 주인공(방화3구역 등 원 누락 원인이었음), 폴리곤은 흐린 경계 문맥
+      .sort((a, b) => (GRADE_RANK[levelOf(a)] ?? 9) - (GRADE_RANK[levelOf(b)] ?? 9));   // 등급순 — 600 상한이 걸려도 S/A(교통 역)가 밀려나지 않게(2026-07-22 사용자 "GTX B 역 안 보임")
+      // (구)폴리곤 구역 원 생략 규칙 제거 — 호재 원이 주인공(방화3구역 등 원 누락 원인이었음), 폴리곤은 흐린 경계 문맥
     let n = 0;
     for (const s of pool) {
       if (++n > 600) break;   // 성능 상한
@@ -2782,7 +2784,7 @@ function initKakao() {
   map.addControl(new K.ZoomControl(), K.ControlPosition.LEFT);
   const DONG_LV = 6, APT_LV = 4;
   const lodGrades = lv => lv <= APT_LV ? ["S", "A", "B", "C", "미정"] : lv <= 5 ? ["S", "A", "B", "C"] : lv <= 7 ? ["S", "A", "B"] : lv <= 9 ? ["S", "A"] : ["S"];   // C=lv5부터, B=lv7부터(사용자 2026-07-21) · 최원경(lv10+)=S만(2026-07-22 줌아웃=국가급)
-  const HJR = { S: 13, A: 11, B: 8, C: 6, "미정": 4.5 };   // 크기=등급(카카오 렌더러 로컬 — Leaflet HJ_R과 별개 스코프)
+  const HJR = { S: 21, A: 16, B: 12, C: 9, "미정": 6 };   // 크기=등급(카카오 렌더러 로컬 — Leaflet HJ_R과 별개 스코프). 2026-07-22 상향(사용자) — Leaflet HJ_R과 동일값 유지
   const mapEl = el;
   let tip = document.getElementById("_ktip");
   if (!tip) {
@@ -2825,7 +2827,8 @@ function initKakao() {
     const pool = SIGNALS.concat(MASTER_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
       .filter(s => !(s._road && s.access_points)).filter(s => s.signal !== false).filter(visible)
       .filter(s => s.geometry && s.geometry.coordinates).filter(s => show.has(levelOf(s)))
-      .filter(s => { const c = s.geometry.coordinates; return b.contain(LL(c[0], c[1])); });
+      .filter(s => { const c = s.geometry.coordinates; return b.contain(LL(c[0], c[1])); })
+      .sort((a, b2) => (GRADE_RANK[levelOf(a)] ?? 9) - (GRADE_RANK[levelOf(b2)] ?? 9));   // 등급순 — 600 상한이 걸려도 S/A(교통 역)가 밀려나지 않게(2026-07-22)
     const next = new Set(); let n = 0;
     for (const s of pool) { if (++n > 600) break;
       const t = hjStyle(s);
@@ -3418,7 +3421,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260722q");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260722r");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3520,7 +3523,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260722q"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260722r"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3546,7 +3549,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260722q");
+  const CB = "?b=" + (window.BUILD || "20260722r");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
