@@ -808,8 +808,23 @@ function basisUnknown(s) {
   return false;   // 교통(노선종류)·인프라(면적)·수기 확정 등은 근거 보유로 간주
 }
 // 등급 근거값(사실): 일자리=연면적/투자액, 주거개발=세대수. 근거 데이터 없으면 '미상'(→등급 미정, P2)
+// 접힌 블록 조각의 대표 — 제목에서 블록 표기를 떼고 **몇 개 블록인지**를 드러낸다.
+// 2026-07-22 사용자 지적: "이거 3개를 합친게 아니고 1개만 남았네?" — 핀은 접혔는데
+// 대표가 자기 블록 숫자(35.6만㎡)만 보이면 접은 의미가 없다. 합계는 gradeBasisHtml이 낸다.
+function sigTitle(s) {
+  // ⚠ JS \b는 ASCII 기준이라 한글 뒤에서 동작하지 않는다 → 선행탐색으로 경계를 잡는다.
+  let t = (s.title || "").replace(/^(\S+)\s+\1(?=\s|$)/, "$1");   // '가양동 가양동 …' 중복 접두 제거
+  if (!s || !s.group_n) return t;
+  t = t.replace(/\s*\([^)]*\)\s*$/, "")
+       .replace(/\s*[A-Za-z가-힣]{0,4}\d+(?:[-–~][\dA-Za-z]+)*\s*(?:BL|블록|블럭)/i, "").trim();
+  return `${t} (${s.group_n}개 블록)`;
+}
+
 function gradeBasisHtml(s) {
   const c = catOf(s);
+  // 접힌 사업이면 **합계**가 그 사업의 규모다(개별 블록 값이 아니라).
+  if (s.group_n && s.group_area_m2)
+    return `<span class="gbasis">${s.group_n}블록 합계 연면적 ${(s.group_area_m2 / 10000).toFixed(1).replace(".0", "")}만㎡</span> · `;
   // 교통(철도) = 위계 판정 근거(파이프라인 grade.rail_level이 lvl_basis로 스탬프 — S/A/B/C 이유를 그대로 표기, P2)
   if (s.lvl_basis) return `<span class="gbasis">${s.lvl_basis}</span> · `;
   if (c === "일자리") {
@@ -1689,7 +1704,7 @@ function cardHtml(s, extra = "") {
       ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}
       ${noCoord ? '<span class="badge-near">위치 미확정 — 지도 미표시</span>' : ""}
       ${icMissing ? '<span class="badge-near" title="이 도로는 진출입 지점(IC·진입로)에서만 타고 내립니다. 공식 IC 위치가 아직 확정·공개되지 않아 영향권을 산정하지 않습니다(근거 없는 범위를 만들지 않음).">진출입 지점 미확정 — 영향권 미산정</span>' : ""}${srcBadge(s)} ${extra}</div>
-    <div class="title">${s.title}</div>
+    <div class="title">${sigTitle(s)}</div>
     <div class="stage">단계: <b>${ph}</b> <span class="pmini">(${pIdx + 1}/${PHASES.length})</span>${detail} · ${freshness(s)}</div>
     ${miniBarHtml(s)}`;
 }
@@ -1822,7 +1837,7 @@ function renderDetail(s) {
         ${phaseSolid(s) ? "" : `<span class="badge-draft">착공 전 (${phaseOf(s)})</span>`}
         ${s.gate === "계획안" ? '<span class="badge-draft">계획(안) — 승인 전</span>' : ""}
         ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}</div>
-      <h2>${s.title}</h2>
+      <h2>${sigTitle(s)}</h2>
       ${s.gate === "계획안" ? `<div class="kv" style="color:#b3651e"><b>계획(안)</b> 승인 전 법정계획(안) 단계 — 노선·정거장 위치는 변경될 수 있습니다${s.gate_basis ? ` · ${s.gate_basis}` : ""}</div>` : ""}
       ${freshness(s)}
       ${lineBar(s)}
@@ -2422,7 +2437,7 @@ function initLeaflet() {
           stroke: false, fillColor: col, fillOpacity: .13, interactive: false }).addTo(map);
         halo.bringToBack(); hjDots.push(halo);
       }
-      m.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${s.title}</div>`
+      m.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${sigTitle(s)}</div>`
         + `<div class="apt-pop-sub"><span style="color:${col};font-weight:700">● ${catOf(s)}</span> · ${lvlPill(lv)} ${gradeBasisHtml(s).replace(/ · $/, "")}</div>`
         + `<div class="apt-pop-cats"><span>단계 ${phaseOf(s)}${s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : ""}</span></div></div>`,
         { direction: "top", offset: [0, -6], className: "apt-tip", sticky: true });
@@ -2788,7 +2803,7 @@ function initKakao() {
     return { col, lvl, solid, unk, r: unk ? HJR.C : (HJR[lvl] || 5), bw: !unk && (lvl === "S" || lvl === "A") ? 2.6 : 2,
       alpha: s.status === "종결" ? .45 : unk ? .75 : .9, fillOp: unk ? .10 : solid ? .22 : .10 }; };
   const hjHtml = s => { const t = hjStyle(s);
-    return '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + s.title + '</div><div class="apt-pop-sub"><span style="color:' + t.col + ';font-weight:700">● ' + catOf(s) + '</span> · ' + lvlPill(t.lvl) + ' ' + gradeBasisHtml(s).replace(/ · $/, "") + '</div><div class="apt-pop-cats"><span>단계 ' + phaseOf(s) + (s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : "") + '</span></div></div>'; };
+    return '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + sigTitle(s) + '</div><div class="apt-pop-sub"><span style="color:' + t.col + ';font-weight:700">● ' + catOf(s) + '</span> · ' + lvlPill(t.lvl) + ' ' + gradeBasisHtml(s).replace(/ · $/, "") + '</div><div class="apt-pop-cats"><span>단계 ' + phaseOf(s) + (s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : "") + '</span></div></div>'; };
   const renderHojae = () => {
     const lv = map.getLevel(); const show = new Set(lodGrades(lv)); const b = map.getBounds();
     const pool = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
@@ -3393,7 +3408,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260722al");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260722am");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3512,7 +3527,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260722al"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260722am"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3538,7 +3553,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260722al");
+  const CB = "?b=" + (window.BUILD || "20260722am");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
