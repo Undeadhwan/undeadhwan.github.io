@@ -708,7 +708,8 @@ const GEO_PREC = {
   parcel:      { t: "지번 기준", d: "지번 주소 지오코딩 (~50m)" },
   parcel_base: { t: "본번 기준(근사)", d: "부번 필지 조회 실패로 본번 대체 (~260m)" },
   jigu:        { t: "지구 경계 기준", d: "공식 택지·개발지구 경계 중심 — 지구 크기만큼 오차" },
-  zone:        { t: "구역 확인", d: "정비구역 폴리곤 내부 확인 — 구역 크기만큼 오차" },
+  zone:        { t: "구역 확인", d: "정비구역·지구단위계획구역 폴리곤 기준 — 구역 크기만큼 오차" },
+  zone_wide:   { t: "광역 구역 중심(근사)", d: "50만㎡ 넘는 구역의 중심점 — 세부 부지 위치 아님(수백m~1km)" },
   zone_poi:    { t: "지구명 검색(근사)", d: "지구명 장소검색 — 지구 크기만큼 오차, 지점 확정 아님" },
   station_poi: { t: "지점명 검색", d: "역·IC 장소검색으로 확인 (~100m) — 고시 도면 실측 아님" },
   landmark:    { t: "지물 기준(근사)", d: "교차로·시설 등 인근 지물 기준 (~200m) — 정거장 확정 위치 아님" },
@@ -3414,7 +3415,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260723b");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260723c");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3533,7 +3534,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260723b"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260723c"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3559,7 +3560,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260723b");
+  const CB = "?b=" + (window.BUILD || "20260723c");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {

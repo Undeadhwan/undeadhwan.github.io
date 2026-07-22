@@ -8981,24 +8981,32 @@
      "src": "토지이음 고시"
     }
    ],
-   "last_movement": "2026-07-22",
+   "last_movement": "2026-07-23",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=637292"
    ],
    "src_name": "토지이음 부천시",
-   "geo_prec": "none",
-   "geo_approx": true,
+   "geo_prec": "zone",
+   "geo_approx": false,
    "confirmed": false,
    "template_type": "기업이전",
    "stage_history": [
     {
      "stage": "계획",
-     "date": "2026-07-22",
+     "date": "2026-07-23",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-07-22"
+   "first_seen": "2026-07-23",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.797976,
+     37.479869
+    ]
+   },
+   "geo_basis": "브이월드 지구단위계획구역 폴리곤 중심점: 소사역세권 지구단위계획구역"
   },
   {
    "id": "E-635806",
@@ -11840,24 +11848,32 @@
     }
    ],
    "sd": "서울",
-   "last_movement": "2026-07-22",
+   "last_movement": "2026-07-23",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=632943"
    ],
    "src_name": "토지이음 서울특별시 균형발전본부 균형발전기획관 동남권사업과",
-   "geo_prec": "none",
+   "geo_prec": "zone_wide",
    "geo_approx": true,
    "confirmed": false,
    "template_type": "기업이전",
    "stage_history": [
     {
      "stage": "계획",
-     "date": "2026-07-22",
+     "date": "2026-07-23",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-07-22"
+   "first_seen": "2026-07-23",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.070141,
+     37.515085
+    ]
+   },
+   "geo_basis": "브이월드 지구단위계획구역 폴리곤 중심점: 국제교류복합지구 지구단위계획구역 (구역 177만㎡ — 중심점은 세부 부지 위치가 아님)"
   },
   {
    "id": "E-631891",

@@ -2613,7 +2613,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "station_poi",
+    "geo_approx": false,
+    "geo_basis": "장소검색 '남광명JC'(단발 후보) — 현재 좌표에서 1776m 이내 확인",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -2626,12 +2628,12 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": null,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.86995,
-      37.42379
+      126.857677,
+      37.411066
      ]
     },
     "stage_history": [
@@ -2647,8 +2649,8 @@
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.86995,
-     37.42379
+     126.857677,
+     37.411066
     ]
    }
   },
@@ -2671,7 +2673,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 광명시 노온사동 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -2684,7 +2688,6 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -2730,6 +2733,8 @@
     "pt_role": "jc",
     "pt_type": "road_jc",
     "geo_prec": "parcel",
+    "geo_approx": false,
+    "geo_basis": "고시 기재 지번 「경기도 광명시 노온사동 100」",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -2742,7 +2747,6 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -2787,7 +2791,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 부천시 작동 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -2800,7 +2806,6 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -2845,7 +2850,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「인천광역시 계양구 상야동 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -2858,7 +2865,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「인천광역시 계양구 상야동 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -2903,7 +2910,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 김포시 풍무동 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -2916,7 +2925,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 김포시 풍무동 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -2961,7 +2970,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 김포시 고촌읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -2974,7 +2985,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 김포시 고촌읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -3019,7 +3030,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 김포시 양촌읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -3032,7 +3045,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 김포시 양촌읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -3077,7 +3090,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 김포시 통진읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -3090,7 +3105,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 김포시 통진읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -3135,7 +3150,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 김포시 월곶면 고막리 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -3148,7 +3165,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 김포시 월곶면 고막리 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -3193,7 +3210,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 김포시 월곶면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -3206,7 +3225,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 김포시 월곶면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -3251,7 +3270,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「인천광역시 강화군 선원면 신정리 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -3264,7 +3285,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「인천광역시 강화군 선원면 신정리 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -3309,7 +3330,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 김포시 양촌읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -3322,7 +3345,6 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -3367,7 +3389,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 김포시 하성면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -3380,7 +3404,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 김포시 하성면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -3425,7 +3449,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 파주시 송촌동 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -3438,7 +3464,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 파주시 송촌동 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -3483,7 +3509,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 파주시 월롱면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -3496,7 +3524,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 파주시 월롱면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -3541,7 +3569,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 파주시 파주읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -3554,7 +3584,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 파주시 파주읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -3599,7 +3629,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 파주시 법원읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -3612,7 +3644,6 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -3657,7 +3688,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 광주시 곤지암읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -3670,7 +3703,6 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -3715,7 +3747,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 이천시 신둔면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -3728,7 +3762,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 이천시 신둔면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -3773,7 +3807,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 여주시 산북면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -3786,7 +3822,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 여주시 산북면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -3831,7 +3867,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 양평군 양평읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -3844,7 +3882,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 양평군 양평읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -3889,7 +3927,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 양주시 광적면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -3902,7 +3942,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "절차 문서 확인 — 「실시계획」",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 양주시 광적면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -3947,7 +3987,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 양주시 은현면 용암리 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -3960,7 +4002,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "절차 문서 확인 — 「실시계획」",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 양주시 은현면 용암리 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -4005,7 +4047,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 의정부시 장암동 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -4018,7 +4062,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "절차 문서 확인 — 「실시계획」",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 의정부시 장암동 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -4063,7 +4107,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 양주시 장흥면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -4076,7 +4122,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "절차 문서 확인 — 「실시계획」",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 양주시 장흥면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -4121,7 +4167,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 양주시 은현면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -4134,7 +4182,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 양주시 은현면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -4179,7 +4227,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 연천군 군남면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -4192,7 +4242,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 연천군 군남면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -4237,7 +4287,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 파주시 월롱면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -4250,7 +4302,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 파주시 월롱면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -4295,7 +4347,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 파주시 군내면 백연리 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -4308,7 +4362,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 파주시 군내면 백연리 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -4353,7 +4407,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경상남도 함양군 함양읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -4366,7 +4422,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경상남도 함양군 함양읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -4411,7 +4467,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경상남도 거창군 거창읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -4424,7 +4482,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경상남도 거창군 거창읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -4469,7 +4527,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경상남도 거창군 남상면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -4482,7 +4542,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경상남도 거창군 남상면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -4527,7 +4587,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경상남도 합천군 대병면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -4540,7 +4602,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경상남도 합천군 대병면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -4585,7 +4647,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경상남도 합천군 합천읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -4598,7 +4662,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경상남도 합천군 합천읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -4643,7 +4707,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경상남도 의령군 의령읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -4656,7 +4722,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경상남도 의령군 의령읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -4701,7 +4767,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경상남도 창녕군 창녕읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -4714,7 +4782,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경상남도 창녕군 창녕읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -4759,7 +4827,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「세종특별자치시 장군면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -4772,7 +4842,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「세종특별자치시 장군면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -4817,7 +4887,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「세종특별자치시 연기면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -4830,7 +4902,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「세종특별자치시 연기면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -4875,7 +4947,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「충청남도 천안시 동남구 목천읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -4888,7 +4962,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「충청남도 천안시 동남구 목천읍 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -4933,7 +5007,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「충청남도 천안시 서북구 입장면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -4946,7 +5022,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「충청남도 천안시 서북구 입장면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -4991,7 +5067,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 「경기도 안성시 금광면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -5004,7 +5082,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 「경기도 안성시 금광면 1」 — 본번 1은 자리표시(지점 지번 아님)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -5050,6 +5128,8 @@
     "pt_role": "ic",
     "pt_type": "road_ic",
     "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 서울 강서구 외발산동(고시) · 동 대표점 근사",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -5062,7 +5142,6 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": true,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -5108,6 +5187,8 @@
     "pt_role": "jc",
     "pt_type": "road_jc",
     "geo_prec": "station_poi",
+    "geo_approx": false,
+    "geo_basis": "장소검색 '88JC'(단발 후보) — 현재 좌표에서 1087m 이내 확인",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -5120,8 +5201,6 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_basis": "장소검색 '88JC'(단발 후보) — 현재 좌표에서 1087m 이내 확인",
-    "geo_approx": false,
     "position_confidence": null,
     "geometry": {
      "type": "Point",
@@ -5168,6 +5247,8 @@
     "pt_role": "ic",
     "pt_type": "road_ic",
     "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 김포 감정동 · 동 대표점 근사",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -5180,9 +5261,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
-    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
-    "geo_approx": true,
+    "position_confidence": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 김포 감정동 · 동 대표점 근사",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -5228,6 +5307,8 @@
     "pt_role": "ic",
     "pt_type": "road_ic",
     "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 김포 통진읍 서암리 · 동 대표점 근사",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -5240,9 +5321,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
-    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
-    "geo_approx": true,
+    "position_confidence": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 김포 통진읍 서암리 · 동 대표점 근사",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -5288,6 +5367,8 @@
     "pt_role": "ic",
     "pt_type": "road_ic",
     "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 파주 운정 일원 · 동 대표점 근사",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -5300,9 +5381,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
-    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
-    "geo_approx": true,
+    "position_confidence": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 파주 운정 일원 · 동 대표점 근사",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -5348,6 +5427,8 @@
     "pt_role": "ic",
     "pt_type": "road_ic",
     "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 광주 신촌동 · 동 대표점 근사",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -5360,9 +5441,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
-    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
-    "geo_approx": true,
+    "position_confidence": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 광주 신촌동 · 동 대표점 근사",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -5407,7 +5486,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 지방도 519호선 접속 — 리 단위 확인",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -5420,7 +5501,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 지방도 519호선 접속 — 리 단위 확인",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -5465,7 +5546,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 영춘면 유암리(스니펫 — 원문 미확인)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -5478,7 +5561,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 영춘면 유암리(스니펫 — 원문 미확인)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -5523,7 +5606,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 강원 영월군 영월읍 팔괴리 — 노선 종점",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -5536,7 +5621,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 강원 영월군 영월읍 팔괴리 — 노선 종점",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -5582,6 +5667,8 @@
     "pt_role": "ic",
     "pt_type": "road_ic",
     "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 충북 제천시 — 읍면동 미확인(시 대표점)",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -5594,9 +5681,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_basis": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
-    "position_confidence": "고시 전 표기(가칭·번호) — 이름으로 위치 확정 불가, 동 대표점 유지",
-    "geo_approx": true,
+    "position_confidence": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 충북 제천시 — 읍면동 미확인(시 대표점)",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -5641,7 +5726,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 양주시 광적면 — 후보 3곳(광백저수지앞/능안교차로/가래비사거리) 미확정",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -5654,7 +5741,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "절차 문서 확인 — 「실시계획」",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 양주시 광적면 — 후보 3곳(광백저수지앞/능안교차로/가래비사거리) 미확정",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -5699,7 +5786,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 인천 중구 남항로·서해대로 접속 — 동 미확인",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -5712,7 +5801,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 인가 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 인천 중구 남항로·서해대로 접속 — 동 미확인",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -5757,7 +5846,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 인천 아암물류단지 일원 — 구·동 미확인",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -5770,7 +5861,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 인가 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 인천 아암물류단지 일원 — 구·동 미확인",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -5815,7 +5906,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 경기 시흥시 — 동 미확인",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -5828,7 +5921,7 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 인가 — 법정 절차 진행 중",
-    "geo_approx": false,
+    "position_confidence": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 경기 시흥시 — 동 미확인",
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -5873,7 +5966,9 @@
     "signal": true,
     "pt_role": "ramp_add",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 전남광주통합특별시 북구 용봉동·오치동 — 진출만 가능하던 반쪽 IC에 *",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -5886,7 +5981,6 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -5931,7 +6025,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 경기도 하남시 감일동",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -5944,7 +6040,6 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "절차 문서 확인 — 「착공」",
-    "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -5989,7 +6084,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 경기도 하남시 상사창동",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -6002,7 +6099,6 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "절차 문서 확인 — 「착공」",
-    "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -6047,7 +6143,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 경기도 하남시 상산곡동",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -6060,7 +6158,6 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "절차 문서 확인 — 「착공」",
-    "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -6105,7 +6202,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 경기도 광주시 남종면",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -6118,7 +6217,6 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "절차 문서 확인 — 「착공」",
-    "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -6163,7 +6261,9 @@
     "signal": true,
     "pt_role": "ic",
     "pt_type": "road_ic",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 경기도 양평군 강하면",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -6176,7 +6276,6 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "절차 문서 확인 — 「착공」",
-    "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -6221,7 +6320,9 @@
     "signal": false,
     "pt_role": "jc",
     "pt_type": "road_jc",
-    "geo_prec": "parcel",
+    "geo_prec": "dong",
+    "geo_approx": true,
+    "geo_basis": "고시 소재지 읍면동 기준 — 실제 지점 아님 · 경기도 양평군 강상면",
     "src_tier": "official_notice",
     "milestones": [
      {
@@ -6234,7 +6335,6 @@
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "절차 문서 확인 — 「착공」",
-    "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
@@ -6262,929 +6362,118 @@
   },
   {
    "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      127.73426,
+      35.53396
+     ],
+     [
+      127.90878,
+      35.71045
+     ],
+     [
+      127.95076,
+      35.6459
+     ],
+     [
+      127.98612,
+      35.54029
+     ],
+     [
+      128.17955,
+      35.59268
+     ],
+     [
+      128.29715,
+      35.28693
+     ],
+     [
+      128.49211,
+      35.54455
+     ]
+    ]
+   },
    "properties": {
-    "kind": "station",
+    "kind": "line",
     "mode": "road",
-    "name": "강진~광주 고속도로(광주해남완도 1단계) 진입로(이름 미상)",
-    "line": "강진광주고속도로",
+    "name": "함양울산고속도로",
+    "official_name": "함양울산선(함양~창녕)",
+    "linekind": "고속도로",
+    "official_type": "고속도로",
+    "access": null,
+    "access_note": null,
+    "ic_note": null,
     "lvl": "A",
-    "status": "공사중 — '26 개통 목표 · 공사중 7개 공구",
-    "confirmed": true,
+    "status": "공사중 — '26 순차 개통 목표(창녕~밀양 '24.12 선개통) · 공사중 12개 공구",
     "phase": "착공",
-    "linekind": "진입로",
-    "name_src": "OSM 연결로 클러스터",
-    "signal": true,
-    "pt_role": "ramp",
-    "pt_type": "road_ic",
-    "geo_prec": "landmark",
-    "src_tier": "osm_geom",
+    "confirmed": true,
+    "owner": "국토부/도로공사",
+    "src_tier": "official_report",
+    "src_name": "국토부/도로공사 공식 — 함양울산선(함양~창녕)",
+    "src_url": "https://www.korea.kr/news/policyNewsView.do?newsId=148937983",
+    "geom_src": "공식 정거장 좌표 연결(노선 축 투영(공식 IC 좌표)) — 실선형 아님",
+    "pt_type": "road_line",
+    "has_official_ic": true,
     "milestones": [
      {
       "phase": "착공",
-      "stage": "공사중 — '26 개통 목표 · 공사중 7개 공구",
+      "stage": "공사중 — '26 순차 개통 목표(창녕~밀양 '24.12 선개통) · 공사중 1",
       "state": "current",
-      "src": "도로공사"
+      "src": "국토부/도로공사"
      }
     ],
-    "ramps": 7,
     "audited": "2026-07-17",
     "gate": "신호",
     "gate_basis": "단계 착공 — 법정 절차 진행 중",
+    "approx": true,
+    "geom_rebuilt": true,
+    "note": "OSM 선형 폐기 후 공식 정거장 7개를 이어 구성한 회랑. 실제 경로가 아니며 기본계획 고시 선형 확보 시 대체된다",
+    "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
-     "type": "Point",
+     "type": "LineString",
      "coordinates": [
-      126.751558,
-      34.698362
+      [
+       127.73426,
+       35.53396
+      ],
+      [
+       127.90878,
+       35.71045
+      ],
+      [
+       127.95076,
+       35.6459
+      ],
+      [
+       127.98612,
+       35.54029
+      ],
+      [
+       128.17955,
+       35.59268
+      ],
+      [
+       128.29715,
+       35.28693
+      ],
+      [
+       128.49211,
+       35.54455
+      ]
      ]
     },
     "stage_history": [
      {
       "stage": "착공",
-      "date": "2026-07-18",
+      "date": "2026-07-23",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.751558,
-     34.698362
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "mode": "road",
-    "name": "강진~광주 고속도로(광주해남완도 1단계) 진입로(이름 미상)",
-    "line": "강진광주고속도로",
-    "lvl": "A",
-    "status": "공사중 — '26 개통 목표 · 공사중 7개 공구",
-    "confirmed": true,
-    "phase": "착공",
-    "linekind": "진입로",
-    "name_src": "OSM 연결로 클러스터",
-    "signal": true,
-    "pt_role": "ramp",
-    "pt_type": "road_ic",
-    "geo_prec": "landmark",
-    "src_tier": "osm_geom",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "공사중 — '26 개통 목표 · 공사중 7개 공구",
-      "state": "current",
-      "src": "도로공사"
-     }
-    ],
-    "ramps": 2,
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.740156,
-      34.821142
-     ]
-    }
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.740156,
-     34.821142
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "mode": "road",
-    "name": "강진~광주 고속도로(광주해남완도 1단계) 진입로(이름 미상)",
-    "line": "강진광주고속도로",
-    "lvl": "A",
-    "status": "공사중 — '26 개통 목표 · 공사중 7개 공구",
-    "confirmed": true,
-    "phase": "착공",
-    "linekind": "진입로",
-    "name_src": "OSM 연결로 클러스터",
-    "signal": true,
-    "pt_role": "ramp",
-    "pt_type": "road_ic",
-    "geo_prec": "landmark",
-    "src_tier": "osm_geom",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "공사중 — '26 개통 목표 · 공사중 7개 공구",
-      "state": "current",
-      "src": "도로공사"
-     }
-    ],
-    "ramps": 3,
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.741534,
-      34.77952
-     ]
-    }
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.741534,
-     34.77952
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "mode": "road",
-    "name": "울산외곽순환고속도로(미호JC~가대IC) 진입로(이름 미상)",
-    "line": "울산외곽순환고속도로",
-    "lvl": "A",
-    "status": "설계 완료 — '26 하반기 착공 예정·'29 개통목표(당초 '27서 연기)",
-    "confirmed": false,
-    "phase": "인가",
-    "linekind": "진입로",
-    "name_src": "OSM 연결로 클러스터",
-    "signal": true,
-    "pt_role": "ramp",
-    "pt_type": "road_ic",
-    "geo_prec": "landmark",
-    "src_tier": "osm_geom",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "설계 완료 — '26 하반기 착공 예정·'29 개통목표(당초 '27서 연기)",
-      "state": "current",
-      "src": "도로공사"
-     }
-    ],
-    "ramps": 4,
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 인가 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      129.353859,
-      35.617739
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     129.353859,
-     35.617739
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "mode": "road",
-    "name": "상화로 입체화(대심도 지하도로) 진입로(이름 미상)",
-    "line": "상화로 지하도로",
-    "lvl": "B",
-    "status": "'22.3 착공(4.14km·3,400억) — '27 준공 목표",
-    "confirmed": true,
-    "phase": "착공",
-    "linekind": "진입로",
-    "name_src": "OSM 연결로 클러스터",
-    "signal": true,
-    "pt_role": "ramp",
-    "pt_type": "road_ic",
-    "geo_prec": "landmark",
-    "src_tier": "osm_geom",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "'22.3 착공(4.14km·3,400억) — '27 준공 목표",
-      "state": "current",
-      "src": "대구시"
-     }
-    ],
-    "ramps": 7,
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      128.530084,
-      35.808185
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     128.530084,
-     35.808185
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "mode": "road",
-    "name": "동해고속도로 속초~고성(제진) 연장 진입로(이름 미상)",
-    "line": "동해고속도로",
-    "lvl": "A",
-    "status": "사전타당성 용역('23.7 착수) — '28 착공 검토, 개통목표 미정",
-    "confirmed": false,
-    "phase": "계획",
-    "linekind": "진입로",
-    "name_src": "OSM 연결로 클러스터",
-    "signal": true,
-    "pt_role": "ramp",
-    "pt_type": "road_ic",
-    "geo_prec": "landmark",
-    "src_tier": "osm_geom",
-    "milestones": [
-     {
-      "phase": "계획",
-      "stage": "사전타당성 용역('23.7 착수) — '28 착공 검토, 개통목표 미정",
-      "state": "current",
-      "src": "도로공사"
-     }
-    ],
-    "ramps": 4,
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "절차 문서 확인 — 「착공」",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      129.34998,
-      36.379913
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "계획",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     129.34998,
-     36.379913
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "mode": "road",
-    "name": "강진~광주 고속도로(광주해남완도 1단계) 진입로(이름 미상)",
-    "line": "강진광주고속도로",
-    "lvl": "A",
-    "status": "공사중 — '26 개통 목표 · 공사중 7개 공구",
-    "confirmed": true,
-    "phase": "착공",
-    "linekind": "진입로",
-    "name_src": "OSM 연결로 클러스터",
-    "signal": true,
-    "pt_role": "ramp",
-    "pt_type": "road_ic",
-    "geo_prec": "landmark",
-    "src_tier": "osm_geom",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "공사중 — '26 개통 목표 · 공사중 7개 공구",
-      "state": "current",
-      "src": "도로공사"
-     }
-    ],
-    "ramps": 12,
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.823195,
-      35.085639
-     ]
-    }
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.823195,
-     35.085639
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "mode": "road",
-    "name": "상화로 입체화(대심도 지하도로) 진입로(이름 미상)",
-    "line": "상화로 지하도로",
-    "lvl": "B",
-    "status": "'22.3 착공(4.14km·3,400억) — '27 준공 목표",
-    "confirmed": true,
-    "phase": "착공",
-    "linekind": "진입로",
-    "name_src": "OSM 연결로 클러스터",
-    "signal": true,
-    "pt_role": "ramp",
-    "pt_type": "road_ic",
-    "geo_prec": "landmark",
-    "src_tier": "osm_geom",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "'22.3 착공(4.14km·3,400억) — '27 준공 목표",
-      "state": "current",
-      "src": "대구시"
-     }
-    ],
-    "ramps": 4,
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      128.553315,
-      35.808219
-     ]
-    }
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     128.553315,
-     35.808219
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "mode": "road",
-    "name": "강진~광주 고속도로(광주해남완도 1단계) 진입로(이름 미상)",
-    "line": "강진광주고속도로",
-    "lvl": "A",
-    "status": "공사중 — '26 개통 목표 · 공사중 7개 공구",
-    "confirmed": true,
-    "phase": "착공",
-    "linekind": "진입로",
-    "name_src": "OSM 연결로 클러스터",
-    "signal": true,
-    "pt_role": "ramp",
-    "pt_type": "road_ic",
-    "geo_prec": "landmark",
-    "src_tier": "osm_geom",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "공사중 — '26 개통 목표 · 공사중 7개 공구",
-      "state": "current",
-      "src": "도로공사"
-     }
-    ],
-    "ramps": 12,
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.838698,
-      35.128105
-     ]
-    }
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.838698,
-     35.128105
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "mode": "road",
-    "name": "평택~부여~익산 2단계(부여~익산) 진입로(이름 미상)",
-    "line": "익산평택고속도로",
-    "lvl": "A",
-    "status": "미착공 — '29 착공·'34 완공 목표(1단계 평택~부여는 '24.12 개통)",
-    "confirmed": false,
-    "phase": "계획",
-    "linekind": "진입로",
-    "name_src": "OSM 연결로 클러스터",
-    "signal": true,
-    "pt_role": "ramp",
-    "pt_type": "road_ic",
-    "geo_prec": "landmark",
-    "src_tier": "osm_geom",
-    "milestones": [
-     {
-      "phase": "계획",
-      "stage": "미착공 — '29 착공·'34 완공 목표(1단계 평택~부여는 '24.12 개통)",
-      "state": "current",
-      "src": "민자"
-     }
-    ],
-    "ramps": 5,
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "절차 문서 확인 — 「착공」",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      127.088704,
-      35.943478
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "계획",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     127.088704,
-     35.943478
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "mode": "road",
-    "name": "강진~광주 고속도로(광주해남완도 1단계) 진입로(이름 미상)",
-    "line": "강진광주고속도로",
-    "lvl": "A",
-    "status": "공사중 — '26 개통 목표 · 공사중 7개 공구",
-    "confirmed": true,
-    "phase": "착공",
-    "linekind": "진입로",
-    "name_src": "OSM 연결로 클러스터",
-    "signal": true,
-    "pt_role": "ramp",
-    "pt_type": "road_ic",
-    "geo_prec": "landmark",
-    "src_tier": "osm_geom",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "공사중 — '26 개통 목표 · 공사중 7개 공구",
-      "state": "current",
-      "src": "도로공사"
-     }
-    ],
-    "ramps": 6,
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.820664,
-      35.018708
-     ]
-    }
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.820664,
-     35.018708
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "mode": "road",
-    "name": "행복도시 외곽순환 행복대로(한별~용호) 진입로(이름 미상)",
-    "line": "행복대로",
-    "lvl": "B",
-    "status": "공사중(3.34km) — '27 하반기 개통 목표",
-    "confirmed": true,
-    "phase": "착공",
-    "linekind": "진입로",
-    "name_src": "OSM 연결로 클러스터",
-    "signal": true,
-    "pt_role": "ramp",
-    "pt_type": "road_ic",
-    "geo_prec": "landmark",
-    "src_tier": "osm_geom",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "공사중(3.34km) — '27 하반기 개통 목표",
-      "state": "current",
-      "src": "행복청"
-     }
-    ],
-    "ramps": 12,
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      127.271345,
-      36.54229
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     127.271345,
-     36.54229
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "mode": "road",
-    "name": "서산영덕선 대산~당진 진입로(이름 미상)",
-    "line": "서산영덕고속도로",
-    "lvl": "A",
-    "status": "착공(25.36km·9,131억) — '30 개통목표 (본선 당진~영덕은 개통완료) · 공사중 4개 공구",
-    "confirmed": true,
-    "phase": "착공",
-    "linekind": "진입로",
-    "name_src": "OSM 연결로 클러스터",
-    "signal": true,
-    "pt_role": "ramp",
-    "pt_type": "road_ic",
-    "geo_prec": "landmark",
-    "src_tier": "osm_geom",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "착공(25.36km·9,131억) — '30 개통목표 (본선 당진~영덕은 개통완",
-      "state": "current",
-      "src": "도로공사"
-     }
-    ],
-    "ramps": 4,
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      127.183842,
-      36.501857
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     127.183842,
-     36.501857
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "mode": "road",
-    "name": "고속국도 제292호선 오송지선 건설공사 진입로(이름 미상)",
-    "line": "세종포천고속도로오송지선",
-    "lvl": "A",
-    "status": "공사중",
-    "confirmed": true,
-    "phase": "착공",
-    "linekind": "진입로",
-    "name_src": "OSM 연결로 클러스터",
-    "signal": true,
-    "pt_role": "ramp",
-    "pt_type": "road_ic",
-    "geo_prec": "landmark",
-    "src_tier": "osm_geom",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "공사중",
-      "state": "current",
-      "src": "도로공사"
-     }
-    ],
-    "ramps": 15,
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      127.241952,
-      36.648628
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     127.241952,
-     36.648628
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "mode": "road",
-    "name": "행복도시 외곽순환 행복대로(한별~용호) 진입로(이름 미상)",
-    "line": "행복대로",
-    "lvl": "B",
-    "status": "공사중(3.34km) — '27 하반기 개통 목표",
-    "confirmed": true,
-    "phase": "착공",
-    "linekind": "진입로",
-    "name_src": "OSM 연결로 클러스터",
-    "signal": true,
-    "pt_role": "ramp",
-    "pt_type": "road_ic",
-    "geo_prec": "landmark",
-    "src_tier": "osm_geom",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "공사중(3.34km) — '27 하반기 개통 목표",
-      "state": "current",
-      "src": "행복청"
-     }
-    ],
-    "ramps": 11,
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      127.299864,
-      36.543292
-     ]
-    }
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     127.299864,
-     36.543292
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "mode": "road",
-    "name": "당진청주선 미개통 구간 진입로(이름 미상)",
-    "line": "당진청주고속도로",
-    "lvl": "A",
-    "status": "공사중 — 인주JC~아산IC '27.12, 송악JC~인주JC '29 개통 예정 · 공사중 2개 공구",
-    "confirmed": true,
-    "phase": "착공",
-    "linekind": "진입로",
-    "name_src": "OSM 연결로 클러스터",
-    "signal": true,
-    "pt_role": "ramp",
-    "pt_type": "road_ic",
-    "geo_prec": "landmark",
-    "src_tier": "osm_geom",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "공사중 — 인주JC~아산IC '27.12, 송악JC~인주JC '29 개통 예정 ",
-      "state": "current",
-      "src": "도로공사"
-     }
-    ],
-    "ramps": 7,
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.915401,
-      36.86242
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.915401,
-     36.86242
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "mode": "road",
-    "name": "당진청주선 미개통 구간 진입로(이름 미상)",
-    "line": "당진청주고속도로",
-    "lvl": "A",
-    "status": "공사중 — 인주JC~아산IC '27.12, 송악JC~인주JC '29 개통 예정 · 공사중 2개 공구",
-    "confirmed": true,
-    "phase": "착공",
-    "linekind": "진입로",
-    "name_src": "OSM 연결로 클러스터",
-    "signal": true,
-    "pt_role": "ramp",
-    "pt_type": "road_ic",
-    "geo_prec": "landmark",
-    "src_tier": "osm_geom",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "공사중 — 인주JC~아산IC '27.12, 송악JC~인주JC '29 개통 예정 ",
-      "state": "current",
-      "src": "도로공사"
-     }
-    ],
-    "ramps": 2,
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.974581,
-      36.821865
-     ]
-    }
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.974581,
-     36.821865
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "mode": "road",
-    "name": "서산영덕선 대산~당진 진입로(이름 미상)",
-    "line": "서산영덕고속도로",
-    "lvl": "A",
-    "status": "착공(25.36km·9,131억) — '30 개통목표 (본선 당진~영덕은 개통완료) · 공사중 4개 공구",
-    "confirmed": true,
-    "phase": "착공",
-    "linekind": "진입로",
-    "name_src": "OSM 연결로 클러스터",
-    "signal": true,
-    "pt_role": "ramp",
-    "pt_type": "road_ic",
-    "geo_prec": "landmark",
-    "src_tier": "osm_geom",
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "착공(25.36km·9,131억) — '30 개통목표 (본선 당진~영덕은 개통완",
-      "state": "current",
-      "src": "도로공사"
-     }
-    ],
-    "ramps": 5,
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.617204,
-      36.851666
-     ]
-    }
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.617204,
-     36.851666
-    ]
+    "first_seen": "2026-07-23",
+    "last_movement": "2026-07-23"
    }
   },
   {
@@ -7293,8 +6582,100 @@
     "type": "LineString",
     "coordinates": [
      [
-      126.86995,
-      37.42379
+      128.5078,
+      37.2106
+     ],
+     [
+      128.39805,
+      37.14584
+     ],
+     [
+      128.37082,
+      37.13471
+     ],
+     [
+      128.1915,
+      37.13224
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "line",
+    "mode": "road",
+    "name": "평택제천고속도로",
+    "official_name": "제천~영월 고속도로(평택영월선)",
+    "linekind": "고속도로",
+    "official_type": "고속도로",
+    "access": null,
+    "access_note": null,
+    "ic_note": null,
+    "lvl": "A",
+    "status": "**'26.7.21 착공 예정** — IC 4곳+JC 1곳(어상천·단양구인사·동제천·남영월), 29.9km·1조9,975억, '32 준공목표",
+    "phase": "착공",
+    "confirmed": true,
+    "owner": "국토부/도로공사",
+    "src_tier": "official_report",
+    "src_name": "국토부/도로공사 공식 — 제천~영월 고속도로(평택영월선)",
+    "src_url": "https://www.newspim.com/news/view/20260716000223",
+    "geom_src": "공식 정거장 좌표 연결(노선 축 투영(공식 IC 좌표)) — 실선형 아님",
+    "pt_type": "road_line",
+    "has_official_ic": true,
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "**'26.7.21 착공 예정** — IC 4곳+JC 1곳(어상천·단양구인사·동",
+      "state": "current",
+      "src": "국토부/도로공사"
+     }
+    ],
+    "audited": "2026-07-17",
+    "gate": "신호",
+    "gate_basis": "단계 착공 — 법정 절차 진행 중",
+    "approx": true,
+    "geom_rebuilt": true,
+    "note": "OSM 선형 폐기 후 공식 정거장 4개를 이어 구성한 회랑. 실제 경로가 아니며 기본계획 고시 선형 확보 시 대체된다",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       128.5078,
+       37.2106
+      ],
+      [
+       128.39805,
+       37.14584
+      ],
+      [
+       128.37082,
+       37.13471
+      ],
+      [
+       128.1915,
+       37.13224
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-23",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-23",
+    "last_movement": "2026-07-23"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      126.857677,
+      37.411066
      ],
      [
       126.85595,
@@ -7359,8 +6740,8 @@
      "type": "LineString",
      "coordinates": [
       [
-       126.86995,
-       37.42379
+       126.857677,
+       37.411066
       ],
       [
        126.85595,
@@ -7393,6 +6774,146 @@
     ],
     "first_seen": "2026-07-18",
     "last_movement": "2026-07-18"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      126.78739,
+      37.57551
+     ],
+     [
+      126.76893,
+      37.61097
+     ],
+     [
+      126.71959,
+      37.61318
+     ],
+     [
+      126.69489,
+      37.62519
+     ],
+     [
+      126.63162,
+      37.62612
+     ],
+     [
+      126.60755,
+      37.68401
+     ],
+     [
+      126.60038,
+      37.69863
+     ],
+     [
+      126.58002,
+      37.71817
+     ],
+     [
+      126.57388,
+      37.72781
+     ],
+     [
+      126.51666,
+      37.73358
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "line",
+    "mode": "road",
+    "name": "계양강화고속도로",
+    "official_name": "계양~강화 고속도로",
+    "linekind": "고속도로",
+    "official_type": "고속도로",
+    "access": null,
+    "access_note": null,
+    "ic_note": null,
+    "lvl": "A",
+    "status": "'26.3.12 착공식 — '32 준공목표 · 3조2,629억",
+    "phase": "착공",
+    "confirmed": true,
+    "owner": "국토부/도로공사",
+    "src_tier": "official_report",
+    "src_name": "국토부/도로공사 공식 — 계양~강화 고속도로",
+    "src_url": "http://www.incheon.go.kr/IC010205/view?repSeq=DOM_0000000014327277",
+    "geom_src": "공식 정거장 좌표 연결(노선 축 투영(공식 IC 좌표)) — 실선형 아님",
+    "pt_type": "road_line",
+    "has_official_ic": true,
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "'26.3.12 착공식 — '32 준공목표 · 3조2,629억",
+      "state": "current",
+      "src": "국토부/도로공사"
+     }
+    ],
+    "audited": "2026-07-17",
+    "gate": "신호",
+    "gate_basis": "단계 착공 — 법정 절차 진행 중",
+    "approx": true,
+    "geom_rebuilt": true,
+    "note": "OSM 선형 폐기 후 공식 정거장 10개를 이어 구성한 회랑. 실제 경로가 아니며 기본계획 고시 선형 확보 시 대체된다",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       126.78739,
+       37.57551
+      ],
+      [
+       126.76893,
+       37.61097
+      ],
+      [
+       126.71959,
+       37.61318
+      ],
+      [
+       126.69489,
+       37.62519
+      ],
+      [
+       126.63162,
+       37.62612
+      ],
+      [
+       126.60755,
+       37.68401
+      ],
+      [
+       126.60038,
+       37.69863
+      ],
+      [
+       126.58002,
+       37.71817
+      ],
+      [
+       126.57388,
+       37.72781
+      ],
+      [
+       126.51666,
+       37.73358
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-23",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-23",
+    "last_movement": "2026-07-23"
    }
   },
   {
@@ -7477,6 +6998,90 @@
     "type": "LineString",
     "coordinates": [
      [
+      127.05818,
+      37.87168
+     ],
+     [
+      127.01034,
+      37.82984
+     ],
+     [
+      126.93098,
+      37.81337
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "line",
+    "mode": "road",
+    "name": "서울양주고속도로",
+    "official_name": "서울~양주 고속도로",
+    "linekind": "고속도로",
+    "official_type": "고속도로",
+    "access": null,
+    "access_note": null,
+    "ic_note": "IC 명단 미공개(실시설계·환경영향평가 중) — 확인된 건 광백IC 1곳뿐이며 위치 미확정(후보 3곳·변경 논란). 나머지 진출입 지점 미확정",
+    "lvl": "A",
+    "status": "실시계획 승인 전 — IC 명단(광백IC·은현JC 등) 보도 기준",
+    "phase": "계획",
+    "confirmed": false,
+    "owner": "국토부",
+    "src_tier": "official_report",
+    "src_name": "국토부 공식 — 서울~양주 고속도로",
+    "src_url": "https://pimac.kdi.re.kr/notice/accept_view.jsp?seq_no=22191",
+    "geom_src": "공식 정거장 좌표 연결(노선 축 투영(공식 IC 좌표)) — 실선형 아님",
+    "pt_type": "road_line",
+    "has_official_ic": true,
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "실시계획 승인 전 — IC 명단(광백IC·은현JC 등) 보도 기준",
+      "state": "current",
+      "src": "국토부"
+     }
+    ],
+    "audited": "2026-07-17",
+    "gate": "신호",
+    "gate_basis": "절차 문서 확인 — 「실시계획」",
+    "approx": true,
+    "geom_rebuilt": true,
+    "note": "OSM 선형 폐기 후 공식 정거장 3개를 이어 구성한 회랑. 실제 경로가 아니며 기본계획 고시 선형 확보 시 대체된다",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       127.05818,
+       37.87168
+      ],
+      [
+       127.01034,
+       37.82984
+      ],
+      [
+       126.93098,
+       37.81337
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-23",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-23",
+    "last_movement": "2026-07-23"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
       127.01925,
       37.86374
      ],
@@ -7539,310 +7144,6 @@
     "stage_history": [
      {
       "stage": "계획",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
-   }
-  },
-  {
-   "type": "Feature",
-   "geometry": {
-    "type": "LineString",
-    "coordinates": [
-     [
-      127.183842,
-      36.501857
-     ],
-     [
-      126.617204,
-      36.851666
-     ]
-    ]
-   },
-   "properties": {
-    "kind": "line",
-    "mode": "road",
-    "name": "서산영덕고속도로",
-    "official_name": "서산영덕선 대산~당진",
-    "linekind": "고속도로",
-    "official_type": "고속도로",
-    "access": null,
-    "access_note": null,
-    "ic_note": null,
-    "lvl": "A",
-    "status": "착공(25.36km·9,131억) — '30 개통목표 (본선 당진~영덕은 개통완료) · 공사중 4개 공구",
-    "phase": "착공",
-    "confirmed": true,
-    "owner": "도로공사",
-    "src_tier": "official_report",
-    "src_name": "도로공사 공식 — 서산영덕선 대산~당진",
-    "src_url": "https://www.ccnnews.co.kr/news/articleView.html?idxno=352492",
-    "geom_src": "공식 정거장 좌표 연결(발표 순서) — 실선형 아님",
-    "pt_type": "road_line",
-    "has_official_ic": false,
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "착공(25.36km·9,131억) — '30 개통목표 (본선 당진~영덕은 개통완",
-      "state": "current",
-      "src": "도로공사"
-     }
-    ],
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "approx": true,
-    "geom_rebuilt": true,
-    "note": "OSM 선형 폐기 후 공식 정거장 2개를 이어 구성한 회랑. 실제 경로가 아니며 기본계획 고시 선형 확보 시 대체된다",
-    "geo_prec": "line",
-    "geo_approx": false,
-    "geometry": {
-     "type": "LineString",
-     "coordinates": [
-      [
-       127.183842,
-       36.501857
-      ],
-      [
-       126.617204,
-       36.851666
-      ]
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
-   }
-  },
-  {
-   "type": "Feature",
-   "geometry": {
-    "type": "LineString",
-    "coordinates": [
-     [
-      126.915401,
-      36.86242
-     ],
-     [
-      126.974581,
-      36.821865
-     ]
-    ]
-   },
-   "properties": {
-    "kind": "line",
-    "mode": "road",
-    "name": "당진청주고속도로",
-    "official_name": "당진청주선 미개통 구간",
-    "linekind": "고속도로",
-    "official_type": "고속도로",
-    "access": null,
-    "access_note": null,
-    "ic_note": null,
-    "lvl": "A",
-    "status": "공사중 — 인주JC~아산IC '27.12, 송악JC~인주JC '29 개통 예정 · 공사중 2개 공구",
-    "phase": "착공",
-    "confirmed": true,
-    "owner": "도로공사",
-    "src_tier": "official_report",
-    "src_name": "도로공사 공식 — 당진청주선 미개통 구간",
-    "src_url": "https://www.ccdailynews.com/news/articleView.html?idxno=2229085",
-    "geom_src": "공식 정거장 좌표 연결(발표 순서) — 실선형 아님",
-    "pt_type": "road_line",
-    "has_official_ic": false,
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "공사중 — 인주JC~아산IC '27.12, 송악JC~인주JC '29 개통 예정 ",
-      "state": "current",
-      "src": "도로공사"
-     }
-    ],
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "approx": true,
-    "geom_rebuilt": true,
-    "note": "OSM 선형 폐기 후 공식 정거장 2개를 이어 구성한 회랑. 실제 경로가 아니며 기본계획 고시 선형 확보 시 대체된다",
-    "geo_prec": "line",
-    "geo_approx": false,
-    "geometry": {
-     "type": "LineString",
-     "coordinates": [
-      [
-       126.915401,
-       36.86242
-      ],
-      [
-       126.974581,
-       36.821865
-      ]
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
-   }
-  },
-  {
-   "type": "Feature",
-   "geometry": {
-    "type": "LineString",
-    "coordinates": [
-     [
-      128.530084,
-      35.808185
-     ],
-     [
-      128.553315,
-      35.808219
-     ]
-    ]
-   },
-   "properties": {
-    "kind": "line",
-    "mode": "road",
-    "name": "상화로 지하도로",
-    "official_name": "상화로 입체화(대심도 지하도로)",
-    "linekind": "도시고속화",
-    "official_type": "도시고속화",
-    "access": "ramp",
-    "access_note": "대심도 지하도로 — 진출입 지점에서만 접근",
-    "ic_note": null,
-    "lvl": "B",
-    "status": "'22.3 착공(4.14km·3,400억) — '27 준공 목표",
-    "phase": "착공",
-    "confirmed": true,
-    "owner": "대구시",
-    "src_tier": "official_report",
-    "src_name": "대구시 공식 — 상화로 입체화(대심도 지하도로)",
-    "src_url": "https://mbiz.heraldcorp.com/view.php?ud=20220315000040",
-    "geom_src": "공식 정거장 좌표 연결(발표 순서) — 실선형 아님",
-    "pt_type": "road_line",
-    "has_official_ic": false,
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "'22.3 착공(4.14km·3,400억) — '27 준공 목표",
-      "state": "current",
-      "src": "대구시"
-     }
-    ],
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "approx": true,
-    "geom_rebuilt": true,
-    "note": "OSM 선형 폐기 후 공식 정거장 2개를 이어 구성한 회랑. 실제 경로가 아니며 기본계획 고시 선형 확보 시 대체된다",
-    "geo_prec": "line",
-    "geo_approx": false,
-    "geometry": {
-     "type": "LineString",
-     "coordinates": [
-      [
-       128.530084,
-       35.808185
-      ],
-      [
-       128.553315,
-       35.808219
-      ]
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
-   }
-  },
-  {
-   "type": "Feature",
-   "geometry": {
-    "type": "LineString",
-    "coordinates": [
-     [
-      127.271345,
-      36.54229
-     ],
-     [
-      127.299864,
-      36.543292
-     ]
-    ]
-   },
-   "properties": {
-    "kind": "line",
-    "mode": "road",
-    "name": "행복대로",
-    "official_name": "행복도시 외곽순환 행복대로(한별~용호)",
-    "linekind": "도시고속화",
-    "official_type": "도시고속화",
-    "access": null,
-    "access_note": null,
-    "ic_note": null,
-    "lvl": "B",
-    "status": "공사중(3.34km) — '27 하반기 개통 목표",
-    "phase": "착공",
-    "confirmed": true,
-    "owner": "행복청",
-    "src_tier": "official_report",
-    "src_name": "행복청 공식 — 행복도시 외곽순환 행복대로(한별~용호)",
-    "src_url": "https://www.sedaily.com/article/20057297",
-    "geom_src": "공식 정거장 좌표 연결(발표 순서) — 실선형 아님",
-    "pt_type": "road_line",
-    "has_official_ic": false,
-    "milestones": [
-     {
-      "phase": "착공",
-      "stage": "공사중(3.34km) — '27 하반기 개통 목표",
-      "state": "current",
-      "src": "행복청"
-     }
-    ],
-    "audited": "2026-07-17",
-    "gate": "신호",
-    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-    "approx": true,
-    "geom_rebuilt": true,
-    "note": "OSM 선형 폐기 후 공식 정거장 2개를 이어 구성한 회랑. 실제 경로가 아니며 기본계획 고시 선형 확보 시 대체된다",
-    "geo_prec": "line",
-    "geo_approx": false,
-    "geometry": {
-     "type": "LineString",
-     "coordinates": [
-      [
-       127.271345,
-       36.54229
-      ],
-      [
-       127.299864,
-       36.543292
-      ]
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "착공",
       "date": "2026-07-18",
       "basis": "observed"
      }
