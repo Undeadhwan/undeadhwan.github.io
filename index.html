@@ -118,6 +118,10 @@
   .dong-lbl { font-size:11.5px; font-weight:700; color:#3a4358; text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff;
     white-space:nowrap; cursor:pointer; transform:translate(-50%,-50%); }
   .dong-lbl:hover { color:#2e5ce6; text-decoration:underline; }
+  /* 신도시·대형지구 딱지 라벨(등급 없는 옅은 영역) — 분류색 옅게, 알약 배경 */
+  .mst-lbl { font-size:11px; font-weight:800; color:#8f1e4c; background:rgba(255,255,255,.82); border:1px solid rgba(184,29,84,.35);
+    border-radius:999px; padding:1.5px 8px; white-space:nowrap; transform:translate(-50%,-50%); text-shadow:0 0 2px #fff; }
+  .mst-lbl:hover { background:#fff; border-color:#b81d54; }
   .apt-house-s { font-size:16px; line-height:1; cursor:pointer; transform:translate(-50%,-50%);
     filter:drop-shadow(0 1px 2px rgba(0,0,0,.35)); }   /* 컬러 이모지 그대로(선명) — 호재 원과 형태로 구분 */
   .apt-house-s:hover { font-size:18px; }
@@ -2370,9 +2374,25 @@ function initLeaflet() {
      등급 LOD: z<12=A만 → z12~13=A+B → z14+=C·미정까지. 뷰포트 컬링+상한. 철도역·도로는 renderRail(선·라벨)이 담당. */
   let hjDots = [];
   const clearHojae = () => { hjDots.forEach(m => map.removeLayer(m)); hjDots = []; };
+  // 신도시·대형지구 딱지 = 옅은 영역(등급 없음, 클릭 정보). Leaflet 폴백용(카카오가 정식).
+  let mstLayers = [];
+  const renderMasterArea = () => {
+    mstLayers.forEach(o => map.removeLayer(o)); mstLayers = [];
+    const bd = map.getBounds();
+    for (const s of MASTER_SIG) {
+      if (!s.boundary || !filter.cat.has(catOf(s)) || !visible(s)) continue;
+      const c = s.geometry.coordinates; if (!bd.contains([c[1], c[0]])) continue;
+      const col = colorOf(s);
+      const latlngs = s.boundary.coordinates[0].map(([x, y]) => [y, x]);
+      const poly = L.polygon(latlngs, { pane: "cand", color: col, weight: 1.4, opacity: .5, dashArray: "6 5", fillColor: col, fillOpacity: .07 }).addTo(map);
+      poly.on("click", e => { L.DomEvent.stopPropagation(e); showSignal(s, false); });
+      poly.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${s.title}</div><div class="apt-pop-sub">지구 딱지 · 등급 없음 — 개별 호재건으로 판단</div></div>`, { sticky: true, className: "apt-tip" });
+      mstLayers.push(poly);
+    }
+  };
   const HJ_R = { S: 21, A: 16, B: 12, C: 9, "미정": 6 };   // 크기=등급 (S=국가급 최대). 2026-07-22 상향 — 사용자 "작아서 잘 안보임(특히 C), 등급 차이도 구분 안 됨" → 전체 확대 + C 하한 상향 + 단차 벌림
   hjLegend.addTo(map);   // 범례가 HJ_R을 읽으므로 여기서 부착(위에서 부르면 TDZ 오류)
-  const lodGrades = z => z >= 14 ? ["S", "A", "B", "C", "미정"] : z === 13 ? ["S", "A", "B", "C"] : z >= 12 ? ["S", "A", "B"] : z >= 10 ? ["S", "A"] : ["S"];   // 최원경=S만(2026-07-22 — 줌아웃 초기 화면은 국가급 신호만)
+  const lodGrades = z => z >= 14 ? ["S", "A", "B", "C", "미정"] : z >= 12 ? ["S", "A", "B", "C"] : z >= 11 ? ["S", "A", "B"] : z >= 9 ? ["S", "A"] : ["S"];   // B·C를 덜 확대해도 보이게 한 단계씩 앞당김(2026-07-22 사용자) · 최원경=S만
   const renderHojae = () => {
     clearHojae();
     const z = map.getZoom();
@@ -2382,6 +2402,8 @@ function initLeaflet() {
     // 도로 노선 신호(access_points 보유)는 선으로 렌더되므로 제외(확정 병합분 포함), IC 점만 포함.
     const pool = SIGNALS.concat(MASTER_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
       .filter(s => !(s._road && s.access_points))
+      .filter(s => !s.area_shape)   // area_shape(신도시 딱지)=옅은 영역으로 별도 렌더(등급 원 아님)
+      .filter(s => show.size > 1 || !(s.pt_type === "rail_station" || s.pt_type === "road_ic"))   // 망형(전철·도로): 최원경엔 선만, 한 단계 확대해야 역·IC 등장(2026-07-22 사용자)
       .filter(s => s.signal !== false)   // JC(분기점) 제외 — 진출입 불가라 호재 아님
       .filter(visible)
       .filter(s => s.geometry && s.geometry.coordinates)   // 좌표 미확정 신호 제외(지도 미표시 — 카드에서 표기)
@@ -2527,6 +2549,7 @@ function initLeaflet() {
     if (z >= DONG_ZOOM) { if (!map.hasLayer(dongLayer)) map.addLayer(dongLayer); }   // 동 경계 폴리곤 문맥
     else { if (map.hasLayer(dongLayer)) map.removeLayer(dongLayer); }
     renderJeongbiPoly();   // 정비구역 경계 폴리곤(고시 사실) — jbDrawnRings 채워짐
+    renderMasterArea();    // 신도시·대형지구 딱지 = 옅은 영역(등급 없음, 클릭 정보)
     renderHojae();         // ★ 모든 호재 원 — 라벨보다 **먼저** 그려 위치를 확보(라벨이 이를 회피)
     renderDongLabels();                                   // z12+ 동 이름 라벨 — 호재 원과 겹치면 회피
     if (z >= APT_ZOOM) renderAptDots(); else clearAptDots();   // z14+ 아파트 집 아이콘
@@ -2738,7 +2761,7 @@ function initKakao() {
   window._map = map; window._kmap = map; map.setMaxLevel(13);
   map.addControl(new K.ZoomControl(), K.ControlPosition.LEFT);
   const DONG_LV = 6, APT_LV = 4;
-  const lodGrades = lv => lv <= APT_LV ? ["S", "A", "B", "C", "미정"] : lv <= 5 ? ["S", "A", "B", "C"] : lv <= 7 ? ["S", "A", "B"] : lv <= 9 ? ["S", "A"] : ["S"];   // C=lv5부터, B=lv7부터(사용자 2026-07-21) · 최원경(lv10+)=S만(2026-07-22 줌아웃=국가급)
+  const lodGrades = lv => lv <= APT_LV ? ["S", "A", "B", "C", "미정"] : lv <= 6 ? ["S", "A", "B", "C"] : lv <= 8 ? ["S", "A", "B"] : lv <= 10 ? ["S", "A"] : ["S"];   // B·C를 덜 확대해도 보이게 한 단계씩 앞당김(2026-07-22 사용자) · 최원경(lv11+)=S만
   const HJR = { S: 21, A: 16, B: 12, C: 9, "미정": 6 };   // 크기=등급(카카오 렌더러 로컬 — Leaflet HJ_R과 별개 스코프). 2026-07-22 상향(사용자) — Leaflet HJ_R과 동일값 유지
   const mapEl = el;
   let tip = document.getElementById("_ktip");
@@ -2780,7 +2803,8 @@ function initKakao() {
   const renderHojae = () => {
     const lv = map.getLevel(); const show = new Set(lodGrades(lv)); const b = map.getBounds();
     const pool = SIGNALS.concat(MASTER_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
-      .filter(s => !(s._road && s.access_points)).filter(s => s.signal !== false).filter(visible)
+      .filter(s => !(s._road && s.access_points)).filter(s => !s.area_shape).filter(s => s.signal !== false).filter(visible)   // area_shape(신도시 딱지)=옅은 영역으로 별도 렌더(등급 원 아님)
+      .filter(s => show.size > 1 || !(s.pt_type === "rail_station" || s.pt_type === "road_ic"))   // 망형: 최원경엔 선만, 한 단계 확대해야 역·IC(2026-07-22 사용자)
       .filter(s => s.geometry && s.geometry.coordinates).filter(s => show.has(levelOf(s)))
       .filter(s => { const c = s.geometry.coordinates; return b.contain(LL(c[0], c[1])); })
       .sort((a, b2) => (GRADE_RANK[levelOf(a)] ?? 9) - (GRADE_RANK[levelOf(b2)] ?? 9));   // 등급순 — 600 상한이 걸려도 S/A(교통 역)가 밀려나지 않게(2026-07-22)
@@ -2928,6 +2952,35 @@ function initKakao() {
       f._kjb.setMap(map); shownJb.push(f._kjb); }
     toggleJbLegend(n > 0); };
 
+  /* 신도시·대형지구 마스터(딱지) = 등급 없는 **옅은 영역**(2026-07-22 사용자 확정 — 딱지에 등급 안 매김).
+     경계 폴리곤 + 지구명 라벨. 클릭하면 정보 패널. 개별 호재건(철도·기업·정비)이 각자 등급을 갖는다.
+     오버레이는 1회 생성 후 setMap 토글(줌 성능) — 정비 폴리곤과 같은 방식. */
+  let shownMst = [];
+  const renderMasterArea = () => {
+    shownMst.forEach(o => o.setMap(null)); shownMst = [];
+    const b = map.getBounds();
+    for (const s of MASTER_SIG) {
+      if (!s.boundary || !filter.cat.has(catOf(s)) || !visible(s)) continue;
+      const ring = s.boundary.coordinates[0];
+      const c = s.geometry.coordinates; if (!b.contain(LL(c[0], c[1]))) continue;
+      const col = colorOf(s);
+      if (!s._kmArea) {
+        s._kmArea = new K.Polygon({ path: ring.map(([x, y]) => LL(x, y)), strokeWeight: 1.4, strokeColor: col,
+          strokeOpacity: .5, strokeStyle: "shortdash", fillColor: col, fillOpacity: .07, zIndex: 2 });
+        const short = (s.title || "").replace(/\s*(공공주택지구|택지개발사업|택지개발지구|도시개발사업|일반산업단지|공공주택|신도시).*$/, "").trim() || s.title;
+        const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + s.title + '</div><div class="apt-pop-sub">지구 딱지 · 등급 없음 — 개별 호재건으로 판단</div><div class="apt-pop-cats"><span>' + (s.hh ? Number(s.hh).toLocaleString() + '세대' : '') + (s.area_m2 ? ' · ' + (s.area_m2/1e6).toFixed(1) + 'km²' : '') + ' · ' + phaseOf(s) + '</span></div></div>';
+        K.event.addListener(s._kmArea, "mouseover", mev => showTip(html, evToClient(mev)));
+        K.event.addListener(s._kmArea, "mousemove", mev => showTip(html, evToClient(mev)));
+        K.event.addListener(s._kmArea, "mouseout", hideTip);
+        K.event.addListener(s._kmArea, "click", () => { _ovClickTs = Date.now(); hideTip(); showSignal(s, false); });
+        const elx = document.createElement("div"); elx.className = "mst-lbl"; elx.textContent = short; elx.style.cursor = "pointer";
+        elx.addEventListener("click", e => { e.stopPropagation(); _ovClickTs = Date.now(); showSignal(s, false); });
+        s._kmLbl = new K.CustomOverlay({ position: LL(c[0], c[1]), content: elx, zIndex: 9, yAnchor: .5, xAnchor: .5 });
+      }
+      s._kmArea.setMap(map); s._kmLbl.setMap(map); shownMst.push(s._kmArea, s._kmLbl);
+    }
+  };
+
   // 아파트 마커 + hover 팝업(비교담기)
   let aptDots = [], aptPop = null, aptPopTimer = null;
   const closeAptPop = () => { if (aptPop) { aptPop.remove(); aptPop = null; } };
@@ -2980,7 +3033,7 @@ function initKakao() {
     div.querySelector(".hlt").addEventListener("click", () => { const off = div.classList.toggle("collapsed"); localStorage.setItem("hojae_legend_off", off ? "1" : "0"); div.querySelector(".car").textContent = off ? "▾" : "▴"; });
     mapEl.appendChild(div); }
 
-  const applyLOD = () => { renderDongPoly(); renderJeongbiPoly(); renderHojae(); renderDongLabels(); renderAptDots(); renderRail(); loadBdong(); };
+  const applyLOD = () => { renderDongPoly(); renderJeongbiPoly(); renderMasterArea(); renderHojae(); renderDongLabels(); renderAptDots(); renderRail(); loadBdong(); };
   K.event.addListener(map, "idle", applyLOD);
   // 줌 애니메이션 프레임마다 카카오가 살아있는 벡터·DOM 오버레이 전부를 재투영한다 — 그게 "딱딱 끊김"의 원인.
   // 애니메이션 동안 우리 오버레이 **전부**를 잠깐 내리고 idle의 applyLOD가 복귀시킨다(네이버지도 방식 —
@@ -3376,7 +3429,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260722v");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260722w");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3477,7 +3530,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260722v"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260722w"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3503,7 +3556,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260722v");
+  const CB = "?b=" + (window.BUILD || "20260722w");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
