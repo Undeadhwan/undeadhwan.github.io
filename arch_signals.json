@@ -3618,8 +3618,8 @@
    "splot": "위례 택지개발지구",
    "block": "복합용지2",
    "lot": null,
-   "geo_prec": "dong",
-   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "geo_prec": "jigu",
+   "position_confidence": null,
    "hhld_cnt": 0,
    "ho_cnt": 0,
    "sd": "서울",
@@ -3659,13 +3659,13 @@
    "rcept_dt": "20260615",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
+    "type": "Point",
     "coordinates": [
-     127.132671,
-     37.480065
+     127.130003,
+     37.471862
     ]
    },
-   "geo_approx": true,
-   "block_unresolved": true,
+   "geo_approx": false,
    "stage_history": [
     {
      "stage": "인가",
@@ -3683,6 +3683,7 @@
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 867,428㎡ — 일자리:오피스 S",
+   "geo_basis": "택지정보 가구획지 — 11710KL2006001 블록 E1-2 필지 E1-2 (복합용지) · 종전 좌표에서 936m 이동",
    "master_ref": {
     "id": "M-11710KL2006001",
     "title": "위례 택지개발사업 예정지구"
