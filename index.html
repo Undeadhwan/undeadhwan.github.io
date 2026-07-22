@@ -981,7 +981,7 @@ const JEONGBI_LICENSED = true;
 // 신규 철도 노선: OSM 실제 선형(railway=construction/proposed) 기반 재구축 → 활성.
 // 건설중=실선, 계획=점선(§7). 출처 OpenStreetMap(ODbL, 지도 하단·툴팁 표기).
 const RAIL_READY = true;
-let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [], JEONGBI_SIG = [], RAIL = [], RAIL_SIG = [], DART = [], DART_SIG = [], ARCH = [], ARCH_SIG = [], ROADF = [], ROAD_SIG = [], PARK_SIG = [], DPS_SIG = [], MASTER_SIG = [], JOBS_SIG = [], MEGA_SIG = [];
+let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [], JEONGBI_SIG = [], RAIL = [], RAIL_SIG = [], DART = [], DART_SIG = [], ARCH = [], ARCH_SIG = [], ROADF = [], ROAD_SIG = [], PARK_SIG = [], DPS_SIG = [], MASTER_SIG = [], JOBS_SIG = [], MEGA_SIG = [], EUM_SIG = [];
 /* DART(신규시설투자·유형자산양수) → 일자리 후보 신호 어댑트. 위치=회사 소재지 근사(§ 후보층, confirmed:false) */
 function buildDartSignals() {   // DART 전자공시 = 법정 공시 → official_report
   DART_SIG = (DART || []).filter(s => s.geometry && s.geometry.coordinates).map(s => ({
@@ -2385,7 +2385,7 @@ function initLeaflet() {
     const bd = map.getBounds();
     // 철도역·도로IC도 호재 원 체계로 일원화(2026-07-16 사용자 지적 — "역 생기는 곳이 호재인데 원이 없다").
     // 도로 노선 신호(access_points 보유)는 선으로 렌더되므로 제외(확정 병합분 포함), IC 점만 포함.
-    const pool = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
+    const pool = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
       .filter(s => !(s._road && s.access_points))
       .filter(s => !s.area_shape)   // area_shape(신도시 딱지)=옅은 영역으로 별도 렌더(등급 원 아님)
       .filter(s => z >= 11 || !(s.pt_type === "rail_station" || s.pt_type === "road_ic"))   // 망형(전철·도로): 지역 뷰(z<11)엔 선만, 지구·역 뷰(z≥11)에서만 역·IC 등장(2026-07-22 사용자)
@@ -2787,7 +2787,7 @@ function initKakao() {
     return '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + s.title + '</div><div class="apt-pop-sub"><span style="color:' + t.col + ';font-weight:700">● ' + catOf(s) + '</span> · ' + lvlPill(t.lvl) + ' ' + gradeBasisHtml(s).replace(/ · $/, "") + '</div><div class="apt-pop-cats"><span>단계 ' + phaseOf(s) + (s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : "") + '</span></div></div>'; };
   const renderHojae = () => {
     const lv = map.getLevel(); const show = new Set(lodGrades(lv)); const b = map.getBounds();
-    const pool = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
+    const pool = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
       .filter(s => !(s._road && s.access_points)).filter(s => !s.area_shape).filter(s => s.signal !== false).filter(visible)   // area_shape(신도시 딱지)=옅은 영역으로 별도 렌더(등급 원 아님)
       .filter(s => lv <= 7 || !(s.pt_type === "rail_station" || s.pt_type === "road_ic"))   // 망형: 지역 뷰(lv>7)엔 선만, 지구·역 뷰(lv≤7)에서만 역·IC(2026-07-22 사용자)
       .filter(s => s.geometry && s.geometry.coordinates).filter(s => show.has(levelOf(s)))
@@ -3194,7 +3194,7 @@ function setView(mode) {
 /* ══════════ 등급 미판정(미정) 목록 ══════════ */
 // 모든 신호 통합 후 등급 미판정(levelOf==="미정")만 — 결측 사유 표기. 사용자가 보고 소스·기준 보완.
 function allSignalsFlat() {
-  return [].concat(SIGNALS, MASTER_SIG, JOBS_SIG, MEGA_SIG, JEONGBI_SIG, RAIL_SIG, ROAD_SIG, DART_SIG, ARCH_SIG, PARK_SIG, DPS_SIG).filter(s => s && s.geometry);
+  return [].concat(SIGNALS, MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, RAIL_SIG, ROAD_SIG, DART_SIG, ARCH_SIG, PARK_SIG, DPS_SIG).filter(s => s && s.geometry);
 }
 function undetReason(s) {
   const c = catOf(s);
@@ -3389,13 +3389,13 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260722ae");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260722af");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
   applyThresholds(await gj("thresholds.json").catch(() => null));
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
-  const [dong, sgg, main, macro, rawData, autoData, regions, jeongbiData, railData, roadData, dartData, archData, parkData, dpsData, masterData, jobsData, megaData] = await Promise.all([
+  const [dong, sgg, main, macro, rawData, autoData, regions, jeongbiData, railData, roadData, dartData, archData, parkData, dpsData, masterData, jobsData, megaData, eumData] = await Promise.all([
     gj("bdong/서울.geojson"),      // 초기 = 서울 467동(§3.1 법정동). 나머지 15시도는 뷰포트·선택 시 지연 로드(bdong/index.json)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
@@ -3412,7 +3412,8 @@ function initSearch() {
     gj("dps_signals.json").catch(() => ({ signals: [] })),            // 공공건축 설계공모(건축HUB) — 계획단계 후보
     gj("master_signals.json").catch(() => ({ signals: [] })),         // S급 지구 마스터(택지정보 대장, 2026-07-22)
     gj("jobs_signals.json").catch(() => ({ signals: [] })),           // 대형 일자리 S(용산·잠실·북항 등, 2026-07-22)
-    gj("mega_signals.json").catch(() => ({ signals: [] }))            // 관보 고시 원문 파싱 — 대장에 아직 없는 신규 지구(2026-07-22)
+    gj("mega_signals.json").catch(() => ({ signals: [] })),           // 관보 고시 원문 파싱 — 대장에 아직 없는 신규 지구(2026-07-22)
+    gj("eum_signals.json").catch(() => ({ signals: [] }))             // 토지이음 지자체 도시계획 고시(2026-07-22)
   ]);
   RAIL = (railData && railData.features) || [];
   buildRailSignals();   // 계획/건설역 → 교통 신호(신설역 근처 아파트 호재 카운팅 기준좌표)
@@ -3444,6 +3445,11 @@ function initSearch() {
   // 등급은 없다 — 지정 고시에 사업비·세대수가 없어 미정이 정직하다(딱지 미등급 규칙과 동일).
   MEGA_SIG = ((megaData && megaData.signals) || []).filter(s => s.geometry).map(s => Object.assign({
     _mega: true, confirmed: false, status: "활성"
+  }, s));
+  // 토지이음 지자체 도시계획 고시(2026-07-22) — **관보에 실리지 않는** 지구단위계획·도시개발구역·
+  // 재정비촉진 계열. 좌표·면적은 첨부 고시문에서 읽는다(없으면 좌표 없이 데이터로만 남는다).
+  EUM_SIG = ((eumData && eumData.signals) || []).filter(s => s.geometry).map(s => Object.assign({
+    _eum: true, confirmed: false, status: "활성"
   }, s));
   // dedupJobByArea() 비활성(2026-07-16): DART 위치가 본사-근사라 거리(250m) 기반 면적-우선 dedup이
   // 무관한 인접 신축건물을 '같은 시설'로 오판→포스코 1.6조·동국제강 등 최대 신호를 잘못 제거함.
@@ -3502,7 +3508,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260722ae"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260722af"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3528,7 +3534,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260722ae");
+  const CB = "?b=" + (window.BUILD || "20260722af");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
