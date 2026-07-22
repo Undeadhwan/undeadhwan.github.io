@@ -1,0 +1,4707 @@
+{
+ "_note": "S급 마스터 신호 — 택지정보 지구 대장(jigu_dstrc.csv)+가구획지(jigu_blocks.json). master_fetch.py 생성(백지 재현). 마스터-조각 병합은 master_merge.py.",
+ "generated": "2026-07-22",
+ "signals": [
+  {
+   "id": "M-41590MX2008001",
+   "title": "화성동탄2 택지개발사업",
+   "master": true,
+   "zonecode": "41590MX2008001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 123,594호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 123594,
+   "amount_eok": 161144,
+   "area_m2": 24029205,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2007-12-20",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2008-07-11",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2010-07-07",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2007-12-20",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2026"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "화성시",
+   "loc": "경기도 화성시 동탄면 금곡리, 목리, 방교리, 산척리, 송리, 신리, 영천리, 오산리, 장지리, 중리, 청계리 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 3562개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.110184,
+     37.181667
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-44730KL2010001",
+   "title": "행정중심복합도시건설사업",
+   "master": true,
+   "zonecode": "44730KL2010001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 200,000호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 200000,
+   "area_m2": 73006502,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2006-07-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2006-11-29",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2007-07-04",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2006-07-31",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2030"
+    }
+   ],
+   "template_type": "정비사업",
+   "loc": "세종특별자치시 세종특별자치시 소담동, 보람동, 대평동, 가람동, 한솔동, 나성동, 새롬동, 다정동, 어진동, 종촌동, 도담동, 고운동, 아름동, 산울동, 해밀동, 합강동, 집현동, 연기면 한별리, 누리리, 세종리, 보통리, 연동면 용호리, 다솜리",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 4656개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.261303,
+     36.506793
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41220MX2006001",
+   "title": "고덕 국제화계획지구 택지개발사업",
+   "master": true,
+   "zonecode": "41220MX2006001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 61,285호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "hh": 61285,
+   "amount_eok": 103880,
+   "area_m2": 17264324,
+   "phase": "인가",
+   "current_stage": "실시계획 승인",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2006-09-21",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2008-05-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2013-01-04",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2027"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "평택시",
+   "loc": "경기도 평택시 고덕동, 고덕면 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 4890개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.036205,
+     37.047105
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-28260MX2007002",
+   "title": "인천검단지구 택지개발지구",
+   "master": true,
+   "zonecode": "28260MX2007002",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 75,857호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 75857,
+   "amount_eok": 83868,
+   "area_m2": 11109137,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2007-06-28",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2009-02-06",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2010-01-06",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2009-02-06",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2028"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "대전",
+   "sg": "서구",
+   "loc": "인천광역시 서구 당하동, 원당동, 마전동, 불로동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 1772개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.694352,
+     37.597635
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41280MX2020001",
+   "title": "고양창릉 공공주택지구",
+   "master": true,
+   "zonecode": "41280MX2020001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 38,334호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 38334,
+   "amount_eok": 111689,
+   "area_m2": 8119006,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2020-03-06",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2021-11-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2021-11-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2020-03-06",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2029"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "고양시",
+   "loc": "경기도 고양시 덕양구 원흥동, 동산동, 용두동, 향동동, 화전동, 도내동, 행신동, 화정동, 성사동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 1056개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.865955,
+     37.622241
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41360MX2019001",
+   "title": "남양주왕숙 공공주택지구",
+   "master": true,
+   "zonecode": "41360MX2019001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 64,159호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 64159,
+   "amount_eok": 83266,
+   "area_m2": 10293785,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2019-10-15",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2021-08-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2021-08-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2019-10-15",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2028"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "남양주시",
+   "loc": "경기도 남양주시 진접읍 연평리, 내곡리, 내각리, 진겁읍 신월리, 진관리, 사능리, 용정리, 송능리, 배양리, 퇴계원읍 퇴계원리 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 1470개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.168134,
+     37.664729
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41450MX2019001",
+   "title": "하남교산 공공주택지구",
+   "master": true,
+   "zonecode": "41450MX2019001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 36,697호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 36697,
+   "amount_eok": 103876,
+   "area_m2": 6858234,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2019-10-15",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2021-08-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2021-08-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2019-10-15",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2028"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "하남시",
+   "loc": "경기도 하남시 천현동, 항동, 하사창동, 교산동, 상사창동, 춘궁동, 덕풍동, 창우동, 신장동, 상산곡동, 광암동, 초일동, 초이동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 1226개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.203643,
+     37.517474
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41115MX2004001",
+   "title": "광교지구 택지개발사업",
+   "master": true,
+   "zonecode": "41115MX2004001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 31,500호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 31500,
+   "amount_eok": 93968,
+   "area_m2": 10786949,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2004-06-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2005-12-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2007-06-28",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2004-06-30",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2024"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "수원시",
+   "loc": "경기도 수원시 영통구 이의동, 원천동, 하동, 용인시 수지구 상현동, 기흥구 영덕동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 1347개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.058368,
+     37.29387
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41480KH2007003",
+   "title": "파주운정3 택지개발사업",
+   "master": true,
+   "zonecode": "41480KH2007003",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 44,958호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 44958,
+   "amount_eok": 51847,
+   "area_m2": 7157692,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2007-06-28",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2008-12-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2012-04-05",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2008-12-31",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2027"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "남양주시",
+   "loc": "경기도 파주시 교하, 당하, 와동, 동패, 목동, 다율, 문발, 신촌, 연다산, 오도, 서패동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 2270개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.720496,
+     37.724566
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41630KL2004002",
+   "title": "양주신도시(옥정)택지개발사업",
+   "master": true,
+   "zonecode": "41630KL2004002",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 45,518호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 45518,
+   "amount_eok": 40716,
+   "area_m2": 7060702,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2004-12-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2007-03-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2007-12-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2007-03-30",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2027"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "양주시",
+   "loc": "경기도 양주시 산북동, 삼숭동, 덕정동, 덕계동, 회정동, 고암동, 회암동, 율정동, 옥정동,고읍동, 만송동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 1159개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.08898,
+     37.826355
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41590KL2001001",
+   "title": "화성동탄지구 택지개발사업",
+   "master": true,
+   "zonecode": "41590KL2001001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 41,410호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 41410,
+   "amount_eok": 42353,
+   "area_m2": 9035343,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2001-04-25",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2001-12-14",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2002-12-26",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2021-12-14",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2027"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "화성시",
+   "loc": "경기도 화성시 석우동, 반송동, 오산동, 영천동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 2388개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.068077,
+     37.205307
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41210LH2022002",
+   "title": "광명시흥 공공주택지구",
+   "master": true,
+   "zonecode": "41210LH2022002",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 67,000호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 67000,
+   "area_m2": 12714465,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2022-11-29",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2024-12-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2024-12-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2022-11-29",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2031"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "광명시",
+   "loc": "경기도 광명시 광명동, 옥길동, 노온사동, 가학동 및 시흥시 과림동, 무지내동, 금이동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 1532개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.842624,
+     37.44375
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41190MX2020001",
+   "title": "부천대장 공공주택지구",
+   "master": true,
+   "zonecode": "41190MX2020001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 20,318호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 20318,
+   "amount_eok": 42531,
+   "area_m2": 3448888,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2020-05-27",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2021-11-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2021-11-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2020-05-27",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2029"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "부천시",
+   "loc": "경기도 부천시 오정구 대장동, 오정동, 원종동, 삼정동, 인천광역시 계양구 동양동, 박촌동, 병방동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 364개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.785517,
+     37.538554
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41390MX2010005",
+   "title": "반월특수지역 개발구역 중 시화2단계(송산그린시티) 개발사업",
+   "master": true,
+   "zonecode": "41390MX2010005",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 60,000호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "hh": 60000,
+   "area_m2": 55056947,
+   "phase": "인가",
+   "current_stage": "실시계획 승인",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "1977-04-22",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2011-09-27",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2035"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "화성시",
+   "loc": "경기도 화성시 송산면, 마도면, 장전동, 남양동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 3278개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.763196,
+     37.264716
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-44200KH2005001",
+   "title": "아산탕정 택지개발사업",
+   "master": true,
+   "zonecode": "44200KH2005001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 26,845호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 26845,
+   "amount_eok": 32355,
+   "area_m2": 5131821,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2005-12-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2007-12-04",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2009-12-02",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2005-12-30",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2025"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "충남",
+   "sg": "아산시",
+   "loc": "충청남도 천안시 서북구 서북구 불당동, 동남구 신방동 및 아산시 배방읍 장재？세교？휴대리, 탕정면 갈산？매곡？명암？용두리 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 847개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.093182,
+     36.795706
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-28185DA2016001",
+   "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C ",
+   "master": true,
+   "zonecode": "28185DA2016001",
+   "cat": "일자리",
+   "sub": "복합단지",
+   "lvl": "S",
+   "lvl_basis": "사업비 3.7조 — 일자리 S 기준(1조↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 21835,
+   "amount_eok": 37140,
+   "area_m2": 12454155,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2003-08-11",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2003-08-11",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2016-05-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2003-08-11",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2030"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "인천",
+   "sg": "연수구",
+   "loc": "인천광역시 연수구 송도동 543번지 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 324개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.680316,
+     37.367573
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41630KH2006001",
+   "title": "양주신도시(회천)택지개발사업",
+   "master": true,
+   "zonecode": "41630KH2006001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 25,074호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 25074,
+   "amount_eok": 30751,
+   "area_m2": 4120264,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2006-05-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2007-09-21",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2008-12-01",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2007-09-21",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2027"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "양주시",
+   "loc": "경기도 양주시 산북동, 삼숭동, 덕정동, 덕계동, 회정동, 고암동, 회암동, 율정동, 옥정동, 고읍동, 만송동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 976개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.059401,
+     37.823846
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41220PV2016002",
+   "title": "평택 브레인시티 일반산업단지",
+   "master": true,
+   "zonecode": "41220PV2016002",
+   "cat": "일자리",
+   "sub": "복합단지",
+   "lvl": "S",
+   "lvl_basis": "사업비 3.8조 — 일자리 S 기준(1조↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "hh": 17423,
+   "amount_eok": 38178,
+   "area_m2": 4823259,
+   "phase": "인가",
+   "current_stage": "실시계획 승인",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2010-03-15",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2010-03-15",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2010-03-15",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2026"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "경기",
+   "sg": "평택시",
+   "loc": "경기도 평택시 도일동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 519개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.096066,
+     37.049959
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41290MX2019001",
+   "title": "과천과천 공공주택지구",
+   "master": true,
+   "zonecode": "41290MX2019001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 10,204호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 10204,
+   "amount_eok": 44083,
+   "area_m2": 1686775,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2019-10-15",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2024-08-14",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2024-08-14",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2019-10-15",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2030"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "과천시",
+   "loc": "경기도 과천시 과천동, 주암동, 막계동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 408개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.005192,
+     37.447929
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-28110LH2010001",
+   "title": "인천경제자유구역 영종국제도시 영종하늘도시",
+   "master": true,
+   "zonecode": "28110LH2010001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 53,553호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 53553,
+   "area_m2": 19300049,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2003-08-11",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2003-08-11",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2006-12-05",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2003-08-11",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2026"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "울산",
+   "sg": "중구",
+   "loc": "인천광역시 중구 운서동, 운남동, 운북동, 중산동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 3604개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.527979,
+     37.486215
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-28245MX2019001",
+   "title": "인천계양 테크노밸리 공공주택지구",
+   "master": true,
+   "zonecode": "28245MX2019001",
+   "cat": "일자리",
+   "sub": "복합단지",
+   "lvl": "S",
+   "lvl_basis": "사업비 3.5조 — 일자리 S 기준(1조↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 17980,
+   "amount_eok": 35273,
+   "area_m2": 3350904,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2019-10-15",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2021-06-03",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2021-06-03",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2019-10-15",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2026"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "경기",
+   "sg": "부천시",
+   "loc": "인천광역시 계양구 귤현동, 동양동, 박촌동, 병방동, 상야동 및 경기도 부천시 대장동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 406개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.755437,
+     37.553944
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-11710KL2006001",
+   "title": "위례 택지개발사업 예정지구",
+   "master": true,
+   "zonecode": "11710KL2006001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 44,693호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 44693,
+   "area_m2": 6755206,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2006-07-21",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2008-08-05",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2010-01-06",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2006-07-21",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2026"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "성남시",
+   "loc": "서울특별시 송파구 거여동, 장지동, 경기도 성남시 수정구 창곡동, 복정동, 경기도 하남시 학암동, 감이동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 932개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.146603,
+     37.476767
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-46110DA2001001",
+   "title": "남악신도시 택지개발사업",
+   "master": true,
+   "zonecode": "46110DA2001001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 29,375호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 29375,
+   "amount_eok": 15306,
+   "area_m2": 9042044,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2001-04-25",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2002-06-24",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2003-12-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2001-04-25",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2028"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "전남",
+   "sg": "목포시",
+   "loc": "전라남도 목포시 옥암동, 무안군 삼향읍 남악리, 일로읍 망월리 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 2135개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.461531,
+     34.809258
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-44800MX2010001",
+   "title": "충남도청(내포) 신도시 개발사업",
+   "master": true,
+   "zonecode": "44800MX2010001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 41,860호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 41860,
+   "area_m2": 9960447,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2007-07-20",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2008-05-01",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2009-03-20",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2007-07-20",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2027"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "충남",
+   "sg": "예산군",
+   "loc": "충청남도 홍성군 홍북읍, 예산군 삽교읍 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 1795개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.681936,
+     36.654485
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41430MX2023010",
+   "title": "의왕군포안산 공공주택지구",
+   "master": true,
+   "zonecode": "41430MX2023010",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 41,518호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 41518,
+   "area_m2": 5968266,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2023-06-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2025-12-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2025-12-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2023-06-30",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2031"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "군포시",
+   "loc": "경기도 의왕시 초평동·월암동·삼동, 군포시 도마교동·부곡동·대야미동, 안산시 건건동·사사동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 892개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.929777,
+     37.309238
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41370DA2004001",
+   "title": "오산세교2지구 택지개발사업",
+   "master": true,
+   "zonecode": "41370DA2004001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 18,440호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 18440,
+   "amount_eok": 22880,
+   "area_m2": 2762658,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2004-12-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2006-10-17",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2009-01-08",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2004-12-30",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2025"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "오산시",
+   "loc": "경기도 오산시 궐동, 금암동, 가장동, 서동, 가수동, 청학동, 누읍동, 벌음동, 탑동, 두곡동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 858개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.050465,
+     37.151742
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41270MX2020001",
+   "title": "안산장상 공공주택지구",
+   "master": true,
+   "zonecode": "41270MX2020001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 14,078호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 14078,
+   "amount_eok": 26498,
+   "area_m2": 2205604,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2020-05-04",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2021-12-28",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2021-12-28",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2020-05-04",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2028"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "안산시",
+   "loc": "경기도 안산시 상록구 장상동, 장하동, 수암동, 부곡동, 양상동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 374개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.866639,
+     37.352965
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-28200DC2023001",
+   "title": "인천구월2 공공주택지구",
+   "master": true,
+   "zonecode": "28200DC2023001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 15,996호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 15996,
+   "amount_eok": 24124,
+   "area_m2": 2198746,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2023-10-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2025-12-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2025-12-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2023-10-30",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2032"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "울산",
+   "sg": "동구",
+   "loc": "인천광역시 남동구 구월동·남촌동·수산동, 연수구 선학동, 미추홀구 관교동·문학동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 292개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.716157,
+     37.439303
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-47290DC2013001",
+   "title": "경북도청이전신도시 건설사업",
+   "master": true,
+   "zonecode": "47290DC2013001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 40,000호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 40000,
+   "area_m2": 10965877,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2010-05-04",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2012-02-29",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2012-07-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2010-05-04",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2027"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경북",
+   "sg": "안동시",
+   "loc": "경상북도 안동시 풍천면 및 예천군 호명면 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 1823개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.49011,
+     36.571458
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41360LH2009001",
+   "title": "남양주 다산진건 공공주택지구",
+   "master": true,
+   "zonecode": "41360LH2009001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 18,218호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 18218,
+   "amount_eok": 20836,
+   "area_m2": 2713618,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2009-12-03",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2010-04-27",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2010-04-27",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2009-12-03",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2025"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "남양주시",
+   "loc": "경기도 남양주시 다산동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 301개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.154048,
+     37.621401
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41360KL2008001",
+   "title": "남양주 다산지금 공공주택지구",
+   "master": true,
+   "zonecode": "41360KL2008001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 13,897호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 13897,
+   "amount_eok": 24488,
+   "area_m2": 2035522,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2007-12-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2010-07-14",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2011-11-15",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2010-07-14",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2027"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "남양주시",
+   "loc": "경기도 남양주시 다산동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 368개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.1679,
+     37.609757
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41463PV2023008",
+   "title": "용인 반도체 클러스터 일반산업단지",
+   "master": true,
+   "zonecode": "41463PV2023008",
+   "cat": "일자리",
+   "sub": "복합단지",
+   "lvl": "S",
+   "lvl_basis": "사업비 3.5조 — 일자리 S 기준(1조↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "amount_eok": 34895,
+   "area_m2": 4156135,
+   "phase": "인가",
+   "current_stage": "실시계획 승인",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2021-03-29",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2021-03-29",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2021-03-29",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": ""
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "경기",
+   "sg": "용인시",
+   "loc": "경기도 용인시 처인구 독성리, 고당리, 죽능리 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 189개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.31625,
+     37.159559
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-26440MX2016001",
+   "title": "부산 에코델타시티 친수구역",
+   "master": true,
+   "zonecode": "26440MX2016001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 30,400호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 30400,
+   "amount_eok": 1569,
+   "area_m2": 11768998,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2012-12-14",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2012-12-14",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2014-09-01",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2012-12-14",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2028"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "대전",
+   "sg": "서구",
+   "loc": "부산광역시 강서구 명지동, 강동동, 대저2동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 2043개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.915379,
+     35.140665
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-31710LH2023010",
+   "title": "울산선바위 공공주택지구",
+   "master": true,
+   "zonecode": "31710LH2023010",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 14,771호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 14771,
+   "amount_eok": 16773,
+   "area_m2": 1778944,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2023-01-20",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2025-12-26",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2025-12-26",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2023-01-20",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2032"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "울산",
+   "sg": "울주군",
+   "loc": "울산광역시 울주군  범서읍 입암리 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 397개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.221796,
+     35.575039
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-27710MX2010001",
+   "title": "대구경북경제자유구역 대구테크노폴리스지구",
+   "master": true,
+   "zonecode": "27710MX2010001",
+   "cat": "일자리",
+   "sub": "복합단지",
+   "lvl": "S",
+   "lvl_basis": "사업비 1.3조 — 일자리 S 기준(1조↑) 충족",
+   "gate": "신호",
+   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "hh": 17866,
+   "amount_eok": 12993,
+   "area_m2": 7259403,
+   "phase": "계획",
+   "current_stage": "개발계획 승인",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2008-05-06",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2008-05-06",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2026"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "대구",
+   "sg": "달성군",
+   "loc": "대구광역시 달성군 현풍읍, 유가읍 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 1230개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.459708,
+     35.691691
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-11740DC2012002",
+   "title": "서울고덕강일 공공주택지구",
+   "master": true,
+   "zonecode": "11740DC2012002",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 11,872호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 11872,
+   "amount_eok": 18768,
+   "area_m2": 1659312,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2011-12-08",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2012-12-21",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2012-12-21",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2011-12-08",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2026"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "울산",
+   "sg": "동구",
+   "loc": "서울특별시 강동구 고덕동, 강일동, 상일동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 120개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.16807,
+     37.564747
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41285LH2016001",
+   "title": "고양장항 공공주택지구",
+   "master": true,
+   "zonecode": "41285LH2016001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 11,857호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 11857,
+   "amount_eok": 18392,
+   "area_m2": 1562123,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2016-12-28",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2018-04-11",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2018-04-11",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2016-12-28",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2027"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "고양시",
+   "loc": "경기도 고양시 일산동구 장항동, 일산서구 대화동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 322개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.755664,
+     37.649759
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41390LH2009001",
+   "title": "시흥은계 공공주택지구",
+   "master": true,
+   "zonecode": "41390LH2009001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 13,192호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 13192,
+   "amount_eok": 13688,
+   "area_m2": 2009607,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2009-12-03",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2010-04-27",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2010-04-27",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2009-12-03",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2027"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "시흥시",
+   "loc": "경기도 시흥시 대야동, 은행동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 319개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.801362,
+     37.441824
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-48330KH2005001",
+   "title": "양산사송 공공주택지구",
+   "master": true,
+   "zonecode": "48330KH2005001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 14,771호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 14771,
+   "amount_eok": 9959,
+   "area_m2": 2766465,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2005-12-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2007-07-20",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2008-01-04",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2007-07-20",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2026"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경남",
+   "sg": "양산시",
+   "loc": "경상남도 양산시 동면 사송리, 내송리 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 641개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.068932,
+     35.314
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-43113LH2025001",
+   "title": "오송 제3생명과학 국가산업단지",
+   "master": true,
+   "zonecode": "43113LH2025001",
+   "cat": "일자리",
+   "sub": "복합단지",
+   "lvl": "S",
+   "lvl_basis": "사업비 2.3조 — 일자리 S 기준(1조↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "amount_eok": 23481,
+   "area_m2": 4119584,
+   "phase": "인가",
+   "current_stage": "실시계획 승인",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2025-08-28",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2025-08-28",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2025-08-28",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2030"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "충북",
+   "sg": "청주시",
+   "loc": "충청북도 청주시 흥덕구 오송읍 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 506개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.326224,
+     36.608595
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41360LH2018001",
+   "title": "남양주진접2 공공주택지구",
+   "master": true,
+   "zonecode": "41360LH2018001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 11,036호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 11036,
+   "amount_eok": 11437,
+   "area_m2": 1292471,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2018-07-10",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2019-12-20",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2019-12-20",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2018-07-10",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2028"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "남양주시",
+   "loc": "경기도 남양주시 진접읍, 내각리, 연평리 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 402개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.173183,
+     37.70178
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41390LH2018001",
+   "title": "시흥거모 공공주택지구",
+   "master": true,
+   "zonecode": "41390LH2018001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 11,919호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "hh": 11919,
+   "amount_eok": 10247,
+   "area_m2": 1524243,
+   "phase": "인가",
+   "current_stage": "실시계획 승인",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2018-12-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2021-12-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2021-12-30",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2028"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "시흥시",
+   "loc": "경기도 시흥시 거모동 군자동 , 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 360개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.776962,
+     37.345611
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-44200LH2020001",
+   "title": "아산탕정2 도시개발구역",
+   "master": true,
+   "zonecode": "44200LH2020001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 21,000호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 21000,
+   "area_m2": 3571461,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2020-08-26",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2023-01-05",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2025-09-26",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2020-08-26",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2029"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "충남",
+   "sg": "아산시",
+   "loc": "충청남도 아산시 탕정면, 음봉면 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 444개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.082208,
+     36.821722
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-26350DC2022001",
+   "title": "센텀2지구 도시첨단산업단지",
+   "master": true,
+   "zonecode": "26350DC2022001",
+   "cat": "일자리",
+   "sub": "복합단지",
+   "lvl": "S",
+   "lvl_basis": "사업비 2.0조 — 일자리 S 기준(1조↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "amount_eok": 20411,
+   "area_m2": 1912440,
+   "phase": "인가",
+   "current_stage": "실시계획 승인",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2022-11-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2022-11-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2022-11-30",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2027"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "부산",
+   "sg": "해운대구",
+   "loc": "부산광역시 해운대구 반여동, 반송동, 석대동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 203개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.132773,
+     35.21708
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41590LH2022001",
+   "title": "화성봉담3 공공주택지구",
+   "master": true,
+   "zonecode": "41590LH2022001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 18,270호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 18270,
+   "area_m2": 2289715,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2022-12-20",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2025-12-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2025-12-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2022-12-20",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2034"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "화성시",
+   "loc": "경기도 화성시 봉담읍 상리, 수영리, 내리, 매송면 천천리, 원평리 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 264개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.942958,
+     37.235313
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41220PV2015001",
+   "title": "경기경제자유구역 현덕지구",
+   "master": true,
+   "zonecode": "41220PV2015001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 10,124호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 10124,
+   "amount_eok": 7500,
+   "area_m2": 2316161,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2008-05-06",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2008-05-06",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2016-06-17",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2008-05-06",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2027"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "평택시",
+   "loc": "경기도 평택시 현덕면 장수리, 권관리, 포승읍 신영리 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 217개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.906349,
+     36.928162
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-11380DA2010001",
+   "title": "은평 재정비촉진지구",
+   "master": true,
+   "zonecode": "11380DA2010001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 17,057호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 17057,
+   "area_m2": 3492649,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2004-02-25",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2004-02-25",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2005-12-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2004-02-25",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2026"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "서울",
+   "sg": "은평구",
+   "loc": "서울특별시 은평구 진관동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 474개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.93366,
+     37.639249
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-27710KL2010001",
+   "title": "대구국가산업단지",
+   "master": true,
+   "zonecode": "27710KL2010001",
+   "cat": "일자리",
+   "sub": "복합단지",
+   "lvl": "S",
+   "lvl_basis": "사업비 1.7조 — 일자리 S 기준(1조↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "amount_eok": 16542,
+   "area_m2": 8558879,
+   "phase": "인가",
+   "current_stage": "실시계획 승인",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2009-09-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2009-09-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2009-09-30",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2026"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "대구",
+   "sg": "달성군",
+   "loc": "대구광역시 달성군 구지면 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 1001개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.414441,
+     35.650962
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41360MX2019002",
+   "title": "남양주왕숙2 공공주택지구",
+   "master": true,
+   "zonecode": "41360MX2019002",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 15,955호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "hh": 15955,
+   "area_m2": 2393384,
+   "phase": "인가",
+   "current_stage": "실시계획 승인",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2019-10-15",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2021-08-31",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2021-08-31",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2028"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "남양주시",
+   "loc": "경기도 남양주시 일패동, 이패동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 428개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.181187,
+     37.616936
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-48250PV2023010",
+   "title": "김해 대동첨단일반산업단지",
+   "master": true,
+   "zonecode": "48250PV2023010",
+   "cat": "일자리",
+   "sub": "복합단지",
+   "lvl": "S",
+   "lvl_basis": "사업비 1.6조 — 일자리 S 기준(1조↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "amount_eok": 15675,
+   "area_m2": 2806746,
+   "phase": "인가",
+   "current_stage": "실시계획 승인",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2017-06-29",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2017-06-29",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2017-06-29",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2024"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "경남",
+   "sg": "김해시",
+   "loc": "경상남도 김해시 대동면 월촌리 1281-20번지 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 583개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.996724,
+     35.272468
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-28200KH1997001",
+   "title": "인천 논현2지구 택지개발사업",
+   "master": true,
+   "zonecode": "28200KH1997001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 15,402호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 15402,
+   "area_m2": 2547005,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "1997-02-27",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2000-04-10",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2002-01-25",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2000-03-31",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2026"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "울산",
+   "sg": "동구",
+   "loc": "인천광역시 남동구 논현동, 고잔동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 1718개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.724439,
+     37.40485
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-11500DA2010001",
+   "title": "마곡 도시개발구역",
+   "master": true,
+   "zonecode": "11500DA2010001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 12,444호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 12444,
+   "area_m2": 3666802,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2007-12-28",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2007-12-28",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2008-12-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2007-12-28",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2026"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "서울",
+   "sg": "강서구",
+   "loc": "서울특별시 강서구 마곡동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 431개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.831033,
+     37.563893
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-31110KH2008001",
+   "title": "울산다운2 공공주택지구",
+   "master": true,
+   "zonecode": "31110KH2008001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 12,289호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 12289,
+   "area_m2": 1861246,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2008-04-30",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2009-12-28",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2009-12-28",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2008-04-30",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2026"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "울산",
+   "sg": "울주군",
+   "loc": "울산광역시 중구 다운동, 울주군 범서읍 서사리, 척과리 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 445개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.272327,
+     35.584776
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41360LH2019001",
+   "title": "남양주 양정역세권 도시개발구역",
+   "master": true,
+   "zonecode": "41360LH2019001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 12,197호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "hh": 12197,
+   "area_m2": 2063088,
+   "phase": "인가",
+   "current_stage": "실시계획 승인",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2019-03-28",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2021-03-25",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2022-12-22",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2027"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "남양주시",
+   "loc": "경기도 남양주시 삼패동 270-1번지 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 342개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.201442,
+     37.60256
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41390DA2010001",
+   "title": "시흥 배곧신도시 도시개발구역",
+   "master": true,
+   "zonecode": "41390DA2010001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 11,075호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 11075,
+   "area_m2": 4879935,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2009-02-24",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2010-01-29",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2011-10-04",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2009-02-24",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2024"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "시흥시",
+   "loc": "경기도 시흥시 배곧2로 25 일원(배곧동 187번지 일원)",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 342개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.72772,
+     37.374772
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-44830DC2013001",
+   "title": "송산2일반산업단지",
+   "master": true,
+   "zonecode": "44830DC2013001",
+   "cat": "일자리",
+   "sub": "복합단지",
+   "lvl": "S",
+   "lvl_basis": "사업비 1.1조 — 일자리 S 기준(1조↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "amount_eok": 10917,
+   "area_m2": 4281053,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2009-01-02",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2009-09-02",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2009-09-02",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2008-01-01",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2029"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "충남",
+   "sg": "당진시",
+   "loc": "충청남도 당진시 송산면 가곡리, 동곡리, 유곡리, 송악읍 고대리 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 601개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.693785,
+     36.965542
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-29140DA1992001",
+   "title": "광주상무1지구 택지개발사업",
+   "master": true,
+   "zonecode": "29140DA1992001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 10,152호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "hh": 10152,
+   "area_m2": 2621865,
+   "phase": "인가",
+   "current_stage": "실시계획 승인",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "1992-11-06",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "1994-12-05",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "1999"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "대전",
+   "sg": "서구",
+   "loc": "광주광역시 서구 쌍촌동, 유촌동, 치평동, 광산구 마륵동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 861개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.854007,
+     35.155038
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41460DA2021001",
+   "title": "경기용인 플랫폼시티 도시개발구역",
+   "master": true,
+   "zonecode": "41460DA2021001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 10,105호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "hh": 10105,
+   "area_m2": 2728869,
+   "phase": "인가",
+   "current_stage": "실시계획 승인",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2021-01-05",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2022-03-16",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2024-12-24",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2030"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "용인시",
+   "loc": "경기도 용인시 기흥구 마북동, 보정동, 신갈동, 수지구 상현동, 풍덕천동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 299개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.099287,
+     37.301214
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "M-41590KR2026001",
+   "title": "종전부동산 효행지구 도시개발사업",
+   "master": true,
+   "zonecode": "41590KR2026001",
+   "cat": "주거개발",
+   "lvl": "S",
+   "lvl_basis": "건설호수 10,041호 — 주거개발 S 기준(1만 세대↑) 충족",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "hh": 10041,
+   "area_m2": 1381007,
+   "phase": "착공",
+   "current_stage": "조성공사 중",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2022-08-09",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발계획 승인",
+     "date": "2022-08-09",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 승인",
+     "date": "2025-12-04",
+     "state": "done",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "착공",
+     "stage": "조성공사",
+     "date": "2022-08-09",
+     "state": "current",
+     "src": "택지정보 지구 대장"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": null,
+     "state": "future",
+     "eta": "2030"
+    }
+   ],
+   "template_type": "정비사업",
+   "sd": "경기",
+   "sg": "수원시",
+   "loc": "경기도 화성시 봉담읍 수영리, 동화리, 수원시 권선구 오목천동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.jigu.go.kr"
+   ],
+   "src_name": "국토부 택지정보시스템 지구 대장",
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "가구획지 필지 81개 평균(지구 중심 근사)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.965533,
+     37.233122
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  }
+ ]
+}

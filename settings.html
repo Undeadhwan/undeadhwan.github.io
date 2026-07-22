@@ -6,7 +6,7 @@
 <title>호재 기준 설정 — 호재맵</title>
 <style>
   :root { --line:#e6e9f0; --muted:#6b7488; --bg:#f7f8fb; --ink:#1a2233; --accent:#2e5ce6;
-          --A:#e0342b; --B:#e08a1e; --C:#3c8f4a; }
+          --S:#b8860b; --A:#e0342b; --B:#e08a1e; --C:#3c8f4a; }
   * { box-sizing:border-box; }
   body { margin:0; font:14px/1.6 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif;
          color:var(--ink); background:var(--bg); }
@@ -45,7 +45,7 @@
   .subname { font-weight:700; white-space:nowrap; font-size:13px; }
   .basis { font-size:11px; color:var(--muted); font-family:ui-monospace,Menlo,monospace; }
   .lv { font-size:11px; font-weight:800; color:#fff; border-radius:5px; padding:1px 7px; display:inline-block; min-width:20px; text-align:center; }
-  .lv.A { background:var(--A); } .lv.B { background:var(--B); } .lv.C { background:var(--C); }
+  .lv.S { background:var(--S); } .lv.A { background:var(--A); } .lv.B { background:var(--B); } .lv.C { background:var(--C); }
   .desc { font-size:12.5px; color:#48506180; color:#4a5364; }
   input[type=number]::-webkit-outer-spin-button,
   input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
@@ -120,7 +120,7 @@
 
 <script>
 const COLOR = { "교통":"#2e5ce6", "일자리":"#e07b1e", "인프라":"#1f9e6e", "주거개발":"#8b5cf6" };
-const LEVELS = ["A","B","C"];
+const LEVELS = ["S","A","B","C"];   // S등급 신설(2026-07-22 — 1조/30만㎡/1만세대·교통 위계)
 let CFG = null, ORIG = null;
 
 const clean = o => Object.fromEntries(Object.entries(o).filter(([k]) => !k.startsWith("_")));
@@ -150,7 +150,7 @@ function render() {
     el.innerHTML = `<div class="cathead"><span class="dot" style="background:${COLOR[cat]}"></span>${cat}
         <span class="catsub">${flat ? "중분류 없음" : Object.keys(list).join(" · ")}</span></div>
       <table><thead><tr><th style="width:15%">중분류</th>
-        <th>A급 — 기준 / 반경</th><th>B급</th><th>C급</th>
+        <th>S급 — 기준 / 반경</th><th>A급</th><th>B급</th><th>C급</th>
       </tr></thead><tbody></tbody></table>`;
     const tb = el.querySelector("tbody");
 
