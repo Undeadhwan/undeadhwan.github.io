@@ -6,7 +6,7 @@
   "제외어": 25,
   "미적중": 3478,
   "채택": 268,
-  "좌표": 127,
+  "좌표": 161,
   "규칙": "sources.json title_include / title_exclude / since_days"
  },
  "signals": [
@@ -274,10 +274,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=638139"
    ],
    "src_name": "토지이음 인천광역시 남동구",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「남촌동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.722037,
+     37.435598
+    ]
+   },
    "stage_history": [
     {
      "stage": "인가",
@@ -362,10 +370,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=637100"
    ],
    "src_name": "토지이음 부산광역시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「다대동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.994501,
+     35.057135
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -840,10 +856,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=636967"
    ],
    "src_name": "토지이음 울산광역시 도시균형개발과",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「화정동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.40753,
+     35.513675
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -1366,7 +1390,6 @@
    "sub": "복합단지",
    "area_m2": 766236,
    "area_kind": "부지",
-   "loc": "고령군 다산면 송곡리 일원",
    "phase": "계획",
    "current_stage": "경상북도 고시 제2026-251호",
    "gosi_kind": "변경",
@@ -1382,7 +1405,6 @@
     }
    ],
    "sd": "경북",
-   "sg": "고령군",
    "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
@@ -1391,7 +1413,7 @@
    "src_name": "토지이음 경상북도",
    "geo_prec": "dong",
    "geo_approx": true,
-   "geo_basis": "첨부 고시문 위치 「고령군 다산면 송곡리 일원」 — 동 대표점 근사(송곡리) — 실좌표 아님",
+   "geo_basis": "첨부 고시문 본문 동 「송곡리」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
    "geometry": {
@@ -1599,6 +1621,8 @@
    "title": "도시관리계획(당산지구중심 지구단위계획 결정(변경), 특별계획구역2 지정 및 세부개발계획) 결정 및 지형도면 고시",
    "cat": "일자리",
    "sub": "복합단지",
+   "area_m2": 3300,
+   "area_kind": "부지",
    "phase": "계획",
    "current_stage": "서울특별시 고시 제2026-368호",
    "gosi_kind": "변경",
@@ -1620,10 +1644,20 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=637759"
    ],
    "src_name": "토지이음 서울특별시 미래공간기획관 미래공간담당관",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「양평동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.89383,
+     37.541966
+    ]
+   },
+   "lvl": "C",
+   "lvl_basis": "부지면적 3,300㎡ — 일자리:부지 C",
    "stage_history": [
     {
      "stage": "계획",
@@ -2019,7 +2053,6 @@
    "sub": "복합단지",
    "area_m2": 520681,
    "area_kind": "부지",
-   "loc": "충청남도 아산시 둔포면 둔포리 122-4번지 일원                                    보행자도로                         1,189                        0.2",
    "phase": "계획",
    "current_stage": "충청남도 고시 제2026-266호",
    "gosi_kind": "변경",
@@ -2035,23 +2068,22 @@
     }
    ],
    "sd": "충남",
-   "sg": "아산시",
    "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=636242"
    ],
    "src_name": "토지이음 충청남도",
-   "geo_prec": "parcel",
-   "geo_approx": false,
-   "geo_basis": "첨부 고시문 위치 「충청남도 아산시 둔포면 둔포리 122-4번지 일원             」 — 고시 위치 지번 「둔포리 122-4」",
+   "geo_prec": "dong",
+   "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「둔포리」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.045722,
-     36.926497
+     127.054789,
+     36.937436
     ]
    },
    "lvl": "B",
@@ -2603,7 +2635,6 @@
    "sub": "복합단지",
    "area_m2": 88381,
    "area_kind": "부지",
-   "loc": "안성시 원곡면 외가천리 17-11번지 일원",
    "phase": "계획",
    "current_stage": "경기도 안성시 고시 제2026-154호",
    "gosi_kind": "변경",
@@ -2626,16 +2657,16 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=635911"
    ],
    "src_name": "토지이음 경기도 안성시 경제도시국 도시개발과",
-   "geo_prec": "parcel",
-   "geo_approx": false,
-   "geo_basis": "첨부 고시문 위치 「안성시 원곡면 외가천리 17-11번지 일원」 — 고시 위치 지번 「외가천리 17-11」",
+   "geo_prec": "dong",
+   "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「외가천리」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.144847,
-     37.034421
+     127.151549,
+     37.032475
     ]
    },
    "lvl": "C",
@@ -2714,10 +2745,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=636886"
    ],
    "src_name": "토지이음 전라남도 고흥군",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「외초리」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.496423,
+     34.434225
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -2862,6 +2901,9 @@
    "title": "포천 양문 일반산업단지 실시계획 변경 승인 고시",
    "cat": "일자리",
    "sub": "복합단지",
+   "area_m2": 179635,
+   "area_kind": "부지",
+   "loc": "경기도 포천시 영중면 양문리 979 일원",
    "phase": "계획",
    "current_stage": "경기도 고시 제2026-129호",
    "gosi_kind": "변경",
@@ -2877,16 +2919,27 @@
     }
    ],
    "sd": "경기",
+   "sg": "포천시",
    "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=636291"
    ],
    "src_name": "토지이음 경기도",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 위치 「경기도 포천시 영중면 양문리 979 일원」 — 동 대표점 근사(양문리) — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.266625,
+     38.004527
+    ]
+   },
+   "lvl": "C",
+   "lvl_basis": "부지면적 179,635㎡ — 일자리:부지 C",
    "stage_history": [
     {
      "stage": "계획",
@@ -2922,10 +2975,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=635420"
    ],
    "src_name": "토지이음 경기도 구리시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「갈매동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "정비사업",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.131172,
+     37.64106
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -2962,10 +3023,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=637746"
    ],
    "src_name": "토지이음 서울특별시 주택실 건축기획관 재정비촉진과",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「신길동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "정비사업",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.924425,
+     37.515192
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -3132,7 +3201,6 @@
    "title": "부산진해경제자유구역 보배복합지구 개발계획 변경 및 지형도면 고시",
    "cat": "일자리",
    "sub": "복합단지",
-   "loc": "창원시 진해구 두동 산224번지 일원",
    "phase": "계획",
    "current_stage": "경상남도 고시 제2026-254호",
    "gosi_kind": "변경",
@@ -3148,17 +3216,24 @@
     }
    ],
    "sd": "경남",
-   "sg": "창원시",
    "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=635586"
    ],
    "src_name": "토지이음 경상남도",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「연산동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.110917,
+     35.183409
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -3228,7 +3303,6 @@
    "title": "명동일반산업단지 관리기본계획 변경 및 지형도면 고시",
    "cat": "일자리",
    "sub": "복합단지",
-   "loc": "김해시 한림면 명동리 1375번지 일원",
    "phase": "계획",
    "current_stage": "경상남도 김해시 고시 제2026-192호",
    "gosi_kind": "변경",
@@ -3243,26 +3317,16 @@
      "src": "토지이음 고시"
     }
    ],
-   "sd": "경남",
-   "sg": "김해시",
    "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=637498"
    ],
    "src_name": "토지이음 김해시",
-   "geo_prec": "parcel",
-   "geo_approx": false,
-   "geo_basis": "첨부 고시문 위치 「김해시 한림면 명동리 1375번지 일원」 — 고시 위치 지번 「명동리 1375」",
+   "geo_prec": "none",
+   "geo_approx": true,
    "confirmed": false,
    "template_type": "기업이전",
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     128.800998,
-     35.294509
-    ]
-   },
    "stage_history": [
     {
      "stage": "계획",
@@ -3611,10 +3675,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=635582"
    ],
    "src_name": "토지이음 대전광역시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「오류동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "정비사업",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.403422,
+     36.3246
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -3651,10 +3723,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=635571"
    ],
    "src_name": "토지이음 대전광역시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「오류동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
-   "template_type": "정비사업"
+   "template_type": "정비사업",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.403422,
+     36.3246
+    ]
+   }
   },
   {
    "id": "E-635008",
@@ -4020,10 +4100,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=635378"
    ],
    "src_name": "토지이음 대전광역시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「도마동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "정비사업",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.377716,
+     36.318135
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -4146,16 +4234,32 @@
     }
    ],
    "sd": "부산",
-   "last_movement": "20260527",
+   "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=634702"
    ],
    "src_name": "토지이음 부산광역시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「성북동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
-   "template_type": "기업이전"
+   "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.831777,
+     35.066615
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
   },
   {
    "id": "E-634741",
@@ -4412,10 +4516,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=635554"
    ],
    "src_name": "토지이음 충청남도 아산시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「냉정리」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.903198,
+     36.864613
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -4639,16 +4751,32 @@
     }
    ],
    "sd": "인천",
-   "last_movement": "20260520",
+   "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=634528"
    ],
    "src_name": "토지이음 인천광역시 경제자유구역청",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「관리가」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
-   "template_type": "기업이전"
+   "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.660751,
+     37.612049
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
   },
   {
    "id": "E-634454",
@@ -4657,7 +4785,6 @@
    "sub": "복합단지",
    "area_m2": 29725,
    "area_kind": "부지",
-   "loc": "광주시 역동 28-3번지 일원",
    "phase": "계획",
    "current_stage": "경기도 광주시 고시 제2026-228호",
    "gosi_kind": "변경",
@@ -4672,8 +4799,6 @@
      "src": "토지이음 고시"
     }
    ],
-   "sd": "경기",
-   "sg": "광주시",
    "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
@@ -4714,7 +4839,7 @@
      "src": "토지이음 고시"
     }
    ],
-   "last_movement": "20260520",
+   "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=634054"
@@ -4723,7 +4848,15 @@
    "geo_prec": "none",
    "geo_approx": true,
    "confirmed": false,
-   "template_type": "기업이전"
+   "template_type": "기업이전",
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
   },
   {
    "id": "E-635732",
@@ -4731,7 +4864,6 @@
    "cat": "인프라",
    "area_m2": 26064,
    "area_kind": "부지",
-   "loc": "청평면 청평리 일원 지구단위계획구역",
    "phase": "계획",
    "current_stage": "경기도 가평군 고시 제2026-183호",
    "gosi_kind": "변경",
@@ -4804,7 +4936,6 @@
    "cat": "인프라",
    "area_m2": 26064,
    "area_kind": "부지",
-   "loc": "청평면 청평리 일원 지구단위계획구역",
    "phase": "계획",
    "current_stage": "경기도 가평군 고시 제2026-183호",
    "gosi_kind": "변경",
@@ -4821,18 +4952,34 @@
    ],
    "sd": "경기",
    "sg": "가평군",
-   "last_movement": "20260519",
+   "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=634346"
    ],
    "src_name": "토지이음 경기도 가평군 건설도시국 도시과",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「청평리」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.432865,
+     37.745061
+    ]
+   },
    "lvl": "C",
-   "lvl_basis": "부지면적 26,064㎡ — 인프라:부지 C"
+   "lvl_basis": "부지면적 26,064㎡ — 인프라:부지 C",
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
   },
   {
    "id": "E-635986",
@@ -5171,10 +5318,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=634550"
    ],
    "src_name": "토지이음 서울특별시 노원구 도시계획국 재건축사업과",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「월계동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "정비사업",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.068441,
+     37.624179
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -5402,10 +5557,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=634149"
    ],
    "src_name": "토지이음 광주시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「탄벌동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.253999,
+     37.417935
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -5441,10 +5604,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=633953"
    ],
    "src_name": "토지이음 부산광역시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「녹산동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.899802,
+     35.129279
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -5481,10 +5652,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=633796"
    ],
    "src_name": "토지이음 경기도 이천시 도시주택국 도시과",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「장암리」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.404851,
+     37.280979
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -5588,6 +5767,8 @@
    "title": "천안 테크노파크 일반산업단지 관리기본계획(변경) 수립 고시",
    "cat": "일자리",
    "sub": "복합단지",
+   "area_m2": 132318,
+   "area_kind": "부지",
    "phase": "계획",
    "current_stage": "충청남도 천안시 고시 제2026-188호",
    "gosi_kind": "변경",
@@ -5612,6 +5793,8 @@
    "geo_approx": true,
    "confirmed": false,
    "template_type": "기업이전",
+   "lvl": "C",
+   "lvl_basis": "부지면적 132,318㎡ — 일자리:부지 C",
    "stage_history": [
     {
      "stage": "계획",
@@ -5672,7 +5855,9 @@
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-07-22"
+   "first_seen": "2026-07-22",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "id": "E-635153",
@@ -5703,12 +5888,22 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=635153"
    ],
    "src_name": "토지이음 충청남도 천안시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「남산리」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.17915,
+     36.900583
+    ]
+   },
    "lvl": "C",
-   "lvl_basis": "부지면적 132,318㎡ — 일자리:부지 C"
+   "lvl_basis": "부지면적 132,318㎡ — 일자리:부지 C",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "id": "E-633798",
@@ -5925,7 +6120,6 @@
    "sub": "복합단지",
    "area_m2": 695468,
    "area_kind": "부지",
-   "loc": "고성군 동해면 장좌리 산319-1번지 일원",
    "phase": "계획",
    "current_stage": "경상남도 고시 제2026-215호",
    "gosi_kind": "변경",
@@ -5940,8 +6134,7 @@
      "src": "토지이음 고시"
     }
    ],
-   "sd": "강원",
-   "sg": "고성군",
+   "sd": "경남",
    "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
@@ -5950,7 +6143,7 @@
    "src_name": "토지이음 경상남도",
    "geo_prec": "dong",
    "geo_approx": true,
-   "geo_basis": "첨부 고시문 위치 「고성군 동해면 장좌리 산319-1번지 일원」 — 동 대표점 근사(장좌리) — 실좌표 아님",
+   "geo_basis": "첨부 고시문 본문 동 「장좌리」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
    "geometry": {
@@ -6031,7 +6224,6 @@
    "sub": "복합단지",
    "area_m2": 1594023,
    "area_kind": "부지",
-   "loc": "고성군 동해면 양촌리 산9-7번지 일원",
    "phase": "계획",
    "current_stage": "경상남도 고시 제2026-217호",
    "gosi_kind": "변경",
@@ -6046,8 +6238,7 @@
      "src": "토지이음 고시"
     }
    ],
-   "sd": "강원",
-   "sg": "고성군",
+   "sd": "경남",
    "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
@@ -6056,7 +6247,7 @@
    "src_name": "토지이음 경상남도",
    "geo_prec": "dong",
    "geo_approx": true,
-   "geo_basis": "첨부 고시문 위치 「고성군 동해면 양촌리 산9-7번지 일원」 — 동 대표점 근사(양촌리) — 실좌표 아님",
+   "geo_basis": "첨부 고시문 본문 동 「양촌리」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
    "geometry": {
@@ -6174,10 +6365,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=633665"
    ],
    "src_name": "토지이음 부산광역시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「생곡동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.898859,
+     35.133308
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -6329,7 +6528,6 @@
    "id": "E-637751",
    "title": "도시관리계획(상암택지개발지구 지구단위계획) 결정(변경) 및 지형도면 고시",
    "cat": "주거개발",
-   "loc": "결정도상의 표시된 곳에 공개공지의 일부 또는 전부를 설치하도록 할 것. 공개공지의 위치가 표시되지 않은",
    "phase": "계획",
    "current_stage": "서울특별시 고시 제2026-247호",
    "gosi_kind": "변경",
@@ -6351,10 +6549,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=637751"
    ],
    "src_name": "토지이음 서울특별시 미래공간기획관 도시활력담당관",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「상암동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "정비사업",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.895826,
+     37.579228
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -6462,10 +6668,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=635913"
    ],
    "src_name": "토지이음 서울특별시 주택실 건축기획관 재정비촉진과",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「북가좌동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "정비사업",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.920324,
+     37.582089
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -6597,10 +6811,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=633741"
    ],
    "src_name": "토지이음 경기도 여주시 도시건설국 도시계획과",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「홍문동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.636701,
+     37.297864
+    ]
+   },
    "lvl": "C",
    "lvl_basis": "부지면적 11,032㎡ — 일자리:부지 C",
    "stage_history": [
@@ -7232,6 +7454,9 @@
    "title": "용인 보평3지구 도시개발구역지정 및 개발계획 수립",
    "cat": "일자리",
    "sub": "복합단지",
+   "area_m2": 148711,
+   "area_kind": "부지",
+   "loc": "용인시 처인구 고림동 522번지 일원",
    "phase": "계획",
    "current_stage": "경기도 용인시 고시 제2026-235호",
    "gosi_kind": "신규",
@@ -7246,16 +7471,28 @@
      "src": "토지이음 고시"
     }
    ],
+   "sd": "경기",
+   "sg": "용인시",
    "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=637291"
    ],
    "src_name": "토지이음 용인시",
-   "geo_prec": "none",
-   "geo_approx": true,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "geo_basis": "첨부 고시문 위치 「용인시 처인구 고림동 522번지 일원」 — 고시 위치 지번 「고림동 522」",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.221275,
+     37.261447
+    ]
+   },
+   "lvl": "C",
+   "lvl_basis": "부지면적 148,711㎡ — 일자리:부지 C",
    "stage_history": [
     {
      "stage": "계획",
@@ -7910,7 +8147,6 @@
    "title": "H-테크노밸리 일반산업단지 관리기본계획(변경) 고시",
    "cat": "일자리",
    "sub": "복합단지",
-   "loc": "화성시 양감면 요당리, 신왕리 일원",
    "phase": "계획",
    "current_stage": "경기도 화성시 고시 제2026-427호",
    "gosi_kind": "변경",
@@ -7925,26 +8161,16 @@
      "src": "토지이음 고시"
     }
    ],
-   "sd": "경기",
-   "sg": "화성시",
    "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=633571"
    ],
    "src_name": "토지이음 화성시",
-   "geo_prec": "dong",
+   "geo_prec": "none",
    "geo_approx": true,
-   "geo_basis": "첨부 고시문 위치 「화성시 양감면 요당리, 신왕리 일원」 — 동 대표점 근사(요당리) — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.939762,
-     37.075628
-    ]
-   },
    "stage_history": [
     {
      "stage": "계획",
@@ -8027,7 +8253,7 @@
     }
    ],
    "sd": "강원",
-   "last_movement": "20260417",
+   "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=632892"
@@ -8036,7 +8262,15 @@
    "geo_prec": "none",
    "geo_approx": true,
    "confirmed": false,
-   "template_type": "기업이전"
+   "template_type": "기업이전",
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
   },
   {
    "id": "E-632844",
@@ -8252,6 +8486,8 @@
    "id": "E-633323",
    "title": "효창공원앞역세권(효창동 5-307일원) 장기전세주택 도시정비형 재개발사업 정비구역 지정 및 정비계획 결정 및 지형도면 고시",
    "cat": "주거개발",
+   "area_m2": 525,
+   "area_kind": "부지",
    "phase": "계획",
    "current_stage": "서울특별시 고시 제2026-215호",
    "gosi_kind": "신규",
@@ -8353,6 +8589,9 @@
    "title": "여남지구 도시개발구역 지정 및 개발계획 수립 지형도면 고시",
    "cat": "일자리",
    "sub": "복합단지",
+   "area_m2": 490569,
+   "area_kind": "부지",
+   "loc": "경상북도 포항시 북구 여남동 산32번지 일원",
    "phase": "계획",
    "current_stage": "경상북도 포항시 고시 제2026-109호",
    "gosi_kind": "신규",
@@ -8367,16 +8606,28 @@
      "src": "토지이음 고시"
     }
    ],
+   "sd": "경북",
+   "sg": "포항시",
    "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=638372"
    ],
    "src_name": "토지이음 포항시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 위치 「경상북도 포항시 북구 여남동 산32번지 일원」 — 동 대표점 근사(여남동) — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.417211,
+     36.08019
+    ]
+   },
+   "lvl": "B",
+   "lvl_basis": "부지면적 490,569㎡ — 일자리:부지 B",
    "stage_history": [
     {
      "stage": "계획",
@@ -8501,7 +8752,7 @@
    ],
    "sd": "경북",
    "sg": "포항시",
-   "last_movement": "2026-07-22",
+   "last_movement": "20260415",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=632837"
@@ -8520,15 +8771,7 @@
     ]
    },
    "lvl": "B",
-   "lvl_basis": "부지면적 490,569㎡ — 일자리:부지 B",
-   "stage_history": [
-    {
-     "stage": "계획",
-     "date": "2026-07-22",
-     "basis": "observed"
-    }
-   ],
-   "first_seen": "2026-07-22"
+   "lvl_basis": "부지면적 490,569㎡ — 일자리:부지 B"
   },
   {
    "id": "E-632835",
@@ -8674,7 +8917,6 @@
    "sub": "복합단지",
    "area_m2": 1908235,
    "area_kind": "부지",
-   "loc": "경주시 문무대왕면 두산ㆍ어일ㆍ송전리 일원",
    "phase": "계획",
    "current_stage": "경상북도 경주시 고시 제2026-96호",
    "gosi_kind": "변경",
@@ -8699,7 +8941,7 @@
    "src_name": "토지이음 경상북도 경주시 일자리경제국 원자력정책과",
    "geo_prec": "dong",
    "geo_approx": true,
-   "geo_basis": "첨부 고시문 위치 「경주시 문무대왕면 두산ㆍ어일ㆍ송전리 일원」 — 동 대표점 근사(송전리) — 실좌표 아님",
+   "geo_basis": "첨부 고시문 본문 동 「송전리」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
    "geometry": {
@@ -9245,7 +9487,6 @@
    "sub": "복합단지",
    "area_m2": 3306,
    "area_kind": "부지",
-   "loc": "고랑동 307-12 → 고랑동 306-18",
    "phase": "계획",
    "current_stage": "국토교통부 고시 제2026-178호",
    "gosi_kind": "변경",
@@ -9270,14 +9511,14 @@
    "src_name": "토지이음 전북특별자치도 전주시 광역도시기반조성실 공영개발과",
    "geo_prec": "dong",
    "geo_approx": true,
-   "geo_basis": "첨부 고시문 위치 「고랑동 307-12 → 고랑동 306-18」 — 동 대표점 근사(고랑동) — 실좌표 아님",
+   "geo_basis": "첨부 고시문 본문 동 「동산동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.08715,
-     35.871189
+     127.095974,
+     35.876479
     ]
    },
    "lvl": "C",
@@ -9554,7 +9795,6 @@
    "sub": "복합단지",
    "area_m2": 1593963,
    "area_kind": "부지",
-   "loc": "천안시 동남구 수신면 해정‧백자리, 성남면 봉양리 일원",
    "phase": "계획",
    "current_stage": "충청남도 천안시 고시 제2026-124호",
    "gosi_kind": "변경",
@@ -9569,26 +9809,16 @@
      "src": "토지이음 고시"
     }
    ],
-   "sd": "충남",
-   "sg": "천안시",
    "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=635811"
    ],
    "src_name": "토지이음 천안시",
-   "geo_prec": "dong",
+   "geo_prec": "none",
    "geo_approx": true,
-   "geo_basis": "첨부 고시문 위치 「천안시 동남구 수신면 해정‧백자리, 성남면 봉양리 일원」 — 동 대표점 근사(백자리) — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     127.288483,
-     36.714096
-    ]
-   },
    "lvl": "A",
    "lvl_basis": "부지면적 1,593,963㎡ — 일자리:부지 A",
    "stage_history": [
@@ -9894,16 +10124,34 @@
    ],
    "sd": "경기",
    "sg": "남양주시",
-   "last_movement": "20260402",
+   "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=635641"
    ],
    "src_name": "토지이음 남양주시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「이패동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
-   "template_type": "기업이전"
+   "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.213575,
+     37.617429
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "id": "E-635640",
@@ -9964,16 +10212,32 @@
     }
    ],
    "sd": "전남",
-   "last_movement": "20260402",
+   "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=635452"
    ],
    "src_name": "토지이음 전라남도",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「서산동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
-   "template_type": "정비사업"
+   "template_type": "정비사업",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.37904,
+     34.784846
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
   },
   {
    "id": "E-634441",
@@ -10109,6 +10373,9 @@
    "title": "순천 조례2지구 도시개발구역 지정 및 개발계획 수립 고시",
    "cat": "일자리",
    "sub": "복합단지",
+   "area_m2": 63844,
+   "area_kind": "부지",
+   "loc": "전라남도 순천시 조례동 산15-1번지 일원",
    "phase": "계획",
    "current_stage": "전라남도 고시 제2026-121호",
    "gosi_kind": "신규",
@@ -10124,16 +10391,35 @@
     }
    ],
    "sd": "전남",
-   "last_movement": "20260402",
+   "sg": "순천시",
+   "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=633133"
    ],
    "src_name": "토지이음 전라남도",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 위치 「전라남도 순천시 조례동 산15-1번지 일원」 — 동 대표점 근사(조례동) — 실좌표 아님",
    "confirmed": false,
-   "template_type": "기업이전"
+   "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.537447,
+     34.969525
+    ]
+   },
+   "lvl": "C",
+   "lvl_basis": "부지면적 63,844㎡ — 일자리:부지 C",
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
   },
   {
    "id": "E-632372",
@@ -10199,10 +10485,20 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=632213"
    ],
    "src_name": "토지이음 경기도 남양주시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「이패동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
-   "template_type": "기업이전"
+   "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.213575,
+     37.617429
+    ]
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "id": "E-632212",
@@ -10231,10 +10527,20 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=632212"
    ],
    "src_name": "토지이음 경기도 남양주시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「이패동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
-   "template_type": "기업이전"
+   "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.213575,
+     37.617429
+    ]
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "id": "E-632181",
@@ -10336,16 +10642,32 @@
     }
    ],
    "sd": "부산",
-   "last_movement": "20260401",
+   "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=632255"
    ],
    "src_name": "토지이음 부산광역시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「강서구지사동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
-   "template_type": "기업이전"
+   "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.849833,
+     35.140638
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
   },
   {
    "id": "E-631766",
@@ -10369,18 +10691,34 @@
     }
    ],
    "sd": "부산",
-   "last_movement": "20260401",
+   "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=631766"
    ],
    "src_name": "토지이음 부산광역시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「반룡리」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.270598,
+     35.349065
+    ]
+   },
    "lvl": "A",
-   "lvl_basis": "부지면적 1,426,874㎡ — 일자리:부지 A"
+   "lvl_basis": "부지면적 1,426,874㎡ — 일자리:부지 A",
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
   },
   {
    "id": "E-631639",
@@ -11461,10 +11799,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=632952"
    ],
    "src_name": "토지이음 서울특별시 주택실 건축기획관 재정비촉진과",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「마천동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "정비사업",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.144863,
+     37.503428
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -11494,7 +11840,7 @@
     }
    ],
    "sd": "서울",
-   "last_movement": "20260326",
+   "last_movement": "2026-07-22",
    "src_tier": "official_notice",
    "sources": [
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=632943"
@@ -11503,7 +11849,15 @@
    "geo_prec": "none",
    "geo_approx": true,
    "confirmed": false,
-   "template_type": "기업이전"
+   "template_type": "기업이전",
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
   },
   {
    "id": "E-631891",
@@ -11511,7 +11865,6 @@
    "cat": "주거개발",
    "area_m2": 1413,
    "area_kind": "부지",
-   "loc": "봉명동 469-35 일원             여 공공 편익성을 제공하고 유성",
    "phase": "계획",
    "current_stage": "대전광역시 고시 제2026-70호",
    "gosi_kind": "변경",
@@ -11533,10 +11886,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=631891"
    ],
    "src_name": "토지이음 대전광역시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「장대동」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "정비사업",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.338359,
+     36.357062
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -11661,10 +12022,18 @@
     "https://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=631678"
    ],
    "src_name": "토지이음 부산광역시",
-   "geo_prec": "none",
+   "geo_prec": "dong",
    "geo_approx": true,
+   "geo_basis": "첨부 고시문 본문 동 「반룡리」 대표점 근사 — 실좌표 아님",
    "confirmed": false,
    "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.270598,
+     35.349065
+    ]
+   },
    "lvl": "A",
    "lvl_basis": "부지면적 1,426,874㎡ — 일자리:부지 A"
   },
