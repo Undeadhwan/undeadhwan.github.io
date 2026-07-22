@@ -1829,6 +1829,10 @@ function renderDetail(s) {
       ${msTrack(s)}
       ${nextWatch(s)}
       ${s.addr ? `<div class="kv"><b>대지위치</b> ${s.addr} <span class="copyaddr" onclick="copyAddr(this,'${s.addr.replace(/'/g, "\\'")}')" title="주소 복사">📋</span></div>` : ""}
+      ${s.group_n ? `<div class="kv"><b>한 사업 · ${s.group_n}개 블록</b> 합계 연면적 ${(s.group_area_m2 || 0).toLocaleString()}㎡
+        <span class="note">— 블록별 허가가 따로 나와 지도엔 대표 1개로 접어 표시합니다(개별 사실은 아래 그대로).</span>
+        <div class="fs-grid" style="margin-top:6px">${s.group_members.map(m =>
+          `<span>${m.block || "-"}</span><b>${(m.area_m2 || 0).toLocaleString()}㎡${m.lvl ? ` · ${m.lvl}급` : ""}</b>`).join("")}</div></div>` : ""}
       ${s._arch ? `<div class="factsheet"><div class="fs-h">허가 원본 사실 (건축HUB API 수신값 그대로)</div>
         <div class="fs-grid">
           <span>건축구분</span><b>${s.arch_gb || "-"}</b>
@@ -3389,7 +3393,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260722ai");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260722aj");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3508,7 +3512,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260722ai"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260722aj"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3534,7 +3538,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260722ai");
+  const CB = "?b=" + (window.BUILD || "20260722aj");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
