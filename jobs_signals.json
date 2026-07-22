@@ -1,0 +1,216 @@
+{
+ "_note": "대형 일자리 신호 — official_jobs.json + build_jobs.py(백지 재현). 등급=grade.py · 게이트=gate.py.",
+ "signals": [
+  {
+   "id": "J-yongsan-icd",
+   "title": "용산 국제업무지구",
+   "cat": "일자리",
+   "sub": "복합단지",
+   "lvl": "S",
+   "lvl_basis": "사업비 510,000억(51.0조) — 일자리 S(대형 업무지구·MICE·항만재개발)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "amount_eok": 510000,
+   "area_m2": 495000,
+   "phase": "착공",
+   "current_stage": "실시계획 인가·기반시설 착공('25 하반기)",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "도시개발구역 지정·개발계획 수립",
+     "date": "2024-11",
+     "state": "done",
+     "src": "서울시 고시"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시계획 인가",
+     "date": "2025",
+     "state": "done",
+     "src": "서울시"
+    },
+    {
+     "phase": "착공",
+     "stage": "기반시설 착공",
+     "date": "2025",
+     "state": "current",
+     "src": "서울시"
+    },
+    {
+     "phase": "준공",
+     "stage": "기반시설 준공 '28 · 입주 '30~",
+     "state": "future",
+     "eta": "2030"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "서울",
+   "sg": "용산구",
+   "loc": "용산구 한강로 일원(용산정비창 부지)",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "src_name": "서울시 도시개발구역 지정·개발계획(용산국제업무지구)",
+   "sources": [
+    "https://urban.seoul.go.kr/view/html/PMNU2070000001"
+   ],
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "지구 대표 좌표(공식 위치 근사 — 지구 크기만큼 오차)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.9662,
+     37.533
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "J-jamsil-mice",
+   "title": "잠실 스포츠·MICE 복합공간",
+   "cat": "일자리",
+   "sub": "복합단지",
+   "lvl": "S",
+   "lvl_basis": "사업비 33,000억(3.3조) — 일자리 S(대형 업무지구·MICE·항만재개발)",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "amount_eok": 33000,
+   "area_m2": 357576,
+   "phase": "인가",
+   "current_stage": "민투심 통과·실시협약(‘25.7) — 착공 '26 하반기 예정",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "민자적격성·민투심 통과",
+     "date": "2024",
+     "state": "done",
+     "src": "기재부 민투심"
+    },
+    {
+     "phase": "인가",
+     "stage": "실시협약",
+     "date": "2025-07",
+     "state": "current",
+     "src": "서울시"
+    },
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "state": "future",
+     "eta": "2026"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "state": "future",
+     "eta": "2032"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "서울",
+   "sg": "송파구",
+   "loc": "송파구 올림픽로 25 일원(잠실종합운동장)",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "src_name": "서울시 잠실 스포츠·MICE 복합공간 조성 민간투자사업",
+   "sources": [
+    "https://news.seoul.go.kr/citybuild/archives/44587"
+   ],
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "지구 대표 좌표(공식 위치 근사 — 지구 크기만큼 오차)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.0723,
+     37.5158
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "J-busan-bukhang-2",
+   "title": "부산항 북항 2단계 재개발",
+   "cat": "일자리",
+   "sub": "복합단지",
+   "lvl": "S",
+   "lvl_basis": "사업비 40,636억(4.1조) — 일자리 S(대형 업무지구·MICE·항만재개발)",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「예타」",
+   "amount_eok": 40636,
+   "area_m2": 2280000,
+   "phase": "계획",
+   "current_stage": "예타 통과·기본계획(변경) — '30 완공 목표",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "사업계획 수립·예타 통과",
+     "date": "2022",
+     "state": "current",
+     "src": "해수부"
+    },
+    {
+     "phase": "인가",
+     "stage": "기본계획·실시계획",
+     "state": "future"
+    },
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "state": "future"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "state": "future",
+     "eta": "2030"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "부산",
+   "sg": "동구",
+   "loc": "부산 동구·중구 북항 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_report",
+   "src_name": "해양수산부 부산항 북항 2단계 항만재개발사업 기본계획",
+   "sources": [
+    "https://www.mof.go.kr/doc/ko/selectDoc.do?docSeq=42773&menuSeq=971&bbsSeq=10"
+   ],
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "지구 대표 좌표(공식 위치 근사 — 지구 크기만큼 오차)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.045,
+     35.115
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  }
+ ]
+}
