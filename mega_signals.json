@@ -1,0 +1,366 @@
+{
+ "_note": "관보 고시 원문 파싱 신호 — build_mega.py 생성. 후보(mega_gosi_candidates)의 **원문**에서 명칭·위치·면적·편입필지를 읽어 좌표까지 만든 층. 등급은 매기지 않는다 (지정 고시에 사업비·세대수가 없다 — 미정이 정직). 택지정보 대장에 등재되면 master_signals가 주인이 되고 여기선 빠진다(master_dup).",
+ "generated": "2026-07-22",
+ "미채택": [
+  {
+   "고시": "국토교통부공고제2026-824호(서울양재 공공주택지구 지정에 관한 주민 등의 의견 청취 공고)",
+   "사유": "위치·면적 미기재(지정 전 단계 공고로 보임)"
+  }
+ ],
+ "signals": [
+  {
+   "id": "G-981770346000",
+   "title": "오산세교3 공공주택지구",
+   "cat": "주거개발",
+   "area_m2": 4307144,
+   "phase": "계획",
+   "current_stage": "지구 지정",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「지구 지정」",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2025-12-31",
+     "state": "current",
+     "src": "관보 고시"
+    }
+   ],
+   "sd": "경기",
+   "sg": "오산시",
+   "loc": "경기도 오산시 가수동, 가장동, 궐동, 금암동, 누읍동, 두곡동, 벌음동, 서동, 탑동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_notice",
+   "sources": [
+    "https://gwanbo.go.kr/ezpdf/customLayout.jsp?contentId=I0000000000000001766981770346000&tocId=I0000000000000001766561260503000&isTocOrder=N"
+   ],
+   "src_name": "관보 국토교통부",
+   "gosi_title": "국토교통부고시제2025-951호(오산세교3 공공주택지구 지정 및 지형도면 등)",
+   "parcels_n": 1963,
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "고시 붙임 편입필지 24개 평균(지구 근사)",
+   "confirmed": false,
+   "template_type": "정비사업",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.042645,
+     37.162899
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "G-975054832000",
+   "title": "구리토평2 공공주택지구",
+   "cat": "주거개발",
+   "area_m2": 2756748,
+   "phase": "계획",
+   "current_stage": "지구 지정",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「지구 지정」",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2025-12-31",
+     "state": "current",
+     "src": "관보 고시"
+    }
+   ],
+   "sd": "경기",
+   "sg": "구리시",
+   "loc": "경기도 구리시 토평동, 교문동, 수택동, 아천동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_notice",
+   "sources": [
+    "https://gwanbo.go.kr/ezpdf/customLayout.jsp?contentId=I0000000000000001766975054832000&tocId=I0000000000000001766555664982000&isTocOrder=N"
+   ],
+   "src_name": "관보 국토교통부",
+   "gosi_title": "국토교통부고시제2025-867호(구리토평2 공공주택지구의 지정 및 지형도면 등)",
+   "parcels_n": 3066,
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "고시 붙임 편입필지 24개 평균(지구 근사)",
+   "confirmed": false,
+   "template_type": "정비사업",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.130421,
+     37.585968
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "G-665696420000",
+   "title": "서울서리풀1 공공주택지구",
+   "cat": "주거개발",
+   "area_m2": 2018074,
+   "phase": "계획",
+   "current_stage": "지구 지정",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「지구 지정」",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2026-02-02",
+     "state": "current",
+     "src": "관보 고시"
+    }
+   ],
+   "sd": "서울",
+   "sg": "서초구",
+   "loc": "서울특별시 서초구 원지동, 신원동, 염곡동, 내곡동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_notice",
+   "sources": [
+    "https://gwanbo.go.kr/ezpdf/customLayout.jsp?contentId=I0000000000000001769665696420000&tocId=I0000000000000001769573603912000&isTocOrder=N"
+   ],
+   "src_name": "관보 공공택지기획과",
+   "gosi_title": "국토교통부고시제2026-54호(서울서리풀1 공공주택지구의 지정 및 지형도면 등)",
+   "parcels_n": 2487,
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "고시 붙임 편입필지 24개 평균(지구 근사)",
+   "confirmed": false,
+   "template_type": "정비사업",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.045517,
+     37.459451
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "G-726590521000",
+   "title": "제주화북2 공공주택지구",
+   "cat": "주거개발",
+   "area_m2": 923809,
+   "phase": "계획",
+   "current_stage": "지구 지정",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「지구 지정」",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2025-12-30",
+     "state": "current",
+     "src": "관보 고시"
+    }
+   ],
+   "sd": "제주",
+   "sg": "제주시",
+   "loc": "제주특별자치도 제주시 화북이동, 도련일동, 영평동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_notice",
+   "sources": [
+    "https://gwanbo.go.kr/ezpdf/customLayout.jsp?contentId=I0000000000000001766726590521000&tocId=I0000000000000001766544955980000&isTocOrder=N"
+   ],
+   "src_name": "관보 도심주택공급협력과",
+   "gosi_title": "국토교통부고시제2025-933호(제주화북2 공공주택지구 지정 및 지형도면 등)",
+   "parcels_n": 482,
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "고시 붙임 편입필지 24개 평균(지구 근사)",
+   "confirmed": false,
+   "template_type": "정비사업",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.575379,
+     33.500947
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "G-230941045000",
+   "title": "인천로봇랜드 도시첨단산업단지",
+   "cat": "일자리",
+   "sub": "복합단지",
+   "area_m2": 297497,
+   "phase": "인가",
+   "current_stage": "산업단지계획 승인",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "산업단지계획 승인",
+     "date": "2025-12-01",
+     "state": "current",
+     "src": "관보 고시"
+    }
+   ],
+   "sd": "인천",
+   "sg": "서해구",
+   "loc": "인천광역시 서구 청라동 100-60번지 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_notice",
+   "sources": [
+    "https://gwanbo.go.kr/ezpdf/customLayout.jsp?contentId=I0000000000000001764230941045000&tocId=I0000000000000001764030232956000&isTocOrder=N"
+   ],
+   "src_name": "관보 영종청라계획과",
+   "gosi_title": "경제자유구역청고시제2025-52호(인천로봇랜드 도시첨단산업단지 산업단지계획 승인 및 지형도면 고시)",
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "geo_basis": "고시 위치 지번 「청라동 100-60」",
+   "confirmed": false,
+   "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.606166,
+     37.524987
+    ]
+   },
+   "lvl": "A",
+   "lvl_basis": "면적 297,497㎡ — 일자리:복합단지 A",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "G-992639601000",
+   "title": "서울서리풀2 공공주택지구",
+   "cat": "주거개발",
+   "area_m2": 193259,
+   "phase": "계획",
+   "current_stage": "지구 지정",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「지구 지정」",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2026-06-11",
+     "state": "current",
+     "src": "관보 고시"
+    }
+   ],
+   "sd": "서울",
+   "sg": "서초구",
+   "loc": "서울특별시 서초구 우면동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_notice",
+   "sources": [
+    "https://gwanbo.go.kr/ezpdf/customLayout.jsp?contentId=I0000000000000001780992639601000&tocId=I0000000000000001780906928757000&isTocOrder=N"
+   ],
+   "src_name": "관보 공공택지관리과",
+   "gosi_title": "국토교통부고시제2026-273호(서울서리풀2 공공주택지구의 지정 및 지형도면 등)",
+   "parcels_n": 442,
+   "geo_prec": "jigu",
+   "geo_approx": false,
+   "geo_basis": "고시 붙임 편입필지 24개 평균(지구 근사)",
+   "confirmed": false,
+   "template_type": "정비사업",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.017716,
+     37.459342
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  },
+  {
+   "id": "G-928762795000",
+   "title": "아산국가산업단지(원정지구) 개발사업 시행자 지정 고시",
+   "cat": "일자리",
+   "sub": "복합단지",
+   "area_m2": 92692,
+   "phase": "인가",
+   "current_stage": "사업시행자 지정",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "사업시행자 지정",
+     "date": "2026-04-27",
+     "state": "current",
+     "src": "관보 고시"
+    }
+   ],
+   "sd": "경기",
+   "sg": "평택시",
+   "loc": "경기도 평택시 포승읍 원정리 9-17번지 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_notice",
+   "sources": [
+    "https://gwanbo.go.kr/ezpdf/customLayout.jsp?contentId=I0000000000000001776928762795000&tocId=I0000000000000001776818859206000&isTocOrder=N"
+   ],
+   "src_name": "관보 항만건설과",
+   "gosi_title": "평택지방해양수산청고시제2026-25호(아산국가산업단지(원정지구) 개발사업 시행자 지정 고시)",
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "geo_basis": "고시 위치 지번 「원정리 9-17」",
+   "confirmed": false,
+   "template_type": "기업이전",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.793668,
+     36.997426
+    ]
+   },
+   "lvl": "B",
+   "lvl_basis": "면적 92,692㎡ — 일자리:복합단지 B",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22"
+  }
+ ]
+}
