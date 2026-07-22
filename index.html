@@ -818,6 +818,13 @@ function gradeBasisHtml(s) {
   if (c === "일자리") {
     if (s.area_m2) return `<span class="gbasis">연면적 ${(s.area_m2 / 10000).toFixed(1).replace(".0", "")}만㎡</span> · `;
     if (s.amount_eok) return `<span class="gbasis">투자 ${Number(s.amount_eok).toLocaleString()}억</span> · `;
+    // 등급이 있는데 근거값이 없으면 침묵하지 않는다 — 지도는 회색 처리하면서 카드만
+    // 선명한 배지를 보이면 무근거 등급처럼 읽힌다(2026-07-22 사용자 지적, P2).
+    return levelOf(s) !== "미정" ? `<span class="gbasis undet">등급 근거 미기록</span> · ` : "";
+  }
+  if (c === "인프라") {
+    if (s.area_m2) return `<span class="gbasis">연면적 ${(s.area_m2 / 10000).toFixed(1).replace(".0", "")}만㎡</span> · `;
+    if (s.amount_eok) return `<span class="gbasis">사업비 ${Number(s.amount_eok).toLocaleString()}억</span> · `;
     return "";
   }
   if (c === "주거개발")
@@ -3385,7 +3392,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260722o");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260722p");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3481,7 +3488,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260722o"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260722p"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3507,7 +3514,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260722o");
+  const CB = "?b=" + (window.BUILD || "20260722p");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {

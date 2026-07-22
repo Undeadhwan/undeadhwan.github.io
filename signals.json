@@ -347,7 +347,9 @@
    "pt_type": "facility",
    "geo_prec": "parcel",
    "geo_basis": "신호에 기재된 지번 '마곡동 745-3' 지오코딩",
-   "geo_approx": false
+   "geo_approx": false,
+   "area_m2": 59000,
+   "lvl_note": "등급 근거: 연면적 5.9만㎡(공식 발표)"
   },
   {
    "id": "S-0008",
@@ -399,7 +401,9 @@
    "src_tier": "official_report",
    "pt_type": "facility",
    "geo_prec": "parcel",
-   "geo_approx": false
+   "geo_approx": false,
+   "amount_eok": 29640,
+   "lvl_note": "등급 근거: 총사업비 2조9,640억(국가시범지구 지정 발표, 원문 출처) — 일자리 A 기준(5,000억↑) 충족"
   },
   {
    "id": "S-0009",
@@ -492,7 +496,8 @@
    "src_tier": "official_report",
    "pt_type": "facility",
    "geo_prec": "parcel",
-   "geo_approx": false
+   "geo_approx": false,
+   "area_m2": 760000
   },
   {
    "id": "S-0011",
@@ -756,11 +761,13 @@
    "radius_type": "공공주택공급",
    "phase": "준공·개통",
    "cat": "주거개발",
-   "lvl": "C",
+   "lvl": "미정",
    "src_tier": "official_report",
    "pt_type": "facility",
    "geo_prec": "parcel",
-   "geo_approx": false
+   "geo_approx": false,
+   "hh": 196,
+   "lvl_note": "196호 — 주거개발 최소 기준(500세대) 미달로 등급 미판정(눈금 명문 규칙). 종전 C는 근거 없는 등급이라 교정(2026-07-22)"
   }
  ]
 }
