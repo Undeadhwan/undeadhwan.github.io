@@ -65,8 +65,11 @@
   .ddgrp.off .ddsubs { opacity:.38; }   /* 대분류 꺼짐 = 하위도 비표시. 선택 상태는 보존 */
   .ddnosub { font-size:12px; color:#a8adb7; align-self:center; }
   .ddall { margin-top:12px; text-align:center; color:var(--accent); font-size:12.5px; font-weight:600; cursor:pointer; }
-  #wrap { display:flex; height:calc(100vh - 87px); }
-  #panel { width:400px; flex-shrink:0; border-right:1px solid var(--line); overflow-y:auto; padding:14px 16px 60px; position:relative; order:0; }
+  #wrap { display:flex; height:calc(100vh - 87px); position:relative; }
+  /* 상세 패널 = 지도를 **밀지 않고** 도크 옆에 떠 있는 카드(2026-07-23 사용자 요청). 도크(326)+12 여백 위치 */
+  #panel { position:absolute; left:338px; top:12px; width:392px; max-height:calc(100% - 24px); overflow-y:auto;
+    background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:0 8px 30px rgba(25,35,60,.16);
+    padding:16px 16px 20px; z-index:500; order:0; }
   #map { flex:1; min-width:0; order:1; }
   .regionbar { display:flex; gap:7px; align-items:center; flex-wrap:wrap; }
   .regionbar select { font-size:13px; font-weight:600; padding:7px 10px; border:1px solid #d9dee8; border-radius:9px; background:#fff; color:#1a2233; cursor:pointer; min-width:94px; }
@@ -412,7 +415,8 @@
   .hj-legend.collapsed .sec, .hj-legend.collapsed .hnote { display:none; }
   @media (max-width: 768px) { .hj-legend { max-width:158px; font-size:10.5px; padding:7px 8px 8px; } }
   /* ══════════ 좌측 도크 (조회조건 + 범례 통합, 2026-07-23 UI 개편) ══════════ */
-  #dock { width:326px; flex-shrink:0; border-right:1px solid var(--line); background:#fff; overflow-y:auto; padding:13px 13px 40px; order:-1; }
+  #dock { width:326px; flex-shrink:0; border-right:1px solid var(--line); background:#fff; overflow-y:auto; padding:13px 13px 30px; order:-1; scrollbar-width:none; }
+  #dock::-webkit-scrollbar { display:none; }   /* 스크롤바 숨김(사용자 요청) — 필요 시 스크롤은 되되 바는 안 보임 */
   #dock .dk-h { display:flex; align-items:baseline; justify-content:space-between; }
   #dock .dk-h b { font-size:14.5px; letter-spacing:-.2px; }
   #dock .dk-h .cnt { font-size:11.5px; color:#9aa0aa; }
@@ -1265,9 +1269,18 @@ function isStaleFinished(s) {
   const dstr = s.last_movement || (h && h.length ? h[h.length - 1].date : null) || s.date || null;
   return _staleFin(s.current_stage, phaseOf(s), s.status, dstr);
 }
-const visible = s => filter.cat.has(catOf(s))   // 기타도 정식 분류 — 우회 제거(필터가 전 화면 일관 적용)
-  && subVisible(s)                               // 중분류 조회축(대분류에 세부 축이 있는 경우만 적용)
-  && filter.phase.has(phaseOf(s))                // 4단계 백본 조회축
+/* 분류 게이트 (2026-07-23 재설계 — 사용자: "대분류 토글은 전체선택/해제 개념").
+   세부 축이 있는 대분류(교통·일자리·인프라)는 **중분류(filter.sub)가 게이트**다 —
+   대분류를 꺼도 중분류를 켜면 그 중분류는 조회된다(대분류 헤더는 하위 전체 on/off 버튼일 뿐).
+   세부 축이 없는 대분류(주거개발·기타)만 filter.cat이 직접 게이트. */
+function catVisible(s) {
+  const cat = catOf(s), keys = SUB_KEYS[cat];
+  if (!keys || !keys.length) return filter.cat.has(cat);
+  const sub = subOf(s);
+  return keys.includes(sub) ? filter.sub.has(sub) : filter.cat.has(cat);
+}
+const visible = s => catVisible(s)
+  && filter.phase.has(phaseOf(s))                // 4단계 백본 조회축(전체해제는 단계를 비우지 않음 → 유지)
   && filter.lvl.has(levelOf(s))                  // 등급 조회축(A/B/C/미정)
   && (!filter.region || `${s.sd} ${s.sg}` === filter.region)
   && !isStaleFinished(s);   // 끝난 신호(종료 후 1년 초과)는 지도·목록·집계 전부에서 숨김(사용자 2026-07-21)
@@ -2120,8 +2133,9 @@ function renderDock() {
   const trow = (sk, label, ico) => `<div class="trow${filter.sub.has(sk) ? "" : " off"}" data-tog="sub" data-k="${sk}"><span class="ico">${ico}</span><span class="lb">${label}</span><span class="n">${C.sub[sk] || 0}</span></div>`;
   const lt = k => `<span class="lt${filter.lines.has(k) ? "" : " off"}" data-tog="lines" data-k="${k}">${k}</span>`;
   const catBlock = cat => {
-    const col = CAT_COLOR[cat], on = filter.cat.has(cat);
-    const subs = (SUB_KEYS[cat] || []).filter(sk => (C.sub[sk] || 0) > 0);
+    const col = CAT_COLOR[cat], keys = SUB_KEYS[cat] || [];
+    const on = keys.length ? keys.some(sk => filter.sub.has(sk)) : filter.cat.has(cat);   // 대분류 헤더 = 하위 중 하나라도 켜지면 on
+    const subs = keys.filter(sk => (C.sub[sk] || 0) > 0);
     const pills = subs.map(sk => `<span class="pill${filter.sub.has(sk) ? "" : " off"}" data-tog="sub" data-k="${sk}"><i class="pd" style="background:${col}"></i>${sk}<span class="pn">${C.sub[sk]}</span></span>`).join("");
     return `<div class="chead${on ? "" : " off"}" data-tog="cat" data-k="${cat}"><i class="cd" style="background:${col}"></i>${cat}<span class="cn">${C.cat[cat] || 0}</span></div>${pills ? `<div class="pills">${pills}</div>` : ""}`;
   };
@@ -2132,7 +2146,6 @@ function renderDock() {
     : `<span class="gp${filter.lvl.has(g) ? "" : " off"}" data-tog="lvl" data-k="${g}"><i class="gd" style="width:${SZ[g]}px;height:${SZ[g]}px"></i>${g}</span>`;
   dock.innerHTML = `
     <div class="dk-h"><b>표시 조건 · 범례</b><span class="cnt">${C.total.toLocaleString()}개 표시중</span></div>
-    <div class="dk-sub">항목을 눌러 켜고 끄세요. 색·모양이 곧 지도 범례입니다.</div>
     <div class="dk-btns"><button data-all="on">전체 선택</button><button data-all="off">전체 해제</button></div>
     <div class="sec">
       <div class="sec-h"><i class="sq" style="background:${CAT_COLOR["교통"]}"></i>교통<span class="sub">선형 · 파랑 일원화</span></div>
@@ -2162,19 +2175,35 @@ function initDock() {
     if (!t) return;
     if (t.dataset.all) {
       const on = t.dataset.all === "on";
+      // 전체선택/해제는 **무엇을 볼지**(분류·중분류·노선선형)만 다룬다. 단계·등급은 별도 정제축이라
+      // 항상 전체 유지 — 그래야 "전체 해제 후 철도·역 클릭"이 (모든 단계·등급의) 철도를 보여준다.
       CAT_KEYS.forEach(k => on ? filter.cat.add(k) : filter.cat.delete(k));
       ALL_SUBS.forEach(k => on ? filter.sub.add(k) : filter.sub.delete(k));
-      PHASES.forEach(k => on ? filter.phase.add(k) : filter.phase.delete(k));
-      GRADES_DISP.forEach(k => on ? filter.lvl.add(k) : filter.lvl.delete(k));
       ["철도선", "도로선"].forEach(k => on ? filter.lines.add(k) : filter.lines.delete(k));
+      PHASES.forEach(k => filter.phase.add(k));
+      GRADES_DISP.forEach(k => filter.lvl.add(k));
       localStorage.setItem("hojae_lines", JSON.stringify([...filter.lines]));
       renderAll(); window._dbg?.applyLOD?.(); return;
     }
-    const set = { cat: filter.cat, sub: filter.sub, phase: filter.phase, lvl: filter.lvl, lines: filter.lines }[t.dataset.tog];
+    const axis = t.dataset.tog, k = t.dataset.k;
+    if (axis === "cat") {
+      // 대분류 헤더 = 하위 중분류 **전체 선택/해제** 버튼(세부 축 있는 경우). 없으면 대분류 자체 토글.
+      const keys = SUB_KEYS[k];
+      if (keys && keys.length) {
+        const allOn = keys.every(sk => filter.sub.has(sk));
+        keys.forEach(sk => allOn ? filter.sub.delete(sk) : filter.sub.add(sk));
+        allOn ? filter.cat.delete(k) : filter.cat.add(k);
+      } else {
+        filter.cat.has(k) ? filter.cat.delete(k) : filter.cat.add(k);
+      }
+      renderAll(); return;
+    }
+    const set = { sub: filter.sub, phase: filter.phase, lvl: filter.lvl, lines: filter.lines }[axis];
     if (!set) return;
-    const k = t.dataset.k;
     set.has(k) ? set.delete(k) : set.add(k);
-    if (t.dataset.tog === "lines") { localStorage.setItem("hojae_lines", JSON.stringify([...filter.lines])); window._dbg?.applyLOD?.(); }
+    // 중분류를 켜면 소속 대분류도 켜진 것으로(헤더·카운트 일관). 다 끄면 대분류도 끔.
+    if (axis === "sub") { const pc = CAT_KEYS.find(c => (SUB_KEYS[c] || []).includes(k)); if (pc) { (SUB_KEYS[pc].some(sk => filter.sub.has(sk)) ? filter.cat.add(pc) : filter.cat.delete(pc)); } }
+    if (axis === "lines") { localStorage.setItem("hojae_lines", JSON.stringify([...filter.lines])); window._dbg?.applyLOD?.(); }
     renderAll();
   });
   renderDock();
@@ -2616,8 +2645,9 @@ function initLeaflet() {
       // 실선 경계 = **착공**(물리 실체, 사용자 확정 2026-07-17) — 철도·도로 공통 phase 백본.
       // approx(대표점 근사 선형)는 단계와 무관하게 점선(§4.1 — 선 자체가 실측이 아님).
       const dashed = !["착공", "준공"].some(k => (p.phase || "").startsWith(k));   // 착공·준공=실선(범례 일치), 계획·인가=점선. 근사 선형은 툴팁으로만 고지(사용자 2026-07-21)
-      // 중분류 조회축(2026-07-18): 선형·역 라벨도 철도/도로 필터에 반응해야 전 화면 일관(신호 목록·집계와 동일 기준)
-      if (!filter.sub.has(isRoad ? "도로" : "철도")) continue;
+      // 선형·역 라벨 = 철도·역(중분류) **또는** 노선 선형 토글이 켜지면 표시(2026-07-23 분리).
+      // → "철도선만 보기"(전체해제 + 철도선 on)가 가능해진다. 점 호재(역 원)는 filter.sub가 별도 게이트.
+      if (!(filter.sub.has(isRoad ? "도로" : "철도") || filter.lines.has(isRoad ? "도로선" : "철도선"))) continue;
       if (phaseFiltering && !filter.phase.has(p.phase || "계획")) continue;   // phase 미상(예타 등 고시 전)=계획 취급 — 단계 필터에 반응(2026-07-21)
       if (YEAR_SEL && false) continue;   // (철도 고시연도 필터는 추후)
       if (f.geometry.type === "LineString" || f.geometry.type === "MultiLineString") {
@@ -3071,7 +3101,7 @@ function initKakao() {
       if (f.geometry.type !== "Point") continue;
       const p = f.properties; const isRoad = p.mode === "road";
       if (p.gate === "관찰") continue;   // 관찰 게이트 — 라벨도 미표시
-      if (!filter.sub.has(isRoad ? "도로" : "철도")) continue;
+      if (!(filter.sub.has(isRoad ? "도로" : "철도") || filter.lines.has(isRoad ? "도로선" : "철도선"))) continue;   // 철도·역 또는 노선선형(2026-07-23)
       if (phaseFiltering && !filter.phase.has(p.phase || "계획")) continue;
       const [x, y] = f.geometry.coordinates; if (!b.contain(LL(x, y))) continue;
       const elx = document.createElement("div"); elx.className = "rail-name"; elx.textContent = p.name; elx.style.pointerEvents = "none";
