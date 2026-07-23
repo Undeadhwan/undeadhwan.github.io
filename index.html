@@ -428,10 +428,11 @@
   /* ══ 뱃지 표준화(2026-07-23 사용자 — "네이버처럼 깔끔하고 짙은 테두리, 잘 안 보임").
      켜짐 = 짙은 테두리 #2b3440 + 흰 배경 + 진한 글씨 / 꺼짐 = 연회색 채움 #f4f5f7 + 연한 테두리.
      전체선택·해제 / 교통행 / 노선선형 토글 / 중분류 / 단계 / 등급 — 전부 같은 규칙(--line #e5e5ea는 너무 연했음). ══ */
-  /* 전체선택·해제 = **동작 버튼**(토글 아님) — 채운 회색 버튼으로(짙은 테두리는 '선택된 상태'처럼 보여 혼동됨, 2026-07-23 사용자) */
-  #dock .dk-btns button { flex:1; padding:10px; border:1px solid #d1d6df; border-radius:9px; background:#eef1f5; color:#333e4d; font-weight:700; font-size:13.5px; cursor:pointer; }
-  #dock .dk-btns button:hover { background:#e2e7ee; }
-  #dock .dk-btns button:active { background:#d6dce5; }
+  /* 전체선택·해제 = 현재 상태 토글(사용자 "선택된 건 보여야죠"): 활성(.on)=짙은 테두리+흰 배경, 비활성=연회색 muted */
+  #dock .dk-btns button { flex:1; padding:10px; border:1px solid #e5e5ea; border-radius:9px; background:#f4f5f7; color:#a5aab3; font-weight:700; font-size:13.5px; cursor:pointer; }
+  #dock .dk-btns button.on { border:2px solid #2b3440; background:#fff; color:#1c1c1e; }
+  #dock .dk-btns button:hover { background:#e8ebf0; }
+  #dock .dk-btns button.on:hover { background:#f4f6f9; }
   #dock .sec { margin-bottom:15px; }
   #dock .sec-h { display:flex; align-items:center; gap:7px; font-size:13.5px; font-weight:800; color:var(--ink); margin-bottom:8px; }
   #dock .sec-h .sq { width:11px; height:11px; border-radius:3px; flex-shrink:0; }
@@ -2156,20 +2157,10 @@ function renderPanel() {
    상단 드롭다운 필터 + 우하단 범례를 하나로. 항목 클릭 = 켜기/끄기, 색·모양이 곧 범례.
    기존 filter 상태(cat/sub/lvl/phase/lines)를 그대로 조작하므로 판정 로직은 불변. */
 function dockCounts() {
-  // 뱃지 = **현재 화면에 보이는** 호재 개수(2026-07-23 사용자). 지도 준비 후엔 뷰포트 bbox + 줌 LOD를
-  // renderHojae와 동일 규칙으로 적용 → 뱃지 숫자가 실제 그려진 점과 일치(P5 정직). 지도 준비 전엔 전역 집계.
-  const vf = mapApi?.viewFilter?.();
-  const inView = s => {
-    if (filter.region && `${s.sd} ${s.sg}` !== filter.region) return false;
-    if (isStaleFinished(s)) return false;
-    if (!vf) return true;                                  // 지도 준비 전 — 전역 집계 폴백
-    const c = s.geometry && s.geometry.coordinates;
-    if (!c || !vf.inB(c[0], c[1])) return false;           // 뷰포트 밖
-    const l = levelOf(s);
-    if (l && !vf.grades.has(l)) return false;              // 현재 줌 LOD 밖(줌아웃=S만) — renderHojae와 동일
-    return true;
-  };
-  const pool = allSignalsFlat().filter(inView);
+  // 뱃지 = **필터/선택지역 기준 고정** 개수(2026-07-23 재변경). 종전 뷰포트 기준은 팬마다 숫자·pill이
+  // 들쭉날쭉해 "지역 호재 파악"을 방해했다(사용자 2회 지적). 지역을 고르면 그 지역, 아니면 전체 —
+  // 지도 이동과 무관하게 안정적. (지도에 실제 그려지는 점은 뷰포트·줌 LOD·상한을 여전히 따름.)
+  const pool = allSignalsFlat().filter(s => (!filter.region || `${s.sd} ${s.sg}` === filter.region) && !isStaleFinished(s));
   const cat = {}, sub = {}, lvl = {};
   pool.forEach(s => {
     const c = catOf(s); if (c) cat[c] = (cat[c] || 0) + 1;
@@ -2198,9 +2189,12 @@ function renderDock() {
   const gp = g => g === "미정"
     ? `<span class="gp${filter.lvl.has("미정") ? "" : " off"}" data-tog="lvl" data-k="미정"><i class="gd" style="width:9px;height:9px;background:none;border:1.5px dashed #333"></i>미판정</span>`
     : `<span class="gp${filter.lvl.has(g) ? "" : " off"}" data-tog="lvl" data-k="${g}"><i class="gd" style="width:${SZ[g]}px;height:${SZ[g]}px"></i>${g}</span>`;
+  // 전체선택/해제 = 현재 선택 상태 토글 표시(사용자 "선택된 건 보여야죠"): 다 켜짐=전체선택 활성, 다 꺼짐=전체해제 활성
+  const _allOn = CAT_KEYS.every(k => filter.cat.has(k)) && ALL_SUBS.every(k => filter.sub.has(k)) && filter.lines.has("철도선") && filter.lines.has("도로선");
+  const _allOff = !CAT_KEYS.some(k => filter.cat.has(k)) && !ALL_SUBS.some(k => filter.sub.has(k)) && !filter.lines.has("철도선") && !filter.lines.has("도로선");
   dock.innerHTML = `
-    <div class="dk-h"><b>표시 조건 · 범례</b><span class="cnt">${C.total.toLocaleString()}개 표시중</span></div>
-    <div class="dk-btns"><button data-all="on">전체 선택</button><button data-all="off">전체 해제</button></div>
+    <div class="dk-h"><b>표시 조건 · 범례</b><span class="cnt">${filter.region ? filter.region + " " : ""}호재 ${C.total.toLocaleString()}건</span></div>
+    <div class="dk-btns"><button data-all="on" class="${_allOn ? "on" : ""}">전체 선택</button><button data-all="off" class="${_allOff ? "on" : ""}">전체 해제</button></div>
     <div class="sec">
       <div class="sec-h"><i class="sq" style="background:${CAT_COLOR["교통"]}"></i>교통<span class="sub">선형 · 파랑 일원화</span></div>
       ${trow("도로", "도로", roadIco)}${trow("철도", "철도 · 역", railIco)}
@@ -2975,7 +2969,7 @@ function initLeaflet() {
              highlightRings, clearHighlight, clearAptMarker, emphasizePin, radarPulse, sggRings: () => window._sggRings,
              highlightRoute, clearRoute,
              viewFilter: () => ({ inB: (x, y) => map.getBounds().contains([y, x]), grades: new Set(lodGrades(map.getZoom())) }) };
-  map.on("zoomend moveend", () => { try { renderDock(); } catch (e) {} });   // 이동/줌마다 뱃지 뷰포트 카운트 갱신
+  // (뱃지 카운트는 지역/필터 기준 고정 — 지도 이동마다 갱신하지 않는다, 2026-07-23)
   refreshPins();
 }
 /* 노선 → 신호 상세 어댑트(우측 패널) — 전역(카카오·Leaflet 두 렌더러 공유, 2026-07-21) */
@@ -3378,7 +3372,7 @@ function initKakao() {
   const sggRingsFn = () => { if (window._sggRings) return window._sggRings; const m = {}; SGG_GEO.features.forEach(f => { const disp = f.properties.sido + " " + sggDisplayName(f.properties.name); ringsOf(f).forEach(r => (m[disp] = m[disp] || []).push(r)); }); return (window._sggRings = m); };
   mapApi = { refreshPins, panTo: ll => map.panTo(LL(ll[0], ll[1])), showRadius, showRadiusMany, clearRadius, showAptAnchor, highlightRings, clearHighlight, clearAptMarker, emphasizePin, radarPulse, sggRings: sggRingsFn, highlightRoute, clearRoute,
              viewFilter: () => ({ inB: (x, y) => map.getBounds().contain(LL(x, y)), grades: new Set(lodGrades(map.getLevel())) }) };
-  K.event.addListener(map, "idle", () => { try { renderDock(); } catch (e) {} });   // 이동/줌마다 뱃지 뷰포트 카운트 갱신
+  // (뱃지 카운트는 지역/필터 기준 고정 — 지도 이동마다 갱신하지 않는다, 2026-07-23)
   refreshPins();
 }
 
@@ -3707,7 +3701,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260723w");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260723x");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3827,7 +3821,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260723w"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260723x"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3853,7 +3847,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260723w");
+  const CB = "?b=" + (window.BUILD || "20260723x");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
