@@ -298,6 +298,9 @@
   .subtrack { font-size:11px; color:var(--muted); margin:2px 0 8px; line-height:1.5; }
   .subtrack .subcur { color:var(--ink); background:#fff3cd; border-radius:3px; padding:0 3px; }
   .dong-badge { background:#fff; border:1.5px solid var(--navy); border-radius:12px; padding:1px 8px; font-size:11px; font-weight:600; white-space:nowrap; cursor:pointer; }
+  /* 겹친 호재(같은 지점 중첩) 개수 배지 — 클릭 시 목록 펼침(범례와 1:1). 중립 남색·흰 글자 */
+  .cl-badge { background:var(--navy); color:#fff; border:2px solid #fff; border-radius:14px; min-width:22px; height:22px; padding:0 6px; font-size:12px; font-weight:800; line-height:22px; text-align:center; box-shadow:0 2px 7px rgba(0,0,0,.32); cursor:pointer; white-space:nowrap; }
+  .cl-badge:hover { background:#3a4ea0; }
   /* 아파트 이름 라벨 (조회 진입점용 — §4.1 허용, 배지·개수 없음) */
   /* 호갱노노식 아파트 집모양 마커 — 신호 있는 단지만 호재 건수(§7 절충), 0건은 흐린 집(숫자 없음) */
   .apt-house { position:relative; display:inline-block; background:#4460e0; color:#fff; border-radius:6px;
@@ -2072,6 +2075,34 @@ function renderDongSig(v) {
   };
   panelListRender();
 }
+/* 겹친 호재(같은 지점 중첩) 배지 클릭 → 그 지점 신호 묶음 패널(매트릭스+목록). renderDongSig와 같은 골격 재사용 */
+function showCluster(sigs) {
+  view = { mode: "cluster", sigs };
+  ANIMATE = true; renderPanel(); ANIMATE = false;
+  mapApi?.clearRadius?.(); mapApi?.clearRoute?.(); mapApi?.clearAptMarker?.();
+}
+function renderCluster(v) {
+  const p = document.getElementById("panel");
+  const list = (v.sigs || []).filter(visible);
+  const f = list[0] || v.sigs[0] || {};
+  p.innerHTML = `
+    <div class="phead"><div class="pt">겹친 호재 ${list.length}건</div><div class="closex" onclick="closePanel()">✕</div></div>
+    <div class="ps">같은 지점에 모인 호재${f.sd ? ` — ${f.sd} ${f.sg || ""}` : ""} (지도상 한 배지로 묶임)</div>
+    ${hojaeMatrixHtml(list)}
+    ${yearChipsHtml()}
+    <div id="list"></div>`;
+  wireYearChips(p);
+  const el = p.querySelector("#list");
+  panelListRender = () => {
+    el.innerHTML = "";
+    if (!list.length) { el.innerHTML = `<div class="pickhint">표시 조건에 맞는 호재 없음</div>`; return; }
+    const arr = panelArrange(list.slice());
+    if (!arr.length) { el.innerHTML = `<div class="pickhint">${LEVEL_NAME[panelGrade] || panelGrade}급 호재 없음</div>`; return; }
+    arr.slice(0, 80).forEach(s => el.appendChild(makeCard(s)));
+    animateCards(el);
+  };
+  panelListRender();
+}
 let returnView = null;
 function showSignal(s, pan) {
   if (view.mode !== "detail") returnView = view;   // 신호 클릭 직전 뷰(동/구/단지) 기억
@@ -2106,6 +2137,7 @@ function renderPanel() {
   }
   if (view.mode === "dong") return renderDong(view.dong);
   if (view.mode === "dongsig") return renderDongSig(view);
+  if (view.mode === "cluster") return renderCluster(view);
   if (view.mode === "sgg") return renderSggFeed(view.sgg);
   if (view.mode === "apt") return renderApt(view.apt);
   if (view.mode === "detail") return renderDetail(view.signal);
@@ -2603,9 +2635,21 @@ function initLeaflet() {
       .filter(s => { const c = s.geometry.coordinates; return bd.contains([c[1], c[0]]); })
       .sort((a, b) => (GRADE_RANK[levelOf(a)] ?? 9) - (GRADE_RANK[levelOf(b)] ?? 9));   // 등급순 — 600 상한이 걸려도 S/A(교통 역)가 밀려나지 않게(2026-07-22 사용자 "GTX B 역 안 보임")
       // (구)폴리곤 구역 원 생략 규칙 제거 — 호재 원이 주인공(방화3구역 등 원 누락 원인이었음), 폴리곤은 흐린 경계 문맥
+    // 좌표 중첩 그룹핑 — 같은 지점 겹침은 '+N' 배지 하나로(2026-07-23, 카카오와 동일 규칙·도크 범례와 1:1)
+    const groups = new Map();
+    for (const s of pool) { const c = s.geometry.coordinates; const gk = c[0].toFixed(4) + "," + c[1].toFixed(4);
+      let g = groups.get(gk); if (!g) groups.set(gk, g = []); g.push(s); }
     let n = 0;
-    for (const s of pool) {
+    for (const [gk, g] of groups) {
       if (++n > 600) break;   // 성능 상한
+      if (g.length > 1) {   // 겹침 → 개수 배지 1개(클릭 시 showCluster 목록)
+        const [bx, by] = g[0].geometry.coordinates;
+        const badge = L.marker([by, bx], { pane: "cand", icon: L.divIcon({ className: "", html: `<div class="cl-badge">+${g.length}</div>`, iconSize: [30, 22], iconAnchor: [15, 11] }) }).addTo(map);
+        badge.on("click", (e) => { L.DomEvent.stopPropagation(e); showCluster(g); });
+        hjDots.push(badge);
+        continue;
+      }
+      const s = g[0];
       const [x, y] = s.geometry.coordinates;
       const unk = basisUnknown(s);   // 근거 미상(미정 포함) = 회색 원·C급 크기(사용자 확정)
       const col = s.status === "종결" ? "#9aa3b2" : unk ? "#8a93a3" : colorOf(s);
@@ -2992,6 +3036,7 @@ function initKakao() {
   /* 호재 마커: 신호 객체에 1회 캐시(_kmk) — 줌마다 최대 600개 Marker 파괴·재생성이 잔여 버벅임 원인이라
      setMap 토글 + 스타일 바뀐 것만 setImage(사용자 "줌업 좀 더 부드럽게" 2026-07-21). 툴팁 HTML은 hover 시 계산. */
   let hjShown = new Set();
+  let clusterOv = new Map();   // 겹친 호재 배지 캐시(좌표키 → CustomOverlay)
   const hjStyle = s => { const unk = basisUnknown(s);
     const col = s.status === "종결" ? "#9aa3b2" : unk ? "#8a93a3" : colorOf(s); const lvl = levelOf(s); const solid = phaseSolid(s);
     return { col, lvl, solid, unk, r: unk ? HJR.C : (HJR[lvl] || 5), bw: !unk && (lvl === "S" || lvl === "A") ? 2.6 : 2,
@@ -3011,8 +3056,28 @@ function initKakao() {
       .filter(s => s.geometry && s.geometry.coordinates).filter(s => show.has(levelOf(s)))
       .filter(s => { const c = s.geometry.coordinates; return b.contain(LL(c[0], c[1])); })
       .sort((a, b2) => (GRADE_RANK[levelOf(a)] ?? 9) - (GRADE_RANK[levelOf(b2)] ?? 9));   // 등급순 — 600 상한이 걸려도 S/A(교통 역)가 밀려나지 않게(2026-07-22)
-    const next = new Set(); let n = 0;
-    for (const s of pool) { if (++n > 600) break;
+    // 좌표 중첩 그룹핑 — 같은 지점(동 대표점·같은 구역)에 쌓인 호재는 '+N' 배지 하나로 묶는다(2026-07-23,
+    // 도크 범례와 1:1). 실좌표라 줌인해도 안 흩어지므로 좌표키(≈11m) 기준. 배지 클릭 → showCluster 목록 패널.
+    const groups = new Map();
+    for (const s of pool) { const c = s.geometry.coordinates; const gk = c[0].toFixed(4) + "," + c[1].toFixed(4);
+      let g = groups.get(gk); if (!g) groups.set(gk, g = []); g.push(s); }
+    const next = new Set(), nextCl = new Set(); let n = 0;
+    for (const [gk, g] of groups) { if (++n > 600) break;
+      if (g.length > 1) {   // 겹침 → 배지 1개
+        const [x, y] = g[0].geometry.coordinates;
+        let ov = clusterOv.get(gk);
+        if (!ov) {
+          const el = document.createElement("div"); el.className = "cl-badge";
+          el.onclick = () => { hideTip(); showCluster(el._g); };
+          ov = new K.CustomOverlay({ position: LL(x, y), content: el, zIndex: 11, yAnchor: .5, xAnchor: .5 });
+          ov._el = el; clusterOv.set(gk, ov);
+        }
+        ov._el._g = g; ov._el.textContent = "+" + g.length;   // 현재 표시 조건의 멤버·개수로 갱신
+        ov.setMap(map); nextCl.add(gk);
+        g.forEach(s => { if (s._kmk) s._kmk.setMap(null); hjShown.delete(s); });   // 개별 마커 숨김
+        continue;
+      }
+      const s = g[0];
       const t = hjStyle(s);
       const key = t.col + "|" + t.r + "|" + t.bw + "|" + t.solid + "|" + t.fillOp + "|" + t.alpha + "|" + (s.geo_approx ? 1 : 0);
       if (!s._kmk) {
@@ -3024,8 +3089,9 @@ function initKakao() {
         s._kmk = mk; s._kmkKey = key;
       } else if (s._kmkKey !== key) { s._kmk.setImage(hojaeMarkerImage(t.col, t.r, t.bw, t.solid, t.fillOp, t.alpha, s.geo_approx)); s._kmkKey = key; }
       s._kmk.setMap(map); next.add(s); hjShown.delete(s); }
-    hjShown.forEach(s => s._kmk && s._kmk.setMap(null));   // 이번에 빠진 것만 끔
-    hjShown = next; };
+    hjShown.forEach(s => s._kmk && s._kmk.setMap(null));   // 이번에 빠진 개별 마커 끔
+    hjShown = next;
+    clusterOv.forEach((ov, gk) => { if (!nextCl.has(gk)) ov.setMap(null); }); };   // 이번에 빠진 배지 끔
 
   // 동 라벨: feature에 1회 캐시(_klbl) — 충돌 계산만 매번, DOM 생성은 안 한다
   let lblShown = new Set();
@@ -3611,7 +3677,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260723o");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260723p");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3731,7 +3797,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260723o"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260723p"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3757,7 +3823,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260723o");
+  const CB = "?b=" + (window.BUILD || "20260723p");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
