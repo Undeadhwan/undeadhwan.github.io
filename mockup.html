@@ -41,6 +41,19 @@
   .grades{display:flex;flex-wrap:wrap;gap:7px}
   .gp{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border:1px solid var(--line);border-radius:999px;font-size:12.5px;font-weight:700;background:#fff;cursor:pointer}
   .gp .gd{border-radius:50%;background:#7a8496;display:inline-block}
+  /* 노선 선형 표시 토글 */
+  .ltog{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--ink2);padding:6px 4px 0}
+  .ltog .lbl{color:var(--ink3)}
+  .ltog .lt{padding:3px 9px;border:1px solid var(--line);border-radius:999px;font-size:11px;font-weight:700;cursor:pointer;background:#eef2fe;color:var(--blue)}
+  .ltog .lt.off{background:#fff;color:var(--ink3);opacity:.55}
+  /* 단계 pill (실선/점선 = 착공/계획) */
+  .phase .pill{padding:6px 10px}
+  .phase .pill svg{display:block}
+  /* 위치근사 후광 범례 */
+  .halo-leg{display:flex;align-items:center;gap:9px;font-size:11.5px;color:var(--ink2);margin:2px 0 12px;padding:2px 2px}
+  .halo-leg .halo{position:relative;width:26px;height:26px;flex-shrink:0}
+  .halo-leg .halo::before{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,rgba(46,92,230,.28),rgba(46,92,230,0) 70%)}
+  .halo-leg .halo i{position:absolute;top:9px;left:9px;width:8px;height:8px;border-radius:50%;background:var(--blue)}
   .note{margin-top:6px;background:#f0f5ff;border:1px solid #dbe6fb;border-radius:10px;padding:10px 11px;font-size:11.5px;color:var(--ink2);line-height:1.45;display:flex;gap:8px;align-items:flex-start}
   .badge{width:20px;height:20px;border-radius:50%;background:var(--home);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
   /* ── 지도 목업 ── */
@@ -93,6 +106,7 @@
       <div class="trow"><span class="ico"><svg width="34" height="14"><line x1="2" y1="7" x2="32" y2="7" stroke="#2e5ce6" stroke-width="3.4" stroke-linecap="round"/></svg></span><span class="lb">도로</span><span class="n">101</span></div>
       <div class="trow"><span class="ico"><svg width="34" height="14"><line x1="2" y1="7" x2="32" y2="7" stroke="#2e5ce6" stroke-width="3.4"/><circle cx="8" cy="7" r="3.4" fill="#fff" stroke="#2e5ce6" stroke-width="2"/><circle cx="26" cy="7" r="3.4" fill="#fff" stroke="#2e5ce6" stroke-width="2"/></svg></span><span class="lb">철도 · 역</span><span class="n">705</span></div>
       <div class="legrow"><span class="s"><svg width="26" height="8"><line x1="1" y1="4" x2="25" y2="4" stroke="#2e5ce6" stroke-width="3"/></svg>착공(실선)</span><span class="s"><svg width="26" height="8"><line x1="1" y1="4" x2="25" y2="4" stroke="#2e5ce6" stroke-width="3" stroke-dasharray="5 4"/></svg>계획(점선)</span></div>
+      <div class="ltog"><span class="lbl">노선 선형 표시</span><span class="lt">철도선</span><span class="lt">도로선</span></div>
     </div>
 
     <!-- 점 호재 -->
@@ -123,6 +137,17 @@
       </div>
     </div>
 
+    <!-- 단계 -->
+    <div class="sec">
+      <div class="sec-h">단계<span class="sub">진행 단계 · 실선=착공/점선=계획</span></div>
+      <div class="pills phase">
+        <span class="pill"><svg width="20" height="7"><line x1="1" y1="4" x2="19" y2="4" stroke="#2e5ce6" stroke-width="2.6" stroke-dasharray="4 3"/></svg>계획</span>
+        <span class="pill"><svg width="20" height="7"><line x1="1" y1="4" x2="19" y2="4" stroke="#2e5ce6" stroke-width="2.6" stroke-dasharray="4 3"/></svg>인가</span>
+        <span class="pill"><svg width="20" height="7"><line x1="1" y1="4" x2="19" y2="4" stroke="#2e5ce6" stroke-width="2.6"/></svg>착공</span>
+        <span class="pill"><svg width="20" height="7"><line x1="1" y1="4" x2="19" y2="4" stroke="#2e5ce6" stroke-width="2.6"/></svg>준공·개통</span>
+      </div>
+    </div>
+
     <!-- 등급 -->
     <div class="sec">
       <div class="sec-h">등급<span class="sub">원 크기로 표현</span></div>
@@ -135,6 +160,7 @@
       </div>
     </div>
 
+    <div class="halo-leg"><span class="halo"><i></i></span><span><b>흐릿한 후광</b> = 위치 근사(이 근처) · 지번 미확정</span></div>
     <div class="note"><span class="badge">4</span><span><b>겹친 호재</b>는 개수 배지로 묶어 표시됩니다. 클릭하면 목록이 펼쳐져요.</span></div>
   </aside>
 
@@ -154,6 +180,9 @@
       <!-- 철도(계획): 점선 + 노드 -->
       <polyline points="220,60 250,300 300,560" fill="none" stroke="#2e5ce6" stroke-width="3.6" stroke-dasharray="10 8"/>
       <polyline points="760,40 730,300 700,560" fill="none" stroke="#2e5ce6" stroke-width="3.6" stroke-dasharray="10 8"/>
+      <!-- 위치근사 후광 (마커 뒤 흐릿한 원) -->
+      <radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#e0761e" stop-opacity=".32"/><stop offset="70%" stop-color="#e0761e" stop-opacity="0"/></radialGradient>
+      <circle cx="695" cy="320" r="40" fill="url(#halo)"/>
       <!-- 점 호재: 색=분류, 크기=등급 -->
       <circle cx="360" cy="360" r="21" fill="#c2255c" fill-opacity=".9" stroke="#fff" stroke-width="2"/>            <!-- 주거 S -->
       <circle cx="835" cy="120" r="14" fill="#c2255c" fill-opacity=".9" stroke="#fff" stroke-width="2"/>            <!-- 주거 A -->
