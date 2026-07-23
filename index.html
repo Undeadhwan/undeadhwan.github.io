@@ -2115,7 +2115,20 @@ function renderPanel() {
    상단 드롭다운 필터 + 우하단 범례를 하나로. 항목 클릭 = 켜기/끄기, 색·모양이 곧 범례.
    기존 filter 상태(cat/sub/lvl/phase/lines)를 그대로 조작하므로 판정 로직은 불변. */
 function dockCounts() {
-  const pool = allSignalsFlat().filter(s => (!filter.region || `${s.sd} ${s.sg}` === filter.region) && !isStaleFinished(s));
+  // 뱃지 = **현재 화면에 보이는** 호재 개수(2026-07-23 사용자). 지도 준비 후엔 뷰포트 bbox + 줌 LOD를
+  // renderHojae와 동일 규칙으로 적용 → 뱃지 숫자가 실제 그려진 점과 일치(P5 정직). 지도 준비 전엔 전역 집계.
+  const vf = mapApi?.viewFilter?.();
+  const inView = s => {
+    if (filter.region && `${s.sd} ${s.sg}` !== filter.region) return false;
+    if (isStaleFinished(s)) return false;
+    if (!vf) return true;                                  // 지도 준비 전 — 전역 집계 폴백
+    const c = s.geometry && s.geometry.coordinates;
+    if (!c || !vf.inB(c[0], c[1])) return false;           // 뷰포트 밖
+    const l = levelOf(s);
+    if (l && !vf.grades.has(l)) return false;              // 현재 줌 LOD 밖(줌아웃=S만) — renderHojae와 동일
+    return true;
+  };
+  const pool = allSignalsFlat().filter(inView);
   const cat = {}, sub = {}, lvl = {};
   pool.forEach(s => {
     const c = catOf(s); if (c) cat[c] = (cat[c] || 0) + 1;
@@ -2630,7 +2643,9 @@ function initLeaflet() {
   // 도로 색 = 교통 파랑(분류색). 철도와의 구분은 중분류 필터로(2026-07-18 — 중공선/도넛 형태 문법 폐기)
   const renderRail = () => {
     clearRail();
-    if ((!RAIL.length && !ROADF.length) || !filter.cat.has("교통")) return;
+    // 선형 토글(filter.lines)만 켜도 렌더 — "철도선만 보기"(전체해제 + 철도선) 지원(2026-07-23).
+    const linesOn = filter.lines.has("철도선") || filter.lines.has("도로선");
+    if ((!RAIL.length && !ROADF.length) || (!filter.cat.has("교통") && !linesOn)) return;
     const phaseFiltering = filter.phase.size < PHASES.length;
     const railCol = CAT_COLOR["교통"];   // 파랑
     const z = map.getZoom();
@@ -2896,7 +2911,9 @@ function initLeaflet() {
   };
   mapApi = { refreshPins, panTo: ll => map.panTo([ll[1], ll[0]]), showRadius, showRadiusMany, clearRadius, showAptAnchor,
              highlightRings, clearHighlight, clearAptMarker, emphasizePin, radarPulse, sggRings: () => window._sggRings,
-             highlightRoute, clearRoute };
+             highlightRoute, clearRoute,
+             viewFilter: () => ({ inB: (x, y) => map.getBounds().contains([y, x]), grades: new Set(lodGrades(map.getZoom())) }) };
+  map.on("zoomend moveend", () => { try { renderDock(); } catch (e) {} });   // 이동/줌마다 뱃지 뷰포트 카운트 갱신
   refreshPins();
 }
 /* 노선 → 신호 상세 어댑트(우측 패널) — 전역(카카오·Leaflet 두 렌더러 공유, 2026-07-21) */
@@ -3087,8 +3104,9 @@ function initKakao() {
     const phaseFiltering = filter.phase.size < PHASES.length;
     const lodSet = new Set(lodGrades(map.getLevel()));   // 선도 핀과 같은 등급 LOD(줌아웃=S만, 2026-07-22)
     for (const o of railLineObjs) {
-      const show = catOn && filter.sub.has(o.isRoad ? "도로" : "철도")
-        && (o.isRoad ? filter.lines.has("도로선") : filter.lines.has("철도선"))
+      // 선형은 **노선 선형 토글(filter.lines)만**으로 표시한다(2026-07-23 분리). 점 호재(역 원)와 독립 —
+      // "철도선만 보기"(전체해제 + 철도선)가 가능. 교통 분류/철도·역 토글은 역 원만 좌우한다.
+      const show = (o.isRoad ? filter.lines.has("도로선") : filter.lines.has("철도선"))
         && lodSet.has(o.lvl)
         && (!phaseFiltering || filter.phase.has(o.ph));
       o.objs.forEach(l => l.setMap(show ? map : null));
@@ -3262,7 +3280,9 @@ function initKakao() {
   let hlPolys = []; const clearHighlight = () => { hlPolys.forEach(o => o.setMap(null)); hlPolys = []; };
   const highlightRings = ringsXY => { clearHighlight(); if (!ringsXY || !ringsXY.length) return; ringsXY.forEach(r => hlPolys.push(new K.Polygon({ map, path: r.map(([x, y]) => LL(x, y)), strokeWeight: 2.5, strokeColor: "#5b3fd4", strokeOpacity: .95, fillColor: "#5b3fd4", fillOpacity: .12, zIndex: 6 }))); };
   const sggRingsFn = () => { if (window._sggRings) return window._sggRings; const m = {}; SGG_GEO.features.forEach(f => { const disp = f.properties.sido + " " + sggDisplayName(f.properties.name); ringsOf(f).forEach(r => (m[disp] = m[disp] || []).push(r)); }); return (window._sggRings = m); };
-  mapApi = { refreshPins, panTo: ll => map.panTo(LL(ll[0], ll[1])), showRadius, showRadiusMany, clearRadius, showAptAnchor, highlightRings, clearHighlight, clearAptMarker, emphasizePin, radarPulse, sggRings: sggRingsFn, highlightRoute, clearRoute };
+  mapApi = { refreshPins, panTo: ll => map.panTo(LL(ll[0], ll[1])), showRadius, showRadiusMany, clearRadius, showAptAnchor, highlightRings, clearHighlight, clearAptMarker, emphasizePin, radarPulse, sggRings: sggRingsFn, highlightRoute, clearRoute,
+             viewFilter: () => ({ inB: (x, y) => map.getBounds().contain(LL(x, y)), grades: new Set(lodGrades(map.getLevel())) }) };
+  K.event.addListener(map, "idle", () => { try { renderDock(); } catch (e) {} });   // 이동/줌마다 뱃지 뷰포트 카운트 갱신
   refreshPins();
 }
 
@@ -3591,7 +3611,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260723n");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260723o");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3711,7 +3731,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260723n"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260723o"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3737,7 +3757,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260723n");
+  const CB = "?b=" + (window.BUILD || "20260723o");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
