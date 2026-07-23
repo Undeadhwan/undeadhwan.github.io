@@ -2199,7 +2199,7 @@ function loadLeaflet() {
   document.head.appendChild(s);
 }
 function initLeaflet() {
-  const map = L.map("map").setView([37.556, 126.95], 10);   // 수도권 전역
+  const map = L.map("map", { zoomControl: false }).setView([37.556, 126.95], 10);   // 수도권 전역 · 줌 슬라이더 제거(2026-07-23)
   window._map = map;   // 디버그·검증용
   // 컨테이너 크기 변동 대응 (초기 0크기·모바일 회전 등)
   setTimeout(() => map.invalidateSize(), 300);
@@ -2910,7 +2910,7 @@ function initKakao() {
   const el = document.getElementById("map"); el.style.position = "relative";
   const map = new K.Map(el, { center: new K.LatLng(37.556, 126.95), level: 8 });
   window._map = map; window._kmap = map; map.setMaxLevel(13);
-  map.addControl(new K.ZoomControl(), K.ControlPosition.LEFT);
+  // 줌 슬라이더 제거(2026-07-23 사용자 요청) — 스크롤·핀치 줌으로 대체
   const DONG_LV = 6, APT_LV = 4;
   const lodGrades = lv => lv <= APT_LV ? ["S", "A", "B", "C", "미정"] : lv <= 6 ? ["S", "A", "B", "C"] : lv <= 8 ? ["S", "A", "B"] : lv <= 9 ? ["S", "A"] : ["S"];   // 수도권-와이드(lv10+)=S만(GTX 부각, 2026-07-22 사용자 "GTX가 S로 보여야") · B·C는 lv6/8부터
   const HJR = { S: 21, A: 16, B: 12, C: 9, "미정": 6 };   // 크기=등급(카카오 렌더러 로컬 — Leaflet HJ_R과 별개 스코프). 2026-07-22 상향(사용자) — Leaflet HJ_R과 동일값 유지
