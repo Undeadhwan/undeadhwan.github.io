@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>호재맵 화면개선 시안</title>
+<style>
+  :root{ --line:#e2e7f0; --ink:#1a2233; --ink2:#5a6478; --ink3:#8b93a6; --panel:#fff; --bg:#eef1f6;
+    --blue:#2e5ce6; --job:#e0761e; --infra:#2e8b57; --home:#c2255c; }
+  *{box-sizing:border-box} body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--ink);background:var(--bg)}
+  header{display:flex;align-items:center;gap:14px;padding:10px 16px;border-bottom:1px solid var(--line);background:#fff}
+  .logo{font-weight:800;font-size:19px}.logo small{font-weight:500;color:var(--ink3);font-size:11px;margin-left:6px}
+  .srch{flex:1;max-width:560px;display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:11px;padding:9px 13px;color:var(--ink3);background:#fbfcfe}
+  .tabs{display:flex;gap:4px;margin-left:auto}.tab{padding:7px 12px;border-radius:8px;color:var(--ink2);font-weight:600;font-size:13px}.tab.on{background:#eef2fe;color:var(--blue)}
+  #wrap{display:flex;height:calc(100vh - 58px)}
+  /* ── 좌측 도크: 조회조건 + 범례 통합 ── */
+  #dock{width:340px;flex-shrink:0;border-right:1px solid var(--line);background:#fff;overflow-y:auto;padding:14px 13px 30px}
+  .dk-h{display:flex;align-items:baseline;justify-content:space-between}
+  .dk-h b{font-size:15px}.dk-h .cnt{font-size:12px;color:var(--ink3)}
+  .dk-sub{font-size:11.5px;color:var(--ink3);margin:3px 0 11px;line-height:1.4}
+  .dk-btns{display:flex;gap:7px;margin-bottom:14px}
+  .dk-btns button{flex:1;padding:8px;border:1px solid var(--line);border-radius:9px;background:#f7f9fc;color:var(--ink2);font-weight:700;font-size:12.5px;cursor:pointer}
+  .dk-btns button:hover{background:#eef2f8}
+  .sec{margin-bottom:16px}
+  .sec-h{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:800;color:var(--ink);margin-bottom:8px}
+  .sec-h .sq{width:11px;height:11px;border-radius:3px;flex-shrink:0}
+  .sec-h .sub{font-weight:500;color:var(--ink3);font-size:11px}
+  /* 교통 토글 행 */
+  .trow{display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid #dbe3f5;border-radius:10px;margin-bottom:7px;background:#f3f7ff;cursor:pointer}
+  .trow.off{background:#fff;border-color:var(--line);opacity:.5}
+  .trow .ico{width:34px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+  .trow .lb{font-weight:700;font-size:13px}.trow .n{margin-left:auto;font-size:12px;color:var(--ink3);font-weight:600}
+  .legrow{display:flex;gap:16px;align-items:center;font-size:11px;color:var(--ink2);padding:2px 4px 0}
+  .legrow .s{display:inline-flex;align-items:center;gap:6px}
+  /* 점 호재: 분류 헤더 + 중분류 pill */
+  .chead{display:flex;align-items:center;gap:8px;font-weight:800;font-size:13px;margin:12px 0 6px}
+  .chead .cd{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+  .chead .cn{margin-left:auto;width:11px;height:11px;border-radius:50%}
+  .pills{display:flex;flex-wrap:wrap;gap:6px}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border:1px solid var(--line);border-radius:999px;font-size:12px;background:#fff;cursor:pointer;color:#333}
+  .pill.off{opacity:.42}
+  .pill .pd{width:7px;height:7px;border-radius:50%}.pill .pn{color:var(--ink3);font-weight:700;font-size:11px}
+  /* 등급 */
+  .grades{display:flex;flex-wrap:wrap;gap:7px}
+  .gp{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border:1px solid var(--line);border-radius:999px;font-size:12.5px;font-weight:700;background:#fff;cursor:pointer}
+  .gp .gd{border-radius:50%;background:#7a8496;display:inline-block}
+  .note{margin-top:6px;background:#f0f5ff;border:1px solid #dbe6fb;border-radius:10px;padding:10px 11px;font-size:11.5px;color:var(--ink2);line-height:1.45;display:flex;gap:8px;align-items:flex-start}
+  .badge{width:20px;height:20px;border-radius:50%;background:var(--home);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  /* ── 지도 목업 ── */
+  #map{flex:1;position:relative;background:linear-gradient(180deg,#eef2f7,#e8edf4);overflow:hidden}
+  .crumb{position:absolute;top:14px;left:16px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:12.5px;font-weight:600;color:var(--ink2);box-shadow:0 2px 8px rgba(30,40,60,.06)}
+  .crumb b{color:var(--ink)}
+  svg{width:100%;height:100%;display:block}
+  .zc{position:absolute;right:14px;bottom:20px;display:flex;flex-direction:column;gap:1px}
+  .zc button{width:34px;height:34px;border:1px solid var(--line);background:#fff;font-size:18px;color:var(--ink2);cursor:pointer}
+</style></head>
+<body>
+<header>
+  <div class="logo">호재맵<small>가칭 · 신호 추적 미디어</small></div>
+  <div class="srch">🔍 <span>시·군·구·읍면동 검색 (예: 강서구 마곡동)</span></div>
+  <div class="tabs"><span class="tab on">지도</span><span class="tab">미판정 목록</span><span class="tab">기준 설정</span><span class="tab">노선·역 대장</span><span class="tab">데이터·방법론</span></div>
+</header>
+<div id="wrap">
+  <!-- 좌측 도크 = 조회조건 + 범례 -->
+  <aside id="dock">
+    <div class="dk-h"><b>표시 조건 · 범례</b><span class="cnt">16개 표시중</span></div>
+    <div class="dk-sub">항목을 눌러 켜고 끄세요. 색·모양이 곧 지도 범례입니다.</div>
+    <div class="dk-btns"><button>전체 선택</button><button>전체 해제</button></div>
+
+    <!-- 교통 -->
+    <div class="sec">
+      <div class="sec-h"><i class="sq" style="background:var(--blue)"></i>교통<span class="sub">선형 · 파랑 일원화</span></div>
+      <div class="trow"><span class="ico"><svg width="34" height="14"><line x1="2" y1="7" x2="32" y2="7" stroke="#2e5ce6" stroke-width="3.4" stroke-linecap="round"/></svg></span><span class="lb">도로</span><span class="n">101</span></div>
+      <div class="trow"><span class="ico"><svg width="34" height="14"><line x1="2" y1="7" x2="32" y2="7" stroke="#2e5ce6" stroke-width="3.4"/><circle cx="8" cy="7" r="3.4" fill="#fff" stroke="#2e5ce6" stroke-width="2"/><circle cx="26" cy="7" r="3.4" fill="#fff" stroke="#2e5ce6" stroke-width="2"/></svg></span><span class="lb">철도 · 역</span><span class="n">705</span></div>
+      <div class="legrow"><span class="s"><svg width="26" height="8"><line x1="1" y1="4" x2="25" y2="4" stroke="#2e5ce6" stroke-width="3"/></svg>착공(실선)</span><span class="s"><svg width="26" height="8"><line x1="1" y1="4" x2="25" y2="4" stroke="#2e5ce6" stroke-width="3" stroke-dasharray="5 4"/></svg>계획(점선)</span></div>
+    </div>
+
+    <!-- 점 호재 -->
+    <div class="sec">
+      <div class="sec-h" style="margin-bottom:2px">점 호재<span class="sub">색 = 분류 · 크기 = 등급</span></div>
+
+      <div class="chead"><i class="cd" style="background:var(--job)"></i>일자리<i class="cn" style="background:var(--job)"></i></div>
+      <div class="pills">
+        <span class="pill"><i class="pd" style="background:var(--job)"></i>오피스<span class="pn">266</span></span>
+        <span class="pill"><i class="pd" style="background:var(--job)"></i>복합단지<span class="pn">238</span></span>
+        <span class="pill"><i class="pd" style="background:var(--job)"></i>공장<span class="pn">225</span></span>
+        <span class="pill"><i class="pd" style="background:var(--job)"></i>지식산업센터<span class="pn">83</span></span>
+      </div>
+
+      <div class="chead"><i class="cd" style="background:var(--infra)"></i>인프라<i class="cn" style="background:var(--infra)"></i></div>
+      <div class="pills">
+        <span class="pill"><i class="pd" style="background:var(--infra)"></i>문화·관광·체육<span class="pn">163</span></span>
+        <span class="pill"><i class="pd" style="background:var(--infra)"></i>공공시설<span class="pn">112</span></span>
+        <span class="pill"><i class="pd" style="background:var(--infra)"></i>판매<span class="pn">98</span></span>
+        <span class="pill"><i class="pd" style="background:var(--infra)"></i>병원<span class="pn">37</span></span>
+        <span class="pill off"><i class="pd" style="background:var(--infra)"></i>공원·녹지<span class="pn">13</span></span>
+      </div>
+
+      <div class="chead"><i class="cd" style="background:var(--home)"></i>주거개발<i class="cn" style="background:var(--home)"></i></div>
+      <div class="pills">
+        <span class="pill"><i class="pd" style="background:var(--home)"></i>재개발·재건축<span class="pn">62</span></span>
+        <span class="pill"><i class="pd" style="background:var(--home)"></i>택지·신도시<span class="pn">37</span></span>
+      </div>
+    </div>
+
+    <!-- 등급 -->
+    <div class="sec">
+      <div class="sec-h">등급<span class="sub">원 크기로 표현</span></div>
+      <div class="grades">
+        <span class="gp"><i class="gd" style="width:15px;height:15px"></i>S</span>
+        <span class="gp"><i class="gd" style="width:12px;height:12px"></i>A</span>
+        <span class="gp"><i class="gd" style="width:10px;height:10px"></i>B</span>
+        <span class="gp"><i class="gd" style="width:8px;height:8px"></i>C</span>
+        <span class="gp" style="opacity:.6"><i class="gd" style="width:8px;height:8px;background:none;border:1.5px dashed #9aa4b4"></i>미판정</span>
+      </div>
+    </div>
+
+    <div class="note"><span class="badge">4</span><span><b>겹친 호재</b>는 개수 배지로 묶어 표시됩니다. 클릭하면 목록이 펼쳐져요.</span></div>
+  </aside>
+
+  <!-- 지도 목업 -->
+  <div id="map">
+    <div class="crumb">📍 <b>서울특별시</b> › <b>강서구</b> › 전체</div>
+    <svg viewBox="0 0 900 620" preserveAspectRatio="xMidYMid slice">
+      <!-- 철도(착공): 실선 + 역 노드 -->
+      <polyline points="60,150 300,220 480,120 680,180 850,150" fill="none" stroke="#2e5ce6" stroke-width="4"/>
+      <circle cx="60" cy="150" r="7" fill="#fff" stroke="#2e5ce6" stroke-width="3.2"/>
+      <circle cx="300" cy="220" r="7" fill="#fff" stroke="#2e5ce6" stroke-width="3.2"/>
+      <circle cx="480" cy="120" r="7" fill="#fff" stroke="#2e5ce6" stroke-width="3.2"/>
+      <circle cx="680" cy="180" r="7" fill="#fff" stroke="#2e5ce6" stroke-width="3.2"/>
+      <circle cx="850" cy="150" r="7" fill="#fff" stroke="#2e5ce6" stroke-width="3.2"/>
+      <!-- 도로(착공): 실선, 노드 없음 -->
+      <polyline points="60,470 260,430 520,480 720,430 880,460" fill="none" stroke="#2e5ce6" stroke-width="4" opacity=".8"/>
+      <!-- 철도(계획): 점선 + 노드 -->
+      <polyline points="220,60 250,300 300,560" fill="none" stroke="#2e5ce6" stroke-width="3.6" stroke-dasharray="10 8"/>
+      <polyline points="760,40 730,300 700,560" fill="none" stroke="#2e5ce6" stroke-width="3.6" stroke-dasharray="10 8"/>
+      <!-- 점 호재: 색=분류, 크기=등급 -->
+      <circle cx="360" cy="360" r="21" fill="#c2255c" fill-opacity=".9" stroke="#fff" stroke-width="2"/>            <!-- 주거 S -->
+      <circle cx="835" cy="120" r="14" fill="#c2255c" fill-opacity=".9" stroke="#fff" stroke-width="2"/>            <!-- 주거 A -->
+      <circle cx="835" cy="30" r="14" fill="#e0761e" fill-opacity=".9" stroke="#fff" stroke-width="2"/>             <!-- 일자리 A -->
+      <circle cx="695" cy="320" r="12" fill="#e0761e" fill-opacity=".9" stroke="#fff" stroke-width="2"/>            <!-- 일자리 B -->
+      <circle cx="450" cy="200" r="9"  fill="#2e8b57" fill-opacity=".9" stroke="#fff" stroke-width="2"/>            <!-- 인프라 C -->
+      <circle cx="760" cy="380" r="12" fill="#2e8b57" fill-opacity=".9" stroke="#fff" stroke-width="2"/>            <!-- 인프라 B -->
+      <circle cx="770" cy="510" r="9"  fill="#2e8b57" fill-opacity=".9" stroke="#fff" stroke-width="2"/>            <!-- 인프라 C -->
+      <circle cx="560" cy="500" r="9"  fill="#2e8b57" fill-opacity=".9" stroke="#fff" stroke-width="2"/>            <!-- 인프라 C -->
+      <!-- 미판정: 점선 작은 원 -->
+      <circle cx="640" cy="230" r="9" fill="none" stroke="#9aa4b4" stroke-width="2" stroke-dasharray="3 3"/>
+      <!-- 겹친 호재: 개수 배지 -->
+      <circle cx="600" cy="330" r="15" fill="#c2255c" stroke="#fff" stroke-width="2.5"/>
+      <text x="600" y="335" font-size="15" font-weight="800" fill="#fff" text-anchor="middle">4</text>
+    </svg>
+    <div class="zc"><button>+</button><button>−</button></div>
+  </div>
+</div>
+</body></html>
