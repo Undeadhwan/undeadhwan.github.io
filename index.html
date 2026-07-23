@@ -1127,12 +1127,16 @@ function buildRoadSignals() {
     ROAD_SIG.push({ _road: true, title: p.official_name || `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: "도로", lvl: p.lvl || "C",
       template_type: "도로", current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
       status: "활성", confirmed: !!p.confirmed, sd: null, road_kind: roadKindOf(p), src_tier: p.src_tier,   // 소재 시도=_sggs(다중 귀속)
-      owner: p.owner, osm_name: p.name, line: p.name, geom_src: p.geom_src, milestones: p.milestones,   // line=노선 하이라이트 키
+      owner: p.owner, osm_name: p.name, line: p.name, geom_src: p.geom_src, geom_status: p.geom_status || null, milestones: p.milestones,   // line=노선 하이라이트 키
       official_type: p.official_type, official_name: p.official_name, access: p.access, access_note: p.access_note, ic_note: p.ic_note,
       sources: p.src_url ? [p.src_url] : [],
-      stage_note: `${p.linekind || "도로"} · ${p.status} · 선형=OSM(ODbL)`,
-      geometry: { coordinates: pts[0] },
-      access_points: pts.slice(1).map(c => ({ coordinates: c, name: null, status: "노선 경유" }))
+      // ⚠ 선형 출처는 데이터의 geom_src를 그대로 쓴다 — 종전엔 "선형=OSM(ODbL)"을 **하드코딩**해
+      //   실제로는 공식 경유지 연결인데 화면이 OSM이라 거짓말했다(2026-07-23 사용자 제보로 발견, P2 위반).
+      stage_note: `${p.linekind || "도로"} · ${p.status}${p.geom_src ? " · " + p.geom_src : ""}`,
+      // 선을 못 그리는 코리더 도로(IC 없음)는 **대표 점**으로 표시(경로 미확정 근사). 그 외는 선/IC점이 담당.
+      geometry: { coordinates: p.geom_point_only && p.geom_point ? p.geom_point : pts[0] },
+      geo_approx: !!(p.geom_point_only || p.geom_partial),
+      ...(p.geom_point_only ? {} : { access_points: pts.slice(1).map(c => ({ coordinates: c, name: null, status: "노선 경유" })) })
     });
   }
   // 전용도로 ↔ 소속 IC 연결(표시·반경 렌더용): IC 점 신호가 영향권(버퍼)의 주체 — 노선 상세엔 접속 IC로 나열만(이중 카운트 없음).
@@ -2482,6 +2486,7 @@ function initLeaflet() {
       if (phaseFiltering && !filter.phase.has(p.phase || "계획")) continue;   // phase 미상(예타 등 고시 전)=계획 취급 — 단계 필터에 반응(2026-07-21)
       if (YEAR_SEL && false) continue;   // (철도 고시연도 필터는 추후)
       if (f.geometry.type === "LineString" || f.geometry.type === "MultiLineString") {
+        if (p.geom_omitted) continue;   // 근거 없는 직선은 안 그린다(2026-07-23 정직 표준) — 도로는 IC점/대표점으로
         // 노선 선형 표시 토글(헤더 '노선') — 선만 숨김, 역·IC 라벨과 호재 원·집계는 불변
         if (isRoad ? !filter.lines.has("도로선") : !filter.lines.has("철도선")) continue;
         // 등급 LOD — 줌아웃에서는 S 노선만. lvl 미기재 폴백 = 어댑터와 동일(도로선 C·철도 정규식)
@@ -2507,7 +2512,7 @@ function initLeaflet() {
           + (p.gate === "계획안" ? `<div class="apt-pop-sub" style="color:#b3651e">노선·정거장 위치는 변경될 수 있습니다</div>` : "")
           // 선형이 전 구간을 못 덮으면 사실을 그대로 알린다(§7) — '단계'와 다른 축이므로 별도 줄로 표기
           + (p.geom_partial ? `<div class="apt-pop-sub" style="color:#b3651e">⚠ ${p.geom_cover_note || "선형 일부 구간만 확보"}</div>` : "")
-          + `<div class="apt-pop-cats"><span style="color:${col}">● 단계 ${p.phase || (p.confirmed ? "착공" : "계획")}</span>${p.note ? " · " + p.note : ""}${p.src_name ? ` · 출처: ${p.src_name}` : isRoad ? " · 선형: OSM(ODbL)" : ""}</div></div>`,
+          + `<div class="apt-pop-cats"><span style="color:${col}">● 단계 ${p.phase || (p.confirmed ? "착공" : "계획")}</span>${p.note ? " · " + p.note : ""}${p.geom_src ? " · " + p.geom_src : p.src_name ? ` · 출처: ${p.src_name}` : ""}</div></div>`,
           { sticky: true, className: "apt-tip" });
         line.on("click", (e) => { L.DomEvent.stopPropagation(e);
           if (isRoad) {   // 도로 노선 = 그 자체가 신호(ROAD_SIG, 확정 병합분은 SIGNALS에서 찾아 상세)
@@ -2870,11 +2875,12 @@ function initKakao() {
     for (const f of RAIL.concat(ROADF)) {
       if (f.geometry.type !== "LineString" && f.geometry.type !== "MultiLineString") continue;
       const p = f.properties; const isRoad = p.mode === "road";
+      if (p.geom_omitted) continue;   // 근거 없는 직선은 그리지 않는다(2026-07-23 정직 표준) — 도로는 IC점/대표점으로 표현
       if (p.gate === "관찰") continue;   // 관찰 게이트 = 지도 기본 뷰 미표시(§0-1 — 절차 진입 전)
       const dashed = !["착공", "준공"].some(k => (p.phase || "").startsWith(k));   // 착공·준공=실선(범례 일치)
       const subdued = isRoad && p.has_official_ic;
       const segs = f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates];
-      const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + (isRoad ? "🛣" : "🚈") + " " + (p.full || p.name) + '</div><div class="apt-pop-sub">' + (p.linekind || "") + ' · <span style="color:' + col + '">' + p.status + '</span>' + (p.gate === "계획안" ? ' · <b style="color:#b3651e">계획(안) — 승인 전</b>' : "") + (p.approx ? " (근사 선형 — 공식 경유지 연결, 실선형 아님)" : dashed ? " (미확정 — 점선)" : "") + '</div>' + (p.gate === "계획안" ? '<div class="apt-pop-sub" style="color:#b3651e">노선·정거장 위치는 변경될 수 있습니다</div>' : "") + (p.geom_partial ? '<div class="apt-pop-sub" style="color:#b3651e">⚠ ' + (p.geom_cover_note || "선형 일부 구간만 확보") + '</div>' : "") + '<div class="apt-pop-cats"><span style="color:' + col + '">● 단계 ' + (p.phase || (p.confirmed ? "착공" : "계획")) + '</span>' + (p.note ? " · " + p.note : "") + (p.src_name ? " · 출처: " + p.src_name : isRoad ? " · 선형: OSM(ODbL)" : "") + '</div></div>';
+      const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + (isRoad ? "🛣" : "🚈") + " " + (p.full || p.name) + '</div><div class="apt-pop-sub">' + (p.linekind || "") + ' · <span style="color:' + col + '">' + p.status + '</span>' + (p.gate === "계획안" ? ' · <b style="color:#b3651e">계획(안) — 승인 전</b>' : "") + (p.approx ? " (근사 선형 — 공식 경유지 연결, 실선형 아님)" : dashed ? " (미확정 — 점선)" : "") + '</div>' + (p.gate === "계획안" ? '<div class="apt-pop-sub" style="color:#b3651e">노선·정거장 위치는 변경될 수 있습니다</div>' : "") + (p.geom_partial ? '<div class="apt-pop-sub" style="color:#b3651e">⚠ ' + (p.geom_cover_note || "선형 일부 구간만 확보") + '</div>' : "") + '<div class="apt-pop-cats"><span style="color:' + col + '">● 단계 ' + (p.phase || (p.confirmed ? "착공" : "계획")) + '</span>' + (p.note ? " · " + p.note : "") + (p.geom_src ? " · " + p.geom_src : p.src_name ? " · 출처: " + p.src_name : "") + '</div></div>';
       const clickHandler = () => { _ovClickTs = Date.now(); hideTip();
         if (isRoad) { const sig = ROAD_SIG.find(s => s.title.startsWith(p.name)) || SIGNALS.find(s => s._road && s.road_ref && p.name.includes(s.road_ref)); if (sig) showSignal(sig, false); return; }
         const flat = f.geometry.type === "MultiLineString" ? f.geometry.coordinates.flat() : f.geometry.coordinates; showSignal(railToSignal(p, flat[Math.floor(flat.length / 2)]), false); };
@@ -3420,7 +3426,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260723h");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260723i");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3539,7 +3545,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260723h"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260723i"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3565,7 +3571,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260723h");
+  const CB = "?b=" + (window.BUILD || "20260723i");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
