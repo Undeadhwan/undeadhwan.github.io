@@ -945,9 +945,14 @@ function subVisible(s) {
   const sub = subOf(s);
   return !keys.includes(sub) || filter.sub.has(sub);
 }
+// 일반도로(간선) 연도 회랑 반경 — 고속도로 IC 점 반경(3~5km)과 **분리**한다(2026-07-23 사용자 지적
+// "선택시 배경이 전부 퍼래지네"). 도로 반경표 {B:3km}는 IC 점 버퍼용인데 간선도로 회랑에 그대로
+// 쓰니 3km 밴드가 화면을 덮었다. 연도 접근 영향은 좁다 — 주거개발 반경(S2/A1/B0.5/C0.3)에 준함.
+const ROAD_CORRIDOR_KM = { S: 1, A: 0.7, B: 0.5, C: 0.3, "미정": 0.3 };
 const getRadius = s => {
   if (s.radius_m) return s.radius_m;
   const c = catOf(s), l = levelOf(s);
+  if (s._road && s.road_kind === "일반") return (ROAD_CORRIDOR_KM[l] || 0.5) * 1000;   // 간선=좁은 회랑
   let tbl = CLASSES[c];
   if (SUB_KEYS[c]) tbl = (tbl[subOf(s)] || tbl[SUB_KEYS[c][0]]);   // 교통=철도/도로 세부표
   return ((tbl && tbl[l]) || 0.8) * 1000;
@@ -3426,7 +3431,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260723l");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260723m");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3545,7 +3550,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260723l"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260723m"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3571,7 +3576,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260723l");
+  const CB = "?b=" + (window.BUILD || "20260723m");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
