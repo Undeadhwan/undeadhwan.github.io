@@ -418,20 +418,22 @@
   .hj-legend.collapsed .sec, .hj-legend.collapsed .hnote { display:none; }
   @media (max-width: 768px) { .hj-legend { max-width:158px; font-size:10.5px; padding:7px 8px 8px; } }
   /* ══════════ 좌측 도크 (조회조건 + 범례 통합, 2026-07-23 UI 개편) ══════════ */
-  #dock { width:326px; flex-shrink:0; border-right:1px solid var(--line); background:#fff; overflow-y:auto; padding:13px 13px 30px; order:-1; scrollbar-width:none; }
+  #dock { width:352px; flex-shrink:0; border-right:1px solid var(--line); background:#fff; overflow-y:auto; padding:13px 14px 30px; order:-1; scrollbar-width:none; }
   #dock::-webkit-scrollbar { display:none; }   /* 스크롤바 숨김(사용자 요청) — 필요 시 스크롤은 되되 바는 안 보임 */
   #dock .dk-h { display:flex; align-items:baseline; justify-content:space-between; }
-  #dock .dk-h b { font-size:14.5px; letter-spacing:-.2px; }
-  #dock .dk-h .cnt { font-size:11.5px; color:#9aa0aa; }
+  #dock .dk-h b { font-size:16px; letter-spacing:-.2px; }
+  #dock .dk-h .cnt { font-size:12px; color:#9aa0aa; }
   #dock .dk-sub { font-size:11px; color:#9aa0aa; margin:3px 0 11px; line-height:1.4; }
   #dock .dk-btns { display:flex; gap:7px; margin-bottom:14px; }
   /* ══ 뱃지 표준화(2026-07-23 사용자 — "네이버처럼 깔끔하고 짙은 테두리, 잘 안 보임").
      켜짐 = 짙은 테두리 #2b3440 + 흰 배경 + 진한 글씨 / 꺼짐 = 연회색 채움 #f4f5f7 + 연한 테두리.
      전체선택·해제 / 교통행 / 노선선형 토글 / 중분류 / 단계 / 등급 — 전부 같은 규칙(--line #e5e5ea는 너무 연했음). ══ */
-  #dock .dk-btns button { flex:1; padding:8px; border:1.5px solid #2b3440; border-radius:9px; background:#fff; color:#1c1c1e; font-weight:700; font-size:12px; cursor:pointer; }
-  #dock .dk-btns button:hover { background:#f2f4f7; }
+  /* 전체선택·해제 = **동작 버튼**(토글 아님) — 채운 회색 버튼으로(짙은 테두리는 '선택된 상태'처럼 보여 혼동됨, 2026-07-23 사용자) */
+  #dock .dk-btns button { flex:1; padding:10px; border:1px solid #d1d6df; border-radius:9px; background:#eef1f5; color:#333e4d; font-weight:700; font-size:13.5px; cursor:pointer; }
+  #dock .dk-btns button:hover { background:#e2e7ee; }
+  #dock .dk-btns button:active { background:#d6dce5; }
   #dock .sec { margin-bottom:15px; }
-  #dock .sec-h { display:flex; align-items:center; gap:7px; font-size:12.5px; font-weight:800; color:var(--ink); margin-bottom:8px; }
+  #dock .sec-h { display:flex; align-items:center; gap:7px; font-size:13.5px; font-weight:800; color:var(--ink); margin-bottom:8px; }
   #dock .sec-h .sq { width:11px; height:11px; border-radius:3px; flex-shrink:0; }
   #dock .sec-h .sub { font-weight:500; color:#9aa0aa; font-size:10.5px; }
   #dock .trow { display:flex; align-items:center; gap:10px; padding:9px 11px; border:1.5px solid #2b3440; border-radius:10px; margin-bottom:7px; background:#fff; color:#1c1c1e; cursor:pointer; }
@@ -441,24 +443,24 @@
   #dock .trow .n { margin-left:auto; font-size:12px; color:#8a90a0; font-weight:600; }
   #dock .ltog { display:flex; align-items:center; gap:7px; font-size:11px; color:#5a6478; padding:6px 4px 0; }
   #dock .ltog .lbl { color:#9aa0aa; }
-  #dock .ltog .lt { padding:3px 9px; border:1.5px solid #2b3440; border-radius:999px; font-size:11px; font-weight:700; cursor:pointer; background:#fff; color:#1c1c1e; }
+  #dock .ltog .lt { padding:4px 11px; border:1.5px solid #2b3440; border-radius:999px; font-size:12.5px; font-weight:700; cursor:pointer; background:#fff; color:#1c1c1e; }
   #dock .ltog .lt.off { background:#f4f5f7; border:1px solid #e5e5ea; color:#a5aab3; opacity:1; }
-  #dock .chead { display:flex; align-items:center; gap:8px; font-weight:800; font-size:13px; margin:11px 0 6px; cursor:pointer; }
+  #dock .chead { display:flex; align-items:center; gap:8px; font-weight:800; font-size:14.5px; margin:12px 0 7px; cursor:pointer; }
   #dock .chead.off { opacity:.42; }
   #dock .chead .cd { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
-  #dock .chead .cn { margin-left:auto; font-size:11px; color:#9aa0aa; font-weight:600; }
+  #dock .chead .cn { margin-left:auto; font-size:12.5px; color:#9aa0aa; font-weight:600; }
   #dock .pills { display:flex; flex-wrap:wrap; gap:6px; }
-  #dock .pill { display:inline-flex; align-items:center; gap:6px; padding:5px 9px; border:1.5px solid #2b3440; border-radius:999px; font-size:12px; background:#fff; cursor:pointer; color:#1c1c1e; white-space:nowrap; }
+  #dock .pill { display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border:1.5px solid #2b3440; border-radius:999px; font-size:13.5px; background:#fff; cursor:pointer; color:#1c1c1e; white-space:nowrap; }
   #dock .pill.off { border:1px solid #e5e5ea; background:#f4f5f7; color:#a5aab3; opacity:1; }
   #dock .pill .pd { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
-  #dock .pill .pn { color:#8a90a0; font-weight:700; font-size:11px; }
+  #dock .pill .pn { color:#8a90a0; font-weight:700; font-size:12.5px; }
   /* 단계 pill: 표준 짙은 테두리 + **점선/실선으로만** 계획·인가(점선)/착공·준공(실선) 구분(지도와 1:1). 색은 통일. */
-  #dock .phase .pill { padding:6px 13px; font-weight:700; border-width:2px; }
+  #dock .phase .pill { padding:7px 15px; font-weight:700; border-width:2px; }
   #dock .phase .pill.dash { border-style:dashed; }
   #dock .phase .pill.solid { border-style:solid; }
   #dock .phase .pill.off { border:1px solid #e5e5ea; color:#a5aab3; background:#f4f5f7; opacity:1; }
-  #dock .grades { display:flex; flex-wrap:wrap; gap:7px; }
-  #dock .gp { display:inline-flex; align-items:center; gap:6px; padding:6px 11px; border:1.5px solid #2b3440; border-radius:999px; font-size:12.5px; font-weight:700; background:#fff; color:#1c1c1e; cursor:pointer; }
+  #dock .grades { display:flex; flex-wrap:nowrap; gap:6px; }   /* 한 줄 고정 — 미판정이 줄바꿈으로 위로 튀지 않게(2026-07-23 사용자) */
+  #dock .gp { display:inline-flex; align-items:center; gap:5px; padding:7px 10px; border:1.5px solid #2b3440; border-radius:999px; font-size:13.5px; font-weight:700; background:#fff; color:#1c1c1e; cursor:pointer; white-space:nowrap; }
   #dock .gp.off { border:1px solid #e5e5ea; background:#f4f5f7; color:#a5aab3; opacity:1; }
   #dock .gp .gd { border-radius:50%; background:#1c1c1e; display:inline-block; flex-shrink:0; }   /* 등급 원 = near-black(사용자 "더 진하게") */
   #dock .halo-leg { display:flex; align-items:center; gap:9px; font-size:11px; color:#5a6478; margin:2px 0 12px; }
@@ -2629,6 +2631,7 @@ function initLeaflet() {
     const z = map.getZoom();
     const show = new Set(lodGrades(z));
     const bd = map.getBounds();
+    const _cen = map.getCenter(), _ccx = _cen.lng, _ccy = _cen.lat;   // 화면 중심 — 상한 컬링을 중심거리순으로(2026-07-23)
     // 철도역·도로IC도 호재 원 체계로 일원화(2026-07-16 사용자 지적 — "역 생기는 곳이 호재인데 원이 없다").
     // 도로 노선 신호(access_points 보유)는 선으로 렌더되므로 제외(확정 병합분 포함), IC 점만 포함.
     const pool = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
@@ -2640,7 +2643,8 @@ function initLeaflet() {
       .filter(s => s.geometry && s.geometry.coordinates)   // 좌표 미확정 신호 제외(지도 미표시 — 카드에서 표기)
       .filter(s => show.has(levelOf(s)))
       .filter(s => { const c = s.geometry.coordinates; return bd.contains([c[1], c[0]]); })
-      .sort((a, b) => (GRADE_RANK[levelOf(a)] ?? 9) - (GRADE_RANK[levelOf(b)] ?? 9));   // 등급순 — 600 상한이 걸려도 S/A(교통 역)가 밀려나지 않게(2026-07-22 사용자 "GTX B 역 안 보임")
+      .sort((a, b) => { const ca = a.geometry.coordinates, cb = b.geometry.coordinates;   // 화면 중심 가까운 순 — 상한이 걸려도 중심부는 항상 표시(2026-07-23)
+        return ((ca[0] - _ccx) ** 2 + (ca[1] - _ccy) ** 2) - ((cb[0] - _ccx) ** 2 + (cb[1] - _ccy) ** 2); });
       // (구)폴리곤 구역 원 생략 규칙 제거 — 호재 원이 주인공(방화3구역 등 원 누락 원인이었음), 폴리곤은 흐린 경계 문맥
     // 근접 겹침 그룹핑(2026-07-23 확장, 카카오와 동일) — 화면 픽셀 격자를 **지오 고정·줌 스케일**로(팬 안정).
     // 동일좌표는 0px라 자동 포함. Leaflet은 clearHojae로 매 렌더 재생성이라 배지 캐시 불필요. 30px=마커 지름 수준.
@@ -2655,7 +2659,7 @@ function initLeaflet() {
       let g = groups.get(gk); if (!g) groups.set(gk, g = []); g.push(s); }
     let n = 0;
     for (const [gk, g] of groups) {
-      if (++n > 600) break;   // 성능 상한
+      if (++n > 4000) break;   // 성능 상한
       if (g.length > 1) {   // 겹침 → 개수 배지 1개(멤버 중심, 클릭 시 showCluster 목록)
         let sx = 0, sy = 0; for (const m of g) { sx += m.geometry.coordinates[0]; sy += m.geometry.coordinates[1]; }
         const badge = L.marker([sy / g.length, sx / g.length], { pane: "cand", icon: L.divIcon({ className: "", html: `<div class="cl-badge">+${g.length}</div>`, iconSize: [30, 22], iconAnchor: [15, 11] }) }).addTo(map);
@@ -3060,6 +3064,7 @@ function initKakao() {
     return '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + sigTitle(s) + '</div><div class="apt-pop-sub"><span style="color:' + t.col + ';font-weight:700">● ' + catOf(s) + '</span> · ' + lvlPill(t.lvl) + ' ' + gradeBasisHtml(s).replace(/ · $/, "") + '</div><div class="apt-pop-cats"><span>단계 ' + phaseOf(s) + (s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : "") + '</span></div></div>'; };
   const renderHojae = () => {
     const lv = map.getLevel(); const show = new Set(lodGrades(lv)); const b = map.getBounds();
+    const _cen = map.getCenter(), _ccx = _cen.getLng(), _ccy = _cen.getLat();   // 화면 중심 — 상한 컬링을 중심거리순으로(2026-07-23)
     const pool = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
       .filter(s => !(s._road && s.access_points)).filter(s => !s.area_shape).filter(s => s.signal !== false).filter(visible)   // area_shape(신도시 딱지)=옅은 영역으로 별도 렌더(등급 원 아님)
       // 망형(전철·도로): 광역 뷰(lv≥9=4km)엔 선만, **도시 뷰(lv≤8=2km)부터 역·IC**.
@@ -3070,7 +3075,8 @@ function initKakao() {
       .filter(s => lv <= 8 || !(s.pt_type === "rail_station" || s.pt_type === "road_ic"))
       .filter(s => s.geometry && s.geometry.coordinates).filter(s => show.has(levelOf(s)))
       .filter(s => { const c = s.geometry.coordinates; return b.contain(LL(c[0], c[1])); })
-      .sort((a, b2) => (GRADE_RANK[levelOf(a)] ?? 9) - (GRADE_RANK[levelOf(b2)] ?? 9));   // 등급순 — 600 상한이 걸려도 S/A(교통 역)가 밀려나지 않게(2026-07-22)
+      .sort((a, b2) => { const ca = a.geometry.coordinates, cb = b2.geometry.coordinates;   // 화면 중심 가까운 순 — 상한이 걸려도 중심부는 항상 표시·가장자리부터 잘림(2026-07-23 사용자 "멀수록 안 보이게")
+        return ((ca[0] - _ccx) ** 2 + (ca[1] - _ccy) ** 2) - ((cb[0] - _ccx) ** 2 + (cb[1] - _ccy) ** 2); });
     // 근접 겹침 그룹핑(2026-07-23 확장) — 화면에서 겹치는 호재를 '+N' 배지 하나로. "근접"은 줌 의존이라
     // **픽셀 격자**로 묶되, 팬 깜빡임을 막으려 격자를 **지오 고정·줌으로만 크기 조절**한다(동일좌표는 0px라 자동 포함).
     // 격자키는 팬에 불변, 줌에서만 재편 → 배지 캐시 churn은 줌에만. 배지 클릭 → showCluster 목록 패널.
@@ -3085,7 +3091,7 @@ function initKakao() {
     for (const s of pool) { const c = s.geometry.coordinates; const gk = cellKey(c[0], c[1]);
       let g = groups.get(gk); if (!g) groups.set(gk, g = []); g.push(s); }
     const next = new Set(), nextCl = new Set(); let n = 0;
-    for (const [gk, g] of groups) { if (++n > 600) break;
+    for (const [gk, g] of groups) { if (++n > 4000) break;
       if (g.length > 1) {   // 겹침 → 배지 1개(멤버 중심에)
         let sx = 0, sy = 0; for (const m of g) { sx += m.geometry.coordinates[0]; sy += m.geometry.coordinates[1]; }
         const ll = LL(sx / g.length, sy / g.length);
@@ -3701,7 +3707,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260723v");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260723w");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3821,7 +3827,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260723v"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260723w"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3847,7 +3853,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260723v");
+  const CB = "?b=" + (window.BUILD || "20260723w");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
