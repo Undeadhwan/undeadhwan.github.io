@@ -411,6 +411,51 @@
   .hj-legend .hnote { margin-top:6px; padding-top:5px; border-top:1px solid var(--line); color:#8a90a0; font-size:9.5px; line-height:1.4; }
   .hj-legend.collapsed .sec, .hj-legend.collapsed .hnote { display:none; }
   @media (max-width: 768px) { .hj-legend { max-width:158px; font-size:10.5px; padding:7px 8px 8px; } }
+  /* ══════════ 좌측 도크 (조회조건 + 범례 통합, 2026-07-23 UI 개편) ══════════ */
+  #dock { width:326px; flex-shrink:0; border-right:1px solid var(--line); background:#fff; overflow-y:auto; padding:13px 13px 40px; order:-1; }
+  #dock .dk-h { display:flex; align-items:baseline; justify-content:space-between; }
+  #dock .dk-h b { font-size:14.5px; letter-spacing:-.2px; }
+  #dock .dk-h .cnt { font-size:11.5px; color:#9aa0aa; }
+  #dock .dk-sub { font-size:11px; color:#9aa0aa; margin:3px 0 11px; line-height:1.4; }
+  #dock .dk-btns { display:flex; gap:7px; margin-bottom:14px; }
+  #dock .dk-btns button { flex:1; padding:8px; border:1px solid var(--line); border-radius:9px; background:#f7f9fc; color:#5a6478; font-weight:700; font-size:12px; cursor:pointer; }
+  #dock .dk-btns button:hover { background:#eef2f8; }
+  #dock .sec { margin-bottom:15px; }
+  #dock .sec-h { display:flex; align-items:center; gap:7px; font-size:12.5px; font-weight:800; color:var(--ink); margin-bottom:8px; }
+  #dock .sec-h .sq { width:11px; height:11px; border-radius:3px; flex-shrink:0; }
+  #dock .sec-h .sub { font-weight:500; color:#9aa0aa; font-size:10.5px; }
+  #dock .trow { display:flex; align-items:center; gap:10px; padding:9px 11px; border:1px solid #dbe3f5; border-radius:10px; margin-bottom:7px; background:#f3f7ff; cursor:pointer; }
+  #dock .trow.off { background:#fff; border-color:var(--line); opacity:.5; }
+  #dock .trow .ico { width:34px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+  #dock .trow .lb { font-weight:700; font-size:13px; }
+  #dock .trow .n { margin-left:auto; font-size:12px; color:#9aa0aa; font-weight:600; }
+  #dock .ltog { display:flex; align-items:center; gap:7px; font-size:11px; color:#5a6478; padding:6px 4px 0; }
+  #dock .ltog .lbl { color:#9aa0aa; }
+  #dock .ltog .lt { padding:3px 9px; border:1px solid var(--line); border-radius:999px; font-size:11px; font-weight:700; cursor:pointer; background:#eef2fe; color:#2e5ce6; }
+  #dock .ltog .lt.off { background:#fff; color:#9aa0aa; opacity:.6; }
+  #dock .chead { display:flex; align-items:center; gap:8px; font-weight:800; font-size:13px; margin:11px 0 6px; cursor:pointer; }
+  #dock .chead.off { opacity:.42; }
+  #dock .chead .cd { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
+  #dock .chead .cn { margin-left:auto; font-size:11px; color:#9aa0aa; font-weight:600; }
+  #dock .pills { display:flex; flex-wrap:wrap; gap:6px; }
+  #dock .pill { display:inline-flex; align-items:center; gap:6px; padding:5px 9px; border:1px solid var(--line); border-radius:999px; font-size:12px; background:#fff; cursor:pointer; color:#333; white-space:nowrap; }
+  #dock .pill.off { opacity:.4; }
+  #dock .pill .pd { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+  #dock .pill .pn { color:#9aa0aa; font-weight:700; font-size:11px; }
+  #dock .phase .pill { padding:6px 13px; font-weight:700; }
+  #dock .phase .pill.dash { border-style:dashed; border-color:#9db4ee; color:#4a5878; }
+  #dock .phase .pill.solid { border-width:2px; border-color:#2e5ce6; color:#1c3aa8; }
+  #dock .grades { display:flex; flex-wrap:wrap; gap:7px; }
+  #dock .gp { display:inline-flex; align-items:center; gap:6px; padding:6px 11px; border:1px solid var(--line); border-radius:999px; font-size:12.5px; font-weight:700; background:#fff; cursor:pointer; }
+  #dock .gp.off { opacity:.42; }
+  #dock .gp .gd { border-radius:50%; background:#7a8496; display:inline-block; flex-shrink:0; }
+  #dock .halo-leg { display:flex; align-items:center; gap:9px; font-size:11px; color:#5a6478; margin:2px 0 12px; }
+  #dock .halo-leg .halo { position:relative; width:26px; height:26px; flex-shrink:0; }
+  #dock .halo-leg .halo::before { content:""; position:absolute; inset:0; border-radius:50%; background:radial-gradient(circle,rgba(46,92,230,.28),rgba(46,92,230,0) 70%); }
+  #dock .halo-leg .halo i { position:absolute; top:9px; left:9px; width:8px; height:8px; border-radius:50%; background:#2e5ce6; }
+  #dock .dk-note { margin-top:6px; background:#f0f5ff; border:1px solid #dbe6fb; border-radius:10px; padding:10px 11px; font-size:11px; color:#5a6478; line-height:1.45; display:flex; gap:8px; align-items:flex-start; }
+  #dock .dk-note .bdg { width:20px; height:20px; border-radius:50%; background:#c2255c; color:#fff; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  @media (max-width: 768px) { #dock { width:100%; order:0; max-height:none; border-right:none; border-bottom:1px solid var(--line); } }
 </style>
 </head>
 <body>
@@ -438,6 +483,7 @@
   </div>
 </header>
 <div id="wrap">
+  <aside id="dock"></aside>
   <aside id="panel"></aside>
   <div id="map"></div>
 </div>
@@ -2049,7 +2095,88 @@ function renderPanel() {
   if (view.mode === "detail") return renderDetail(view.signal);
   renderHome();
 }
-function renderAll() { renderChips(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); }
+/* ══════════ 좌측 도크 (조회조건 + 범례 통합, 2026-07-23 UI 개편) ══════════
+   상단 드롭다운 필터 + 우하단 범례를 하나로. 항목 클릭 = 켜기/끄기, 색·모양이 곧 범례.
+   기존 filter 상태(cat/sub/lvl/phase/lines)를 그대로 조작하므로 판정 로직은 불변. */
+function dockCounts() {
+  const pool = allSignalsFlat().filter(s => (!filter.region || `${s.sd} ${s.sg}` === filter.region) && !isStaleFinished(s));
+  const cat = {}, sub = {}, lvl = {};
+  pool.forEach(s => {
+    const c = catOf(s); if (c) cat[c] = (cat[c] || 0) + 1;
+    const sb = subOf(s); if (sb) sub[sb] = (sub[sb] || 0) + 1;
+    const l = levelOf(s); if (l) lvl[l] = (lvl[l] || 0) + 1;
+  });
+  return { cat, sub, lvl, total: pool.filter(visible).length };
+}
+function renderDock() {
+  const dock = document.getElementById("dock");
+  if (!dock) return;
+  const C = dockCounts();
+  const railIco = `<svg width="34" height="14"><line x1="2" y1="7" x2="32" y2="7" stroke="#2e5ce6" stroke-width="3.4"/><circle cx="8" cy="7" r="3.4" fill="#fff" stroke="#2e5ce6" stroke-width="2"/><circle cx="26" cy="7" r="3.4" fill="#fff" stroke="#2e5ce6" stroke-width="2"/></svg>`;
+  const roadIco = `<svg width="34" height="14"><line x1="2" y1="7" x2="32" y2="7" stroke="#2e5ce6" stroke-width="3.4" stroke-linecap="round"/></svg>`;
+  const trow = (sk, label, ico) => `<div class="trow${filter.sub.has(sk) ? "" : " off"}" data-tog="sub" data-k="${sk}"><span class="ico">${ico}</span><span class="lb">${label}</span><span class="n">${C.sub[sk] || 0}</span></div>`;
+  const lt = k => `<span class="lt${filter.lines.has(k) ? "" : " off"}" data-tog="lines" data-k="${k}">${k}</span>`;
+  const catBlock = cat => {
+    const col = CAT_COLOR[cat], on = filter.cat.has(cat);
+    const subs = (SUB_KEYS[cat] || []).filter(sk => (C.sub[sk] || 0) > 0);
+    const pills = subs.map(sk => `<span class="pill${filter.sub.has(sk) ? "" : " off"}" data-tog="sub" data-k="${sk}"><i class="pd" style="background:${col}"></i>${sk}<span class="pn">${C.sub[sk]}</span></span>`).join("");
+    return `<div class="chead${on ? "" : " off"}" data-tog="cat" data-k="${cat}"><i class="cd" style="background:${col}"></i>${cat}<span class="cn">${C.cat[cat] || 0}</span></div>${pills ? `<div class="pills">${pills}</div>` : ""}`;
+  };
+  const ph = (p, dash) => `<span class="pill ${dash ? "dash" : "solid"}${filter.phase.has(p) ? "" : " off"}" data-tog="phase" data-k="${p}">${p}</span>`;
+  const SZ = { S: 15, A: 12, B: 10, C: 8 };
+  const gp = g => g === "미정"
+    ? `<span class="gp${filter.lvl.has("미정") ? "" : " off"}" data-tog="lvl" data-k="미정"><i class="gd" style="width:8px;height:8px;background:none;border:1.5px dashed #9aa4b4"></i>미판정</span>`
+    : `<span class="gp${filter.lvl.has(g) ? "" : " off"}" data-tog="lvl" data-k="${g}"><i class="gd" style="width:${SZ[g]}px;height:${SZ[g]}px"></i>${g}</span>`;
+  dock.innerHTML = `
+    <div class="dk-h"><b>표시 조건 · 범례</b><span class="cnt">${C.total.toLocaleString()}개 표시중</span></div>
+    <div class="dk-sub">항목을 눌러 켜고 끄세요. 색·모양이 곧 지도 범례입니다.</div>
+    <div class="dk-btns"><button data-all="on">전체 선택</button><button data-all="off">전체 해제</button></div>
+    <div class="sec">
+      <div class="sec-h"><i class="sq" style="background:${CAT_COLOR["교통"]}"></i>교통<span class="sub">선형 · 파랑 일원화</span></div>
+      ${trow("도로", "도로", roadIco)}${trow("철도", "철도 · 역", railIco)}
+      <div class="ltog"><span class="lbl">노선 선형 표시</span>${lt("철도선")}${lt("도로선")}</div>
+    </div>
+    <div class="sec">
+      <div class="sec-h" style="margin-bottom:2px">점 호재<span class="sub">색 = 분류 · 크기 = 등급</span></div>
+      ${["일자리", "인프라", "주거개발"].map(catBlock).join("")}
+    </div>
+    <div class="sec">
+      <div class="sec-h">단계<span class="sub">진행 단계 · 실선=착공/점선=계획</span></div>
+      <div class="pills phase">${ph("계획", true)}${ph("인가", true)}${ph("착공", false)}${ph("준공·개통", false)}</div>
+    </div>
+    <div class="sec">
+      <div class="sec-h">등급<span class="sub">원 크기로 표현</span></div>
+      <div class="grades">${["S", "A", "B", "C", "미정"].map(gp).join("")}</div>
+    </div>
+    <div class="halo-leg"><span class="halo"><i></i></span><span><b>흐릿한 후광</b> = 위치 근사(이 근처) · 지번 미확정</span></div>
+    <div class="dk-note"><span class="bdg">+</span><span><b>겹친 호재</b>는 개수 배지로 묶여 표시됩니다. 클릭하면 목록이 펼쳐져요.</span></div>`;
+}
+function initDock() {
+  const dock = document.getElementById("dock");
+  if (!dock) return;
+  dock.addEventListener("click", e => {
+    const t = e.target.closest("[data-tog],[data-all]");
+    if (!t) return;
+    if (t.dataset.all) {
+      const on = t.dataset.all === "on";
+      CAT_KEYS.forEach(k => on ? filter.cat.add(k) : filter.cat.delete(k));
+      ALL_SUBS.forEach(k => on ? filter.sub.add(k) : filter.sub.delete(k));
+      PHASES.forEach(k => on ? filter.phase.add(k) : filter.phase.delete(k));
+      GRADES_DISP.forEach(k => on ? filter.lvl.add(k) : filter.lvl.delete(k));
+      ["철도선", "도로선"].forEach(k => on ? filter.lines.add(k) : filter.lines.delete(k));
+      localStorage.setItem("hojae_lines", JSON.stringify([...filter.lines]));
+      renderAll(); window._dbg?.applyLOD?.(); return;
+    }
+    const set = { cat: filter.cat, sub: filter.sub, phase: filter.phase, lvl: filter.lvl, lines: filter.lines }[t.dataset.tog];
+    if (!set) return;
+    const k = t.dataset.k;
+    set.has(k) ? set.delete(k) : set.add(k);
+    if (t.dataset.tog === "lines") { localStorage.setItem("hojae_lines", JSON.stringify([...filter.lines])); window._dbg?.applyLOD?.(); }
+    renderAll();
+  });
+  renderDock();
+}
+function renderAll() { renderChips(); renderDock(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); }
 
 /* ══════════ 지도: 카카오 → Leaflet 폴백 ══════════ */
 function bootMap() {
@@ -3530,6 +3657,7 @@ function initSearch() {
     s.merged_osm = rd.title;   // renderRail 선 클릭 → 이 확정 신호로 연결
   });
   renderChips();
+  initDock();
   initRegionBar();
   initSearch();
   renderPanel();
