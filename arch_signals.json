@@ -22020,13 +22020,6 @@
    "use_apr_day": null,
    "milestones": [
     {
-     "phase": "인가",
-     "stage": "건축허가",
-     "date": "2023-08-07",
-     "state": "current",
-     "src": "건축HUB"
-    },
-    {
      "phase": "착공",
      "stage": "착공",
      "state": "future"
@@ -22035,6 +22028,13 @@
      "phase": "준공",
      "stage": "사용승인",
      "state": "future"
+    },
+    {
+     "phase": "인가",
+     "stage": "건축허가",
+     "date": "2023-08-07",
+     "state": "current",
+     "src": "건축HUB"
     }
    ],
    "src_tier": "official_report",
@@ -22045,80 +22045,6 @@
     "coordinates": [
      127.119391,
      37.170426
-    ]
-   },
-   "gate": "신호",
-   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 17,895㎡ — 인프라:판매 C",
-   "geo_approx": false,
-   "stage_history": [
-    {
-     "stage": "계획",
-     "date": "2026-07-18",
-     "basis": "observed"
-    }
-   ],
-   "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18",
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   }
-  },
-  {
-   "title": "산척동 (제2종근린생활시설, 연면적 17천㎡)",
-   "cat": "인프라",
-   "sub": "판매",
-   "lvl": "C",
-   "area_m2": 17895,
-   "purp": "제2종근린생활시설",
-   "arch_gb": "신축",
-   "pk": "1000000000000000350689",
-   "splot": null,
-   "block": null,
-   "lot": null,
-   "geo_prec": "parcel",
-   "position_confidence": null,
-   "hhld_cnt": 0,
-   "ho_cnt": 108,
-   "sd": "경기",
-   "sg": "화성시",
-   "dong": "산척동",
-   "addr": "경기도 화성시 동탄구 산척동 737-2번지",
-   "confirmed": false,
-   "current_stage": "계획",
-   "phase": "계획",
-   "status": "활성",
-   "arch_pms_day": "20230807",
-   "real_stcns_day": null,
-   "use_apr_day": null,
-   "milestones": [
-    {
-     "phase": "인가",
-     "stage": "건축허가",
-     "date": "2023-08-07",
-     "state": "current",
-     "src": "건축HUB"
-    },
-    {
-     "phase": "착공",
-     "stage": "착공",
-     "state": "future"
-    },
-    {
-     "phase": "준공",
-     "stage": "사용승인",
-     "state": "future"
-    }
-   ],
-   "src_tier": "official_report",
-   "pt_type": "facility",
-   "rcept_dt": "20230807",
-   "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
-   "geometry": {
-    "coordinates": [
-     127.119325,
-     37.170154
     ]
    },
    "gate": "신호",
@@ -25370,111 +25296,6 @@
    "addr_verified": {
     "road_addr": "경기도 시흥시 서해안로 230 (정왕동)",
     "jibun_addr": "경기도 시흥시 정왕동 1234-6",
-    "bld_nm": null,
-    "src": "행안부 도로명주소 검색 API"
-   },
-   "geo_approx": false,
-   "stage_history": [
-    {
-     "stage": "인가",
-     "date": "2025-02-19",
-     "basis": "source"
-    },
-    {
-     "stage": "착공",
-     "date": "2025-03-19",
-     "basis": "source"
-    },
-    {
-     "stage": "준공·개통",
-     "date": "2026-02-03",
-     "basis": "source"
-    }
-   ],
-   "first_seen": "2026-07-18",
-   "last_movement": "2026-02-03"
-  },
-  {
-   "title": "정왕동 (공장, 연면적 12천㎡)",
-   "cat": "일자리",
-   "sub": "공장",
-   "lvl": "C",
-   "area_m2": 12523,
-   "purp": "공장",
-   "arch_gb": "신축",
-   "pk": "1000000000000000667286",
-   "splot": null,
-   "block": null,
-   "lot": null,
-   "geo_prec": "parcel",
-   "position_confidence": null,
-   "hhld_cnt": 0,
-   "ho_cnt": 0,
-   "sd": "경기",
-   "sg": "시흥시",
-   "dong": "정왕동",
-   "addr": "경기도 시흥시 정왕동 1234-14번지",
-   "confirmed": false,
-   "current_stage": "준공·개통",
-   "phase": "준공·개통",
-   "status": "활성",
-   "arch_pms_day": "20250219",
-   "real_stcns_day": "20250319",
-   "use_apr_day": "20260203",
-   "milestones": [
-    {
-     "phase": "인가",
-     "stage": "건축허가",
-     "date": "2025-02-19",
-     "state": "done",
-     "src": "건축HUB"
-    },
-    {
-     "phase": "착공",
-     "stage": "착공",
-     "date": "2025-03-19",
-     "state": "done",
-     "src": "건축HUB"
-    },
-    {
-     "phase": "준공",
-     "stage": "사용승인",
-     "date": "2026-02-03",
-     "state": "current",
-     "src": "건축HUB"
-    }
-   ],
-   "src_tier": "official_report",
-   "pt_type": "facility",
-   "rcept_dt": "20260203",
-   "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
-   "geometry": {
-    "coordinates": [
-     126.709466,
-     37.349227
-    ]
-   },
-   "gate": "신호",
-   "gate_basis": "절차 문서 확인 — 「준공」",
-   "lvl_basis": "연면적 12,523㎡ — 일자리:공장 C",
-   "bldrgst": {
-    "bld_nm": " ",
-    "road_addr": "경기도 시흥시 공단1대로27번길 11 (정왕동)",
-    "main_purps": "공장",
-    "tot_area": 2054,
-    "use_apr_day": "20260203",
-    "hhld_cnt": 0,
-    "ho_cnt": 0,
-    "src": "국토부 건축HUB 건축물대장 표제부"
-   },
-   "road_addr": "경기도 시흥시 공단1대로27번길 11 (정왕동)",
-   "completion_verified": {
-    "date": "2026-02-03",
-    "basis": "건축물대장 사용승인일"
-   },
-   "addr_verified": {
-    "road_addr": "경기도 시흥시 공단1대로27번길 11 (정왕동)",
-    "jibun_addr": "경기도 시흥시 정왕동 1234-14",
     "bld_nm": null,
     "src": "행안부 도로명주소 검색 API"
    },
@@ -38259,10 +38080,10 @@
    "cat": "인프라",
    "sub": "판매",
    "lvl": "C",
-   "area_m2": 35549,
+   "area_m2": 35872,
    "purp": "제1종근린생활시설",
    "arch_gb": "신축",
-   "pk": "1000000000000000642121",
+   "pk": "1112100141752",
    "splot": "대야3지구 오복동",
    "block": "B-1",
    "lot": null,
@@ -38278,17 +38099,10 @@
    "current_stage": "계획",
    "phase": "계획",
    "status": "활성",
-   "arch_pms_day": "20241224",
+   "arch_pms_day": "20210824",
    "real_stcns_day": null,
    "use_apr_day": null,
    "milestones": [
-    {
-     "phase": "인가",
-     "stage": "건축허가",
-     "date": "2024-12-24",
-     "state": "current",
-     "src": "건축HUB"
-    },
     {
      "phase": "착공",
      "stage": "착공",
@@ -38298,11 +38112,25 @@
      "phase": "준공",
      "stage": "사용승인",
      "state": "future"
+    },
+    {
+     "phase": "인가",
+     "stage": "건축허가",
+     "date": "2021-08-24",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "인가",
+     "stage": "건축허가",
+     "date": "2024-12-24",
+     "state": "done",
+     "src": "건축HUB"
     }
    ],
    "src_tier": "official_report",
    "pt_type": "facility",
-   "rcept_dt": "20241224",
+   "rcept_dt": "20210824",
    "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
    "geometry": {
     "type": "Point",
@@ -38313,18 +38141,18 @@
    },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 35,549㎡ — 인프라:판매 C",
+   "lvl_basis": "연면적 35,872㎡ — 인프라:판매 C",
    "geo_basis": "택지정보 가구획지 — 41390LH2009001 블록 B-1 필지 B-1 (공동주택) · 종전 좌표에서 1076m 이동",
    "geo_approx": false,
    "stage_history": [
     {
      "stage": "계획",
-     "date": "2026-07-18",
+     "date": "2026-07-27",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18",
+   "first_seen": "2026-07-27",
+   "last_movement": "2026-07-27",
    "master_ref": {
     "id": "M-41390LH2009001",
     "title": "시흥은계 공공주택지구"
@@ -38407,82 +38235,6 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-10-31"
-  },
-  {
-   "title": "대야동 SH 신천역 오복 PARK (제1종근린생활시설, 연면적 35천㎡)",
-   "cat": "인프라",
-   "sub": "판매",
-   "lvl": "C",
-   "area_m2": 35872,
-   "purp": "제1종근린생활시설",
-   "arch_gb": "신축",
-   "pk": "1112100141752",
-   "splot": "대야3지구 오복동",
-   "block": "B-1",
-   "lot": null,
-   "geo_prec": "jigu",
-   "position_confidence": null,
-   "hhld_cnt": 0,
-   "ho_cnt": 196,
-   "sd": "경기",
-   "sg": "시흥시",
-   "dong": "대야동",
-   "addr": "경기도 시흥시 대야동 블록",
-   "confirmed": false,
-   "current_stage": "계획",
-   "phase": "계획",
-   "status": "활성",
-   "arch_pms_day": "20210824",
-   "real_stcns_day": null,
-   "use_apr_day": null,
-   "milestones": [
-    {
-     "phase": "인가",
-     "stage": "건축허가",
-     "date": "2021-08-24",
-     "state": "current",
-     "src": "건축HUB"
-    },
-    {
-     "phase": "착공",
-     "stage": "착공",
-     "state": "future"
-    },
-    {
-     "phase": "준공",
-     "stage": "사용승인",
-     "state": "future"
-    }
-   ],
-   "src_tier": "official_report",
-   "pt_type": "facility",
-   "rcept_dt": "20210824",
-   "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.798279,
-     37.451887
-    ]
-   },
-   "gate": "신호",
-   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 35,872㎡ — 인프라:판매 C",
-   "geo_basis": "택지정보 가구획지 — 41390LH2009001 블록 B-1 필지 B-1 (공동주택) · 종전 좌표에서 1076m 이동",
-   "geo_approx": false,
-   "stage_history": [
-    {
-     "stage": "계획",
-     "date": "2026-07-27",
-     "basis": "observed"
-    }
-   ],
-   "first_seen": "2026-07-27",
-   "last_movement": "2026-07-27",
-   "master_ref": {
-    "id": "M-41390LH2009001",
-    "title": "시흥은계 공공주택지구"
-   }
   },
   {
    "title": "매화동 매화산업단지 A4-1BL 지식산업센터 건립사업 신축공사 (공장, 연면적 54천㎡)",
@@ -43529,76 +43281,6 @@
    "cat": "인프라",
    "sub": "판매",
    "lvl": "C",
-   "area_m2": 14939,
-   "purp": "제1종근린생활시설",
-   "arch_gb": "신축",
-   "pk": "1000000000000000601066",
-   "splot": null,
-   "block": null,
-   "lot": null,
-   "geo_prec": "parcel",
-   "position_confidence": null,
-   "hhld_cnt": 0,
-   "ho_cnt": 101,
-   "sd": "인천",
-   "sg": "부평구",
-   "dong": "부평동",
-   "addr": "인천광역시 부평구 부평동 203-20번지",
-   "confirmed": false,
-   "current_stage": "계획",
-   "phase": "계획",
-   "status": "활성",
-   "arch_pms_day": "20241016",
-   "real_stcns_day": null,
-   "use_apr_day": null,
-   "milestones": [
-    {
-     "phase": "인가",
-     "stage": "건축허가",
-     "date": "2024-10-16",
-     "state": "current",
-     "src": "건축HUB"
-    },
-    {
-     "phase": "착공",
-     "stage": "착공",
-     "state": "future"
-    },
-    {
-     "phase": "준공",
-     "stage": "사용승인",
-     "state": "future"
-    }
-   ],
-   "src_tier": "official_report",
-   "pt_type": "facility",
-   "rcept_dt": "20241016",
-   "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
-   "geometry": {
-    "coordinates": [
-     126.72295,
-     37.496226
-    ]
-   },
-   "gate": "신호",
-   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 14,939㎡ — 인프라:판매 C",
-   "geo_approx": false,
-   "stage_history": [
-    {
-     "stage": "계획",
-     "date": "2026-07-18",
-     "basis": "observed"
-    }
-   ],
-   "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18"
-  },
-  {
-   "title": "부평동 (제1종근린생활시설, 연면적 14천㎡)",
-   "cat": "인프라",
-   "sub": "판매",
-   "lvl": "C",
    "area_m2": 14920,
    "purp": "제1종근린생활시설",
    "arch_gb": "신축",
@@ -43623,6 +43305,16 @@
    "use_apr_day": null,
    "milestones": [
     {
+     "phase": "준공",
+     "stage": "사용승인",
+     "state": "future"
+    },
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "state": "done"
+    },
+    {
      "phase": "인가",
      "stage": "건축허가",
      "date": "2024-10-16",
@@ -43635,11 +43327,6 @@
      "date": "2025-04-03",
      "state": "current",
      "src": "건축HUB"
-    },
-    {
-     "phase": "준공",
-     "stage": "사용승인",
-     "state": "future"
     }
    ],
    "src_tier": "official_report",
@@ -46508,6 +46195,11 @@
    "use_apr_day": "20250918",
    "milestones": [
     {
+     "phase": "준공",
+     "stage": "사용승인",
+     "state": "done"
+    },
+    {
      "phase": "인가",
      "stage": "건축허가",
      "date": "2023-05-30",
@@ -46585,90 +46277,6 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2025-09-18"
-  },
-  {
-   "title": "감이동 감일복합커뮤니티센터 (교육연구시설, 연면적 9천㎡)",
-   "cat": "인프라",
-   "sub": "학교",
-   "lvl": "C",
-   "area_m2": 9322,
-   "purp": "교육연구시설",
-   "arch_gb": "신축",
-   "pk": "1000000000000000304787",
-   "splot": null,
-   "block": null,
-   "lot": null,
-   "geo_prec": "parcel",
-   "position_confidence": null,
-   "hhld_cnt": 0,
-   "ho_cnt": 0,
-   "sd": "경기",
-   "sg": "하남시",
-   "dong": "감이동",
-   "addr": "경기도 하남시 감이동 451번지",
-   "confirmed": false,
-   "current_stage": "착공",
-   "phase": "착공",
-   "status": "활성",
-   "arch_pms_day": "20230530",
-   "real_stcns_day": "20231012",
-   "use_apr_day": null,
-   "milestones": [
-    {
-     "phase": "인가",
-     "stage": "건축허가",
-     "date": "2023-05-30",
-     "state": "done",
-     "src": "건축HUB"
-    },
-    {
-     "phase": "착공",
-     "stage": "착공",
-     "date": "2023-10-12",
-     "state": "current",
-     "src": "건축HUB"
-    },
-    {
-     "phase": "준공",
-     "stage": "사용승인",
-     "state": "future"
-    }
-   ],
-   "src_tier": "official_report",
-   "pt_type": "facility",
-   "rcept_dt": "20231012",
-   "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
-   "geometry": {
-    "coordinates": [
-     127.159521,
-     37.508612
-    ]
-   },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 9,322㎡ — 인프라 C",
-   "addr_verified": {
-    "road_addr": "경기도 하남시 감일순환로 171 (감이동)",
-    "jibun_addr": "경기도 하남시 감이동 451 감일복합커뮤니티센터",
-    "bld_nm": "감일복합커뮤니티센터",
-    "src": "행안부 도로명주소 검색 API"
-   },
-   "road_addr": "경기도 하남시 감일순환로 171 (감이동)",
-   "geo_approx": false,
-   "stage_history": [
-    {
-     "stage": "인가",
-     "date": "2023-05-30",
-     "basis": "source"
-    },
-    {
-     "stage": "착공",
-     "date": "2023-10-12",
-     "basis": "source"
-    }
-   ],
-   "first_seen": "2026-07-19",
-   "last_movement": "2023-10-12"
   },
   {
    "title": "오류동 명진실업(주) (공장, 연면적 14천㎡)",

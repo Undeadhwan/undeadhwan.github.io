@@ -691,6 +691,8 @@ const CLASSES_DEFAULT = {
     "문화·관광·체육": { S: 2.0, A: 2.0, B: 1.0, C: 0.5 },   // 문화·집회·운동·관광휴게·숙박(관광거점) 통합(§7b 2026-07-18)
     "학교":       { S: 2.0, A: 2.0, B: 1.5, C: 0.5 },
     "공공시설":    { S: 2.0, A: 2.0, B: 1.0, C: 0.5 },   // 구청·시청·복합청사·경찰서 등 행정청사(2026-07-18 신설 — 종전 '업무시설'→일자리 오분류 교정)
+    "공항":       { S: 3.0, A: 3.0, B: 1.5, C: 1.0 },   // 2026-07-27 매핑 감사 — 조회축 없이 떠돌던 국가시설(신공항 등). 반경 가안
+    "항만":       { S: 3.0, A: 3.0, B: 1.5, C: 1.0 },   // 〃 (진해신항 등)
     "기타시설":    { S: 2.0, A: 2.0, B: 1.0, C: 0.5 }
   },
   "주거개발": { S: 3.0, A: 3.0, B: 2.0, C: 0.8 }
@@ -702,10 +704,10 @@ const GRADES_DISP = ["S", "A", "B", "C", "미정"];   // 배지·매트릭스 �
 const GRADE_RANK = { S: 0, A: 1, B: 2, C: 3, "미정": 4 };   // 렌더 우선순위 — 600 상한이 걸려도 S/A(교통 역 등)가 살아남게(2026-07-22)
 const LEVEL_NAME = { S: "S급", A: "A급", B: "B급", C: "C급", "미정": "미정" };
 const SUB_KEYS = { "교통": ["철도", "도로", "환승·터미널"], "일자리": ["오피스", "지식산업센터", "공장", "복합단지"],
-  "인프라": ["병원", "공원·녹지", "판매", "문화·관광·체육", "학교", "공공시설", "기타시설"] };   // 세부 축 있는 대분류 — 인프라는 §7b 유형별(2026-07-18)
+  "인프라": ["병원", "공원·녹지", "판매", "문화·관광·체육", "학교", "공공시설", "공항", "항만", "기타시설"] };   // 세부 축 있는 대분류 — 인프라는 §7b 유형별(2026-07-18). 공항·항만 추가(2026-07-27 매핑 감사 — S급 8건이 조회축 없이 떠돌았다)
 // 중분류 조회축 전체 키(대분류 순서 유지). 이름은 대분류를 넘나들어 겹치지 않으므로 평면 Set으로 관리한다.
 const ALL_SUBS = CAT_KEYS.flatMap(c => SUB_KEYS[c] || []);
-const CAT_SUB = { "교통": "철도 / 도로 / 환승·터미널", "일자리": "오피스 / 지식산업센터 / 공장 / 복합단지", "인프라": "병원 / 공원·녹지 / 판매 / 문화·관광·체육 / 학교(특목) / 공공시설 / 기타시설", "주거개발": "신도시 / 택지 / 재개발 / 재건축" };
+const CAT_SUB = { "교통": "철도 / 도로 / 환승·터미널", "일자리": "오피스 / 지식산업센터 / 공장 / 복합단지", "인프라": "병원 / 공원·녹지 / 판매 / 문화·관광·체육 / 학교(특목) / 공공시설 / 공항 / 항만 / 기타시설", "주거개발": "신도시 / 택지 / 재개발 / 재건축" };
 // S 눈금(2026-07-22): 일자리·인프라 = 1조↑ 또는 연면적 30만㎡↑ / 주거 1만세대↑ / 교통 = 위계(thresholds 교통_위계)
 const LEVEL_DESC = {
   "교통": {
@@ -734,6 +736,8 @@ const LEVEL_DESC = {
     "문화·관광·체육": { S: "국가급 (1조↑ / 30만㎡↑ — 잠실 스포츠·MICE급)", A: "광역급 (아레나·컨벤션·관광거점 호텔 10만㎡+ / 사업비 500억+)", B: "시군구 대표급 (5~10만㎡ / 150억+)", C: "근린 복합센터·생활SOC (연면적 3천㎡+ / 30억+)" },
     "학교":     { S: "기준 없음 — 학교는 S 대상 아님", A: "전국모집 특목 (영재·전국자사고·국제학교)", B: "광역모집 특목 (과학고·외고·예술고)", C: "기준 없음 (§7b — 일반 초중고는 배제)" },
     "공공시설": { S: "국가급 행정거점 (1조↑ / 30만㎡↑)", A: "광역 행정거점 (연면적 5만㎡+ / 사업비 500억+ — 시청·통합청사)", B: "구청·복합청사급 (1~5만㎡ / 150억+)", C: "주민센터·행정복지센터 (3천㎡+ / 30억+)" },
+    "공항":     { S: "신공항·통합신공항 (사업비 1조↑)", A: "지방공항 신설·확장 (1조 미만)", B: "터미널 증축·시설 개량", C: "기타 공항시설" },
+    "항만":     { S: "신항·국가항만 신설 (사업비 1조↑)", A: "부두·방파제 등 대형 증설 (1조 미만)", B: "항만시설 개량", C: "기타 항만시설" },
     "기타시설": { S: "초대형 (1조↑ / 30만㎡↑)", A: "대형 (연면적 5만㎡+ / 사업비 500억+)", B: "중대형 (1~5만㎡ / 150억+)", C: "일반 — §7b 유형표 미정의 용도(기준 보완 대상)" }
   },
   "주거개발": { S: "신도시·재정비 마스터급 (1만 세대↑ — 3기 신도시·1기 재정비)", A: "도시급 대형 (5천 세대↑)", B: "지역 대장주급 (1,500~5천 세대)", C: "일반 단지급 (500~1,500 세대)" }
@@ -752,6 +756,10 @@ function lvStyle(cat, lvl) {
 /* 등급(S/A/B/C) 공통 색 — 카테고리 무관. S=골드(국가급)/A=마젠타(핵심)/B=보라(중대형)/C=슬레이트(일반). 각 화면 등급 그루핑 */
 const LVL_COLOR = { S: "#b8860b", A: "#d6156d", B: "#7c3aed", C: "#94a3b8", "미정": "#c3b091" };   // S=골드/A=마젠타/B=보라/C=슬레이트/미정=베이지(미판정)
 const LVL_STYLE = { S: "background:#b8860b;color:#fff;", A: "background:#d6156d;color:#fff;", B: "background:#7c3aed;color:#fff;", C: "background:#94a3b8;color:#fff;", "미정": "background:#fff;color:#8a7a56;border:1.5px dashed #c3b091;" };
+/* 호재 원 표시 규칙(2026-07-27 사용자 확정): 뷰포트 조회 → 등급 우선 → 중심 가까운 순, 상한까지.
+   두 렌더러(Leaflet·카카오) 공통 상수 — 기준 일원화. */
+const LVL_RANK = { S: 0, A: 1, B: 2, C: 3, "미정": 4 };
+const MAX_DOTS = 600;   // 표시 상한 — 초과분은 낮은 등급·중심에서 먼 것부터 탈락
 const LVL_TXT = LVL_COLOR;
 const LVL_LETTER = { S: "S", A: "A", B: "B", C: "C", "미정": "?" };   // 배지 글자(미정=?)
 function lvlPill(l) { return `<span class="lvtag" style="${LVL_STYLE[l]}">${LEVEL_NAME[l]}</span>`; }
@@ -2613,7 +2621,7 @@ function initLeaflet() {
   };
   // 정비 추진 신호 마커(정비몽땅+공공데이터): 폴리곤 없는 추진건만 점선 표시(폴리곤과 겹치면 억제 = 중복 방지)
   /* ══ 호재 상시 표시(호재 중심 개편 2026-07-16) — 모든 점 신호를 원으로. 크기=등급, 색=분류, 미확정=점선(§7).
-     등급 LOD: z<12=A만 → z12~13=A+B → z14+=C·미정까지. 뷰포트 컬링+상한. 철도역·도로는 renderRail(선·라벨)이 담당. */
+     표시 규칙(2026-07-27): 뷰포트 조회 → 등급 우선 → 중심 가까운 순, MAX_DOTS 상한. 철도역·도로는 renderRail(선·라벨)이 담당. */
   let hjDots = [];
   const clearHojae = () => { hjDots.forEach(m => map.removeLayer(m)); hjDots = []; };
   // 신도시·대형지구 딱지 영역 렌더 폐기(2026-07-22 사용자 — convex hull 경계가 부정확(엉터리)라 P5 위반.
@@ -2626,7 +2634,6 @@ function initLeaflet() {
   const renderHojae = () => {
     clearHojae();
     const z = map.getZoom();
-    const show = new Set(lodGrades(z));
     const bd = map.getBounds();
     const _cen = map.getCenter(), _ccx = _cen.lng, _ccy = _cen.lat;   // 화면 중심 — 상한 컬링을 중심거리순으로(2026-07-23)
     // 철도역·도로IC도 호재 원 체계로 일원화(2026-07-16 사용자 지적 — "역 생기는 곳이 호재인데 원이 없다").
@@ -2639,26 +2646,23 @@ function initLeaflet() {
       .filter(visible)
       .filter(s => s.geometry && s.geometry.coordinates)   // 좌표 미확정 신호 제외(지도 미표시 — 카드에서 표기)
       .filter(s => { const c = s.geometry.coordinates; return bd.contains([c[1], c[0]]); });
-    // 밀도 적응 LOD(2026-07-27, 카카오 렌더러와 동일): 뷰포트 후보 ≤400이면 등급 컬링 해제 —
-    // 지방 도시(대전 등)에서 B·C·미정이 통째로 사라지는 공백 방지. 밀집 뷰는 종전 등급 LOD 유지.
-    const pool = (prelim.length <= 400 ? prelim : prelim.filter(s => show.has(levelOf(s))))
-      .sort((a, b) => { const ca = a.geometry.coordinates, cb = b.geometry.coordinates;   // 화면 중심 가까운 순 — 상한이 걸려도 중심부는 항상 표시(2026-07-23)
-        return ((ca[0] - _ccx) ** 2 + (ca[1] - _ccy) ** 2) - ((cb[0] - _ccx) ** 2 + (cb[1] - _ccy) ** 2); });
-      // (구)폴리곤 구역 원 생략 규칙 제거 — 호재 원이 주인공(방화3구역 등 원 누락 원인이었음), 폴리곤은 흐린 경계 문맥
-    // 근접 겹침 그룹핑(2026-07-23 확장, 카카오와 동일) — 화면 픽셀 격자를 **지오 고정·줌 스케일**로(팬 안정).
-    // 동일좌표는 0px라 자동 포함. Leaflet은 clearHojae로 매 렌더 재생성이라 배지 캐시 불필요. 30px=마커 지름 수준.
-    const _sz = map.getSize();
-    const _cx = _sz.x ? (bd.getEast() - bd.getWest()) / _sz.x * 30 : 0;
-    const _cy = _sz.y ? (bd.getNorth() - bd.getSouth()) / _sz.y * 30 : 0;
-    const cellKey = (x, y) => (_cx > 0 && _cy > 0)
-      ? Math.floor(x / _cx) + "," + Math.floor(y / _cy)
-      : x.toFixed(4) + "," + y.toFixed(4);   // 폴백: 크기 미확보 시 동일좌표만
+    // 표시 규칙(2026-07-27 사용자 확정, 카카오 렌더러와 동일): 뷰포트 내 후보를 **등급 우선 →
+    // 중심 가까운 순**으로 정렬해 상한(MAX_DOTS)까지 표시. 줌별 등급 컷(lodGrades)은 호재 원에서
+    // 폐기 — 드래그마다 등급이 들쑥날쑥했고 지방(후보가 성긴 곳)에선 B·C가 통째로 사라졌다.
+    // 상한 초과 시 낮은 등급·먼 것부터 탈락 → 살짝 드래그해도 구성이 안정.
+    const pool = prelim
+      .sort((a, b) => { const ra = LVL_RANK[levelOf(a)] ?? 9, rb = LVL_RANK[levelOf(b)] ?? 9;
+        if (ra !== rb) return ra - rb;
+        const ca = a.geometry.coordinates, cb = b.geometry.coordinates;
+        return ((ca[0] - _ccx) ** 2 + (ca[1] - _ccy) ** 2) - ((cb[0] - _ccx) ** 2 + (cb[1] - _ccy) ** 2); })
+      .slice(0, MAX_DOTS);
+    // 겹침 배지는 **완전 동일 좌표만**(2026-07-27 사용자 확정 — "정확히 똑같은 위치가 아니면 묶지 마라").
+    // 종전 30px 픽셀격자 근접 그룹핑은 위치가 다른 이웃 호재까지 +N으로 숨겨 남발이었다.
+    const cellKey = (x, y) => x.toFixed(6) + "," + y.toFixed(6);   // ≈0.1m — 동 대표점 폴백 등 사실상 같은 지점만
     const groups = new Map();
     for (const s of pool) { const c = s.geometry.coordinates; const gk = cellKey(c[0], c[1]);
       let g = groups.get(gk); if (!g) groups.set(gk, g = []); g.push(s); }
-    let n = 0;
     for (const [gk, g] of groups) {
-      if (++n > 4000) break;   // 성능 상한
       if (g.length > 1) {   // 겹침 → 개수 배지 1개(멤버 중심, 클릭 시 showCluster 목록)
         let sx = 0, sy = 0; for (const m of g) { sx += m.geometry.coordinates[0]; sy += m.geometry.coordinates[1]; }
         const badge = L.marker([sy / g.length, sx / g.length], { pane: "cand", icon: L.divIcon({ className: "", html: `<div class="cl-badge">+${g.length}</div>`, iconSize: [30, 22], iconAnchor: [15, 11] }) }).addTo(map);
@@ -2972,8 +2976,7 @@ function initLeaflet() {
   };
   mapApi = { refreshPins, panTo: ll => map.panTo([ll[1], ll[0]]), showRadius, showRadiusMany, clearRadius, showAptAnchor,
              highlightRings, clearHighlight, clearAptMarker, emphasizePin, radarPulse, sggRings: () => window._sggRings,
-             highlightRoute, clearRoute,
-             viewFilter: () => ({ inB: (x, y) => map.getBounds().contains([y, x]), grades: new Set(lodGrades(map.getZoom())) }) };
+             highlightRoute, clearRoute };   // viewFilter 제거(2026-07-27) — 소비처 없는 죽은 API였다
   // (뱃지 카운트는 지역/필터 기준 고정 — 지도 이동마다 갱신하지 않는다, 2026-07-23)
   refreshPins();
 }
@@ -3053,8 +3056,7 @@ function initKakao() {
   /* 호재 마커: 신호 객체에 1회 캐시(_kmk) — 줌마다 최대 600개 Marker 파괴·재생성이 잔여 버벅임 원인이라
      setMap 토글 + 스타일 바뀐 것만 setImage(사용자 "줌업 좀 더 부드럽게" 2026-07-21). 툴팁 HTML은 hover 시 계산. */
   let hjShown = new Set();
-  let clusterOv = new Map();   // 겹친 호재 배지 캐시(격자키 → CustomOverlay)
-  const CLUSTER_PX = 30;       // 겹침 배지로 묶는 화면 거리(px, 마커 지름 수준) — 근접 클러스터링 격자 크기
+  let clusterOv = new Map();   // 겹친 호재 배지 캐시(동일좌표키 → CustomOverlay)
   const hjStyle = s => { const unk = basisUnknown(s);
     const col = s.status === "종결" ? "#9aa3b2" : unk ? "#8a93a3" : colorOf(s); const lvl = levelOf(s); const solid = phaseSolid(s);
     return { col, lvl, solid, unk, r: unk ? HJR.C : (HJR[lvl] || 5), bw: !unk && (lvl === "S" || lvl === "A") ? 2.6 : 2,
@@ -3062,7 +3064,7 @@ function initKakao() {
   const hjHtml = s => { const t = hjStyle(s);
     return '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + sigTitle(s) + '</div><div class="apt-pop-sub"><span style="color:' + t.col + ';font-weight:700">● ' + catOf(s) + '</span> · ' + lvlPill(t.lvl) + ' ' + gradeBasisHtml(s).replace(/ · $/, "") + '</div><div class="apt-pop-cats"><span>단계 ' + phaseOf(s) + (s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : "") + '</span></div></div>'; };
   const renderHojae = () => {
-    const lv = map.getLevel(); const show = new Set(lodGrades(lv)); const b = map.getBounds();
+    const lv = map.getLevel(); const b = map.getBounds();
     const _cen = map.getCenter(), _ccx = _cen.getLng(), _ccy = _cen.getLat();   // 화면 중심 — 상한 컬링을 중심거리순으로(2026-07-23)
     const prelim = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
       .filter(s => !(s._road && s.access_points)).filter(s => !s.area_shape).filter(s => s.signal !== false).filter(visible)   // area_shape(신도시 딱지)=옅은 영역으로 별도 렌더(등급 원 아님)
@@ -3074,27 +3076,24 @@ function initKakao() {
       .filter(s => lv <= 8 || !(s.pt_type === "rail_station" || s.pt_type === "road_ic"))
       .filter(s => s.geometry && s.geometry.coordinates)
       .filter(s => { const c = s.geometry.coordinates; return b.contain(LL(c[0], c[1])); });
-    // 밀도 적응 LOD(2026-07-27 사용자 제보: 대전에서 주거개발 전체를 켜도 0개 — 정비 최고등급이 B라
-    // 등급 컬링에 전멸). 등급 LOD는 수도권 밀집용이므로, **뷰포트가 한산하면(≤400) 컬링 해제**해
-    // 지방에서도 B·C·미정이 보이게 한다. 밀집 뷰(수도권 와이드)는 종전 그대로.
-    const pool = (prelim.length <= 400 ? prelim : prelim.filter(s => show.has(levelOf(s))))
-      .sort((a, b2) => { const ca = a.geometry.coordinates, cb = b2.geometry.coordinates;   // 화면 중심 가까운 순 — 상한이 걸려도 중심부는 항상 표시·가장자리부터 잘림(2026-07-23 사용자 "멀수록 안 보이게")
-        return ((ca[0] - _ccx) ** 2 + (ca[1] - _ccy) ** 2) - ((cb[0] - _ccx) ** 2 + (cb[1] - _ccy) ** 2); });
-    // 근접 겹침 그룹핑(2026-07-23 확장) — 화면에서 겹치는 호재를 '+N' 배지 하나로. "근접"은 줌 의존이라
-    // **픽셀 격자**로 묶되, 팬 깜빡임을 막으려 격자를 **지오 고정·줌으로만 크기 조절**한다(동일좌표는 0px라 자동 포함).
-    // 격자키는 팬에 불변, 줌에서만 재편 → 배지 캐시 churn은 줌에만. 배지 클릭 → showCluster 목록 패널.
-    const _sw = b.getSouthWest(), _ne = b.getNorthEast();
-    const _W = mapEl.clientWidth || mapEl.offsetWidth || 0, _H = mapEl.clientHeight || mapEl.offsetHeight || 0;
-    const _cx = _W ? (_ne.getLng() - _sw.getLng()) / _W * CLUSTER_PX : 0;
-    const _cy = _H ? (_ne.getLat() - _sw.getLat()) / _H * CLUSTER_PX : 0;
-    const cellKey = (x, y) => (_cx > 0 && _cy > 0)
-      ? Math.floor(x / _cx) + "," + Math.floor(y / _cy)
-      : x.toFixed(4) + "," + y.toFixed(4);   // 폴백: 컨테이너 크기 미확보 시 동일좌표만
+    // 표시 규칙(2026-07-27 사용자 확정): 뷰포트 내 후보를 **등급 우선 → 중심 가까운 순**으로 정렬해
+    // 상한(MAX_DOTS)까지 표시. 줌별 등급 컷(lodGrades)은 호재 원에서 폐기 — 드래그마다 등급이
+    // 들쑥날쑥했고 지방에선 B·C가 통째로 사라졌다. 상한 초과 시 낮은 등급·먼 것부터 탈락.
+    const pool = prelim
+      .sort((a, b2) => { const ra = LVL_RANK[levelOf(a)] ?? 9, rb = LVL_RANK[levelOf(b2)] ?? 9;
+        if (ra !== rb) return ra - rb;
+        const ca = a.geometry.coordinates, cb = b2.geometry.coordinates;
+        return ((ca[0] - _ccx) ** 2 + (ca[1] - _ccy) ** 2) - ((cb[0] - _ccx) ** 2 + (cb[1] - _ccy) ** 2); })
+      .slice(0, MAX_DOTS);
+    // 겹침 배지는 **완전 동일 좌표만**(2026-07-27 사용자 확정 — "정확히 똑같은 위치가 아니면 묶지 마라").
+    // 종전 30px 픽셀격자 근접 그룹핑은 위치가 다른 이웃 호재까지 +N으로 숨겨 남발이었다.
+    // 키가 좌표 그 자체라 팬·줌에 불변 — 배지 캐시 churn 없음. 배지 클릭 → showCluster 목록 패널.
+    const cellKey = (x, y) => x.toFixed(6) + "," + y.toFixed(6);   // ≈0.1m — 동 대표점 폴백 등 사실상 같은 지점만
     const groups = new Map();
     for (const s of pool) { const c = s.geometry.coordinates; const gk = cellKey(c[0], c[1]);
       let g = groups.get(gk); if (!g) groups.set(gk, g = []); g.push(s); }
-    const next = new Set(), nextCl = new Set(); let n = 0;
-    for (const [gk, g] of groups) { if (++n > 4000) break;
+    const next = new Set(), nextCl = new Set();
+    for (const [gk, g] of groups) {
       if (g.length > 1) {   // 겹침 → 배지 1개(멤버 중심에)
         let sx = 0, sy = 0; for (const m of g) { sx += m.geometry.coordinates[0]; sy += m.geometry.coordinates[1]; }
         const ll = LL(sx / g.length, sy / g.length);
@@ -3379,8 +3378,7 @@ function initKakao() {
   let hlPolys = []; const clearHighlight = () => { hlPolys.forEach(o => o.setMap(null)); hlPolys = []; };
   const highlightRings = ringsXY => { clearHighlight(); if (!ringsXY || !ringsXY.length) return; ringsXY.forEach(r => hlPolys.push(new K.Polygon({ map, path: r.map(([x, y]) => LL(x, y)), strokeWeight: 2.5, strokeColor: "#5b3fd4", strokeOpacity: .95, fillColor: "#5b3fd4", fillOpacity: .12, zIndex: 6 }))); };
   const sggRingsFn = () => { if (window._sggRings) return window._sggRings; const m = {}; SGG_GEO.features.forEach(f => { const disp = f.properties.sido + " " + sggDisplayName(f.properties.name); ringsOf(f).forEach(r => (m[disp] = m[disp] || []).push(r)); }); return (window._sggRings = m); };
-  mapApi = { refreshPins, panTo: ll => map.panTo(LL(ll[0], ll[1])), showRadius, showRadiusMany, clearRadius, showAptAnchor, highlightRings, clearHighlight, clearAptMarker, emphasizePin, radarPulse, sggRings: sggRingsFn, highlightRoute, clearRoute,
-             viewFilter: () => ({ inB: (x, y) => map.getBounds().contain(LL(x, y)), grades: new Set(lodGrades(map.getLevel())) }) };
+  mapApi = { refreshPins, panTo: ll => map.panTo(LL(ll[0], ll[1])), showRadius, showRadiusMany, clearRadius, showAptAnchor, highlightRings, clearHighlight, clearAptMarker, emphasizePin, radarPulse, sggRings: sggRingsFn, highlightRoute, clearRoute };   // viewFilter 제거(2026-07-27) — 소비처 없는 죽은 API였다
   // (뱃지 카운트는 지역/필터 기준 고정 — 지도 이동마다 갱신하지 않는다, 2026-07-23)
   refreshPins();
 }
@@ -3710,7 +3708,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260727t");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260728a");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3754,22 +3752,22 @@ function initSearch() {
   }, s));
   // S급 지구 마스터(2026-07-22) — 택지정보 지구 대장. 좌표=지구 필지 평균(geo_prec=jigu, 근사).
   // 조각(건축·공모·DART)은 master_ref로 소속만 기록 — 지도에는 둘 다 표시(집계 접기는 추후 별도 논의).
-  MASTER_SIG = ((masterData && masterData.signals) || []).filter(s => s.geometry).map(s => Object.assign({
+  MASTER_SIG = ((masterData && masterData.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden).map(s => Object.assign({
     _master: true, confirmed: false, status: "활성"
   }, s));
   // 대형 일자리 S(용산·잠실·북항 등) — official_jobs.json 공식지식. S 점 호재(원)로 표시.
-  JOBS_SIG = ((jobsData && jobsData.signals) || []).filter(s => s.geometry).map(s => Object.assign({
+  JOBS_SIG = ((jobsData && jobsData.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden).map(s => Object.assign({
     _jobs: true, confirmed: false
   }, s, { status: s.status_override || "활성" }));   // status_override=정체 고정(새만금공항 계쟁 등, P5)
   // 관보 고시 원문 신호(2026-07-22) — 택지정보 대장에 **아직 없는** 신규 지구(서리풀1·2·구리토평2·
   // 오산세교3·제주화북2·인천로봇랜드 등). 좌표는 고시 붙임의 편입필지 평균(geo_prec=jigu).
   // 등급은 없다 — 지정 고시에 사업비·세대수가 없어 미정이 정직하다(딱지 미등급 규칙과 동일).
-  MEGA_SIG = ((megaData && megaData.signals) || []).filter(s => s.geometry).map(s => Object.assign({
+  MEGA_SIG = ((megaData && megaData.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden).map(s => Object.assign({
     _mega: true, confirmed: false, status: "활성"
   }, s));
   // 토지이음 지자체 도시계획 고시(2026-07-22) — **관보에 실리지 않는** 지구단위계획·도시개발구역·
   // 재정비촉진 계열. 좌표·면적은 첨부 고시문에서 읽는다(없으면 좌표 없이 데이터로만 남는다).
-  EUM_SIG = ((eumData && eumData.signals) || []).filter(s => s.geometry).map(s => Object.assign({
+  EUM_SIG = ((eumData && eumData.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden).map(s => Object.assign({   // 승격·교차중복 억제 반영(어댑터 함정 — 2026-07-27)
     _eum: true, confirmed: false, status: "활성"
   }, s));
   // dedupJobByArea() 비활성(2026-07-16): DART 위치가 본사-근사라 거리(250m) 기반 면적-우선 dedup이
@@ -3830,7 +3828,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260727t"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260728a"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3856,7 +3854,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260727t");
+  const CB = "?b=" + (window.BUILD || "20260728a");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
