@@ -1,5 +1,5 @@
 {
- "_note": "호재맵 신호 테이블 v0.3 (2026-07-14) — 전 건 공식 출처 검증. sd/sg 지역태그(전국 확장 대비). confirmed:false=운영자 승격 전. 신정지선(S-0015)은 무산을 무산으로, 미리내집(S-0016)은 '임대감소=호재' 통념을 사실로 교정 — 정직 표기(P1·P5) 사례. | 2026-07-15: 신 4대분류(교통/일자리/인프라/주거개발)×레벨(A핵심/B중대형/C일반) cat·lvl 부여.",
+ "_note": "호재맵 확정층 v0.4 (2026-07-27) — **파이프라인 유래 승격만**(사용자 확정: 핵심은 수집 파이프라인에 들어오는 호재인가). 수동 조사 신호 7건(S-0007/0009/0011/0012/0014/0015/0016)은 제거 — 중복(arch·master가 이미 추적) 또는 coverage_checklist backlog로 이관(잡을 커넥터 명시). 남은 승격 요건: 수집층 원문 링크(g2b·DART 등)+좌표 근거. 준공 1년규칙 등재(S-0003/0005)는 checklist 정답지가 감시.",
  "signals": [
   {
    "id": "S-0001",
@@ -115,61 +115,6 @@
    "gate_basis": "확정층 — 사람 승격(게이트 통과)"
   },
   {
-   "id": "S-0007",
-   "title": "강서구 통합신청사 (마곡동 745-3)",
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.823323,
-     37.561638
-    ]
-   },
-   "position_confidence": null,
-   "scale": "지구",
-   "value_tags": [
-    "인프라"
-   ],
-   "template_type": "공공시설",
-   "current_stage": "착공",
-   "stage_note": "2024-03-15 착공, 2026-04 보도 기준 공정률 83%+. 지하2~지상8층, 연면적 5.9만㎡(구청+구의회+보건소). 2026-06 나라장터 '통합신청사 이사 용역' 공고와 정합",
-   "stage_history": [
-    {
-     "stage": "착공",
-     "date": "2024-03-15",
-     "근거": "서울시 건설알림이"
-    }
-   ],
-   "last_movement": "2026-06-17",
-   "next_watch": "2026-08-31 준공 → 10월 개청(이전) 여부",
-   "target_completion": {
-    "y": 2026.65,
-    "label": "'26.08 준공·10월 개청 (공식 목표)",
-    "type": "confirmed",
-    "finEnd": 2026.8
-   },
-   "sources": [
-    "https://www.munhwa.com/article/11582339",
-    "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01587280&bidPbancOrd=000"
-   ],
-   "confirmed": false,
-   "sd": "서울",
-   "sg": "강서구",
-   "radius_type": "공공청사",
-   "phase": "착공",
-   "cat": "인프라",
-   "lvl": "A",
-   "src_tier": "official_report",
-   "pt_type": "facility",
-   "geo_prec": "parcel",
-   "geo_basis": "신호에 기재된 지번 '마곡동 745-3' 지오코딩",
-   "geo_approx": false,
-   "area_m2": 59000,
-   "lvl_note": "등급 근거: 연면적 5.9만㎡(공식 발표)",
-   "gate": "신호",
-   "gate_basis": "확정층 — 사람 승격(게이트 통과)",
-   "lvl_basis": "연면적 59,000㎡ — 인프라 A"
-  },
-  {
    "id": "S-0008",
    "title": "김포공항 도시재생 혁신지구 (공항동 1373 일원)",
    "geometry": {
@@ -227,266 +172,96 @@
    "lvl_basis": "사업비 29,640억 — 일자리 S"
   },
   {
-   "id": "S-0009",
-   "title": "마곡 산업단지 유보지 복합용지 전환 (12.5만㎡)",
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.83559,
-     37.55863
-    ]
-   },
-   "position_confidence": "앵커 — 이대서울병원(유보지 인접 실좌표) 기준. 정확 지번 미공표",
-   "scale": "지구",
-   "value_tags": [
-    "직장",
-    "여가"
-   ],
-   "template_type": null,
-   "current_stage": "도시계획 변경 가결",
-   "stage_note": "2025-12-17 서울시 도계위, 산업시설용지 125,227㎡ → 산업·업무·문화·지원 복합용지 변경 원안가결. 강서구는 돔구장·문화복합시설 유치 타당성 용역(2025-07, 나라장터 수집분) 진행 — 템플릿(도시개발 변경) 미정",
-   "last_movement": "2025-12-17",
-   "next_watch": "SH 공급(매각) 공고, 강서구 타당성 용역 결과",
-   "sources": [
-    "https://news.nate.com/view/20251218n25709",
-    "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R25BK00966122&bidPbancOrd=000"
-   ],
-   "confirmed": false,
-   "sd": "서울",
-   "sg": "강서구",
-   "radius_type": "지구단위·도시개발",
-   "phase": "인가",
-   "cat": "일자리",
-   "lvl": "B",
-   "src_tier": "official_report",
-   "pt_type": "facility",
-   "geo_prec": "parcel",
-   "geo_approx": false,
-   "gate": "신호",
-   "gate_basis": "확정층 — 사람 승격(게이트 통과)"
-  },
-  {
-   "id": "S-0011",
-   "title": "가양·등촌 택지지구 재정비 (노후계획도시 특별법)",
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.856,
-     37.559
-    ]
-   },
-   "position_confidence": "근사 — 가양·등촌 택지 일대(총 174만㎡ 면형) 대표점. 구역 폴리곤 확보 필요",
-   "scale": "광역",
-   "value_tags": [
-    "인프라"
-   ],
-   "template_type": "정비사업",
-   "current_stage": "지구단위계획 수립 중 (고시 전)",
-   "stage_note": "서남권 대개조(2024-02) → 노후계획도시 특별법 1호 적용 추진(최대 3만가구 보도) → 서울시 조례(2025-03) → 교통영향평가 용역 발주(2026-02, 나라장터 수집분). 조합 방식이 아닌 지구단위계획 재정비라 정비사업 템플릿 부적합 — 전용 템플릿 필요(운영자 결정)",
-   "last_movement": "2026-02-23",
-   "next_watch": "지구단위계획(안) 열람공고·결정고시",
-   "sources": [
-    "https://www.mt.co.kr/estate/2024/04/16/2024041514085239071",
-    "https://www.housingherald.co.kr/news/articleView.html?idxno=49852",
-    "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01350054&bidPbancOrd=000"
-   ],
-   "confirmed": false,
-   "sd": "서울",
-   "sg": "강서구",
-   "radius_type": "정비구역(재건축·재개발)",
-   "phase": "계획",
-   "cat": "주거개발",
+   "id": "S-0003",
+   "title": "제3연륙교(청라하늘대교) 개통",
+   "cat": "교통",
+   "sub": "도로",
+   "template_type": "도로",
+   "radius_type": "교량·간선도로",
+   "current_stage": "개통(2026-01-05)",
+   "phase": "준공·개통",
+   "confirmed": true,
    "lvl": "A",
-   "src_tier": "official_report",
-   "pt_type": "facility",
-   "geo_prec": "parcel",
-   "geo_approx": false,
-   "gate": "신호",
-   "gate_basis": "확정층 — 사람 승격(게이트 통과)"
-  },
-  {
-   "id": "S-0012",
-   "sd": "서울",
-   "sg": "강서구",
-   "title": "서서울문화플라자 (내발산동 743)",
+   "lvl_basis": "총사업비 6,500억·4.67km 해상교량(인프라 A 500억+ 눈금)",
+   "scale": "도시",
+   "sd": "인천",
+   "sg": "서해구",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.828991,
-     37.552936
+     126.58619,
+     37.51539
     ]
    },
-   "position_confidence": null,
-   "scale": "지구",
-   "value_tags": [
-    "여가",
-    "인프라"
-   ],
-   "template_type": "공공시설",
-   "current_stage": "설계용역",
-   "stage_note": "서울시립 복합문화시설(도서관+수영장+서울형키즈카페), 총사업비 약 592억. 2026-05-06 설계공모 당선작 선정(㈜디림건축). 착공·준공 시점 미공개",
-   "stage_history": [
-    {
-     "stage": "설계공모 당선",
-     "date": "2026-05-06",
-     "근거": "서울시 발표"
-    }
-   ],
-   "last_movement": "2026-05-06",
-   "next_watch": "설계계약·기본실시설계, 이후 나라장터 공사입찰 공고",
-   "sources": [
-    "https://www.newspim.com/news/view/20260506000004",
-    "https://project.seoul.go.kr"
-   ],
-   "source_type": "서울시 설계공모포털 + 강서구 고시",
-   "confirmed": false,
-   "radius_type": "도서관·문화시설",
-   "phase": "인가",
-   "cat": "인프라",
-   "lvl": "C",
-   "src_tier": "official_report",
-   "pt_type": "facility",
-   "geo_prec": "parcel",
-   "geo_basis": "신호에 기재된 지번 '내발산동 743' 지오코딩",
+   "geo_prec": "landmark",
    "geo_approx": false,
-   "gate": "신호",
-   "gate_basis": "확정층 — 사람 승격(게이트 통과)"
-  },
-  {
-   "id": "S-0014",
-   "sd": "경기",
-   "sg": "부천시",
-   "title": "부천 대장신도시 + SK 수도권 R&D센터",
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.79101,
-     37.54213
-    ]
-   },
-   "position_confidence": "앵커 — 부천 대장지구 대표점(면형, 폴리곤 확보 필요)",
-   "scale": "광역",
-   "value_tags": [
-    "직장",
-    "인프라"
-   ],
-   "template_type": "기업이전",
-   "current_stage": "착공",
-   "stage_note": "3기신도시(2020-05 지구지정, 2023-07 조성착공, 준공목표 2029-12). SK이노베이션+SK하이닉스 공동 수도권 R&D센터(반도체공장 아님, 4.5만㎡·1.19조, 2025-12-15 입주계약, 착공 2027·준공 2030 목표). 대한항공·DN솔루션즈 등 동반 입주. 강서 서남권에는 대장홍대선으로 연결되는 인접 파급",
-   "stage_history": [
-    {
-     "stage": "지구지정",
-     "date": "2020-05"
-    },
-    {
-     "stage": "조성착공",
-     "date": "2023-07"
-    },
-    {
-     "stage": "SK 입주계약",
-     "date": "2025-12-15"
-    }
-   ],
-   "last_movement": "2025-12-15",
-   "next_watch": "R&D센터 착공(2027 목표), 대장홍대선 개통 연계",
-   "target_completion": {
-    "y": 2029.9,
-    "label": "'29.12 신도시 준공 목표",
-    "type": "confirmed",
-    "finEnd": 2030.2
-   },
-   "sources": [
-    "https://www.etnews.com/20251215000386",
-    "https://www.xn--3-3u6ey6lv7rsa.kr/kor/CMS/Contents/Contents.do?mCode=MN068"
-   ],
-   "source_type": "3기신도시포털 + 부천시/국토부 보도",
-   "confirmed": false,
-   "radius_type": "대규모복합개발",
-   "phase": "착공",
-   "cat": "주거개발",
-   "lvl": "A",
-   "src_tier": "official_report",
+   "geo_basis": "VWorld POI '청라하늘대교' (교량 상 지점)",
    "pt_type": "facility",
-   "geo_prec": "parcel",
-   "geo_approx": false,
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.ifez.go.kr"
+   ],
    "gate": "신호",
-   "gate_basis": "확정층 — 사람 승격(게이트 통과)"
-  },
-  {
-   "id": "S-0015",
-   "sd": "서울",
-   "sg": "강서구",
-   "title": "2호선 신정지선 강서(화곡) 연장 — 무산·대체",
-   "geometry": null,
-   "position_confidence": "위치 없음 — 무산된 구상",
-   "scale": "광역",
+   "gate_basis": "확정층 — 준공(개통) 사실, 사람 승격",
+   "last_movement": "2026-01-05",
+   "next_watch": "— (준공 완료: 종료 후 1년 표시 규칙)",
    "value_tags": [
     "교통"
    ],
-   "template_type": "철도",
-   "current_stage": "구상(무산)",
-   "status_override": "종결",
-   "stage_note": "2012~2013 강서(화곡~홍대) 방면 연장 검토됐으나 차량기지 문제 등으로 무산, 광역수요는 대장홍대선으로 대체됨. 도시철도망계획에 반영된 확정 노선 아님. 현재 살아있는 축은 김포방면(2024 사전타당성). ※ 커뮤니티에 도는 '2호선 강서 연장'은 사실상 종결 — 정직 표기(P5)",
-   "last_movement": "2024-03",
-   "next_watch": "해당 없음 (강서 방면은 종결). 김포방면 별도 사업으로 추적",
-   "sources": [
-    "http://www.joongboodaily.com/news/articleView.html?idxno=20759"
+   "stage_history": [
+    {
+     "stage": "개통",
+     "date": "2026-01-05",
+     "basis": "IFEZ 공식(개통일)"
+    }
    ],
-   "source_type": "과거 언론·지자체 검토 발표",
-   "confirmed": false,
-   "radius_type": "지하철·전철역",
-   "phase": "계획",
-   "cat": "교통",
-   "lvl": "C",
-   "sub": "철도",
-   "src_tier": "official_report",
-   "pt_type": "facility",
-   "geo_prec": "none",
-   "geo_approx": true,
-   "gate": "신호",
-   "gate_basis": "확정층 — 사람 승격(게이트 통과)"
+   "note": "청라~영종 4.67km. 준공=level이나 1년 규칙(2026-07-21 확정)으로 '✓ 준공 후 N개월' 표시, 2027-01 자동 숨김."
   },
   {
-   "id": "S-0016",
-   "sd": "서울",
-   "sg": "강서구",
-   "title": "마곡 미리내집(장기전세Ⅱ) 공급",
+   "id": "S-0005",
+   "title": "신도평화대교(영종~신도) 개통",
+   "cat": "교통",
+   "sub": "도로",
+   "template_type": "도로",
+   "radius_type": "교량·간선도로",
+   "current_stage": "개통(2026-07-14)",
+   "phase": "준공·개통",
+   "confirmed": true,
+   "lvl": "A",
+   "lvl_basis": "총사업비 1,597억·3.26km 해상교량(인프라 A 500억+ 눈금)",
+   "scale": "도시",
+   "sd": "인천",
+   "sg": "영종구",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.82369,
-     37.56711
+     126.4474,
+     37.507
     ]
    },
-   "position_confidence": "근사 — 마곡엠밸리 일대(단지 지오코딩 대기)",
-   "scale": "근린",
-   "value_tags": [
-    "보육",
-    "인프라"
-   ],
-   "template_type": null,
-   "current_stage": "공급·모집",
-   "stage_note": "마곡엠밸리17단지 미리내집 196호(5차, 2025-08 모집). ※ 사실 표기: 미리내집은 '분양전환 없는' 임대이며 만기 장기전세는 매각 아닌 미리내집으로 재순환(임대총량 유지). '임대 감소=호재' 통념은 공식 사실과 다름 — 공급/모집 사실까지만 신호, 시세 해석은 하지 않음(P1)",
-   "last_movement": "2025-08-11",
-   "next_watch": "SH 회차별 입주자모집공고(마곡 물량 편입)",
-   "sources": [
-    "https://mediahub.seoul.go.kr/archives/2015199",
-    "https://www.i-sh.co.kr"
-   ],
-   "source_type": "SH공사 입주자모집공고(i-sh.co.kr)",
-   "confirmed": false,
-   "radius_type": "공공주택공급",
-   "phase": "준공·개통",
-   "cat": "주거개발",
-   "lvl": "미정",
-   "src_tier": "official_report",
-   "pt_type": "facility",
-   "geo_prec": "parcel",
+   "geo_prec": "landmark",
    "geo_approx": false,
-   "hh": 196,
-   "lvl_note": "196호 — 주거개발 최소 기준(500세대) 미달로 등급 미판정(눈금 명문 규칙). 종전 C는 근거 없는 등급이라 교정(2026-07-22)",
+   "geo_basis": "삼목~신도 선착장 중점 근사 — 교량 POI 미등록(개통 2026-07-14 직후). POI 등재 시 교체",
+   "pt_type": "facility",
+   "src_tier": "official_report",
+   "sources": [
+    "https://www.incheon.go.kr"
+   ],
    "gate": "신호",
-   "gate_basis": "확정층 — 사람 승격(게이트 통과)"
+   "gate_basis": "확정층 — 준공(개통) 사실, 사람 승격",
+   "last_movement": "2026-07-14",
+   "next_watch": "서해남북평화도로 2단계(신도~강화)는 타당성 중단 — 관찰(별건)",
+   "value_tags": [
+    "교통"
+   ],
+   "stage_history": [
+    {
+     "stage": "개통",
+     "date": "2026-07-14",
+     "basis": "인천시 공식(개통일)"
+    }
+   ],
+   "note": "서해남북평화도로 1단계. 1년 규칙으로 표시, 2027-07 자동 숨김."
   }
  ]
 }

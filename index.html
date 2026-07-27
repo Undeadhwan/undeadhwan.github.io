@@ -498,6 +498,7 @@
     <span class="chip" id="v-settings" onclick="window.open('settings.html','_blank')" title="등급 눈금(면적·금액·세대수)과 영향 반경을 thresholds.json에 직접 설정 — 운영자 전용">⚙ 기준 설정</span>
     <span class="chip" onclick="window.open('rail_reference.html','_blank')" title="신규 철도 노선·역사 좌표 대장 (영향권 기준)">🚈 노선·역 대장</span>
     <span class="chip" onclick="window.open('methodology.html','_blank')" title="데이터 소스·추출·가공·매핑 방법 (운영 문서)">📄 데이터·방법론</span>
+    <span class="chip" onclick="window.open('report.html','_blank')" title="주간 무인 수집 회전에서 바뀐 것 (자동 생성)">🗞 주간 변경</span>
   </div>
 </header>
 <div id="wrap">
@@ -1228,7 +1229,7 @@ function buildJeongbiSignals() {
     // 세대수 기준: A≥5천/B 1500~5천/C 500~1500. 500 미만·미확보 = 미정(미판정, 최소기준 미달/데이터없음)
     _jb: true, src_tier: "official_report", milestones: c.milestones || [], title: c.n, cat: "주거개발", lvl: hhLevel(c.hh),   // 세대수 눈금 = thresholds.json(SSOT)
     template_type: "정비사업", current_stage: c.stage, phase: c.phase, status: c.drop ? "종결" : "활성", confirmed: false,
-    sd: c.sd, sg: c.sg, dong: c.dong, hh: c.hh, last_movement: null, target_completion: null,
+    sd: c.sd, sg: c.sg, dong: c.dong, hh: c.hh, last_movement: c.last_movement || null, stage_history: c.stage_history || undefined, target_completion: null,   // 실일자(경기 마일스톤 소급 등) → 신선도·정체 표시
     sources: [c.sd === "서울" ? "https://cleanup.seoul.go.kr" : c.sd === "경기" ? "https://gg.go.kr" : "https://www.data.go.kr"],
     geometry: { coordinates: [c.lon, c.lat] }
   }));
@@ -2629,15 +2630,17 @@ function initLeaflet() {
     const _cen = map.getCenter(), _ccx = _cen.lng, _ccy = _cen.lat;   // 화면 중심 — 상한 컬링을 중심거리순으로(2026-07-23)
     // 철도역·도로IC도 호재 원 체계로 일원화(2026-07-16 사용자 지적 — "역 생기는 곳이 호재인데 원이 없다").
     // 도로 노선 신호(access_points 보유)는 선으로 렌더되므로 제외(확정 병합분 포함), IC 점만 포함.
-    const pool = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
+    const prelim = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
       .filter(s => !(s._road && s.access_points))
       .filter(s => !s.area_shape)   // area_shape(신도시 딱지)=옅은 영역으로 별도 렌더(등급 원 아님)
       .filter(s => z >= 10 || !(s.pt_type === "rail_station" || s.pt_type === "road_ic"))   // 망형(전철·도로): 광역 뷰(z<10=카카오 lv9+)엔 선만, 도시·지구 뷰(z≥10=lv≤8)부터 역·IC 등장
       .filter(s => s.signal !== false)   // JC(분기점) 제외 — 진출입 불가라 호재 아님
       .filter(visible)
       .filter(s => s.geometry && s.geometry.coordinates)   // 좌표 미확정 신호 제외(지도 미표시 — 카드에서 표기)
-      .filter(s => show.has(levelOf(s)))
-      .filter(s => { const c = s.geometry.coordinates; return bd.contains([c[1], c[0]]); })
+      .filter(s => { const c = s.geometry.coordinates; return bd.contains([c[1], c[0]]); });
+    // 밀도 적응 LOD(2026-07-27, 카카오 렌더러와 동일): 뷰포트 후보 ≤400이면 등급 컬링 해제 —
+    // 지방 도시(대전 등)에서 B·C·미정이 통째로 사라지는 공백 방지. 밀집 뷰는 종전 등급 LOD 유지.
+    const pool = (prelim.length <= 400 ? prelim : prelim.filter(s => show.has(levelOf(s))))
       .sort((a, b) => { const ca = a.geometry.coordinates, cb = b.geometry.coordinates;   // 화면 중심 가까운 순 — 상한이 걸려도 중심부는 항상 표시(2026-07-23)
         return ((ca[0] - _ccx) ** 2 + (ca[1] - _ccy) ** 2) - ((cb[0] - _ccx) ** 2 + (cb[1] - _ccy) ** 2); });
       // (구)폴리곤 구역 원 생략 규칙 제거 — 호재 원이 주인공(방화3구역 등 원 누락 원인이었음), 폴리곤은 흐린 경계 문맥
@@ -3060,7 +3063,7 @@ function initKakao() {
   const renderHojae = () => {
     const lv = map.getLevel(); const show = new Set(lodGrades(lv)); const b = map.getBounds();
     const _cen = map.getCenter(), _ccx = _cen.getLng(), _ccy = _cen.getLat();   // 화면 중심 — 상한 컬링을 중심거리순으로(2026-07-23)
-    const pool = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
+    const prelim = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
       .filter(s => !(s._road && s.access_points)).filter(s => !s.area_shape).filter(s => s.signal !== false).filter(visible)   // area_shape(신도시 딱지)=옅은 영역으로 별도 렌더(등급 원 아님)
       // 망형(전철·도로): 광역 뷰(lv≥9=4km)엔 선만, **도시 뷰(lv≤8=2km)부터 역·IC**.
       // 2026-07-22엔 lv≤7이었는데 실측 결과 **기준이 뒤집혀 있었다**(2026-07-23 사용자 제보):
@@ -3068,8 +3071,12 @@ function initKakao() {
       // 서로 다른 축으로 돌아 등급 높은 신호가 먼저 사라졌다. lv8에서 역·IC 71개(S 17·A 33·B 21).
       // Leaflet 폴백의 z≥10과 같은 경계다(lv = 18 − z) — 두 렌더러가 어긋나면 폴백에서 다르게 보인다.
       .filter(s => lv <= 8 || !(s.pt_type === "rail_station" || s.pt_type === "road_ic"))
-      .filter(s => s.geometry && s.geometry.coordinates).filter(s => show.has(levelOf(s)))
-      .filter(s => { const c = s.geometry.coordinates; return b.contain(LL(c[0], c[1])); })
+      .filter(s => s.geometry && s.geometry.coordinates)
+      .filter(s => { const c = s.geometry.coordinates; return b.contain(LL(c[0], c[1])); });
+    // 밀도 적응 LOD(2026-07-27 사용자 제보: 대전에서 주거개발 전체를 켜도 0개 — 정비 최고등급이 B라
+    // 등급 컬링에 전멸). 등급 LOD는 수도권 밀집용이므로, **뷰포트가 한산하면(≤400) 컬링 해제**해
+    // 지방에서도 B·C·미정이 보이게 한다. 밀집 뷰(수도권 와이드)는 종전 그대로.
+    const pool = (prelim.length <= 400 ? prelim : prelim.filter(s => show.has(levelOf(s))))
       .sort((a, b2) => { const ca = a.geometry.coordinates, cb = b2.geometry.coordinates;   // 화면 중심 가까운 순 — 상한이 걸려도 중심부는 항상 표시·가장자리부터 잘림(2026-07-23 사용자 "멀수록 안 보이게")
         return ((ca[0] - _ccx) ** 2 + (ca[1] - _ccy) ** 2) - ((cb[0] - _ccx) ** 2 + (cb[1] - _ccy) ** 2); });
     // 근접 겹침 그룹핑(2026-07-23 확장) — 화면에서 겹치는 호재를 '+N' 배지 하나로. "근접"은 줌 의존이라
@@ -3702,7 +3709,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260727f");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260727r");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3822,7 +3829,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260727f"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260727r"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3848,7 +3855,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260727f");
+  const CB = "?b=" + (window.BUILD || "20260727r");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
