@@ -713,6 +713,560 @@
     }
    ],
    "first_seen": "2026-07-23"
+  },
+  {
+   "id": "J-jinhae-newport",
+   "title": "부산항 진해신항",
+   "cat": "인프라",
+   "sub": "항만",
+   "lvl": "S",
+   "lvl_basis": "사업비 126,379억 — 인프라 S",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "amount_eok": 126379,
+   "amount_kind": "인프라",
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "어업보상 약정 체결 완료(2025-07-11)로 본격 착수(해수부) — 남방파제 등 5개 공사 착공, 2030년 3개 선석 우선 개장 목표",
+   "milestones": [
+    {
+     "date": "2019-08",
+     "stage": "제2차 신항만건설기본계획(2019~2040) 반영·고시",
+     "phase": "계획",
+     "state": "done",
+     "src": "해양수산부 고시"
+    },
+    {
+     "date": "2021-12",
+     "stage": "1단계(9선석·7조9,208억) 예비타당성조사 통과",
+     "phase": "인가",
+     "state": "done",
+     "src": "기획재정부·해수부"
+    },
+    {
+     "date": "2025-07",
+     "stage": "어업보상 체결·본격 착수(남방파제 등 5개 공사)",
+     "phase": "착공",
+     "state": "current",
+     "src": "해양수산부 보도자료 2025-07-16"
+    },
+    {
+     "date": "2030-12",
+     "stage": "3개 선석 우선 개장 목표",
+     "phase": "준공",
+     "state": "future",
+     "src": "해양수산부"
+    },
+    {
+     "date": "2040-12",
+     "stage": "15개 선석 전체 완비 목표",
+     "phase": "준공",
+     "state": "future",
+     "src": "해양수산부"
+    }
+   ],
+   "template_type": "공공시설",
+   "sd": "경남",
+   "sg": "창원시",
+   "loc": "경남 창원시 진해구 연도동 (연도 전면 해상 일원, 매립)",
+   "last_movement": "2026-07-27",
+   "src_tier": "official_report",
+   "src_name": "해양수산부 — 진해신항 개발사업 착수",
+   "sources": [
+    "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156697853"
+   ],
+   "geo_prec": "zone_wide",
+   "geo_approx": true,
+   "geo_basis": "예정지 중심 근사 — 해상 매립 사업으로 POI 없음. 구글맵 POI '연도'(35.06409,128.76505) 남측 해상 약 1km. 고시 도면 좌표 확보 시 교체",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.765,
+     35.055
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-27",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-27"
+  },
+  {
+   "id": "J-saemangeum-airport",
+   "title": "새만금국제공항",
+   "cat": "인프라",
+   "sub": "공항",
+   "lvl": "A",
+   "lvl_basis": "사업비 8,077억 — 인프라 A",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "amount_eok": 8077,
+   "amount_kind": "인프라",
+   "area_kind": "부지",
+   "phase": "인가",
+   "current_stage": "미착공 — 기본계획 고시('22.6)까지 완료했으나 1심 취소 판결로 계쟁 중. 2026 예산 1,200억 확보",
+   "status_override": "정체",
+   "status_note": "서울행정법원 1심 기본계획 취소 판결(2025-09-11, 국토부 항소 중) — 사업 중단 상태. 2026년 예산 1,200억은 확보됨(P5: 역방향 신호 병기)",
+   "milestones": [
+    {
+     "date": "2019-01",
+     "stage": "국가균형발전 프로젝트 예타면제 선정",
+     "phase": "계획",
+     "state": "done",
+     "src": "기획재정부·균형발전위"
+    },
+    {
+     "date": "2022-06",
+     "stage": "기본계획 수립·고시(활주로 2,500m·총 8,077억)",
+     "phase": "인가",
+     "state": "done",
+     "src": "국토교통부"
+    },
+    {
+     "date": "2024-06",
+     "stage": "에어사이드 턴키 실시설계·시공 계약(HJ중공업 컨소시엄)",
+     "phase": "인가",
+     "state": "done",
+     "src": "국토교통부"
+    },
+    {
+     "date": "2025-09",
+     "stage": "⚠ 서울행정법원 기본계획 취소 판결(1심·항소 중) — 사업 중단",
+     "phase": "인가",
+     "state": "current",
+     "src": "서울행정법원 2025-09-11"
+    },
+    {
+     "date": "2029-12",
+     "stage": "개항 목표(원계획 — 소송으로 지연 확실시)",
+     "phase": "준공",
+     "state": "future",
+     "src": "국토교통부 기본계획"
+    }
+   ],
+   "template_type": "공공시설",
+   "sd": "전북",
+   "sg": "군산시",
+   "loc": "전북 군산시 (새만금 매립지, 군산공항 서측 1.35km)",
+   "last_movement": "2026-07-27",
+   "src_tier": "official_notice",
+   "src_name": "국토교통부 — 새만금국제공항 기본계획",
+   "sources": [
+    "https://www.korea.kr/news/policyNewsView.do?newsId=148903000"
+   ],
+   "geo_prec": "zone_wide",
+   "geo_approx": true,
+   "geo_basis": "기본계획 위치 서술 도출 — '군산공항 서측 1.35km'(국토부): 구글맵 POI 군산공항(35.92592,126.61566)에서 정서 1.35km. 근사",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.60069,
+     35.92592
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-07-27",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-27"
+  },
+  {
+   "id": "J-jeju-2nd-airport",
+   "title": "제주 제2공항",
+   "cat": "인프라",
+   "sub": "공항",
+   "lvl": "S",
+   "lvl_basis": "사업비 54,532억 — 인프라 S",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "amount_eok": 54532,
+   "amount_kind": "인프라",
+   "area_kind": "부지",
+   "phase": "인가",
+   "current_stage": "기본계획 고시(2024-09-06) 후 환경영향평가 진행 중(2025-05 준비서 제출) — 착공 미정",
+   "milestones": [
+    {
+     "date": "2015-11",
+     "stage": "사전타당성 검토·성산읍 입지 선정",
+     "phase": "계획",
+     "state": "done",
+     "src": "국토교통부"
+    },
+    {
+     "date": "2024-09",
+     "stage": "기본계획 고시(1단계 5조4,532억, 1·2단계 분리 추진)",
+     "phase": "인가",
+     "state": "done",
+     "src": "국토교통부 고시"
+    },
+    {
+     "date": "2025-05",
+     "stage": "환경영향평가 절차 착수(준비서 제출)",
+     "phase": "인가",
+     "state": "current",
+     "src": "국토교통부·제주도"
+    },
+    {
+     "stage": "착공(환경영향평가·도의회 동의·토지보상 후 — 시기 미정)",
+     "phase": "착공",
+     "state": "future",
+     "src": "국토교통부"
+    }
+   ],
+   "template_type": "공공시설",
+   "sd": "제주",
+   "sg": "서귀포시",
+   "loc": "제주 서귀포시 성산읍 온평리·신산리·난산리·수산리·고성리 일원 (551만㎡)",
+   "last_movement": "2026-07-27",
+   "src_tier": "official_notice",
+   "src_name": "국토교통부 — 제주 제2공항 기본계획 고시",
+   "sources": [
+    "https://www.molit.go.kr/USR/NEWS/m_71/dtl.jsp?lcmspage=1&id=95090155"
+   ],
+   "geo_prec": "zone_wide",
+   "geo_approx": true,
+   "geo_basis": "예정지 중심 근사 — POI 없음. 예정지 양단 온평리(33.41119,126.89356)·신산리(33.38581,126.86756) 중간점. 고시 도면 좌표 확보 시 교체",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.88056,
+     33.3985
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-07-27",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-27"
+  },
+  {
+   "id": "J-ulleung-airport",
+   "title": "울릉공항",
+   "cat": "인프라",
+   "sub": "공항",
+   "lvl": "A",
+   "lvl_basis": "사업비 8,792억 — 인프라 A",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "amount_eok": 8792,
+   "amount_kind": "인프라",
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "공사 중 — 공정률 75.6%('26.3, 부산지방항공청). 준공 '27.12·개항 '28 목표(감사원 수요 재검토로 지연 리스크)",
+   "milestones": [
+    {
+     "date": "2020-11",
+     "stage": "착공",
+     "phase": "착공",
+     "state": "done",
+     "src": "국토교통부"
+    },
+    {
+     "date": "2024-08",
+     "stage": "준공 2년 연기(→'27.12, 개항 '28)",
+     "phase": "착공",
+     "state": "done",
+     "src": "국토교통부"
+    },
+    {
+     "date": "2026-03",
+     "stage": "공정률 75.6% — 가두봉 절취 '26.11 완료 예정",
+     "phase": "착공",
+     "state": "current",
+     "src": "부산지방항공청"
+    },
+    {
+     "date": "2027-12",
+     "stage": "준공 목표",
+     "phase": "준공",
+     "state": "future",
+     "src": "국토교통부"
+    },
+    {
+     "eta": "2028",
+     "stage": "개항 목표",
+     "phase": "준공",
+     "state": "future",
+     "src": "국토교통부"
+    }
+   ],
+   "template_type": "공공시설",
+   "sd": "경북",
+   "sg": "울릉군",
+   "loc": "경북 울릉군 울릉읍 사동리 (가두봉~사동항 해상매립)",
+   "last_movement": "2026-07-27",
+   "src_tier": "official_report",
+   "src_name": "국토교통부(부산지방항공청) — 울릉공항 건설",
+   "sources": [
+    "https://www.molit.go.kr/USR/NEWS/m_71/dtl.jsp?id=95082228"
+   ],
+   "geo_prec": "landmark",
+   "geo_approx": false,
+   "geo_basis": "구글맵 POI '울릉공항' (2026-07 확인) — 사동리 해상매립 활주로 부지와 일치",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     130.87249,
+     37.46272
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-27",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-27"
+  },
+  {
+   "id": "J-donghae-newport",
+   "title": "동해신항(동해항 3단계)",
+   "cat": "인프라",
+   "sub": "항만",
+   "lvl": "S",
+   "lvl_basis": "사업비 17,342억 — 인프라 S",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "amount_eok": 17342,
+   "amount_kind": "인프라",
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "외곽시설(방파호안) 준공 후 부두 건설 — 석탄부두('26.6 착공, 1,386억·'31 준공), 수소항만 4선석 민자('25.1 심의 통과)",
+   "milestones": [
+    {
+     "date": "2017-06",
+     "stage": "방파호안 1공구 착공",
+     "phase": "착공",
+     "state": "done",
+     "src": "해양수산부"
+    },
+    {
+     "date": "2020-12",
+     "stage": "제4차 전국 항만기본계획 고시 — 총 7선석",
+     "phase": "인가",
+     "state": "done",
+     "src": "해양수산부 고시"
+    },
+    {
+     "date": "2021-11",
+     "stage": "방파호안 준공(외곽시설 90%+)",
+     "phase": "착공",
+     "state": "done",
+     "src": "해양수산부"
+    },
+    {
+     "date": "2025-01",
+     "stage": "수소 전용항만 민자(약 8,500억) 중앙항만정책심의회 통과",
+     "phase": "인가",
+     "state": "done",
+     "src": "강원특별자치도"
+    },
+    {
+     "date": "2026-06",
+     "stage": "석탄부두 착공(1,386억·'31 준공 목표)",
+     "phase": "착공",
+     "state": "current",
+     "src": "해양수산부 2026-06-28"
+    }
+   ],
+   "template_type": "공공시설",
+   "sd": "강원",
+   "sg": "동해시",
+   "loc": "강원 동해시 송정동 일원 해상(동해항 북측)",
+   "last_movement": "2026-07-27",
+   "src_tier": "official_notice",
+   "src_name": "해양수산부 — 제4차 전국 항만기본계획(동해신항)",
+   "sources": [
+    "https://www.mof.go.kr/doc/ko/selectDoc.do?docSeq=36906&menuSeq=888&bbsSeq=35"
+   ],
+   "geo_prec": "zone_wide",
+   "geo_approx": true,
+   "geo_basis": "예정지 중심 근사 — 전용 POI 없음. 동해항 북측 신항 방파호안 내측 수역 중심(위성 실측 ±150m)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.1336,
+     37.5012
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-27",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-27"
+  },
+  {
+   "id": "J-yeongilman-breakwater2",
+   "title": "포항 영일만항 남방파제 2단계",
+   "cat": "인프라",
+   "sub": "항만",
+   "lvl": "A",
+   "lvl_basis": "사업비 3,621억 — 인프라 A",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "amount_eok": 3621,
+   "amount_kind": "인프라",
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "계약 완료('26.1, 남광토건 컨소시엄)·'26.7.27부터 공사 실시(포항지방해양수산청) — '30 준공 목표",
+   "milestones": [
+    {
+     "date": "2024-05",
+     "stage": "일괄입찰·설계심의",
+     "phase": "인가",
+     "state": "done",
+     "src": "해양수산부"
+    },
+    {
+     "date": "2026-01",
+     "stage": "계약 완료·착공(1.3km·3,621억)",
+     "phase": "착공",
+     "state": "done",
+     "src": "포항지방해양수산청"
+    },
+    {
+     "date": "2026-07",
+     "stage": "본공사 실시('26.7.27~)",
+     "phase": "착공",
+     "state": "current",
+     "src": "포항지방해양수산청"
+    },
+    {
+     "date": "2030-12",
+     "stage": "준공 목표",
+     "phase": "준공",
+     "state": "future",
+     "src": "포항지방해양수산청"
+    }
+   ],
+   "template_type": "공공시설",
+   "sd": "경북",
+   "sg": "포항시",
+   "loc": "경북 포항시 북구 흥해읍 용한리 전면 해상",
+   "last_movement": "2026-07-27",
+   "src_tier": "official_report",
+   "src_name": "포항지방해양수산청 — 영일만항 남방파제 2단계",
+   "sources": [
+    "https://pohang.mof.go.kr/ko/page.do?menuIdx=2798"
+   ],
+   "geo_prec": "landmark",
+   "geo_approx": false,
+   "geo_basis": "구글맵 POI '영일만항'(2026-07 확인) — 신설 방파제는 항 외곽 해상, 항 POI로 대표(선형 좌표 미확보)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.43214,
+     36.11064
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-27",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-27"
+  },
+  {
+   "id": "J-gwangyang-auto-port",
+   "title": "광양항 3-2단계 자동화 컨테이너부두",
+   "cat": "인프라",
+   "sub": "항만",
+   "lvl": "A",
+   "lvl_basis": "사업비 7,846억 — 인프라 A",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "amount_eok": 7846,
+   "amount_kind": "인프라",
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "자동화 하역장비 3종 국내 제작 계약 완료·제작 중, 상부시설 우선 시공 — '29.3 정식 개장 목표('26.1 보도 기준 계획대로 추진)",
+   "milestones": [
+    {
+     "date": "2021-11",
+     "stage": "예비타당성조사 통과",
+     "phase": "인가",
+     "state": "done",
+     "src": "해양수산부"
+    },
+    {
+     "date": "2022-06",
+     "stage": "해수부 착수보고(당초 6,915억)",
+     "phase": "인가",
+     "state": "done",
+     "src": "해양수산부 2022-06-28"
+    },
+    {
+     "date": "2025-09",
+     "stage": "총사업비 7,846억 증액·자동화장비(안벽크레인8·ARMGC32·L-AGV44) 국내 3사 계약",
+     "phase": "착공",
+     "state": "done",
+     "src": "여수광양항만공사"
+    },
+    {
+     "date": "2025-12",
+     "stage": "상부시설 우선 시공분 착공",
+     "phase": "착공",
+     "state": "current",
+     "src": "여수광양항만공사"
+    },
+    {
+     "date": "2029-03",
+     "stage": "자동화부두 정식 상업개장 목표",
+     "phase": "준공",
+     "state": "future",
+     "src": "여수광양항만공사"
+    }
+   ],
+   "template_type": "공공시설",
+   "sd": "전남광주",
+   "sg": "광양시",
+   "loc": "전남 광양시 도이동 일원 (광양항 컨테이너부두 3-2단계)",
+   "last_movement": "2026-07-27",
+   "src_tier": "official_report",
+   "src_name": "해양수산부·여수광양항만공사 — 광양항 자동화부두 구축",
+   "sources": [
+    "https://www.ygpa.or.kr/hmpg/ygpa/port/gypt/devm/contPageDetail.do?conts_no=BF03F9B710384D718A9A673F6B4BE1C6"
+   ],
+   "geo_prec": "landmark",
+   "geo_approx": false,
+   "geo_basis": "공식 위치 서술(YGPA '광양시 도이동 일원'·GFEZ '3단계2차 전면해상') 기반 부두 구역 근사 — 컨부두로 240 지오코딩점의 서남측 부두선",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.65389,
+     34.89603
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-07-27",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-27"
   }
  ]
 }
