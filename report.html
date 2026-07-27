@@ -8,18 +8,35 @@ td,th{border:1px solid #e5e5ea;padding:5px 8px;text-align:left} th{background:#f
 .kpi{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0} .kpi div{border:1.5px solid #2b3440;
 border-radius:8px;padding:10px 16px} .kpi b{font-size:20px;display:block}
 .note{color:#6e6e73;font-size:12px} a{color:#0a5}
+.bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:14px 0}
+select{font-size:14px;padding:6px 10px;border:1.5px solid #2b3440;border-radius:8px;background:#fff}
+.delta{color:#6e6e73;font-size:12px}
 </style></head><body>
-<h1>주간 변경 보고 <span class="note">2026-07-27 무인 수집 회전</span></h1>
-<p class="note">이 페이지는 매주 자동 수집(build_all --fetch) 직후 파이프라인이 자동 생성합니다. 전부 사실 기록이며 판단을 담지 않습니다. <a href="index.html">← 지도로</a></p>
-<div class="kpi"><div><b>0</b>신규 호재</div><div><b>0</b>제거·소멸</div>
-<div><b>19</b>단계 전이</div><div><b>0</b>정비 완료처리</div>
-<div><b>26</b>발굴 잔여(미수록)</div></div>
-<h2>신호유형별 증감</h2>
-<table><tr><th>유형</th><th>신규</th><th>제거</th></tr></table>
-<h2>신규 대형(S·A급)</h2>
-<p class="note">없음</p>
-<h2>단계 전이 (이번 주 도달)</h2>
-<table><tr><th>사업</th><th>도달 단계</th></tr><tr><td></td><td>준공·개통</td></tr><tr><td></td><td>준공·개통</td></tr><tr><td></td><td>준공·개통</td></tr><tr><td></td><td>준공·개통</td></tr><tr><td></td><td>준공·개통</td></tr><tr><td></td><td>준공·개통</td></tr><tr><td></td><td>준공·개통</td></tr><tr><td></td><td>준공·개통</td></tr><tr><td></td><td>준공·개통</td></tr><tr><td></td><td>준공·개통</td></tr><tr><td></td><td>준공·개통</td></tr><tr><td></td><td>준공·개통</td></tr><tr><td></td><td>준공·개통</td></tr><tr><td></td><td>준공·개통</td></tr><tr><td></td><td>준공·개통</td></tr><tr><td></td><td>준공·개통</td></tr><tr><td></td><td>준공·개통</td></tr><tr><td></td><td>준공·개통</td></tr><tr><td>아산국가산업단지(원정지구) 개발사업 시행자 지정 고시</td><td>계획</td></tr></table>
-<h2>정비 완료 처리 (완공 확인)</h2>
-<p class="note">없음</p>
+<h1>주간 변경 보고</h1>
+<p class="note">매주 자동 수집(build_all --fetch) 직후 파이프라인이 자동 생성합니다. 전부 사실 기록이며 판단을 담지 않습니다. <a href="index.html">← 지도로</a></p>
+<div class="bar"><label>조회 주차 <select id="wk"><option value="0">2026-07-27</option></select></label>
+<span class="delta" id="cmp"></span></div>
+<div id="body"></div>
+<script>
+var ARCH = [{"date": "2026-07-27", "files": [], "new_big": [], "transitions": [{"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "아산국가산업단지(원정지구) 개발사업 시행자 지정 고시", "phase": "계획"}], "jeongbi_done_new": [], "coverage_gaps": 26, "totals": {"add": 0, "rem": 0, "trans": 19, "done": 0}}];
+function esc(s){return String(s==null?'':s).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+function rows(items,cols){return items.map(function(i){return '<tr>'+cols.map(function(c){return '<td>'+esc(i[c])+'</td>';}).join('')+'</tr>';}).join('');}
+function tbl(head,items,cols){return items&&items.length?('<table><tr>'+head.map(function(h){return '<th>'+h+'</th>';}).join('')+'</tr>'+rows(items,cols)+'</table>'):'<p class="note">없음</p>';}
+function render(idx){
+  var r=ARCH[idx], t=r.totals||{};
+  var kpi='<div class="kpi"><div><b>'+(t.add||0)+'</b>신규 호재</div><div><b>'+(t.rem||0)+'</b>제거·소멸</div>'
+    +'<div><b>'+(t.trans||0)+'</b>단계 전이</div><div><b>'+(t.done||0)+'</b>정비 완료처리</div>'
+    +(r.coverage_gaps!=null?'<div><b>'+r.coverage_gaps+'</b>발굴 잔여(미수록)</div>':'')+'</div>';
+  document.getElementById('body').innerHTML=
+    '<p class="note">'+esc(r.date)+' 무인 수집 회전</p>'+kpi
+    +'<h2>신호유형별 증감</h2>'+tbl(['유형','신규','제거'],r.files,['file','add','rem'])
+    +'<h2>신규 대형(S·A급)</h2>'+tbl(['등급','지역','사업','출처'],r.new_big,['lvl','sd','name','src'])
+    +'<h2>단계 전이 (해당 주 도달)</h2>'+tbl(['사업','도달 단계'],r.transitions,['name','phase'])
+    +'<h2>정비 완료 처리 (완공 확인)</h2>'+tbl(['지역','구역'],r.jeongbi_done_new,['sd','name']);
+  var prev=ARCH[idx+1];
+  document.getElementById('cmp').textContent=prev?('직전 회전 '+prev.date+' 대비'):'가장 오래된 기록';
+}
+document.getElementById('wk').addEventListener('change',function(e){render(+e.target.value);});
+render(0);
+</script>
 </body></html>
