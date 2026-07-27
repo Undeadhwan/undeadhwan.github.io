@@ -11,14 +11,39 @@ border-radius:8px;padding:10px 16px} .kpi b{font-size:20px;display:block}
 .bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:14px 0}
 select{font-size:14px;padding:6px 10px;border:1.5px solid #2b3440;border-radius:8px;background:#fff}
 .delta{color:#6e6e73;font-size:12px}
+.status{margin:14px 0;padding:12px 16px;border-radius:10px;font-size:14px;font-weight:600;
+border:1.5px solid #2b3440} .status small{font-weight:400;color:#555}
+.st-ok{background:#eafaf1;border-color:#0a8a4a} .st-warn{background:#fff7e6;border-color:#c77700}
+.st-err{background:#fdecec;border-color:#c0392b}
 </style></head><body>
 <h1>주간 변경 보고</h1>
 <p class="note">매주 자동 수집(build_all --fetch) 직후 파이프라인이 자동 생성합니다. 전부 사실 기록이며 판단을 담지 않습니다. <a href="index.html">← 지도로</a></p>
+<div class="status" id="status" style="display:none"></div>
 <div class="bar"><label>조회 주차 <select id="wk"><option value="0">2026-07-27</option></select></label>
 <span class="delta" id="cmp"></span></div>
 <div id="body"></div>
 <script>
 var ARCH = [{"date": "2026-07-27", "files": [], "new_big": [], "transitions": [{"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "", "phase": "준공·개통"}, {"name": "아산국가산업단지(원정지구) 개발사업 시행자 지정 고시", "phase": "계획"}], "jeongbi_done_new": [], "coverage_gaps": 26, "totals": {"add": 0, "rem": 0, "trans": 19, "done": 0}}];
+// ── 빌드 상태 배너 — "돌았는지·성공했는지"를 한눈에(2026-07-27) ──
+// build_status.json은 매 실행 갱신(실패도 weekly_update.sh가 푸시). 런타임 fetch라 stale 페이지도 최신 상태 표시.
+(function(){
+  fetch('build_status.json?_='+Date.now()).then(function(r){return r.ok?r.json():null;}).then(function(s){
+    if(!s) return;
+    var el=document.getElementById('status'); if(!el) return;
+    var run=s.last_run||''; var days=null;
+    var m=run.match(/(\d{4})-(\d{2})-(\d{2})/);
+    if(m){ var d=new Date(+m[1],+m[2]-1,+m[3]); days=Math.floor((Date.now()-d.getTime())/86400000); }
+    var ago=days==null?'':(days<=0?'오늘':days+'일 전');
+    var res=s.result||'?', cls, icon;
+    if(res==='성공'){ cls=(days!=null&&days>8)?'st-warn':'st-ok'; icon=(days!=null&&days>8)?'🟠':'🟢'; }
+    else { cls='st-err'; icon='🔴'; }
+    var msg=icon+' 마지막 자동 수집: '+esc(run)+' · '+esc(res)+(ago?' ('+ago+')':'');
+    if(res!=='성공') msg+=' <small>— 로그 확인 필요</small>';
+    else if(days!=null&&days>8) msg+=' <small>— 8일 넘게 갱신 없음(스케줄러/맥 확인)</small>';
+    else if(s.build) msg+=' <small>· BUILD '+esc(s.build)+(s.changes?' · 신규 '+(s.changes.add||0)+'·전이 '+(s.changes.trans||0):'')+'</small>';
+    el.className='status '+cls; el.innerHTML=msg; el.style.display='';
+  }).catch(function(){});
+})();
 function esc(s){return String(s==null?'':s).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
 function rows(items,cols){return items.map(function(i){return '<tr>'+cols.map(function(c){return '<td>'+esc(i[c])+'</td>';}).join('')+'</tr>';}).join('');}
 function tbl(head,items,cols){return items&&items.length?('<table><tr>'+head.map(function(h){return '<th>'+h+'</th>';}).join('')+'</tr>'+rows(items,cols)+'</table>'):'<p class="note">없음</p>';}
