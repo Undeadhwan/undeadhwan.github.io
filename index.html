@@ -706,8 +706,18 @@ const LEVELS = ["S", "A", "B", "C"];
 const GRADES_DISP = ["S", "A", "B", "C", "미정"];   // 배지·매트릭스 표시용(미정 포함)
 const GRADE_RANK = { S: 0, A: 1, B: 2, C: 3, "미정": 4 };   // 렌더 우선순위 — 600 상한이 걸려도 S/A(교통 역 등)가 살아남게(2026-07-22)
 const LEVEL_NAME = { S: "S급", A: "A급", B: "B급", C: "C급", "미정": "미정" };
-const SUB_KEYS = { "교통": ["철도", "도로", "환승·터미널"], "일자리": ["오피스", "지식산업센터", "공장", "데이터센터", "복합단지"],
-  "인프라": ["병원", "공원·녹지", "판매", "문화·관광·체육", "학교", "공공시설", "공항", "항만", "기타시설"] };   // 세부 축 있는 대분류 — 인프라는 §7b 유형별(2026-07-18). 공항·항만 추가(2026-07-27 매핑 감사 — S급 8건이 조회축 없이 떠돌았다)
+// ── 역효과 표기 (P5 "정직이 차별점 — 역효과도 표기") ────────────────────────────
+// ⚠ 종전엔 `side_effects` 필드를 화면이 렌더할 준비만 해 두고 **채우는 데가 아무 데도 없었다**
+//    (실측 2026-07-28: 전 신호 0건). 원칙이 화면에만 있고 데이터엔 없던 상태다.
+// 여기 적는 것은 **시설 종류가 수반하는 사실**이지 "좋다/나쁘다" 판단이 아니다(P1).
+//   · 개별 신호 고유의 역효과(그 고시가 소음대책을 명시한 경우 등)는 계속 `side_effects` 필드로 싣는다.
+//   · 여기 없는 종류는 **비워 둔다** — 근거 없이 부정 문구를 만들지 않는다.
+const SUB_CAVEAT = {
+  "데이터센터": "전력 수전설비·냉각탑을 수반하는 시설 — 고용 유발은 상주 수십 명 수준으로 오피스와 다름",
+  "공장": "제조시설 — 업종에 따라 대기·소음 영향이 따를 수 있음",
+};
+const SUB_KEYS = { "교통": ["철도", "도로", "환승·터미널"], "일자리": ["오피스", "지식산업센터", "공장", "데이터센터", "복합단지", "미상"],
+  "인프라": ["병원", "공원·녹지", "판매", "문화·관광·체육", "학교", "공공시설", "공항", "항만", "기타시설", "미상"] };   // 세부 축 있는 대분류 — 인프라는 §7b 유형별(2026-07-18). 공항·항만 추가(2026-07-27 매핑 감사 — S급 8건이 조회축 없이 떠돌았다)
 // 중분류 조회축 전체 키(대분류 순서 유지). 이름은 대분류를 넘나들어 겹치지 않으므로 평면 Set으로 관리한다.
 const ALL_SUBS = CAT_KEYS.flatMap(c => SUB_KEYS[c] || []);
 const CAT_SUB = { "교통": "철도 / 도로 / 환승·터미널", "일자리": "오피스 / 지식산업센터 / 공장 / 데이터센터 / 복합단지", "인프라": "병원 / 공원·녹지 / 판매 / 문화·관광·체육 / 학교(특목) / 공공시설 / 공항 / 항만 / 기타시설", "주거개발": "신도시 / 택지 / 재개발 / 재건축" };
@@ -1019,11 +1029,20 @@ const subOf = s => s.sub || (s.template_type === "도로" ? "도로"
   : "");                                  // 세부 축 자체가 없는 대분류(주거개발) — 빈 값이 정답
 /* 중분류 조회축 판정: 세부 축이 없는 대분류(주거개발)는 항상 통과.
    목록에 없는 미지의 세부값은 숨기지 않고 통과시킨다 — 필터가 데이터를 조용히 감추면 안 됨(P5). QA로 잡는다. */
+// 중분류 **조회 키** — 필터와 집계가 같은 규칙을 쓰게 한다(2026-07-28 사용자 제보로 신설).
+// ⚠ 종전엔 축 어휘에 없는 값(빈 값 · '연구소' · '물류' · '발전')이 `!keys.includes(sub)`로
+//    **모든 중분류 필터를 통과**했다. 그래서 '데이터센터'만 켜도 김포공항 도시재생 혁신지구·
+//    동국제강 공시 같은 미상 신호가 섞여 나와 "이게 왜 데이터센터냐"가 됐다 — 화면이 거짓말했다.
+//    숨기는 건 P2 위반이므로 **'미상'이라는 명시적 칸**으로 모아 켜고 끌 수 있게 한다.
+const subKeyOf = s => {
+  const keys = SUB_KEYS[catOf(s)] || [];
+  const v = subOf(s);
+  return keys.includes(v) ? v : "미상";
+};
 function subVisible(s) {
   const keys = SUB_KEYS[catOf(s)];
   if (!keys) return true;
-  const sub = subOf(s);
-  return !keys.includes(sub) || filter.sub.has(sub);
+  return filter.sub.has(subKeyOf(s));
 }
 // 일반도로(간선) 연도 회랑 반경 — 고속도로 IC 점 반경(3~5km)과 **분리**한다(2026-07-23 사용자 지적
 // "선택시 배경이 전부 퍼래지네"). 도로 반경표 {B:3km}는 IC 점 버퍼용인데 간선도로 회랑에 그대로
@@ -1089,9 +1108,12 @@ let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS =
 /* DART(신규시설투자·유형자산양수) → 일자리 후보 신호 어댑트. 위치=회사 소재지 근사(§ 후보층, confirmed:false) */
 function buildDartSignals() {   // DART 전자공시 = 법정 공시 → official_report
   DART_SIG = (DART || []).filter(s => s.geometry && s.geometry.coordinates).map(s => ({
-    // DART 투자공시는 **목적물 용도가 공시에 없다** → 중분류 미상으로 둔다(오피스/공장 추정 금지, P2).
-    // 미상 신호는 subVisible이 통과시켜 중분류 필터에 걸려 사라지지 않는다. 보완 경로 = 원문 2단 조회로 목적물 용도 취득.
-    _dart: true, src_tier: "official_report", milestones: s.milestones, title: s.title, cat: "일자리", lvl: s.lvl || "C", template_type: "기업이전",
+    // ⚠ 종전 주석은 "공시에 목적물 용도가 없어 중분류 미상"이었는데 **틀렸다**(2026-07-28 교정).
+    //    `dart_fetch.facility_of()`가 투자목적 문구에서 실제로 분류해 저장하고 있다
+    //    (실측 36건: 공장 18 · 오피스 6 · 연구소 5 · 물류 2 · 발전 1 · 미상 4).
+    //    그걸 어댑터가 버려서 전부 미상으로 떠 있었다 — 어댑터 함정 재발.
+    //    축 어휘에 없는 값(연구소·물류·발전)은 subKeyOf가 '미상'으로 모은다.
+    _dart: true, sub: s.sub || null, src_tier: "official_report", milestones: s.milestones, title: s.title, cat: "일자리", lvl: s.lvl || "C", template_type: "기업이전",
     current_stage: s.current_stage || "공시", phase: s.phase || "계획", status: "활성", confirmed: false,
     sd: s.sd, sg: s.sg, dong: s.dong || null, amount_eok: s.amount_eok,
     last_movement: s.rcept_dt && s.rcept_dt.length === 8 ? `${s.rcept_dt.slice(0,4)}-${s.rcept_dt.slice(4,6)}-${s.rcept_dt.slice(6,8)}` : null,
@@ -1974,6 +1996,7 @@ function renderDetail(s) {
       ${(s.jc_points || []).length ? `<div class="kv"><b>분기점(JC)</b> ${s.jc_points.map(j => j.name).join(" · ")}
         <span class="hmhint">— 차량 진출입 불가, 호재 아님(구조 정보)</span></div>` : ""}
       ${s.side_effects?.length ? `<div class="kv"><b>역효과 표기</b> ${s.side_effects.join(", ")}</div>` : ""}
+      ${SUB_CAVEAT[subOf(s)] ? `<div class="kv"><b>시설 특성</b> <span class="hmhint">${SUB_CAVEAT[subOf(s)]}</span></div>` : ""}
       <div class="kv"><b>위치</b> ${precNote(s)}${
         s.st_status && s.st_status !== "확정" && s.st_status !== "기존" ? ` · <b>${s.st_status}</b>(명칭·위치 미확정)` : ""}${
         s.pt_type === "road_ic" ? " · 도로 IC(철도역 아님)" : ""}</div>
@@ -2181,7 +2204,7 @@ function dockCounts() {
   const cat = {}, sub = {}, lvl = {};
   pool.forEach(s => {
     const c = catOf(s); if (c) cat[c] = (cat[c] || 0) + 1;
-    const sb = subOf(s); if (sb) sub[sb] = (sub[sb] || 0) + 1;
+    const sb = SUB_KEYS[catOf(s)] ? subKeyOf(s) : subOf(s); if (sb) sub[sb] = (sub[sb] || 0) + 1;
     const l = levelOf(s); if (l) lvl[l] = (lvl[l] || 0) + 1;
   });
   return { cat, sub, lvl, total: pool.filter(visible).length };
@@ -3718,7 +3741,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260728q");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260728r");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3838,7 +3861,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260728q"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260728r"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3864,7 +3887,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260728q");
+  const CB = "?b=" + (window.BUILD || "20260728r");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
