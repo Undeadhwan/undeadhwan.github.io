@@ -169363,6 +169363,559 @@
   },
   {
    "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "울산 도시철도 2호선(수소트램)",
+    "full": "울산 도시철도 2호선(수소트램)",
+    "linekind": "트램",
+    "lvl": "C",
+    "lvl_basis": "위계 C (트램)",
+    "gate": "신호",
+    "gate_basis": "절차 문서 확인 — 「예비타당성」",
+    "phase": "계획",
+    "status": "예비타당성조사 중(2단계)",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "북울산역~야음사거리 13.55km · 사업비 4,400억원 · 정거장 위치 미공표(기·종점만 표시)",
+    "src_name": "울산광역시",
+    "src_url": "https://www.ulsan.go.kr/u/traffic/contents.ulsan?mId=001006004002000000",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "예비타당성조사 중(2단계)",
+      "state": "current",
+      "src": "울산광역시"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-07-28",
+    "geom_src": "역 앵커 연결(근사)",
+    "geom_adequacy": "endpoints_only",
+    "geom_adequacy_note": "위치 확보 정거장 2개뿐 — 공식 노선도 없이는 직선 외 표현 불가",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       129.371804,
+       35.614566
+      ],
+      [
+       129.341491,
+       35.532404
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-28",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-28",
+    "last_movement": "2026-07-28"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      129.371804,
+      35.614566
+     ],
+     [
+      129.341491,
+      35.532404
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "북울산역",
+    "line": "울산 도시철도 2호선(수소트램)",
+    "lvl": "C",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "예비타당성조사 중(2단계)",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "예비타당성조사 중(2단계)",
+      "state": "current",
+      "src": "울산광역시"
+     }
+    ],
+    "note": "구간 기·종점 · 정거장 위치 미공표",
+    "audited": "2026-07-28",
+    "drop": null,
+    "gate_basis": "절차 문서 확인 — 「예비타당성」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.371804,
+      35.614566
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-28",
+      "basis": "observed"
+     },
+     {
+      "stage": "착공",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-07-28"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.371804,
+     35.614566
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "야음사거리",
+    "line": "울산 도시철도 2호선(수소트램)",
+    "lvl": "C",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "예비타당성조사 중(2단계)",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": true,
+    "geo_prec": "dong",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "예비타당성조사 중(2단계)",
+      "state": "current",
+      "src": "울산광역시"
+     }
+    ],
+    "note": "구간 기·종점 · 정거장 위치 미공표",
+    "audited": "2026-07-28",
+    "drop": null,
+    "gate_basis": "절차 문서 확인 — 「예비타당성」",
+    "geo_approx": true,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.341491,
+      35.532404
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-28",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-28",
+    "last_movement": "2026-07-28"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.341491,
+     35.532404
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "울산 도시철도 3호선(수소트램)",
+    "full": "울산 도시철도 3호선(수소트램)",
+    "linekind": "트램",
+    "lvl": "C",
+    "lvl_basis": "위계 C (트램)",
+    "gate": "신호",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "phase": "계획",
+    "status": "향후 추진(도시철도망 구축계획 수록)",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "효문역~대왕암공원 16.99km · 사업비 4,085억원 · 정거장 위치 미공표(기·종점만 표시)",
+    "src_name": "울산광역시",
+    "src_url": "https://www.ulsan.go.kr/u/traffic/contents.ulsan?mId=001006004002000000",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "향후 추진(도시철도망 구축계획 수록)",
+      "state": "current",
+      "src": "울산광역시"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-07-28",
+    "geom_src": "역 앵커 연결(근사)",
+    "geom_adequacy": "endpoints_only",
+    "geom_adequacy_note": "위치 확보 정거장 2개뿐 — 공식 노선도 없이는 직선 외 표현 불가",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       129.361709,
+       35.568806
+      ],
+      [
+       129.435249,
+       35.490362
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-28",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-28",
+    "last_movement": "2026-07-28"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      129.361709,
+      35.568806
+     ],
+     [
+      129.435249,
+      35.490362
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "효문역",
+    "line": "울산 도시철도 3호선(수소트램)",
+    "lvl": "C",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "향후 추진(도시철도망 구축계획 수록)",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "향후 추진(도시철도망 구축계획 수록)",
+      "state": "current",
+      "src": "울산광역시"
+     }
+    ],
+    "note": "구간 기·종점 · 정거장 위치 미공표",
+    "audited": "2026-07-28",
+    "drop": null,
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.361709,
+      35.568806
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-28",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-28",
+    "last_movement": "2026-07-28"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.361709,
+     35.568806
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "대왕암공원",
+    "line": "울산 도시철도 3호선(수소트램)",
+    "lvl": "C",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "향후 추진(도시철도망 구축계획 수록)",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "향후 추진(도시철도망 구축계획 수록)",
+      "state": "current",
+      "src": "울산광역시"
+     }
+    ],
+    "note": "구간 기·종점 · 정거장 위치 미공표",
+    "audited": "2026-07-28",
+    "drop": null,
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.435249,
+      35.490362
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-28",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-28",
+    "last_movement": "2026-07-28"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.435249,
+     35.490362
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "울산 도시철도 4호선(수소트램)",
+    "full": "울산 도시철도 4호선(수소트램)",
+    "linekind": "트램",
+    "lvl": "C",
+    "lvl_basis": "위계 C (트램)",
+    "gate": "신호",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "phase": "계획",
+    "status": "향후 추진(도시철도망 구축계획 수록)",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "신복교차로~복산성당 5.94km · 사업비 2,232억원 · 정거장 위치 미공표(기·종점만 표시)",
+    "src_name": "울산광역시",
+    "src_url": "https://www.ulsan.go.kr/u/traffic/contents.ulsan?mId=001006004002000000",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "향후 추진(도시철도망 구축계획 수록)",
+      "state": "current",
+      "src": "울산광역시"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-07-28",
+    "geom_src": "역 앵커 연결(근사)",
+    "geom_adequacy": "endpoints_only",
+    "geom_adequacy_note": "위치 확보 정거장 2개뿐 — 공식 노선도 없이는 직선 외 표현 불가",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       129.263024,
+       35.548782
+      ],
+      [
+       129.328894,
+       35.559173
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-28",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-28",
+    "last_movement": "2026-07-28"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      129.263024,
+      35.548782
+     ],
+     [
+      129.328894,
+      35.559173
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "신복교차로",
+    "line": "울산 도시철도 4호선(수소트램)",
+    "lvl": "C",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "향후 추진(도시철도망 구축계획 수록)",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "향후 추진(도시철도망 구축계획 수록)",
+      "state": "current",
+      "src": "울산광역시"
+     }
+    ],
+    "note": "구간 기·종점 · 정거장 위치 미공표",
+    "audited": "2026-07-28",
+    "drop": null,
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.263024,
+      35.548782
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-28",
+      "basis": "observed"
+     },
+     {
+      "stage": "착공",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-07-28"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.263024,
+     35.548782
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "복산성당",
+    "line": "울산 도시철도 4호선(수소트램)",
+    "lvl": "C",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "향후 추진(도시철도망 구축계획 수록)",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "향후 추진(도시철도망 구축계획 수록)",
+      "state": "current",
+      "src": "울산광역시"
+     }
+    ],
+    "note": "구간 기·종점 · 정거장 위치 미공표",
+    "audited": "2026-07-28",
+    "drop": null,
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.328894,
+      35.559173
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-28",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-28",
+    "last_movement": "2026-07-28"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.328894,
+     35.559173
+    ]
+   }
+  },
+  {
+   "type": "Feature",
    "geometry": {
     "type": "LineString",
     "coordinates": [

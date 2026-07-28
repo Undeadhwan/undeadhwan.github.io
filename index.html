@@ -787,6 +787,7 @@ const GEO_PREC = {
   station_poi: { t: "지점명 검색", d: "역·IC 장소검색으로 확인 (~100m) — 고시 도면 실측 아님" },
   poi:         { t: "POI 실위치 확인", d: "구글맵·카카오 장소 POI로 검증한 실위치 — 지번 지오코딩이 안 맞는 신설 시설(매립지·블록)" },
   landmark:    { t: "지물 기준(근사)", d: "교차로·시설 등 인근 지물 기준 (~200m) — 정거장 확정 위치 아님" },
+  feature_wide:{ t: "대형 지물 대표점(근사)", d: "교량·방파제·부두처럼 **선형·광역 시설**을 한 점으로 대표 (수백m~수km) — 실제 구조물 위치 아님" },
   dong:        { t: "동 대표점(근사)", d: "읍면동 중심점 (500m~2km) — 실제 위치 아님, 위치 미확정" },
   sgg:         { t: "시군구 대표점(근사)", d: "시군구 중심점 (2km+) — 실제 위치 아님" },
   line:        { t: "선형", d: "노선 경로 — 점 좌표 개념이 없음(지점 정밀도는 각 정거장에 표기)" },
@@ -3708,7 +3709,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260728m");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260728n");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3828,7 +3829,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260728m"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260728n"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3854,7 +3855,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260728m");
+  const CB = "?b=" + (window.BUILD || "20260728n");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
