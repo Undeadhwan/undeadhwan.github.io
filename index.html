@@ -1313,6 +1313,25 @@ const filter = {
 };
 let view = { mode: "home", dong: null, signal: null };
 let mapApi = null;   // {panTo(lnglat), refreshPins()}
+/* ── 지도 공용 헬퍼 (2026-07-29 전수 감사 A — Leaflet 전용 API 무가드 호출 6곳이 카카오에서
+   크래시하던 클래스의 원천 해결). 전역 함수는 window._map을 직접 부르지 말고 이것만 쓴다.
+   html_check가 전역 스코프의 직접 호출을 게이트한다. */
+function mapGo(lat, lon, zLeaflet) {
+  if (!window._map) return;
+  if (window._map.setView) window._map.setView([lat, lon], zLeaflet);
+  else { window._map.setLevel(Math.max(1, 18 - zLeaflet)); window._map.setCenter(new kakao.maps.LatLng(lat, lon)); }
+}
+function mapFit(lls, padPx) {   // lls = [[lat,lon],...]
+  if (!window._map || !lls.length) return;
+  if (window._map.fitBounds) window._map.fitBounds(L.latLngBounds(lls).pad(0.12));
+  else { const b = new kakao.maps.LatLngBounds(); lls.forEach(([la, lo]) => b.extend(new kakao.maps.LatLng(la, lo)));
+         window._map.setBounds(b, padPx || 30); }
+}
+function mapRelayout() {
+  if (!window._map) return;
+  if (window._map.invalidateSize) window._map.invalidateSize();
+  else if (window._map.relayout) window._map.relayout();
+}
 
 /* ══════════ 유틸 ══════════ */
 /* 끝난 신호/구역은 '종료 후 1년'까지만 노출 — 그 뒤는 delta(신호)가 아니라 level (사용자 2026-07-21).
@@ -1585,7 +1604,7 @@ function selectSido(sd) {
   fillRegion("r-sgg", sd ? sggListOf(sd) : [], "시군구 선택");
   fillRegion("r-dong", [], "읍면동 선택");
   closePanel();
-  if (sd && window._map && SIDO_CENTER[sd]) window._map.setView(SIDO_CENTER[sd], sd === "서울" ? 11 : 10);
+  if (sd && window._map && SIDO_CENTER[sd]) mapGo(SIDO_CENTER[sd][0], SIDO_CENTER[sd][1], sd === "서울" ? 11 : 10);
 }
 function selectSgg(sg) {
   nav.sg = sg || null; nav.dong = null;
@@ -1685,20 +1704,13 @@ function showApt(a) {
   aptFocus = new Set(signalsNearPoint([a.lon, a.lat], true).map(x => x.s));   // 이 단지 호재만 지도에(필터 무관)
   ANIMATE = true;
   renderPanel();
-  // setView는 Leaflet 전용 — 카카오에선 TypeError로 여기서 끊겨 radar·refreshPins가 죽어 있었다(2026-07-29 실측).
-  // 줌은 고정값이 아니라 **이 단지의 호재가 전부 들어오는 화면**으로 — lv3(500m)에선 반경 1~4km
-  // 호재가 다 화면 밖이라 포커스가 빈 지도가 된다(실측).
+  // 화면은 **이 단지의 호재가 전부 들어오는 범위**로(고정 줌이면 반경 1~4km 호재가 화면 밖 — 실측).
+  // 지도 이동은 공용 헬퍼만(mapGo/mapFit) — Leaflet 전용 API 직접 호출로 카카오에서 크래시하던
+  // 클래스의 원천 해결(2026-07-29 전수 감사 A, html_check 게이트가 지킨다).
   if (window._map) {
     const fpts = [...(aptFocus || [])].map(s => s.geometry && s.geometry.coordinates).filter(Boolean);
-    if (window._map.setView) {
-      if (fpts.length) window._map.fitBounds(L.latLngBounds(fpts.concat([[a.lon, a.lat]]).map(c => [c[1], c[0]])).pad(0.12));
-      else window._map.setView([a.lat, a.lon], 15);
-    } else {
-      if (fpts.length) { const bb = new kakao.maps.LatLngBounds();
-        fpts.concat([[a.lon, a.lat]]).forEach(c => bb.extend(new kakao.maps.LatLng(c[1], c[0])));
-        window._map.setBounds(bb, 40); }
-      else { window._map.setLevel(4); mapApi?.panTo?.([a.lon, a.lat]); }
-    }
+    if (fpts.length) mapFit(fpts.concat([[a.lon, a.lat]]).map(c => [c[1], c[0]]), 40);
+    else mapGo(a.lat, a.lon, 15);
     mapApi?.showAptAnchor?.(a);
   }
   mapApi?.radarPulse?.(a.lon, a.lat);   // 단지 중심 레이더 파동
@@ -2063,11 +2075,7 @@ function showSgg(disp) {
   mapApi?.refreshPins?.();
   mapApi?.highlightRings?.((window._sggRings || {})[disp]);   // 선택 시군구 경계 강조
   const bd = window._sggBounds?.[disp];
-  if (bd && window._map) {
-    if (window._map.fitBounds) window._map.fitBounds(bd);
-    else { const b2 = new kakao.maps.LatLngBounds();   // 카카오 분기(2026-07-29)
-      b2.extend(new kakao.maps.LatLng(bd[0][0], bd[0][1])); b2.extend(new kakao.maps.LatLng(bd[1][0], bd[1][1]));
-      window._map.setBounds(b2, 30); } }
+  if (bd && window._map) mapFit(bd, 30);   // 공용 헬퍼(2026-07-29)
   ANIMATE = false;
 }
 function pointInSgg(pt, disp) {
@@ -2136,11 +2144,7 @@ function showDong(f) {
   mapApi?.highlightRings?.(ringsOf(f));   // 선택한 동 경계만 강조
   const c = ringCentroid(ringsOf(f)[0]);  // 동 중심에서 레이더 파동
   // 동 클릭 = 해당 동으로 줌업(영역 fit — 호재 중심 개편)
-  if (window._map) { const bb = dongBB(f);
-    if (window._map.fitBounds) window._map.fitBounds([[bb[1], bb[0]], [bb[3], bb[2]]], { padding: [30, 30], maxZoom: 15 });
-    else { const b2 = new kakao.maps.LatLngBounds();   // 카카오 — fitBounds는 Leaflet 전용(스윕 발견 2026-07-29)
-      b2.extend(new kakao.maps.LatLng(bb[1], bb[0])); b2.extend(new kakao.maps.LatLng(bb[3], bb[2]));
-      window._map.setBounds(b2, 30); } }
+  if (window._map) { const bb = dongBB(f); mapFit([[bb[1], bb[0]], [bb[3], bb[2]]], 30); }   // 공용 헬퍼(2026-07-29)
   mapApi?.radarPulse?.(c[0], c[1]);
   mapApi?.refreshPins?.();   // 이 동 호재만 등장(애니메이션)
   ANIMATE = false;
@@ -2234,7 +2238,7 @@ function renderPanel() {
     const want = view.mode === "home" ? "none" : "";
     if (pn.style.display !== want) {
       pn.style.display = want;
-      setTimeout(() => window._map && window._map.invalidateSize(), 60);   // 컨테이너 폭 변경 → 타일 재계산
+      setTimeout(mapRelayout, 60);   // 컨테이너 폭 변경 → 타일 재계산(지도 공용 헬퍼 — 카카오=relayout)
     }
   }
   if (view.mode === "dong") return renderDong(view.dong);
@@ -3598,7 +3602,7 @@ function srchResults(qRaw) {
 function srchGoSignal(s) {
   const pts = signalPoints(s).length ? signalPoints(s) : (s._road ? roadLinePoints(s) : []);   // 전용도로=선형 폴백(이동용)
   if (pts.length && window._map)
-    window._map.setView([pts[0].coord[1], pts[0].coord[0]], Math.max(window._map.getZoom(), 14));
+    mapGo(pts[0].coord[1], pts[0].coord[0], 14);
   showSignal(s);   // 상세 패널 + 영향 반경 (좌표 미확정 신호는 패널만)
 }
 let srchItems = [], srchIdx = -1;
@@ -3653,7 +3657,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260729d");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260729e");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3778,7 +3782,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260729d"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260729e"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3804,7 +3808,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260729d");
+  const CB = "?b=" + (window.BUILD || "20260729e");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
