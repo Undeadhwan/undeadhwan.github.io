@@ -70553,7 +70553,7 @@
     "dashed": true,
     "approx": true,
     "drop": null,
-    "note": "본선(마곡나루~가산디지털단지)+지선(목동선 흡수, ~당산) T자형 개편 — 선형 재작성 필요 · 3차 계획(안)에서 목동선을 확장·개칭한 노선 — 미고시",
+    "note": "본선(마곡나루~가산디지털단지)+지선(목동선 흡수, ~당산) T자형 개편 — 3차 계획(안)에서 목동선을 확장·개칭한 노선 — 미고시",
     "src_name": "서울시·국토교통부",
     "src_url": "https://www.seoul.go.kr/news/news_report.do?nttNo=459504",
     "src_tier": "official_notice",
@@ -70604,14 +70604,74 @@
     ],
     "route_verified": null,
     "audited": "2026-07-17",
-    "geom_src": "역 앵커 연결(근사)",
+    "geom_src": "공식 정거장 좌표 연결(분기 스펙 2가지 — 시·종점 공식(서울시 3차 도시철도망 구축계획(안) 보도자료 — 본선 마곡나루~가산디지)) — 실선형 아님",
     "geom_adequacy": "dense_anchor",
-    "geom_adequacy_note": "정거장 간격 2.5km — 앵커 체인이 곧 경로(§2b, 작도 불필요)",
+    "geom_adequacy_note": "정거장 간격 2.1km — 앵커 체인이 곧 경로(§2b, 작도 불필요)",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
-     "type": "LineString",
+     "type": "MultiLineString",
      "coordinates": [
+      [
+       [
+        126.826461,
+        37.566753
+       ],
+       [
+        126.825451,
+        37.540114
+       ],
+       [
+        126.83313,
+        37.52861
+       ],
+       [
+        126.858702,
+        37.494625
+       ],
+       [
+        126.88258,
+        37.48122
+       ]
+      ],
+      [
+       [
+        126.83758,
+        37.510746
+       ],
+       [
+        126.86561,
+        37.51205
+       ],
+       [
+        126.87506,
+        37.52437
+       ],
+       [
+        126.88287,
+        37.53644
+       ],
+       [
+        126.90341,
+        37.533047
+       ]
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-07-18"
+   },
+   "geometry": {
+    "type": "MultiLineString",
+    "coordinates": [
+     [
       [
        126.826461,
        37.566753
@@ -70631,6 +70691,12 @@
       [
        126.88258,
        37.48122
+      ]
+     ],
+     [
+      [
+       126.83758,
+       37.510746
       ],
       [
        126.86561,
@@ -70648,56 +70714,6 @@
        126.90341,
        37.533047
       ]
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "계획",
-      "date": "2026-07-18",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
-   },
-   "geometry": {
-    "type": "LineString",
-    "coordinates": [
-     [
-      126.826461,
-      37.566753
-     ],
-     [
-      126.825451,
-      37.540114
-     ],
-     [
-      126.83313,
-      37.52861
-     ],
-     [
-      126.858702,
-      37.494625
-     ],
-     [
-      126.88258,
-      37.48122
-     ],
-     [
-      126.86561,
-      37.51205
-     ],
-     [
-      126.87506,
-      37.52437
-     ],
-     [
-      126.88287,
-      37.53644
-     ],
-     [
-      126.90341,
-      37.533047
      ]
     ]
    }
@@ -71522,6 +71538,97 @@
     "coordinates": [
      126.90341,
      37.533047
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "서부트럭터미널역",
+    "line": "서남선",
+    "lvl": "C",
+    "gate": "계획안",
+    "confirmed": false,
+    "status": "3차 도시철도망(안) — 국토부 승인 전",
+    "phase": "계획",
+    "st_status": "가칭",
+    "approx": true,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "제2차 도시철도망 고시 — 전신 '목동선' 포함",
+      "date": "2020-11-17",
+      "state": "done",
+      "src": "국토교통부·서울시"
+     },
+     {
+      "phase": "계획",
+      "stage": "제3차 계획(안) — 목동선 확장·개칭(본선+지선)",
+      "date": "2026-06-10",
+      "state": "done",
+      "src": "서울시"
+     },
+     {
+      "phase": "계획",
+      "stage": "제3차 계획(안) 시민 공청회",
+      "date": "2026-06-30",
+      "state": "current",
+      "src": "서울시"
+     },
+     {
+      "phase": "계획",
+      "stage": "국가위원회 검토·국토부 승인",
+      "eta": "2026 하반기",
+      "state": "next",
+      "src": "서울시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "지선 기점 — 3차 도시철도망(안) 원문 '지선 서부트럭터미널~당산' 명기. 좌표=POI '서부트럭터미널'(place:서부트럭터미널 (후보 10개 중 최근접), 신월역 3415m) — 역사 위치는 고시 전",
+    "audited": "2026-07-17",
+    "drop": null,
+    "gate_basis": "법정계획 (안)·공람 단계 — 「(안)」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.83758,
+      37.510746
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-29",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-29",
+    "last_movement": "2026-07-29"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.83758,
+     37.510746
     ]
    }
   },

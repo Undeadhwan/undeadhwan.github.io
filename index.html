@@ -126,10 +126,10 @@
   .apt-house-s:hover { font-size:18px; }
   .apt-house-s.sel { font-size:20px; filter:drop-shadow(0 0 4px #d6156d); }
   /* 아파트 = 깔끔한 집모양 SVG (2026-07-21 "집모양이 아니잖아" — 이모지도 점도 아님). 무채 조연 유지 */
-  .apt-dot { width:17px; height:17px; cursor:pointer; filter:drop-shadow(0 1px 2px rgba(0,0,0,.4)); }
+  .apt-dot { width:19px; height:19px; cursor:pointer; filter:drop-shadow(0 1px 2px rgba(0,0,0,.45)); }
   .apt-dot svg { display:block; width:100%; height:100%; }
-  .apt-dot path { fill:#7e8698; stroke:#fff; stroke-width:1.7; stroke-linejoin:round; }
-  .apt-dot:hover path { fill:#5a6478; }
+  .apt-dot path { fill:#273044; stroke:#fff; stroke-width:1.7; stroke-linejoin:round; }   /* 진회남색 — 무채(조연) 유지하되 또렷하게(2026-07-29 사용자 "눈에 잘 안 띔") */
+  .apt-dot:hover path { fill:#0f1522; }
   .apt-dot.sel { filter:drop-shadow(0 0 4px rgba(214,21,109,.55)); }
   .apt-dot.sel path { fill:#d6156d; }
   .apt-dot.lf { transform:translate(-50%,-50%); }   /* Leaflet divIcon은 좌상단 앵커 — 중심 보정 */
@@ -1113,7 +1113,7 @@ const JEONGBI_LICENSED = true;
 // 신규 철도 노선: OSM 실제 선형(railway=construction/proposed) 기반 재구축 → 활성.
 // 건설중=실선, 계획=점선(§7). 출처 OpenStreetMap(ODbL, 지도 하단·툴팁 표기).
 const RAIL_READY = true;
-let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [], JEONGBI_SIG = [], RAIL = [], RAIL_SIG = [], DART = [], DART_SIG = [], ARCH = [], ARCH_SIG = [], ROADF = [], ROAD_SIG = [], PARK_SIG = [], DPS_SIG = [], MASTER_SIG = [], JOBS_SIG = [], MEGA_SIG = [], EUM_SIG = [];
+let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [], JEONGBI_SIG = [], RAIL = [], RAIL_SIG = [], DART = [], DART_SIG = [], ARCH = [], ARCH_SIG = [], ROADF = [], ROAD_SIG = [], UPIS_SIG = [], DPS_SIG = [], MASTER_SIG = [], JOBS_SIG = [], MEGA_SIG = [], EUM_SIG = [];
 /* DART(신규시설투자·유형자산양수) → 일자리 후보 신호 어댑트. 위치=회사 소재지 근사(§ 후보층, confirmed:false) */
 function buildDartSignals() {   // DART 전자공시 = 법정 공시 → official_report
   DART_SIG = (DART || []).filter(s => s.geometry && s.geometry.coordinates).map(s => ({
@@ -1424,10 +1424,11 @@ const dongName = f => f.properties.adm_nm.split(" ").pop();
 /* 선택 시에만 지도에 뜨는 호재 = 현재 선택 컨텍스트의 신호(§7 온디맨드). 홈·시군구=없음(카운트 박스만) */
 let ANIMATE = false;   // 선택 순간에만 등장 애니메이션 켬(슬라이더·필터 재렌더 땐 끔)
 let compareSet = [];   // 아파트 비교(§4.5): 최대 4, 신호 속성만 비교(점수·시세 없음)
+let aptFocus = null;   // 아파트 포커스(2026-07-29 사용자): 단지 클릭 시 그 단지 반경 호재만 지도 표시. 조회필터와 무관(비교와 동일 원칙)
 const CMP_MAX = 4;
 function activeSignals() {
   if (view.mode === "dong" && view.dong) return SIGNALS.filter(visible).filter(s => dongRelation(s, view.dong));
-  if (view.mode === "apt" && view.apt) return signalsNearPoint([view.apt.lon, view.apt.lat]).map(x => x.s);
+  if (view.mode === "apt" && view.apt) return signalsNearPoint([view.apt.lon, view.apt.lat], true).map(x => x.s);   // 단지 사실=필터 무관(비교와 동일 원칙)
   if (view.mode === "detail" && view.signal) return [view.signal];
   return [];
 }
@@ -1607,8 +1608,10 @@ function syncRegionBar() {
 function buildTree() { syncRegionBar(); }   // 트리 제거 → 지역 드롭다운 동기화로 대체
 
 /* ══════════ 아파트 앵커: 단지 좌표 반경 내 신호 (§4.4 역방향 조회) ══════════ */
-function signalsNearPoint(coord) {
+function signalsNearPoint(coord, all = false) {
   // 확정 신호 + 정비(어댑트) 통합 카운팅. 정비는 좌표 근접(~2km bbox)만 우선 추려 성능 확보.
+  // all=true → **조회조건 필터 무시**(아파트 비교용, 2026-07-29 사용자 확정 "비교는 필터와 무관해야").
+  //   데이터 불변식(끝난 신호 숨김)은 필터가 아니라 사실 규칙이므로 유지한다.
   const near = s => { const c = s.geometry.coordinates; return Math.abs(c[0] - coord[0]) < 0.02 && Math.abs(c[1] - coord[1]) < 0.02; };
   const jbLocal = JEONGBI_SIG.filter(near);
   const railLocal = RAIL_SIG.filter(near);   // 계획/건설역도 호재로 카운팅
@@ -1617,7 +1620,7 @@ function signalsNearPoint(coord) {
   // 도로: 30여 개 다점 신호 — bbox 프리필터 없이 전체 평가(signalPoints가 샘플점 전부 검사, 노선당 1건 집계)
   return SIGNALS.concat(jbLocal, railLocal, dartLocal, archLocal, ROAD_SIG)
     .filter(s => s.signal !== false)   // JC 제외(호재 아님)
-    .filter(visible).map(s => {
+    .filter(all ? (s => !isStaleFinished(s)) : visible).map(s => {
     const d = Math.min(...(signalPoints(s).map(p => meters(coord, p.coord)) || [Infinity]));
     return { s, dist: d, within: d <= getRadius(s) };
   }).filter(x => x.within && isFinite(x.dist)).sort((a, b) => a.dist - b.dist);
@@ -1677,16 +1680,32 @@ function signalsInSgg(disp) {
 }
 function showApt(a) {
   view = { mode: "apt", apt: a };
+  aptFocus = new Set(signalsNearPoint([a.lon, a.lat], true).map(x => x.s));   // 이 단지 호재만 지도에(필터 무관)
   ANIMATE = true;
   renderPanel();
-  if (window._map) { window._map.setView([a.lat, a.lon], 15); mapApi?.showAptAnchor?.(a); }
+  // setView는 Leaflet 전용 — 카카오에선 TypeError로 여기서 끊겨 radar·refreshPins가 죽어 있었다(2026-07-29 실측).
+  // 줌은 고정값이 아니라 **이 단지의 호재가 전부 들어오는 화면**으로 — lv3(500m)에선 반경 1~4km
+  // 호재가 다 화면 밖이라 포커스가 빈 지도가 된다(실측).
+  if (window._map) {
+    const fpts = [...(aptFocus || [])].map(s => s.geometry && s.geometry.coordinates).filter(Boolean);
+    if (window._map.setView) {
+      if (fpts.length) window._map.fitBounds(L.latLngBounds(fpts.concat([[a.lon, a.lat]]).map(c => [c[1], c[0]])).pad(0.12));
+      else window._map.setView([a.lat, a.lon], 15);
+    } else {
+      if (fpts.length) { const bb = new kakao.maps.LatLngBounds();
+        fpts.concat([[a.lon, a.lat]]).forEach(c => bb.extend(new kakao.maps.LatLng(c[1], c[0])));
+        window._map.setBounds(bb, 40); }
+      else { window._map.setLevel(4); mapApi?.panTo?.([a.lon, a.lat]); }
+    }
+    mapApi?.showAptAnchor?.(a);
+  }
   mapApi?.radarPulse?.(a.lon, a.lat);   // 단지 중심 레이더 파동
   mapApi?.refreshPins?.();   // 이 단지 반경 호재만 등장(애니메이션)
   ANIMATE = false;
 }
 function renderApt(a) {
   const p = document.getElementById("panel");
-  const near = signalsNearPoint([a.lon, a.lat]);
+  const near = signalsNearPoint([a.lon, a.lat], true);   // 단지 사실=필터 무관
   const inCmp = compareSet.some(x => x.n === a.n && x.dong === a.dong);
   p.innerHTML = `
     <div class="phead"><div class="pt">${a.n}</div><div class="closex" onclick="closePanel()">✕</div></div>
@@ -1881,13 +1900,24 @@ function renderCompareBar() {
   if (go && compareSet.length >= 2) go.onclick = openCompare;
 }
 function cmpStats(a) {
-  const near = signalsNearPoint([a.lon, a.lat]);
+  // 비교는 **조회조건 필터와 무관**하다(2026-07-29 사용자 확정) — 지도에서 뭘 껐든 단지의 사실은 같다.
+  const near = signalsNearPoint([a.lon, a.lat], true);
   const byCat = {}; DISPLAY_CAT_KEYS.forEach(k => byCat[k] = 0);
   const byPhase = {}; PHASES.forEach(p => byPhase[p] = 0);
+  // 칸별 구성 목록(호버 툴팁용) — 개수만 보이면 "그게 뭔데"를 알 수 없다(사용자 요청)
+  const lvlNames = {}, phaseNames = {};
   let stalled = 0;
-  near.forEach(({ s }) => { byCat[catOf(s)] = (byCat[catOf(s)] || 0) + 1; byPhase[phaseOf(s)]++; if (s.status === "정체") stalled++; });
+  near.forEach(({ s, dist }) => {
+    byCat[catOf(s)] = (byCat[catOf(s)] || 0) + 1; byPhase[phaseOf(s)]++;
+    if (s.status === "정체") stalled++;
+    const nm = `${(s.title || "").replace(/"/g, "'")} (${dist < 1000 ? Math.round(dist) + "m" : (dist / 1000).toFixed(1) + "km"})`;
+    (lvlNames[levelOf(s)] = lvlNames[levelOf(s)] || []).push(nm);
+    (phaseNames[phaseOf(s)] = phaseNames[phaseOf(s)] || []).push(nm);
+  });
   const nearest = near[0] ? { title: near[0].s.title, dist: near[0].dist } : null;
-  return { total: near.length, byCat, byLvl: levelCounts(near), byPhase, stalled, nearest };
+  return { total: near.length, byCat, byLvl: levelCounts(near), byPhase, stalled, nearest,
+           lvlNames, phaseNames,
+           allNames: near.map(({ s, dist }) => `${(s.title || "").replace(/"/g, "'")} (${dist < 1000 ? Math.round(dist) + "m" : (dist / 1000).toFixed(1) + "km"})`) };
 }
 function openCompare() {
   if (compareSet.length < 2) return;
@@ -1901,19 +1931,20 @@ function openCompare() {
       <thead><tr><th class="rowh">단지</th>${compareSet.map(a =>
         `<th>${a.n}<small>${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : ""}</small></th>`).join("")}</tr></thead>
       <tbody>
-        ${row("반경 내 호재", s => `<b>${s.total}건</b>`)}
+        ${row("반경 내 호재", s => `<b title="${(s.allNames || []).slice(0, 20).join("&#10;")}${(s.allNames || []).length > 20 ? "&#10;… 외 " + (s.allNames.length - 20) + "건" : ""}" style="cursor:help">${s.total}건</b>`)}
         ${row("가장 가까운 호재", s => s.nearest ? `${s.nearest.title.length > 16 ? s.nearest.title.slice(0, 16) + "…" : s.nearest.title}<br><span style="color:var(--muted)">${dist(s.nearest.dist)}</span>` : "—")}
         <tr class="catrow"><td class="rowh" colspan="${compareSet.length + 1}" style="background:#eef1f6;text-align:left">등급별 개수 (A핵심 / B중대형 / C일반)</td></tr>
-        ${LEVELS.filter(l => stats.some(s => s.byLvl[l].total)).map(l =>
+        ${LEVELS.concat("미정").filter(l => stats.some(s => s.byLvl[l].total)).map(l =>
           row(`　<span class="lvtag" style="${LVL_STYLE[l]}">${LEVEL_NAME[l]}</span>`, s => {
             const g = s.byLvl[l];
             if (!g.total) return `<span style="color:#c3c8d2">·</span>`;
             const cats = CAT_KEYS.filter(c => g.cats[c]).map(c => `<span style="color:${CAT_COLOR[c]}">${CAT_SHORT[c]}${g.cats[c]}</span>`).join(" ");
-            return `<b>${g.total}</b> <span style="font-size:10px">${cats}</span>`;
+            // 커서를 대면 그 칸을 구성하는 호재 이름·거리가 보인다(2026-07-29 사용자 요청)
+            return `<span title="${(s.lvlNames[l] || []).slice(0, 15).join("&#10;")}" style="cursor:help"><b>${g.total}</b> <span style="font-size:10px">${cats}</span></span>`;
           })).join("")}
         <tr class="catrow"><td class="rowh" colspan="${compareSet.length + 1}" style="background:#eef1f6;text-align:left">단계별 개수</td></tr>
         ${PHASES.filter(p => stats.some(s => s.byPhase[p])).map(p =>
-          row(`　${p}`, s => `${s.byPhase[p] || 0}`)).join("")}
+          row(`　${p}`, s => `<span title="${(s.phaseNames[p] || []).slice(0, 15).join("&#10;")}" style="cursor:help">${s.byPhase[p] || 0}</span>`)).join("")}
         ${row("정체 신호", s => s.stalled ? `<span style="color:var(--stall)">${s.stalled}건 ⚠</span>` : "0")}
       </tbody>
     </table>
@@ -2090,6 +2121,7 @@ function goHome() {
   mapApi?.clearRadius(); mapApi?.clearHighlight?.(); mapApi?.clearRoute?.(); mapApi?.clearAptMarker?.();
 }
 function showDong(f) {
+  aptFocus = null;   // 아파트 포커스 해제
   view = { mode: "dong", dong: f };
   nav.sd = f.properties.sido || "서울"; nav.sg = f.properties.sgg; nav.dong = f.properties.EMD_KOR_NM; syncRegionBar();
   ANIMATE = true;
@@ -2174,6 +2206,7 @@ function showSignal(s, pan) {
 }
 /* 닫기: 신호 상세는 왔던 피드(동/구/단지)로 복귀(경계 강조 유지), 피드는 홈으로 */
 function closePanel() {
+  aptFocus = null; mapApi?.refreshPins?.();   // 아파트 포커스 해제
   if (view.mode === "detail" && returnView && returnView.mode && returnView.mode !== "home") {
     const rv = returnView; returnView = null;
     if (rv.mode === "dong") return showDong(rv.dong);
@@ -2489,6 +2522,7 @@ function initLeaflet() {
     }
   };
   const APT_ZOOM = 14;   // 이 줌 이상 = 아파트 마커(동 박스 대신). 호갱노노식 LOD 사다리 최하단
+  const APT_ICON_ZOOM = 13;   // 집 아이콘만 한 단계 일찍(2026-07-29 사용자 "이 줌에서도 보이게") — 라벨·등급 LOD는 불변
   let aptDots = [];
   const clearAptDots = () => { aptDots.forEach(m => map.removeLayer(m)); aptDots = []; };
   // 아파트 집모양 마커: 확대 시 뷰포트 내 단지. 신호 있는 단지만 호재 건수 표시(§7 절충, A안), 0건=흐린 점.
@@ -2498,7 +2532,7 @@ function initLeaflet() {
   let APT_HH_MIN = +(localStorage.getItem("hojae_apt_hh") || 500);
   const renderAptDots = () => {
     clearAptDots();
-    if (map.getZoom() < APT_ZOOM) return;
+    if (map.getZoom() < APT_ICON_ZOOM) return;
     const bd = map.getBounds();
     const cands = APTS.filter(a => bd.contains([a.lat, a.lon]))
       .filter(a => !APT_HH_MIN || (a.hh || 0) >= APT_HH_MIN)   // 세대수 필터(미상=0 취급 → '전체'에서만 표시)
@@ -2702,7 +2736,7 @@ function initLeaflet() {
     renderMasterArea();    // 신도시·대형지구 딱지 = 옅은 영역(등급 없음, 클릭 정보)
     renderHojae();         // ★ 모든 호재 원 — 라벨보다 **먼저** 그려 위치를 확보(라벨이 이를 회피)
     renderDongLabels();                                   // z12+ 동 이름 라벨 — 호재 원과 겹치면 회피
-    if (z >= APT_ZOOM) renderAptDots(); else clearAptDots();   // z14+ 아파트 집 아이콘
+    if (z >= APT_ICON_ZOOM) renderAptDots(); else clearAptDots();   // z14+ 아파트 집 아이콘
     renderRail();          // 철도/도로 노선·역(§7 실선/점선)
     if (z >= DONG_ZOOM) loadBdongVisible();   // 동 라벨이 필요한 줌부터 화면에 걸친 시도 경계 로드(전국 분할)
   };
@@ -2912,7 +2946,7 @@ function initKakao() {
   const map = new K.Map(el, { center: new K.LatLng(37.556, 126.95), level: 8 });
   window._map = map; window._kmap = map; map.setMaxLevel(13);
   // 줌 슬라이더 제거(2026-07-23 사용자 요청) — 스크롤·핀치 줌으로 대체
-  const DONG_LV = 6, APT_LV = 4;
+  const DONG_LV = 6, APT_LV = 4, APT_ICON_LV = 5;   // 집 아이콘만 lv5부터(2026-07-29) — 라벨·등급 LOD(APT_LV)는 불변
   const lodGrades = lv => lv <= APT_LV ? ["S", "A", "B", "C", "미정"] : lv <= 6 ? ["S", "A", "B", "C"] : lv <= 8 ? ["S", "A", "B"] : lv <= 9 ? ["S", "A"] : ["S"];   // 수도권-와이드(lv10+)=S만(GTX 부각, 2026-07-22 사용자 "GTX가 S로 보여야") · B·C는 lv6/8부터
   const HJR = { S: 21, A: 16, B: 12, C: 9, "미정": 6 };   // 크기=등급(카카오 렌더러 로컬 — Leaflet HJ_R과 별개 스코프). 2026-07-22 상향(사용자) — Leaflet HJ_R과 동일값 유지
   const mapEl = el;
@@ -2956,8 +2990,9 @@ function initKakao() {
   const renderHojae = () => {
     const lv = map.getLevel(); const b = map.getBounds();
     const _cen = map.getCenter(), _ccx = _cen.getLng(), _ccy = _cen.getLat();   // 화면 중심 — 상한 컬링을 중심거리순으로(2026-07-23)
-    const prelim = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
-      .filter(s => !(s._road && s.access_points)).filter(s => !s.area_shape).filter(s => s.signal !== false).filter(visible)   // area_shape(신도시 딱지)=옅은 영역으로 별도 렌더(등급 원 아님)
+    const prelim = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, UPIS_SIG, DPS_SIG)
+      .filter(s => !(s._road && s.access_points)).filter(s => !s.area_shape).filter(s => s.signal !== false)
+      .filter(s => aptFocus ? (aptFocus.has(s) && !isStaleFinished(s)) : visible(s))   // 아파트 포커스=그 단지 호재만(필터 무관, 2026-07-29)
       // 망형(전철·도로): 광역 뷰(lv≥9=4km)엔 선만, **도시 뷰(lv≤8=2km)부터 역·IC**.
       // 2026-07-22엔 lv≤7이었는데 실측 결과 **기준이 뒤집혀 있었다**(2026-07-23 사용자 제보):
       // lv8에서 B급 정비구역 65개는 보이는데 **S급 GTX 역은 0개**였다 — 등급 LOD와 역·IC LOD가
@@ -3162,7 +3197,7 @@ function initKakao() {
   let aptShown = new Set();
   const renderAptDots = () => {
     const next = new Set();
-    if (map.getLevel() <= APT_LV) {
+    if (map.getLevel() <= APT_ICON_LV) {
       const b = map.getBounds();
       const cands = APTS.filter(a => b.contain(LL(a.lon, a.lat))).filter(a => !aptHhMin || (a.hh || 0) >= aptHhMin).map(a => ({ a, hh: a.hh || 0 }));
       cands.sort((x, y) => y.hh - x.hh); const placed = [];
@@ -3404,11 +3439,20 @@ function setView(mode) {
 /* ══════════ 등급 미판정(미정) 목록 ══════════ */
 // 모든 신호 통합 후 등급 미판정(levelOf==="미정")만 — 결측 사유 표기. 사용자가 보고 소스·기준 보완.
 function allSignalsFlat() {
-  return [].concat(SIGNALS, MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, RAIL_SIG, ROAD_SIG, DART_SIG, ARCH_SIG, PARK_SIG, DPS_SIG).filter(s => s && s.geometry);
+  return [].concat(SIGNALS, MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, RAIL_SIG, ROAD_SIG, DART_SIG, ARCH_SIG, UPIS_SIG, DPS_SIG).filter(s => s && s.geometry);
 }
 function undetReason(s) {
   const c = catOf(s);
-  if (c === "주거개발") return s.hh ? `세대수 ${Number(s.hh).toLocaleString()}세대 — 최소 등급기준(500세대) 미달` : "세대수 미확보 (정비 추진현황에 세대수 없음)";
+  // 판정기가 남긴 실제 사유(lvl_basis)가 있으면 그걸 쓴다 — 종전엔 41,518세대 신도시 딱지(의도적
+  // 미등급, 2026-07-22 사용자 확정)에 "500세대 미달"이라는 거짓 단정을 찍었다(2026-07-29 사용자 발견).
+  if (s.lvl_basis) return s.lvl_basis;
+  if (c === "주거개발") {
+    if (!s.hh) return "세대수 미확보 (정비 추진현황에 세대수 없음)";
+    const minC = (typeof HH_GRADE !== "undefined" && HH_GRADE.C) || 1000;
+    return Number(s.hh) < minC
+      ? `세대수 ${Number(s.hh).toLocaleString()}세대 — 최소 등급기준(C·${minC.toLocaleString()}세대) 미만`
+      : `세대수 ${Number(s.hh).toLocaleString()}세대인데 등급 미부여 — 판정 경로 점검 필요(정상 아님)`;
+  }
   if (c === "일자리") return "연면적·투자액 미확보";
   if (c === "교통") return "노선종류 미상";
   return "등급 기준 데이터 미확보";
@@ -3599,13 +3643,13 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260729b");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260729c");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
   applyThresholds(await gj("thresholds.json").catch(() => null));
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
-  const [dong, sgg, main, macro, rawData, autoData, regions, jeongbiData, railData, roadData, dartData, archData, parkData, dpsData, masterData, jobsData, megaData, eumData] = await Promise.all([
+  const [dong, sgg, main, macro, rawData, autoData, regions, jeongbiData, railData, roadData, dartData, archData, parkData, hospData, dpsData, masterData, jobsData, megaData, eumData] = await Promise.all([
     gj("bdong/서울.geojson"),      // 초기 = 서울 467동(§3.1 법정동). 나머지 15시도는 뷰포트·선택 시 지연 로드(bdong/index.json)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
@@ -3618,7 +3662,8 @@ function initSearch() {
     gj("road_signals.json").catch(() => ({ features: [] })),   // 신규 도로(고속·간선 신설/확장/지하화, OSM) — IC=점·노선=다점 신호
     gj("dart_signals.json").catch(() => ({ signals: [] })),   // DART → 일자리 후보
     gj("arch_signals.json").catch(() => ({ signals: [] })),   // 건축인허가(전국). 2026-07-19: 권역 4분할 삭제 — 신호의 sd가 권역을 담는다
-    gj("park_signals.json").catch(() => ({ features: [] })),          // 신규 대형공원(브이월드 도시계획 API 자동수집)
+    gj("park_signals.json").catch(() => ({ features: [] })),          // 도시계획시설(공원) 결정 — 미집행·부분집행만(브이월드)
+    gj("hospital_signals.json").catch(() => ({ features: [] })),      // 도시계획시설(종합의료) 결정 — 같은 커넥터·같은 규칙(2026-07-29 배선)
     gj("dps_signals.json").catch(() => ({ signals: [] })),            // 공공건축 설계공모(건축HUB) — 계획단계 후보
     gj("master_signals.json").catch(() => ({ signals: [] })),         // S급 지구 마스터(택지정보 대장, 2026-07-22)
     gj("jobs_signals.json").catch(() => ({ signals: [] })),           // 대형 일자리 S(용산·잠실·북항 등, 2026-07-22)
@@ -3636,7 +3681,11 @@ function initSearch() {
   ARCH = ((archData && archData.signals) || []).filter(s => !s.superseded_by && !s.map_hidden);   // 권역 4분할 삭제 + 확정층 승격분 제외(핀 중복 방지) — 2026-07-19
   buildArchSignals();   // 건축인허가 → 인프라·일자리 후보 신호(호재 카운팅 포함)
   // 신규 대형공원(브이월드 도시계획 API) — feature 형식이 이미 신호 어댑트와 동일(cat/lvl/geometry)라 그대로 pool 투입
-  PARK_SIG = ((parkData && parkData.features) || []).map(f => Object.assign({ _park: true, geometry: f.geometry }, f.properties));
+  // upis_fetch(도시계획시설 결정) 산출물은 **모두 같은 모양**이라 한 배열에 담는다 — 유형이 늘어도
+  // 전역·어댑터·풀 3곳을 또 고치지 않는다(어댑터 함정 재발 방지, 2026-07-29).
+  UPIS_SIG = [parkData, hospData].flatMap(d => ((d && d.features) || [])
+    .map(f => Object.assign({ _upis: true, geometry: f.geometry }, f.properties)))
+    .filter(s => s.gate !== "관찰");   // 관찰 = 확장/개편 판별 대기(§0-1) — 지도 미표시, 승격은 gosi_confirm.json
   // 공공건축 설계공모(2026-07-18) — 계획 단계 후보. 건축HUB 인허가가 놓치는 공공건축·중형(1만㎡ 미만)을 보완.
   DPS_SIG = ((dpsData && dpsData.signals) || []).filter(s => !s.superseded_by && !s.map_hidden).map(s => Object.assign({
     _dps: true, template_type: "공공시설", confirmed: false, status: s.status || "활성"
@@ -3719,7 +3768,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260729b"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260729c"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3745,7 +3794,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260729b");
+  const CB = "?b=" + (window.BUILD || "20260729c");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
