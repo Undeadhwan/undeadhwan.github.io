@@ -2742,16 +2742,27 @@ function initLeaflet() {
       badges.push(b);
     }
   };
+  let _lfWarned = false;
+  const _lfDegraded = () => {   // 폴백 제한 고지(1회) — 조용한 백지 대신 사실 표기(P5)
+    if (_lfWarned) return; _lfWarned = true;
+    const b = document.createElement("div");
+    b.style.cssText = "position:absolute;top:8px;left:50%;transform:translateX(-50%);z-index:900;background:#fff8e6;border:1px solid #e5c56b;border-radius:10px;padding:7px 14px;font-size:12px;color:#7a5b00;box-shadow:0 2px 10px rgba(0,0,0,.12)";
+    b.textContent = "⚠ 지도 폴백 모드(카카오 SDK 차단됨) — 호재 원·노선 표시가 제한됩니다. 목록·검색·데이터는 정상입니다.";
+    document.getElementById("map").appendChild(b);   // Leaflet 스코프엔 mapEl 없음(컨테이너 id 직접)
+  };
   const applyLOD = () => {
     const z = map.getZoom();
     if (z >= DONG_ZOOM) { if (!map.hasLayer(dongLayer)) map.addLayer(dongLayer); }   // 동 경계 폴리곤 문맥
     else { if (map.hasLayer(dongLayer)) map.removeLayer(dongLayer); }
     renderJeongbiPoly();   // 정비구역 경계 폴리곤(고시 사실) — jbDrawnRings 채워짐
     renderMasterArea();    // 신도시·대형지구 딱지 = 옅은 영역(등급 없음, 클릭 정보)
-    renderHojae();         // ★ 모든 호재 원 — 라벨보다 **먼저** 그려 위치를 확보(라벨이 이를 회피)
+    // ⚠ 폴백 한계(전수감사 2026-07-29 실측): 카카오 이관(07-21) 때 Leaflet판 renderHojae·renderRail이
+    // 유실됐다 — 가드 없이는 여기서 ReferenceError로 **전체 백지**가 된다(그게 최악). 미정의면
+    // 건너뛰고 배너로 사실을 고지한다(P5). 완전 파리티 복원은 별도 작업(질문대장 백로그).
+    if (typeof renderHojae === "function") renderHojae(); else _lfDegraded();
     renderDongLabels();                                   // z12+ 동 이름 라벨 — 호재 원과 겹치면 회피
     if (z >= APT_ICON_ZOOM) renderAptDots(); else clearAptDots();   // z14+ 아파트 집 아이콘
-    renderRail();          // 철도/도로 노선·역(§7 실선/점선)
+    if (typeof renderRail === "function") renderRail();
     if (z >= DONG_ZOOM) loadBdongVisible();   // 동 라벨이 필요한 줌부터 화면에 걸친 시도 경계 로드(전국 분할)
   };
   map.on("zoomend moveend", applyLOD);
@@ -3657,7 +3668,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260729e");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260729f");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3782,7 +3793,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260729e"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260729f"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3808,7 +3819,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260729e");
+  const CB = "?b=" + (window.BUILD || "20260729f");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
