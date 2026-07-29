@@ -855,6 +855,15 @@ function nextWatch(s) {
 /* 노선 바: 역/IC/노선 신호 → 소속 노선 전체 + 지점 칩(클릭 이동, 아실·호갱노노 동선 — 2026-07-17) */
 function chipName(t) { return (t || "").split("(")[0].trim() || t; }
 function chipGo(i) { const x = window._chipSigs?.[i]; if (!x) return; if (x.geometry?.coordinates) mapApi?.panTo?.(x.geometry.coordinates); showSignal(x, true); }   // 칩 클릭=그 지점으로 지도 이동(2026-07-22 — 종전 pan=false라 이동 안 됨)
+/* 그 노선에 **그릴 수 있는 선형**이 있나. geom_omitted = "공식 지점이 성겨 직선이 실제 경로와
+   다르다"고 판정해 일부러 뺀 선형(2026-07-23 정직 표준, 도로 59건). 숨긴 이유가 '거짓이라서'인데
+   하이라이트는 그걸 안 보고 그려서, 클릭하면 가장 굵은 표현으로 되살아났다(2026-07-29 수정). */
+function routeHasGeom(lineName) {
+  if (!lineName) return false;
+  return RAIL.concat(ROADF).some(x => { const p = x.properties || {};
+    return x.geometry && x.geometry.type !== "Point" && !p.geom_omitted
+      && (p.name === lineName || p.full === lineName || p.official_name === lineName); });
+}
 function lineBar(s) {
   if (!s.line) return "";
   const pool = s._rail ? RAIL_SIG : s._road ? ROAD_SIG : [];
@@ -865,7 +874,7 @@ function lineBar(s) {
   const chips = stations.map((x, i) =>
     `<span class="stchip${x === s ? " on" : ""}" onclick="chipGo(${i})">${chipName(x.title)}</span>`).join("");
   return `<div class="linebar"><div class="lb-h">${s._road ? "🛣" : "🚈"} <b>${s.line}</b>
-    <span class="hmhint">노선 전체 하이라이트 중 · 지점 ${stations.length}</span></div>
+    <span class="hmhint">${routeHasGeom(s.line) ? "노선 전체 하이라이트 중" : "선형 미확보 — 지점만 표시"} · 지점 ${stations.length}</span></div>
     <div class="lb-chips">${chips}</div></div>`;
 }
 function srcBadge(s) {
@@ -2661,159 +2670,6 @@ function initLeaflet() {
   //   정확한 지구 경계는 별도 소스(필지 폴리곤/고시 지형도면) 필요. 그때까지 마스터는 지도 미표시 —
   //   신도시는 개별 호재건(철도·기업·정비)으로 드러난다). renderMasterArea = 빈 함수(호출부 안전).
   const renderMasterArea = () => {};
-  const HJ_R = { S: 21, A: 16, B: 12, C: 9, "미정": 6 };   // 크기=등급 (S=국가급 최대). 2026-07-22 상향 — 사용자 "작아서 잘 안보임(특히 C), 등급 차이도 구분 안 됨" → 전체 확대 + C 하한 상향 + 단차 벌림
-  hjLegend.addTo(map);   // 범례가 HJ_R을 읽으므로 여기서 부착(위에서 부르면 TDZ 오류)
-  const lodGrades = z => z >= 14 ? ["S", "A", "B", "C", "미정"] : z >= 12 ? ["S", "A", "B", "C"] : z >= 11 ? ["S", "A", "B"] : z >= 10 ? ["S", "A"] : ["S"];   // 수도권-와이드(z<10)=S만(GTX 부각, 2026-07-22 사용자) · B·C는 z12/11부터
-  const renderHojae = () => {
-    clearHojae();
-    const z = map.getZoom();
-    const bd = map.getBounds();
-    const _cen = map.getCenter(), _ccx = _cen.lng, _ccy = _cen.lat;   // 화면 중심 — 상한 컬링을 중심거리순으로(2026-07-23)
-    // 철도역·도로IC도 호재 원 체계로 일원화(2026-07-16 사용자 지적 — "역 생기는 곳이 호재인데 원이 없다").
-    // 도로 노선 신호(access_points 보유)는 선으로 렌더되므로 제외(확정 병합분 포함), IC 점만 포함.
-    const prelim = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, PARK_SIG, DPS_SIG)
-      .filter(s => !(s._road && s.access_points))
-      .filter(s => !s.area_shape)   // area_shape(신도시 딱지)=옅은 영역으로 별도 렌더(등급 원 아님)
-      .filter(s => z >= 10 || !(s.pt_type === "rail_station" || s.pt_type === "road_ic"))   // 망형(전철·도로): 광역 뷰(z<10=카카오 lv9+)엔 선만, 도시·지구 뷰(z≥10=lv≤8)부터 역·IC 등장
-      .filter(s => s.signal !== false)   // JC(분기점) 제외 — 진출입 불가라 호재 아님
-      .filter(visible)
-      .filter(s => s.geometry && s.geometry.coordinates)   // 좌표 미확정 신호 제외(지도 미표시 — 카드에서 표기)
-      .filter(s => { const c = s.geometry.coordinates; return bd.contains([c[1], c[0]]); });
-    // 표시 규칙(2026-07-27 사용자 확정, 카카오 렌더러와 동일): 뷰포트 내 후보를 **등급 우선 →
-    // 중심 가까운 순**으로 정렬해 상한(MAX_DOTS)까지 표시. 줌별 등급 컷(lodGrades)은 호재 원에서
-    // 폐기 — 드래그마다 등급이 들쑥날쑥했고 지방(후보가 성긴 곳)에선 B·C가 통째로 사라졌다.
-    // 상한 초과 시 낮은 등급·먼 것부터 탈락 → 살짝 드래그해도 구성이 안정.
-    const pool = prelim
-      .sort((a, b) => { const ra = LVL_RANK[levelOf(a)] ?? 9, rb = LVL_RANK[levelOf(b)] ?? 9;
-        if (ra !== rb) return ra - rb;
-        const ca = a.geometry.coordinates, cb = b.geometry.coordinates;
-        return ((ca[0] - _ccx) ** 2 + (ca[1] - _ccy) ** 2) - ((cb[0] - _ccx) ** 2 + (cb[1] - _ccy) ** 2); })
-      .slice(0, MAX_DOTS);
-    // 겹침 배지는 **완전 동일 좌표만**(2026-07-27 사용자 확정 — "정확히 똑같은 위치가 아니면 묶지 마라").
-    // 종전 30px 픽셀격자 근접 그룹핑은 위치가 다른 이웃 호재까지 +N으로 숨겨 남발이었다.
-    const cellKey = (x, y) => x.toFixed(6) + "," + y.toFixed(6);   // ≈0.1m — 동 대표점 폴백 등 사실상 같은 지점만
-    const groups = new Map();
-    for (const s of pool) { const c = s.geometry.coordinates; const gk = cellKey(c[0], c[1]);
-      let g = groups.get(gk); if (!g) groups.set(gk, g = []); g.push(s); }
-    for (const [gk, g] of groups) {
-      if (g.length > 1) {   // 겹침 → 개수 배지 1개(멤버 중심, 클릭 시 showCluster 목록)
-        let sx = 0, sy = 0; for (const m of g) { sx += m.geometry.coordinates[0]; sy += m.geometry.coordinates[1]; }
-        const badge = L.marker([sy / g.length, sx / g.length], { pane: "cand", icon: L.divIcon({ className: "", html: `<div class="cl-badge">+${g.length}</div>`, iconSize: [30, 22], iconAnchor: [15, 11] }) }).addTo(map);
-        badge.on("click", (e) => { L.DomEvent.stopPropagation(e); showCluster(g); });
-        hjDots.push(badge);
-        continue;
-      }
-      const s = g[0];
-      const [x, y] = s.geometry.coordinates;
-      const unk = basisUnknown(s);   // 근거 미상(미정 포함) = 회색 원·C급 크기(사용자 확정)
-      const col = s.status === "종결" ? "#9aa3b2" : unk ? "#8a93a3" : colorOf(s);
-      const lv = levelOf(s);
-      const solid = phaseSolid(s);                       // 실선=인가·착공·준공 / 점선=계획 (phase 백본 — confirmed 필드는 소스별 의미가 달라 폐기)
-      const m = L.circleMarker([y, x], { pane: "cand", radius: unk ? HJ_R.C : (HJ_R[lv] || 5),
-        color: col, weight: !unk && (lv === "S" || lv === "A") ? 2.6 : 2,
-        dashArray: solid ? null : "4 3",                 // 미확정=점선(§7)
-        fillColor: col,                                  // 중공(IC 흰속 도넛) 폐기 2026-07-18 — 철도/도로는 중분류 필터로 조회
-        // 점선+옅은 채움 동시 적용 — 줌아웃에서 점선이 뭉개져도 "미완성" 느낌 유지 (2026-07-17)
-        fillOpacity: unk ? .10 : solid ? .22 : .10,
-        opacity: s.status === "종결" ? .45 : unk ? .75 : .9 }).addTo(map);
-      // 좌표가 근사(동 대표점·근거미상)면 **후광**을 깔아 "이 근처 어딘가"임을 보여준다(§4.1 정직성).
-      // 색=분류 / 점선=단계 / 크기=등급이 이미 쓰이고 있어 새 인코딩 축을 만들지 않으려는 선택(2026-07-18).
-      if (s.geo_approx) {
-        const halo = L.circleMarker([y, x], { pane: "cand", radius: (unk ? HJ_R.C : (HJ_R[lv] || 5)) + 9,
-          stroke: false, fillColor: col, fillOpacity: .13, interactive: false }).addTo(map);
-        halo.bringToBack(); hjDots.push(halo);
-      }
-      m.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${sigTitle(s)}</div>`
-        + `<div class="apt-pop-sub"><span style="color:${col};font-weight:700">● ${catOf(s)}</span> · ${lvlPill(lv)} ${gradeBasisHtml(s).replace(/ · $/, "")}</div>`
-        + `<div class="apt-pop-cats"><span>단계 ${phaseOf(s)}${s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : ""}</span></div></div>`,
-        { direction: "top", offset: [0, -6], className: "apt-tip", sticky: true });
-      m.on("click", (e) => { L.DomEvent.stopPropagation(e); showSignal(s, false); });
-      hjDots.push(m);
-    }
-  };
-  const renderJeongbi = () => {};   // (구) 정비 마커 — renderHojae로 통합, 자리만 유지
-  // 신규 철도 노선(호재) §7 렌더: 확정/건설중=실선, 미확정(계획·구상)=점선. 후보역=점. 교통 분류·4단계 필터 반응.
-  let railLayers = [];
-  const clearRail = () => { railLayers.forEach(l => map.removeLayer(l)); railLayers = []; };
-  // 공식 IC 보유 도로의 OSM 선형: 숨김(true) → 감쇠 병행 표시(false)로 전환 (2026-07-17 재검토 — 대형 노선 13건이 통째로 안 보이는 부작용).
-  // IC 점이 여전히 1차 표현이고, 선형은 저채도 참고선으로 깔린다(철도의 선+역 문법과 통일).
-  const ROAD_LINE_HIDE_WHEN_IC = false;
-  // 도로 색 = 교통 파랑(분류색). 철도와의 구분은 중분류 필터로(2026-07-18 — 중공선/도넛 형태 문법 폐기)
-  const renderRail = () => {
-    clearRail();
-    // 선형 토글(filter.lines)만 켜도 렌더 — "철도선만 보기"(전체해제 + 철도선) 지원(2026-07-23).
-    const linesOn = filter.lines.has("철도선") || filter.lines.has("도로선");
-    if ((!RAIL.length && !ROADF.length) || (!filter.cat.has("교통") && !linesOn)) return;
-    const phaseFiltering = filter.phase.size < PHASES.length;
-    const railCol = CAT_COLOR["교통"];   // 파랑
-    const z = map.getZoom();
-    const lodSet = new Set(lodGrades(z));   // 선도 핀과 같은 등급 LOD(기준 일원화 — 줌아웃=S만, 2026-07-22)
-    for (const f of RAIL.concat(ROADF)) {
-      const p = f.properties;
-      const isRoad = p.mode === "road";
-      if (p.gate === "관찰") continue;   // 관찰 게이트 = 지도 기본 뷰 미표시(§0-1 — 절차 진입 전)
-      // 색 = 4대 분류만(교통=파랑, 사용자 확정 2026-07-17 — 황갈은 일자리 오렌지와 혼동돼 폐기).
-      // 철도/도로 구분은 중분류 필터가 담당(2026-07-18) — 선은 단계 문법(실선/점선)만 인코딩
-      const col = railCol;
-      // 실선 경계 = **착공**(물리 실체, 사용자 확정 2026-07-17) — 철도·도로 공통 phase 백본.
-      // approx(대표점 근사 선형)는 단계와 무관하게 점선(§4.1 — 선 자체가 실측이 아님).
-      const dashed = !["착공", "준공"].some(k => (p.phase || "").startsWith(k));   // 착공·준공=실선(범례 일치), 계획·인가=점선. 근사 선형은 툴팁으로만 고지(사용자 2026-07-21)
-      // 선형·역 라벨 = 철도·역(중분류) **또는** 노선 선형 토글이 켜지면 표시(2026-07-23 분리).
-      // → "철도선만 보기"(전체해제 + 철도선 on)가 가능해진다. 점 호재(역 원)는 filter.sub가 별도 게이트.
-      if (!(filter.sub.has(isRoad ? "도로" : "철도") || filter.lines.has(isRoad ? "도로선" : "철도선"))) continue;
-      if (phaseFiltering && !filter.phase.has(p.phase || "계획")) continue;   // phase 미상(예타 등 고시 전)=계획 취급 — 단계 필터에 반응(2026-07-21)
-      if (YEAR_SEL && false) continue;   // (철도 고시연도 필터는 추후)
-      if (f.geometry.type === "LineString" || f.geometry.type === "MultiLineString") {
-        if (p.geom_omitted) continue;   // 근거 없는 직선은 안 그린다(2026-07-23 정직 표준) — 도로는 IC점/대표점으로
-        // 노선 선형 표시 토글(헤더 '노선') — 선만 숨김, 역·IC 라벨과 호재 원·집계는 불변
-        if (isRoad ? !filter.lines.has("도로선") : !filter.lines.has("철도선")) continue;
-        // 등급 LOD — 줌아웃에서는 S 노선만. lvl 미기재 폴백 = 어댑터와 동일(도로선 C·철도 정규식)
-        if (!lodSet.has(p.lvl || (isRoad ? "C" : railLevelOf(p.full || p.name, p.linekind)))) continue;
-        // **공식 IC가 존재하는 도로**: IC 점이 1차 표현(사용자 확정 2026-07-17), 선형은 감쇠 참고선으로 병행
-        // (2026-07-17 재검토 — 숨김은 수도권제2순환 등 13건이 통째로 안 보이는 부작용. OSM 선형과 IC가
-        //  어긋나 보이는 문제는 저채도·세선으로 완화).
-        if (isRoad && p.has_official_ic && ROAD_LINE_HIDE_WHEN_IC) continue;
-        const subdued = isRoad && p.has_official_ic;
-        const ll = f.geometry.type === "MultiLineString"
-          ? f.geometry.coordinates.map(seg => seg.map(([x, y]) => [y, x]))   // 다중 세그먼트
-          : f.geometry.coordinates.map(([x, y]) => [y, x]);
-        const line = L.polyline(ll, { pane: "rail", color: col,
-          // 굵기 통일(2026-07-20 사용자 확정): 도로=철도 동일. 실선 3.2·점선 2.6으로 소폭 상향
-          // (2026-07-21 사용자 요청 "살짝만 더 두껍게" — 얇으면 커서로 선택이 어렵다. Leaflet은
-          //  클릭 판정이 weight에 연동되므로 두께를 올리면 선택도 함께 쉬워진다).
-          weight: dashed ? 2.6 : 3.2,
-          opacity: subdued ? .45 : isRoad ? .75 : .9,
-          dashArray: dashed ? "8 7" : null, lineCap: "round" }).addTo(map);
-        // (2026-07-18) 도로 중공선(흰 심선) 폐기 — 철도/도로 구분은 색·형태가 아니라 중분류 필터가 담당.
-        line.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${isRoad ? "🛣" : "🚈"} ${p.full || p.name}</div>`
-          + `<div class="apt-pop-sub">${p.linekind || ""} · <span style="color:${col}">${p.status}</span>${p.gate === "계획안" ? ' · <b style="color:#b3651e">계획(안) — 승인 전</b>' : ""}${p.approx ? " (근사 선형 — 공식 경유지 연결, 실선형 아님)" : dashed ? " (미확정 — 점선)" : ""}</div>`
-          + (p.gate === "계획안" ? `<div class="apt-pop-sub" style="color:#b3651e">노선·정거장 위치는 변경될 수 있습니다</div>` : "")
-          // 선형이 전 구간을 못 덮으면 사실을 그대로 알린다(§7) — '단계'와 다른 축이므로 별도 줄로 표기
-          + (p.geom_partial ? `<div class="apt-pop-sub" style="color:#b3651e">⚠ ${p.geom_cover_note || "선형 일부 구간만 확보"}</div>` : "")
-          + `<div class="apt-pop-cats"><span style="color:${col}">● 단계 ${p.phase || (p.confirmed ? "착공" : "계획")}</span>${p.note ? " · " + p.note : ""}${p.geom_src ? " · " + p.geom_src : p.src_name ? ` · 출처: ${p.src_name}` : ""}</div></div>`,
-          { sticky: true, className: "apt-tip" });
-        line.on("click", (e) => { L.DomEvent.stopPropagation(e);
-          if (isRoad) {   // 도로 노선 = 그 자체가 신호(ROAD_SIG, 확정 병합분은 SIGNALS에서 찾아 상세)
-            const sig = ROAD_SIG.find(s => s.title.startsWith(p.name))
-              || SIGNALS.find(s => s._road && s.road_ref && p.name.includes(s.road_ref));
-            if (sig) showSignal(sig, false);
-            return;
-          }
-          const flat = f.geometry.type === "MultiLineString" ? f.geometry.coordinates.flat() : f.geometry.coordinates;
-          showSignal(railToSignal(p, flat[Math.floor(flat.length / 2)]), false); });
-        railLayers.push(line);
-      } else if (f.geometry.type === "Point" && z >= 14) {
-        // 역·IC 원은 renderHojae(호재 원 체계: 크기=등급·색=분류)로 일원화 — 여기선 z14+ 역명 상시 라벨만(뷰포트 내)
-        const [x, y] = f.geometry.coordinates;
-        if (!map.getBounds().contains([y, x])) continue;
-        const lb = L.marker([y, x], { pane: "rail", interactive: false,
-          icon: L.divIcon({ className: "", html: `<div class="rail-name">${p.name}</div>`, iconSize: null }) });
-        lb.addTo(map); railLayers.push(lb);
-      }
-    }
-  };
-  // 철도 노선 → 신호 상세 어댑트(우측 패널)
-  // railToSignal은 전역 함수로 승격됨(카카오·Leaflet 공유, 2026-07-21) — 지역 정의 제거
   /* 호재 중심 LOD(2026-07-16 대개편): 카운트 배지(동·시군구) 전면 제거 —
      상시 = 호재 원(등급 LOD) + 철도/도로 선. z12+=동 이름 라벨(클릭 앵커), z14+=아파트 집 아이콘. */
   const renderDongLabels = () => {
@@ -2970,6 +2826,7 @@ function initLeaflet() {
     for (const f of RAIL.concat(ROADF)) {
       const p = f.properties;
       if (f.geometry.type === "Point") continue;
+      if (p.geom_omitted) continue;   // 숨긴 선형은 하이라이트에서도 안 그린다(2026-07-29 — 지점 링만)
       if (p.name !== lineName && p.full !== lineName && p.official_name !== lineName) continue;
       const ll = f.geometry.type === "MultiLineString"
         ? f.geometry.coordinates.map(seg => seg.map(([x, y]) => [y, x]))
@@ -3395,7 +3252,8 @@ function initKakao() {
   const showRadius = s => { clearRadius(); addRadius(s); }; const showRadiusMany = list => { clearRadius(); list.forEach(addRadius); };
   let routeHl = []; const clearRoute = () => { routeHl.forEach(o => o.setMap(null)); routeHl = []; };
   const highlightRoute = (lineName, fit) => { clearRoute(); if (!lineName) return; const col = CAT_COLOR["교통"]; let bounds = new K.LatLngBounds();
-    for (const f of RAIL.concat(ROADF)) { const p = f.properties; if (f.geometry.type === "Point") continue; if (p.name !== lineName && p.full !== lineName && p.official_name !== lineName) continue;
+    for (const f of RAIL.concat(ROADF)) { const p = f.properties; if (f.geometry.type === "Point") continue; if (p.geom_omitted) continue;   // 숨긴 선형은 하이라이트에서도 안 그린다(2026-07-29 — 지점 링만)
+      if (p.name !== lineName && p.full !== lineName && p.official_name !== lineName) continue;
       const segs = f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates]; const dashed = (!["착공", "준공"].some(k => (p.phase || "").startsWith(k)));
       segs.forEach(seg => { const ll = seg.map(([x, y]) => { const q = LL(x, y); bounds.extend(q); return q; }); routeHl.push(new K.Polyline({ map, path: ll, strokeColor: "#fff", strokeWeight: 11, strokeOpacity: .85, zIndex: 21 })); routeHl.push(new K.Polyline({ map, path: ll, strokeColor: col, strokeWeight: 5.5, strokeOpacity: .95, strokeStyle: dashed ? "shortdash" : "solid", zIndex: 22 })); }); }
     for (const f of RAIL.concat(ROADF)) { const p = f.properties; if (p.kind !== "station" || p.signal === false) continue; if (p.line !== lineName && p.line_official !== lineName) continue; const [x, y] = f.geometry.coordinates;
@@ -3741,7 +3599,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260729a");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260729b");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3861,7 +3719,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260729a"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260729b"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3887,7 +3745,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260729a");
+  const CB = "?b=" + (window.BUILD || "20260729b");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
