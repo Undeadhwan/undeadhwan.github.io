@@ -1,0 +1,374 @@
+{
+ "type": "FeatureCollection",
+ "_note": "신규 판매·유통시설(판매 10,000㎡+·결정고시 2023+, 집행상태 미집행·부분집행만) — 브이월드 도시계획 API 자동수집. 집행완료(=이미 있는 공원)와 상태 미상은 제외. upis_fetch.py --type retail. 부지면적 축(연면적 아님) — 등급은 인프라:부지 공용 눈금",
+ "collected": "2026-07-29",
+ "boxes": 182,
+ "all_over_min": 233,
+ "delta_new": 5,
+ "by_grade": {
+  "B": 1,
+  "C": 4
+ },
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "판매",
+    "title": "유통단지 (880,959㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 부분집행",
+    "phase": "착공",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "판매",
+    "area_m2": 880959,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "48250NTC202508060101",
+    "gate": "관찰",
+    "gate_lock": true,
+    "note": "조성계획 변경(유통단지) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-08-06 · 집행 부분집행 · 근거 고시: 김해도시관리계획(유통업무설비)사업 시행자 지정, 실시계획인가 및 조성계획 결정(변경) 및 지형도면 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(유통·시장) 결정",
+      "date": "2025-08-06",
+      "state": "done",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "current"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-07-29",
+    "lvl_basis": "부지면적 880,959㎡ — 인프라:부지 B",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.827877,
+      35.181274
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-29",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-29",
+    "last_movement": "2026-07-29"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.827877,
+     35.181274
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "판매",
+    "title": "기타 시장시설 (10,029㎡)",
+    "lvl": "C",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "판매",
+    "area_m2": 10029,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "47820NTC202412230001",
+    "gate": "신호",
+    "note": "조성계획 변경(기타 시장시설) — 신규 아님·미착공 계획 갱신 · 결정고시 2024-12-23 · 집행 미집행 · 근거 고시: 청도 군관리계획(도로, 시장) 결정(변경) 및 지형도면 등 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(유통·시장) 결정",
+      "date": "2024-12-23",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-07-29",
+    "gate_basis": "단계 인가 — 법정 절차 진행 중",
+    "lvl_basis": "부지면적 10,029㎡ — 인프라:부지 C",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.745772,
+      35.644174
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2026-07-29",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-29",
+    "last_movement": "2026-07-29"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.745772,
+     35.644174
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "판매",
+    "title": "대규모점포 (25,271㎡)",
+    "lvl": "C",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "판매",
+    "area_m2": 25271,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "47210NTC202409090002",
+    "gate": "신호",
+    "note": "조성계획 변경(대규모점포) — 신규 아님·미착공 계획 갱신 · 결정고시 2024-09-09 · 집행 미집행 · 근거 고시: 영주 도시관리계획(도시계획시설 : 시장, 도로) 결정(변경) 및 지형도면 등 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(유통·시장) 결정",
+      "date": "2024-09-09",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-07-29",
+    "gate_basis": "단계 인가 — 법정 절차 진행 중",
+    "lvl_basis": "부지면적 25,271㎡ — 인프라:부지 C",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.58812,
+      36.792067
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2026-07-29",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-29",
+    "last_movement": "2026-07-29"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.58812,
+     36.792067
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "판매",
+    "title": "가축시장 (85,321㎡)",
+    "lvl": "C",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 부분집행",
+    "phase": "착공",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "판매",
+    "area_m2": 85321,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "48250NTC202404040054",
+    "gate": "관찰",
+    "gate_lock": true,
+    "note": "조성계획 변경(가축시장) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-04-04 · 집행 부분집행 · 근거 고시: 김해도시관리계획(시설: 도축장, 시장) 결정(변경) 및 지형도면 고시 [내삼리 1282번지 일원]",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(유통·시장) 결정",
+      "date": "2024-04-04",
+      "state": "done",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "current"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-07-29",
+    "lvl_basis": "부지면적 85,321㎡ — 인프라:부지 C",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.812893,
+      35.226432
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-07-29",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-29",
+    "last_movement": "2026-07-29"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.812893,
+     35.226432
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "판매",
+    "title": "대규모점포 (17,679㎡)",
+    "lvl": "C",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "판매",
+    "area_m2": 17679,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "44770NTC202309200002",
+    "gate": "신호",
+    "note": "조성계획 변경(대규모점포) — 신규 아님·미착공 계획 갱신 · 결정고시 2023-09-20 · 집행 미집행 · 근거 고시: 서천 군관리계획(서천특화시장주변 지구단위계획) 결정(변경) 및 지형도면 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(유통·시장) 결정",
+      "date": "2023-09-20",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-07-29",
+    "gate_basis": "단계 인가 — 법정 절차 진행 중",
+    "lvl_basis": "부지면적 17,679㎡ — 인프라:부지 C",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.687198,
+      36.074884
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2026-07-29",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-29",
+    "last_movement": "2026-07-29"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.687198,
+     36.074884
+    ]
+   }
+  }
+ ]
+}
