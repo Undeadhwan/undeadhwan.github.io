@@ -883,11 +883,13 @@ function srcBadge(s) {
   return `<span class="badge-src ${v.cls}" title="${v.tip}">${v.t}</span>`;
 }
 function levelPill(s) { return lvlPill(levelOf(s)); }
-// 세부 축(중분류) 라벨. 판별 근거가 없으면 **아무것도 붙이지 않는다** — 첫 축으로 추정 표기하면 거짓(P2).
+// 세부 축(중분류) 라벨 — **조회 키(subKeyOf)를 그대로 말한다**(2026-07-29 사용자 "왜 데이터센터지" 2회).
+// 종전엔 미상이면 아무것도 안 붙였는데, 미상 칩과 함께 켠 화면에서 무표기 신호가 옆 칩 소속처럼
+// 읽혔다. 추정 표기가 아니라 '미상'이라는 사실의 표기이므로 P2에 부합한다.
 function subLabel(s) {
   if (!SUB_KEYS[catOf(s)]) return "";
-  const sub = subOf(s);
-  return sub ? " · " + sub : "";
+  const k = subKeyOf(s);
+  return k === "미상" ? ' · <span style="color:#8a7a56">중분류 미상</span>' : " · " + k;
 }
 // YYYYMMDD → YYYY-MM-DD (팩트시트 표기)
 function fmtDay(d) { d = (d || "").trim(); return d.length === 8 ? `${d.slice(0,4)}-${d.slice(4,6)}-${d.slice(6,8)}` : (d || "—"); }
@@ -2061,7 +2063,11 @@ function showSgg(disp) {
   mapApi?.refreshPins?.();
   mapApi?.highlightRings?.((window._sggRings || {})[disp]);   // 선택 시군구 경계 강조
   const bd = window._sggBounds?.[disp];
-  if (bd && window._map) window._map.fitBounds(bd);
+  if (bd && window._map) {
+    if (window._map.fitBounds) window._map.fitBounds(bd);
+    else { const b2 = new kakao.maps.LatLngBounds();   // 카카오 분기(2026-07-29)
+      b2.extend(new kakao.maps.LatLng(bd[0][0], bd[0][1])); b2.extend(new kakao.maps.LatLng(bd[1][0], bd[1][1]));
+      window._map.setBounds(b2, 30); } }
   ANIMATE = false;
 }
 function pointInSgg(pt, disp) {
@@ -2130,7 +2136,11 @@ function showDong(f) {
   mapApi?.highlightRings?.(ringsOf(f));   // 선택한 동 경계만 강조
   const c = ringCentroid(ringsOf(f)[0]);  // 동 중심에서 레이더 파동
   // 동 클릭 = 해당 동으로 줌업(영역 fit — 호재 중심 개편)
-  if (window._map) { const bb = dongBB(f); window._map.fitBounds([[bb[1], bb[0]], [bb[3], bb[2]]], { padding: [30, 30], maxZoom: 15 }); }
+  if (window._map) { const bb = dongBB(f);
+    if (window._map.fitBounds) window._map.fitBounds([[bb[1], bb[0]], [bb[3], bb[2]]], { padding: [30, 30], maxZoom: 15 });
+    else { const b2 = new kakao.maps.LatLngBounds();   // 카카오 — fitBounds는 Leaflet 전용(스윕 발견 2026-07-29)
+      b2.extend(new kakao.maps.LatLng(bb[1], bb[0])); b2.extend(new kakao.maps.LatLng(bb[3], bb[2]));
+      window._map.setBounds(b2, 30); } }
   mapApi?.radarPulse?.(c[0], c[1]);
   mapApi?.refreshPins?.();   // 이 동 호재만 등장(애니메이션)
   ANIMATE = false;
@@ -2986,7 +2996,7 @@ function initKakao() {
     return { col, lvl, solid, unk, r: unk ? HJR.C : (HJR[lvl] || 5), bw: !unk && (lvl === "S" || lvl === "A") ? 2.6 : 2,
       alpha: s.status === "종결" ? .45 : unk ? .75 : .9, fillOp: unk ? .10 : solid ? .22 : .10 }; };
   const hjHtml = s => { const t = hjStyle(s);
-    return '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + sigTitle(s) + '</div><div class="apt-pop-sub"><span style="color:' + t.col + ';font-weight:700">● ' + catOf(s) + '</span> · ' + lvlPill(t.lvl) + ' ' + gradeBasisHtml(s).replace(/ · $/, "") + '</div><div class="apt-pop-cats"><span>단계 ' + phaseOf(s) + (s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : "") + '</span></div></div>'; };
+    return '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + sigTitle(s) + '</div><div class="apt-pop-sub"><span style="color:' + t.col + ';font-weight:700">● ' + catOf(s) + '</span>' + subLabel(s) + ' · ' + lvlPill(t.lvl) + ' ' + gradeBasisHtml(s).replace(/ · $/, "") + '</div><div class="apt-pop-cats"><span>단계 ' + phaseOf(s) + (s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : "") + '</span></div></div>'; };
   const renderHojae = () => {
     const lv = map.getLevel(); const b = map.getBounds();
     const _cen = map.getCenter(), _ccx = _cen.getLng(), _ccy = _cen.getLat();   // 화면 중심 — 상한 컬링을 중심거리순으로(2026-07-23)
@@ -3643,7 +3653,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260729c");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260729d");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3768,7 +3778,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260729c"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260729d"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3794,7 +3804,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260729c");
+  const CB = "?b=" + (window.BUILD || "20260729d");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
