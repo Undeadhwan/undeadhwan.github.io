@@ -89,6 +89,19 @@
     background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:0 8px 30px rgba(25,35,60,.16);
     padding:16px 16px 20px; z-index:500; order:0; }
   #map { flex:1; min-width:0; order:1; }
+  /* 목록 모드 — 지도가 있던 자리를 그대로 쓴다(도크 공유). 카드는 패널과 같은 makeCard. */
+  #listv { flex:1; min-width:0; order:1; display:none; overflow-y:auto; padding:16px 20px 80px; background:var(--bg); }
+  #listv .lvhead { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    max-width:920px; margin:0 auto 6px; }
+  #listv .lvtitle { font-size:16px; font-weight:700; }
+  #listv .lvctl { display:flex; align-items:center; gap:8px; }
+  #listv .lvsort { font-size:var(--fs-s); color:var(--ink2); display:flex; align-items:center; gap:6px; }
+  #listv select, #listv input { font-size:var(--fs-s); padding:6px 8px; border:1px solid var(--line); border-radius:var(--r-s); background:#fff; color:var(--ink); }
+  #listv input { min-width:150px; }
+  #listv .lvcount { max-width:920px; margin:0 auto 10px; font-size:var(--fs-s); color:var(--ink2); font-variant-numeric:tabular-nums; }
+  #listv .lvcount b { color:var(--ink); }
+  #listv #l-list { max-width:920px; margin:0 auto; }
+  #listv .lloc { color:var(--ink2); }
   .regionbar { display:flex; gap:7px; align-items:center; flex-wrap:wrap; }
   .regionbar select { font-size:14.5px; font-weight:600; padding:8px 11px; border:1px solid #d9dee8; border-radius:9px; background:#fff; color:#1a2233; cursor:pointer; min-width:94px; }
   .regionbar select:focus { outline:none; border-color:#2e5ce6; }
@@ -311,6 +324,8 @@
   .card .watch { font-size:12px; color:var(--muted); margin-top:4px; }
   .fresh { font-size:11px; color:var(--muted); }
   .fresh.stall { color:var(--stall); font-weight:700; }
+  /* 관측일 기반 표기 = 문서 날짜가 아님 → 점선(DESIGN §1-7: 실선=사실 / 점선=사실 아님) */
+  .fresh.obs { border-bottom:1px dotted var(--line2); cursor:help; }
   .fresh.done { color:#2e8b57; font-weight:600; }
   .badge-draft { display:inline-block; font-size:10px; background:#fff3cd; color:#856404; border-radius:4px; padding:1px 5px; margin-left:4px; }
   /* ── 마일스톤 트랙 (DATA_STANDARD §3b) — "지금 어디까지 왔고, 다음은 언제" ── */
@@ -358,8 +373,10 @@
   .subtrack .subcur { color:var(--ink); background:#fff3cd; border-radius:3px; padding:0 3px; }
   .dong-badge { background:#fff; border:1.5px solid var(--navy); border-radius:12px; padding:1px 8px; font-size:11px; font-weight:600; white-space:nowrap; cursor:pointer; }
   /* 겹친 호재(같은 지점 중첩) 개수 배지 — 클릭 시 목록 펼침(범례와 1:1). 중립 남색·흰 글자 */
-  .cl-badge { background:var(--navy); color:#fff; border:2px solid #fff; border-radius:14px; min-width:22px; height:22px; padding:0 6px; font-size:12px; font-weight:800; line-height:22px; text-align:center; box-shadow:0 2px 7px rgba(0,0,0,.32); cursor:pointer; white-space:nowrap; }
-  .cl-badge:hover { background:#3a4ea0; }
+  /* 겹침 배지 — 지도 위 요소는 밝게(2026-07-30). 종전 네이비 채움+짙은 그림자는 호재 원보다
+     무거워 보여 조연이 주인공을 눌렀다(P4). 흰 알약 + 얇은 잉크 테두리로 무게를 낮춘다. */
+  .cl-badge { background:#fff; color:var(--ink); border:1.4px solid var(--ink); border-radius:14px; min-width:22px; height:22px; padding:0 6px; font-size:12px; font-weight:700; line-height:20px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,.16); cursor:pointer; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .cl-badge:hover { background:var(--ink); color:#fff; }
   /* 아파트 이름 라벨 (조회 진입점용 — §4.1 허용, 배지·개수 없음) */
   /* 호갱노노식 아파트 집모양 마커 — 신호 있는 단지만 호재 건수(§7 절충), 0건은 흐린 집(숫자 없음) */
   .apt-house { position:relative; display:inline-block; background:#4460e0; color:#fff; border-radius:6px;
@@ -550,9 +567,14 @@
     <select id="r-dong" disabled><option value="">읍면동 선택</option></select>
   </div>
   <div class="chips" id="f-dd"></div>
+  <!-- 뷰 전환(지도 | 목록)은 **사용자 기능**이라 운영 도구 그룹(#f-view)에 두지 않는다.
+       #f-view는 운영 모드에서만 보이므로, 여기 있으면 공개 화면에 목록이 존재하지 않게 된다. -->
+  <div class="chips" id="f-mode">
+    <span class="chip on" id="v-map">지도</span>
+    <span class="chip" id="v-list" title="지도와 같은 표시 조건으로, 최근 움직인 신호부터 목록으로 봅니다">목록</span>
+  </div>
   <div class="chips" id="f-view">
     <select id="apt-hh" title="아파트 표시 세대수 필터 (아파트는 z14+ 집 아이콘)" style="font-size:12px;padding:4px 6px;border:1px solid var(--line);border-radius:8px;background:#fff"></select>
-    <span class="chip on" id="v-map">지도</span>
     <span class="chip" id="v-undet" title="등급 기준(면적·금액·세대수 등)에 매칭 안 돼 등급 미판정인 호재 목록">❓ 미판정 목록</span>
     <span class="chip" id="v-settings" onclick="window.open('settings.html','_blank')" title="등급 눈금(면적·금액·세대수)과 영향 반경을 thresholds.json에 직접 설정 — 운영자 전용">⚙ 기준 설정</span>
     <span class="chip" onclick="window.open('rail_reference.html','_blank')" title="신규 철도 노선·역사 좌표 대장 (영향권 기준)">🚈 노선·역 대장</span>
@@ -565,6 +587,27 @@
   <aside id="dock"></aside>
   <aside id="panel"></aside>
   <div id="map"></div>
+  <!-- 목록 모드: 지도와 **같은 도크(표시 조건)** 안에 산다. 필터를 두 벌 만들지 않는다(2026-07-30). -->
+  <div id="listv">
+    <div class="lvhead">
+      <div class="lvtitle">신호 목록</div>
+      <div class="lvctl">
+        <label class="lvsort">정렬
+          <select id="l-sort">
+            <option value="recent">최근순 (움직임 · 확인일)</option>
+            <option value="moved">문서상 움직임순 (관측일은 뒤로)</option>
+            <option value="level">등급순</option>
+            <option value="phase">단계순 (계획→준공)</option>
+            <option value="dist">거리순 (선택 단지 기준)</option>
+          </select>
+        </label>
+        <input id="l-q" type="search" placeholder="이름 검색">
+      </div>
+    </div>
+    <div class="lvcount" id="l-count"></div>
+    <div id="l-list"></div>
+    <div style="text-align:center; margin:16px 0;"><span class="chip" id="l-more" style="display:none">더 보기</span></div>
+  </div>
 </div>
 <div id="cmpBar"></div>
 <div id="cmpModal" style="display:none;">
@@ -576,30 +619,10 @@
   </div>
 </div>
 
-<div id="raw" style="display:none; height:calc(100vh - 87px); overflow-y:auto; padding:16px 20px 80px;">
-  <div style="max-width:1080px; margin:0 auto;">
-    <div class="pt">수도권 원시 신호 탐색 (최근 1년)</div>
-    <div class="ps">수집·필터 통과한 <b>원시 공고/공시</b>층입니다 — 아직 신호(§3.1) 아님. 큐레이션 판단용.
-      나라장터: 수도권 기관 + 키워드(타당성·기본계획·실시설계·지구단위·정비계획·조성·건립·신설·확장) / DART: 수도권 소재지 언급 공시</div>
-    <div class="rawctl">
-      <select id="r-sido"><option value="">시도: 전체</option></select>
-      <select id="r-sgg"><option value="">시군구: 전체</option></select>
-      <select id="r-price">
-        <option value="0">금액: 전체</option>
-        <option value="100000000">1억+</option>
-        <option value="300000000">3억+</option>
-        <option value="500000000" selected>5억+ (권장 컷)</option>
-        <option value="1000000000">10억+</option>
-        <option value="3000000000">30억+</option>
-      </select>
-      <select id="r-src"><option value="">소스: 전체</option><option>G2B</option><option>DART</option></select>
-      <input id="r-q" type="search" placeholder="제목 검색 (예: 지구단위, 돔구장)">
-    </div>
-    <div class="ps" id="r-count" style="margin-top:10px"></div>
-    <div id="r-list"></div>
-    <div style="text-align:center; margin:14px 0;"><span class="chip" id="r-more" style="display:none">더 보기</span></div>
-  </div>
-</div>
+<!-- 수도권 원시 공고 뷰(#raw)는 2026-07-30 접었다 — 공시 원문 덤프라 읽을 수 없었고, 그 자리를
+     '확인된 신호'를 시간축으로 보는 목록 모드(#listv)가 대신한다. 원시층 데이터(capital_raw.json)는
+     후보층(signalize) 입력이라 파이프라인은 그대로다. ⚠ 이 블록의 r-sido/r-sgg는 헤더 지역선택과
+     **id가 겹쳐** 있었다(getElementById가 헤더 것을 집어 조용히 어긋날 수 있는 상태). -->
 <div id="undet" style="display:none; height:calc(100vh - 87px); overflow-y:auto; padding:16px 20px 80px;">
   <div style="max-width:1080px; margin:0 auto;">
     <div class="pt">등급 미판정 목록</div>
@@ -1527,14 +1550,30 @@ function weeksAgo(d) {
   const t = new Date(d.length === 7 ? d + "-01" : d);
   return Math.max(0, Math.round((TODAY - t) / (7 * 864e5)));
 }
+/* last_movement의 **날짜 출처**(2026-07-30). lifecycle.py가 이미 구분해 뒀다:
+     basis="source"  = 소스 원문의 날짜(허가일·고시일·개통일) → 실제로 그날 움직인 것 = 사실
+     basis="observed"= 우리가 그 단계임을 처음 본 날 → "그날 움직였다"는 뜻이 **아니다**
+   전체 4,508건 중 2,585건(57%)이 observed인데 화면은 전부 "움직임"이라 불러 왔다.
+   정비 조합 2,285건이 수집 이틀치 날짜를 공유해 "이번 주 움직임 2,588건"이 되던 상태 —
+   실제로는 그 주에 **처음 본** 것이다. 데이터가 구분한 것을 화면이 지우면 안 된다(P2·P5). */
+function movBasis(s) {
+  const h = s.stage_history;
+  if (!h || !h.length || !s.last_movement) return null;
+  const e = h.filter(x => x.date === s.last_movement).pop() || h[h.length - 1];
+  return e.basis === "observed" ? "observed" : "source";
+}
+const OBS_TIP = "소스에 단계 변경일이 없어 **우리가 그 단계임을 확인한 날**로 표기합니다(관측 사실). 그날 움직였다는 뜻이 아닙니다.";
 function freshness(s) {
   const w = weeksAgo(s.last_movement);
   if (w === null) return "";
-  const months = w / 4.345;
+  const months = w / 4.345, obs = movBasis(s) === "observed";
   if (phaseOf(s) === "준공·개통")   // 종결 단계 = '정체' 개념 없음(P5) — 완료 후 경과만 사실 표기("N개월 전"은 잔여기간으로 오독됨)
     return `<span class="fresh done">✓ 준공 후 ${months >= 12 ? Math.floor(months / 12) + "년" : Math.max(1, Math.floor(months)) + "개월"} 경과</span>`;
-  if (months >= 6) return `<span class="fresh stall">정체 ${Math.floor(months)}개월 ⚠</span>`;
-  return `<span class="fresh">▸ ${w === 0 ? "이번 주" : w + "주 전"} 움직임</span>`;
+  // 정체: observed도 '관측 이래 단계 변화 없음'이라 정체 근거는 되지만, 근거의 종류는 밝힌다.
+  if (months >= 6) return `<span class="fresh stall"${obs ? ` title="${OBS_TIP}"` : ""}>정체 ${Math.floor(months)}개월${obs ? "(관측 이래)" : ""} ⚠</span>`;
+  return obs
+    ? `<span class="fresh obs" title="${OBS_TIP}">▸ ${w === 0 ? "이번 주" : w + "주 전"} 확인</span>`
+    : `<span class="fresh">▸ ${w === 0 ? "이번 주" : w + "주 전"} 움직임</span>`;
 }
 function meters(p1, p2) {
   const x = (p2[0] - p1[0]) * 111320 * Math.cos((p1[1] + p2[1]) / 2 * Math.PI / 180);
@@ -2286,7 +2325,6 @@ function renderSggFeed(disp) {
   const p = document.getElementById("panel");
   const sggSigs = signalsInSgg(disp);   // 확정+정비+철도 (수도권 전역)
   const cands = (AUTO || []).filter(a => `${a.sd} ${a.sg}` === disp);
-  const rawN = (RAW || []).filter(r => `${r.sd} ${r.sg}` === disp).length;
   const LIST_CAP = 80;
   p.innerHTML = `
     <div class="phead"><div class="pt">${disp}</div><div class="closex" onclick="closePanel()">✕</div></div>
@@ -2577,7 +2615,7 @@ function resetFilters() {
   localStorage.setItem("hojae_lines", JSON.stringify([...filter.lines]));
   renderAll(); window._dbg?.applyLOD?.();
 }
-function renderAll() { renderChips(); renderDock(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); }
+function renderAll() { renderChips(); renderDock(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); if (VIEW_MODE === "list") renderList(); }
 
 /* ══════════ 지도: 카카오 → Leaflet 폴백 ══════════ */
 function bootMap() {
@@ -3071,8 +3109,8 @@ function initLeaflet() {
       if (s.road_kind === "전용") {   // 전용도로: 영향권 = 진출입 IC 반경만 (선 자체는 버퍼 없음 — 이원 관리)
         (s.ic_points || []).forEach(ap => {
           const c = L.circle([ap.coordinates[1], ap.coordinates[0]], {
-            radius: getRadius(s), color: col, weight: 2, opacity: .9,
-            fillColor: col, fillOpacity: 0.28, interactive: false }).addTo(map);
+            radius: getRadius(s), color: col, weight: 1.5, opacity: .85,
+            fillColor: col, fillOpacity: 0.14, interactive: false }).addTo(map);
           if (c._path) c._path.classList.add("circ-in");
           circles.push(c);
         });
@@ -3087,8 +3125,8 @@ function initLeaflet() {
     }
     signalPoints(s).forEach(p => {
       const c = L.circle([p.coord[1], p.coord[0]], {
-        radius: getRadius(s), color: col, weight: 2, opacity: .9,
-        fillColor: col, fillOpacity: 0.28, interactive: false
+        radius: getRadius(s), color: col, weight: 1.5, opacity: .85,
+        fillColor: col, fillOpacity: 0.14, interactive: false
       }).addTo(map);
       if (c._path) c._path.classList.add("circ-in");
       circles.push(c);
@@ -3168,14 +3206,33 @@ function hexA(hex, a) {
   return "rgba(" + parseInt(n.slice(0, 2), 16) + "," + parseInt(n.slice(2, 4), 16) + "," + parseInt(n.slice(4, 6), 16) + "," + a + ")";
 }
 /* 호재 원 마커 이미지(스타일별 캐시) — CustomOverlay div 대신 Kakao Marker로 렌더해 드래그 성능 확보
-   (사용자 "부드럽게" 2026-07-21). 색=분류·크기=등급·점선=단계·후광=근사 를 SVG 하나에 담고 캐시. */
+   (사용자 "부드럽게" 2026-07-21). 색=분류·크기=등급·점선=단계·후광=근사 를 SVG 하나에 담고 캐시.
+
+   2026-07-30 형태 개선(사용자 "촌스럽다 — 인식은 잘 되어야 함", 색은 그대로 유지):
+     ① **흰 케이싱** — 색 테두리 바깥에 흰 링. 베이스맵(주황 도로·초록 녹지) 위에서 원이 배경에
+        직접 닿아 지저분하던 것을 끊는다. 지도 마커의 표준 해법이고 인식성은 오히려 올라간다.
+     ② **얇은 테두리** — 케이싱이 생기면 굵을 필요가 없다. r=6짜리 미정 원에 bw=2는 선이 원의 1/3이었다.
+     ③ **둘레 비례 미세 점선** — 고정 "4 3"은 작은 원에서 8조각짜리 톱니가 됐다. 조각 수를 둘레에서
+        도출해 크기와 무관하게 같은 결로 보이게 한다(round cap).
+     ④ **코어 도트** — 채움을 옅게 낮춘 대신 중심에 점을 찍는다. 겹치거나 작아도 "여기 하나 있다"가
+        사라지지 않는다. 착공 후=채운 점 / 계획·인가=속 빈 점으로 P2 문법(실선/점선)을 한 번 더 반복. */
 const _hjImg = {};
 function hojaeMarkerImage(col, r, bw, solid, fillOp, alpha, halo) {
   const key = col + "|" + r + "|" + bw + "|" + solid + "|" + fillOp + "|" + alpha + "|" + halo;
   if (_hjImg[key]) return _hjImg[key];
-  const size = Math.ceil((halo ? r + 9 : r + bw + 1) * 2), c = size / 2;
-  let inner = halo ? '<circle cx="' + c + '" cy="' + c + '" r="' + (r + 9) + '" fill="' + col + '" opacity="0.13"/>' : "";
-  inner += '<circle cx="' + c + '" cy="' + c + '" r="' + r + '" fill="' + hexA(col, fillOp) + '" stroke="' + col + '" stroke-width="' + bw + '"' + (solid ? "" : ' stroke-dasharray="4 3"') + '/>';
+  const cw = 1.6, ro = r + bw / 2 + cw / 2;              // 케이싱 반지름(색 테두리 바깥)
+  const size = Math.ceil((halo ? r + 7 : ro + cw) * 2), c = size / 2;
+  let inner = halo ? '<circle cx="' + c + '" cy="' + c + '" r="' + (r + 7) + '" fill="' + col + '" opacity="0.10"/>' : "";
+  inner += '<circle cx="' + c + '" cy="' + c + '" r="' + ro.toFixed(2) + '" fill="none" stroke="#fff" stroke-width="' + cw + '" opacity="0.95"/>';
+  let dash = "";
+  if (!solid) {   // 둘레를 짝수 등분 → 크기가 달라도 결이 같다
+    const circ = 2 * Math.PI * r, n = Math.max(8, Math.round(circ / 4.6 / 2) * 2), seg = circ / n;
+    dash = ' stroke-dasharray="' + (seg * 0.45).toFixed(2) + " " + (seg * 0.55).toFixed(2) + '" stroke-linecap="round"';
+  }
+  inner += '<circle cx="' + c + '" cy="' + c + '" r="' + r + '" fill="' + hexA(col, fillOp) + '" stroke="' + col + '" stroke-width="' + bw + '"' + dash + '/>';
+  inner += solid
+    ? '<circle cx="' + c + '" cy="' + c + '" r="' + Math.max(1.6, r * 0.26).toFixed(1) + '" fill="' + col + '"/>'
+    : '<circle cx="' + c + '" cy="' + c + '" r="' + Math.max(1.4, r * 0.2).toFixed(1) + '" fill="#fff" stroke="' + col + '" stroke-width="1.2"/>';
   const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '"><g opacity="' + alpha + '">' + inner + '</g></svg>';
   const img = new kakao.maps.MarkerImage("data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg),
     new kakao.maps.Size(size, size), { offset: new kakao.maps.Point(c, c) });
@@ -3229,8 +3286,10 @@ function initKakao() {
   let clusterOv = new Map();   // 겹친 호재 배지 캐시(동일좌표키 → CustomOverlay)
   const hjStyle = s => { const unk = basisUnknown(s);
     const col = s.status === "종결" ? "#9aa3b2" : unk ? "#8a93a3" : colorOf(s); const lvl = levelOf(s); const solid = phaseSolid(s);
-    return { col, lvl, solid, unk, r: unk ? HJR.C : (HJR[lvl] || 5), bw: !unk && (lvl === "S" || lvl === "A") ? 2.6 : 2,
-      alpha: s.status === "종결" ? .45 : unk ? .75 : .9, fillOp: unk ? .10 : solid ? .22 : .10 }; };
+    // 두께·채움은 흰 케이싱 도입에 맞춰 낮췄다(2026-07-30) — 케이싱이 경계를 만들어 주므로
+    // 굵은 테두리와 진한 채움이 없어도 또렷하고, 원이 겹칠 때 진흙색이 되지 않는다.
+    return { col, lvl, solid, unk, r: unk ? HJR.C : (HJR[lvl] || 5), bw: !unk && (lvl === "S" || lvl === "A") ? 2 : 1.6,
+      alpha: s.status === "종결" ? .45 : unk ? .75 : .92, fillOp: unk ? .07 : solid ? .16 : .07 }; };
   const hjHtml = s => { const t = hjStyle(s);
     return '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + sigTitle(s) + '</div><div class="apt-pop-sub"><span style="color:' + t.col + ';font-weight:700">● ' + catOf(s) + '</span>' + subLabel(s) + ' · ' + lvlPill(t.lvl) + ' ' + gradeBasisHtml(s).replace(/ · $/, "") + '</div><div class="apt-pop-cats"><span>단계 ' + phaseOf(s) + (s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : "") + '</span></div></div>'; };
   const renderHojae = () => {
@@ -3338,7 +3397,13 @@ function initKakao() {
       const objs = [], hits = [];
       segs.forEach(seg => {
         const path = seg.map(([x, y]) => LL(x, y));
-        objs.push(new K.Polyline({ path, strokeColor: col, strokeWeight: dashed ? 2.6 : 3.2, strokeOpacity: subdued ? .45 : isRoad ? .75 : .9, strokeStyle: dashed ? "shortdash" : "solid", zIndex: 3 }));
+        // 흰 케이싱 + 색 본선(2026-07-30) — 지하철 노선도의 표준 문법. 종전엔 색 선 하나가
+        // 주황 도로망 위에 그대로 얹혀 배경과 섞였다. 케이싱이 배경을 끊어 주므로 본선을
+        // 더 얇게 해도 오히려 또렷하다. 점선은 촘촘한 dot로 바꿔 톱니를 없앤다.
+        objs.push(new K.Polyline({ path, strokeColor: "#ffffff", strokeWeight: dashed ? 5 : 5.6,
+          strokeOpacity: subdued ? .5 : .85, strokeStyle: "solid", zIndex: 2 }));
+        objs.push(new K.Polyline({ path, strokeColor: col, strokeWeight: dashed ? 2.4 : 3,
+          strokeOpacity: subdued ? .5 : isRoad ? .8 : .92, strokeStyle: dashed ? "shortdot" : "solid", zIndex: 3 }));
         // 히트선 정점 다이어트(1/3) — 단 **꺾임 정점은 보존**한다. 종전 무조건 i%3은
         // 정점이 몇 개 없는 앵커 노선에서 중간 경유점을 지워 히트선이 경로를 통째로
         // 이탈시켰다(실측 최대 29km — "커서 대도 미리보기 안 되는 구간"의 원인, 2026-07-21).
@@ -3531,9 +3596,9 @@ function initKakao() {
   const emphasizePin = s => { pins.forEach(ov => { const on = s && ov._sig === s; const r = on ? ov._baseR + 5 : ov._baseR, dia = r * 2;
     ov._el.style.width = ov._el.style.height = dia + "px"; ov._el.style.borderColor = on ? "#5b3fd4" : (ov._col || "#12263f"); ov._el.style.borderWidth = on ? "4px" : "3px"; ov.setZIndex(on ? 30 : 20); }); };
   const addRadius = s => { const col = colorOf(s);
-    if (s._road && s.access_points) { if (s.road_kind === "전용") { (s.ic_points || []).forEach(ap => circles.push(new K.Circle({ map, center: LL(ap.coordinates[0], ap.coordinates[1]), radius: getRadius(s), strokeWeight: 2, strokeColor: col, strokeOpacity: .9, fillColor: col, fillOpacity: .28, zIndex: 5 }))); return; }
+    if (s._road && s.access_points) { if (s.road_kind === "전용") { (s.ic_points || []).forEach(ap => circles.push(new K.Circle({ map, center: LL(ap.coordinates[0], ap.coordinates[1]), radius: getRadius(s), strokeWeight: 1.5, strokeColor: col, strokeOpacity: .85, fillColor: col, fillOpacity: .14, zIndex: 5 }))); return; }
       roadLinePoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 0, strokeOpacity: 0, fillColor: col, fillOpacity: .05, zIndex: 5 }))); return; }
-    signalPoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 2, strokeColor: col, strokeOpacity: .9, fillColor: col, fillOpacity: .28, zIndex: 5 }))); };
+    signalPoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 1.5, strokeColor: col, strokeOpacity: .85, fillColor: col, fillOpacity: .14, zIndex: 5 }))); };
   const showRadius = s => { clearRadius(); addRadius(s); }; const showRadiusMany = list => { clearRadius(); list.forEach(addRadius); };
   let routeHl = []; const clearRoute = () => { routeHl.forEach(o => o.setMap(null)); routeHl = []; };
   const highlightRoute = (lineName, fit) => { clearRoute(); if (!lineName) return; const col = CAT_COLOR["교통"]; let bounds = new K.LatLngBounds();
@@ -3675,16 +3740,92 @@ function applyYearFilter() {
     if (pick) { pick.style.display = "block"; pick.style.left = gp(v) + "%"; pick.setAttribute("data-yr", v); }
   });
 }
+let VIEW_MODE = "map";
 function setView(mode) {
-  if (mode === "gantt") mode = "map";   // 타임라인 뷰 제거 — 연도필터는 우측 목록에 통합
-  document.getElementById("wrap").style.display = mode === "map" ? "flex" : "none";
-  document.getElementById("raw").style.display = mode === "raw" ? "block" : "none";
+  if (mode === "gantt" || mode === "raw") mode = "map";   // 폐기된 뷰(타임라인·수도권 원시) → 지도
+  VIEW_MODE = mode;
+  // 목록은 **지도와 같은 도크 안에 산다** — 표시 조건을 두 벌 만들지 않기 위해 wrap을 공유한다.
+  const inWrap = mode === "map" || mode === "list";
+  document.getElementById("wrap").style.display = inWrap ? "flex" : "none";
+  document.getElementById("map").style.display = mode === "map" ? "" : "none";
+  document.getElementById("listv").style.display = mode === "list" ? "block" : "none";
   document.getElementById("undet").style.display = mode === "undet" ? "block" : "none";
   const g = document.getElementById("gantt"); if (g) g.style.display = "none";
-  for (const v of ["map", "undet"])
+  for (const v of ["map", "list", "undet"])
     document.getElementById("v-" + v).classList.toggle("on", mode === v);
-  if (mode === "raw") initRaw();
+  // 상세 패널은 지도 위에 뜨는 부유 카드다 — 목록 위에 겹치면 목록을 가린다.
+  const pn = document.getElementById("panel"); if (pn && mode !== "map") pn.style.display = "none";
+  if (mode === "map") { renderPanel(); setTimeout(mapRelayout, 60); }   // 지도 복귀 = 타일 재계산 필수(카카오 relayout)
+  if (mode === "list") initList();
   if (mode === "undet") initUndet();
+}
+/* ══════════ 목록 모드 (2026-07-30) ══════════
+   지도는 '어디'에 강하고 목록은 '무엇이 최근에 움직였나'에 강하다. 우리는 신호 추적 미디어라
+   시간축이 핵심인데 지도엔 시간축이 없다 — 그 축을 담당하는 화면.
+   원칙: ① 표시 조건은 도크 하나(visible)를 그대로 쓴다 ② 카드는 makeCard 재사용 ③ 정렬만 목록 고유. */
+const LIST_PAGE = 60;
+let listShown = LIST_PAGE, listReady = false;
+function initList() {
+  if (!listReady) {
+    listReady = true;
+    document.getElementById("l-sort").onchange = () => { listShown = LIST_PAGE; renderList(); };
+    document.getElementById("l-q").oninput = () => { clearTimeout(window._lq); window._lq = setTimeout(() => { listShown = LIST_PAGE; renderList(); }, 200); };
+    document.getElementById("l-more").onclick = () => { listShown += LIST_PAGE; renderList(); };
+  }
+  listShown = LIST_PAGE;
+  renderList();
+}
+/* 선택 단지 기준 거리 — 없으면 null(거리순은 그때 선택 불가) */
+function listAnchorApt() { return view.mode === "apt" && view.apt && isFinite(view.apt.lon) ? view.apt : null; }
+function distToApt(s, a) {
+  const pts = signalPoints(s);
+  if (!pts.length) return Infinity;
+  return Math.min(...pts.map(p => meters([a.lon, a.lat], p.coord)));
+}
+function renderList() {
+  const sortSel = document.getElementById("l-sort");
+  const apt = listAnchorApt();
+  // 거리순은 기준 단지가 있을 때만 성립한다 — 없으면 고르지 못하게 막고(허상 정렬 금지) 최근순으로 되돌린다.
+  const dOpt = sortSel.querySelector('option[value="dist"]');
+  dOpt.disabled = !apt;
+  dOpt.textContent = apt ? `거리순 (${apt.n} 기준)` : "거리순 (단지 선택 시)";
+  if (!apt && sortSel.value === "dist") sortSel.value = "recent";
+  const q = document.getElementById("l-q").value.trim();
+  const pool = allSignalsFlat().filter(visible).filter(s => !q || (sigTitle(s) || "").includes(q) || `${s.sd || ""} ${s.sg || ""} ${s.dong || ""}`.includes(q));
+  const rec = s => s.last_movement || "";
+  const lvR = s => { const i = ["S", "A", "B", "C"].indexOf(levelOf(s)); return i < 0 ? 9 : i; };   // 미판정은 뒤로
+  const sort = sortSel.value;
+  const rows = pool.slice().sort(
+    // 문서상 움직임순: 원문 날짜를 가진 신호가 먼저, 관측일뿐인 신호는 **숨기지 않고** 뒤로
+    // (숨기면 그건 필터다 — 필터는 도크 하나뿐이라는 원칙을 지킨다).
+    sort === "moved" ? ((a, b) => (movBasis(a) === "observed") - (movBasis(b) === "observed") || rec(b).localeCompare(rec(a)))
+    : sort === "level" ? ((a, b) => lvR(a) - lvR(b) || rec(b).localeCompare(rec(a)))
+    : sort === "phase" ? ((a, b) => PHASE_IDX[phaseOf(a)] - PHASE_IDX[phaseOf(b)] || rec(b).localeCompare(rec(a)))
+    : sort === "dist" ? ((a, b) => distToApt(a, apt) - distToApt(b, apt))
+    : ((a, b) => rec(b).localeCompare(rec(a))));
+  const byCat = {}; rows.forEach(s => { const c = catOf(s); byCat[c] = (byCat[c] || 0) + 1; });
+  // 이번 주 집계도 출처를 가른다 — 섞으면 "이번 주 2,588건 움직임"이라는 거짓 headline이 된다(P2).
+  const wk = rows.filter(s => weeksAgo(s.last_movement) === 0);
+  const wkMov = wk.filter(s => movBasis(s) !== "observed").length, wkObs = wk.length - wkMov;
+  document.getElementById("l-count").innerHTML =
+    `<b>${rows.length.toLocaleString()}건</b> — ${filter.region || "전 지역"} · 지도와 같은 표시 조건`
+    + (wkMov ? ` · <b>이번 주 움직임 ${wkMov.toLocaleString()}건</b>` : "")
+    + (wkObs ? ` · <span title="${OBS_TIP}" style="border-bottom:1px dotted var(--line2);cursor:help">이번 주 신규 확인 ${wkObs.toLocaleString()}건</span>` : "")
+    + (Object.keys(byCat).length ? " · " + CAT_KEYS.filter(c => byCat[c]).map(c => `<span style="color:${CAT_COLOR[c]};font-weight:600">${c} ${byCat[c]}</span>`).join(" · ") : "");
+  const el = document.getElementById("l-list");
+  el.innerHTML = "";
+  if (!rows.length) {
+    el.innerHTML = `<div class="pickhint" style="padding:24px">표시 조건에 맞는 호재 없음 — 왼쪽 조건을 풀면 나타납니다.</div>`;
+  } else {
+    rows.slice(0, listShown).forEach(s => {
+      const loc = [s.sd, s.sg, s.dong].filter(Boolean).join(" ");
+      const d = apt && sort === "dist" ? distToApt(s, apt) : null;
+      const extra = `<span class="lloc">· ${loc || "위치 미상"}${d !== null && isFinite(d) ? ` · ${d < 1000 ? Math.round(d) + "m" : (d / 1000).toFixed(1) + "km"}` : ""}</span>`;
+      // 목록에서 카드를 누르면 지도로 넘어가 그 신호를 연다(목록=발견, 지도=위치 확인).
+      el.appendChild(makeCard(s, extra, () => { setView("map"); showSignal(s, true); }));
+    });
+  }
+  document.getElementById("l-more").style.display = rows.length > listShown ? "inline-block" : "none";
 }
 /* ══════════ 등급 미판정(미정) 목록 ══════════ */
 // 모든 신호 통합 후 등급 미판정(levelOf==="미정")만 — 결측 사유 표기. 사용자가 보고 소스·기준 보완.
@@ -3744,57 +3885,10 @@ function renderUndet(more) {
   document.getElementById("u-more").style.display = rows.length > window._undetShown ? "inline-block" : "none";
 }
 
-/* ══════════ 수도권 원시 데이터 탐색 ══════════ */
-let RAW = null, rawShown = 0, rawReady = false;
-const RAW_PAGE = 150;
-const SIDO_LABEL = { "서울": "서울특별시", "경기": "경기도", "인천": "인천광역시" };
-function initRaw() {
-  if (!rawReady) {
-    rawReady = true;
-    const sel = document.getElementById("r-sido");
-    ["서울", "경기", "인천"].forEach(s => sel.appendChild(new Option(SIDO_LABEL[s], s)));
-    const sgg = document.getElementById("r-sgg");
-    const fillSgg = () => {
-      const sido = sel.value;
-      sgg.innerHTML = '<option value="">시군구: 전체</option>';
-      [...new Set(RAW.filter(r => !sido || r.sd === sido).map(r => r.sg))]
-        .sort((a, b) => a.localeCompare(b, "ko"))
-        .forEach(g => sgg.appendChild(new Option(g, g)));
-    };
-    sel.onchange = () => { fillSgg(); renderRaw(); };
-    fillSgg();
-    for (const id of ["r-sgg", "r-price", "r-src"]) document.getElementById(id).onchange = renderRaw;
-    document.getElementById("r-q").oninput = () => { clearTimeout(window._rq); window._rq = setTimeout(renderRaw, 250); };
-    document.getElementById("r-more").onclick = () => renderRaw(true);
-  }
-  renderRaw();
-}
-function rawFiltered() {
-  const sido = document.getElementById("r-sido").value;
-  const sgg = document.getElementById("r-sgg").value;
-  const minP = +document.getElementById("r-price").value;
-  const src = document.getElementById("r-src").value;
-  const q = document.getElementById("r-q").value.trim();
-  return RAW.filter(r =>
-    (!sido || r.sd === sido) && (!sgg || r.sg === sgg) && (!src || r.src === src)
-    && (minP === 0 || r.src === "DART" || (r.p || 0) >= minP)   // DART는 금액 개념 없음 → 통과
-    && (!q || r.t.includes(q) || r.org.includes(q))
-  ).sort((a, b) => b.d.localeCompare(a.d));
-}
-function renderRaw(more) {
-  const list = document.getElementById("r-list");
-  const rows = rawFiltered();
-  rawShown = more ? rawShown + RAW_PAGE : RAW_PAGE;
-  document.getElementById("r-count").innerHTML =
-    `<b>${rows.length.toLocaleString()}건</b> (월평균 ${(rows.length / 12).toFixed(1)}건) — 표시 ${Math.min(rawShown, rows.length)}건, 공고일 최신순`;
-  list.innerHTML = rows.slice(0, rawShown).map(r => `
-    <div class="rrow">
-      <div class="rt">${r.t}</div>
-      <div class="rm">${r.d} · <b>${SIDO_LABEL[r.sd] || r.sd} ${r.sg}</b> · ${r.org} · ${r.src}${r.p ? ` · <b>${(r.p / 1e8).toFixed(1)}억</b>` : ""}
-        ${r.kw ? ` · ${r.kw}` : ""} · <a href="${r.u}" target="_blank">원문</a></div>
-    </div>`).join("");
-  document.getElementById("r-more").style.display = rows.length > rawShown ? "inline-block" : "none";
-}
+/* ══════════ 원시층 데이터 (지도 시군구 뱃지 집계 전용) ══════════
+   원시 공고 탐색 화면(#raw)은 2026-07-30 접었다 — 남은 쓰임은 시군구 뱃지의 개수 집계 하나뿐이다.
+   데이터 자체는 SSOT 체인의 원시층(capital_raw.json)이라 그대로 싣는다. */
+let RAW = null;
 
 /* ══════════ 상단 통합 검색 (동·시군구·아파트·호재) — 지역 파라미터 없음, 로드된 전 데이터 대상 ══════════ */
 const SRCH_TAG = { dong: { t: "동", c: "#4460e0" }, sgg: { t: "지역", c: "#2c3fb5" }, apt: { t: "아파트", c: "#d6156d" } };
@@ -3893,7 +3987,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260730y");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260731a");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4016,6 +4110,7 @@ function initSearch() {
   renderPanel();
   bootMap();
   document.getElementById("v-map").onclick = () => setView("map");
+  document.getElementById("v-list").onclick = () => setView("list");
   document.getElementById("v-undet").onclick = () => setView("undet");
   initOpsMode();
   loadDeferred();   // 큰 파일(경기·인천 동경계·전국 아파트·정비 폴리곤)은 초기 렌더 뒤 백그라운드 로드
@@ -4054,7 +4149,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730y"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731a"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4080,7 +4175,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260730y");
+  const CB = "?b=" + (window.BUILD || "20260731a");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
