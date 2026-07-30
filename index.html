@@ -648,73 +648,10 @@
   .rrow a { color:var(--accent); text-decoration:none; font-size:11.5px; }
 </style>
 
-<div id="gantt" style="display:none; height:calc(100vh - 87px); overflow-y:auto; padding:20px 24px 70px;">
-  <div style="max-width:980px; margin:0 auto;">
-    <div class="pt">강서구 · 신호 타임라인</div>
-    <div class="ps">완료 구간은 사실(실선·날짜), 미래 구간은 절차 통계 기반 추정(빗금·범위). 소요기간 수치는 가안 — 파일럿 캘리브레이션 대상.</div>
-    <div class="timectrl">
-      <div class="trow">
-        <label>시점 필터</label>
-        <input type="range" id="yr" min="2026" max="2033" step="1" value="2033">
-        <span class="yr" id="yrLabel">전체 보기</span>
-      </div>
-      <p class="tdesc" id="yrDesc"></p>
-    </div>
-    <div class="gpaper">
-      <div class="g-inner">
-        <div class="g-head" id="ghead"></div>
-        <div id="grows"></div>
-        <div class="nogroup" id="nogroup"></div>
-      </div>
-      <div class="legend">
-        <span><span class="sw" style="background:#1E2A38"></span>완료 구간 (사실·날짜)</span>
-        <span><span class="sw" style="background:#C4392F"></span>현재 진행 단계</span>
-        <span><span class="sw" style="background:repeating-linear-gradient(-45deg,rgba(196,57,47,.28) 0 5px,rgba(196,57,47,.1) 5px 10px);border:1px dashed rgba(196,57,47,.6)"></span>추정 구간 (절차 통계 가안)</span>
-        <span>◆ 확정·고시 시점 (사실)</span><span>◇ 추정 완료 범위 (±)</span>
-      </div>
-    </div>
-  </div>
-</div>
-<style>
-  .timectrl { background:#fff; border:1px solid var(--line); padding:14px 18px; margin:12px 0 16px; border-radius:10px; }
-  .timectrl .trow { display:flex; align-items:center; gap:14px; }
-  .timectrl label { font-size:13px; font-weight:700; white-space:nowrap; }
-  .timectrl input[type=range] { flex:1; accent-color:#C4392F; }
-  .timectrl .yr { font-size:16px; font-weight:800; color:#C4392F; width:110px; text-align:right; }
-  .timectrl .tdesc { font-size:11.5px; color:var(--muted); margin-top:8px; }
-  .gpaper { background:#fff; border:1px solid var(--line); border-radius:10px; padding:18px 20px 12px; overflow-x:auto; }
-  .g-inner { min-width:760px; }
-  .g-head { display:flex; margin-left:230px; border-bottom:2px solid var(--ink); position:relative; }
-  .g-head span { flex:1; font-size:11px; font-weight:700; color:var(--muted); padding:0 0 6px 5px; border-left:1px solid var(--line); }
-  .g-head span:first-child { border-left:none; }
-  .g-row { display:flex; align-items:center; min-height:60px; border-bottom:1px dashed var(--line); position:relative; }
-  .g-row.dim { opacity:.32; }
-  .g-label { width:230px; flex-shrink:0; padding-right:14px; }
-  .g-label h4 { font-size:13px; font-weight:800; }
-  .g-label .m { font-size:10.5px; color:var(--muted); }
-  .g-badge { display:inline-block; font-size:9.5px; font-weight:700; padding:1px 6px; border-radius:2px; margin-left:4px; background:#F5EDD8; color:#B08A2E; }
-  .g-track { flex:1; position:relative; height:52px; }
-  .gridline { position:absolute; top:-1px; bottom:-1px; width:1px; background:var(--line); }
-  .gbar { position:absolute; top:8px; height:18px; border-radius:2px; }
-  .gbar.done { background:#1E2A38; }
-  .gbar.now { background:#C4392F; }
-  .gbar.est { background:repeating-linear-gradient(-45deg,rgba(196,57,47,.28) 0 5px,rgba(196,57,47,.10) 5px 10px); border:1px dashed rgba(196,57,47,.6); }
-  .gbar.stalldone { background:#B08A2E; }
-  .fin { position:absolute; top:2px; font-size:9.5px; font-weight:800; white-space:nowrap; color:#C4392F; }
-  .fin.range { color:#9A4038; font-weight:700; }
-  .fin.confirmed::before { content:"◆ "; }
-  .fin.range::before { content:"◇ "; }
-  .stageLbl { position:absolute; top:28px; font-size:9px; color:var(--muted); white-space:nowrap; }
-  .nowline { position:absolute; top:-6px; bottom:-6px; width:2px; background:#C4392F; opacity:.8; z-index:2; }
-  .nowline::after { content:"오늘"; position:absolute; top:-13px; left:-11px; font-size:9px; font-weight:800; color:#C4392F; }
-  .pickline { position:absolute; top:-6px; bottom:-6px; width:2px; background:#4A6E93; z-index:2; }
-  .pickline::after { content:attr(data-yr); position:absolute; top:-13px; left:-13px; font-size:9px; font-weight:800; color:#4A6E93; }
-  .nogroup { margin-top:14px; border-top:2px solid var(--line); padding-top:10px; }
-  .nogroup h5 { font-size:11px; letter-spacing:.08em; color:#B08A2E; font-weight:800; margin-bottom:6px; }
-  .nogroup .why { font-size:11px; color:var(--muted); margin:2px 0 10px 230px; }
-  .legend { display:flex; gap:16px; flex-wrap:wrap; font-size:11px; color:var(--muted); margin-top:14px; }
-  .legend .sw { display:inline-block; width:20px; height:11px; vertical-align:-1px; margin-right:5px; border-radius:2px; }
-</style>
+<!-- 타임라인(간트) 뷰는 2026-07-22 폐기(연도 필터는 우측 목록에 통합)됐고, 2026-07-31에
+     마크업·CSS·전용 함수(DUR/ganttRow/buildGantt/applyYearFilter)를 함께 걷어냈다.
+     ⚠ 마크업만 지우면 buildGantt가 getElementById("ghead")를 가드 없이 참조해 JS가 죽는다 —
+     부품이 사라지면 그 부품을 쓰던 코드도 같이 없앤다(간결한 프로세스 원칙). -->
 <footer>투자 권유 아님 · 모든 신호는 미확정 — 사실(단계·날짜·거리)만 표시하며 매수/매도 판단은 다루지 않습니다.</footer>
 
 <script>
@@ -3628,118 +3565,6 @@ function initKakao() {
 const G_T0 = 2023, G_T1 = 2034, G_NOW = 2026.53;  // 2026-07-13
 const gp = y => (y - G_T0) / (G_T1 - G_T0) * 100;
 const yearDec = d => { const t = new Date(d.length === 7 ? d + "-01" : d); return t.getFullYear() + t.getMonth() / 12; };
-/* 단계별 통상 소요 가안 [최소, 최대] 개월 — 캘리브레이션 대상(§3.2) */
-const DUR = {
-  "공공시설": { "설계용역": [6, 12], "공사입찰": [2, 4], "착공": [12, 24] },
-  "기업이전": { "인허가": [6, 12], "착공": [18, 30] },
-  "철도": { "착공": [60, 84] },
-  "도로": { "설계": [12, 24], "착공": [24, 48] }
-};
-/* 신호 → 간트 행 (진행 신호). 과거 단계는 확정 날짜(stage_history) 있을 때만 막대, 없으면 텍스트(P2) */
-function ganttRow(s) {
-  const track = (STAGE_TRACKS[s.template_type] || []).map(x => Array.isArray(x) ? x[0] : x);
-  const idx = track.indexOf(s.current_stage);
-  const lm = s.last_movement ? yearDec(s.last_movement) : G_NOW;
-  const bars = [], labels = [];
-  let hist = s.stage_history || [];
-  // 확정 이력: 기간(date~end)은 done 막대, 시점만 있으면 라벨
-  hist.forEach((h, j) => {
-    const a = yearDec(h.date);
-    if (h.end) {
-      bars.push([a, yearDec(h.end), "done"]);
-      labels.push([a, `${h.stage} ${h.date}~${h.end} (사실)`]);
-    } else {
-      labels.push([Math.max(G_T0, a), `◆ ${h.stage} ${h.date}`]);
-    }
-  });
-  if (!hist.length && idx > 0) {
-    labels.push([Math.max(G_T0, lm - 0.55), `● 이전 ${idx}단계 완료 (일자 미상)`]);
-  }
-  // 현재 단계: last_movement → 오늘
-  bars.push([Math.min(lm, G_NOW - 0.05), G_NOW, "now"]);
-  labels.push([Math.min(lm, G_NOW - 0.05), `${s.current_stage} (${s.last_movement || "?"}~)`]);
-  // 미래: 목표일(target_completion)이 있으면 그 지점까지 추정 막대 1개, 없으면 통상 소요 가안 누적
-  let fin;
-  if (s.target_completion) {
-    const t = s.target_completion;
-    if (t.y > G_NOW + 0.1) {
-      bars.push([G_NOW, t.y, "est"]);
-      labels.push([G_NOW + .2, track.length && idx >= 0 && idx < track.length - 1 ? `${track[track.length - 1]}까지 잔여 절차` : "잔여 절차"]);
-    }
-    fin = { type: t.type || "range", y: t.y, label: t.label, finEnd: t.finEnd || t.y };
-  } else if (track.length && idx >= 0) {
-    let cur = G_NOW, spreadMo = 0;
-    const durs = DUR[s.template_type] || {};
-    for (let i = idx + 1; i < track.length; i++) {
-      const d = durs[track[i]] || [6, 12];
-      const mid = (d[0] + d[1]) / 2 / 12;
-      if (track[i] !== track[track.length - 1]) {
-        bars.push([cur, cur + mid, "est"]);
-        labels.push([cur, `${track[i]} (통상 ${d[0]}~${d[1]}개월 가안)`]);
-        cur += mid; spreadMo += (d[1] - d[0]) / 2;
-      }
-    }
-    fin = { type: "range", y: cur, label: `'${String(Math.round(cur)).slice(2)} 전후 ±${Math.max(3, Math.round(spreadMo))}개월 (추정)`, finEnd: cur + spreadMo / 12 };
-  } else {
-    // 템플릿 미정 신호: 추정하지 않음 — 다음 관찰 포인트만
-    fin = { type: "range", y: G_NOW + .15, label: `다음 관찰: ${(s.next_watch || "").slice(0, 22)}`, finEnd: G_NOW };
-  }
-  return { s, bars, labels, fin };
-}
-function buildGantt() {
-  const ghead = document.getElementById("ghead");
-  ghead.innerHTML = "";
-  for (let y = G_T0; y < G_T1; y++) ghead.innerHTML += `<span>'${String(y).slice(2)}</span>`;
-  const grid = [...Array(G_T1 - G_T0)].map((_, j) => `<div class="gridline" style="left:${gp(G_T0 + j)}%"></div>`).join("");
-  const active = SIGNALS.filter(s => s.status !== "정체");
-  const stalled = SIGNALS.filter(s => s.status === "정체");
-  const rows = active.map(ganttRow);
-  const grows = document.getElementById("grows");
-  grows.innerHTML = "";
-  rows.forEach((r, i) => {
-    grows.innerHTML += `<div class="g-row" data-fin="${r.fin.finEnd}" id="grow${i}">
-      <div class="g-label"><h4>${r.s.title}${r.draft ? '<span class="g-badge">초안</span>' : ""}</h4>
-        <div class="m">${r.s.scale} · ${(r.s.value_tags || []).join("+")} · 현재: <b>${r.s.current_stage || "?"}</b></div></div>
-      <div class="g-track">${grid}
-        ${r.bars.map(([a, b, c]) => `<div class="gbar ${c}" style="left:${gp(a)}%;width:${Math.max(0.5, gp(b) - gp(a))}%"></div>`).join("")}
-        ${r.labels.map(([a, t], j) => `<div class="stageLbl" style="left:${gp(a)}%;top:${28 + (j % 2) * 11}px">${t}</div>`).join("")}
-        <div class="fin ${r.fin.type}" style="left:${gp(r.fin.y)}%">${r.fin.label}</div>
-        <div class="nowline" style="left:${gp(G_NOW)}%"></div>
-        <div class="pickline" id="gpick${i}" style="display:none"></div>
-      </div></div>`;
-  });
-  const ng = document.getElementById("nogroup");
-  ng.innerHTML = stalled.length ? `<h5>⚠ 일정 산출 불가 (정체 — 추정 막대를 그리지 않음)</h5>` : "";
-  stalled.forEach(s => {
-    const lm = yearDec(s.last_movement);
-    const mo = Math.floor((G_NOW - lm) * 12);
-    ng.innerHTML += `<div class="g-row">
-      <div class="g-label"><h4>${s.title}<span class="g-badge">정체</span></h4>
-        <div class="m">${s.scale} · 현재: ${s.current_stage}</div></div>
-      <div class="g-track">${grid}
-        <div class="gbar stalldone" style="left:${gp(lm)}%;width:1.2%"></div>
-        <div class="stageLbl" style="left:${gp(lm)}%">${s.current_stage} (${s.last_movement})</div>
-        <div class="stageLbl" style="left:${gp(lm) + 3}%;top:12px;color:#B08A2E;font-weight:700">■ 이후 절차 미확정 — 추정 표시하지 않음</div>
-        <div class="nowline" style="left:${gp(G_NOW)}%"></div>
-      </div></div>
-      <p class="why">${s.current_stage}(${s.last_movement}) 후 ${mo}개월 무움직임. 다음 단계 확정 전에는 일정을 추정하지 않습니다${s.next_watch ? ` — 관찰 포인트: ${s.next_watch}` : ""}.</p>`;
-  });
-  applyYearFilter();
-}
-function applyYearFilter() {
-  const v = +document.getElementById("yr").value;
-  const full = v === 2033;
-  document.getElementById("yrLabel").textContent = full ? "전체 보기" : v + "년 기준";
-  document.getElementById("yrDesc").innerHTML = full
-    ? '슬라이더를 조정하면 <b>해당 연도까지 절차상 완료 범위에 도달하는 신호</b>만 강조됩니다. "실현 보장"이 아니라 절차 소요기간 기반 추정이며, 정체 신호는 산출 대상에서 제외됩니다.'
-    : `<b>${v}년까지 절차상 완료 범위에 도달하는 신호</b> 강조 중 — 도달 여부는 추정이며 실현을 보장하지 않습니다. 정체 신호는 산출 대상에서 제외됩니다.`;
-  document.querySelectorAll("#grows .g-row").forEach((row, i) => {
-    const pick = document.getElementById("gpick" + i);
-    if (full) { row.classList.remove("dim"); if (pick) pick.style.display = "none"; return; }
-    row.classList.toggle("dim", +row.dataset.fin > v);
-    if (pick) { pick.style.display = "block"; pick.style.left = gp(v) + "%"; pick.setAttribute("data-yr", v); }
-  });
-}
 let VIEW_MODE = "map";
 function setView(mode) {
   if (mode === "gantt" || mode === "raw") mode = "map";   // 폐기된 뷰(타임라인·수도권 원시) → 지도
@@ -3987,7 +3812,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260731d");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260731e");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4149,7 +3974,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731d"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731e"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4175,7 +4000,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260731d");
+  const CB = "?b=" + (window.BUILD || "20260731e");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
