@@ -107,8 +107,10 @@
 <dialog id="dlg">
   <header><h1>저장할 내용</h1></header>
   <div class="body">
-    <p class="qual">프로토타입 단계라 파일 쓰기는 아직 배선되지 않았습니다. 아래 내용을
-       <code>thresholds.json</code>에 붙여넣거나, 다운로드해 교체하세요.</p>
+    <p class="qual"><b>이 주소는 정적 호스팅이라 파일을 쓸 수 없습니다</b>(배선 문제가 아니라 환경 문제).
+       바로 저장하려면 로컬 저장 서버로 여세요 — <code>python3 settings_server.py</code> 실행 후
+       <a href="http://localhost:8778/settings.html">localhost:8778/settings.html</a>.
+       지금 당장 반영하려면 아래 내용을 <code>thresholds.json</code>에 붙여넣거나 다운로드해 교체하세요.</p>
     <textarea id="out" readonly></textarea>
     <div style="margin-top:12px; display:flex; gap:9px;">
       <button class="primary" id="dl">파일 다운로드</button>
@@ -257,7 +259,9 @@ async function doSave(btn) {
     if (!j.ok) throw new Error(j.error || "저장 실패");
     ORIG = structuredClone(CFG);          // 저장 성공 = 이제 이것이 원본
     count();
-    toast(`저장됨 ${j.saved} · 백업 ${j.backup}`, true);
+    // 저장 = 파일까지 됐다는 뜻. 라이브 반영은 배포가 따로 필요하다는 걸 같이 말한다
+    // (P2·"푸시했다≠나갔다" — 저장만 하고 반영됐다고 착각하면 안 된다).
+    toast(`저장됨 ${j.saved} · 백업 ${j.backup} — 라이브 반영은 build_all --deploy --push`, true);
   } catch (e) {
     // 저장 서버가 아니면(정적 서버) 파일을 못 쓴다 — 그때만 수동 경로를 연다.
     toast("자동 저장 불가 — " + e.message, false);
@@ -289,14 +293,25 @@ reset.onclick = () => { CFG = structuredClone(ORIG); render(); };
 // 다 고쳐놓고 저장 단계에서 실패를 알게 되는 것이 가장 나쁜 순서다.
 fetch("/api/health").then(r => r.ok ? r.json() : null).then(j => !!(j && j.save)).catch(() => false)
   .then(ok => {
-    if (ok) return;
-    document.getElementById("ro").innerHTML =
-      `<div class="warn" style="margin:0 0 11px"><b>읽기 전용 환경입니다.</b>
-       이 주소에는 저장 서버가 없어 <b>저장 버튼이 파일에 쓰지 못합니다</b>(정적 호스팅).
-       값을 바꾸면 JSON을 내려받아 <code>thresholds.json</code>을 교체하거나,
-       로컬에서 <code>python3 settings_server.py</code> 를 띄우고
-       <a href="http://localhost:8778/settings.html">localhost:8778</a> 로 여세요.</div>`;
+    const ro = document.getElementById("ro");
+    if (ok) {   // 저장 가능한 환경임을 **먼저** 알린다 — 저장 버튼이 진짜 파일을 쓴다는 확인
+      ro.innerHTML = `<div style="margin:0 0 11px;padding:9px 12px;border:1px solid #bfe3cf;background:#f2fbf6;
+        border-radius:9px;font-size:13px;color:#1f7a4d"><b>바로 저장 가능</b> — '변경사항 저장'(⌘S)을 누르면
+        <code>thresholds.json</code>에 바로 씁니다(저장 전 <code>attic/</code>에 자동 백업 · 구조 검증 통과 시에만 교체).</div>`;
+      return;
+    }
+    ro.innerHTML =
+      `<div class="warn" style="margin:0 0 11px"><b>이 주소에서는 저장할 수 없습니다.</b>
+       정적 호스팅이라 브라우저가 파일을 쓸 방법이 없습니다(배선 문제 아님).
+       <b>바로 저장하려면</b> 터미널에서 <code>python3 settings_server.py</code> 를 띄우고
+       <a href="http://localhost:8778/settings.html">localhost:8778/settings.html</a> 로 여세요 —
+       지도(<code>index.html</code>)도 같은 주소에서 열립니다.
+       지금 값만 옮기려면 저장 버튼 → JSON 다운로드로 <code>thresholds.json</code>을 교체하세요.</div>`;
   });
+// ⌘S / Ctrl+S = 저장 (브라우저 '페이지 저장'을 가로챈다 — 편집 화면에서 가장 기대되는 단축키)
+document.addEventListener("keydown", e => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") { e.preventDefault(); doSave(save2); }
+});
 
 fetch("thresholds.json?" + Date.now())
   .then(r => r.json())
