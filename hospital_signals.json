@@ -1,10 +1,374 @@
 {
  "type": "FeatureCollection",
  "_note": "신규 종합병원(병원 10,000㎡+·결정고시 2023+, 집행상태 미집행·부분집행만) — 브이월드 도시계획 API 자동수집. 집행완료(=이미 있는 공원)와 상태 미상은 제외. upis_fetch.py --type hospital. 규모=부지면적 프록시(병상 미제공) — §7b 병상기준의 근사",
- "collected": "2026-07-29",
+ "collected": "2026-07-30",
  "boxes": 182,
  "all_over_min": 139,
- "delta_new": 0,
- "by_grade": {},
- "features": []
+ "delta_new": 5,
+ "by_grade": {
+  "A": 3,
+  "B": 2
+ },
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "병원",
+    "title": "종합의료시설 (63,795㎡)",
+    "lvl": "C",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "의료",
+    "area_m2": 63795,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "41610NTC202506124207",
+    "gate": "관찰",
+    "gate_lock": true,
+    "note": "조성계획 변경(종합의료시설) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-06-12 · 집행 미집행 · 근거 고시: 광주시 도시관리계획(도로, 종합의료시설, 지구단위계획) 결정(변경) 및 지형도면 고시 ",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(종합의료) 결정",
+      "date": "2025-06-12",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-07-30",
+    "lvl_basis": "부지면적 63,795㎡ — 인프라:부지 C",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.26591,
+      37.395021
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2026-07-30",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-30",
+    "last_movement": "2026-07-30"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.26591,
+     37.395021
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "병원",
+    "title": "대학병원 (83,814㎡)",
+    "lvl": "C",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "의료",
+    "area_m2": 83814,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "48120NTC202410240149",
+    "gate": "관찰",
+    "gate_lock": true,
+    "note": "조성계획 변경(대학병원) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-10-24 · 집행 미집행 · 근거 고시: 창원국가산업단지 개발사업[대학병원 부지조성사업] 실시계획 변경 승인 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(종합의료) 결정",
+      "date": "2024-10-24",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-07-30",
+    "lvl_basis": "부지면적 83,814㎡ — 인프라:부지 C",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.707254,
+      35.199807
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2026-07-30",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-30",
+    "last_movement": "2026-07-30"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.707254,
+     35.199807
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "병원",
+    "title": "기타종합의료시설 (20,445㎡)",
+    "lvl": "C",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "의료",
+    "area_m2": 20445,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "47250NTC202407290001",
+    "gate": "관찰",
+    "gate_lock": true,
+    "note": "조성계획 변경(기타종합의료시설) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-07-29 · 집행 미집행 · 근거 고시: 상주 도시관리계획(도로, 종합의료시설) 결정(변경) 및 지형도면 등 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(종합의료) 결정",
+      "date": "2024-07-29",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-07-30",
+    "lvl_basis": "부지면적 20,445㎡ — 인프라:부지 C",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.154788,
+      36.414489
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2026-07-30",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-30",
+    "last_movement": "2026-07-30"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.154788,
+     36.414489
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "병원",
+    "title": "종합병원 (96,847㎡)",
+    "lvl": "C",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "의료",
+    "area_m2": 96847,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "41460NTC202404170002",
+    "gate": "관찰",
+    "gate_lock": true,
+    "note": "조성계획 변경(종합병원) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-04-17 · 집행 미집행 · 근거 고시: 용인도시계획시설(종합의료시설3호:용인세브란스) 결정(변경)",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(종합의료) 결정",
+      "date": "2024-04-17",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-07-30",
+    "lvl_basis": "부지면적 96,847㎡ — 인프라:부지 C",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.14653,
+      37.271296
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2026-07-30",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-30",
+    "last_movement": "2026-07-30"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.14653,
+     37.271296
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "병원",
+    "title": "기타종합의료시설 (32,257㎡)",
+    "lvl": "C",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "의료",
+    "area_m2": 32257,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "26000NTC202301190003",
+    "gate": "관찰",
+    "gate_lock": true,
+    "note": "조성계획 변경(기타종합의료시설) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-01-19 · 집행 미집행 · 근거 고시: 도시관리계획(동아대학교 의료원) 변경결정 및 지형도면 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(종합의료) 결정",
+      "date": "2023-01-19",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-07-30",
+    "lvl_basis": "부지면적 32,257㎡ — 인프라:부지 C",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.017709,
+      35.119876
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2026-07-30",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-30",
+    "last_movement": "2026-07-30"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.017709,
+     35.119876
+    ]
+   }
+  }
+ ]
 }
