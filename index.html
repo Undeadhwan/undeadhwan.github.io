@@ -553,7 +553,6 @@
   <div class="chips" id="f-view">
     <select id="apt-hh" title="아파트 표시 세대수 필터 (아파트는 z14+ 집 아이콘)" style="font-size:12px;padding:4px 6px;border:1px solid var(--line);border-radius:8px;background:#fff"></select>
     <span class="chip on" id="v-map">지도</span>
-    <span class="chip" id="v-raw">수도권 데이터</span>
     <span class="chip" id="v-undet" title="등급 기준(면적·금액·세대수 등)에 매칭 안 돼 등급 미판정인 호재 목록">❓ 미판정 목록</span>
     <span class="chip" id="v-settings" onclick="window.open('settings.html','_blank')" title="등급 눈금(면적·금액·세대수)과 영향 반경을 thresholds.json에 직접 설정 — 운영자 전용">⚙ 기준 설정</span>
     <span class="chip" onclick="window.open('rail_reference.html','_blank')" title="신규 철도 노선·역사 좌표 대장 (영향권 기준)">🚈 노선·역 대장</span>
@@ -2296,7 +2295,7 @@ function renderSggFeed(disp) {
     ${yearChipsHtml()}
     <div id="list"></div>
     ${cands.length ? `<div class="group-h">후보 신호 (자동 생성 — 5억+·DART, 중복 통합, 단계는 추정)</div><div id="candlist"></div>
-      <div style="margin:10px 0"><span class="chip" onclick="gotoRaw('${disp}')">원시 공고 전체 보기 →</span></div>` : ""}`;
+` : ""}`;
   wireYearChips(p);
   const list = p.querySelector("#list");
   panelListRender = () => {
@@ -2327,14 +2326,6 @@ function renderSggFeed(disp) {
           · ${a.src} · ${a.sources.map((u, i) => `<a href="${u}" target="_blank">원문${a.sources.length > 1 ? i + 1 : ""}</a>`).join(" ")}</div>
       </div>`);
   });
-}
-function gotoRaw(disp) {
-  const [sd, sg] = disp.split(" ");
-  setView("raw");
-  document.getElementById("r-sido").value = sd;
-  document.getElementById("r-sido").onchange();
-  document.getElementById("r-sgg").value = sg;
-  renderRaw();
 }
 
 /* ══════════ 뷰 전환 ══════════ */
@@ -3690,7 +3681,7 @@ function setView(mode) {
   document.getElementById("raw").style.display = mode === "raw" ? "block" : "none";
   document.getElementById("undet").style.display = mode === "undet" ? "block" : "none";
   const g = document.getElementById("gantt"); if (g) g.style.display = "none";
-  for (const v of ["map", "raw", "undet"])
+  for (const v of ["map", "undet"])
     document.getElementById("v-" + v).classList.toggle("on", mode === v);
   if (mode === "raw") initRaw();
   if (mode === "undet") initUndet();
@@ -4025,7 +4016,6 @@ function initSearch() {
   renderPanel();
   bootMap();
   document.getElementById("v-map").onclick = () => setView("map");
-  document.getElementById("v-raw").onclick = () => setView("raw");
   document.getElementById("v-undet").onclick = () => setView("undet");
   initOpsMode();
   loadDeferred();   // 큰 파일(경기·인천 동경계·전국 아파트·정비 폴리곤)은 초기 렌더 뒤 백그라운드 로드
