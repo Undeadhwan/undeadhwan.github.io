@@ -9,6 +9,11 @@
   :root {
     --ink:#1c1c1e; --muted:#8e8e93; --line:#e5e5ea; --bg:#fff;
     --navy:#12263f; --stall:#b8860b; --accent:#0a66c2;
+    /* ── DESIGN.md §2 캐노니컬 토큰 (SSOT — 새 색·크기 임의 추가 금지) ── */
+    --ink2:#6b7280; --ink3:#9ca3af; --line2:#d1d5db; --panel:#fafafa;
+    --c-traffic:#2e5ce6; --c-job:#e0761e; --c-infra:#2e8b57; --c-house:#c2255c;
+    --warn:#b45309;
+    --r:10px; --r-s:7px; --fs:13px; --fs-s:11.5px;
   }
   * { margin:0; box-sizing:border-box; }
   body { font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif; color:var(--ink); background:var(--bg); }
@@ -35,6 +40,18 @@
   .chips { display:flex; gap:6px; flex-wrap:wrap; }
   .chip { font-size:12px; border:1px solid var(--line); border-radius:999px; padding:3px 10px; cursor:pointer; user-select:none; color:var(--muted); }
   .chip.on { border-color:var(--ink); color:var(--ink); font-weight:600; }
+  /* ── 운영 도구는 기본 숨김 (DESIGN.md §3 · 정식 오픈 화면엔 존재하지 않는다).
+     노출 조건: 로컬(file:/localhost) 또는 ?ops=1로 한 번 켠 브라우저(localStorage).
+     라이브 기본값은 항상 꺼짐 — "정식 오픈 전에 지우기"를 사람이 기억하지 않게 한다. ── */
+  #f-view { display:none; }
+  body.ops #f-view { display:flex; }
+  .opswitch { display:none; align-items:center; gap:6px; margin-left:auto; font-size:var(--fs-s); color:var(--ink3);
+              white-space:nowrap; user-select:none; cursor:pointer; }
+  body.ops-avail .opswitch { display:flex; }
+  .opswitch i { width:28px; height:16px; border-radius:999px; background:var(--line2); position:relative; transition:.15s; flex-shrink:0; }
+  .opswitch i::after { content:""; position:absolute; top:2px; left:2px; width:12px; height:12px; border-radius:50%; background:#fff; transition:.15s; }
+  body.ops .opswitch i { background:var(--ink); }
+  body.ops .opswitch i::after { left:14px; }
   /* 필터 드롭다운 (네이버식 큼직한 pill + 토글) */
   .dd { position:relative; }
   .ddbtn { font-size:14px; font-weight:700; border:1.5px solid #e3e6ec; border-radius:999px; padding:9px 16px; cursor:pointer;
@@ -421,58 +438,59 @@
   .hj-legend.collapsed .sec, .hj-legend.collapsed .hnote { display:none; }
   @media (max-width: 768px) { .hj-legend { max-width:158px; font-size:10.5px; padding:7px 8px 8px; } }
   /* ══════════ 좌측 도크 (조회조건 + 범례 통합, 2026-07-23 UI 개편) ══════════ */
-  #dock { width:352px; flex-shrink:0; border-right:1px solid var(--line); background:#fff; overflow-y:auto; padding:13px 14px 30px; order:-1; scrollbar-width:none; }
+  /* 2026-07-30 UI 개편 — DESIGN.md 문법 적용. 대분류 4개(교통 포함)가 동일한 행,
+     중분류는 아코디언 안 체크박스, **표시 옵션(선형)은 스위치**(필터와 모양부터 다르게),
+     전체선택·해제 2버튼 → "초기화" 링크 1개(기본과 다를 때만 노출), hover "only"로 1클릭 단독보기. */
+  #dock { width:250px; flex-shrink:0; border-right:1px solid var(--line); background:#fff; overflow-y:auto; padding:0 0 24px; order:-1; scrollbar-width:none; }
   #dock::-webkit-scrollbar { display:none; }   /* 스크롤바 숨김(사용자 요청) — 필요 시 스크롤은 되되 바는 안 보임 */
-  #dock .dk-h { display:flex; align-items:baseline; justify-content:space-between; }
-  #dock .dk-h b { font-size:16px; letter-spacing:-.2px; }
-  #dock .dk-h .cnt { font-size:12px; color:#9aa0aa; }
-  #dock .dk-sub { font-size:11px; color:#9aa0aa; margin:3px 0 11px; line-height:1.4; }
-  #dock .dk-btns { display:flex; gap:7px; margin-bottom:14px; }
-  /* ══ 뱃지 표준화(2026-07-23 사용자 — "네이버처럼 깔끔하고 짙은 테두리, 잘 안 보임").
-     켜짐 = 짙은 테두리 #2b3440 + 흰 배경 + 진한 글씨 / 꺼짐 = 연회색 채움 #f4f5f7 + 연한 테두리.
-     전체선택·해제 / 교통행 / 노선선형 토글 / 중분류 / 단계 / 등급 — 전부 같은 규칙(--line #e5e5ea는 너무 연했음). ══ */
-  /* 전체선택·해제 = 현재 상태 토글(사용자 "선택된 건 보여야죠"): 활성(.on)=짙은 테두리+흰 배경, 비활성=연회색 muted */
-  #dock .dk-btns button { flex:1; padding:10px; border:1px solid #e5e5ea; border-radius:9px; background:#f4f5f7; color:#a5aab3; font-weight:700; font-size:13.5px; cursor:pointer; }
-  #dock .dk-btns button.on { border:2px solid #2b3440; background:#fff; color:#1c1c1e; }
-  #dock .dk-btns button:hover { background:#e8ebf0; }
-  #dock .dk-btns button.on:hover { background:#f4f6f9; }
-  #dock .sec { margin-bottom:15px; }
-  #dock .sec-h { display:flex; align-items:center; gap:7px; font-size:13.5px; font-weight:800; color:var(--ink); margin-bottom:8px; }
-  #dock .sec-h .sq { width:11px; height:11px; border-radius:3px; flex-shrink:0; }
-  #dock .sec-h .sub { font-weight:500; color:#9aa0aa; font-size:10.5px; }
-  #dock .trow { display:flex; align-items:center; gap:10px; padding:9px 11px; border:1.5px solid #2b3440; border-radius:10px; margin-bottom:7px; background:#fff; color:#1c1c1e; cursor:pointer; }
-  #dock .trow.off { background:#f4f5f7; border:1px solid #e5e5ea; color:#a5aab3; opacity:1; }
-  #dock .trow .ico { width:34px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
-  #dock .trow .lb { font-weight:700; font-size:13px; }
-  #dock .trow .n { margin-left:auto; font-size:12px; color:#8a90a0; font-weight:600; }
-  #dock .ltog { display:flex; align-items:center; gap:7px; font-size:11px; color:#5a6478; padding:6px 4px 0; }
-  #dock .ltog .lbl { color:#9aa0aa; }
-  #dock .ltog .lt { padding:4px 11px; border:1.5px solid #2b3440; border-radius:999px; font-size:12.5px; font-weight:700; cursor:pointer; background:#fff; color:#1c1c1e; }
-  #dock .ltog .lt.off { background:#f4f5f7; border:1px solid #e5e5ea; color:#a5aab3; opacity:1; }
-  #dock .chead { display:flex; align-items:center; gap:8px; font-weight:800; font-size:14.5px; margin:12px 0 7px; cursor:pointer; }
-  #dock .chead.off { opacity:.42; }
-  #dock .chead .cd { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
-  #dock .chead .cn { margin-left:auto; font-size:12.5px; color:#9aa0aa; font-weight:600; }
-  #dock .pills { display:flex; flex-wrap:wrap; gap:6px; }
-  #dock .pill { display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border:1.5px solid #2b3440; border-radius:999px; font-size:13.5px; background:#fff; cursor:pointer; color:#1c1c1e; white-space:nowrap; }
-  #dock .pill.off { border:1px solid #e5e5ea; background:#f4f5f7; color:#a5aab3; opacity:1; }
-  #dock .pill .pd { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
-  #dock .pill .pn { color:#8a90a0; font-weight:700; font-size:12.5px; }
-  /* 단계 pill: 표준 짙은 테두리 + **점선/실선으로만** 계획·인가(점선)/착공·준공(실선) 구분(지도와 1:1). 색은 통일. */
-  #dock .phase .pill { padding:7px 15px; font-weight:700; border-width:2px; }
-  #dock .phase .pill.dash { border-style:dashed; }
-  #dock .phase .pill.solid { border-style:solid; }
-  #dock .phase .pill.off { border:1px solid #e5e5ea; color:#a5aab3; background:#f4f5f7; opacity:1; }
-  #dock .grades { display:flex; flex-wrap:nowrap; gap:6px; }   /* 한 줄 고정 — 미판정이 줄바꿈으로 위로 튀지 않게(2026-07-23 사용자) */
-  #dock .gp { display:inline-flex; align-items:center; gap:5px; padding:7px 10px; border:1.5px solid #2b3440; border-radius:999px; font-size:13.5px; font-weight:700; background:#fff; color:#1c1c1e; cursor:pointer; white-space:nowrap; }
-  #dock .gp.off { border:1px solid #e5e5ea; background:#f4f5f7; color:#a5aab3; opacity:1; }
-  #dock .gp .gd { border-radius:50%; background:#1c1c1e; display:inline-block; flex-shrink:0; }   /* 등급 원 = near-black(사용자 "더 진하게") */
-  #dock .halo-leg { display:flex; align-items:center; gap:9px; font-size:11px; color:#5a6478; margin:2px 0 12px; }
-  #dock .halo-leg .halo { position:relative; width:26px; height:26px; flex-shrink:0; }
-  #dock .halo-leg .halo::before { content:""; position:absolute; inset:0; border-radius:50%; background:radial-gradient(circle,rgba(46,92,230,.28),rgba(46,92,230,0) 70%); }
-  #dock .halo-leg .halo i { position:absolute; top:9px; left:9px; width:8px; height:8px; border-radius:50%; background:#2e5ce6; }
-  #dock .dk-note { margin-top:6px; background:#f0f5ff; border:1px solid #dbe6fb; border-radius:10px; padding:10px 11px; font-size:11px; color:#5a6478; line-height:1.45; display:flex; gap:8px; align-items:flex-start; }
-  #dock .dk-note .bdg { width:20px; height:20px; border-radius:50%; background:#c2255c; color:#fff; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  #dock .dk-h { display:flex; align-items:baseline; justify-content:space-between; padding:13px 14px 10px; }
+  #dock .dk-h b { font-size:14px; }
+  #dock .dk-h b .cnt { color:var(--ink2); font-weight:500; }
+  #dock .dk-rst { font-size:var(--fs-s); color:var(--c-traffic); background:none; border:0; cursor:pointer; padding:0; visibility:hidden; }
+  #dock .dk-rst.show { visibility:visible; }
+  #dock .dk-rst:hover { text-decoration:underline; }
+  /* 대분류 행 — 교통·일자리·인프라·주거개발 동일 문법 (선형/점형 구분 표시 없음) */
+  #dock .cat { border-top:1px solid var(--line); }
+  #dock .cat-h { display:flex; align-items:center; gap:9px; padding:10px 14px; cursor:pointer; position:relative; }
+  #dock .cat-h:hover { background:var(--panel); }
+  #dock .cat-h .chev { color:var(--ink3); font-size:9px; width:12px; flex-shrink:0; text-align:center; transition:transform .15s; }
+  #dock .cat.open .cat-h .chev { transform:rotate(90deg); }
+  #dock .cat-h .cd { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+  #dock .cat-h .nm { font-weight:600; font-size:var(--fs); }
+  #dock .cat-h .cn { margin-left:auto; font-size:var(--fs); color:var(--ink2); font-variant-numeric:tabular-nums; }
+  #dock .cat-h .solo { position:absolute; right:52px; font-size:10.5px; color:var(--ink3); border:1px solid var(--line); border-radius:5px; padding:1px 6px; background:#fff; cursor:pointer; display:none; }
+  #dock .cat-h:hover .solo { display:block; }
+  #dock .cat-h .solo:hover { color:var(--ink); border-color:var(--line2); }
+  #dock .cat.off .cd { background:var(--line2) !important; }
+  #dock .cat.off .nm, #dock .cat.off .cn { color:var(--ink3); }
+  /* 중분류 = 필터(무엇을 보나) → 체크박스 */
+  #dock .subs { display:none; padding:1px 14px 9px 35px; }
+  #dock .cat.open .subs { display:block; }
+  #dock .sub { display:flex; align-items:center; gap:7px; padding:4px 0; cursor:pointer; font-size:var(--fs); }
+  #dock .sub .tick { width:13px; height:13px; border:1.5px solid var(--line2); border-radius:4px; flex-shrink:0; position:relative; }
+  #dock .sub:not(.off) .tick { background:var(--ink); border-color:var(--ink); }
+  #dock .sub:not(.off) .tick::after { content:""; position:absolute; left:3.5px; top:1px; width:3px; height:6px; border:solid #fff; border-width:0 1.5px 1.5px 0; transform:rotate(45deg); }
+  #dock .sub .n { margin-left:auto; color:var(--ink3); font-size:var(--fs-s); font-variant-numeric:tabular-nums; }
+  #dock .sub.off { color:var(--ink3); }
+  /* 표시 옵션(어떻게 보나: 노선 선형) = 스위치 — 체크박스와 문법부터 다르게 (DESIGN.md §3) */
+  #dock .opts { margin-top:6px; padding-top:5px; border-top:1px dashed var(--line); }
+  #dock .optrow { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:3px 0; cursor:pointer; font-size:var(--fs-s); color:var(--ink2); }
+  #dock .optrow:hover { color:var(--ink); }
+  #dock .optrow .sw { width:26px; height:15px; border-radius:999px; background:var(--line2); position:relative; transition:.15s; flex-shrink:0; }
+  #dock .optrow .sw::after { content:""; position:absolute; top:2px; left:2px; width:11px; height:11px; border-radius:50%; background:#fff; transition:.15s; }
+  #dock .optrow.on .sw { background:var(--ink); }
+  #dock .optrow.on .sw::after { left:13px; }
+  /* 정제 축(단계·등급) — 세그 칩: 켜짐=잉크 채움, 꺼짐=외곽선 */
+  #dock .axis { border-top:1px solid var(--line); padding:11px 14px; }
+  #dock .axis .t { display:flex; gap:6px; align-items:baseline; font-size:var(--fs-s); color:var(--ink2); margin-bottom:7px; }
+  #dock .axis .t small { color:var(--ink3); }
+  #dock .seg { display:flex; flex-wrap:wrap; gap:5px; }
+  #dock .seg .s { display:inline-flex; align-items:center; gap:5px; padding:4px 9px; border:1px solid var(--line2); border-radius:var(--r-s); font-size:var(--fs-s); background:#fff; color:var(--ink3); cursor:pointer; white-space:nowrap; }
+  #dock .seg .s:not(.off) { border-color:var(--ink); background:var(--ink); color:#fff; }
+  #dock .seg .s i { border-radius:50%; background:currentColor; flex-shrink:0; display:inline-block; }
+  #dock .seg .s i.dash { background:none; border:1.3px dashed currentColor; }
+  #dock .dk-foot { padding:11px 14px 0; font-size:var(--fs-s); color:var(--ink3); line-height:1.6; }
+  #dock .dk-foot a { color:var(--ink3); }
   @media (max-width: 768px) { #dock { width:100%; order:0; max-height:none; border-right:none; border-bottom:1px solid var(--line); } }
   /* 필터·범례가 좌측 도크로 이동 — 상단 드롭다운 필터와 우하단 호재 범례는 중복이라 숨김(2026-07-23) */
   #f-dd { display:none !important; }
@@ -503,6 +521,7 @@
     <span class="chip" onclick="window.open('methodology.html','_blank')" title="데이터 소스·추출·가공·매핑 방법 (운영 문서)">📄 데이터·방법론</span>
     <span class="chip" onclick="window.open('report.html','_blank')" title="주간 무인 수집 회전에서 바뀐 것 (자동 생성)">🗞 주간 변경</span>
   </div>
+  <label class="opswitch" id="opswitch" title="운영 도구(기준 설정·미판정·대장·주간 변경) 표시 — 로컬 또는 ?ops=1로 켠 브라우저에서만 보입니다">운영 모드<i></i></label>
 </header>
 <div id="wrap">
   <aside id="dock"></aside>
@@ -1144,7 +1163,7 @@ const JEONGBI_LICENSED = true;
 // 신규 철도 노선: OSM 실제 선형(railway=construction/proposed) 기반 재구축 → 활성.
 // 건설중=실선, 계획=점선(§7). 출처 OpenStreetMap(ODbL, 지도 하단·툴팁 표기).
 const RAIL_READY = true;
-let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [], JEONGBI_SIG = [], RAIL = [], RAIL_SIG = [], DART = [], DART_SIG = [], ARCH = [], ARCH_SIG = [], ROADF = [], ROAD_SIG = [], UPIS_SIG = [], DPS_SIG = [], MASTER_SIG = [], JOBS_SIG = [], MEGA_SIG = [], EUM_SIG = [], ADVERSE = [];
+let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [], JEONGBI_SIG = [], RAIL = [], RAIL_SIG = [], DART = [], DART_SIG = [], ARCH = [], ARCH_SIG = [], ROADF = [], ROAD_SIG = [], UPIS_SIG = [], DPS_SIG = [], SH_SIG = [], MASTER_SIG = [], JOBS_SIG = [], MEGA_SIG = [], EUM_SIG = [], ADVERSE = [];
 /* DART(신규시설투자·유형자산양수) → 일자리 후보 신호 어댑트. 위치=회사 소재지 근사(§ 후보층, confirmed:false) */
 function buildDartSignals() {   // DART 전자공시 = 법정 공시 → official_report
   DART_SIG = (DART || []).filter(s => s.geometry && s.geometry.coordinates).map(s => ({
@@ -1343,6 +1362,10 @@ const filter = {
   region: "",   // "" = 전체, "서울 강서구" 형태
   year: null    // null = 전체, 아니면 그 해까지 완료 범위 도달분만
 };
+/* 좌측 도크 대분류 펼침 상태 — 화면이 높으면 기본 펼침(큰 모니터는 클릭 수 그대로),
+   좁으면 기본 접힘(노트북에서 4행이 한눈에). 한 번 펼치면 localStorage로 기억한다. */
+const dockOpen = new Set(JSON.parse(localStorage.getItem("hojae_dock_open")
+  || (window.innerHeight >= 900 ? JSON.stringify(CAT_KEYS) : "[]")));
 let view = { mode: "home", dong: null, signal: null };
 let mapApi = null;   // {panTo(lnglat), refreshPins()}
 /* ── 지도 공용 헬퍼 (2026-07-29 전수 감사 A — Leaflet 전용 API 무가드 호출 6곳이 카카오에서
@@ -2328,56 +2351,72 @@ function renderDock() {
   const dock = document.getElementById("dock");
   if (!dock) return;
   const C = dockCounts();
-  const railIco = `<svg width="34" height="14"><line x1="2" y1="7" x2="32" y2="7" stroke="#2e5ce6" stroke-width="3.4"/><circle cx="8" cy="7" r="3.4" fill="#fff" stroke="#2e5ce6" stroke-width="2"/><circle cx="26" cy="7" r="3.4" fill="#fff" stroke="#2e5ce6" stroke-width="2"/></svg>`;
-  const roadIco = `<svg width="34" height="14"><line x1="2" y1="7" x2="32" y2="7" stroke="#2e5ce6" stroke-width="3.4" stroke-linecap="round"/></svg>`;
-  // 환승·터미널은 **선형이 아니라 시설 점**이라 아이콘도 점으로 구분한다(철도=선+역, 도로=선).
-  // ⚠ 이 행이 없어서 7건이 도크에 아예 안 보였다(2026-07-28 사용자 지적) — 지도에는 뜨는데
-  //   끄고 켤 수도, 개수를 볼 수도 없었고 '전체 해제' 뒤엔 개별 복구가 불가능했다.
-  const termIco = `<svg width="34" height="14"><circle cx="17" cy="7" r="5.2" fill="#fff" stroke="#2e5ce6" stroke-width="2.6"/><circle cx="17" cy="7" r="1.8" fill="#2e5ce6"/></svg>`;
-  const trow = (sk, label, ico) => `<div class="trow${filter.sub.has(sk) ? "" : " off"}" data-tog="sub" data-k="${sk}"><span class="ico">${ico}</span><span class="lb">${label}</span><span class="n">${C.sub[sk] || 0}</span></div>`;
-  const lt = k => `<span class="lt${filter.lines.has(k) ? "" : " off"}" data-tog="lines" data-k="${k}">${k}</span>`;
+  // 표시 옵션(노선 선형) = 교통 대분류 안의 스위치. 필터(체크박스)와 문법을 다르게 둔다(DESIGN.md §3).
+  const CAT_OPTS = { "교통": [["철도선", "철도 선형"], ["도로선", "도로 선형"]] };
   const catBlock = cat => {
     const col = CAT_COLOR[cat], keys = SUB_KEYS[cat] || [];
     const on = keys.length ? keys.some(sk => filter.sub.has(sk)) : filter.cat.has(cat);   // 대분류 헤더 = 하위 중 하나라도 켜지면 on
-    const subs = keys.filter(sk => (C.sub[sk] || 0) > 0);
-    const pills = subs.map(sk => `<span class="pill${filter.sub.has(sk) ? "" : " off"}" data-tog="sub" data-k="${sk}"><i class="pd" style="background:${col}"></i>${sk}<span class="pn">${C.sub[sk]}</span></span>`).join("");
-    return `<div class="chead${on ? "" : " off"}" data-tog="cat" data-k="${cat}"><i class="cd" style="background:${col}"></i>${cat}<span class="cn">${C.cat[cat] || 0}</span></div>${pills ? `<div class="pills">${pills}</div>` : ""}`;
+    // 건수 0인 중분류도 남긴다 — 지역을 좁히면 0이 되지만 축 자체가 사라지면 복구할 방법이 없다
+    // (환승·터미널 7건이 도크에서 사라져 끄고 켤 수 없던 2026-07-28 사고와 같은 클래스).
+    const subs = keys.map(sk => `<div class="sub${filter.sub.has(sk) ? "" : " off"}" data-tog="sub" data-k="${sk}">
+        <span class="tick"></span><span class="nm">${sk === "철도" ? "철도 · 역" : sk}</span><span class="n">${C.sub[sk] || 0}</span></div>`).join("");
+    const opts = (CAT_OPTS[cat] || []).map(([k, lb]) => `<div class="optrow${filter.lines.has(k) ? " on" : ""}" data-tog="lines" data-k="${k}">
+        <span>${lb}</span><i class="sw"></i></div>`).join("");
+    return `<div class="cat${dockOpen.has(cat) ? " open" : ""}${on ? "" : " off"}">
+      <div class="cat-h" data-tog="cat" data-k="${cat}">
+        <span class="chev" data-open="${cat}">▶</span>
+        <i class="cd" style="background:${col}"></i><span class="nm">${cat}</span>
+        <button class="solo" data-solo="${cat}" title="이 분류만 남기고 나머지 끄기">only</button>
+        <span class="cn">${(C.cat[cat] || 0).toLocaleString()}</span>
+      </div>
+      <div class="subs">${subs}${opts ? `<div class="opts">${opts}</div>` : ""}</div>
+    </div>`;
   };
-  const ph = (p, dash) => `<span class="pill ${dash ? "dash" : "solid"}${filter.phase.has(p) ? "" : " off"}" data-tog="phase" data-k="${p}">${phaseLabel(p)}</span>`;
-  const SZ = { S: 15, A: 12, B: 10, C: 8 };
+  const ph = (p, dash) => `<span class="s${filter.phase.has(p) ? "" : " off"}" data-tog="phase" data-k="${p}"><i class="${dash ? "dash" : ""}" style="width:8px;height:8px"></i>${phaseLabel(p)}</span>`;
+  const SZ = { S: 11, A: 9, B: 7, C: 5.5 };
   const gp = g => g === "미정"
-    ? `<span class="gp${filter.lvl.has("미정") ? "" : " off"}" data-tog="lvl" data-k="미정"><i class="gd" style="width:9px;height:9px;background:none;border:1.5px dashed #333"></i>미판정</span>`
-    : `<span class="gp${filter.lvl.has(g) ? "" : " off"}" data-tog="lvl" data-k="${g}"><i class="gd" style="width:${SZ[g]}px;height:${SZ[g]}px"></i>${g}</span>`;
-  // 전체선택/해제 = 현재 선택 상태 토글 표시(사용자 "선택된 건 보여야죠"): 다 켜짐=전체선택 활성, 다 꺼짐=전체해제 활성
-  const _allOn = CAT_KEYS.every(k => filter.cat.has(k)) && ALL_SUBS.every(k => filter.sub.has(k)) && filter.lines.has("철도선") && filter.lines.has("도로선");
-  const _allOff = !CAT_KEYS.some(k => filter.cat.has(k)) && !ALL_SUBS.some(k => filter.sub.has(k)) && !filter.lines.has("철도선") && !filter.lines.has("도로선");
+    ? `<span class="s${filter.lvl.has("미정") ? "" : " off"}" data-tog="lvl" data-k="미정"><i class="dash" style="width:7px;height:7px"></i>미판정</span>`
+    : `<span class="s${filter.lvl.has(g) ? "" : " off"}" data-tog="lvl" data-k="${g}"><i style="width:${SZ[g]}px;height:${SZ[g]}px"></i>${g}</span>`;
+  // 초기화 = 전체선택·해제 2버튼의 대체. 기본 상태와 다를 때만 보인다(평소엔 화면에 없음).
+  const dirty = !(ALL_SUBS.every(k => filter.sub.has(k)) && PHASES.every(k => filter.phase.has(k))
+    && GRADES_DISP.every(k => filter.lvl.has(k)) && filter.lines.has("철도선") && filter.lines.has("도로선"));
   dock.innerHTML = `
-    <div class="dk-h"><b>표시 조건 · 범례</b><span class="cnt">${filter.region ? filter.region + " " : ""}호재 ${C.total.toLocaleString()}건</span></div>
-    <div class="dk-btns"><button data-all="on" class="${_allOn ? "on" : ""}">전체 선택</button><button data-all="off" class="${_allOff ? "on" : ""}">전체 해제</button></div>
-    <div class="sec">
-      <div class="sec-h"><i class="sq" style="background:${CAT_COLOR["교통"]}"></i>교통<span class="sub">선형 · 파랑 일원화</span></div>
-      ${trow("철도", "철도 · 역", railIco)}${trow("도로", "도로", roadIco)}${trow("환승·터미널", "환승 · 터미널", termIco)}
-      <div class="ltog"><span class="lbl">노선 선형 표시</span>${lt("철도선")}${lt("도로선")}</div>
+    <div class="dk-h">
+      <b>${filter.region ? filter.region + " " : ""}호재 <span class="cnt">${C.total.toLocaleString()}</span></b>
+      <button class="dk-rst${dirty ? " show" : ""}" data-all="on">초기화</button>
     </div>
-    <div class="sec">
-      <div class="sec-h" style="margin-bottom:2px">점 호재<span class="sub">색 = 분류 · 크기 = 등급</span></div>
-      ${["일자리", "인프라", "주거개발"].map(catBlock).join("")}
+    ${CAT_KEYS.map(catBlock).join("")}
+    <div class="axis">
+      <div class="t">단계 <small>실선=착공 후 · 점선=계획</small></div>
+      <div class="seg">${ph("계획", true)}${ph("인가", true)}${ph("착공", false)}${ph("준공·개통", false)}</div>
     </div>
-    <div class="sec">
-      <div class="sec-h">단계<span class="sub">진행 단계 · 실선=착공/점선=계획</span></div>
-      <div class="pills phase">${ph("계획", true)}${ph("인가", true)}${ph("착공", false)}${ph("준공·개통", false)}</div>
+    <div class="axis">
+      <div class="t">등급 <small>원 크기</small></div>
+      <div class="seg">${["S", "A", "B", "C", "미정"].map(gp).join("")}</div>
     </div>
-    <div class="sec">
-      <div class="sec-h">등급<span class="sub">원 크기로 표현</span></div>
-      <div class="grades">${["S", "A", "B", "C", "미정"].map(gp).join("")}</div>
-    </div>
-    <div class="halo-leg"><span class="halo"><i></i></span><span><b>흐릿한 후광</b> = 위치 근사(이 근처) · 지번 미확정</span></div>
-    <div class="dk-note"><span class="bdg">+</span><span><b>겹친 호재</b>는 개수 배지로 묶여 표시됩니다. 클릭하면 목록이 펼쳐져요.</span></div>`;
+    <div class="dk-foot">흐릿한 후광 = 위치 근사 · 겹친 호재는 <b>+N</b>으로 묶임<br>
+      <a href="methodology.html" target="_blank">데이터 · 방법론</a></div>`;
 }
 function initDock() {
   const dock = document.getElementById("dock");
   if (!dock) return;
   dock.addEventListener("click", e => {
+    // 펼침(▶)은 토글과 별개 동작 — 대분류 행 클릭은 on/off 1클릭을 유지한다.
+    const op = e.target.closest("[data-open]");
+    if (op) {
+      const k = op.dataset.open;
+      dockOpen.has(k) ? dockOpen.delete(k) : dockOpen.add(k);
+      localStorage.setItem("hojae_dock_open", JSON.stringify([...dockOpen]));
+      renderDock(); return;
+    }
+    // only = 이 분류만 남기기. 종전 "전체 해제 → 원하는 것 켜기"(2클릭+)를 1클릭으로.
+    const so = e.target.closest("[data-solo]");
+    if (so) {
+      const k = so.dataset.solo;
+      CAT_KEYS.forEach(c => { c === k ? filter.cat.add(c) : filter.cat.delete(c);
+        (SUB_KEYS[c] || []).forEach(sk => c === k ? filter.sub.add(sk) : filter.sub.delete(sk)); });
+      renderAll(); return;
+    }
     const t = e.target.closest("[data-tog],[data-all]");
     if (!t) return;
     if (t.dataset.all) {
@@ -3074,7 +3113,7 @@ function initKakao() {
   const renderHojae = () => {
     const lv = map.getLevel(); const b = map.getBounds();
     const _cen = map.getCenter(), _ccx = _cen.getLng(), _ccy = _cen.getLat();   // 화면 중심 — 상한 컬링을 중심거리순으로(2026-07-23)
-    const prelim = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, UPIS_SIG, DPS_SIG)
+    const prelim = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, UPIS_SIG, DPS_SIG, SH_SIG)
       .filter(s => !(s._road && s.access_points)).filter(s => !s.area_shape).filter(s => s.signal !== false)
       .filter(s => aptFocus ? (aptFocus.has(s) && !isStaleFinished(s)) : visible(s))   // 아파트 포커스=그 단지 호재만(필터 무관, 2026-07-29)
       // 망형(전철·도로): 광역 뷰(lv≥9=4km)엔 선만, **도시 뷰(lv≤8=2km)부터 역·IC**.
@@ -3523,7 +3562,7 @@ function setView(mode) {
 /* ══════════ 등급 미판정(미정) 목록 ══════════ */
 // 모든 신호 통합 후 등급 미판정(levelOf==="미정")만 — 결측 사유 표기. 사용자가 보고 소스·기준 보완.
 function allSignalsFlat() {
-  return [].concat(SIGNALS, MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, RAIL_SIG, ROAD_SIG, DART_SIG, ARCH_SIG, UPIS_SIG, DPS_SIG).filter(s => s && s.geometry);
+  return [].concat(SIGNALS, MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, RAIL_SIG, ROAD_SIG, DART_SIG, ARCH_SIG, UPIS_SIG, DPS_SIG, SH_SIG).filter(s => s && s.geometry);
 }
 function undetReason(s) {
   const c = catOf(s);
@@ -3727,13 +3766,13 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260730k");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260730l");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
   applyThresholds(await gj("thresholds.json").catch(() => null));
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
-  const [dong, sgg, main, macro, rawData, autoData, regions, jeongbiData, railData, roadData, dartData, archData, parkData, hospData, retailData, dpsData, masterData, jobsData, megaData, eumData, advData] = await Promise.all([
+  const [dong, sgg, main, macro, rawData, autoData, regions, jeongbiData, railData, roadData, dartData, archData, parkData, hospData, retailData, dpsData, shData, masterData, jobsData, megaData, eumData, advData] = await Promise.all([
     gj("bdong/서울.geojson"),      // 초기 = 서울 467동(§3.1 법정동). 나머지 15시도는 뷰포트·선택 시 지연 로드(bdong/index.json)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
@@ -3750,6 +3789,7 @@ function initSearch() {
     gj("hospital_signals.json").catch(() => ({ features: [] })),      // 도시계획시설(종합의료) 결정 — 같은 커넥터·같은 규칙(2026-07-29 배선)
     gj("retail_signals.json").catch(() => ({ features: [] })),        // 도시계획시설(유통·시장) — UQ154(2026-07-29)
     gj("dps_signals.json").catch(() => ({ signals: [] })),            // 공공건축 설계공모(건축HUB) — 계획단계 후보
+    gj("sh_signals.json").catch(() => ({ signals: [] })),             // SH 공급계획(공급 전 신축만, 2026-07-30)
     gj("master_signals.json").catch(() => ({ signals: [] })),         // S급 지구 마스터(택지정보 대장, 2026-07-22)
     gj("jobs_signals.json").catch(() => ({ signals: [] })),           // 대형 일자리 S(용산·잠실·북항 등, 2026-07-22)
     gj("mega_signals.json").catch(() => ({ signals: [] })),           // 관보 고시 원문 파싱 — 대장에 아직 없는 신규 지구(2026-07-22)
@@ -3780,6 +3820,10 @@ function initSearch() {
   // 공공건축 설계공모(2026-07-18) — 계획 단계 후보. 건축HUB 인허가가 놓치는 공공건축·중형(1만㎡ 미만)을 보완.
   DPS_SIG = ((dpsData && dpsData.signals) || []).filter(s => !s.superseded_by && !s.map_hidden).map(s => Object.assign({
     _dps: true, template_type: "공공시설", confirmed: false, status: s.status || "활성"
+  }, s));
+  // SH 공급계획(2026-07-30) — 공급 전 신축만(매입형·본청약 완료 제외). 좌표=지구 대표점(jigu 근사).
+  SH_SIG = ((shData && shData.signals) || []).filter(s => !s.superseded_by && !s.map_hidden).map(s => Object.assign({
+    _sh: true, template_type: "주거개발", confirmed: false, status: s.status || "활성"
   }, s));
   // S급 지구 마스터(2026-07-22) — 택지정보 지구 대장. 좌표=지구 필지 평균(geo_prec=jigu, 근사).
   // 조각(건축·공모·DART)은 master_ref로 소속만 기록 — 지도에는 둘 다 표시(집계 접기는 추후 별도 논의).
@@ -3846,8 +3890,32 @@ function initSearch() {
   document.getElementById("v-map").onclick = () => setView("map");
   document.getElementById("v-raw").onclick = () => setView("raw");
   document.getElementById("v-undet").onclick = () => setView("undet");
+  initOpsMode();
   loadDeferred();   // 큰 파일(경기·인천 동경계·전국 아파트·정비 폴리곤)은 초기 렌더 뒤 백그라운드 로드
 })();
+
+/* ══════════ 운영 모드 (2026-07-30) ══════════
+   운영 도구(기준 설정·미판정 목록·노선 대장·주간 변경·데이터 뷰·세대수 필터)는 **기본이 숨김**이고
+   정식 오픈 화면에는 존재하지 않는다. "오픈 전에 지우기"를 사람이 기억하는 구조를 만들지 않기 위해
+   기본값을 꺼짐으로 두고, 운영자만 아래 두 경로로 켠다.
+     · 로컬(file: / localhost / 127.0.0.1) — 항상 사용 가능
+     · 라이브에서 `?ops=1` 한 번 방문 — 그 브라우저에만 localStorage로 기억(다른 방문자와 무관)
+   `?ops=0`으로 끈다. 노출 여부만 다루는 UI 장치이지 보안 경계가 아니다(운영 페이지 자체를 라이브에
+   배포하지 않는 것이 실제 경계 — build_all.py PAGES). */
+function initOpsMode() {
+  const q = new URLSearchParams(location.search).get("ops");
+  if (q === "1") localStorage.setItem("hojae_ops", "1");
+  if (q === "0") localStorage.removeItem("hojae_ops");
+  const local = location.protocol === "file:" || ["localhost", "127.0.0.1"].includes(location.hostname);
+  const avail = local || localStorage.getItem("hojae_ops") === "1";
+  if (!avail) return;   // 공개 방문자: 토글도 칩도 DOM에 그려지지 않은 상태 그대로
+  document.body.classList.add("ops-avail", "ops");
+  document.getElementById("opswitch")?.addEventListener("click", () => {
+    const on = document.body.classList.toggle("ops");
+    // 운영 도구를 끈 채로 데이터·미판정 뷰에 남아 있으면 돌아올 버튼이 없다 → 지도로 복귀
+    if (!on && typeof setView === "function") setView("map");
+  });
+}
 
 /* ══════════ 법정동 경계 시도별 지연 로드 (전국 확장 2026-07-17) ══════════
    전국 법정동은 20MB+ → 한 번에 싣지 않는다. bdong/index.json(시도별 bbox 카탈로그)만 먼저 받고,
@@ -3859,7 +3927,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730k"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730l"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3885,7 +3953,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260730k");
+  const CB = "?b=" + (window.BUILD || "20260730l");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
