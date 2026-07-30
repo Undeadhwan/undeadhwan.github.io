@@ -199,7 +199,7 @@
   .cmpbar .cgo.dim { opacity:.4; pointer-events:none; }
   .cmpAdd { display:inline-block; font-size:11px; font-weight:700; border:1.5px solid #1a1a1a; border-radius:8px; padding:3px 9px; cursor:pointer; background:#fff; color:#1a1a1a; }
   .cmpAdd.in { background:#1a1a1a; color:#fff; }
-  #cmpModal .rmpanel { max-width:min(1040px,95vw); }
+  #cmpModal .rmpanel { max-width:min(1240px,96vw); }   /* 4단지까지 제목이 읽히는 폭 */
   .cmptable { width:100%; border-collapse:collapse; font-size:12.5px; }
   .cmptable th, .cmptable td { border:1px solid var(--line); padding:9px 10px; text-align:center; vertical-align:middle; width:calc((100% - 120px)/4); }
   .cmptable th.rowh, .cmptable td.rowh { width:120px; text-align:left; background:#fafbfc; font-weight:700; color:var(--muted); font-size:11.5px; white-space:nowrap; }
@@ -209,7 +209,11 @@
   .cmpnote { font-size:12.5px; color:var(--muted); margin-top:12px; line-height:1.6; }
   /* 비교 v2 (2026-07-30) — hover 툴팁 폐지. 호재를 등급 구분선 아래 전부 펼쳐 커서 없이 스캔한다.
      종전엔 개수 칸에 마우스를 올려야 "그게 무슨 호재인지"를 알 수 있었다(터치 기기에선 아예 불가). */
-  .cmpg { display:grid; gap:0 22px; }
+  /* 컬럼이 좁으면 제목이 "가양 4…"로 잘려 아무 정보가 없다(2026-07-30 3단지 비교 실측).
+     제목은 컬럼 폭을 다 쓰는 **자기 줄**을 갖고, 거리·단계는 그 아래 메타 줄로 내린다.
+     컬럼 최소폭 236px 보장 — 4단지면 가로 스크롤(잘라서 못 읽는 것보다 낫다). */
+  #cmpModal .bd { overflow-x:auto; }
+  .cmpg { display:grid; gap:0 20px; min-width:max-content; }
   .cmpcol .apth { padding:2px 0 9px; border-bottom:1px solid var(--line); }
   .cmpcol .apth b { font-size:16px; }
   .cmpcol .apth .m { color:var(--ink2); font-size:var(--fs-s); margin-top:3px; }
@@ -217,13 +221,14 @@
   .cmpcol .siglist { padding:6px 0 10px; }
   .cmpcol .gsep { display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:var(--ink2); letter-spacing:.3px; margin:11px 0 4px; }
   .cmpcol .gsep::after { content:""; flex:1; height:1px; background:var(--line); }
-  .cmpcol .csig { display:flex; align-items:baseline; gap:7px; padding:4px 0; font-size:var(--fs); line-height:1.45; }
-  .cmpcol .csig .d { width:8px; height:8px; border-radius:50%; flex-shrink:0; align-self:flex-start; margin-top:5px; }
-  /* 이름은 두 줄까지 보여준다 — 한 줄 말줄임은 hover 없이 못 읽고(v2의 목적), 무제한 줄바꿈은
-     건축인허가 제목(용도·연면적 괄호가 붙어 길다)이 6줄로 번져 목록 스캔이 안 된다. */
-  .cmpcol .csig .ttl { flex:1; min-width:0; word-break:keep-all; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-  .cmpcol .csig .dst { flex-shrink:0; color:var(--ink2); font-variant-numeric:tabular-nums; }
-  .cmpcol .csig .ph { flex-shrink:0; font-size:11.5px; color:var(--ink2); border:1px solid var(--line2); border-radius:5px; padding:0 5px; }
+  /* 한 줄에 제목+거리+단계를 나란히 두면 좁은 컬럼에서 제목이 먼저 잘린다("가양 4…").
+     제목은 자기 줄을 다 쓰고(두 줄까지), 거리·단계는 아래 메타 줄로. */
+  .cmpcol .csig { display:grid; grid-template-columns:8px 1fr; gap:0 8px; padding:5px 0; font-size:var(--fs); line-height:1.4; }
+  .cmpcol .csig .d { width:8px; height:8px; border-radius:50%; margin-top:5px; }
+  .cmpcol .csig .ttl { word-break:keep-all; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .cmpcol .csig .meta { grid-column:2; display:flex; align-items:center; gap:6px; margin-top:2px; }
+  .cmpcol .csig .dst { color:var(--ink2); font-size:var(--fs-s); font-variant-numeric:tabular-nums; }
+  .cmpcol .csig .ph { font-size:11.5px; color:var(--ink2); border:1px solid var(--line2); border-radius:5px; padding:0 5px; }
   .cmpcol .csig .ph.dash { border-style:dashed; }
   .cmpcol .csig.warn .ttl { color:var(--warn); }
   /* 연도 버튼 + 카드 미니 진행바 */
@@ -2046,7 +2051,7 @@ function cmpColumn(a) {
     const p = phaseOf(r.s), dash = p === "계획" || p === "인가";
     return `<div class="csig${warn ? " warn" : ""}"><span class="d" style="background:${warn ? "var(--warn)" : CAT_COLOR[catOf(r.s)] || "#999"}"></span>
       <span class="ttl" title="${esc(r.s.title || "")}">${warn ? "⚠ " : ""}${esc(r.s.title || "")}</span>
-      <span class="dst">${dist(r.d)}</span><span class="ph${dash ? " dash" : ""}">${phaseLabel(p)}</span></div>`;
+      <span class="meta"><span class="dst">${dist(r.d)}</span><span class="ph${dash ? " dash" : ""}">${phaseLabel(p)}</span></span></div>`;
   };
   let out = "", g = null;
   rows.filter(r => r.s.status !== "정체").forEach(r => {
@@ -2062,7 +2067,7 @@ function cmpColumn(a) {
     stalled.forEach(r => { out += sig(r, true); });
     adv.forEach(x => { out += `<div class="csig warn"><span class="d" style="background:var(--warn)"></span>
       <span class="ttl" title="${esc(x.f.title || "")}">⚠ ${esc(x.f.title || "")}</span>
-      <span class="dst">${dist(x.dist)}</span><span class="ph">역효과</span></div>`; });
+      <span class="meta"><span class="dst">${dist(x.dist)}</span><span class="ph">역효과</span></span></div>`; });
   }
   const n = rows.length - stalled.length;
   return `<div class="cmpcol">
@@ -2076,7 +2081,7 @@ function cmpColumn(a) {
 function openCompare() {
   if (compareSet.length < 2) return;
   const body = `
-    <div class="cmpg" style="grid-template-columns:repeat(${compareSet.length},minmax(0,1fr))">
+    <div class="cmpg" style="grid-template-columns:repeat(${compareSet.length},minmax(236px,1fr))">
       ${compareSet.map(cmpColumn).join("")}
     </div>
     <div class="cmpnote">· 반경 내 호재의 <b>개수·거리·단계 사실만</b> 나열합니다 — 가중치 합산·순위·추천·'수혜' 판단 없음(§7·P1·P3). 세대수는 단지 식별 표기일 뿐 비교 축이 아닙니다.<br>
@@ -2399,11 +2404,14 @@ function renderDock() {
   const catBlock = cat => {
     const col = CAT_COLOR[cat], keys = SUB_KEYS[cat] || [];
     const on = keys.length ? keys.some(sk => filter.sub.has(subId(cat, sk))) : filter.cat.has(cat);   // 대분류 헤더 = 하위 중 하나라도 켜지면 on
-    // 건수 0인 중분류도 남긴다 — 지역을 좁히면 0이 되지만 축 자체가 사라지면 복구할 방법이 없다
-    // (환승·터미널 7건이 도크에서 사라져 끄고 켤 수 없던 2026-07-28 사고와 같은 클래스).
-    const subs = keys.map(sk => { const id = subId(cat, sk);
-      return `<div class="sub${filter.sub.has(id) ? "" : " off"}" data-tog="sub" data-k="${id}">
-        <span class="tick"></span><span class="nm">${sk === "철도" ? "철도 · 역" : sk}</span><span class="n">${C.sub[id] || 0}</span></div>`; }).join("");
+    /* 0건 중분류는 숨긴다(2026-07-30 사용자 "0인 애들은 보이지마") — 단 **꺼둔 축은 0이어도 남긴다.**
+       사용자가 끈 필터가 화면에서 사라지면 신호가 왜 안 보이는지 알 수도, 되돌릴 수도 없다
+       (환승·터미널 7건이 도크에 행이 없어 끄고 켤 수 없던 2026-07-28 사고와 같은 클래스).
+       건수는 선택 지역 기준이라, 지역을 좁혀 0이 된 축은 지역을 넓히면 다시 나타난다. */
+    const subs = keys.map(sk => { const id = subId(cat, sk), n = C.sub[id] || 0, on = filter.sub.has(id);
+      if (!n && on) return "";
+      return `<div class="sub${on ? "" : " off"}" data-tog="sub" data-k="${id}">
+        <span class="tick"></span><span class="nm">${sk === "철도" ? "철도 · 역" : sk}</span><span class="n">${n}</span></div>`; }).join("");
     const opts = (CAT_OPTS[cat] || []).map(([k, lb]) => `<div class="optrow${filter.lines.has(k) ? " on" : ""}" data-tog="lines" data-k="${k}">
         <span>${lb}</span><i class="sw"></i></div>`).join("");
     return `<div class="cat${dockOpen.has(cat) ? " open" : ""}${on ? "" : " off"}">
@@ -3810,7 +3818,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260730o");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260730p");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3971,7 +3979,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730o"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730p"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3997,7 +4005,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260730o");
+  const CB = "?b=" + (window.BUILD || "20260730p");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
