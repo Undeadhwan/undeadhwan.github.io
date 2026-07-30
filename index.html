@@ -3370,8 +3370,12 @@ function initKakao() {
     for (const o of railLineObjs) {
       // 선형은 **노선 선형 토글(filter.lines)만**으로 표시한다(2026-07-23 분리). 점 호재(역 원)와 독립 —
       // "철도선만 보기"(전체해제 + 철도선)가 가능. 교통 분류/철도·역 토글은 역 원만 좌우한다.
+      /* ⚠ 종전엔 여기에 `lodSet.has(o.lvl)`가 있어 **초기 줌(level 8)에서 C급 노선 33개가 통째로
+         사라졌다** — 서남선·서부선 남부연장(계획안 문법의 대표 사례 둘)이 정확히 그 안에 있었다.
+         역(점)은 2026-07-28에 등급 LOD를 폐기했는데 선에만 남아 **점은 보이고 선은 없는** 비대칭이 됐다.
+         methodology §지도 LOD의 명문 규칙은 정반대다: "줌아웃엔 **선만**". 등급은 굵기·zIndex에만 쓴다.
+         (2026-07-30 사용자 제보 "서남선은 역사는 있는데 노선이 안보여 … 자꾸 기준이 바뀌면 곤란해") */
       const show = (o.isRoad ? filter.lines.has("도로선") : filter.lines.has("철도선"))
-        && lodSet.has(o.lvl)
         && (!phaseFiltering || filter.phase.has(o.ph));
       o.objs.forEach(l => l.setMap(show ? map : null));
       o.hits.forEach(l => l.setMap(show ? map : null));
@@ -3884,7 +3888,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260730x");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260730y");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4046,7 +4050,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730x"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730y"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4072,7 +4076,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260730x");
+  const CB = "?b=" + (window.BUILD || "20260730y");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
