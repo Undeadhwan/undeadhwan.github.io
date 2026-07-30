@@ -771,7 +771,11 @@ const DISPLAY_CAT_KEYS = ["교통", "일자리", "인프라", "주거개발", "�
 const LEVELS = ["S", "A", "B", "C"];
 const GRADES_DISP = ["S", "A", "B", "C", "미정"];   // 배지·매트릭스 표시용(미정 포함)
 const GRADE_RANK = { S: 0, A: 1, B: 2, C: 3, "미정": 4 };   // 렌더 우선순위 — 600 상한이 걸려도 S/A(교통 역 등)가 살아남게(2026-07-22)
-const LEVEL_NAME = { S: "S급", A: "A급", B: "B급", C: "C급", "미정": "미정" };
+/* 표시 어휘 통일(2026-07-30 사용자 "미상이랑 미정이랑 다른거야?") — 두 개념이 세 단어로 흩어져 있었다.
+     · **등급**이 안 정해진 것 = 화면에서 항상 **"미판정"** (내부 키는 "미정" 유지 — 데이터 호환)
+     · **중분류(유형)**를 모르는 것 = 항상 **"유형 미상"**
+   같은 카드에 '미정'과 '미상'이 나란히 뜨면 사용자는 둘이 다른 축인지 알 수 없다(기준 일원화 원칙). */
+const LEVEL_NAME = { S: "S급", A: "A급", B: "B급", C: "C급", "미정": "미판정" };
 // ── 역효과 표기 (P5 "정직이 차별점 — 역효과도 표기") ────────────────────────────
 // ⚠ 종전엔 `side_effects` 필드를 화면이 렌더할 준비만 해 두고 **채우는 데가 아무 데도 없었다**
 //    (실측 2026-07-28: 전 신호 0건). 원칙이 화면에만 있고 데이터엔 없던 상태다.
@@ -965,7 +969,7 @@ function levelPill(s) { return lvlPill(levelOf(s)); }
 function subLabel(s) {
   if (!SUB_KEYS[catOf(s)]) return "";
   const k = subKeyOf(s);
-  return k === "미상" ? ' · <span style="color:#8a7a56">중분류 미상</span>' : " · " + k;
+  return k === "미상" ? ' · <span style="color:#8a7a56">유형 미상</span>' : " · " + k;   // 등급 '미판정'과 구분되는 어휘
 }
 // YYYYMMDD → YYYY-MM-DD (팩트시트 표기)
 function fmtDay(d) { d = (d || "").trim(); return d.length === 8 ? `${d.slice(0,4)}-${d.slice(4,6)}-${d.slice(6,8)}` : (d || "—"); }
@@ -1061,6 +1065,12 @@ let HH_GRADE = { S: 10000, A: 5000, B: 1500, C: 500 };   // 주거개발 세대�
 let ADVERSE_RKM = 1;   // 역효과 시설 카드 병기 조회 반경 km(기본값) — SSOT는 thresholds.json 역효과_설정
 const hhLevel = hh => !hh ? "미정"
   : hh >= HH_GRADE.S ? "S" : hh >= HH_GRADE.A ? "A" : hh >= HH_GRADE.B ? "B" : hh >= HH_GRADE.C ? "C" : "미정";
+/* 등급이 미판정인 **이유**를 말한다(2026-07-30 사용자 "세대수도 있는데 왜 미정이야?").
+   같은 '미판정' 배지가 두 가지를 겸하고 있었다 — ① 세대수 자체가 없음 ② 세대수는 있는데 C 문턱 미달.
+   ②를 설명 없이 미판정으로만 보여주면 화면이 버그처럼 읽힌다(P2 — 사실은 표시, 추정은 구분). */
+const hhBasis = hh => !hh ? "세대수 미상 — 소스에 세대수가 없어 등급 미판정"
+  : hh >= HH_GRADE.C ? `세대수 ${hh.toLocaleString()} — 주거개발 ${hhLevel(hh)}`
+  : `세대수 ${hh.toLocaleString()} — C 문턱(${HH_GRADE.C.toLocaleString()}세대) 미달로 등급 미판정`;
 function applyThresholds(TH) {
   if (!TH) return false;
   try {
@@ -1393,7 +1403,7 @@ function buildJeongbiSignals() {
     // 세대수 기준: A≥5천/B 1500~5천/C 500~1500. 500 미만·미확보 = 미정(미판정, 최소기준 미달/데이터없음)
     // ⚠ 원문 사업구분(`type`)을 어댑터가 반드시 실어야 중분류 축이 화면에 온다 —
     //    어댑터는 필드를 골라 복사하므로, 안 실으면 전부 '미상'으로 떨어진다(어댑터 함정 4회 경험).
-    _jb: true, _jbtype: c.type || "", src_tier: "official_report", milestones: c.milestones || [], title: c.n, cat: "주거개발", lvl: hhLevel(c.hh),   // 세대수 눈금 = thresholds.json(SSOT)
+    _jb: true, _jbtype: c.type || "", src_tier: "official_report", milestones: c.milestones || [], title: c.n, cat: "주거개발", lvl: hhLevel(c.hh), lvl_basis: hhBasis(c.hh),   // 세대수 눈금 = thresholds.json(SSOT) · 사유는 카드에 표기
     template_type: "정비사업", current_stage: c.stage, phase: c.phase, status: c.drop ? "종결" : "활성", confirmed: false,
     sd: c.sd, sg: c.sg, dong: c.dong, hh: c.hh, last_movement: c.last_movement || null, stage_history: c.stage_history || undefined, target_completion: null,   // 실일자(경기 마일스톤 소급 등) → 신선도·정체 표시
     geo_prec: c.geo_prec, geo_approx: !!c.geo_approx || c.geo_prec === "dong",   // 동 대표점 등 근사를 후광·카드에 정직 표기(§4.1 — 국토부 통합은 주소 컬럼이 없어 동 폴백이 많다: 대구 비산동 6건 한 점 사례)
@@ -1444,8 +1454,17 @@ function mapGo(lat, lon, zLeaflet) {
   if (window._map.setView) window._map.setView([lat, lon], zLeaflet);
   else { window._map.setLevel(Math.max(1, 18 - zLeaflet)); window._map.setCenter(new kakao.maps.LatLng(lat, lon)); }
 }
-function mapFit(lls, padPx) {   // lls = [[lat,lon],...]
-  if (!window._map || !lls.length) return;
+function mapFit(lls, padPx) {   // lls = [[lat,lon],...] 또는 경계객체({_southWest,_northEast})
+  if (!window._map || !lls) return;
+  /* ⚠ 경계객체를 그대로 넘기던 호출부가 있었다 — `lls.length`가 undefined라 **조용히 아무 일도 안 했다**.
+     그래서 시군구를 선택해도 지도가 움직이지 않았다(2026-07-30 사용자 제보: "시군구는 좌표이동 안됨").
+     조용한 무동작을 만들지 않으려면 받는 쪽이 두 형태를 다 이해하는 게 맞다(호출부가 8곳이다). */
+  if (!Array.isArray(lls)) {
+    const sw = lls._southWest || lls.sw, ne = lls._northEast || lls.ne;
+    if (!sw || !ne) return;
+    lls = [[sw.lat, sw.lng], [ne.lat, ne.lng]];
+  }
+  if (!lls.length) return;
   if (window._map.fitBounds) window._map.fitBounds(L.latLngBounds(lls).pad(0.12));
   else { const b = new kakao.maps.LatLngBounds(); lls.forEach(([la, lo]) => b.extend(new kakao.maps.LatLng(la, lo)));
          window._map.setBounds(b, padPx || 30); }
@@ -2268,7 +2287,16 @@ function renderSggFeed(disp) {
   const list = p.querySelector("#list");
   panelListRender = () => {
     list.innerHTML = "";
-    if (!sggSigs.length) { list.innerHTML = `<div class="pickhint">이 시군구 영향권 호재 없음</div>`; return; }
+    /* "없다"와 "걸러졌다"를 구분한다(2026-07-30 사용자 제보 — 인천 미추홀구에 37건이 있는데
+       표시 조건을 대부분 꺼둔 상태라 '호재 없음'만 떴다. 화면이 사실과 다르게 읽힌다). */
+    if (!sggSigs.length) {
+      const total = ((SGG_SIG && SGG_SIG[disp]) || []).length;
+      list.innerHTML = total
+        ? `<div class="pickhint">표시 조건에 맞는 호재 없음 — 조건을 풀면 <b>${total}건</b>
+             <span class="chip" style="margin-left:6px" onclick="resetFilters()">표시 조건 초기화</span></div>`
+        : `<div class="pickhint">이 시군구 영향권 호재 없음</div>`;
+      return;
+    }
     const arr = panelArrange(sggSigs.slice());
     if (!arr.length) { list.innerHTML = `<div class="pickhint">${LEVEL_NAME[panelGrade] || panelGrade}급 호재 없음</div>`; return; }
     arr.slice(0, LIST_CAP).forEach(s => list.appendChild(makeCard(s)));
@@ -2443,14 +2471,13 @@ function renderDock() {
   const catBlock = cat => {
     const col = CAT_COLOR[cat], keys = SUB_KEYS[cat] || [];
     const on = keys.length ? keys.some(sk => filter.sub.has(subId(cat, sk))) : filter.cat.has(cat);   // 대분류 헤더 = 하위 중 하나라도 켜지면 on
-    /* 0건 중분류는 숨긴다(2026-07-30 사용자 "0인 애들은 보이지마") — 단 **꺼둔 축은 0이어도 남긴다.**
-       사용자가 끈 필터가 화면에서 사라지면 신호가 왜 안 보이는지 알 수도, 되돌릴 수도 없다
-       (환승·터미널 7건이 도크에 행이 없어 끄고 켤 수 없던 2026-07-28 사고와 같은 클래스).
-       건수는 선택 지역 기준이라, 지역을 좁혀 0이 된 축은 지역을 넓히면 다시 나타난다. */
+    /* 0건 중분류는 **켜짐/꺼짐과 무관하게** 숨긴다(2026-07-30 사용자 "0건인건 해제했을때도 안보이게해").
+       복구 경로는 상단 '초기화' — 기본과 달라지면 항상 나타나므로, 꺼둔 축이 안 보여도 되돌릴 수 있다.
+       건수는 선택 지역 기준이라 지역을 넓히면 그 축은 다시 나타난다. */
     const subs = keys.map(sk => { const id = subId(cat, sk), n = C.sub[id] || 0, on = filter.sub.has(id);
-      if (!n && on) return "";
+      if (!n) return "";
       return `<div class="sub${on ? "" : " off"}" data-tog="sub" data-k="${id}">
-        <span class="tick"></span><span class="nm">${sk === "철도" ? "철도 · 역" : sk}</span><span class="n">${n}</span></div>`; }).join("");
+        <span class="tick"></span><span class="nm">${sk === "철도" ? "철도 · 역" : sk === "미상" ? "유형 미상" : sk}</span><span class="n">${n}</span></div>`; }).join("");
     const opts = (CAT_OPTS[cat] || []).map(([k, lb]) => `<div class="optrow${filter.lines.has(k) ? " on" : ""}" data-tog="lines" data-k="${k}">
         <span>${lb}</span><i class="sw"></i></div>`).join("");
     return `<div class="cat${dockOpen.has(cat) ? " open" : ""}${on ? "" : " off"}">
@@ -2510,18 +2537,7 @@ function initDock() {
     }
     const t = e.target.closest("[data-tog],[data-all]");
     if (!t) return;
-    if (t.dataset.all) {
-      const on = t.dataset.all === "on";
-      // 전체선택/해제는 **무엇을 볼지**(분류·중분류·노선선형)만 다룬다. 단계·등급은 별도 정제축이라
-      // 항상 전체 유지 — 그래야 "전체 해제 후 철도·역 클릭"이 (모든 단계·등급의) 철도를 보여준다.
-      CAT_KEYS.forEach(k => on ? filter.cat.add(k) : filter.cat.delete(k));
-      ALL_SUBS.forEach(k => on ? filter.sub.add(k) : filter.sub.delete(k));
-      ["철도선", "도로선"].forEach(k => on ? filter.lines.add(k) : filter.lines.delete(k));
-      PHASES.forEach(k => filter.phase.add(k));
-      GRADES_DISP.forEach(k => filter.lvl.add(k));
-      localStorage.setItem("hojae_lines", JSON.stringify([...filter.lines]));
-      renderAll(); window._dbg?.applyLOD?.(); return;
-    }
+    if (t.dataset.all) { resetFilters(); return; }   // 초기화 = 공용 함수 하나(패널 안내도 같은 것을 부른다)
     const axis = t.dataset.tog, k = t.dataset.k;
     if (axis === "cat") {
       // 대분류 헤더 = 하위 중분류 **전체 선택/해제** 버튼(세부 축 있는 경우). 없으면 대분류 자체 토글.
@@ -2544,6 +2560,17 @@ function initDock() {
     renderAll();
   });
   renderDock();
+}
+/* 표시 조건 초기화 — 도크의 '초기화'와 **같은 동작 하나**를 여기서 정의해 두 곳이 갈리지 않게 한다.
+   패널의 "조건을 풀면 N건" 안내에서도 부른다(2026-07-30). */
+function resetFilters() {
+  CAT_KEYS.forEach(k => filter.cat.add(k));
+  ALL_SUBS.forEach(k => filter.sub.add(k));
+  ["철도선", "도로선"].forEach(k => filter.lines.add(k));
+  PHASES.forEach(k => filter.phase.add(k));
+  GRADES_DISP.forEach(k => filter.lvl.add(k));
+  localStorage.setItem("hojae_lines", JSON.stringify([...filter.lines]));
+  renderAll(); window._dbg?.applyLOD?.();
 }
 function renderAll() { renderChips(); renderDock(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); }
 
@@ -3857,7 +3884,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260730u");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260730v");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4018,7 +4045,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730u"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730v"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4044,7 +4071,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260730u");
+  const CB = "?b=" + (window.BUILD || "20260730v");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
