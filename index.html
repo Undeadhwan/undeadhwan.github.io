@@ -775,8 +775,12 @@ const SUB_CAVEAT = {
 };
 const SUB_KEYS = { "교통": ["철도", "도로", "환승·터미널"], "일자리": ["오피스", "지식산업센터", "공장", "데이터센터", "복합단지", "미상"],
   "인프라": ["병원", "공원·녹지", "판매", "문화·관광·체육", "학교", "공공시설", "공항", "항만", "기타시설", "미상"] };   // 세부 축 있는 대분류 — 인프라는 §7b 유형별(2026-07-18). 공항·항만 추가(2026-07-27 매핑 감사 — S급 8건이 조회축 없이 떠돌았다)
-// 중분류 조회축 전체 키(대분류 순서 유지). 이름은 대분류를 넘나들어 겹치지 않으므로 평면 Set으로 관리한다.
-const ALL_SUBS = CAT_KEYS.flatMap(c => SUB_KEYS[c] || []);
+/* 중분류 조회 키는 **대분류로 한정**한다: `"일자리|미상"` (2026-07-30 사용자 제보로 수정).
+   종전엔 평면 이름 Set이라 `미상`이 일자리·인프라 양쪽에 같은 키로 들어갔고 —
+   인프라 only를 눌러도 일자리 미상 4건이 그대로 남았다(체크박스 하나가 두 대분류를 동시에 토글).
+   이름은 표시용, 키는 subId()로만 만든다. */
+const subId = (cat, sub) => cat + "|" + sub;
+const ALL_SUBS = CAT_KEYS.flatMap(c => (SUB_KEYS[c] || []).map(s => subId(c, s)));
 const CAT_SUB = { "교통": "철도 / 도로 / 환승·터미널", "일자리": "오피스 / 지식산업센터 / 공장 / 데이터센터 / 복합단지", "인프라": "병원 / 공원·녹지 / 판매 / 문화·관광·체육 / 학교(특목) / 공공시설 / 공항 / 항만 / 기타시설", "주거개발": "신도시 / 택지 / 재개발 / 재건축" };
 // S 눈금(2026-07-22): 일자리·인프라 = 1조↑ 또는 연면적 30만㎡↑ / 주거 1만세대↑ / 교통 = 위계(thresholds 교통_위계)
 const LEVEL_DESC = {
@@ -1118,10 +1122,11 @@ const subKeyOf = s => {
   const v = subOf(s);
   return keys.includes(v) ? v : "미상";
 };
+const subIdOf = s => subId(catOf(s), subKeyOf(s));   // 조회 키(대분류 한정) — 표시 이름은 subKeyOf
 function subVisible(s) {
   const keys = SUB_KEYS[catOf(s)];
   if (!keys) return true;
-  return filter.sub.has(subKeyOf(s));
+  return filter.sub.has(subIdOf(s));
 }
 // 일반도로(간선) 연도 회랑 반경 — 고속도로 IC 점 반경(3~5km)과 **분리**한다(2026-07-23 사용자 지적
 // "선택시 배경이 전부 퍼래지네"). 도로 반경표 {B:3km}는 IC 점 버퍼용인데 간선도로 회랑에 그대로
@@ -1431,8 +1436,13 @@ function isStaleFinished(s) {
 function catVisible(s) {
   const cat = catOf(s), keys = SUB_KEYS[cat];
   if (!keys || !keys.length) return filter.cat.has(cat);
-  const sub = subOf(s);
-  return keys.includes(sub) ? filter.sub.has(sub) : filter.cat.has(cat);
+  /* 게이트 키는 **도크가 세는 키와 같아야 한다**(subKeyOf: 축 어휘에 없는 값은 '미상'으로 모음).
+     종전엔 여기만 원본 subOf를 봐서, 도크의 '미상 4건' 체크박스를 꺼도 그 4건이 계속 보였다
+     (일자리 raw '물류' 1건·공란 3건. 2026-07-30 미상 격리 작업 중 발견).
+     단, 그 대분류에 담을 칸이 없으면(예: 교통엔 '미상' 행이 없다) 대분류로 게이트한다 —
+     행도 없이 조용히 사라지는 신호를 만들지 않기 위해서다(P2·P5). */
+  const key = subKeyOf(s);
+  return keys.includes(key) ? filter.sub.has(subId(cat, key)) : filter.cat.has(cat);
 }
 const visible = s => catVisible(s)
   && filter.phase.has(phaseOf(s))                // 4단계 백본 조회축(전체해제는 단계를 비우지 않음 → 유지)
@@ -1585,10 +1595,10 @@ function renderChips() {
       }
       const tg = document.createElement("div");
       tg.className = "ddtoggles" + (d.subKeys ? " nested" : "");
-      const mkTog = (set, k, cls) => {
+      const mkTog = (set, k, cls, label) => {
         const t = document.createElement("div");
         t.className = "ddtog" + cls + (set.has(k) ? " on" : "");
-        t.textContent = k;
+        t.textContent = label || k;
         t.onclick = () => { set.has(k) ? set.delete(k) : set.add(k); ddAfter(d); renderAll(); };
         return t;
       };
@@ -1601,7 +1611,8 @@ function renderChips() {
         const subs = d.subKeys[k] || [];
         const row = document.createElement("div");
         row.className = "ddsubs";
-        if (subs.length) subs.forEach(sk => row.appendChild(mkTog(d.subSet, sk, " sub")));
+        // 중분류 키는 대분류 한정(subId) — 이름만 쓰면 '미상'이 두 대분류를 동시에 토글한다
+        if (subs.length) subs.forEach(sk => row.appendChild(mkTog(d.subSet, subId(k, sk), " sub", sk)));
         else row.innerHTML = `<span class="ddnosub">중분류 없음</span>`;   // 주거개발 — 세부 축 미정의(정직 표기)
         grp.appendChild(row);
         tg.appendChild(grp);
@@ -2374,7 +2385,7 @@ function dockCounts() {
   const cat = {}, sub = {}, lvl = {};
   pool.forEach(s => {
     const c = catOf(s); if (c) cat[c] = (cat[c] || 0) + 1;
-    const sb = SUB_KEYS[catOf(s)] ? subKeyOf(s) : subOf(s); if (sb) sub[sb] = (sub[sb] || 0) + 1;
+    const sb = SUB_KEYS[catOf(s)] ? subIdOf(s) : subOf(s); if (sb) sub[sb] = (sub[sb] || 0) + 1;
     const l = levelOf(s); if (l) lvl[l] = (lvl[l] || 0) + 1;
   });
   return { cat, sub, lvl, total: pool.filter(visible).length };
@@ -2387,11 +2398,12 @@ function renderDock() {
   const CAT_OPTS = { "교통": [["철도선", "철도 선형"], ["도로선", "도로 선형"]] };
   const catBlock = cat => {
     const col = CAT_COLOR[cat], keys = SUB_KEYS[cat] || [];
-    const on = keys.length ? keys.some(sk => filter.sub.has(sk)) : filter.cat.has(cat);   // 대분류 헤더 = 하위 중 하나라도 켜지면 on
+    const on = keys.length ? keys.some(sk => filter.sub.has(subId(cat, sk))) : filter.cat.has(cat);   // 대분류 헤더 = 하위 중 하나라도 켜지면 on
     // 건수 0인 중분류도 남긴다 — 지역을 좁히면 0이 되지만 축 자체가 사라지면 복구할 방법이 없다
     // (환승·터미널 7건이 도크에서 사라져 끄고 켤 수 없던 2026-07-28 사고와 같은 클래스).
-    const subs = keys.map(sk => `<div class="sub${filter.sub.has(sk) ? "" : " off"}" data-tog="sub" data-k="${sk}">
-        <span class="tick"></span><span class="nm">${sk === "철도" ? "철도 · 역" : sk}</span><span class="n">${C.sub[sk] || 0}</span></div>`).join("");
+    const subs = keys.map(sk => { const id = subId(cat, sk);
+      return `<div class="sub${filter.sub.has(id) ? "" : " off"}" data-tog="sub" data-k="${id}">
+        <span class="tick"></span><span class="nm">${sk === "철도" ? "철도 · 역" : sk}</span><span class="n">${C.sub[id] || 0}</span></div>`; }).join("");
     const opts = (CAT_OPTS[cat] || []).map(([k, lb]) => `<div class="optrow${filter.lines.has(k) ? " on" : ""}" data-tog="lines" data-k="${k}">
         <span>${lb}</span><i class="sw"></i></div>`).join("");
     return `<div class="cat${dockOpen.has(cat) ? " open" : ""}${on ? "" : " off"}">
@@ -2446,7 +2458,7 @@ function initDock() {
     if (so) {
       const k = so.dataset.solo;
       CAT_KEYS.forEach(c => { c === k ? filter.cat.add(c) : filter.cat.delete(c);
-        (SUB_KEYS[c] || []).forEach(sk => c === k ? filter.sub.add(sk) : filter.sub.delete(sk)); });
+        (SUB_KEYS[c] || []).forEach(sk => c === k ? filter.sub.add(subId(c, sk)) : filter.sub.delete(subId(c, sk))); });
       renderAll(); return;
     }
     const t = e.target.closest("[data-tog],[data-all]");
@@ -2466,10 +2478,10 @@ function initDock() {
     const axis = t.dataset.tog, k = t.dataset.k;
     if (axis === "cat") {
       // 대분류 헤더 = 하위 중분류 **전체 선택/해제** 버튼(세부 축 있는 경우). 없으면 대분류 자체 토글.
-      const keys = SUB_KEYS[k];
-      if (keys && keys.length) {
-        const allOn = keys.every(sk => filter.sub.has(sk));
-        keys.forEach(sk => allOn ? filter.sub.delete(sk) : filter.sub.add(sk));
+      const ids = (SUB_KEYS[k] || []).map(sk => subId(k, sk));
+      if (ids.length) {
+        const allOn = ids.every(id => filter.sub.has(id));
+        ids.forEach(id => allOn ? filter.sub.delete(id) : filter.sub.add(id));
         allOn ? filter.cat.delete(k) : filter.cat.add(k);
       } else {
         filter.cat.has(k) ? filter.cat.delete(k) : filter.cat.add(k);
@@ -2480,7 +2492,7 @@ function initDock() {
     if (!set) return;
     set.has(k) ? set.delete(k) : set.add(k);
     // 중분류를 켜면 소속 대분류도 켜진 것으로(헤더·카운트 일관). 다 끄면 대분류도 끔.
-    if (axis === "sub") { const pc = CAT_KEYS.find(c => (SUB_KEYS[c] || []).includes(k)); if (pc) { (SUB_KEYS[pc].some(sk => filter.sub.has(sk)) ? filter.cat.add(pc) : filter.cat.delete(pc)); } }
+    if (axis === "sub") { const pc = k.split("|")[0]; if (SUB_KEYS[pc]) { (SUB_KEYS[pc].some(sk => filter.sub.has(subId(pc, sk))) ? filter.cat.add(pc) : filter.cat.delete(pc)); } }
     if (axis === "lines") { localStorage.setItem("hojae_lines", JSON.stringify([...filter.lines])); window._dbg?.applyLOD?.(); }
     renderAll();
   });
@@ -3297,7 +3309,7 @@ function initKakao() {
       if (f.geometry.type !== "Point") continue;
       const p = f.properties; const isRoad = p.mode === "road";
       if (p.gate === "관찰") continue;   // 관찰 게이트 — 라벨도 미표시
-      if (!(filter.sub.has(isRoad ? "도로" : "철도") || filter.lines.has(isRoad ? "도로선" : "철도선"))) continue;   // 철도·역 또는 노선선형(2026-07-23)
+      if (!(filter.sub.has(subId("교통", isRoad ? "도로" : "철도")) || filter.lines.has(isRoad ? "도로선" : "철도선"))) continue;   // 철도·역 또는 노선선형(2026-07-23)
       if (phaseFiltering && !filter.phase.has(p.phase || "계획")) continue;
       const [x, y] = f.geometry.coordinates; if (!b.contain(LL(x, y))) continue;
       const elx = document.createElement("div"); elx.className = "rail-name"; elx.textContent = p.name; elx.style.pointerEvents = "none";
@@ -3798,7 +3810,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260730m");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260730n");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3959,7 +3971,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730m"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730n"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3985,7 +3997,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260730m");
+  const CB = "?b=" + (window.BUILD || "20260730n");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
