@@ -779,14 +779,20 @@ const SUB_CAVEAT = {
   "공장": "제조시설 — 업종에 따라 대기·소음 영향이 따를 수 있음",
 };
 const SUB_KEYS = { "교통": ["철도", "도로", "환승·터미널"], "일자리": ["오피스", "지식산업센터", "공장", "데이터센터", "복합단지", "미상"],
-  "인프라": ["병원", "공원·녹지", "판매", "문화·관광·체육", "학교", "공공시설", "공항", "항만", "기타시설", "미상"] };   // 세부 축 있는 대분류 — 인프라는 §7b 유형별(2026-07-18). 공항·항만 추가(2026-07-27 매핑 감사 — S급 8건이 조회축 없이 떠돌았다)
+  "인프라": ["병원", "공원·녹지", "판매", "문화·관광·체육", "학교", "공공시설", "공항", "항만", "기타시설", "미상"],
+  "주거개발": ["재개발", "재건축", "주거환경개선", "소규모정비", "리모델링", "재정비촉진지구", "지역주택조합", "택지·지구", "미상"] };
+/* 주거개발 중분류(2026-07-30 신설) — 축은 **법정 사업유형**이다.
+   「도시 및 주거환경정비법」 정비사업 3종(재개발·재건축·주거환경개선) + 「소규모주택정비법」 소규모정비
+   + 「주택법」 지역주택조합 + 택지·지구(공공주택지구·택지개발·도시개발).
+   임의 구분이 아니라 정비 신호가 이미 담고 있는 원문 사업구분(`type`)을 법정 유형으로 정규화한 것.
+   ⚠ 이 주석은 SUB_KEYS 객체 **밖**에 둔다 — 안에 쓰면 따옴표 문자열이 조회축 게이트에 중분류로 잡힌다. */   // 세부 축 있는 대분류 — 인프라는 §7b 유형별(2026-07-18). 공항·항만 추가(2026-07-27 매핑 감사 — S급 8건이 조회축 없이 떠돌았다)
 /* 중분류 조회 키는 **대분류로 한정**한다: `"일자리|미상"` (2026-07-30 사용자 제보로 수정).
    종전엔 평면 이름 Set이라 `미상`이 일자리·인프라 양쪽에 같은 키로 들어갔고 —
    인프라 only를 눌러도 일자리 미상 4건이 그대로 남았다(체크박스 하나가 두 대분류를 동시에 토글).
    이름은 표시용, 키는 subId()로만 만든다. */
 const subId = (cat, sub) => cat + "|" + sub;
 const ALL_SUBS = CAT_KEYS.flatMap(c => (SUB_KEYS[c] || []).map(s => subId(c, s)));
-const CAT_SUB = { "교통": "철도 / 도로 / 환승·터미널", "일자리": "오피스 / 지식산업센터 / 공장 / 데이터센터 / 복합단지", "인프라": "병원 / 공원·녹지 / 판매 / 문화·관광·체육 / 학교(특목) / 공공시설 / 공항 / 항만 / 기타시설", "주거개발": "신도시 / 택지 / 재개발 / 재건축" };
+const CAT_SUB = { "교통": "철도 / 도로 / 환승·터미널", "일자리": "오피스 / 지식산업센터 / 공장 / 데이터센터 / 복합단지", "인프라": "병원 / 공원·녹지 / 판매 / 문화·관광·체육 / 학교(특목) / 공공시설 / 공항 / 항만 / 기타시설", "주거개발": "재개발 / 재건축 / 주거환경개선 / 소규모정비 / 지역주택조합 / 택지·지구" };
 // S 눈금(2026-07-22): 일자리·인프라 = 1조↑ 또는 연면적 30만㎡↑ / 주거 1만세대↑ / 교통 = 위계(thresholds 교통_위계)
 const LEVEL_DESC = {
   "교통": {
@@ -1110,11 +1116,36 @@ const jobSubOf = s => {
   if (/업무|교육연구|연구/.test(p)) return "오피스";
   return "";   // 판별 근거 없음(DART 투자공시 등) — 추정하지 않는다(P2). subVisible이 통과시킴
 };
+/* 주거개발 중분류 = 원문 사업구분(`type`)의 법정 유형 정규화.
+   원문은 지자체마다 표기가 달라 그대로 축으로 못 쓴다 — 실측 12종 이상:
+   '재개발(주택정비형)'·'1)재개발(주택정비)'·'3)재건축(공동주택)'·'5)주거환경개선'·'주거환경개선(현지개량)'.
+   ⚠ '소규모재건축'을 '재건축'보다 **먼저** 본다(부분일치 순서가 곧 판정). */
+function houseTypeOf(str) {
+  const t = String(str || "").replace(/^\d+\)\s*/, "");
+  if (!t) return "";
+  if (/가로주택|자율주택|소규모재건축|소규모재개발|소규모주택/.test(t)) return "소규모정비";
+  if (/리모델링/.test(t)) return "리모델링";
+  if (/지역주택/.test(t)) return "지역주택조합";
+  if (/재정비촉진/.test(t)) return "재정비촉진지구";   // 뉴타운 — 재개발·재건축 혼합이라 따로 둔다(어느 쪽이라 단정하지 않음)
+  if (/재개발/.test(t)) return "재개발";
+  if (/재건축/.test(t)) return "재건축";
+  if (/주거환경/.test(t)) return "주거환경개선";
+  if (/공공주택지구|택지개발|도시개발구역|도시개발사업/.test(t)) return "택지·지구";
+  return "";
+}
+function houseSubOf(s) {
+  // ① 원문 사업구분이 있으면 그것이 권위. ② 없으면 **공식 고시 제목**에서 읽는다 —
+  //    제목에 사업유형이 문자로 적혀 있는 경우가 많다(실측 369건 중 333건). 추측이 아니라 표기 추출.
+  return houseTypeOf(s._jbtype || s.type)
+    || houseTypeOf(s.title)
+    || (s.master || s.area_kind ? "택지·지구" : "");   // 택지정보 대장(마스터플랜) 계열
+}
 const subOf = s => s.sub || (s.template_type === "도로" ? "도로"
   : catOf(s) === "인프라" ? infraSubOf(s)
   : catOf(s) === "일자리" ? jobSubOf(s)
   : catOf(s) === "교통" ? "철도"          // 교통은 세부 미상이면 철도(역·노선이 기본형)
-  : "");                                  // 세부 축 자체가 없는 대분류(주거개발) — 빈 값이 정답
+  : catOf(s) === "주거개발" ? houseSubOf(s)
+  : "");
 /* 중분류 조회축 판정: 세부 축이 없는 대분류(주거개발)는 항상 통과.
    목록에 없는 미지의 세부값은 숨기지 않고 통과시킨다 — 필터가 데이터를 조용히 감추면 안 됨(P5). QA로 잡는다. */
 // 중분류 **조회 키** — 필터와 집계가 같은 규칙을 쓰게 한다(2026-07-28 사용자 제보로 신설).
@@ -1355,7 +1386,9 @@ function buildRoadSignals() {
 function buildJeongbiSignals() {
   JEONGBI_SIG = JEONGBI.filter(c => c.lat && c.lon).map(c => ({
     // 세대수 기준: A≥5천/B 1500~5천/C 500~1500. 500 미만·미확보 = 미정(미판정, 최소기준 미달/데이터없음)
-    _jb: true, src_tier: "official_report", milestones: c.milestones || [], title: c.n, cat: "주거개발", lvl: hhLevel(c.hh),   // 세대수 눈금 = thresholds.json(SSOT)
+    // ⚠ 원문 사업구분(`type`)을 어댑터가 반드시 실어야 중분류 축이 화면에 온다 —
+    //    어댑터는 필드를 골라 복사하므로, 안 실으면 전부 '미상'으로 떨어진다(어댑터 함정 4회 경험).
+    _jb: true, _jbtype: c.type || "", src_tier: "official_report", milestones: c.milestones || [], title: c.n, cat: "주거개발", lvl: hhLevel(c.hh),   // 세대수 눈금 = thresholds.json(SSOT)
     template_type: "정비사업", current_stage: c.stage, phase: c.phase, status: c.drop ? "종결" : "활성", confirmed: false,
     sd: c.sd, sg: c.sg, dong: c.dong, hh: c.hh, last_movement: c.last_movement || null, stage_history: c.stage_history || undefined, target_completion: null,   // 실일자(경기 마일스톤 소급 등) → 신선도·정체 표시
     geo_prec: c.geo_prec, geo_approx: !!c.geo_approx || c.geo_prec === "dong",   // 동 대표점 등 근사를 후광·카드에 정직 표기(§4.1 — 국토부 통합은 주소 컬럼이 없어 동 폴백이 많다: 대구 비산동 6건 한 점 사례)
@@ -3818,7 +3851,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260730p");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260730q");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3979,7 +4012,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730p"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730q"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4005,7 +4038,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260730p");
+  const CB = "?b=" + (window.BUILD || "20260730q");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
