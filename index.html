@@ -646,20 +646,35 @@ const PHASES = ["계획", "인가", "착공", "준공·개통"];
 const PHASE_IDX = Object.fromEntries(PHASES.map((p, i) => [p, i]));
 /* 유형별 세부 마일스톤 트랙 (기획서 §3.2) — [세부단계, 소속 국면].
    정비사업(재건축·재개발)은 이주·철거를 별도 추가단계로 분리(사용자 요청). */
+/* 유형별 트랙 — 2026-07-30 사용자 확정: **'인가'는 법정 인가가 아니라 「사업 실현이 공식 절차로
+   확정되어 무산 가능성이 희소해진 단계」**다. 그래서 예타·민자적격성·중투심사 **통과**부터 인가다.
+   근거: 종전 정의(실시계획 승인만)는 예타 통과 13노선을 망계획 반영과 같은 칸에 넣어 정보를 버렸다 —
+   두 상태의 무산 가능성이 전혀 다른데도. 무산 가능성은 절차 통과라는 **사실**로 갈리므로 P1에 걸리지 않는다.
+   ⚠ 저장값은 "인가"를 유지하고 **표시만** PHASE_LABEL로 '확정·인가'로 바꾼다(산출물 일괄 치환은
+   백본에 없는 값이 섞이는 사고를 새로 만든다 — eum '준공' 실측). SSOT는 thresholds.json 단계_백본. */
 const STAGE_TRACKS = {
-  "철도":   [["계획반영","계획"],["예타/민자적격성","계획"],["기본계획","계획"],["실시계획 승인","인가"],["착공","착공"],["개통","준공·개통"]],
-  "도로":   [["계획반영","계획"],["타당성","계획"],["설계","인가"],["착공","착공"],["개통","준공·개통"]],
-  "공공시설": [["예산반영","계획"],["설계용역","인가"],["공사입찰","인가"],["착공","착공"],["준공","준공·개통"]],
-  "기업이전": [["토지취득","계획"],["인허가","인가"],["착공","착공"],["입주","준공·개통"]],
-  "정비사업": [["구역지정","계획"],["조합설립","인가"],["사업시행인가","인가"],["관리처분","인가"],["이주","착공"],["철거","착공"],["착공","착공"],["준공","준공·개통"]]
+  "철도":   [["계획반영","계획"],["사전타당성","계획"],["예타 진행","계획"],["예타/민자적격성 통과","인가"],["기본계획 승인","인가"],["실시계획 승인","인가"],["착공","착공"],["개통","준공·개통"]],
+  "도로":   [["계획반영","계획"],["타당성","계획"],["예타 통과","인가"],["설계","인가"],["착공","착공"],["개통","준공·개통"]],
+  "공공시설": [["예산반영","계획"],["설계공모","계획"],["설계용역 계약","인가"],["공사입찰","인가"],["착공","착공"],["준공","준공·개통"]],
+  "기업이전": [["공시","계획"],["토지취득","계획"],["건축허가","인가"],["인허가","인가"],["착공","착공"],["입주","준공·개통"],["사용승인","준공·개통"]],
+  "정비사업": [["구역지정","계획"],["정비계획","계획"],["조합설립","인가"],["사업시행인가","인가"],["관리처분","인가"],["이주","착공"],["철거","착공"],["착공","착공"],["준공","준공·개통"]]
 };
+/* 표시 라벨 — 저장값(계획/인가/착공/준공·개통) → 화면 문구. thresholds.json 단계_백본.표시라벨이 SSOT. */
+let PHASE_LABEL = { "계획": "계획", "인가": "확정·인가", "착공": "착공", "준공·개통": "준공·개통" };
+const phaseLabel = p => PHASE_LABEL[p] || p;
 /* current_stage → 국면. 우선순위: 신호 명시 phase → 트랙 내 매칭 → 키워드 분류 → 계획(기본).
    유형별 세부단계 이름이 자유로워도 4국면 필터가 항상 성립하도록 하는 매핑층. */
+/* 폴백 키워드 — 트랙 매칭이 안 될 때만. 순서가 두 번 중요하다(2026-07-30 자가시험이 잡은 것):
+   ① 확정(예타 통과)이 '예타'(계획)보다 먼저 — 뒤바뀌면 통과가 계획으로 떨어진다.
+   ② 강한 계획(망계획·절차 전)이 인가보다 먼저 — 인가 끝의 막연한 '승인'이 「도시철도망('26.2 승인)」을 물어간다.
+   파이썬 쪽 같은 규칙은 phase_map.py(thresholds.json 단계_백본을 읽는다) — 규칙 SSOT는 그 파일이다. */
 const PHASE_KEYWORDS = [
-  ["준공·개통", /준공|개통|입주|완공|공급·모집|분양/],
-  ["착공", /착공|이주|철거/],
-  ["인가", /인가|승인|지정|가결|고시|허가|입찰|설계|관리처분|조합설립/],
-  ["계획", /계획|구상|반영|타당성|검토|수립|예타|취득/]
+  ["인가", /(예타|예비\s*타당성|민자적격성|중투심사|중앙투자심사)[^가-힣]{0,6}(통과|면제)/],
+  ["준공·개통", /준공|개통(?!\s*(목표|예정|전망))|입주|완공|사용승인|공급·모집|분양/],
+  ["착공", /착공(?!\s*(목표|예정|미정))|이주|철거|시운전/],
+  ["계획", /망계획|철도망|도시철도망|계획\s*반영|사전\s*타당성|절차\s*(전|미착수)|설계공모|예산반영|취득|공시/],
+  ["인가", /인가|승인|지정|가결|고시|허가|입찰|설계|관리처분|조합설립|결정고시|미집행/],
+  ["계획", /계획|구상|반영|타당성|검토|수립|예타/]
 ];
 function trackOf(s) { return STAGE_TRACKS[s.template_type] || null; }
 function phaseOf(s) {
@@ -1004,6 +1019,8 @@ function applyThresholds(TH) {
     if (hh && hh.A) HH_GRADE = { S: hh.S || Infinity, A: hh.A, B: hh.B, C: hh.C };   // S 미정의 시 S 미부여(Infinity)
     const av = TH["역효과_설정"];
     if (av && av["반경_km"]) ADVERSE_RKM = av["반경_km"];   // 역효과 카드 병기 조회 반경(2026-07-30)
+    const pb = TH["단계_백본"];                            // 4단계 백본 SSOT(정의·표시라벨) — 2026-07-30
+    if (pb && pb["표시라벨"]) PHASE_LABEL = Object.assign({}, PHASE_LABEL, pb["표시라벨"]);
     return true;
   } catch (e) { console.warn("[기준] thresholds.json 적용 실패 — 기본값 사용", e); return false; }
 }
@@ -1894,7 +1911,7 @@ function cardHtml(s, extra = "") {
       ${noCoord ? '<span class="badge-near">위치 미확정 — 지도 미표시</span>' : ""}
       ${icMissing ? '<span class="badge-near" title="이 도로는 진출입 지점(IC·진입로)에서만 타고 내립니다. 공식 IC 위치가 아직 확정·공개되지 않아 영향권을 산정하지 않습니다(근거 없는 범위를 만들지 않음).">진출입 지점 미확정 — 영향권 미산정</span>' : ""}${srcBadge(s)} ${extra}</div>
     <div class="title">${sigTitle(s)}</div>
-    <div class="stage">단계: <b>${ph}</b> <span class="pmini">(${pIdx + 1}/${PHASES.length})</span>${detail} · ${freshness(s)}</div>
+    <div class="stage">단계: <b>${phaseLabel(ph)}</b> <span class="pmini">(${pIdx + 1}/${PHASES.length})</span>${detail} · ${freshness(s)}</div>
     ${miniBarHtml(s)}`;
 }
 function renderHome() {
@@ -1977,7 +1994,7 @@ function openCompare() {
           })).join("")}
         <tr class="catrow"><td class="rowh" colspan="${compareSet.length + 1}" style="background:#eef1f6;text-align:left">단계별 개수</td></tr>
         ${PHASES.filter(p => stats.some(s => s.byPhase[p])).map(p =>
-          row(`　${p}`, s => `<span title="${(s.phaseNames[p] || []).slice(0, 15).join("&#10;")}" style="cursor:help">${s.byPhase[p] || 0}</span>`)).join("")}
+          row(`　${phaseLabel(p)}`, s => `<span title="${(s.phaseNames[p] || []).slice(0, 15).join("&#10;")}" style="cursor:help">${s.byPhase[p] || 0}</span>`)).join("")}
         ${row("정체 신호", s => s.stalled ? `<span style="color:var(--stall)">${s.stalled}건 ⚠</span>` : "0")}
         ${row(`역효과 시설 (${ADVERSE_RKM}km)`, (s, a) => {
           // 역효과 병기(P5 — 2026-07-30 ②안): 환경기초시설 결정·미완공. 개수·거리 사실만
@@ -2309,7 +2326,7 @@ function renderDock() {
     const pills = subs.map(sk => `<span class="pill${filter.sub.has(sk) ? "" : " off"}" data-tog="sub" data-k="${sk}"><i class="pd" style="background:${col}"></i>${sk}<span class="pn">${C.sub[sk]}</span></span>`).join("");
     return `<div class="chead${on ? "" : " off"}" data-tog="cat" data-k="${cat}"><i class="cd" style="background:${col}"></i>${cat}<span class="cn">${C.cat[cat] || 0}</span></div>${pills ? `<div class="pills">${pills}</div>` : ""}`;
   };
-  const ph = (p, dash) => `<span class="pill ${dash ? "dash" : "solid"}${filter.phase.has(p) ? "" : " off"}" data-tog="phase" data-k="${p}">${p}</span>`;
+  const ph = (p, dash) => `<span class="pill ${dash ? "dash" : "solid"}${filter.phase.has(p) ? "" : " off"}" data-tog="phase" data-k="${p}">${phaseLabel(p)}</span>`;
   const SZ = { S: 15, A: 12, B: 10, C: 8 };
   const gp = g => g === "미정"
     ? `<span class="gp${filter.lvl.has("미정") ? "" : " off"}" data-tog="lvl" data-k="미정"><i class="gd" style="width:9px;height:9px;background:none;border:1.5px dashed #333"></i>미판정</span>`
@@ -3693,7 +3710,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260730d");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260730e");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3825,7 +3842,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730d"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730e"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3851,7 +3868,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260730d");
+  const CB = "?b=" + (window.BUILD || "20260730e");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
