@@ -101797,9 +101797,9 @@
     "audited": "2026-07-17",
     "geom_src": "역 앵커 연결(근사)",
     "geom_adequacy": "sparse",
-    "geom_adequacy_note": "정거장 간격 3.3km — 회랑이 실제 경로와 다를 수 있음(공식 노선도 필요)",
+    "geom_adequacy_note": "정거장 간격 3.5km — 회랑이 실제 경로와 다를 수 있음(공식 노선도 필요)",
     "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 1/3개가 표시 선형 밖(최대 1.2km, 금토(판교제2테크노밸리)). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
+    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 1/4개가 표시 선형 밖(최대 1.2km, 금토(판교제2테크노밸리)). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
@@ -101816,6 +101816,10 @@
       [
        127.10809,
        37.36604
+      ],
+      [
+       127.077892,
+       37.390582
       ]
      ]
     },
@@ -101843,6 +101847,10 @@
      [
       127.10809,
       37.36604
+     ],
+     [
+      127.077892,
+      37.390582
      ]
     ]
    }
@@ -102061,6 +102069,76 @@
     "coordinates": [
      127.10809,
      37.36604
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "운중(종점)",
+    "line": "성남 도시철도 2호선(판교트램)",
+    "lvl": "C",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "경기 2차 도시철도망('25.12) — 사전타당성 착수 예정",
+    "phase": "계획",
+    "st_status": null,
+    "approx": true,
+    "geo_prec": "landmark",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "제2차 경기도 도시철도망 구축계획 승인·고시",
+      "date": "2025-12-12",
+      "state": "current",
+      "src": "국토교통부·경기도"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "운중동 일대 — 정거장 위치 미확정",
+    "audited": "2026-07-17",
+    "drop": null,
+    "gate_basis": "확정 망계획 반영 — 「도시철도망('2」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.077892,
+      37.390582
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-30",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-30",
+    "last_movement": "2026-07-30"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.077892,
+     37.390582
     ]
    }
   },
