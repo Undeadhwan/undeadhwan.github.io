@@ -223,7 +223,17 @@
   .cmpcol .apth .m { color:var(--ink2); font-size:var(--fs-s); margin-top:3px; }
   .cmpcol .apth .sum { font-size:var(--fs); margin-top:7px; }
   .cmpcol .siglist { padding:6px 0 10px; }
-  .cmpcol .gsep { display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:var(--ink2); letter-spacing:.3px; margin:11px 0 4px; }
+  /* 등급 구분선·집계 — 색은 **전 화면 공용 등급색(LVL_COLOR)** 그대로다(기준 일원화).
+     순위·점수가 아니라 '어느 급이 몇 건인가'라는 집계 사실의 시각 표기다(§7 P3 — 집계는 허용). */
+  .cmpcol .gsep { display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700;
+                  color:var(--gc); letter-spacing:.3px; margin:12px 0 5px; }
+  .cmpcol .gsep i { width:4px; height:13px; border-radius:2px; background:var(--gc); flex-shrink:0; }
+  .cmpcol .gsep::after { background:color-mix(in srgb, var(--gc) 30%, var(--line)); }
+  .cmpcol .gcount { display:flex; flex-wrap:wrap; gap:4px; margin-top:7px; }
+  .cmpcol .gcount .gc { display:inline-flex; align-items:center; gap:4px; font-size:11.5px; font-weight:700;
+                        color:var(--gc); background:color-mix(in srgb, var(--gc) 12%, #fff);
+                        border:1px solid color-mix(in srgb, var(--gc) 35%, #fff); border-radius:999px; padding:1px 8px; }
+  .cmpcol .gcount .gc b { font-size:12.5px; font-variant-numeric:tabular-nums; }
   .cmpcol .gsep::after { content:""; flex:1; height:1px; background:var(--line); }
   /* 한 줄에 제목+거리+단계를 나란히 두면 좁은 컬럼에서 제목이 먼저 잘린다("가양 4…").
      제목은 자기 줄을 다 쓰고(두 줄까지), 거리·단계는 아래 메타 줄로. */
@@ -2113,7 +2123,7 @@ function cmpColumn(a) {
   let out = "", g = null;
   rows.filter(r => r.s.status !== "정체").forEach(r => {
     // 등급 이름은 도크 범례와 같은 어휘로(기준 일원화) — 도크가 "미판정"이면 여기도 미판정
-    if (r.g !== g) { g = r.g; out += `<div class="gsep">${g === "미정" ? "미판정" : (LEVEL_NAME[g] || g)}</div>`; }
+    if (r.g !== g) { g = r.g; out += `<div class="gsep" style="--gc:${LVL_COLOR[g]}"><i></i>${g === "미정" ? "미판정" : (LEVEL_NAME[g] || g)}</div>`; }
     out += sig(r, false);
   });
   // 참고 = 정직성 표기(P5): 정체 신호와 역효과 시설. 숨기지 않고 구분해서 보여준다.
@@ -2131,6 +2141,10 @@ function cmpColumn(a) {
     <div class="apth"><b>${esc(a.n)}</b>
       <div class="m">${esc(a.dong || "")}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : ""}</div>
       <div class="sum">반경 내 호재 <b>${n}건</b>${rows[0] ? " · 최근접 " + dist(rows[0].d) : ""}</div>
+      <div class="gcount">${["S", "A", "B", "C", "미정"].map(g => {
+        const c = rows.filter(r => r.s.status !== "정체" && r.g === g).length;
+        return c ? `<span class="gc" style="--gc:${LVL_COLOR[g]}">${g === "미정" ? "미판정" : g}<b>${c}</b></span>` : "";
+      }).join("")}</div>
     </div>
     <div class="siglist">${out || `<div class="gsep">반경 내 호재 없음</div>`}</div>
   </div>`;

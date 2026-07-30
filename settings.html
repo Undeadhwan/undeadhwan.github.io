@@ -261,7 +261,8 @@ async function doSave(btn) {
     count();
     // 저장 = 파일까지 됐다는 뜻. 라이브 반영은 배포가 따로 필요하다는 걸 같이 말한다
     // (P2·"푸시했다≠나갔다" — 저장만 하고 반영됐다고 착각하면 안 된다).
-    toast(`저장됨 ${j.saved} · 백업 ${j.backup} — 라이브 반영은 build_all --deploy --push`, true);
+    toast(`저장됨 ${j.saved} · 백업 ${j.backup}`, true);
+    showDeployBar();   // 저장 = 로컬 파일까지. 라이브는 배포를 거쳐야 바뀐다(그 단절을 화면에서 끝낸다)
   } catch (e) {
     // 저장 서버가 아니면(정적 서버) 파일을 못 쓴다 — 그때만 수동 경로를 연다.
     toast("자동 저장 불가 — " + e.message, false);
@@ -271,6 +272,38 @@ async function doSave(btn) {
 save.onclick = () => doSave(save);
 save2.onclick = () => doSave(save2);
 
+/* 저장 → 배포 (2026-07-30 사용자 "저장했는데 왜 반영이 안되냐").
+   저장은 **내 컴퓨터의 thresholds.json**만 고친다. 공개 사이트는 별도 저장소라 배포해야 바뀐다.
+   그 사실을 말로만 알리면 매번 같은 질문이 나오므로, 버튼 하나로 끝내되 **QA는 그대로 돈다**
+   (build_all이 QA 실패 시 배포를 중단한다 — 화면에서 눌렀다고 검사를 건너뛰지 않는다). */
+function showDeployBar() {
+  let b = document.getElementById("depbar");
+  if (!b) {
+    b = document.createElement("div"); b.id = "depbar";
+    b.style.cssText = `position:fixed;left:50%;bottom:64px;transform:translateX(-50%);z-index:98;
+      background:#fff;border:1px solid #d9dee8;border-radius:12px;box-shadow:0 8px 26px rgba(0,0,0,.16);
+      padding:10px 14px;display:flex;align-items:center;gap:12px;font-size:13px`;
+    b.innerHTML = `<span><b>저장됨</b> — 공개 사이트에는 아직 반영되지 않았습니다(배포 필요)</span>
+      <button class="primary" id="depgo">지금 배포</button>
+      <button id="depno">나중에</button>`;
+    document.body.appendChild(b);
+    b.querySelector("#depno").onclick = () => b.remove();
+    b.querySelector("#depgo").onclick = async () => {
+      const btn = b.querySelector("#depgo");
+      btn.disabled = true; btn.textContent = "배포 중… (약 2분)";
+      try {
+        const r = await fetch("/api/deploy", { method: "POST" });
+        const j = await r.json();
+        if (!j.ok) throw new Error(j.error || "배포 실패");
+        btn.textContent = "배포 시작됨 ✓";
+        b.querySelector("span").innerHTML = `<b>배포 중</b> — QA 통과 시 약 2분 뒤 공개 사이트에 반영됩니다`;
+      } catch (e) {
+        btn.disabled = false; btn.textContent = "지금 배포";
+        toast("배포 불가 — " + e.message, false);
+      }
+    };
+  }
+}
 function toast(msg, ok) {
   let t = document.getElementById("toast");
   if (!t) { t = document.createElement("div"); t.id = "toast"; document.body.appendChild(t); }
