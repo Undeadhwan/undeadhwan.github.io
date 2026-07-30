@@ -947,6 +947,12 @@ function gradeBasisHtml(s) {
   // 접힌 사업이면 **합계**가 그 사업의 규모다(개별 블록 값이 아니라).
   if (s.group_n && s.group_area_m2)
     return `<span class="gbasis">${s.group_n}블록 합계 연면적 ${(s.group_area_m2 / 10000).toFixed(1).replace(".0", "")}만㎡</span> · `;
+  // 증축 = 등급 근거가 **증축분**이다(2026-07-30). 전체 연면적을 그대로 보이면 규모를 과장한다(P2).
+  if (s.arch_gb === "증축") {
+    if (s.ext_delta_m2) return `<span class="gbasis">증축분 ${(s.ext_delta_m2 / 10000).toFixed(1).replace(".0", "")}만㎡</span>`
+      + `<span class="gbasis undet" style="margin-left:4px">전체 ${(s.area_m2 / 10000).toFixed(1).replace(".0", "")}만㎡</span> · `;
+    return `<span class="gbasis undet">증축 — 증축분 미상(기존 규모 미확인, 등급 미판정)</span> · `;
+  }
   // 교통(철도) = 위계 판정 근거(파이프라인 grade.rail_level이 lvl_basis로 스탬프 — S/A/B/C 이유를 그대로 표기, P2)
   if (s.lvl_basis) return `<span class="gbasis">${s.lvl_basis}</span> · `;
   if (c === "일자리") {
@@ -1159,6 +1165,9 @@ function buildDartSignals() {   // DART 전자공시 = 법정 공시 → officia
 function buildArchSignals() {
   ARCH_SIG = (ARCH || []).filter(s => s.geometry && s.geometry.coordinates).map(s => ({
     _arch: true, src_tier: "official_report", milestones: s.milestones, title: s.title, cat: s.cat || "인프라",
+    // 증축 필드(2026-07-30) — ⚠ 어댑터에 넣지 않으면 화면에 오지 않는다(어댑터 함정, 3회 밟음)
+    arch_gb: s.arch_gb, ext_delta_m2: s.ext_delta_m2, ext_basis: s.ext_basis, nm_basis: s.nm_basis,
+    area_kind: s.area_kind,
     sub: s.sub || undefined,   // 커넥터(arch_fetch)가 실은 중분류를 그대로 신뢰. 없으면 subOf가 purp·이름으로 유도
     lvl: s.lvl || "C", template_type: s.cat === "일자리" ? "기업이전" : s.cat === "교통" ? "환승·터미널" : "생활인프라",
     current_stage: s.current_stage || "인허가", phase: s.phase || "계획", status: s.status || "활성", confirmed: false,
@@ -2109,6 +2118,8 @@ function renderDetail(s) {
         s.src_tier === "osm" ? ' · <b>진행단계·명칭은 공식 확인 전</b>(선형만 OSM 참고)' : ""}${
         /hub\.go\.kr|eais\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 원본 수치는 위 팩트시트 그대로. 건축HUB는 <b>딥링크가 없어</b> 링크에서 <b>대지위치를 직접 입력</b>해야 이 건이 보입니다 — 위 <b>대지위치 📋</b>로 복사해 붙여 넣으세요</div>' : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 개별 딥링크가 없어 포털 연결 — 위 사업장명으로 조회</div>' : ""}</div>
       ${s.master_ref ? `<div class="kv"><b>소속 지구</b> ${s.master_ref.title} <span class="hmhint">— 지구 마스터에 속한 개별 사업(경계 기반 병합)</span></div>` : ""}
+      ${s.ext_basis ? `<div class="kv"><b>증축 규모</b> ${s.ext_basis}</div>` : ""}
+      ${s.nm_basis ? `<div class="kv"><b>건물명 근거</b> ${s.nm_basis}</div>` : ""}
       ${[s.stage_note, s.status_note, s.note].filter(Boolean).length ? `<div class="kv"><b>비고</b> ${[s.stage_note, s.status_note, s.note].filter(Boolean).join(" · ")}</div>` : ""}
       <div class="note">완료=날짜(사실) · 미래=목표/미정 · 진척률(%) 없음 · 영향 반경은 유형 기준표 가안 — <a href="methodology.html" target="_blank">기준 전문</a></div>
     </div>`;
@@ -3716,7 +3727,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260730j");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260730k");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3848,7 +3859,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730j"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730k"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -3874,7 +3885,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260730j");
+  const CB = "?b=" + (window.BUILD || "20260730k");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
