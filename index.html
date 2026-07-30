@@ -1247,6 +1247,7 @@ function buildArchSignals() {
     _arch: true, src_tier: "official_report", milestones: s.milestones, title: s.title, cat: s.cat || "인프라",
     // 증축 필드(2026-07-30) — ⚠ 어댑터에 넣지 않으면 화면에 오지 않는다(어댑터 함정, 3회 밟음)
     arch_gb: s.arch_gb, ext_delta_m2: s.ext_delta_m2, ext_basis: s.ext_basis, nm_basis: s.nm_basis,
+    name_status: s.name_status,   // '미확보' = 공식 시설명을 아직 못 찾음(카드에 그대로 밝힌다 — P2)
     area_kind: s.area_kind,
     sub: s.sub || undefined,   // 커넥터(arch_fetch)가 실은 중분류를 그대로 신뢰. 없으면 subOf가 purp·이름으로 유도
     lvl: s.lvl || "C", template_type: s.cat === "일자리" ? "기업이전" : s.cat === "교통" ? "환승·터미널" : "생활인프라",
@@ -2224,6 +2225,7 @@ function renderDetail(s) {
       ${s.master_ref ? `<div class="kv"><b>소속 지구</b> ${s.master_ref.title} <span class="hmhint">— 지구 마스터에 속한 개별 사업(경계 기반 병합)</span></div>` : ""}
       ${s.ext_basis ? `<div class="kv"><b>증축 규모</b> ${s.ext_basis}</div>` : ""}
       ${s.nm_basis ? `<div class="kv"><b>건물명 근거</b> ${s.nm_basis}</div>` : ""}
+      ${s.name_status === "미확보" ? `<div class="kv"><b>시설명</b> <span class="hmhint">미확보 — 허가 원본에 고유 명칭이 없어 <b>동·지번으로 표시</b>합니다. 건축물대장은 <b>준공 후에 생성</b>되므로 인가·착공 단계에선 공식 명칭이 없을 수 있습니다. <b>사업의 존재</b>는 허가·착공 일자(위 팩트시트)가 근거이며, 이름을 임의로 지어내지 않습니다.</span></div>` : ""}
       ${[s.stage_note, s.status_note, s.note].filter(Boolean).length ? `<div class="kv"><b>비고</b> ${[s.stage_note, s.status_note, s.note].filter(Boolean).join(" · ")}</div>` : ""}
       <div class="note">완료=날짜(사실) · 미래=목표/미정 · 진척률(%) 없음 · 영향 반경은 유형 기준표 가안 — <a href="methodology.html" target="_blank">기준 전문</a></div>
     </div>`;
@@ -3851,7 +3853,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260730q");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260730r");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4012,7 +4014,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730q"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730r"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4038,7 +4040,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260730q");
+  const CB = "?b=" + (window.BUILD || "20260730r");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
