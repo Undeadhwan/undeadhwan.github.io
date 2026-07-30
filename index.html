@@ -3884,13 +3884,13 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260730v");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260730w");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
   applyThresholds(await gj("thresholds.json").catch(() => null));
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
-  const [dong, sgg, main, macro, rawData, autoData, regions, jeongbiData, railData, roadData, dartData, archData, parkData, hospData, retailData, dpsData, shData, masterData, jobsData, megaData, eumData, advData] = await Promise.all([
+  const [dong, sgg, main, macro, rawData, autoData, regions, jeongbiData, railData, roadData, dartData, archData, parkData, hospData, retailData, schoolData, dpsData, shData, masterData, jobsData, megaData, eumData, advData] = await Promise.all([
     gj("bdong/서울.geojson"),      // 초기 = 서울 467동(§3.1 법정동). 나머지 15시도는 뷰포트·선택 시 지연 로드(bdong/index.json)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
@@ -3906,6 +3906,7 @@ function initSearch() {
     gj("park_signals.json").catch(() => ({ features: [] })),          // 도시계획시설(공원) 결정 — 미집행·부분집행만(브이월드)
     gj("hospital_signals.json").catch(() => ({ features: [] })),      // 도시계획시설(종합의료) 결정 — 같은 커넥터·같은 규칙(2026-07-29 배선)
     gj("retail_signals.json").catch(() => ({ features: [] })),        // 도시계획시설(유통·시장) — UQ154(2026-07-29)
+    gj("school_signals.json").catch(() => ({ features: [] })),        // 도시계획시설(학교) 결정 — 초등·특목·대학(2026-07-30 사용자 확정)
     gj("dps_signals.json").catch(() => ({ signals: [] })),            // 공공건축 설계공모(건축HUB) — 계획단계 후보
     gj("sh_signals.json").catch(() => ({ signals: [] })),             // SH 공급계획(공급 전 신축만, 2026-07-30)
     gj("master_signals.json").catch(() => ({ signals: [] })),         // S급 지구 마스터(택지정보 대장, 2026-07-22)
@@ -3927,7 +3928,7 @@ function initSearch() {
   // 신규 대형공원(브이월드 도시계획 API) — feature 형식이 이미 신호 어댑트와 동일(cat/lvl/geometry)라 그대로 pool 투입
   // upis_fetch(도시계획시설 결정) 산출물은 **모두 같은 모양**이라 한 배열에 담는다 — 유형이 늘어도
   // 전역·어댑터·풀 3곳을 또 고치지 않는다(어댑터 함정 재발 방지, 2026-07-29).
-  UPIS_SIG = [parkData, hospData, retailData].flatMap(d => ((d && d.features) || [])
+  UPIS_SIG = [parkData, hospData, retailData, schoolData].flatMap(d => ((d && d.features) || [])
     .map(f => Object.assign({ _upis: true, geometry: f.geometry }, f.properties)))
     .filter(s => s.gate !== "관찰");   // 관찰 = 확장/개편 판별 대기(§0-1) — 지도 미표시, 승격은 gosi_confirm.json
   // 역효과(UQ158 환경기초 — 폐기물·하수 등, 2026-07-30 사용자 확정 ②안): **호재 풀에 넣지 않는다.**
@@ -4045,7 +4046,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730v"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730w"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4071,7 +4072,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260730v");
+  const CB = "?b=" + (window.BUILD || "20260730w");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
