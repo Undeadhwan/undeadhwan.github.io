@@ -199,7 +199,9 @@
   .cmpbar .cgo.dim { opacity:.4; pointer-events:none; }
   .cmpAdd { display:inline-block; font-size:11px; font-weight:700; border:1.5px solid #1a1a1a; border-radius:8px; padding:3px 9px; cursor:pointer; background:#fff; color:#1a1a1a; }
   .cmpAdd.in { background:#1a1a1a; color:#fff; }
-  #cmpModal .rmpanel { max-width:min(1240px,96vw); }   /* 4단지까지 제목이 읽히는 폭 */
+  /* ⚠ `.rmpanel`은 width:min(460px,92vw)로 **폭이 고정**돼 있다 — max-width만 키우면 아무 일도
+     안 일어난다(2026-07-30: 4단지를 담았는데 1단지만 보였다). 비교 모달은 width를 직접 덮어쓴다. */
+  #cmpModal .rmpanel { width:min(1240px,96vw); max-width:none; }   /* 4단지까지 제목이 읽히는 폭 */
   .cmptable { width:100%; border-collapse:collapse; font-size:12.5px; }
   .cmptable th, .cmptable td { border:1px solid var(--line); padding:9px 10px; text-align:center; vertical-align:middle; width:calc((100% - 120px)/4); }
   .cmptable th.rowh, .cmptable td.rowh { width:120px; text-align:left; background:#fafbfc; font-weight:700; color:var(--muted); font-size:11.5px; white-space:nowrap; }
@@ -213,7 +215,9 @@
      제목은 컬럼 폭을 다 쓰는 **자기 줄**을 갖고, 거리·단계는 그 아래 메타 줄로 내린다.
      컬럼 최소폭 236px 보장 — 4단지면 가로 스크롤(잘라서 못 읽는 것보다 낫다). */
   #cmpModal .bd { overflow-x:auto; }
-  .cmpg { display:grid; gap:0 20px; min-width:max-content; }
+  /* ⚠ min-width:max-content 금지 — 1fr이 제목 길이만큼 벌어져 첫 컬럼이 화면을 다 먹고
+     나머지 단지가 스크롤 밖으로 밀린다(2026-07-30 4단지 비교에서 1개만 보임). 컬럼은 모달 폭을 나눈다. */
+  .cmpg { display:grid; gap:0 20px; }
   .cmpcol .apth { padding:2px 0 9px; border-bottom:1px solid var(--line); }
   .cmpcol .apth b { font-size:16px; }
   .cmpcol .apth .m { color:var(--ink2); font-size:var(--fs-s); margin-top:3px; }
@@ -3853,7 +3857,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260730s");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260730t");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4014,7 +4018,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730s"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260730t"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4040,7 +4044,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260730s");
+  const CB = "?b=" + (window.BUILD || "20260730t");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
