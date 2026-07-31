@@ -1394,8 +1394,15 @@ function buildRoadSignals() {
     // 영향권 = **IC(진출입 가능)만**. JC는 분기점이라 그 지점에서 지역으로 나갈 수 없다 → 영향권 없음
     ln.ic_points = ics.filter(ic => ic.signal !== false && ic.line && (ic.line === ln.osm_name || ic.line === ln.title))
       .map(ic => ({ coordinates: ic.geometry.coordinates, name: ic.title, status: ic.current_stage }));
-    ln.jc_points = ics.filter(ic => ic.signal === false && ic.line && (ic.line === ln.osm_name || ic.line === ln.title))
+    /* ⚠ `signal === false`는 **두 가지 다른 사실**을 담고 있다 (2026-07-31 사용자 화면 제보).
+       ① JC라서 진출입 불가 → 호재 아님  ② 존재 근거를 못 찾아 호재로 셀 수 없음.
+       둘을 묶어 읽는 바람에 '근거 미확인'으로 표기한 고막IC가 **분기점(JC) 목록에 섞여**
+       "고막IC는 분기점"이라는 없는 사실을 화면이 말했다. 사유로 갈라서 각각 표기한다. */
+    const _off = ics.filter(ic => ic.signal === false && ic.line && (ic.line === ln.osm_name || ic.line === ln.title));
+    ln.jc_points = _off.filter(ic => !ic.exists_status)
       .map(ic => ({ coordinates: ic.geometry.coordinates, name: ic.title }));   // 구조 정보(상세 표기용)
+    ln.unverified_points = _off.filter(ic => ic.exists_status)
+      .map(ic => ({ coordinates: ic.geometry.coordinates, name: ic.title, why: ic.exists_note || ic.exists_status }));
   });
 }
 /* 정비(JEONGBI) 후보를 신호 형태로 어댑트 → 아파트 호재 카운팅·카드·4단계 필터에 정비 포함(분류=정비).
@@ -2273,6 +2280,9 @@ function renderDetail(s) {
         `${a.name}${a.coordinates ? "" : " (좌표 미확보)"}`).join(" · ")}</div>` : ""}
       ${(s.jc_points || []).length ? `<div class="kv"><b>분기점(JC)</b> ${s.jc_points.map(j => j.name).join(" · ")}
         <span class="hmhint">— 차량 진출입 불가, 호재 아님(구조 정보)</span></div>` : ""}
+      ${(s.unverified_points || []).length ? `<div class="kv"><b>근거 미확인</b> ${s.unverified_points.map(u => u.name).join(" · ")}
+        <span class="hmhint">— 공식 원문에서 이름을 못 찾았습니다. 지우지 않고 표시하되 호재로 세지 않습니다</span></div>` : ""}
+      ${s.geom_status ? `<div class="kv"><b>선형 범위</b> ${s.geom_status}</div>` : ""}
       ${s.side_effects?.length ? `<div class="kv"><b>역효과 표기</b> ${s.side_effects.join(", ")}</div>` : ""}
       ${SUB_CAVEAT[subOf(s)] ? `<div class="kv"><b>시설 특성</b> <span class="hmhint">${SUB_CAVEAT[subOf(s)]}</span></div>` : ""}
       <div class="kv"><b>위치</b> ${precNote(s)}${
@@ -3894,7 +3904,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260731z");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260731aa");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4056,7 +4066,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731z"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731aa"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4082,7 +4092,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260731z");
+  const CB = "?b=" + (window.BUILD || "20260731aa");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
