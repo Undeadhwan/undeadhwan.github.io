@@ -259,10 +259,11 @@ async function doSave(btn) {
     if (!j.ok) throw new Error(j.error || "저장 실패");
     ORIG = structuredClone(CFG);          // 저장 성공 = 이제 이것이 원본
     count();
-    // 저장 = 파일까지 됐다는 뜻. 라이브 반영은 배포가 따로 필요하다는 걸 같이 말한다
+    // 저장 = **라이브 반영까지** (2026-07-31 사용자 지시). 서버가 저장 직후 배포한다.
+    // 다만 "나갔다"를 서버가 말한 대로만 옮긴다 — 배포가 실패했으면 실패라고 말하고 수동 경로를 연다
     // (P2·"푸시했다≠나갔다" — 저장만 하고 반영됐다고 착각하면 안 된다).
-    toast(`저장됨 ${j.saved} · 백업 ${j.backup}`, true);
-    showDeployBar();   // 저장 = 로컬 파일까지. 라이브는 배포를 거쳐야 바뀐다(그 단절을 화면에서 끝낸다)
+    toast(`저장됨 ${j.saved} · ${j.note || "백업 " + j.backup}`, j.deployed !== false);
+    if (j.deployed === false) showDeployBar();   // 자동 배포 실패 때만 수동 버튼
   } catch (e) {
     // 저장 서버가 아니면(정적 서버) 파일을 못 쓴다 — 그때만 수동 경로를 연다.
     toast("자동 저장 불가 — " + e.message, false);
