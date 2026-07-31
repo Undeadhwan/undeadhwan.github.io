@@ -871,6 +871,7 @@ const GEO_PREC = {
   zone_poi:    { t: "지구명 검색(근사)", d: "지구명 장소검색 — 지구 크기만큼 오차, 지점 확정 아님" },
   station_poi: { t: "지점명 검색", d: "역·IC 장소검색으로 확인 (~100m) — 고시 도면 실측 아님" },
   poi:         { t: "POI 실위치 확인", d: "구글맵·카카오 장소 POI로 검증한 실위치 — 지번 지오코딩이 안 맞는 신설 시설(매립지·블록)" },
+  namu_map:{ t: "문서 지도 좌표(근사)", d: "나무위키 문서 인포박스의 구글맵 좌표 — 고시에 지점 지번이 없을 때의 폴백(수백m). 공식 고시 근거보다 약함" },
   notice_cluster:{ t: "고시 세목 밀집(근사)", d: "도로구역 고시의 편입필지가 넓어지는 구간의 중심 — IC 부지 규모(수백m). 진출입 정확 지점 아님" },
   landmark:    { t: "지물 기준(근사)", d: "교차로·시설 등 인근 지물 기준 (~200m) — 정거장 확정 위치 아님" },
   feature_wide:{ t: "대형 지물 대표점(근사)", d: "교량·방파제·부두처럼 **선형·광역 시설**을 한 점으로 대표 (수백m~수km) — 실제 구조물 위치 아님" },
@@ -887,7 +888,7 @@ const GEO_PREC = {
    → 근사 등급이면 플래그가 없어도 후광. 생산 쪽 누락이 화면의 거짓말이 되지 않게 한 곳에서 막는다. */
 const ROUGH_PREC = new Set(["dong", "sgg", "zone_poi", "zone_wide", "unknown",
                             "parcel_base", "feature_wide", "landmark", "notice_cluster",
-                            "notice_map", "jigu", "zone", "none"]);
+                            "notice_map", "namu_map", "jigu", "zone", "none"]);
 const isApprox = s => !!(s.geo_approx || s.approx) || ROUGH_PREC.has(s.geo_prec);
 function precNote(s) {
   const v = GEO_PREC[s.geo_prec];
@@ -3893,7 +3894,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260731x");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260731y");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4055,7 +4056,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731x"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731y"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4081,7 +4082,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260731x");
+  const CB = "?b=" + (window.BUILD || "20260731y");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
