@@ -2019,6 +2019,7 @@ function cardHtml(s, extra = "") {
       ${s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>'}
       ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}
       ${noCoord ? '<span class="badge-near">위치 미확정 — 지도 미표시</span>' : ""}
+      ${s.name_status === "미확보" ? '<span class="badge-near" title="허가 원본에 고유 명칭이 없어 동·지번으로 표시합니다. 건축물대장은 준공 후에 생성되므로 인가·착공 단계엔 공식 명칭이 없을 수 있습니다. 사업의 존재는 허가·착공 일자가 근거이며, 이름을 임의로 지어내지 않습니다.">시설명 미확보</span>' : ""}
       ${icMissing ? '<span class="badge-near" title="이 도로는 진출입 지점(IC·진입로)에서만 타고 내립니다. 공식 IC 위치가 아직 확정·공개되지 않아 영향권을 산정하지 않습니다(근거 없는 범위를 만들지 않음).">진출입 지점 미확정 — 영향권 미산정</span>' : ""}${srcBadge(s)} ${extra}</div>
     <div class="title">${sigTitle(s)}</div>
     <div class="stage">단계: <b>${phaseLabel(ph)}</b> <span class="pmini">(${pIdx + 1}/${PHASES.length})</span>${detail} · ${freshness(s)}</div>
@@ -3812,7 +3813,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260731e");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260731f");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3974,7 +3975,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731e"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731f"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4000,7 +4001,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260731e");
+  const CB = "?b=" + (window.BUILD || "20260731f");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
