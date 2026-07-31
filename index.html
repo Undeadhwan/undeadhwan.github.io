@@ -415,7 +415,12 @@
   /* 카카오 CustomOverlay 래퍼 div는 pe:auto가 기본이라 역명 라벨이 그 아래 호재원 마커의 호버를 가로챈다
      (가정역 실측: 중심/라벨 위 배지 안 뜸). 내부 .rail-name은 pe:none인데 래퍼는 아니므로 래퍼도 통과시킨다. */
   div:has(> .rail-name) { pointer-events:none; }
-  .apt-pop { background:#fff; border-radius:12px; box-shadow:0 6px 22px rgba(0,0,0,.24); padding:11px 14px; min-width:180px; max-width:250px; }
+  /* 말풍선 꼬리 — 종전엔 꼬리가 없어 카드가 마커와 무관하게 **떠 있는 것처럼** 보였다
+     (2026-07-31 사용자 "팝업 위치가 좀 떠있다"). 간격도 8px → 3px로 좁힌다. */
+  .apt-pop { position:relative; background:#fff; border-radius:12px; box-shadow:0 6px 22px rgba(0,0,0,.24); padding:11px 14px; min-width:180px; max-width:250px; }
+  .apt-pop::after { content:""; position:absolute; left:50%; bottom:-7px; transform:translateX(-50%);
+    border-left:7px solid transparent; border-right:7px solid transparent; border-top:8px solid #fff;
+    filter:drop-shadow(0 3px 2px rgba(0,0,0,.10)); }
   .apt-pop-nm { font-size:15px; font-weight:800; color:#1a1a1a; }
   .apt-pop-sub { font-size:11.5px; color:var(--muted); margin-top:3px; }
   .apt-pop-cats { font-size:12px; margin-top:8px; display:flex; flex-wrap:wrap; gap:4px 10px; border-top:1px solid var(--line); padding-top:7px; }
@@ -629,7 +634,7 @@
         </select>
       </label>
       <span class="closex" onclick="closeCompare()">✕</span></div>
-    <div class="rmnote">단지를 <b>가격·등급으로 줄 세우지 않습니다</b>(P4/§7). 각 단지 반경 내 <b>호재 신호의 개수·분류·최근접 거리·단계</b>만 사실로 나열합니다. 해석은 사용자 몫.</div>
+    <div class="rmnote">단지를 <b>가격·등급으로 줄 세우지 않습니다</b>(P4/§7). 각 단지 반경 내 <b>호재 신호의 개수·분류·거리·단계</b>만 사실로 나열합니다. 해석은 사용자 몫.</div>
     <div id="cmpBody" style="overflow-x:auto;"></div>
   </div>
 </div>
@@ -2140,7 +2145,10 @@ function cmpColumn(a) {
   return `<div class="cmpcol">
     <div class="apth"><b>${esc(a.n)}</b>
       <div class="m">${esc(a.dong || "")}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : ""}</div>
-      <div class="sum">반경 내 호재 <b>${n}건</b>${rows[0] ? " · 최근접 " + dist(rows[0].d) : ""}</div>
+      <!-- '최근접 N km' 요약은 제거했다(2026-07-31 사용자 "의미없다"). 가장 가까운 하나의 거리는
+           단지 전체를 대표하지 못한다 — 400m C급이 1.7km S급보다 앞서 보여 단지 간 우열처럼 읽힌다.
+           거리는 **신호별 사실**로만 각 행에 남긴다(§7·P3 순위 만들지 않음). -->
+      <div class="sum">반경 내 호재 <b>${n}건</b></div>
       <div class="gcount">${["S", "A", "B", "C", "미정"].map(g => {
         const c = rows.filter(r => r.s.status !== "정체" && r.g === g).length;
         return c ? `<span class="gc" style="--gc:${LVL_COLOR[g]}">${g === "미정" ? "미판정" : g}<b>${c}</b></span>` : "";
@@ -2788,7 +2796,10 @@ function initLeaflet() {
       // 집 아이콘 = 무채색(조연). 호재 원(컬러)이 주인공 — 숫자·배지 없음(§7 상시배지 금지 완전 준수)
       const m = L.marker([a.lat, a.lon], { pane: "badge", zIndexOffset: sel ? 1000 : 0,
         icon: L.divIcon({ className: "", html: `<div class="apt-dot lf${sel ? " sel" : ""}"><svg viewBox="0 0 24 24"><path d="M12 3.2 3.5 10.6V21h6.2v-5.6h4.6V21h6.2V10.6Z"/></svg></div>`, iconSize: null }) }).addTo(map);
-      const near = () => signalsNearPoint([a.lon, a.lat]);   // 팝업 열 때만 계산(렌더 비용 절감)
+      // ⚠ **all=true 필수** — 단지 반경 내 호재 개수는 **사실**이라 조회조건과 무관해야 한다
+      //   (2026-07-29 확정 "비교는 필터와 무관해야"가 팝업엔 적용돼 있지 않았다).
+      //   실측 사고: 등급 S만 켠 상태에서 같은 단지가 팝업 **0건** / 비교 **6건**으로 갈렸다.
+      const near = () => signalsNearPoint([a.lon, a.lat], true);   // 팝업 열 때만 계산(렌더 비용 절감)
       const sub = `${a.sg} ${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : " · 세대수 미상"}${a.built ? " · 준공 " + a.built : ""}`;
       // hover 팝업: 마커 벗어나 빈 공간 가면 닫힘(300ms 유예 — 그 사이 팝업 위로 이동하면 유지 → 비교담기 클릭 가능).
       // 위치 = 아이콘 바로 위 중앙. 호재 건수는 열 때만 계산.
@@ -3140,7 +3151,9 @@ function initLeaflet() {
       icon: L.divIcon({ className: "", html: `<div class="dong-badge" style="border-color:#c2255c;color:#c2255c">◎ ${a.n}</div>`, iconSize: null }) }).addTo(map);
     clearRadius(); clearHighlight();   // 앵커 마커만
   };
-  const clearAptMarker = () => { if (aptMarker) { map.removeLayer(aptMarker); aptMarker = null; } };
+   // 선택 표시(분홍 아이콘)도 함께 푼다 — 상세를 닫으면 **아파트 선택 자체가 풀려야** 한다
+  //   (2026-07-31 사용자). 종전엔 treeState.selKey만 비우고 아이콘은 다음 지도 이동 때까지 남았다.
+  const clearAptMarker = () => { if (aptMarker) { map.removeLayer(aptMarker); aptMarker = null; } try { renderAptDots(); } catch (e) {} };
   // 레이더 파동: 중심 좌표에서 확산 링 애니메이션 (선택 연출)
   let radarM = null;
   const radarPulse = (lng, lat) => {
@@ -3469,8 +3482,8 @@ function initKakao() {
   // 아파트 마커 + hover 팝업(비교담기)
   let aptDots = [], aptPop = null, aptPopTimer = null;
   const closeAptPop = () => { if (aptPop) { aptPop.remove(); aptPop = null; } };
-  const openAptPop = (a, sub, pt) => { closeAptPop(); const near = signalsNearPoint([a.lon, a.lat]); const inCmp = compareSet.some(x => x.n === a.n && x.dong === a.dong);
-    aptPop = document.createElement("div"); aptPop.style.cssText = "position:absolute;z-index:50;transform:translate(-50%,-100%);pointer-events:auto"; aptPop.style.left = pt.x + "px"; aptPop.style.top = (pt.y - 8) + "px";
+  const openAptPop = (a, sub, pt) => { closeAptPop(); const near = signalsNearPoint([a.lon, a.lat], true); const inCmp = compareSet.some(x => x.n === a.n && x.dong === a.dong);   // all=true — 단지 사실은 조회조건 무관(Leaflet판 주석 참조)
+    aptPop = document.createElement("div"); aptPop.style.cssText = "position:absolute;z-index:50;transform:translate(-50%,-100%);pointer-events:auto"; aptPop.style.left = pt.x + "px"; aptPop.style.top = (pt.y - 3) + "px";
     aptPop.innerHTML = '<div class="apt-pop"><div class="apt-pop-nm">' + a.n + '</div><div class="apt-pop-sub">' + sub + '</div><div class="apt-pop-cnt">반경 내 호재 <b>' + near.length + '</b>건</div><div class="apt-pop-cmp' + (inCmp ? " in" : "") + '">' + (inCmp ? "✓ 비교함" : "＋ 비교담기") + '</div></div>';
     mapEl.appendChild(aptPop); const btn = aptPop.querySelector(".apt-pop-cmp");
     if (btn) btn.addEventListener("click", e => { e.stopPropagation(); toggleCompare(a); const on = compareSet.some(x => x.n === a.n && x.dong === a.dong); btn.classList.toggle("in", on); btn.textContent = on ? "✓ 비교함" : "＋ 비교담기"; });
@@ -3579,7 +3592,9 @@ function initKakao() {
   let aptMarker = null;
   const showAptAnchor = a => { if (aptMarker) aptMarker.setMap(null); const elx = document.createElement("div"); elx.className = "dong-badge"; elx.style.cssText = "border-color:#c2255c;color:#c2255c"; elx.textContent = "◎ " + a.n;
     aptMarker = new K.CustomOverlay({ map, position: LL(a.lon, a.lat), content: elx, zIndex: 24, yAnchor: .5, xAnchor: .5 }); clearRadius(); };
-  const clearAptMarker = () => { if (aptMarker) { aptMarker.setMap(null); aptMarker = null; } };
+   // 선택 표시(분홍 아이콘)도 함께 푼다 — 상세를 닫으면 **아파트 선택 자체가 풀려야** 한다
+  //   (2026-07-31 사용자). 종전엔 treeState.selKey만 비우고 아이콘은 다음 지도 이동 때까지 남았다.
+  const clearAptMarker = () => { if (aptMarker) { aptMarker.setMap(null); aptMarker = null; } try { renderAptDots(); } catch (e) {} };
   let radarM = null;
   const radarPulse = (lng, lat) => { if (radarM) radarM.setMap(null); const elx = document.createElement("div"); elx.className = "radar"; elx.innerHTML = "<span></span><span></span><span></span>"; elx.style.pointerEvents = "none";
     radarM = new K.CustomOverlay({ map, position: LL(lng, lat), content: elx, zIndex: 25, yAnchor: .5, xAnchor: .5 }); setTimeout(() => { if (radarM) { radarM.setMap(null); radarM = null; } }, 2600); };
@@ -3842,7 +3857,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260731g");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260731h");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4004,7 +4019,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731g"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731h"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4030,7 +4045,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260731g");
+  const CB = "?b=" + (window.BUILD || "20260731h");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
