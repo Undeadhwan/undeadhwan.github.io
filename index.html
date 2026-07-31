@@ -2348,6 +2348,10 @@ function goHome() {
   renderPanel();
   mapApi?.refreshPins?.();   // 선택 해제 → 호재 핀 사라짐(카운트 박스만)
   mapApi?.clearRadius(); mapApi?.clearHighlight?.(); mapApi?.clearRoute?.(); mapApi?.clearAptMarker?.();
+  // 공용 툴팁도 지운다 — 폴리곤/마커를 **클릭해서** 패널이 뜨면 그 위로 커서가 옮겨가 map이
+  // mouseout을 못 받고, 패널을 닫아도 말풍선이 지도 위에 그대로 남는다(2026-07-31 사용자 제보:
+  // 아파트 상세를 닫았는데 '봉천3구역주택재개발사업' 창이 떠 있었다). 뷰가 바뀌면 무조건 닫는다.
+  mapApi?.hideTip?.();
 }
 function showDong(f) {
   aptFocus = null;   // 아파트 포커스 해제
@@ -2435,6 +2439,7 @@ function showSignal(s, pan) {
 }
 /* 닫기: 신호 상세는 왔던 피드(동/구/단지)로 복귀(경계 강조 유지), 피드는 홈으로 */
 function closePanel() {
+  mapApi?.hideTip?.();   // 남아 있는 말풍선 제거 — 복귀 경로(showApt/showDong 등)는 goHome을 안 거친다
   aptFocus = null; mapApi?.refreshPins?.();   // 아파트 포커스 해제
   if (view.mode === "detail" && returnView && returnView.mode && returnView.mode !== "home") {
     const rv = returnView; returnView = null;
@@ -3601,7 +3606,7 @@ function initKakao() {
   let hlPolys = []; const clearHighlight = () => { hlPolys.forEach(o => o.setMap(null)); hlPolys = []; };
   const highlightRings = ringsXY => { clearHighlight(); if (!ringsXY || !ringsXY.length) return; ringsXY.forEach(r => hlPolys.push(new K.Polygon({ map, path: r.map(([x, y]) => LL(x, y)), strokeWeight: 2.5, strokeColor: "#5b3fd4", strokeOpacity: .95, fillColor: "#5b3fd4", fillOpacity: .12, zIndex: 6 }))); };
   const sggRingsFn = () => { if (window._sggRings) return window._sggRings; const m = {}; SGG_GEO.features.forEach(f => { const disp = f.properties.sido + " " + sggDisplayName(f.properties.name); ringsOf(f).forEach(r => (m[disp] = m[disp] || []).push(r)); }); return (window._sggRings = m); };
-  mapApi = { refreshPins, panTo: ll => map.panTo(LL(ll[0], ll[1])), showRadius, showRadiusMany, clearRadius, showAptAnchor, highlightRings, clearHighlight, clearAptMarker, emphasizePin, radarPulse, sggRings: sggRingsFn, highlightRoute, clearRoute };   // viewFilter 제거(2026-07-27) — 소비처 없는 죽은 API였다
+  mapApi = { refreshPins, panTo: ll => map.panTo(LL(ll[0], ll[1])), showRadius, showRadiusMany, clearRadius, showAptAnchor, highlightRings, clearHighlight, clearAptMarker, emphasizePin, radarPulse, sggRings: sggRingsFn, highlightRoute, clearRoute, hideTip };   // viewFilter 제거(2026-07-27) — 소비처 없는 죽은 API였다
   // (뱃지 카운트는 지역/필터 기준 고정 — 지도 이동마다 갱신하지 않는다, 2026-07-23)
   refreshPins();
 }
@@ -3857,7 +3862,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260731i");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260731j");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4019,7 +4024,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731i"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731j"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4045,7 +4050,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260731i");
+  const CB = "?b=" + (window.BUILD || "20260731j");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
