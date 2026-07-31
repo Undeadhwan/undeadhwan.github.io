@@ -871,6 +871,7 @@ const GEO_PREC = {
   zone_poi:    { t: "지구명 검색(근사)", d: "지구명 장소검색 — 지구 크기만큼 오차, 지점 확정 아님" },
   station_poi: { t: "지점명 검색", d: "역·IC 장소검색으로 확인 (~100m) — 고시 도면 실측 아님" },
   poi:         { t: "POI 실위치 확인", d: "구글맵·카카오 장소 POI로 검증한 실위치 — 지번 지오코딩이 안 맞는 신설 시설(매립지·블록)" },
+  notice_cluster:{ t: "고시 세목 밀집(근사)", d: "도로구역 고시의 편입필지가 넓어지는 구간의 중심 — IC 부지 규모(수백m). 진출입 정확 지점 아님" },
   landmark:    { t: "지물 기준(근사)", d: "교차로·시설 등 인근 지물 기준 (~200m) — 정거장 확정 위치 아님" },
   feature_wide:{ t: "대형 지물 대표점(근사)", d: "교량·방파제·부두처럼 **선형·광역 시설**을 한 점으로 대표 (수백m~수km) — 실제 구조물 위치 아님" },
   dong:        { t: "동 대표점(근사)", d: "읍면동 중심점 (500m~2km) — 실제 위치 아님, 위치 미확정" },
@@ -885,7 +886,7 @@ const GEO_PREC = {
    사용자 확정: "정확하지 않으면 후광 넣고 표시해. 그러려고 후광을 도입한 거잖아."
    → 근사 등급이면 플래그가 없어도 후광. 생산 쪽 누락이 화면의 거짓말이 되지 않게 한 곳에서 막는다. */
 const ROUGH_PREC = new Set(["dong", "sgg", "zone_poi", "zone_wide", "unknown",
-                            "parcel_base", "feature_wide", "landmark", "none"]);
+                            "parcel_base", "feature_wide", "landmark", "notice_cluster", "none"]);
 const isApprox = s => !!(s.geo_approx || s.approx) || ROUGH_PREC.has(s.geo_prec);
 function precNote(s) {
   const v = GEO_PREC[s.geo_prec];
@@ -3394,7 +3395,14 @@ function initKakao() {
       const segs = f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates];
       const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + (isRoad ? "🛣" : "🚈") + " " + (p.full || p.name) + '</div><div class="apt-pop-sub">' + (p.linekind || "") + ' · <span style="color:' + col + '">' + p.status + '</span>' + (p.gate === "계획안" ? ' · <b style="color:#b3651e">계획(안) — 승인 전</b>' : "") + (p.approx ? " (근사 선형 — 공식 경유지 연결, 실선형 아님)" : dashed ? " (미확정 — 점선)" : "") + '</div>' + (p.gate === "계획안" ? '<div class="apt-pop-sub" style="color:#b3651e">노선·정거장 위치는 변경될 수 있습니다</div>' : "") + (p.geom_partial ? '<div class="apt-pop-sub" style="color:#b3651e">⚠ ' + (p.geom_cover_note || "선형 일부 구간만 확보") + '</div>' : "") + '<div class="apt-pop-cats"><span style="color:' + col + '">● 단계 ' + (p.phase || (p.confirmed ? "착공" : "계획")) + '</span>' + (p.note ? " · " + p.note : "") + (p.geom_src ? " · " + p.geom_src : p.src_name ? " · 출처: " + p.src_name : "") + '</div></div>';
       const clickHandler = () => { _ovClickTs = Date.now(); hideTip();
-        if (isRoad) { const sig = ROAD_SIG.find(s => s.title.startsWith(p.name)) || SIGNALS.find(s => s._road && s.road_ref && p.name.includes(s.road_ref)); if (sig) showSignal(sig, false); return; }
+        // 도로 선 클릭 — **키로 찾는다**. 종전엔 `title.startsWith(p.name)`였는데 2026-07-17에 표시명을
+        // 공식 사업명으로 바꾸면서(계양강화고속도로 → "계양~강화 고속도로") 접두가 깨져 **8개 고속도로가
+        // 클릭해도 아무 반응이 없었다**(2026-07-31 사용자 "선형 선택이 안되네? IC랑 결합되어야 하는데").
+        // 어댑터가 이미 `line: p.name`을 하이라이트 키로 싣고 있다 — 그 키를 그대로 쓰면 표시명이 바뀌어도 안 깨진다.
+        if (isRoad) { const sig = ROAD_SIG.find(s => !s.pt_type && s.line === p.name)
+                             || ROAD_SIG.find(s => s.title.startsWith(p.name))
+                             || SIGNALS.find(s => s._road && s.road_ref && p.name.includes(s.road_ref));
+          if (sig) showSignal(sig, false); return; }
         const flat = f.geometry.type === "MultiLineString" ? f.geometry.coordinates.flat() : f.geometry.coordinates; showSignal(railToSignal(p, flat[Math.floor(flat.length / 2)]), false); };
       const objs = [], hits = [];
       segs.forEach(seg => {
@@ -3879,7 +3887,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260731s");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260731t");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4041,7 +4049,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731s"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731t"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4067,7 +4075,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260731s");
+  const CB = "?b=" + (window.BUILD || "20260731t");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {

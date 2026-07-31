@@ -52,7 +52,7 @@
     "geom_adequacy": "traced",
     "geom_adequacy_note": "공식 노선도 좌표변환 — 형상 확보",
     "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 9/18개가 표시 선형 밖(최대 3.1km, 청라국제도시역, 영종역, 공항화물청사역). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
+    "geom_cover_note": "정거장 9/18개가 표시 선형 밖(최대 3,110m). 그중 5개는 **역 좌표가 근사**(지물·동 대표점)라 생긴 차이다 — 선형이 아니라 역 좌표를 정밀화해야 한다(§2b 고시 조서 지번)",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
@@ -14152,7 +14152,7 @@
     "geom_adequacy": "traced",
     "geom_adequacy_note": "공식 노선도 좌표변환 — 형상 확보",
     "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 4/14개가 표시 선형 밖(최대 0.6km, 검단역, 신림역, 가산디지털단지역). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
+    "geom_cover_note": "정거장 4/14개가 표시 선형 밖(최대 593m). 그중 3개는 **역 좌표가 근사**(지물·동 대표점)라 생긴 차이다 — 선형이 아니라 역 좌표를 정밀화해야 한다(§2b 고시 조서 지번)",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
@@ -46975,7 +46975,7 @@
     "geom_adequacy": "traced",
     "geom_adequacy_note": "공식 노선도 좌표변환 — 형상 확보",
     "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 4/13개가 표시 선형 밖(최대 1.3km, 삼성역, 금정역, 광운대역). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
+    "geom_cover_note": "정거장 4/13개가 표시 선형 밖(최대 1,343m). 그중 3개는 **역 좌표가 근사**(지물·동 대표점)라 생긴 차이다 — 선형이 아니라 역 좌표를 정밀화해야 한다(§2b 고시 조서 지번)",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
@@ -72979,7 +72979,9 @@
      }
     ],
     "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "last_movement": "2026-07-18",
+    "geom_partial": true,
+    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 1/16개가 표시 선형 밖(최대 290m, 106정거장(가칭 신촌)). 공식 노선도 보강 대상"
    },
    "geometry": {
     "type": "LineString",
@@ -78136,7 +78138,9 @@
      }
     ],
     "first_seen": "2026-07-18",
-    "last_movement": "2026-07-30"
+    "last_movement": "2026-07-30",
+    "geom_partial": true,
+    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 1/11개가 표시 선형 밖(최대 361m, 봉은사역). 공식 노선도 보강 대상"
    },
    "geometry": {
     "type": "LineString",
@@ -81361,7 +81365,9 @@
      }
     ],
     "first_seen": "2026-07-18",
-    "last_movement": "2026-07-18"
+    "last_movement": "2026-07-18",
+    "geom_partial": true,
+    "geom_cover_note": "정거장 8/16개가 표시 선형 밖(최대 469m). 그중 6개는 **역 좌표가 근사**(지물·동 대표점)라 생긴 차이다 — 선형이 아니라 역 좌표를 정밀화해야 한다(§2b 고시 조서 지번)"
    },
    "geometry": {
     "type": "LineString",
@@ -90551,7 +90557,7 @@
     "geom_adequacy": "traced",
     "geom_adequacy_note": "공식 노선도 좌표변환 — 형상 확보",
     "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 1/12개가 표시 선형 밖(최대 0.6km, 110 남위례). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
+    "geom_cover_note": "정거장 2/12개가 표시 선형 밖(최대 608m). 그중 1개는 **역 좌표가 근사**(지물·동 대표점)라 생긴 차이다 — 선형이 아니라 역 좌표를 정밀화해야 한다(§2b 고시 조서 지번)",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
@@ -100288,7 +100294,7 @@
     "geom_adequacy": "sparse",
     "geom_adequacy_note": "정거장 간격 12.3km — 회랑이 실제 경로와 다를 수 있음(공식 노선도 필요)",
     "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 1/3개가 표시 선형 밖(최대 1.5km, 향남역(가칭)). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
+    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 1/3개가 표시 선형 밖(최대 1,457m, 향남역(가칭)). 공식 노선도 보강 대상",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
@@ -101799,7 +101805,7 @@
     "geom_adequacy": "sparse",
     "geom_adequacy_note": "정거장 간격 3.5km — 회랑이 실제 경로와 다를 수 있음(공식 노선도 필요)",
     "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 1/4개가 표시 선형 밖(최대 1.2km, 금토(판교제2테크노밸리)). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
+    "geom_cover_note": "정거장 1/4개가 표시 선형 밖(최대 1,232m). 그중 1개는 **역 좌표가 근사**(지물·동 대표점)라 생긴 차이다 — 선형이 아니라 역 좌표를 정밀화해야 한다(§2b 고시 조서 지번)",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
@@ -110911,7 +110917,7 @@
     "geom_adequacy": "endpoints_only",
     "geom_adequacy_note": "위치 확보 정거장 2개뿐 — 공식 노선도 없이는 직선 외 표현 불가",
     "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 1/2개가 표시 선형 밖(최대 0.8km, 서울대 정문(가칭)). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
+    "geom_cover_note": "정거장 1/2개가 표시 선형 밖(최대 826m). 그중 1개는 **역 좌표가 근사**(지물·동 대표점)라 생긴 차이다 — 선형이 아니라 역 좌표를 정밀화해야 한다(§2b 고시 조서 지번)",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
@@ -126727,7 +126733,7 @@
     "geom_adequacy": "traced",
     "geom_adequacy_note": "공식 노선도 좌표변환 — 형상 확보",
     "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 2/7개가 표시 선형 밖(최대 1.1km, 명지(경유), 오시리아(종점)). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
+    "geom_cover_note": "정거장 2/7개가 표시 선형 밖(최대 1,105m). 그중 1개는 **역 좌표가 근사**(지물·동 대표점)라 생긴 차이다 — 선형이 아니라 역 좌표를 정밀화해야 한다(§2b 고시 조서 지번)",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
@@ -138611,7 +138617,7 @@
     "geom_adequacy": "endpoints_only",
     "geom_adequacy_note": "위치 확보 정거장 2개뿐 — 공식 노선도 없이는 직선 외 표현 불가",
     "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 1/2개가 표시 선형 밖(최대 1.0km, 부산신항(가칭)). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
+    "geom_cover_note": "정거장 1/2개가 표시 선형 밖(최대 954m). 그중 1개는 **역 좌표가 근사**(지물·동 대표점)라 생긴 차이다 — 선형이 아니라 역 좌표를 정밀화해야 한다(§2b 고시 조서 지번)",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
@@ -193265,7 +193271,7 @@
     "geom_adequacy": "traced",
     "geom_adequacy_note": "공식 노선도 좌표변환 — 형상 확보",
     "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 4/14개가 표시 선형 밖(최대 0.6km, 검단역, 신림역, 가산디지털단지역). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
+    "geom_cover_note": "정거장 4/14개가 표시 선형 밖(최대 593m). 그중 3개는 **역 좌표가 근사**(지물·동 대표점)라 생긴 차이다 — 선형이 아니라 역 좌표를 정밀화해야 한다(§2b 고시 조서 지번)",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
@@ -193355,7 +193361,7 @@
     "geom_adequacy": "traced",
     "geom_adequacy_note": "공식 노선도 좌표변환 — 형상 확보",
     "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 4/14개가 표시 선형 밖(최대 0.6km, 검단역, 신림역, 가산디지털단지역). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
+    "geom_cover_note": "정거장 4/14개가 표시 선형 밖(최대 593m). 그중 3개는 **역 좌표가 근사**(지물·동 대표점)라 생긴 차이다 — 선형이 아니라 역 좌표를 정밀화해야 한다(§2b 고시 조서 지번)",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
@@ -193430,7 +193436,7 @@
     "geom_adequacy": "traced",
     "geom_adequacy_note": "공식 노선도 좌표변환 — 형상 확보",
     "geom_partial": true,
-    "geom_cover_note": "선형 일부 구간만 확보 — 정거장 4/13개가 표시 선형 밖(최대 1.3km, 삼성역, 금정역, 광운대역). 출처 선형(OSM)이 착공 구간 위주라 전 구간이 아님",
+    "geom_cover_note": "정거장 4/13개가 표시 선형 밖(최대 1,343m). 그중 3개는 **역 좌표가 근사**(지물·동 대표점)라 생긴 차이다 — 선형이 아니라 역 좌표를 정밀화해야 한다(§2b 고시 조서 지번)",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
