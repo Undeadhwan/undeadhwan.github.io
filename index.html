@@ -879,6 +879,14 @@ const GEO_PREC = {
   unknown:     { t: "근거 미기록(근사)", d: "좌표 출처가 기록되지 않음 — 근사로 취급" },
   none:        { t: "좌표 없음", d: "위치 미확보 — 지도에 정식 핀으로 표시하지 않음" },
 };
+/* 후광(= "이 근처") 판정은 **정밀도 등급에서 도출**한다 — 플래그 하나에 기대지 않는다 (2026-07-31).
+   실측: 철도 역 193건이 `landmark`(~200m 근사)인데 생산 쪽에서 geo_approx를 안 붙여
+   **정확한 핀처럼** 떠 있었다(그 밖 29건도 동일 — arch parcel_base 24 등).
+   사용자 확정: "정확하지 않으면 후광 넣고 표시해. 그러려고 후광을 도입한 거잖아."
+   → 근사 등급이면 플래그가 없어도 후광. 생산 쪽 누락이 화면의 거짓말이 되지 않게 한 곳에서 막는다. */
+const ROUGH_PREC = new Set(["dong", "sgg", "zone_poi", "zone_wide", "unknown",
+                            "parcel_base", "feature_wide", "landmark", "none"]);
+const isApprox = s => !!(s.geo_approx || s.approx) || ROUGH_PREC.has(s.geo_prec);
 function precNote(s) {
   const v = GEO_PREC[s.geo_prec];
   // 필드명은 geo_approx다. 종전엔 s.approx를 보고 있어 등급표에 없는 값이 "확정 좌표"로 나왔다.
@@ -3328,15 +3336,15 @@ function initKakao() {
       }
       const s = g[0];
       const t = hjStyle(s);
-      const key = t.col + "|" + t.r + "|" + t.bw + "|" + t.solid + "|" + t.fillOp + "|" + t.alpha + "|" + (s.geo_approx ? 1 : 0);
+      const key = t.col + "|" + t.r + "|" + t.bw + "|" + t.solid + "|" + t.fillOp + "|" + t.alpha + "|" + (isApprox(s) ? 1 : 0);
       if (!s._kmk) {
         const [x, y] = s.geometry.coordinates;
-        const mk = new K.Marker({ position: LL(x, y), image: hojaeMarkerImage(t.col, t.r, t.bw, t.solid, t.fillOp, t.alpha, s.geo_approx), zIndex: 10 });
+        const mk = new K.Marker({ position: LL(x, y), image: hojaeMarkerImage(t.col, t.r, t.bw, t.solid, t.fillOp, t.alpha, isApprox(s)), zIndex: 10 });
         K.event.addListener(mk, "mouseover", () => { const q = toPt(x, y); const rc = mapEl.getBoundingClientRect(); showTip(hjHtml(s), { clientX: rc.left + q.x, clientY: rc.top + q.y }); });
         K.event.addListener(mk, "mouseout", hideTip);
         K.event.addListener(mk, "click", () => { hideTip(); showSignal(s, false); });
         s._kmk = mk; s._kmkKey = key;
-      } else if (s._kmkKey !== key) { s._kmk.setImage(hojaeMarkerImage(t.col, t.r, t.bw, t.solid, t.fillOp, t.alpha, s.geo_approx)); s._kmkKey = key; }
+      } else if (s._kmkKey !== key) { s._kmk.setImage(hojaeMarkerImage(t.col, t.r, t.bw, t.solid, t.fillOp, t.alpha, isApprox(s))); s._kmkKey = key; }
       s._kmk.setMap(map); next.add(s); hjShown.delete(s); }
     hjShown.forEach(s => s._kmk && s._kmk.setMap(null));   // 이번에 빠진 개별 마커 끔
     hjShown = next;
@@ -3864,7 +3872,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260731p");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260731q");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4026,7 +4034,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731p"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731q"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4052,7 +4060,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260731p");
+  const CB = "?b=" + (window.BUILD || "20260731q");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
