@@ -1489,7 +1489,12 @@ function _staleFin(stage, phase, status, dstr) {
 }
 function isStaleFinished(s) {
   const h = s.stage_history;
-  const dstr = s.last_movement || (h && h.length ? h[h.length - 1].date : null) || s.date || null;
+  /* 완료일 근거가 소스에 없는 준공은 **날짜를 주장하지 않는다**(2026-07-31).
+     생산 쪽(lifecycle)이 last_movement를 비웠는데 여기서 stage_history로 폴백하면
+     '우리가 본 날'을 완료일로 되물어와, 몇 년 전 준공한 재개발이 영원히 '이번 주 움직임'이 된다
+     — 정비 준공 261건이 그 상태였다. 미상이면 미상으로 넘겨 _staleFin의 기존 규칙에 맡긴다. */
+  const dstr = s.fin_date_unknown ? null
+             : (s.last_movement || (h && h.length ? h[h.length - 1].date : null) || s.date || null);
   return _staleFin(s.current_stage, phaseOf(s), s.status, dstr);
 }
 /* 분류 게이트 (2026-07-23 재설계 — 사용자: "대분류 토글은 전체선택/해제 개념").
@@ -3888,7 +3893,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260731v");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260731w");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4050,7 +4055,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731v"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731w"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4076,7 +4081,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260731v");
+  const CB = "?b=" + (window.BUILD || "20260731w");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
