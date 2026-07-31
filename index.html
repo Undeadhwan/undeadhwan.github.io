@@ -886,7 +886,8 @@ const GEO_PREC = {
    사용자 확정: "정확하지 않으면 후광 넣고 표시해. 그러려고 후광을 도입한 거잖아."
    → 근사 등급이면 플래그가 없어도 후광. 생산 쪽 누락이 화면의 거짓말이 되지 않게 한 곳에서 막는다. */
 const ROUGH_PREC = new Set(["dong", "sgg", "zone_poi", "zone_wide", "unknown",
-                            "parcel_base", "feature_wide", "landmark", "notice_cluster", "none"]);
+                            "parcel_base", "feature_wide", "landmark", "notice_cluster",
+                            "notice_map", "jigu", "zone", "none"]);
 const isApprox = s => !!(s.geo_approx || s.approx) || ROUGH_PREC.has(s.geo_prec);
 function precNote(s) {
   const v = GEO_PREC[s.geo_prec];
@@ -3887,7 +3888,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260731t");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260731u");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4049,7 +4050,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731t"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731u"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4075,7 +4076,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260731t");
+  const CB = "?b=" + (window.BUILD || "20260731u");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
