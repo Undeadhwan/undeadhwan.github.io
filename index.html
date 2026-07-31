@@ -290,6 +290,11 @@
              width:min(460px,92vw); max-height:86vh; overflow-y:auto; box-shadow:0 12px 48px rgba(0,0,0,.28); padding:18px 20px; }
   .rmhead { display:flex; justify-content:space-between; align-items:center; font-size:15px; margin-bottom:6px; }
   .rmnote { font-size:11.5px; color:var(--muted); margin-bottom:14px; line-height:1.5; }
+  /* 비교 정렬 — 목록 모드의 정렬 컨트롤과 같은 문법(DESIGN.md §3) */
+  .cmpsort { margin-left:auto; margin-right:12px; font-size:var(--fs-s); color:var(--ink2); display:flex; align-items:center; gap:6px; }
+  .cmpsort select { font-size:var(--fs-s); padding:5px 7px; border:1px solid var(--line); border-radius:var(--r-s); background:#fff; color:var(--ink); }
+  /* 거리순일 때 행마다 붙는 등급 — 구분선을 못 쓰므로 등급 사실이 사라지지 않게 한다 */
+  .gmini { font-size:10px; font-weight:700; color:var(--gc); border:1px solid var(--gc); border-radius:4px; padding:0 4px; margin-right:5px; white-space:nowrap; }
   .rmcat { font-size:12px; font-weight:800; color:#2e5ce6; margin:14px 0 6px; }
   .rmsub { font-size:11.5px; font-weight:700; color:#5a6478; margin:8px 0 3px 2px; }
   .rmrow { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:7px 0; border-bottom:1px solid var(--line); }
@@ -613,7 +618,17 @@
 <div id="cmpModal" style="display:none;">
   <div class="rmbackdrop" onclick="closeCompare()"></div>
   <div class="rmpanel">
-    <div class="rmhead"><b>아파트 비교 — 호재 신호 기준</b><span class="closex" onclick="closeCompare()">✕</span></div>
+    <div class="rmhead"><b>아파트 비교 — 호재 신호 기준</b>
+      <!-- 나열 순서는 사실의 배열일 뿐이다(점수·순위 아님, §7·P3). 데이터가 받쳐주는 두 축만 둔다:
+           등급(규모 분류)과 거리(측정값). '완료 임박순'은 target_completion 보유가 전 신호 중 1건뿐이라
+           만들지 않았다 — 축을 늘리기 전에 수율부터 센다. -->
+      <label class="cmpsort">정렬
+        <select id="cmp-sort" onchange="renderCompareBody()">
+          <option value="level">등급순</option>
+          <option value="dist">거리순</option>
+        </select>
+      </label>
+      <span class="closex" onclick="closeCompare()">✕</span></div>
     <div class="rmnote">단지를 <b>가격·등급으로 줄 세우지 않습니다</b>(P4/§7). 각 단지 반경 내 <b>호재 신호의 개수·분류·최근접 거리·단계</b>만 사실로 나열합니다. 해석은 사용자 몫.</div>
     <div id="cmpBody" style="overflow-x:auto;"></div>
   </div>
@@ -2084,22 +2099,31 @@ const esc = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(
 /* 비교 컬럼 1개 — 등급 구분선 아래 호재를 **전부 펼쳐** 나열한다(2026-07-30).
    종전 표는 개수 칸에 커서를 올려야 구성 호재를 볼 수 있었고(터치 기기는 불가) 칸마다 hover가 필요했다.
    컬럼은 등가 — 순위·점수·승자 없음(§4.5·P3). */
+function cmpSortMode() {
+  const el = document.getElementById("cmp-sort");
+  return el ? el.value : "level";
+}
 function cmpColumn(a) {
   const dist = d => d < 1000 ? Math.round(d) + "m" : (d / 1000).toFixed(1) + "km";
   const near = signalsNearPoint([a.lon, a.lat], true);   // 비교는 조회조건과 무관(2026-07-29 확정)
   const GO = { S: 0, A: 1, B: 2, C: 3, "미정": 4 };
+  const byDist = cmpSortMode() === "dist";
   const rows = near.map(({ s, dist: d }) => ({ s, d, g: levelOf(s) }))
-    .sort((x, y) => GO[x.g] - GO[y.g] || x.d - y.d);
+    .sort(byDist ? ((x, y) => x.d - y.d) : ((x, y) => GO[x.g] - GO[y.g] || x.d - y.d));
   const sig = (r, warn) => {
     const p = phaseOf(r.s), dash = p === "계획" || p === "인가";
+    // 거리순에서는 등급 구분선이 못 쓰이므로(등급이 뒤섞인다) 등급을 **행마다** 붙인다 —
+    // 어느 축으로 보든 등급·거리·단계 세 사실이 다 보여야 한다.
+    const gtag = byDist && r.g
+      ? `<span class="gmini" style="--gc:${LVL_COLOR[r.g]}">${r.g === "미정" ? "미판정" : r.g}</span>` : "";
     return `<div class="csig${warn ? " warn" : ""}"><span class="d" style="background:${warn ? "var(--warn)" : CAT_COLOR[catOf(r.s)] || "#999"}"></span>
       <span class="ttl" title="${esc(r.s.title || "")}">${warn ? "⚠ " : ""}${esc(r.s.title || "")}</span>
-      <span class="meta"><span class="dst">${dist(r.d)}</span><span class="ph${dash ? " dash" : ""}">${phaseLabel(p)}</span></span></div>`;
+      <span class="meta">${gtag}<span class="dst">${dist(r.d)}</span><span class="ph${dash ? " dash" : ""}">${phaseLabel(p)}</span></span></div>`;
   };
   let out = "", g = null;
   rows.filter(r => r.s.status !== "정체").forEach(r => {
     // 등급 이름은 도크 범례와 같은 어휘로(기준 일원화) — 도크가 "미판정"이면 여기도 미판정
-    if (r.g !== g) { g = r.g; out += `<div class="gsep" style="--gc:${LVL_COLOR[g]}"><i></i>${g === "미정" ? "미판정" : (LEVEL_NAME[g] || g)}</div>`; }
+    if (!byDist && r.g !== g) { g = r.g; out += `<div class="gsep" style="--gc:${LVL_COLOR[g]}"><i></i>${g === "미정" ? "미판정" : (LEVEL_NAME[g] || g)}</div>`; }
     out += sig(r, false);
   });
   // 참고 = 정직성 표기(P5): 정체 신호와 역효과 시설. 숨기지 않고 구분해서 보여준다.
@@ -2127,6 +2151,12 @@ function cmpColumn(a) {
 }
 function openCompare() {
   if (compareSet.length < 2) return;
+  renderCompareBody();
+  document.getElementById("cmpModal").style.display = "block";
+}
+/* 정렬만 바꿔 다시 그린다(모달을 닫았다 열지 않는다) */
+function renderCompareBody() {
+  if (compareSet.length < 2) return;
   const body = `
     <div class="cmpg" style="grid-template-columns:repeat(${compareSet.length},minmax(236px,1fr))">
       ${compareSet.map(cmpColumn).join("")}
@@ -2134,7 +2164,6 @@ function openCompare() {
     <div class="cmpnote">· 반경 내 호재의 <b>개수·거리·단계 사실만</b> 나열합니다 — 가중치 합산·순위·추천·'수혜' 판단 없음(§7·P1·P3). 세대수는 단지 식별 표기일 뿐 비교 축이 아닙니다.<br>
       · 거리는 단지 좌표(도로 수준 근사) 기준. 참고 = 정체 신호 · 역효과 시설(${ADVERSE_RKM}km 내 환경기초시설 결정·미완공) — 존재·거리 사실만, 영향 판단 아님(P5).</div>`;
   document.getElementById("cmpBody").innerHTML = body;
-  document.getElementById("cmpModal").style.display = "block";
 }
 function closeCompare() { document.getElementById("cmpModal").style.display = "none"; }
 
@@ -3813,7 +3842,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260731f");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260731g");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -3975,7 +4004,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731f"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731g"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4001,7 +4030,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260731f");
+  const CB = "?b=" + (window.BUILD || "20260731g");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
