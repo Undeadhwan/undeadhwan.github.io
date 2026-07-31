@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>호재 기준 설정 — 호재맵</title>
 <style>
-  :root { --line:#e6e9f0; --muted:#6b7488; --bg:#f7f8fb; --ink:#1a2233; --accent:#2e5ce6;
+  :root { --line:#e6e9f0; --muted:#6b7488; --bg:#f7f8fb; --ink:#1a2233; --accent:#2563eb;
           --S:#b8860b; --A:#e0342b; --B:#e08a1e; --C:#3c8f4a; }
   * { box-sizing:border-box; }
   body { margin:0; font:14px/1.6 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif;
@@ -121,7 +121,7 @@
 </dialog>
 
 <script>
-const COLOR = { "교통":"#2e5ce6", "일자리":"#e07b1e", "인프라":"#1f9e6e", "주거개발":"#8b5cf6" };
+const COLOR = { "교통":"#e07a15", "일자리":"#2563eb", "인프라":"#63308a", "주거개발":"#12a06b" };   // DESIGN.md §2 분류색과 1:1 (2026-07-31 재배치)
 const LEVELS = ["S","A","B","C"];   // S등급 신설(2026-07-22 — 1조/30만㎡/1만세대·교통 위계)
 let CFG = null, ORIG = null;
 

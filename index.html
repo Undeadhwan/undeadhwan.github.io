@@ -8,10 +8,10 @@
 <style>
   :root {
     --ink:#1c1c1e; --muted:#8e8e93; --line:#e5e5ea; --bg:#fff;
-    --navy:#12263f; --stall:#b8860b; --accent:#0a66c2;
+    --navy:#12263f; --stall:#b8860b; --accent:#2563eb;   /* 액센트(링크·활성) — 일자리 파랑과 같은 값을 공유한다 */
     /* ── DESIGN.md §2 캐노니컬 토큰 (SSOT — 새 색·크기 임의 추가 금지) ── */
     --ink2:#6b7280; --ink3:#9ca3af; --line2:#d1d5db; --panel:#fafafa;
-    --c-traffic:#2e5ce6; --c-job:#e0761e; --c-infra:#2e8b57; --c-house:#c2255c;
+    --c-traffic:#e07a15; --c-job:#2563eb; --c-infra:#63308a; --c-house:#12a06b;
     --warn:#b45309;
     /* 글자 크기 = 네이버 부동산 수준(2026-07-30 사용자 지시 "텍스트 크기가 좀 더 컸으면") */
     --r:10px; --r-s:7px; --fs:14.5px; --fs-s:12.5px;
@@ -27,7 +27,7 @@
   .srch .srchicon { position:absolute; left:11px; top:50%; transform:translateY(-50%); font-size:12px; opacity:.55; pointer-events:none; }
   .srch input { width:280px; font-size:14.5px; padding:9px 12px 9px 32px; border:1.5px solid #e3e6ec; border-radius:999px;
                 background:#fff; outline:none; transition:border-color .12s, box-shadow .12s; }
-  .srch input:focus { border-color:#2e5ce6; box-shadow:0 0 0 3px rgba(46,92,230,.12); }
+  .srch input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(37,99,235,.12); }
   .srchpanel { position:absolute; top:calc(100% + 6px); left:0; z-index:1500; background:#fff; border:1px solid #eceef2;
                border-radius:14px; box-shadow:0 10px 34px rgba(0,0,0,.16); width:360px; max-height:440px; overflow-y:auto;
                padding:6px; display:none; }
@@ -104,12 +104,12 @@
   #listv .lloc { color:var(--ink2); }
   .regionbar { display:flex; gap:7px; align-items:center; flex-wrap:wrap; }
   .regionbar select { font-size:14.5px; font-weight:600; padding:8px 11px; border:1px solid #d9dee8; border-radius:9px; background:#fff; color:#1a2233; cursor:pointer; min-width:94px; }
-  .regionbar select:focus { outline:none; border-color:#2e5ce6; }
+  .regionbar select:focus { outline:none; border-color:var(--accent); }
   .regionbar select:disabled { color:#aab; background:#f6f7f9; cursor:default; }
   /* 아실식 브레드크럼 + 격자 선택 */
   .bc { display:flex; align-items:center; gap:4px; padding:14px 12px; font-size:14px; font-weight:700;
-        border-bottom:2px solid #2e5ce6; background:#f2f6ff; position:sticky; top:0; z-index:4; }
-  .bc span.seg { color:#2e5ce6; cursor:pointer; padding:2px 4px; border-radius:6px; }
+        border-bottom:2px solid var(--accent); background:#f2f6ff; position:sticky; top:0; z-index:4; }
+  .bc span.seg { color:var(--accent); cursor:pointer; padding:2px 4px; border-radius:6px; }
   .bc span.seg:not(.ph):hover { background:#e2ebff; }
   .bc span.seg.ph { color:#9aa3b2; font-weight:500; cursor:default; }
   .bc span.sep { color:#b9c4d8; margin:0 1px; font-weight:400; }
@@ -117,8 +117,8 @@
   .gcell { padding:15px 6px; border-bottom:1px solid var(--line); border-right:1px solid var(--line);
            cursor:pointer; font-size:14px; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .gcell:nth-child(2n) { border-right:none; }
-  .gcell:hover { background:#f2f6ff; color:#2e5ce6; }
-  .gcell.sel { background:#e2ebff; color:#2e5ce6; font-weight:800; }
+  .gcell:hover { background:#f2f6ff; color:var(--accent); }
+  .gcell.sel { background:#e2ebff; color:var(--accent); font-weight:800; }
   .gcell .gc { color:var(--muted); font-weight:500; font-size:11.5px; }
   .gnote { padding:12px; font-size:11.5px; color:var(--muted); }
   /* ── 선택 시 호재 등장 애니메이션 (빠른 속도) ── */
@@ -151,7 +151,7 @@
   .hj-box.apt.sel { border-color:#d6156d; box-shadow:0 0 0 2px rgba(214,21,109,.32), 0 2px 8px rgba(30,45,90,.25); }
   .dong-lbl { font-size:11.5px; font-weight:700; color:#3a4358; text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff;
     white-space:nowrap; cursor:pointer; transform:translate(-50%,-50%); }
-  .dong-lbl:hover { color:#2e5ce6; text-decoration:underline; }
+  .dong-lbl:hover { color:var(--accent); text-decoration:underline; }
   .apt-house-s { font-size:16px; line-height:1; cursor:pointer; transform:translate(-50%,-50%);
     filter:drop-shadow(0 1px 2px rgba(0,0,0,.35)); }   /* 컬러 이모지 그대로(선명) — 호재 원과 형태로 구분 */
   .apt-house-s:hover { font-size:18px; }
@@ -295,7 +295,7 @@
   .cmpsort select { font-size:var(--fs-s); padding:5px 7px; border:1px solid var(--line); border-radius:var(--r-s); background:#fff; color:var(--ink); }
   /* 거리순일 때 행마다 붙는 등급 — 구분선을 못 쓰므로 등급 사실이 사라지지 않게 한다 */
   .gmini { font-size:10px; font-weight:700; color:var(--gc); border:1px solid var(--gc); border-radius:4px; padding:0 4px; margin-right:5px; white-space:nowrap; }
-  .rmcat { font-size:12px; font-weight:800; color:#2e5ce6; margin:14px 0 6px; }
+  .rmcat { font-size:12px; font-weight:800; color:var(--accent); margin:14px 0 6px; }
   .rmsub { font-size:11.5px; font-weight:700; color:#5a6478; margin:8px 0 3px 2px; }
   .rmrow { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:7px 0; border-bottom:1px solid var(--line); }
   .rmrow .rlabel { font-size:13px; }
@@ -322,7 +322,7 @@
   .card { border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:10px; cursor:pointer; }
   .card:hover { border-color:#b0b0b6; }
   .card .tags { font-size:11px; color:var(--muted); margin-bottom:4px; }
-  .gbasis { color:#e0761e; font-weight:600; }
+  .gbasis { color:var(--ink2); font-weight:600; }   /* 등급 근거 수치 = 사실 표기라 무채색(분류색 아님) */
   .gbasis.undet { color:#a08a5a; font-weight:600; font-style:italic; }
   .card .title { font-size:14px; font-weight:600; margin-bottom:5px; }
   .card .stage { font-size:12px; }
@@ -341,7 +341,7 @@
   .stchip { font-size:11px; padding:2px 8px; border-radius:20px; border:1px solid #c7d2ea; background:#fff;
             color:#2545a8; cursor:pointer; white-space:nowrap; }
   .stchip:hover { background:#e9eefb; }
-  .stchip.on { background:#2e5ce6; color:#fff; border-color:#2e5ce6; font-weight:700; }
+  .stchip.on { background:var(--accent); color:#fff; border-color:var(--accent); font-weight:700; }
   .nextwatch { margin:2px 0 8px; font-size:12px; color:#444; background:#fffbea; border:1px solid #efe3ae;
                border-radius:8px; padding:5px 10px; display:inline-block; }
   .msrow.future .msdot { border-color:#c4c9d4; }
@@ -403,14 +403,14 @@
   .leaflet-popup.apt-pop-wrap .leaflet-popup-content-wrapper { background:transparent; box-shadow:none; padding:0; }
   .leaflet-popup.apt-pop-wrap .leaflet-popup-content { margin:0; width:auto !important; }
   .leaflet-popup.apt-pop-wrap .leaflet-popup-tip-container, .leaflet-popup.apt-pop-wrap .leaflet-popup-tip { display:none; }
-  .leaflet-tooltip.rail-stlbl { background:rgba(255,255,255,.92); border:1px solid #2e5ce6; color:#1a2b6b;
+  .leaflet-tooltip.rail-stlbl { background:rgba(255,255,255,.92); border:1px solid var(--c-traffic); color:var(--ink);
     font-size:11px; font-weight:700; padding:1px 5px; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,.18); white-space:nowrap; }
   .leaflet-tooltip.rail-stlbl::before { display:none; }
   .leaflet-tooltip.rail-hover { background:#fff; border:1px solid var(--line); border-radius:8px; padding:3px 8px;
     font-size:12px; box-shadow:0 2px 8px rgba(0,0,0,.18); white-space:nowrap; }   /* 역·IC hover — 가장자리 세로붕괴 방지 */
   .leaflet-tooltip.rail-hover::before { display:none; }
-  .rail-name { font-size:10.5px; font-weight:700; color:#1a2b6b; background:rgba(255,255,255,.92);
-    border:1px solid #2e5ce6; border-radius:8px; padding:1px 5px; white-space:nowrap;
+  .rail-name { font-size:10.5px; font-weight:700; color:var(--ink); background:rgba(255,255,255,.92);
+    border:1px solid var(--c-traffic); border-radius:8px; padding:1px 5px; white-space:nowrap;
     transform:translate(10px,-50%); box-shadow:0 1px 3px rgba(0,0,0,.18); }   /* z14+ 역명 라벨(원은 renderHojae) */
   /* 카카오 CustomOverlay 래퍼 div는 pe:auto가 기본이라 역명 라벨이 그 아래 호재원 마커의 호버를 가로챈다
      (가정역 실측: 중심/라벨 위 배지 안 뜸). 내부 .rail-name은 pe:none인데 래퍼는 아니므로 래퍼도 통과시킨다. */
@@ -439,7 +439,7 @@
   .fs-grid span { color:var(--muted); } .fs-grid b { color:var(--ink); }
   /* 레이더 파동 (크게) */
   .radar { position:relative; width:0; height:0; pointer-events:none; }
-  .radar span { position:absolute; border:3px solid #2e5ce6; border-radius:50%; left:0; top:0; transform:translate(-50%,-50%);
+  .radar span { position:absolute; border:3px solid var(--accent); border-radius:50%; left:0; top:0; transform:translate(-50%,-50%);
     width:0; height:0; opacity:.7; animation:radarPulse 2.2s ease-out forwards; box-shadow:0 0 12px rgba(46,92,230,.4); }
   .radar span:nth-child(2){ animation-delay:.45s; } .radar span:nth-child(3){ animation-delay:.9s; }
   @keyframes radarPulse { 0%{width:0;height:0;opacity:.7;} 100%{width:560px;height:560px;opacity:0;} }
@@ -497,9 +497,9 @@
   .hj-legend .sec > b { display:block; font-size:9.5px; color:#7a8090; font-weight:700; margin-bottom:3px; letter-spacing:.3px; }
   .hj-legend .row { display:flex; align-items:center; gap:6px; white-space:nowrap; color:#333; }
   .hj-legend .dot { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
-  .hj-legend .ln { width:22px; height:0; flex-shrink:0; border-top-width:2.5px; border-top-color:#2e5ce6; }
+  .hj-legend .ln { width:22px; height:0; flex-shrink:0; border-top-width:2.5px; border-top-color:var(--ink2); }
   .hj-legend .sz { display:flex; align-items:center; gap:4px; }
-  .hj-legend .sz i { border-radius:50%; background:#2e5ce6; display:inline-block; }
+  .hj-legend .sz i { border-radius:50%; background:var(--ink2); display:inline-block; }
   .hj-legend .hnote { margin-top:6px; padding-top:5px; border-top:1px solid var(--line); color:#8a90a0; font-size:9.5px; line-height:1.4; }
   .hj-legend.collapsed .sec, .hj-legend.collapsed .hnote { display:none; }
   @media (max-width: 768px) { .hj-legend { max-width:158px; font-size:10.5px; padding:7px 8px 8px; } }
@@ -825,11 +825,13 @@ const LEVEL_DESC = {
   },
   "주거개발": { S: "신도시·재정비 마스터급 (1만 세대↑ — 3기 신도시·1기 재정비)", A: "도시급 대형 (5천 세대↑)", B: "지역 대장주급 (1,500~5천 세대)", C: "일반 단지급 (500~1,500 세대)" }
 };
-// 주거개발 = 마젠타(#c2255c) — 종전 레드(#c4392f)가 일자리 오렌지와 원 크기에서 구분 안 됨(사용자 지적 2026-07-17)
-const CAT_COLOR = { "교통": "#2e5ce6", "일자리": "#e0761e", "인프라": "#2e8b57", "주거개발": "#c2255c", "기타": "#6e6e73" };
+// 분류색 재배치(2026-07-31 사용자 확정) — 의미 연관: 교통=주황(속도·활기·연결) · 일자리=파랑(전문성·신뢰)
+// · 인프라=보라(도시 기초·안정·세련) · 주거개발=초록(자연·가정·성장). 값은 DESIGN.md §2 토큰과 1:1.
+// 종전 배치(교통 파랑/인프라 초록/주거개발 자주)는 적록색약에서 인프라↔주거개발 색차 ΔE 2.6(=같은 색)이었다 → 현재 최소 33.4.
+const CAT_COLOR = { "교통": "#e07a15", "일자리": "#2563eb", "인프라": "#63308a", "주거개발": "#12a06b", "기타": "#6e6e73" };
 /* 레벨 pill: 분류색 강도로 등급화 (A=진한 채움/B=중간 채움/C=연한). A급이 확 띔 */
-const CAT_TINT = { "교통": ["#e7ecfc", "#1c3aa8"], "일자리": ["#fbebdb", "#8a4a12"], "인프라": ["#e2f1e8", "#1d6b40"], "주거개발": ["#f9e0ec", "#8f1e4c"], "기타": ["#ececf0", "#55555a"] };
-const CAT_MID = { "교통": "#6f8cec", "일자리": "#e79f5a", "인프라": "#5aab84", "주거개발": "#d56a9a", "기타": "#a2a7b5" };
+const CAT_TINT = { "교통": ["#fee7d7", "#773b00"], "일자리": ["#eae9fe", "#0044ad"], "인프라": ["#f4e6fc", "#56247d"], "주거개발": ["#d9f1e3", "#005737"], "기타": ["#ececf0", "#55555a"] };
+const CAT_MID = { "교통": "#f29d58", "일자리": "#7f8df9", "인프라": "#875ea3", "주거개발": "#6cc197", "기타": "#a2a7b5" };
 function lvStyle(cat, lvl) {
   const base = CAT_COLOR[cat] || "#6e6e73", tint = CAT_TINT[cat] || CAT_TINT["기타"], mid = CAT_MID[cat] || "#a2a7b5";
   if (lvl === "S" || lvl === "A") return `background:${base};color:#fff;`;   // S=분류색 채움(A와 동급 강조 — 등급 구분은 LVL_STYLE 배지가 담당)
@@ -1019,7 +1021,7 @@ function gradeBasisHtml(s) {
     return "";
   }
   if (c === "주거개발")
-    return s.hh ? `<span class="gbasis" style="color:#c2255c">${Number(s.hh).toLocaleString()}세대</span> · `
+    return s.hh ? `<span class="gbasis" style="color:var(--c-house)">${Number(s.hh).toLocaleString()}세대</span> · `
                 : `<span class="gbasis undet">세대수 미상</span> · `;
   return "";
 }
@@ -3153,7 +3155,7 @@ function initLeaflet() {
   const showAptAnchor = a => {
     if (aptMarker) map.removeLayer(aptMarker);
     aptMarker = L.marker([a.lat, a.lon], { pane: "sig",
-      icon: L.divIcon({ className: "", html: `<div class="dong-badge" style="border-color:#c2255c;color:#c2255c">◎ ${a.n}</div>`, iconSize: null }) }).addTo(map);
+      icon: L.divIcon({ className: "", html: `<div class="dong-badge" style="border-color:var(--c-house);color:var(--c-house)">◎ ${a.n}</div>`, iconSize: null }) }).addTo(map);
     clearRadius(); clearHighlight();   // 앵커 마커만
   };
    // 선택 표시(분홍 아이콘)도 함께 푼다 — 상세를 닫으면 **아파트 선택 자체가 풀려야** 한다
@@ -3595,7 +3597,7 @@ function initKakao() {
       const elx = document.createElement("div"); elx.style.cssText = "width:18px;height:18px;border-radius:50%;border:3.5px solid #fff;box-shadow:0 0 0 1.5px " + col + ";pointer-events:none"; routeHl.push(new K.CustomOverlay({ map, position: LL(x, y), content: elx, zIndex: 23, yAnchor: .5, xAnchor: .5 })); }
     if (fit && !bounds.isEmpty()) { try { map.setBounds(bounds); } catch (e) {} } };
   let aptMarker = null;
-  const showAptAnchor = a => { if (aptMarker) aptMarker.setMap(null); const elx = document.createElement("div"); elx.className = "dong-badge"; elx.style.cssText = "border-color:#c2255c;color:#c2255c"; elx.textContent = "◎ " + a.n;
+  const showAptAnchor = a => { if (aptMarker) aptMarker.setMap(null); const elx = document.createElement("div"); elx.className = "dong-badge"; elx.style.cssText = "border-color:var(--c-house);color:var(--c-house)"; elx.textContent = "◎ " + a.n;
     aptMarker = new K.CustomOverlay({ map, position: LL(a.lon, a.lat), content: elx, zIndex: 24, yAnchor: .5, xAnchor: .5 }); clearRadius(); };
    // 선택 표시(분홍 아이콘)도 함께 푼다 — 상세를 닫으면 **아파트 선택 자체가 풀려야** 한다
   //   (2026-07-31 사용자). 종전엔 treeState.selKey만 비우고 아이콘은 다음 지도 이동 때까지 남았다.
@@ -3771,7 +3773,7 @@ const srchNorm = s => (s || "").toLowerCase().replace(/\s+/g, "");
 function srchHi(name, qRaw) {
   const i = name.toLowerCase().indexOf(qRaw.toLowerCase());
   if (i < 0) return name;   // 공백 무시 매칭 등으로 원문에 없으면 강조 생략
-  return name.slice(0, i) + `<b style="color:#2e5ce6">` + name.slice(i, i + qRaw.length) + "</b>" + name.slice(i + qRaw.length);
+  return name.slice(0, i) + `<b style="color:var(--accent)">` + name.slice(i, i + qRaw.length) + "</b>" + name.slice(i + qRaw.length);
 }
 function srchResults(qRaw) {
   const q = srchNorm(qRaw);
@@ -3862,7 +3864,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260731j");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260731k");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4024,7 +4026,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731j"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731k"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4050,7 +4052,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260731j");
+  const CB = "?b=" + (window.BUILD || "20260731k");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
