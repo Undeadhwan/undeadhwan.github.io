@@ -11,7 +11,7 @@
     --navy:#12263f; --stall:#b8860b; --accent:#2563eb;   /* 액센트(링크·활성) — 일자리 파랑과 같은 값을 공유한다 */
     /* ── DESIGN.md §2 캐노니컬 토큰 (SSOT — 새 색·크기 임의 추가 금지) ── */
     --ink2:#6b7280; --ink3:#9ca3af; --line2:#d1d5db; --panel:#fafafa;
-    --c-traffic:#c1121f; --c-job:#2563eb; --c-infra:#63308a; --c-house:#12a06b;
+    --c-traffic:#c1121f; --c-job:#2563eb; --c-infra:#63308a; --c-house:#0e8a5c;
     --warn:#b45309;
     /* 글자 크기 = 네이버 부동산 수준(2026-07-30 사용자 지시 "텍스트 크기가 좀 더 컸으면") */
     --r:10px; --r-s:7px; --fs:14.5px; --fs-s:12.5px;
@@ -828,10 +828,10 @@ const LEVEL_DESC = {
 // 분류색 재배치(2026-07-31 사용자 확정) — 의미 연관: 교통=주황(속도·활기·연결) · 일자리=파랑(전문성·신뢰)
 // · 인프라=보라(도시 기초·안정·세련) · 주거개발=초록(자연·가정·성장). 값은 DESIGN.md §2 토큰과 1:1.
 // 종전 배치(교통 파랑/인프라 초록/주거개발 자주)는 적록색약에서 인프라↔주거개발 색차 ΔE 2.6(=같은 색)이었다 → 현재 최소 33.4.
-const CAT_COLOR = { "교통": "#c1121f", "일자리": "#2563eb", "인프라": "#63308a", "주거개발": "#12a06b", "기타": "#6e6e73" };
+const CAT_COLOR = { "교통": "#c1121f", "일자리": "#2563eb", "인프라": "#63308a", "주거개발": "#0e8a5c", "기타": "#6e6e73" };
 /* 레벨 pill: 분류색 강도로 등급화 (A=진한 채움/B=중간 채움/C=연한). A급이 확 띔 */
-const CAT_TINT = { "교통": ["#fde6e2", "#9c0014"], "일자리": ["#eae9fe", "#0044ad"], "인프라": ["#f4e6fc", "#56247d"], "주거개발": ["#d9f1e3", "#005737"], "기타": ["#ececf0", "#55555a"] };
-const CAT_MID = { "교통": "#de6254", "일자리": "#7f8df9", "인프라": "#875ea3", "주거개발": "#6cc197", "기타": "#a2a7b5" };
+const CAT_TINT = { "교통": ["#fde6e2", "#9c0014"], "일자리": ["#eae9fe", "#0044ad"], "인프라": ["#f4e6fc", "#56247d"], "주거개발": ["#dbf0e4", "#015738"], "기타": ["#ececf0", "#55555a"] };
+const CAT_MID = { "교통": "#de6254", "일자리": "#7f8df9", "인프라": "#875ea3", "주거개발": "#67b18c", "기타": "#a2a7b5" };
 function lvStyle(cat, lvl) {
   const base = CAT_COLOR[cat] || "#6e6e73", tint = CAT_TINT[cat] || CAT_TINT["기타"], mid = CAT_MID[cat] || "#a2a7b5";
   if (lvl === "S" || lvl === "A") return `background:${base};color:#fff;`;   // S=분류색 채움(A와 동급 강조 — 등급 구분은 LVL_STYLE 배지가 담당)
@@ -3215,9 +3215,15 @@ const _hjImg = {};
 function hojaeMarkerImage(col, r, bw, solid, fillOp, alpha, halo) {
   const key = col + "|" + r + "|" + bw + "|" + solid + "|" + fillOp + "|" + alpha + "|" + halo;
   if (_hjImg[key]) return _hjImg[key];
-  const cw = 1.6, ro = r + bw / 2 + cw / 2;              // 케이싱 반지름(색 테두리 바깥)
-  const size = Math.ceil((halo ? r + 7 : ro + cw) * 2), c = size / 2;
+  // 2026-07-31 문법 강화(사용자 "지도의 녹지·주황과 비슷해 인식성이 떨어진다"):
+  //   케이싱을 두껍게(1.6→2.2) 하고 그 **바깥에 어두운 헤어라인**을 한 겹 두른다.
+  //   색으로 배경을 이기는 데는 한계가 있다 — 카카오맵은 녹지·물·도로·지하철 9색으로 색상환을
+  //   거의 다 쓰므로, 4색을 아무리 잘 골라도 지도와의 색차는 ΔE 28쯤이 천장이다(실측).
+  //   반면 어두운 외곽선은 **배경이 무슨 색이든** 경계를 만든다 — 지도 마커의 표준 해법.
+  const cw = 2.2, ro = r + bw / 2 + cw / 2, ri = ro + cw / 2 + 0.35;   // 케이싱·바깥 헤어라인 반지름
+  const size = Math.ceil((halo ? r + 7 : ri + 1) * 2), c = size / 2;
   let inner = halo ? '<circle cx="' + c + '" cy="' + c + '" r="' + (r + 7) + '" fill="' + col + '" opacity="0.10"/>' : "";
+  inner += '<circle cx="' + c + '" cy="' + c + '" r="' + ri.toFixed(2) + '" fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="0.7"/>';
   inner += '<circle cx="' + c + '" cy="' + c + '" r="' + ro.toFixed(2) + '" fill="none" stroke="#fff" stroke-width="' + cw + '" opacity="0.95"/>';
   let dash = "";
   if (!solid) {   // 둘레를 짝수 등분 → 크기가 달라도 결이 같다
@@ -3226,8 +3232,8 @@ function hojaeMarkerImage(col, r, bw, solid, fillOp, alpha, halo) {
   }
   inner += '<circle cx="' + c + '" cy="' + c + '" r="' + r + '" fill="' + hexA(col, fillOp) + '" stroke="' + col + '" stroke-width="' + bw + '"' + dash + '/>';
   inner += solid
-    ? '<circle cx="' + c + '" cy="' + c + '" r="' + Math.max(1.6, r * 0.26).toFixed(1) + '" fill="' + col + '"/>'
-    : '<circle cx="' + c + '" cy="' + c + '" r="' + Math.max(1.4, r * 0.2).toFixed(1) + '" fill="#fff" stroke="' + col + '" stroke-width="1.2"/>';
+    ? '<circle cx="' + c + '" cy="' + c + '" r="' + Math.max(1.8, r * 0.30).toFixed(1) + '" fill="' + col + '"/>'
+    : '<circle cx="' + c + '" cy="' + c + '" r="' + Math.max(1.6, r * 0.24).toFixed(1) + '" fill="#fff" stroke="' + col + '" stroke-width="1.2"/>';
   const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '"><g opacity="' + alpha + '">' + inner + '</g></svg>';
   const img = new kakao.maps.MarkerImage("data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg),
     new kakao.maps.Size(size, size), { offset: new kakao.maps.Point(c, c) });
@@ -3284,7 +3290,8 @@ function initKakao() {
     // 두께·채움은 흰 케이싱 도입에 맞춰 낮췄다(2026-07-30) — 케이싱이 경계를 만들어 주므로
     // 굵은 테두리와 진한 채움이 없어도 또렷하고, 원이 겹칠 때 진흙색이 되지 않는다.
     return { col, lvl, solid, unk, r: unk ? HJR.C : (HJR[lvl] || 5), bw: !unk && (lvl === "S" || lvl === "A") ? 2 : 1.6,
-      alpha: s.status === "종결" ? .45 : unk ? .75 : .92, fillOp: unk ? .07 : solid ? .16 : .07 }; };
+      // 채움을 올린다(2026-07-31) — 연녹색 녹지 위에서 옅은 채움은 배경의 일부로 읽혔다.
+      alpha: s.status === "종결" ? .45 : unk ? .75 : .92, fillOp: unk ? .10 : solid ? .26 : .16 }; };
   const hjHtml = s => { const t = hjStyle(s);
     return '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + sigTitle(s) + '</div><div class="apt-pop-sub"><span style="color:' + t.col + ';font-weight:700">● ' + catOf(s) + '</span>' + subLabel(s) + ' · ' + lvlPill(t.lvl) + ' ' + gradeBasisHtml(s).replace(/ · $/, "") + '</div><div class="apt-pop-cats"><span>단계 ' + phaseOf(s) + (s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : "") + '</span></div></div>'; };
   const renderHojae = () => {
@@ -3872,7 +3879,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260731q");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260731r");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4034,7 +4041,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731q"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260731r"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4060,7 +4067,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260731q");
+  const CB = "?b=" + (window.BUILD || "20260731r");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
