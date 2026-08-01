@@ -3408,7 +3408,12 @@ function initKakao() {
       if (p.geom_omitted) continue;   // 근거 없는 직선은 그리지 않는다(2026-07-23 정직 표준) — 도로는 IC점/대표점으로 표현
       if (p.gate === "관찰") continue;   // 관찰 게이트 = 지도 기본 뷰 미표시(§0-1 — 절차 진입 전)
       const dashed = !["착공", "준공"].some(k => (p.phase || "").startsWith(k));   // 착공·준공=실선(범례 일치)
-      const subdued = isRoad && p.has_official_ic;
+      // 흐리게 그릴 대상은 **OSM 선형**뿐이다(§2b는 "공식 IC가 있으면 믿을 수 없는 OSM 선을 죽인다"는 뜻).
+      // ⚠ 2026-08-01 사용자 "광명서울 선형 안보이는뎨": 조건이 `has_official_ic`라서, OSM을 전면
+      //   폐기하고 **공식 고시 회랑·표준노드링크로 다시 그린 뒤에도** IC를 가진 노선은 전부 50%로
+      //   깔려 안 보였다. 실측 — 그려진 도로 24개 중 OSM 출처는 **0개**(표준노드링크 10·인접구간 8·
+      //   고시 세목 6)인데 전부 흐렸다. **소스가 바뀌었는데 그 소스를 전제로 만든 규칙이 남아 있었다.**
+      const subdued = isRoad && /OpenStreetMap/.test(String(p.geom_src || ""));
       const segs = f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates];
       const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + (isRoad ? "🛣" : "🚈") + " " + (p.full || p.name) + '</div><div class="apt-pop-sub">' + (p.linekind || "") + ' · <span style="color:' + col + '">' + p.status + '</span>' + (p.gate === "계획안" ? ' · <b style="color:#b3651e">계획(안) — 승인 전</b>' : "") + (p.approx ? " (근사 선형 — 공식 경유지 연결, 실선형 아님)" : dashed ? " (미확정 — 점선)" : "") + '</div>' + (p.gate === "계획안" ? '<div class="apt-pop-sub" style="color:#b3651e">노선·정거장 위치는 변경될 수 있습니다</div>' : "") + (p.geom_partial ? '<div class="apt-pop-sub" style="color:#b3651e">⚠ ' + (p.geom_cover_note || "선형 일부 구간만 확보") + '</div>' : "") + '<div class="apt-pop-cats"><span style="color:' + col + '">● 단계 ' + (p.phase || (p.confirmed ? "착공" : "계획")) + '</span>' + (p.note ? " · " + p.note : "") + (p.geom_src ? " · " + p.geom_src : p.src_name ? " · 출처: " + p.src_name : "") + '</div></div>';
       const clickHandler = () => { _ovClickTs = Date.now(); hideTip();
@@ -3904,7 +3909,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260801c");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260801d");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4066,7 +4071,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260801c"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260801d"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4092,7 +4097,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260801c");
+  const CB = "?b=" + (window.BUILD || "20260801d");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
