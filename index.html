@@ -519,7 +519,13 @@
   #dock .cat { border-top:1px solid var(--line); }
   #dock .cat-h { display:flex; align-items:center; gap:9px; padding:10px 14px; cursor:pointer; position:relative; }
   #dock .cat-h:hover { background:var(--panel); }
-  #dock .cat-h .chev { color:var(--ink3); font-size:9px; width:12px; flex-shrink:0; text-align:center; transition:transform .15s; }
+  /* 펼침 삼각형 — **글리프는 작게, 과녁은 크게** (2026-08-01 사용자 "너무 작아서 클릭이 어려워").
+     종전 12×글자높이(≈9px)는 손가락은 물론 마우스로도 빗나간다. 글자 크기는 11px로만 올리고
+     상하 여백(margin 상쇄 padding)으로 **28×30px 과녁**을 만든다 — 레이아웃은 그대로 두고
+     클릭 영역만 넓히는 방식(줄 높이가 늘면 목록 전체가 길어져 다른 것이 안 보인다). */
+  #dock .cat-h .chev { color:var(--ink3); font-size:11px; width:16px; padding:10px 6px; margin:-10px -6px;
+    flex-shrink:0; text-align:center; transition:transform .15s; border-radius:6px; }
+  #dock .cat-h .chev:hover { color:var(--ink); background:var(--line); }
   #dock .cat.open .cat-h .chev { transform:rotate(90deg); }
   #dock .cat-h .cd { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
   #dock .cat-h .nm { font-weight:600; font-size:15.5px; }
@@ -2518,8 +2524,12 @@ function renderDock() {
   const dock = document.getElementById("dock");
   if (!dock) return;
   const C = dockCounts();
-  // 표시 옵션(노선 선형) = 교통 대분류 안의 스위치. 필터(체크박스)와 문법을 다르게 둔다(DESIGN.md §3).
-  const CAT_OPTS = { "교통": [["철도선", "철도 선형"], ["도로선", "도로 선형"]] };
+  /* 표시 옵션(노선 선형) = **독립 블록**. 종전엔 교통 대분류 **안에** 있어서 세 가지가 불편했다
+     (2026-08-01 사용자): ① 교통을 펼쳐야 보인다(2클릭) ② 교통 전체 선택/해제를 눌러도 얘들은
+     안 따라간다(필터가 아니라 옵션이니 당연한데, 같은 자리에 있으니 고장으로 보인다)
+     ③ 교통을 끄면 스위치가 화면에서 사라진다.
+     **필터(무엇을 보나)와 옵션(어떻게 보나)은 자리부터 갈라 둔다** — DESIGN.md §3 원칙의 배치판. */
+  const LINE_OPTS = [["철도선", "철도 선형"], ["도로선", "도로 선형"]];
   const catBlock = cat => {
     const col = CAT_COLOR[cat], keys = SUB_KEYS[cat] || [];
     const on = keys.length ? keys.some(sk => filter.sub.has(subId(cat, sk))) : filter.cat.has(cat);   // 대분류 헤더 = 하위 중 하나라도 켜지면 on
@@ -2530,16 +2540,14 @@ function renderDock() {
       if (!n) return "";
       return `<div class="sub${on ? "" : " off"}" data-tog="sub" data-k="${id}">
         <span class="tick"></span><span class="nm">${sk === "철도" ? "철도 · 역" : sk === "미상" ? "유형 미상" : sk}</span><span class="n">${n}</span></div>`; }).join("");
-    const opts = (CAT_OPTS[cat] || []).map(([k, lb]) => `<div class="optrow${filter.lines.has(k) ? " on" : ""}" data-tog="lines" data-k="${k}">
-        <span>${lb}</span><i class="sw"></i></div>`).join("");
     return `<div class="cat${dockOpen.has(cat) ? " open" : ""}${on ? "" : " off"}">
       <div class="cat-h" data-tog="cat" data-k="${cat}">
-        <span class="chev" data-open="${cat}">▶</span>
+        <span class="chev" data-open="${cat}" title="${dockOpen.has(cat) ? "접기" : "펼치기"}">▶</span>
         <i class="cd" style="background:${col}"></i><span class="nm">${cat}</span>
         <button class="solo" data-solo="${cat}" title="이 분류만 남기고 나머지 끄기">only</button>
         <span class="cn">${(C.cat[cat] || 0).toLocaleString()}</span>
       </div>
-      <div class="subs">${subs}${opts ? `<div class="opts">${opts}</div>` : ""}</div>
+      <div class="subs">${subs}</div>
     </div>`;
   };
   const ph = (p, dash) => `<span class="s${filter.phase.has(p) ? "" : " off"}" data-tog="phase" data-k="${p}"><i class="${dash ? "dash" : ""}" style="width:8px;height:8px"></i>${phaseLabel(p)}</span>`;
@@ -2556,6 +2564,11 @@ function renderDock() {
       <button class="dk-rst${dirty ? " show" : ""}" data-all="on">초기화</button>
     </div>
     ${CAT_KEYS.map(catBlock).join("")}
+    <div class="axis">
+      <div class="t">선형 표시 <small>지도 위 노선</small></div>
+      <div class="opts">${LINE_OPTS.map(([k, lb]) => `<div class="optrow${filter.lines.has(k) ? " on" : ""}" data-tog="lines" data-k="${k}">
+        <span>${lb}</span><i class="sw"></i></div>`).join("")}</div>
+    </div>
     <div class="axis">
       <div class="t">단계 <small>실선=착공 후 · 점선=계획</small></div>
       <div class="seg">${ph("계획", true)}${ph("인가", true)}${ph("착공", false)}${ph("준공·개통", false)}</div>
@@ -3433,9 +3446,14 @@ function initKakao() {
         // 흰 케이싱 + 색 본선(2026-07-30) — 지하철 노선도의 표준 문법. 종전엔 색 선 하나가
         // 주황 도로망 위에 그대로 얹혀 배경과 섞였다. 케이싱이 배경을 끊어 주므로 본선을
         // 더 얇게 해도 오히려 또렷하다. 점선은 촘촘한 dot로 바꿔 톱니를 없앤다.
-        objs.push(new K.Polyline({ path, strokeColor: "#ffffff", strokeWeight: dashed ? 5 : 5.6,
+        // ⚠ **점선은 실선보다 굵어야 같은 굵기로 보인다** (2026-08-01 사용자 "계획 점선 두께가
+        //   너무 얇아서 잘 안보여"). 종전엔 점선 본선이 2.4로 실선 3보다 **얇았다** — dot는
+        //   잉크가 절반 이하라 같은 굵기여도 훨씬 흐린데, 거기서 20%를 더 깎고 있었다.
+        //   보이는 굵기 ≈ 실굵기 × 잉크비율이므로 점선 쪽을 올린다(3.6). 케이싱도 함께(6.0).
+        //   dot 문법 자체는 유지 — shortdash로 바꾸면 작은 곡선에서 톱니가 돌아온다(2026-07-30).
+        objs.push(new K.Polyline({ path, strokeColor: "#ffffff", strokeWeight: dashed ? 6 : 5.6,
           strokeOpacity: subdued ? .5 : .85, strokeStyle: "solid", zIndex: 2 }));
-        objs.push(new K.Polyline({ path, strokeColor: col, strokeWeight: dashed ? 2.4 : 3,
+        objs.push(new K.Polyline({ path, strokeColor: col, strokeWeight: dashed ? 3.6 : 3,
           strokeOpacity: subdued ? .5 : isRoad ? .8 : .92, strokeStyle: dashed ? "shortdot" : "solid", zIndex: 3 }));
         // 히트선 정점 다이어트(1/3) — 단 **꺾임 정점은 보존**한다. 종전 무조건 i%3은
         // 정점이 몇 개 없는 앵커 노선에서 중간 경유점을 지워 히트선이 경로를 통째로
@@ -3910,7 +3928,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260801j");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260801k");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4072,7 +4090,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260801j"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260801k"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4098,7 +4116,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260801j");
+  const CB = "?b=" + (window.BUILD || "20260801k");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
