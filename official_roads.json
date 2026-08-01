@@ -3117,7 +3117,20 @@
    ],
    "src": "https://cis.seoul.go.kr/TotalAlimi_new/PopInfo.action?cmd=info1&pjt_cd=1112024082395",
    "access": "line",
-   "access_note": "지하화(통과) + **지상부 수변공원화** — 연도 수혜 → 선 회랑"
+   "access_note": "지하화(통과) + **지상부 수변공원화** — 연도 수혜 → 선 회랑",
+   "moct_segments": [
+    {
+     "name": "영동대로",
+     "from": "서울 경기고등학교"
+    },
+    {
+     "name": "동부간선도로",
+     "to": "서울 이화교"
+    }
+   ],
+   "moct_segments_src": "https://www.nowon.kr/www/info/info8/info8_3/info8_3_04.jsp",
+   "official_km": 10.1,
+   "seg_note": "노원구 공식: 민자사업 = 영동대로(경기고 앞)~동부간선도로(이화교), 터널 4차로(병렬) 10.1km · 2023~2029"
   },
   {
    "name": "동부간선도로 창동~상계 지하차도",
