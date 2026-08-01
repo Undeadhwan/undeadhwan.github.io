@@ -4581,6 +4581,34 @@
    "anchor_note": "기점·종점 지명 대표점(지오코딩 '경기 안산' → 지오코딩 '인천 논현') — 자동 절차화 1차, 정밀 경유지 조사로 교체 예정",
    "anchor_src": "https://www.openfiscaldata.go.kr",
    "fiscal_name": "안산-인천고속도로건설"
+  },
+  {
+   "name": "동부간선도로 지하화(재정구간)",
+   "phase": "착공",
+   "stage": "2022~2034 (노원구간 2029 시행) — 동부간선도로 군자교~월계1교 11.5km + 영동대로 학여울역~경기고 앞 2.1km",
+   "owner": "서울시",
+   "type": "자동차전용",
+   "match": [
+    "동부간선"
+   ],
+   "src": "https://www.nowon.kr/www/info/info8/info8_3/info8_3_04.jsp",
+   "access": "line",
+   "access_note": "지하화(통과) + **지상부 수변공원화** — 연도 수혜 → 선 회랑",
+   "moct_segments": [
+    {
+     "name": "동부간선도로",
+     "from": "서울 군자교",
+     "to": "서울 월계1교"
+    },
+    {
+     "name": "영동대로",
+     "from": "서울 학여울역",
+     "to": "서울 경기고등학교"
+    }
+   ],
+   "moct_segments_src": "https://www.nowon.kr/www/info/info8/info8_3/info8_3_04.jsp",
+   "official_km": 13.6,
+   "seg_note": "노원구 공식: 재정사업 = 동부간선도로[송정동(군자교)~월계1교] 터널 4~6차로 11.5km + 영동대로(학여울역~경기고 앞) 터널 4차로 2.1km"
   }
  ],
  "_opened_not_delta": {

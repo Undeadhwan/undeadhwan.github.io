@@ -1348,12 +1348,20 @@ function roadKindOf(p) {
 }
 function buildRoadSignals() {
   const SAMPLE_M = 1200;
-  const sample = coords => {   // MultiLineString 세그먼트들 → 간격 샘플점
+  /* MultiLineString 세그먼트들 → 간격 샘플점.
+     ⚠ **간격은 그 신호의 회랑 반경보다 촘촘해야 한다** (2026-08-01, 사용자 "영향권이 안먹었자나
+     해당 아파트에"). 샘플점이 곧 버퍼 중심이므로, 간격이 반경보다 크면 점 사이에 **회랑 구멍**이
+     생긴다. 실측 — 휘경주공1단지는 동부간선도로 지하화 선에서 **365m**인데, 1,200m 간격 샘플로는
+     가장 가까운 점이 663m라 500m 회랑 밖으로 판정돼 카드에서 통째로 빠졌다.
+     전용도로(IC 점이 버퍼 주체)는 무관하지만, **일반도로는 선 자체가 버퍼**라 치명적이다.
+     연도 회랑은 C급 300m가 최소이므로 그 절반인 150m 이하로 잡는다. */
+  const sample = (coords, step) => {
+    const S = step || SAMPLE_M;
     const pts = [];
     for (const seg of coords) {
-      let acc = SAMPLE_M;   // 각 세그 시작점 포함
+      let acc = S;   // 각 세그 시작점 포함
       for (let i = 0; i < seg.length; i++) {
-        if (i === 0 || acc >= SAMPLE_M) { pts.push(seg[i]); acc = 0; }
+        if (i === 0 || acc >= S) { pts.push(seg[i]); acc = 0; }
         if (i < seg.length - 1) acc += meters(seg[i], seg[i + 1]);
       }
     }
@@ -1375,7 +1383,9 @@ function buildRoadSignals() {
         geometry: { coordinates: f.geometry.coordinates } });
       continue;
     }
-    const pts = sample(f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates]);
+    // 연도 회랑(일반도로)은 반경이 좁으므로(ROAD_CORRIDOR_KM C=0.3km) 샘플도 촘촘해야 한다.
+    const pts = sample(f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates],
+                       roadKindOf(p) === "일반" ? 150 : SAMPLE_M);
     if (!pts.length) continue;
     // 표시명 = 공식 사업명 우선(OSM 이름은 선형 매칭용일 뿐 — 공식 SSOT 사상 2026-07-17)
     ROAD_SIG.push({ _road: true, title: p.official_name || `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: "도로", lvl: p.lvl || "C",
@@ -3949,7 +3959,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260801t");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260801u");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4111,7 +4121,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260801t"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260801u"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4137,7 +4147,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260801t");
+  const CB = "?b=" + (window.BUILD || "20260801u");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
