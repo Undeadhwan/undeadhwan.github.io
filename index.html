@@ -3429,7 +3429,7 @@ function initKakao() {
       //   고시 세목 6)인데 전부 흐렸다. **소스가 바뀌었는데 그 소스를 전제로 만든 규칙이 남아 있었다.**
       const subdued = isRoad && /OpenStreetMap/.test(String(p.geom_src || ""));
       const segs = f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates];
-      const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + (isRoad ? "🛣" : "🚈") + " " + (p.full || p.name) + '</div><div class="apt-pop-sub">' + (p.linekind || "") + ' · <span style="color:' + col + '">' + p.status + '</span>' + (p.gate === "계획안" ? ' · <b style="color:#b3651e">계획(안) — 승인 전</b>' : "") + (p.approx ? " (근사 선형 — 공식 경유지 연결, 실선형 아님)" : dashed ? " (미확정 — 점선)" : "") + '</div>' + (p.gate === "계획안" ? '<div class="apt-pop-sub" style="color:#b3651e">노선·정거장 위치는 변경될 수 있습니다</div>' : "") + (p.geom_partial ? '<div class="apt-pop-sub" style="color:#b3651e">⚠ ' + (p.geom_cover_note || "선형 일부 구간만 확보") + '</div>' : "") + '<div class="apt-pop-cats"><span style="color:' + col + '">● 단계 ' + (p.phase || (p.confirmed ? "착공" : "계획")) + '</span>' + (p.note ? " · " + p.note : "") + (p.geom_src ? " · " + p.geom_src : p.src_name ? " · 출처: " + p.src_name : "") + '</div></div>';
+      const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + (isRoad ? "🛣" : "🚈") + " " + (p.full || p.name) + '</div><div class="apt-pop-sub">' + (p.linekind || "") + ' · <span style="color:' + col + '">' + p.status + '</span>' + (p.gate === "계획안" ? ' · <b style="color:#b3651e">계획(안) — 승인 전</b>' : "") + (p.approx ? " (근사 선형 — 공식 경유지 연결, 실선형 아님)" : dashed ? " (미확정 — 점선)" : "") + '</div>' + (p.gate === "계획안" ? '<div class="apt-pop-sub" style="color:#b3651e">노선·정거장 위치는 변경될 수 있습니다</div>' : "") + (p.geom_partial ? '<div class="apt-pop-sub" style="color:#b3651e">⚠ ' + (p.geom_cover_note || "선형 일부 구간만 확보") + '</div>' : "") + (p.geom_bridged_km ? '<div class="apt-pop-sub" style="color:#7a8699">┈ 이 중 ' + p.geom_bridged_km + 'km는 <b>보간</b>(연한 선) — 정점 사이를 이은 구간이라 형상 근거 없음</div>' : "") + '<div class="apt-pop-cats"><span style="color:' + col + '">● 단계 ' + (p.phase || (p.confirmed ? "착공" : "계획")) + '</span>' + (p.note ? " · " + p.note : "") + (p.geom_src ? " · " + p.geom_src : p.src_name ? " · 출처: " + p.src_name : "") + '</div></div>';
       const clickHandler = () => { _ovClickTs = Date.now(); hideTip();
         // 도로 선 클릭 — **키로 찾는다**. 종전엔 `title.startsWith(p.name)`였는데 2026-07-17에 표시명을
         // 공식 사업명으로 바꾸면서(계양강화고속도로 → "계양~강화 고속도로") 접두가 깨져 **8개 고속도로가
@@ -3455,6 +3455,21 @@ function initKakao() {
           strokeOpacity: subdued ? .5 : .85, strokeStyle: "solid", zIndex: 2 }));
         objs.push(new K.Polyline({ path, strokeColor: col, strokeWeight: dashed ? 3.6 : 3,
           strokeOpacity: subdued ? .5 : isRoad ? .8 : .92, strokeStyle: dashed ? "shortdot" : "solid", zIndex: 3 }));
+      });
+      /* **보간 구간은 다르게 그린다** (2026-08-01 사용자 "말이 되냐 중간에 끊기는게?").
+         정점이 촘촘한 선의 드문 빈틈은 **추측이 아니라 보간**이다 — 양쪽 다 실제 회랑 위의 점이고
+         그 사이로 경로가 지난다는 건 안다. 그래서 끊지 않고 잇되, 그 구간만 **연하게** 그려
+         "여기 형상은 근거가 없다"를 눈으로 알 수 있게 한다(P2 — 이으면서 숨기지는 않는다).
+         선이 통째로 성긴 노선(GTX A 중앙 6.95km 등)은 여전히 끊는다 — 그건 보간이 아니라 추측이다. */
+      (p.geom_bridges || []).forEach(seg => {
+        const bp = seg.map(([x, y]) => LL(x, y));
+        objs.push(new K.Polyline({ path: bp, strokeColor: "#ffffff", strokeWeight: 5,
+          strokeOpacity: .55, strokeStyle: "solid", zIndex: 2 }));
+        objs.push(new K.Polyline({ path: bp, strokeColor: col, strokeWeight: 2.2,
+          strokeOpacity: .42, strokeStyle: "shortdash", zIndex: 3 }));
+      });
+      segs.forEach(seg => {
+        const path = seg.map(([x, y]) => LL(x, y));
         // 히트선 정점 다이어트(1/3) — 단 **꺾임 정점은 보존**한다. 종전 무조건 i%3은
         // 정점이 몇 개 없는 앵커 노선에서 중간 경유점을 지워 히트선이 경로를 통째로
         // 이탈시켰다(실측 최대 29km — "커서 대도 미리보기 안 되는 구간"의 원인, 2026-07-21).
@@ -3928,7 +3943,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260801l");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260801m");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4090,7 +4105,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260801l"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260801m"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4116,7 +4131,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260801l");
+  const CB = "?b=" + (window.BUILD || "20260801m");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
