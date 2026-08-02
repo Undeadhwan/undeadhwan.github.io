@@ -935,7 +935,12 @@ function msTrack(s) {
     </div></div>`);
   }
   flush();
-  return `<div class="mstrack">` + out.join("") + `</div>`;
+  // 단계 확인일 — 교통 단계는 자동 갱신되지 않는 수동 SSOT라, 마지막으로 대조한 날짜가 곧 근거다.
+  const chk = s.stage_checked
+    ? `<div class="msmeta" style="margin-top:6px">단계 확인 ${s.stage_checked} — 공식 소스에 마지막으로 대조한 날짜`
+      + (s.stage_src ? ` · <a href="${s.stage_src}" target="_blank" rel="noopener">근거</a>` : "") + `</div>`
+    : "";
+  return `<div class="mstrack">` + out.join("") + chk + `</div>`;
 }
 /* 다음 관찰 포인트(§7 문법: 매수의견 대신 "다음 관찰") — 유형 세부단계 트랙에서 현재의 다음 항목 */
 function nextWatch(s) {
@@ -1329,6 +1334,7 @@ function buildRailSignals() {
     status: f.properties.drop ? "종결" : "활성",   // 무산 노선(인동선 지선 등) = 종결 표식(P5 — 숨기지 않고 표시)
     confirmed: f.properties.confirmed, sd: null,   // 소재 시도·시군구는 ensureRailSgg가 좌표로 산출(전국)
     src_tier: f.properties.src_tier, st_status: f.properties.st_status, approx: f.properties.approx, note: f.properties.note,
+    stage_checked: f.properties.stage_checked, stage_src: f.properties.stage_src,   // 단계는 수동 SSOT — 언제 확인했는지가 신뢰 근거(P2)
     pt_type: f.properties.pt_type, geo_prec: f.properties.geo_prec, geo_approx: !!f.properties.geo_approx, geo_basis: f.properties.geo_basis || null, milestones: f.properties.milestones,
     geometry: { coordinates: f.geometry.coordinates }
   }));
@@ -1383,6 +1389,7 @@ function buildRoadSignals() {
       ROAD_SIG.push({ _road: true, title: p.name, cat: "교통", sub: "도로", lvl: p.lvl || "A",
         template_type: "도로", current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
         src_tier: p.src_tier, ic_loc: p.loc, ic_status: p.ic_status, pt_type: p.pt_type, geo_prec: p.geo_prec, geo_approx: !!p.geo_approx, geo_basis: p.geo_basis || null, milestones: p.milestones,
+        stage_checked: p.stage_checked, stage_src: p.stage_src,
         line: p.line,   // 소속 노선명 — 전용도로 ic_points 매칭 기준
         // JC(분기점)=고속도로끼리 연결, 일반 차량 진출입 불가 → **그 동네 호재 아님**(2026-07-17 사용자 지적, §7 거리≠수혜).
         // 노선의 접속 구조 사실로만 보존 — 지도 원·영향권·집계에서 제외.
@@ -1407,6 +1414,7 @@ function buildRoadSignals() {
       status: "활성", confirmed: !!p.confirmed, sd: null, road_kind: roadKindOf(p), src_tier: p.src_tier,   // 소재 시도=_sggs(다중 귀속)
       owner: p.owner, osm_name: p.name, line: p.name, geom_src: p.geom_src, geom_status: p.geom_status || null, milestones: p.milestones,   // line=노선 하이라이트 키
       official_type: p.official_type, official_name: p.official_name, access: p.access, access_note: p.access_note, ic_note: p.ic_note,
+      stage_checked: p.stage_checked, stage_src: p.stage_src,   // 단계는 수동 SSOT — 확인 시점을 화면에 남긴다
       sources: p.src_url ? [p.src_url] : [],
       // ⚠ 선형 출처는 데이터의 geom_src를 그대로 쓴다 — 종전엔 "선형=OSM(ODbL)"을 **하드코딩**해
       //   실제로는 공식 경유지 연결인데 화면이 OSM이라 거짓말했다(2026-07-23 사용자 제보로 발견, P2 위반).
@@ -1525,6 +1533,23 @@ function _staleFin(stage, phase, status, dstr) {
   const d = new Date(String(dstr).length === 7 ? dstr + "-01" : dstr);
   const cut = new Date(TODAY); cut.setFullYear(cut.getFullYear() - 1);
   return d < cut;
+}
+/* 단계 확인일 (2026-08-02) — 교통 단계(phase)는 API가 갱신하지 않는 **수동 SSOT**다.
+   그래서 "언제 확인했는지"가 그 값을 믿을 수 있는 유일한 근거다(P2 — 사실은 표시, 추정은 구분).
+   정체가 사실로 확인된 사업(예타 장기 심사 등)에만 붙는다 — 없으면 아무것도 표시하지 않는다. */
+function stageCheckedHtml(s) {
+  if (!s.stage_checked) return "";
+  const t = "이 사업의 진행 단계를 마지막으로 공식 소스에 대조해 확인한 날짜입니다. "
+          + "교통 단계는 자동 갱신되지 않으므로 사람이 확인한 시점을 함께 표시합니다.";
+  const u = s.stage_src ? ` <a href="${s.stage_src}" target="_blank" rel="noopener">근거</a>` : "";
+  return `<span class="pmini" title="${t}">단계 확인 ${s.stage_checked}</span>${u}`;
+}
+/* 단계 줄 꼬리 — 빈 조각을 걸러 `·`를 이어 붙인다.
+   종전엔 `· ${freshness(s)}`를 무조건 찍어, 신선도가 빈 신호에서 "착공 미정 · " 처럼
+   구분자만 남았다(확인일을 붙이자 "· ·"로 드러남). 조각을 모아 join하면 구조적으로 안 생긴다. */
+function stageTail(s) {
+  const parts = [freshness(s), stageCheckedHtml(s)].filter(x => x && String(x).trim());
+  return parts.length ? " · " + parts.join(" · ") : "";
 }
 function isStaleFinished(s) {
   const h = s.stage_history;
@@ -2098,7 +2123,7 @@ function cardHtml(s, extra = "") {
       ${s.name_status === "미확보" ? '<span class="badge-near" title="허가 원본에 고유 명칭이 없어 동·지번으로 표시합니다. 건축물대장은 준공 후에 생성되므로 인가·착공 단계엔 공식 명칭이 없을 수 있습니다. 사업의 존재는 허가·착공 일자가 근거이며, 이름을 임의로 지어내지 않습니다.">시설명 미확보</span>' : ""}
       ${icMissing ? '<span class="badge-near" title="이 도로는 진출입 지점(IC·진입로)에서만 타고 내립니다. 공식 IC 위치가 아직 확정·공개되지 않아 영향권을 산정하지 않습니다(근거 없는 범위를 만들지 않음).">진출입 지점 미확정 — 영향권 미산정</span>' : ""}${srcBadge(s)} ${extra}</div>
     <div class="title">${sigTitle(s)}</div>
-    <div class="stage">단계: <b>${phaseLabel(ph)}</b> <span class="pmini">(${pIdx + 1}/${PHASES.length})</span>${detail} · ${freshness(s)}</div>
+    <div class="stage">단계: <b>${phaseLabel(ph)}</b> <span class="pmini">(${pIdx + 1}/${PHASES.length})</span>${detail}${stageTail(s)}</div>
     ${miniBarHtml(s)}`;
 }
 function renderHome() {
@@ -3246,6 +3271,7 @@ function railToSignal(p, cen) {
     lvl: p.lvl || railLevelOf(p.full || p.name, p.linekind),   // 파이프라인 판정(grade.rail_level) 우선, 없으면 폴백
     lvl_basis: p.lvl_basis, gate: p.gate, gate_basis: p.gate_basis,
     template_type: "철도", current_stage: p.status, phase: p.phase, status: p.drop ? "종결" : "활성", confirmed: p.confirmed,
+    stage_checked: p.stage_checked, stage_src: p.stage_src,
     sd: null, geometry: { coordinates: cen },   // 노선은 여러 시도 경유 — 단일 sd 미표기
     sources: p.src_url ? [p.src_url] : [], stage_note: `${p.linekind} · ${p.status}${p.note ? " · " + p.note : ""}`,
   };
@@ -3973,7 +3999,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260802f");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260802g");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4135,7 +4161,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260802f"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260802g"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4161,7 +4187,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260802f");
+  const CB = "?b=" + (window.BUILD || "20260802g");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
