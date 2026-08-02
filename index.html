@@ -1469,6 +1469,10 @@ function buildJeongbiSignals() {
     _jb: true, _jbtype: c.type || "", src_tier: "official_report", milestones: c.milestones || [], title: c.n, cat: "주거개발", lvl: hhLevel(c.hh), lvl_basis: hhBasis(c.hh),   // 세대수 눈금 = thresholds.json(SSOT) · 사유는 카드에 표기
     template_type: "정비사업", current_stage: c.stage, phase: c.phase, status: c.drop ? "종결" : "활성", confirmed: false,
     sd: c.sd, sg: c.sg, dong: c.dong, hh: c.hh, last_movement: c.last_movement || null, stage_history: c.stage_history || undefined, target_completion: null,   // 실일자(경기 마일스톤 소급 등) → 신선도·정체 표시
+    // ⚠ 완료일 미상 표식 — 안 실으면 isStaleFinished가 stage_history의 **관측일**을 완료일로 읽어
+    //   10년 전 끝난 조합이 '최근 준공'으로 영영 살아남는다(긴등마을 실측, 어댑터 함정 5회째.
+    //   생산측(lifecycle)은 2026-07-31에 고쳤는데 어댑터가 그 필드를 떨어뜨려 화면은 그대로였다).
+    fin_date_unknown: c.fin_date_unknown, fin_note: c.fin_note, done_apt: c.done_apt,
     geo_prec: c.geo_prec, geo_approx: !!c.geo_approx || c.geo_prec === "dong",   // 동 대표점 등 근사를 후광·카드에 정직 표기(§4.1 — 국토부 통합은 주소 컬럼이 없어 동 폴백이 많다: 대구 비산동 6건 한 점 사례)
     sources: [c.sd === "서울" ? "https://cleanup.seoul.go.kr" : c.sd === "경기" ? "https://gg.go.kr" : "https://www.data.go.kr"],
     geometry: { coordinates: [c.lon, c.lat] }
@@ -4020,7 +4024,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260802j");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260803a");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4182,7 +4186,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260802j"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260803a"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4208,7 +4212,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260802j");
+  const CB = "?b=" + (window.BUILD || "20260803a");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
