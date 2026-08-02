@@ -1213,6 +1213,21 @@ const getRadius = s => {
   if (SUB_KEYS[c]) tbl = (tbl[subOf(s)] || tbl[SUB_KEYS[c][0]]);   // 교통=철도/도로 세부표
   return ((tbl && tbl[l]) || 0.8) * 1000;
 };
+/* 성능용 bbox 프리필터의 반경(도 단위) — **반경표(CLASSES)에서 도출**한다.
+   상수로 두면 반경표만 키웠을 때 조용히 반경 규칙을 이긴다(CJ부지 실측, 2026-08-02). */
+let _maxRadiusDegCache = null;
+function _maxRadiusDeg() {
+  if (_maxRadiusDegCache) return _maxRadiusDegCache;
+  let mx = 1;   // km — 바닥값
+  for (const c in CLASSES) for (const k in CLASSES[c]) {
+    const v = CLASSES[c][k];
+    if (typeof v === "number") mx = Math.max(mx, v);
+    else if (v && typeof v === "object") for (const l in v) if (typeof v[l] === "number") mx = Math.max(mx, v[l]);
+  }
+  // 위도 37.5° 기준 경도 1도≈88.8km(더 짧은 축) + 여유 10% — 프리필터는 넉넉해야 한다(자르는 건 반경 판정)
+  _maxRadiusDegCache = (mx * 1.1) / 88.8;
+  return _maxRadiusDegCache;
+}
 // 색 = 4대 분류만 인코딩(사용자 확정 2026-07-17 전면 재검토 — 도로=황갈 예외는 일자리 오렌지와 혼동돼 폐기).
 // 교통 내 철도/도로 구분은 **조회축(중분류 필터)**이 담당 — 형태 문법(중공선·흰속 도넛)은 폐기(2026-07-18 사용자 확정).
 // 이유: 대분류·중분류를 각각 조회할 수 있으면 지도 위에 구분을 이중으로 새길 필요가 없다.
@@ -1864,10 +1879,16 @@ function buildTree() { syncRegionBar(); }   // 트리 제거 → 지역 드롭�
 
 /* ══════════ 아파트 앵커: 단지 좌표 반경 내 신호 (§4.4 역방향 조회) ══════════ */
 function signalsNearPoint(coord, all = false) {
-  // 확정 신호 + 정비(어댑트) 통합 카운팅. 정비는 좌표 근접(~2km bbox)만 우선 추려 성능 확보.
+  // 확정 신호 + 정비(어댑트) 통합 카운팅. 성능용 bbox 프리필터는 **최대 신호 반경에서 도출**한다.
   // all=true → **조회조건 필터 무시**(아파트 비교용, 2026-07-29 사용자 확정 "비교는 필터와 무관해야").
   //   데이터 불변식(끝난 신호 숨김)은 필터가 아니라 사실 규칙이므로 유지한다.
-  const near = s => { const c = s.geometry.coordinates; return Math.abs(c[0] - coord[0]) < 0.02 && Math.abs(c[1] - coord[1]) < 0.02; };
+  // ⚠ 상수 bbox(±0.02도≈1.8km)를 쓰면 반경(S급 3~4km)보다 좁아 **반경 안 신호를 미리 잘라낸다** —
+  //   실측(2026-08-02 사용자 발견): CJ공장부지 3블록(반경 3km)이 2,019m 떨어진 마곡엠밸리7에서
+  //   빠졌다(Δlng 0.0226 > 0.02). 2,182m인 수명산파크2에는 나왔다(0.0187) — 더 가까운 단지에서만
+  //   빠지는 역설. 「샘플 간격 > 회랑 반경」 사고와 같은 계열: 성능 상수가 반경 규칙을 이긴다.
+  //   → bbox는 데이터의 최대 반경 + 여유로 도출(구조적 봉인 — 반경표를 키우면 같이 커진다).
+  const D = _maxRadiusDeg();
+  const near = s => { const c = s.geometry.coordinates; return Math.abs(c[0] - coord[0]) < D && Math.abs(c[1] - coord[1]) < D; };
   const jbLocal = JEONGBI_SIG.filter(near);
   const railLocal = RAIL_SIG.filter(near);   // 계획/건설역도 호재로 카운팅
   const dartLocal = DART_SIG.filter(near);   // DART 일자리 후보
@@ -3999,7 +4020,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260802h");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260802i");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4161,7 +4182,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260802h"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260802i"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4187,7 +4208,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260802h");
+  const CB = "?b=" + (window.BUILD || "20260802i");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {

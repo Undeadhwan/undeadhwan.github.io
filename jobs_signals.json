@@ -55,15 +55,15 @@
    "sources": [
     "https://urban.seoul.go.kr/view/html/PMNU2070000001"
    ],
-   "geo_prec": "jigu",
-   "geo_approx": true,
-   "geo_basis": "지구 대표 좌표(공식 위치 근사 — 지구 크기만큼 오차)",
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "geo_basis": "용산정비창 본체 필지(한강로3가 40-1) 지오코딩 중심 — 종전 좌표가 부지 밖 북동쪽 915m(후암동 방향)에 있었다(2026-08-02 사용자 지적). 지구는 필지 크기만큼 넓다(약 50만㎡)",
    "confirmed": false,
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.9662,
-     37.533
+     126.956907,
+     37.529433
     ]
    },
    "stage_history": [
@@ -629,7 +629,7 @@
    "template_type": "공공시설",
    "sd": "서울",
    "sg": "영등포구",
-   "loc": "영등포구 여의도동 여의도공원 내",
+   "loc": "영등포구 여의도동 2 여의도공원 **북측**(한강 방향)",
    "last_movement": "2026-07-23",
    "src_tier": "official_report",
    "src_name": "서울시 — 여의도 제2세종문화회관",
@@ -638,13 +638,13 @@
    ],
    "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "지구 대표 좌표(공식 위치 근사 — 지구 크기만큼 오차)",
+   "geo_basis": "서울시 공식 발표 「여의도공원 북측」(2025-11 설계공모 당선작·재조성 계획) — 공원 북측(한강 연접부) 대표점 근사. 종전 공원 중앙 대표점에서 북동 ~500m 교정(2026-08-02 사용자 지적 '한강 근처'). 상세 배치도 좌표는 공모 지침 도면 확보 시 정밀화",
    "confirmed": false,
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.921594,
-     37.525536
+     126.926,
+     37.529
     ]
    },
    "stage_history": [

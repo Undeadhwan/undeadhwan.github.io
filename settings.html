@@ -59,6 +59,10 @@
   input[disabled] { background:#f4f5f8; color:#aab; border-style:dashed; }
   .unit { font-size:11.5px; color:var(--muted); margin-left:5px; }
   .qual { font-size:11.5px; color:var(--muted); font-style:italic; }
+  /* 위계 판정 유형(철도·도로) — '정성' 한 단어로 뭉뚱그리지 않고 **실제 판정 기준 문구**를 그대로 보인다
+     (2026-08-02 사용자 지적 "예전에 알려준 기준을 그대로 표시해놔"). 문구 SSOT = thresholds.등급설명. */
+  .qualdesc { display:block; font-size:11px; line-height:1.45; color:var(--ink,#333); max-width:230px;
+              white-space:normal; word-break:keep-all; margin-top:2px; }
 
   .bar { position:sticky; bottom:0; background:#fff; border-top:1px solid var(--line); padding:12px 22px;
          display:flex; align-items:center; gap:12px; box-shadow:0 -2px 12px rgba(0,0,0,.05); }
@@ -129,11 +133,12 @@ const clean = o => Object.fromEntries(Object.entries(o).filter(([k]) => !k.start
 
 // 등급근거 문자열("면적:인프라|금액:생활SOC") → 실제 눈금을 가리키는 참조 목록
 function parseBasis(b) {
-  if (!b || b === "정성") return [];
+  if (!b || b.startsWith("정성")) return [];
+  // 아는 축(TABLE 키)만 참조로 인정 — "정성(학교 종류) — …" 같은 서술형이 깨진 참조로 렌더되던 것 교정
   return b.split("|").map(part => {
     const i = part.indexOf(":");
     return { kind: part.slice(0, i), key: part.slice(i + 1) };
-  });
+  }).filter(r => TABLE[r.kind]);
 }
 const TABLE = { "면적":"면적_눈금_㎡", "금액":"금액_눈금_억원", "세대수":"세대수_눈금_세대" };
 const UNIT  = { "면적":"㎡", "금액":"억", "세대수":"세대" };
@@ -168,7 +173,9 @@ function render() {
                     class="${zero ? "zero" : ""}"
                     title="${zero ? "0 = 하한 없음. 실질 하한은 아래 '수집 문턱'이다" : r.kind + " 눈금 · " + r.key}"
                     ><i>${zero ? "하한없음" : UNIT[r.kind]}</i>`;
-        }).join("") : `<span class="qual">정성</span>`;
+        // 수치 눈금이 없는 유형(철도·도로 = 위계 판정)은 '정성' 한 단어가 아니라 **그 등급의 실제
+        // 판정 기준 문구**(등급설명 — 사용자가 정한 기준, 판정 코드 grade.rail_level와 1:1)를 보인다.
+        }).join("") : `<span class="qualdesc" title="위계 판정 — 수치 눈금이 아니라 노선 종류·속도·직결 등 사실 축. 판정 규칙 SSOT: thresholds.교통_위계 · 코드 grade.py">${(s2.등급설명 || {})[lv] || "정성"}</span>`;
         return `<td class="cell"><span class="lv ${lv}">${lv}</span>${basis}
           <input class="rad" type="number" step="0.1" min="0" value="${s2.반경_km[lv]}"
                  data-r="${cat}" data-rs="${sub}" data-lv="${lv}" title="영향 반경"><i>km</i></td>`;
