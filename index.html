@@ -481,8 +481,18 @@
     header .logo small { display:none; }
     .regionbar { flex-wrap:nowrap; gap:6px; }
     .regionbar > * { min-width:0; flex:1 1 0; font-size:13px; }
-    #panel { width:100%; border-right:none; border-top:1px solid var(--line); order:1;
-             flex:none; height:auto; overflow:visible; padding-bottom:80px; }
+    /* ★ 상세 = 바텀시트 (2026-08-03 사용자 제보 "모바일에서 가장 불편한 게 호재 상세 보기").
+       종전 모바일 규칙은 width/order/flex만 바꾸고 **position:absolute와 left:338px를 안 풀었다**.
+       절대위치는 흐름 밖이라 order·flex가 무시되고, 패널이 375px 화면에서 338px 오른쪽에 붙어
+       **글자가 통째로 잘려 읽을 수 없었다**(실측 스크린샷).
+       지도 앱의 표준은 하단에서 올라오는 시트다 — 지도를 계속 보면서 상세를 읽고, 시트 안에서만
+       스크롤한다. 닫기(✕)는 이미 모든 상세 헤더에 있다. */
+    #panel { position:fixed; left:0; right:0; bottom:0; top:auto; width:auto;
+             max-height:72vh; overflow-y:auto; -webkit-overflow-scrolling:touch;
+             border:0; border-top:1px solid var(--line); border-radius:16px 16px 0 0;
+             box-shadow:0 -6px 24px rgba(25,35,60,.20); padding:14px 14px 28px; z-index:1200; }
+    #panel .phead { position:sticky; top:-14px; background:#fff; padding:6px 0 8px; margin:-6px 0 0; z-index:2; }
+    #panel .closex { font-size:20px; padding:6px 10px; }   /* 터치 과녁 확대 */
     #gantt { height:auto; padding:14px 10px 90px; }
     #raw { height:auto; padding:12px 10px 90px; }
   }
@@ -4022,7 +4032,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260803z");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260803aa");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4184,7 +4194,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260803z"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260803aa"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4210,7 +4220,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260803z");
+  const CB = "?b=" + (window.BUILD || "20260803aa");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
