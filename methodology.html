@@ -142,7 +142,7 @@
   <tr><th>소스</th><th>방법</th><th>필터/규칙</th></tr>
   <tr><td>나라장터</td><td>REST API, JSON. 조회기간은 "달력상 1개월" 제한 → 구간 분할 호출. 월 단위 캐시(<code>cache_1yr/</code>)로 이어받기</td><td>키워드 포함: 개발계획·지구단위·정비·타당성·기본계획·실시설계·철도·도로·조성·건립 등 / 제외: 폐기물·청소·방화벽·유지관리 등 (<code>sources.json</code>의 keyword_include/exclude가 SSOT). 지역 키워드 단독 필터는 동음이의어(부산 강서구, 방화문) 때문에 금지 — 수요기관 소재지 병행</td></tr>
   <tr><td>DART</td><td>목록 API → (지역정보 없음) → 수도권 소재 기업만 회사 API+원문 zip 2단 조회로 취득 목적물 소재지 확인</td><td>공시유형: 유형자산취득·신규시설투자. 금액 컷 없음(전건)</td></tr>
-  <tr><td>공동주택</td><td><code>getTotalAptList3</code> 1회 페이징으로 전국 단지목록(22,235) → 단지별 <code>getAphusBassInfoV4</code>로 기본정보</td><td>일일 트래픽 한도 존재 → 100건 단위 증분 저장, kaptCode 기준 재개</td></tr>
+  <tr><td>공동주택</td><td><code>getTotalAptList3</code> 1회 페이징으로 전국 단지목록(22,235) → 단지별 <code>getAphusBassInfoV4</code>로 기본정보</td><td>일일 트래픽 한도 존재 → 100건 단위 증분 저장(<code>apartments_all.partial.json</code>), kaptCode 기준 재개. <b>재조회 판정은 라벨이 아니라 값의 부재로</b>(2026-08-03): 좌표·세대수·준공을 이미 가진 단지는 조회하지 않는다 → 실소요 <b>약 300건/회</b>. 종전엔 '완료 등급'을 문자열로 열거해(<code>geo in (road,parcel)</code>) <code>apt_center</code>가 만든 상위 등급 <code>parcel_ctr</code> 21,701건을 미완료로 보고 <b>전량 재조회</b>했다 — 일일 한도를 통째로 태우고, 완주하면 필지중심 좌표를 도로변으로 되돌리는 후퇴였다. 한도 초과(HTTP 429·reasonCode 22)는 <b>즉시 중단·저장</b>한다</td></tr>
   <tr><td>브이월드</td><td>주소→좌표 REST. 도로명(road) 실패 시 지번(parcel) 폴백</td><td>지번주소는 단지명 꼬리 제거 후 질의. 실패율 &lt;1%</td></tr>
 </table>
 
