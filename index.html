@@ -470,7 +470,17 @@
                max-height:60vh; overflow-y:auto; z-index:3000; }
     .ddtog { padding:12px 16px; font-size:14px; }   /* 터치 타깃 확대 */
     #wrap { flex-direction:column; height:auto; }
-    #map { flex:none; height:46vh; width:100%; order:0; }
+    /* ★ 지도를 맨 위로 (2026-08-03 사용자 제보 "모바일 화면 보기가 너무 불편하네").
+       종전엔 #map과 #dock이 **둘 다 order:0**이라 flex가 DOM 순서로 정렬했고, 도크(대분류 4개 ×
+       중분류 전개, max-height:none)가 통째로 지도 위에 깔렸다 — 실측: 지도 시작점이 y=1502px로
+       **두 화면 아래**, 스크롤 없이는 지도가 아예 안 보였다. 지도 앱에서 지도가 안 보이는 상태.
+       order를 명시해 지도(-1) → 도크(0) → 패널·목록(1) 순으로 고정한다. */
+    #map { flex:none; height:46vh; width:100%; order:-1; }
+    /* 헤더 압축 — 267px(화면의 33%)이 지도를 밀어냈다. 시도·시군구·읍면동 셀렉트 3개가 2줄로
+       깨진 게 79px로 가장 컸다. 한 줄로 붙이고 로고 부제를 숨겨 **194px**로 줄인다. */
+    header .logo small { display:none; }
+    .regionbar { flex-wrap:nowrap; gap:6px; }
+    .regionbar > * { min-width:0; flex:1 1 0; font-size:13px; }
     #panel { width:100%; border-right:none; border-top:1px solid var(--line); order:1;
              flex:none; height:auto; overflow:visible; padding-bottom:80px; }
     #gantt { height:auto; padding:14px 10px 90px; }
@@ -4036,7 +4046,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260803x");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260803y");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4198,7 +4208,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260803x"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260803y"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4224,7 +4234,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260803x");
+  const CB = "?b=" + (window.BUILD || "20260803y");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
