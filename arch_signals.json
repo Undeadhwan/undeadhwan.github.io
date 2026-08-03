@@ -882,7 +882,6 @@
      37.49213
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 30,458㎡ — 인프라:병원 B",
@@ -2601,7 +2600,6 @@
      37.489725
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 3,496㎡ — 인프라:공공시설 C",
@@ -3455,7 +3453,6 @@
      37.500434
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 13,752㎡ — 일자리:오피스 C",
@@ -4046,7 +4043,7 @@
    "title": "서초동 서울검찰청사 (업무시설, 연면적 122천㎡)",
    "cat": "인프라",
    "sub": "공공시설",
-   "lvl": "A",
+   "lvl": "B",
    "area_m2": 122109,
    "purp": "업무시설",
    "arch_gb": "증축",
@@ -4107,7 +4104,7 @@
    },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "증축분 면적 31,312㎡ — 일자리:오피스 B",
+   "lvl_basis": "증축분 면적 31,312㎡ — 인프라:공공시설 B",
    "addr_verified": {
     "road_addr": "서울특별시 서초구 반포대로 158 (서초동)",
     "jibun_addr": "서울특별시 서초구 서초동 1724 서울중앙지방검찰청",
@@ -5339,7 +5336,6 @@
      37.486238
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 15,503㎡ — 일자리:오피스 C",
@@ -5969,10 +5965,6 @@
      37.471862
     ]
    },
-   "master_ref": {
-    "id": "M-11710KL2006001",
-    "title": "위례 택지개발사업 예정지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 867,428㎡ — 일자리:오피스 S",
@@ -5992,7 +5984,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-06-15",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11710KL2006001",
+    "title": "위례 택지개발사업 예정지구"
+   }
   },
   {
    "title": "신정동 양천구 보육타운 (노유자시설, 연면적 4천㎡)",
@@ -9150,7 +9146,7 @@
    },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 83,978㎡ — 일자리:지식산업센터 B",
+   "lvl_basis": "연면적 83,978㎡ — 인프라:판매 B",
    "bldrgst": {
     "bld_nm": " ",
     "road_addr": " ",
@@ -9265,7 +9261,7 @@
    },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 24,468㎡ — 일자리:지식산업센터 C",
+   "lvl_basis": "연면적 24,468㎡ — 인프라:판매 C",
    "bldrgst": {
     "bld_nm": " ",
     "road_addr": " ",
@@ -15847,10 +15843,6 @@
      37.488818
     ]
    },
-   "master_ref": {
-    "id": "M-11710KL2006001",
-    "title": "위례 택지개발사업 예정지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 33,050㎡ — 인프라:공공시설 B",
@@ -15865,7 +15857,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2026-02-03",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11710KL2006001",
+    "title": "위례 택지개발사업 예정지구"
+   }
   },
   {
    "title": "가양동 449-19 (공장, 연면적 192천㎡)",
@@ -16023,9 +16019,7 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 203,847㎡ — 일자리:지식산업센터 A",
    "geo_approx": false,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
-   "geo_basis": "보정 대장: 지번 서울특별시 강서구 가양동 92-1 · 종전 좌표에서 478m 이동. 근거: \"가양동 CJ공장부지 특별계획구역 2BL … 위 치 : 강서구 가양동 92-1번지 일대(대지면적 27,983㎡)\" (https://opengov.seoul.go.kr/sanction/26665560)",
+   "geo_basis": "보정 대장: 지번 서울특별시 강서구 가양동 92-1 · 종전 좌표에서 0m 이동. 근거: \"가양동 CJ공장부지 특별계획구역 2BL … 위 치 : 강서구 가양동 92-1번지 일대(대지면적 27,983㎡)\" (https://opengov.seoul.go.kr/sanction/26665560)",
    "stage_history": [
     {
      "stage": "인가",
@@ -16040,7 +16034,10 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-03-21",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "블록 조각 — 같은 사업(CJ공장부지 특별계획구역)의 대표 핀으로 접힘",
+   "group_of": "가양동 CJ공장부지 특별계획구역 3블록 (공장, 연면적 355천㎡)"
   },
   {
    "title": "가양동 CJ공장부지 특별계획구역 3블록 (공장, 연면적 355천㎡)",
@@ -16112,9 +16109,7 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 355,694㎡ — 일자리:지식산업센터 S",
    "geo_approx": false,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
-   "geo_basis": "보정 대장: 지번 서울특별시 강서구 가양동 63-1 · 종전 좌표에서 350m 이동. 근거: \"가양동 CJ공장부지 특별계획구역 3BL … 위 치 : 강서구 가양동 63-1번지 일대(대지면적 45,209㎡) … 연면적 355,740.35㎡\" (https://opengov.seoul.go.kr/sanction/26665560)",
+   "geo_basis": "보정 대장: 지번 서울특별시 강서구 가양동 63-1 · 종전 좌표에서 0m 이동. 근거: \"가양동 CJ공장부지 특별계획구역 3BL … 위 치 : 강서구 가양동 63-1번지 일대(대지면적 45,209㎡) … 연면적 355,740.35㎡\" (https://opengov.seoul.go.kr/sanction/26665560)",
    "stage_history": [
     {
      "stage": "인가",
@@ -16129,7 +16124,29 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-03-21",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "group_n": 3,
+   "group_area_m2": 757973,
+   "group_members": [
+    {
+     "title": "가양동 CJ공장부지 특별계획구역 3블록 (공장, 연면적 355천㎡)",
+     "area_m2": 355694,
+     "lvl": "S",
+     "block": "3블록"
+    },
+    {
+     "title": "가양동 CJ공장부지 특별계획구역 2블록 (공장, 연면적 203천㎡)",
+     "area_m2": 203847,
+     "lvl": "A",
+     "block": "2블록"
+    },
+    {
+     "title": "가양동 CJ공장부지 특별계획구역 1블록 (판매시설, 연면적 198천㎡)",
+     "area_m2": 198432,
+     "lvl": "A",
+     "block": "1블록"
+    }
+   ]
   },
   {
    "title": "가양동 CJ공장부지 특별계획구역 1블록 (판매시설, 연면적 198천㎡)",
@@ -16201,9 +16218,7 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 198,432㎡ — 인프라:판매 A",
    "geo_approx": false,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
-   "geo_basis": "보정 대장: 지번 서울특별시 강서구 가양동 100-1 · 종전 좌표에서 533m 이동. 근거: \"가양동 CJ공장부지 특별계획구역 1BL … 위 치 : 강서구 가양동 100-1번지 일대(대지면적 20,494㎡)\" (https://opengov.seoul.go.kr/sanction/26665560)",
+   "geo_basis": "보정 대장: 지번 서울특별시 강서구 가양동 100-1 · 종전 좌표에서 0m 이동. 근거: \"가양동 CJ공장부지 특별계획구역 1BL … 위 치 : 강서구 가양동 100-1번지 일대(대지면적 20,494㎡)\" (https://opengov.seoul.go.kr/sanction/26665560)",
    "stage_history": [
     {
      "stage": "인가",
@@ -16218,7 +16233,10 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-03-21",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "블록 조각 — 같은 사업(CJ공장부지 특별계획구역)의 대표 핀으로 접힘",
+   "group_of": "가양동 CJ공장부지 특별계획구역 3블록 (공장, 연면적 355천㎡)"
   },
   {
    "title": "마곡동 대웅 마곡연구소 (교육연구시설, 연면적 49천㎡)",
@@ -16287,10 +16305,6 @@
      37.570868
     ]
    },
-   "master_ref": {
-    "id": "M-11500DA2010001",
-    "title": "마곡 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 49,488㎡ — 일자리:오피스 B",
@@ -16335,7 +16349,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-04-24",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11500DA2010001",
+    "title": "마곡 도시개발구역"
+   }
   },
   {
    "title": "마곡동 바이오 이노베이션 허브(bio innovation hub) (교육연구시설, 연면적 41천㎡)",
@@ -16404,10 +16422,6 @@
      37.570249
     ]
    },
-   "master_ref": {
-    "id": "M-11500DA2010001",
-    "title": "마곡 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 41,610㎡ — 일자리:오피스 B",
@@ -16452,7 +16466,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-01-07",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11500DA2010001",
+    "title": "마곡 도시개발구역"
+   }
   },
   {
    "title": "마곡동 VL 르웨스트 (노유자시설, 연면적 157천㎡)",
@@ -16521,10 +16539,6 @@
      37.562776
     ]
    },
-   "master_ref": {
-    "id": "M-11500DA2010001",
-    "title": "마곡 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 157,114㎡ — 인프라:공공시설 A",
@@ -16569,7 +16583,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2025-09-24",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11500DA2010001",
+    "title": "마곡 도시개발구역"
+   }
   },
   {
    "title": "마곡동 ELIF 마곡 가든 스퀘어 (업무시설, 연면적 75천㎡)",
@@ -16638,10 +16656,6 @@
      37.565705
     ]
    },
-   "master_ref": {
-    "id": "M-11500DA2010001",
-    "title": "마곡 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 75,813㎡ — 일자리:오피스 B",
@@ -16686,7 +16700,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-05-08",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11500DA2010001",
+    "title": "마곡 도시개발구역"
+   }
   },
   {
    "title": "마곡동 799 업무근린복합시설 (업무시설, 연면적 22천㎡)",
@@ -16753,10 +16771,6 @@
      37.559184
     ]
    },
-   "master_ref": {
-    "id": "M-11500DA2010001",
-    "title": "마곡 도시개발구역"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
@@ -16783,7 +16797,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-05-10",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11500DA2010001",
+    "title": "마곡 도시개발구역"
+   }
   },
   {
    "title": "마곡동 아이센스 컨소시엄 R&D센터 (교육연구시설, 연면적 12천㎡)",
@@ -16850,10 +16868,6 @@
      37.556881
     ]
    },
-   "master_ref": {
-    "id": "M-11500DA2010001",
-    "title": "마곡 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 12,536㎡ — 일자리:오피스 C",
@@ -16872,7 +16886,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-12-23",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11500DA2010001",
+    "title": "마곡 도시개발구역"
+   }
   },
   {
    "title": "마곡동 특별계획구역5 DSP1-1,2 (제2종근린생활시설, 연면적 14천㎡)",
@@ -16938,18 +16956,11 @@
      37.572321
     ]
    },
-   "master_ref": {
-    "id": "M-11500DA2010001",
-    "title": "마곡 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 14,394㎡ — 인프라:판매 C",
    "geo_basis": "택지정보 가구획지 — 11500DA2010001 블록 지DSP1 필지 1 (지원시설) · 종전 좌표에서 300m 이동",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "블록 조각 — 같은 사업(특별계획구역5)의 대표 핀으로 접힘",
-   "group_of": "마곡동 특별계획구역5 DSP1-3~6 (제2종근린생활시설, 연면적 21천㎡)",
    "stage_history": [
     {
      "stage": "계획",
@@ -16964,7 +16975,14 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-11500DA2010001",
+    "title": "마곡 도시개발구역"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "블록 조각 — 같은 사업(특별계획구역5)의 대표 핀으로 접힘",
+   "group_of": "마곡동 특별계획구역5 DSP1-3~6 (제2종근린생활시설, 연면적 21천㎡)"
   },
   {
    "title": "마곡동 특별계획구역6 DSP2블록 (업무시설, 연면적 54천㎡)",
@@ -17030,10 +17048,6 @@
      37.571591
     ]
    },
-   "master_ref": {
-    "id": "M-11500DA2010001",
-    "title": "마곡 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 54,127㎡ — 일자리:오피스 B",
@@ -17053,7 +17067,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-11500DA2010001",
+    "title": "마곡 도시개발구역"
+   }
   },
   {
    "title": "마곡동 강서구 통합신청사 (업무시설, 연면적 59천㎡)",
@@ -17121,10 +17139,6 @@
      37.561104
     ]
    },
-   "master_ref": {
-    "id": "M-11500DA2010001",
-    "title": "마곡 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 59,314㎡ — 인프라:공공시설 A",
@@ -17144,7 +17158,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2023-07-06",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11500DA2010001",
+    "title": "마곡 도시개발구역"
+   }
   },
   {
    "title": "마곡동 공공형 지식산업센터 (업무시설, 연면적 46천㎡)",
@@ -17212,10 +17230,6 @@
      37.567523
     ]
    },
-   "master_ref": {
-    "id": "M-11500DA2010001",
-    "title": "마곡 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 46,304㎡ — 일자리:지식산업센터 B",
@@ -17235,7 +17249,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-01-08",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11500DA2010001",
+    "title": "마곡 도시개발구역"
+   }
   },
   {
    "title": "마곡동 특별계획구역5 DSP1-3~6 (제2종근린생활시설, 연면적 21천㎡)",
@@ -17300,15 +17318,30 @@
      37.573369
     ]
    },
-   "master_ref": {
-    "id": "M-11500DA2010001",
-    "title": "마곡 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 21,190㎡ — 인프라:판매 C",
    "geo_approx": true,
    "block_unresolved": true,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-18",
+     "basis": "observed"
+    },
+    {
+     "stage": "인가",
+     "date": "2024-06-19",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-07-18",
+   "last_movement": "2026-07-18",
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-11500DA2010001",
+    "title": "마곡 도시개발구역"
+   },
    "group_n": 2,
    "group_area_m2": 35584,
    "group_members": [
@@ -17324,22 +17357,7 @@
      "lvl": "C",
      "block": "DSP1-1,2"
     }
-   ],
-   "stage_history": [
-    {
-     "stage": "계획",
-     "date": "2026-07-18",
-     "basis": "observed"
-    },
-    {
-     "stage": "인가",
-     "date": "2024-06-19",
-     "basis": "source"
-    }
-   ],
-   "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   ]
   },
   {
    "title": "신촌동 제 5공학관 (교육연구시설, 연면적 15천㎡)",
@@ -20301,7 +20319,6 @@
      37.561601
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 22,569㎡ — 일자리:오피스 C",
@@ -22363,7 +22380,6 @@
      37.582722
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 4,997㎡ — 인프라:공공시설 C",
@@ -24729,10 +24745,6 @@
      37.571667
     ]
    },
-   "master_ref": {
-    "id": "M-11740DC2012002",
-    "title": "서울고덕강일 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 7,534㎡ — 인프라:공공시설 C",
@@ -24756,7 +24768,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2025-10-01",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11740DC2012002",
+    "title": "서울고덕강일 공공주택지구"
+   }
   },
   {
    "title": "고덕동 강동구 자원순환센터 (자원순환관련시설, 연면적 45천㎡)",
@@ -24825,11 +24841,6 @@
      37.569956
     ]
    },
-   "master_ref": {
-    "id": "M-11740DC2012002",
-    "title": "서울고덕강일 공공주택지구"
-   },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 45,550㎡ — 인프라:공공시설 B",
@@ -24874,7 +24885,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-11-21",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11740DC2012002",
+    "title": "서울고덕강일 공공주택지구"
+   }
   },
   {
    "title": "고덕동 고덕강일 유통판매 2-3BL_업무시설 (업무시설, 연면적 69천㎡)",
@@ -24939,10 +24954,6 @@
      37.564902
     ]
    },
-   "master_ref": {
-    "id": "M-11740DC2012002",
-    "title": "서울고덕강일 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 69,294㎡ — 일자리:오피스 B",
@@ -24961,7 +24972,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-11740DC2012002",
+    "title": "서울고덕강일 공공주택지구"
+   }
   },
   {
    "title": "고덕동 고덕강일 공공주택지구 유통판매시설용지 2-2 (업무시설, 연면적 59천㎡)",
@@ -25026,16 +25041,10 @@
      37.574853
     ]
    },
-   "master_ref": {
-    "id": "M-11740DC2012002",
-    "title": "서울고덕강일 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 59,529㎡ — 일자리:오피스 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -25051,7 +25060,13 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-11740DC2012002",
+    "title": "서울고덕강일 공공주택지구"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "고덕동 고덕강일 공공주택지구 자족 5-1블록 업무시설 ((주)에스에너지) (업무시설, 연면적 12천㎡)",
@@ -25117,10 +25132,6 @@
      37.567107
     ]
    },
-   "master_ref": {
-    "id": "M-11740DC2012002",
-    "title": "서울고덕강일 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 12,185㎡ — 일자리:오피스 C",
@@ -25140,7 +25151,11 @@
    ],
    "first_seen": "2026-07-27",
    "last_movement": "2026-07-27",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-11740DC2012002",
+    "title": "서울고덕강일 공공주택지구"
+   }
   },
   {
    "title": "고덕동 (업무시설, 연면적 13천㎡)",
@@ -25209,10 +25224,6 @@
      37.565126
     ]
    },
-   "master_ref": {
-    "id": "M-11740DC2012002",
-    "title": "서울고덕강일 공공주택지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
@@ -25238,7 +25249,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-11-28",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11740DC2012002",
+    "title": "서울고덕강일 공공주택지구"
+   }
   },
   {
    "title": "고덕동 아산 바이오메디컬 클러스터 (업무시설, 연면적 15천㎡)",
@@ -25305,16 +25320,10 @@
      37.574853
     ]
    },
-   "master_ref": {
-    "id": "M-11740DC2012002",
-    "title": "서울고덕강일 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 15,306㎡ — 일자리:오피스 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -25330,7 +25339,13 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-06-10",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11740DC2012002",
+    "title": "서울고덕강일 공공주택지구"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "진관동 160-4 (노유자시설, 연면적 34천㎡)",
@@ -25397,10 +25412,6 @@
      37.629378
     ]
    },
-   "master_ref": {
-    "id": "M-11380DA2010001",
-    "title": "은평 재정비촉진지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
@@ -25420,7 +25431,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2026-05-26",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11380DA2010001",
+    "title": "은평 재정비촉진지구"
+   }
   },
   {
    "title": "진관동 편익시설용지 4 (노유자시설, 연면적 41천㎡)",
@@ -25485,16 +25500,10 @@
      37.639839
     ]
    },
-   "master_ref": {
-    "id": "M-11380DA2010001",
-    "title": "은평 재정비촉진지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 41,065㎡ — 인프라:공공시설 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -25505,7 +25514,13 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2024-05-07",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11380DA2010001",
+    "title": "은평 재정비촉진지구"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "진관동 은평뉴타운 진관동 복합시설 (노유자시설, 연면적 51천㎡)",
@@ -25572,16 +25587,10 @@
      37.639839
     ]
    },
-   "master_ref": {
-    "id": "M-11380DA2010001",
-    "title": "은평 재정비촉진지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 51,439㎡ — 인프라:공공시설 A",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -25597,7 +25606,13 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2025-01-17",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11380DA2010001",
+    "title": "은평 재정비촉진지구"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "쌍문동 쌍문1동 공공복합청사 (업무시설, 연면적 6천㎡)",
@@ -26190,10 +26205,6 @@
      37.035546
     ]
    },
-   "master_ref": {
-    "id": "M-41220MX2006001",
-    "title": "고덕 국제화계획지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 4,709,471㎡ — 일자리:공장 S",
@@ -26238,7 +26249,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-04-27",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41220MX2006001",
+    "title": "고덕 국제화계획지구 택지개발사업"
+   }
   },
   {
    "title": "고덕동 고덕일반산업단지 A1-1블럭 (고덕 1696번지 외 13, 18차 증축허가사항변경) (공장, 연면적 2352천㎡)",
@@ -26307,10 +26322,6 @@
      37.031933
     ]
    },
-   "master_ref": {
-    "id": "M-41220MX2006001",
-    "title": "고덕 국제화계획지구 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
@@ -26356,7 +26367,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2026-01-05",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41220MX2006001",
+    "title": "고덕 국제화계획지구 택지개발사업"
+   }
   },
   {
    "title": "고덕동 고덕일반산업단지 A4 블럭 (고덕동 1731 외 2) - 3차 건축허가사항변경 (공장, 연면적 14천㎡)",
@@ -26423,10 +26438,6 @@
      37.026726
     ]
    },
-   "master_ref": {
-    "id": "M-41220MX2006001",
-    "title": "고덕 국제화계획지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 14,975㎡ — 일자리:공장 C",
@@ -26445,7 +26456,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-01-05",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41220MX2006001",
+    "title": "고덕 국제화계획지구 택지개발사업"
+   }
   },
   {
    "title": "고덕동 5BL (판매시설, 연면적 78천㎡)",
@@ -26510,10 +26525,6 @@
      37.056078
     ]
    },
-   "master_ref": {
-    "id": "M-41220MX2006001",
-    "title": "고덕 국제화계획지구 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -26533,7 +26544,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41220MX2006001",
+    "title": "고덕 국제화계획지구 택지개발사업"
+   }
   },
   {
    "title": "고덕동 행정복지센터 (업무시설, 연면적 3천㎡)",
@@ -26600,10 +26615,6 @@
      37.057916
     ]
    },
-   "master_ref": {
-    "id": "M-41220MX2006001",
-    "title": "고덕 국제화계획지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 3,707㎡ — 인프라:공공시설 C",
@@ -26622,7 +26633,11 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2025-04-30",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41220MX2006001",
+    "title": "고덕 국제화계획지구 택지개발사업"
+   }
   },
   {
    "title": "고덕동 평택 준법지원센터 청사 (업무시설, 연면적 3천㎡)",
@@ -26689,10 +26704,6 @@
      37.054672
     ]
    },
-   "master_ref": {
-    "id": "M-41220MX2006001",
-    "title": "고덕 국제화계획지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 3,322㎡ — 인프라:공공시설 C",
@@ -26711,7 +26722,11 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2025-08-26",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41220MX2006001",
+    "title": "고덕 국제화계획지구 택지개발사업"
+   }
   },
   {
    "title": "고덕동 1975-2 (업무시설, 연면적 10천㎡)",
@@ -26776,10 +26791,6 @@
      37.047875
     ]
    },
-   "master_ref": {
-    "id": "M-41220MX2006001",
-    "title": "고덕 국제화계획지구 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -26799,7 +26810,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41220MX2006001",
+    "title": "고덕 국제화계획지구 택지개발사업"
+   }
   },
   {
    "title": "고덕동 평택시 신청사 (업무시설, 연면적 52천㎡)",
@@ -26864,10 +26879,6 @@
      37.04718
     ]
    },
-   "master_ref": {
-    "id": "M-41220MX2006001",
-    "title": "고덕 국제화계획지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 52,916㎡ — 인프라:공공시설 A",
@@ -26886,7 +26897,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41220MX2006001",
+    "title": "고덕 국제화계획지구 택지개발사업"
+   }
   },
   {
    "title": "고덕동 고덕국제화계획지구 업무5(1-1)블럭 평택우체국 (업무시설, 연면적 9천㎡)",
@@ -26954,10 +26969,6 @@
      37.04617
     ]
    },
-   "master_ref": {
-    "id": "M-41220MX2006001",
-    "title": "고덕 국제화계획지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 9,960㎡ — 인프라:공공시설 C",
@@ -26977,7 +26988,11 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2025-02-27",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41220MX2006001",
+    "title": "고덕 국제화계획지구 택지개발사업"
+   }
   },
   {
    "title": "장당동 e편한세상 시티 평택고덕 (판매시설, 연면적 166천㎡)",
@@ -27233,10 +27248,6 @@
      37.036243
     ]
    },
-   "master_ref": {
-    "id": "M-41220PV2016002",
-    "title": "평택 브레인시티 일반산업단지"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
@@ -27256,7 +27267,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2023-11-29",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41220PV2016002",
+    "title": "평택 브레인시티 일반산업단지"
+   }
   },
   {
    "title": "모곡동 JS지식산업센터 (공장, 연면적 38천㎡)",
@@ -27414,10 +27429,6 @@
      37.034081
     ]
    },
-   "master_ref": {
-    "id": "M-41220PV2016002",
-    "title": "평택 브레인시티 일반산업단지"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 15,756㎡ — 일자리:공장 C",
@@ -27437,7 +27448,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-11-04",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41220PV2016002",
+    "title": "평택 브레인시티 일반산업단지"
+   }
   },
   {
    "title": "가재동 송탄농협 종합타운 (판매시설, 연면적 12천㎡)",
@@ -27504,10 +27519,6 @@
      37.049923
     ]
    },
-   "master_ref": {
-    "id": "M-41220PV2016002",
-    "title": "평택 브레인시티 일반산업단지"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 12,398㎡ — 인프라:판매 C",
@@ -27526,7 +27537,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2023-09-26",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41220PV2016002",
+    "title": "평택 브레인시티 일반산업단지"
+   }
   },
   {
    "title": "세교동 442-8 외 5필지 관광숙박시설 (숙박시설, 연면적 33천㎡)",
@@ -27769,7 +27784,7 @@
    },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 5,049㎡ — 인프라:공공시설 C",
+   "lvl_basis": "연면적 5,049㎡ — 일자리:오피스 C",
    "addr_verified": {
     "road_addr": "경기도 평택시 경기대로 777 (지제동)",
     "jibun_addr": "경기도 평택시 지제동 559-4 지제역.",
@@ -27859,7 +27874,7 @@
    },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 8,396㎡ — 인프라:공공시설 C",
+   "lvl_basis": "연면적 8,396㎡ — 인프라:문화·관광·체육 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -28289,10 +28304,6 @@
      37.033219
     ]
    },
-   "master_ref": {
-    "id": "M-41220PV2016002",
-    "title": "평택 브레인시티 일반산업단지"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -28319,7 +28330,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41220PV2016002",
+    "title": "평택 브레인시티 일반산업단지"
+   }
   },
   {
    "title": "칠괴동 (공장, 연면적 12천㎡)",
@@ -28386,10 +28401,6 @@
      37.038635
     ]
    },
-   "master_ref": {
-    "id": "M-41220PV2016002",
-    "title": "평택 브레인시티 일반산업단지"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
@@ -28409,7 +28420,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2026-02-06",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41220PV2016002",
+    "title": "평택 브레인시티 일반산업단지"
+   }
   },
   {
    "title": "도일동 (공장, 연면적 12천㎡)",
@@ -28475,10 +28490,6 @@
      37.049821
     ]
    },
-   "master_ref": {
-    "id": "M-41220PV2016002",
-    "title": "평택 브레인시티 일반산업단지"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -28499,7 +28510,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41220PV2016002",
+    "title": "평택 브레인시티 일반산업단지"
+   }
   },
   {
    "title": "도일동 케이지에이사옥 (공장, 연면적 26천㎡)",
@@ -28568,10 +28583,6 @@
      37.045802
     ]
    },
-   "master_ref": {
-    "id": "M-41220PV2016002",
-    "title": "평택 브레인시티 일반산업단지"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 26,176㎡ — 일자리:공장 C",
@@ -28596,7 +28607,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-10-17",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41220PV2016002",
+    "title": "평택 브레인시티 일반산업단지"
+   }
   },
   {
    "title": "도일동 DOOSAN 두산테스나 (공장, 연면적 49천㎡)",
@@ -28664,10 +28679,6 @@
      37.039487
     ]
    },
-   "master_ref": {
-    "id": "M-41220PV2016002",
-    "title": "평택 브레인시티 일반산업단지"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 49,181㎡ — 일자리:공장 B",
@@ -28687,7 +28698,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-06-10",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41220PV2016002",
+    "title": "평택 브레인시티 일반산업단지"
+   }
   },
   {
    "title": "합정동 신평동행정복지센터 (업무시설, 연면적 5천㎡)",
@@ -29292,10 +29307,6 @@
      37.153992
     ]
    },
-   "master_ref": {
-    "id": "M-41463PV2023008",
-    "title": "용인 반도체 클러스터 일반산업단지"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 1,530,093㎡ — 일자리:공장 S",
@@ -29315,7 +29326,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-10-25",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41463PV2023008",
+    "title": "용인 반도체 클러스터 일반산업단지"
+   }
   },
   {
    "title": "오산동 49 (운동시설, 연면적 38천㎡)",
@@ -29552,10 +29567,6 @@
      37.157816
     ]
    },
-   "master_ref": {
-    "id": "M-41370DA2004001",
-    "title": "오산세교2지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 30,735㎡ — 인프라:판매 C",
@@ -29574,7 +29585,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41370DA2004001",
+    "title": "오산세교2지구 택지개발사업"
+   }
   },
   {
    "title": "원동 테크엘 오산공장 (공장, 연면적 15천㎡)",
@@ -30738,10 +30753,6 @@
      37.144689
     ]
    },
-   "master_ref": {
-    "id": "M-41370DA2004001",
-    "title": "오산세교2지구 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
@@ -30787,7 +30798,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-10-17",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41370DA2004001",
+    "title": "오산세교2지구 택지개발사업"
+   }
   },
   {
    "title": "가수동 오산우체국 (업무시설, 연면적 7천㎡)",
@@ -30854,10 +30869,6 @@
      37.146367
     ]
    },
-   "master_ref": {
-    "id": "M-41370DA2004001",
-    "title": "오산세교2지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 7,065㎡ — 인프라:공공시설 C",
@@ -30877,7 +30888,11 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2025-02-12",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41370DA2004001",
+    "title": "오산세교2지구 택지개발사업"
+   }
   },
   {
    "title": "여울동 동탄역 루센채 (업무시설, 연면적 13천㎡)",
@@ -30944,10 +30959,6 @@
      37.200736
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 13,363㎡ — 일자리:오피스 C",
@@ -30966,7 +30977,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-03-11",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "여울동 라티파니7 (업무시설, 연면적 35천㎡)",
@@ -31031,10 +31046,6 @@
      37.197696
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 35,577㎡ — 일자리:오피스 B",
@@ -31053,7 +31064,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "여울동 라티파니7 (업무시설, 연면적 33천㎡)",
@@ -31118,10 +31133,6 @@
      37.197376
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 33,782㎡ — 일자리:오피스 B",
@@ -31140,7 +31151,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "여울동 (의료시설, 연면적 12천㎡)",
@@ -31207,10 +31222,6 @@
      37.187099
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
@@ -31230,7 +31241,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-01-14",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "여울동 오산동 (의료시설, 연면적 17천㎡)",
@@ -31297,10 +31312,6 @@
      37.187095
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 17,152㎡ — 인프라:병원 C",
@@ -31326,7 +31337,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-09-27",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "여울동 오산동 (의료시설, 연면적 10천㎡)",
@@ -31393,10 +31408,6 @@
      37.187547
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 10,653㎡ — 인프라:병원 C",
@@ -31422,7 +31433,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-09-27",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "여울동 화성 데이터센터 (방송통신시설, 연면적 13천㎡)",
@@ -31487,10 +31502,6 @@
      37.185307
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 13,106㎡ — 일자리:데이터센터 C",
@@ -31509,7 +31520,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "여울동 동탄2신도시 택지개발지구 근린상업지역 32-2BL 제1종근린생활시설 (주식회사 더좋은산업개발 김명배) (제1종근린생활시설, 연면적 13천㎡)",
@@ -31575,10 +31590,6 @@
      37.209343
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 13,337㎡ — 인프라:판매 C",
@@ -31598,7 +31609,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "산척동 (제2종근린생활시설, 연면적 17천㎡)",
@@ -31663,10 +31678,6 @@
      37.170426
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -31686,7 +31697,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "송동 (업무시설, 연면적 54천㎡)",
@@ -31751,10 +31766,6 @@
      37.174819
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -31774,7 +31785,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "송동 ASML 화성 뉴 캠퍼스 P2 (교육연구시설, 연면적 29천㎡)",
@@ -31841,10 +31856,6 @@
      37.175518
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "geo_approx": false,
@@ -31862,7 +31873,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2026-06-17",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "고색동 수원덕산병원 (의료시설, 연면적 86천㎡)",
@@ -32629,10 +32644,6 @@
      37.225865
     ]
    },
-   "master_ref": {
-    "id": "M-41590KL2001001",
-    "title": "화성동탄지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 4,315㎡ — 인프라:문화·관광·체육 C",
@@ -32651,7 +32662,11 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2023-11-06",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41590KL2001001",
+    "title": "화성동탄지구 택지개발사업"
+   }
   },
   {
    "title": "세류동 개성로니엘 (업무시설, 연면적 10천㎡)",
@@ -32720,7 +32735,6 @@
      37.245902
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 10,623㎡ — 일자리:오피스 C",
@@ -32859,7 +32873,7 @@
    "last_movement_basis": "source"
   },
   {
-   "title": "망포동 233-8  어반스퀘어 (제2종근린생활시설, 연면적 20천㎡)",
+   "title": "망포동 233-8 어반스퀘어 (제2종근린생활시설, 연면적 20천㎡)",
    "cat": "인프라",
    "sub": "판매",
    "lvl": "C",
@@ -34325,10 +34339,6 @@
      37.215181
     ]
    },
-   "master_ref": {
-    "id": "M-41590KL2001001",
-    "title": "화성동탄지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "geo_approx": false,
@@ -34346,7 +34356,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2023-08-11",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41590KL2001001",
+    "title": "화성동탄지구 택지개발사업"
+   }
   },
   {
    "title": "반송동 화성시 시니어플러스센터 (노유자시설, 연면적 4천㎡)",
@@ -34413,10 +34427,6 @@
      37.185953
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 4,742㎡ — 인프라:공공시설 C",
@@ -34435,7 +34445,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2025-04-14",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "석우동 (공장, 연면적 15천㎡)",
@@ -34500,10 +34514,6 @@
      37.222866
     ]
    },
-   "master_ref": {
-    "id": "M-41590KL2001001",
-    "title": "화성동탄지구 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -34530,7 +34540,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41590KL2001001",
+    "title": "화성동탄지구 택지개발사업"
+   }
   },
   {
    "title": "석우동 (공장, 연면적 14천㎡)",
@@ -34595,10 +34609,6 @@
      37.222718
     ]
    },
-   "master_ref": {
-    "id": "M-41590KL2001001",
-    "title": "화성동탄지구 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -34625,7 +34635,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41590KL2001001",
+    "title": "화성동탄지구 택지개발사업"
+   }
   },
   {
    "title": "고매동 345kV 신기흥변전소 (제1종근린생활시설, 연면적 17천㎡)",
@@ -34692,10 +34706,6 @@
      37.218211
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
@@ -34715,7 +34725,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-02-11",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "영천동 경기남부직업능력개발원 (교육연구시설, 연면적 22천㎡)",
@@ -34782,10 +34796,6 @@
      37.216718
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 22,378㎡ — 일자리:오피스 C",
@@ -34804,7 +34814,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2022-04-25",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "영천동 (주)메리테크 (공장, 연면적 20천㎡)",
@@ -34871,10 +34885,6 @@
      37.212061
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 10,028㎡ — 일자리:공장 C",
@@ -34900,7 +34910,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2024-05-03",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "영천동 동탄 엘앤씨 지식산업센터 신축공사 (공장, 연면적 28천㎡)",
@@ -34965,10 +34979,6 @@
      37.21399
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 28,576㎡ — 일자리:지식산업센터 C",
@@ -34987,7 +34997,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "영천동 더 챔버 라티파니 (공장, 연면적 82천㎡)",
@@ -35056,10 +35070,6 @@
      37.216008
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 82,303㎡ — 일자리:지식산업센터 B",
@@ -35104,7 +35114,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-02-24",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "영천동 동탄2신도시 테크노밸리 지27-5블럭 지식산업센터 (공장, 연면적 68천㎡)",
@@ -35169,10 +35183,6 @@
      37.218098
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 68,757㎡ — 일자리:지식산업센터 B",
@@ -35191,7 +35201,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "영천동 동탄2 택지개발예정지구 52 1 (공장, 연면적 80천㎡)",
@@ -35256,10 +35270,6 @@
      37.218098
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 80,990㎡ — 일자리:지식산업센터 B",
@@ -35278,7 +35288,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "영천동 동탄2신도시 지원시설용지 50-1BL 지식산업센터(동탄 금강 펜테리움IT타워 4차) (공장, 연면적 29천㎡)",
@@ -35343,10 +35357,6 @@
      37.218098
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 29,055㎡ — 일자리:지식산업센터 C",
@@ -35365,7 +35375,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "영천동 동탄5동행정복지센터 (업무시설, 연면적 3천㎡)",
@@ -35430,10 +35444,6 @@
      37.218098
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "geo_approx": false,
@@ -35446,7 +35456,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2019-09-19",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "영천동 동탄2신도시 지원 27-1BL 지식산업센터 (공장, 연면적 24천㎡)",
@@ -35511,10 +35525,6 @@
      37.218098
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 24,935㎡ — 일자리:지식산업센터 C",
@@ -35533,7 +35543,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   }
   },
   {
    "title": "보라동 행정복지센터 (업무시설, 연면적 4천㎡)",
@@ -39721,10 +39735,6 @@
      37.284845
     ]
    },
-   "master_ref": {
-    "id": "M-41390MX2010005",
-    "title": "반월특수지역 개발구역 중 시화2단계(송산그린시티) 개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 90,944㎡ — 일자리:지식산업센터 B",
@@ -39743,7 +39753,11 @@
    ],
    "first_seen": "2026-07-27",
    "last_movement": "2026-07-27",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41390MX2010005",
+    "title": "반월특수지역 개발구역 중 시화2단계(송산그린시티) 개발사업"
+   }
   },
   {
    "title": "사동 한양대 ERICA캠퍼스혁신파크 HUB동 (공장, 연면적 22천㎡)",
@@ -40337,10 +40351,6 @@
      37.323192
     ]
    },
-   "master_ref": {
-    "id": "M-41430MX2023010",
-    "title": "의왕군포안산 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 4,072㎡ — 인프라:공공시설 C",
@@ -40366,7 +40376,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2022-07-13",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41430MX2023010",
+    "title": "의왕군포안산 공공주택지구"
+   }
   },
   {
    "title": "부곡동 가스트론 군포2공장 (공장, 연면적 13천㎡)",
@@ -40433,10 +40447,6 @@
      37.325598
     ]
    },
-   "master_ref": {
-    "id": "M-41430MX2023010",
-    "title": "의왕군포안산 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 13,917㎡ — 일자리:공장 C",
@@ -40462,7 +40472,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-12-05",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41430MX2023010",
+    "title": "의왕군포안산 공공주택지구"
+   }
   },
   {
    "title": "천천동 종전부동산 이목지구 근린공원 도서관 (교육연구시설, 연면적 6천㎡)",
@@ -40892,10 +40906,6 @@
      37.325735
     ]
    },
-   "master_ref": {
-    "id": "M-41430MX2023010",
-    "title": "의왕군포안산 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 15,385㎡ — 일자리:오피스 C",
@@ -40914,7 +40924,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2022-07-22",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41430MX2023010",
+    "title": "의왕군포안산 공공주택지구"
+   }
   },
   {
    "title": "삼동 부곡커뮤니티센터 (노유자시설, 연면적 5천㎡)",
@@ -40981,10 +40995,6 @@
      37.320818
     ]
    },
-   "master_ref": {
-    "id": "M-41430MX2023010",
-    "title": "의왕군포안산 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 5,206㎡ — 인프라:공공시설 C",
@@ -41003,7 +41013,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2025-08-12",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41430MX2023010",
+    "title": "의왕군포안산 공공주택지구"
+   }
   },
   {
    "title": "삼동 의왕시 삼동 641 지식산업센터 (공장, 연면적 44천㎡)",
@@ -41237,7 +41251,6 @@
      37.265361
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 5,237㎡ — 인프라:공공시설 C",
@@ -42185,10 +42198,6 @@
      37.302365
     ]
    },
-   "master_ref": {
-    "id": "M-41115MX2004001",
-    "title": "광교지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "geo_approx": false,
@@ -42211,7 +42220,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2025-09-10",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41115MX2004001",
+    "title": "광교지구 택지개발사업"
+   }
   },
   {
    "title": "이의동 경기도신청사 주건축물제2동 (자동차관련시설, 연면적 51천㎡)",
@@ -42278,10 +42291,6 @@
      37.300301
     ]
    },
-   "master_ref": {
-    "id": "M-41115MX2004001",
-    "title": "광교지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "geo_approx": true,
@@ -42300,7 +42309,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2025-12-10",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41115MX2004001",
+    "title": "광교지구 택지개발사업"
+   }
   },
   {
    "title": "성복동 555-4 운동시설 및 근린생활시설 (운동시설, 연면적 11천㎡)",
@@ -42536,10 +42549,6 @@
      37.300833
     ]
    },
-   "master_ref": {
-    "id": "M-41115MX2004001",
-    "title": "광교지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "증축분 면적 22,339㎡ — 인프라:판매 C",
@@ -42584,7 +42593,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2025-11-21",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41115MX2004001",
+    "title": "광교지구 택지개발사업"
+   }
   },
   {
    "title": "상현동 상현4지구도시개발사업 A-2 블록 (공장, 연면적 140천㎡)",
@@ -42649,16 +42662,10 @@
      37.3069
     ]
    },
-   "master_ref": {
-    "id": "M-41115MX2004001",
-    "title": "광교지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 140,212㎡ — 일자리:지식산업센터 A",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -42674,7 +42681,13 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41115MX2004001",
+    "title": "광교지구 택지개발사업"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "상현동 상현4지구 A1블록 (공장, 연면적 191천㎡)",
@@ -42739,17 +42752,11 @@
      37.3069
     ]
    },
-   "master_ref": {
-    "id": "M-41115MX2004001",
-    "title": "광교지구 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 191,091㎡ — 일자리:지식산업센터 A",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -42765,7 +42772,13 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41115MX2004001",
+    "title": "광교지구 택지개발사업"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "영덕동 산업시설용지2,3 지식산업센터 (공장, 연면적 152천㎡)",
@@ -43000,10 +43013,6 @@
      37.269071
     ]
    },
-   "master_ref": {
-    "id": "M-41115MX2004001",
-    "title": "광교지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 346,350㎡ — 일자리:지식산업센터 S",
@@ -43022,7 +43031,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-10-29",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41115MX2004001",
+    "title": "광교지구 택지개발사업"
+   }
   },
   {
    "title": "고등동 수원고등 주거환경개선사업 정비구역 C-3-1블록 (노유자시설, 연면적 88천㎡)",
@@ -44101,10 +44114,6 @@
      37.27901
     ]
    },
-   "master_ref": {
-    "id": "M-41115MX2004001",
-    "title": "광교지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 9,509㎡ — 인프라:공공시설 C",
@@ -44149,7 +44158,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2025-08-08",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41115MX2004001",
+    "title": "광교지구 택지개발사업"
+   }
   },
   {
    "title": "원천동 아주대학교 (교육연구시설, 연면적 423천㎡)",
@@ -44218,10 +44231,6 @@
      37.283388
     ]
    },
-   "master_ref": {
-    "id": "M-41115MX2004001",
-    "title": "광교지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "geo_approx": false,
@@ -44244,7 +44253,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2026-05-06",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41115MX2004001",
+    "title": "광교지구 택지개발사업"
+   }
   },
   {
    "title": "원천동 아주대학교 (교육연구시설, 연면적 450천㎡)",
@@ -44309,10 +44322,6 @@
      37.283388
     ]
    },
-   "master_ref": {
-    "id": "M-41115MX2004001",
-    "title": "광교지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "geo_approx": false,
@@ -44325,7 +44334,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2025-12-17",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41115MX2004001",
+    "title": "광교지구 택지개발사업"
+   }
   },
   {
    "title": "마북동 용인 마북 양로시설 (노유자시설, 연면적 10천㎡)",
@@ -46922,10 +46935,6 @@
      37.381368
     ]
    },
-   "master_ref": {
-    "id": "M-28185DA2016001",
-    "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 290,068㎡ — 일자리:오피스 A",
@@ -46951,7 +46960,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2023-07-21",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28185DA2016001",
+    "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
+   }
   },
   {
    "title": "송도동 K-바이오 랩허브 (교육연구시설, 연면적 591천㎡)",
@@ -47016,10 +47029,6 @@
      37.381368
     ]
    },
-   "master_ref": {
-    "id": "M-28185DA2016001",
-    "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 556,459㎡ — 일자리:오피스 S",
@@ -47040,7 +47049,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2025-06-12",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28185DA2016001",
+    "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
+   }
   },
   {
    "title": "송도동 아미코젠 미디어 앤 바이오 프로세스 씨디엠오 플랜트 신축공사 (교육연구시설, 연면적 22천㎡)",
@@ -47105,10 +47118,6 @@
      37.379694
     ]
    },
-   "master_ref": {
-    "id": "M-28185DA2016001",
-    "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 22,447㎡ — 일자리:오피스 C",
@@ -47134,7 +47143,11 @@
    ],
    "first_seen": "2026-07-27",
    "last_movement": "2026-07-27",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-28185DA2016001",
+    "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
+   }
   },
   {
    "title": "송도동 SK 바이오사이언스 Global R&PD Center (교육연구시설, 연면적 65천㎡)",
@@ -47203,10 +47216,6 @@
      37.37685
     ]
    },
-   "master_ref": {
-    "id": "M-28185DA2016001",
-    "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 65,388㎡ — 일자리:오피스 B",
@@ -47251,7 +47260,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-11-21",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28185DA2016001",
+    "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
+   }
   },
   {
    "title": "송도동 203-1 (업무시설, 연면적 106천㎡)",
@@ -47516,10 +47529,6 @@
      37.363761
     ]
    },
-   "master_ref": {
-    "id": "M-28185DA2016001",
-    "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 87,053㎡ — 일자리:공장 B",
@@ -47538,7 +47547,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2023-01-19",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28185DA2016001",
+    "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
+   }
   },
   {
    "title": "송도동 롯데바이오로직스 송도 1공장 (공장, 연면적 99천㎡)",
@@ -47607,10 +47620,6 @@
      37.354736
     ]
    },
-   "master_ref": {
-    "id": "M-28185DA2016001",
-    "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 99,575㎡ — 일자리:공장 B",
@@ -47655,7 +47664,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-06-12",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28185DA2016001",
+    "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
+   }
   },
   {
    "title": "송도동 Pilot 생산시설 + 유틸리티-1 (공장, 연면적 25천㎡)",
@@ -47722,10 +47735,6 @@
      37.363287
     ]
    },
-   "master_ref": {
-    "id": "M-28185DA2016001",
-    "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 25,104㎡ — 일자리:공장 C",
@@ -47744,7 +47753,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-05-18",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28185DA2016001",
+    "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
+   }
   },
   {
    "title": "송도동 345kV 신송도 변전소 (제1종근린생활시설, 연면적 16천㎡)",
@@ -48161,10 +48174,6 @@
      37.399753
     ]
    },
-   "master_ref": {
-    "id": "M-28200KH1997001",
-    "title": "인천 논현2지구 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -48191,7 +48200,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-28200KH1997001",
+    "title": "인천 논현2지구 택지개발사업"
+   }
   },
   {
    "title": "배곧동 굿네이버스 미래재단 시니어타운 (노유자시설, 연면적 7천㎡)",
@@ -48260,10 +48273,6 @@
      37.381951
     ]
    },
-   "master_ref": {
-    "id": "M-41390DA2010001",
-    "title": "시흥 배곧신도시 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 7,148㎡ — 인프라:공공시설 C",
@@ -48308,7 +48317,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2026-02-02",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41390DA2010001",
+    "title": "시흥 배곧신도시 도시개발구역"
+   }
   },
   {
    "title": "배곧동 서울대학교 시흥캠퍼스(재외동포교육문화센터) (교육연구시설, 연면적 116천㎡)",
@@ -48373,10 +48386,6 @@
      37.36684
     ]
    },
-   "master_ref": {
-    "id": "M-41390DA2010001",
-    "title": "시흥 배곧신도시 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 28,532㎡ — 인프라:문화·관광·체육 B",
@@ -48397,7 +48406,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2026-02-11",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41390DA2010001",
+    "title": "시흥 배곧신도시 도시개발구역"
+   }
   },
   {
    "title": "배곧동 배곧서울대학교병원 (의료시설, 연면적 112천㎡)",
@@ -48464,10 +48477,6 @@
      37.364664
     ]
    },
-   "master_ref": {
-    "id": "M-41390DA2010001",
-    "title": "시흥 배곧신도시 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 112,896㎡ — 인프라:병원 A",
@@ -48493,7 +48502,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-11-10",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41390DA2010001",
+    "title": "시흥 배곧신도시 도시개발구역"
+   }
   },
   {
    "title": "배곧동 배곧프라임센터S 지식산업센터 (공장, 연면적 36천㎡)",
@@ -48558,10 +48571,6 @@
      37.358107
     ]
    },
-   "master_ref": {
-    "id": "M-41390DA2010001",
-    "title": "시흥 배곧신도시 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 36,757㎡ — 일자리:지식산업센터 B",
@@ -48587,7 +48596,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41390DA2010001",
+    "title": "시흥 배곧신도시 도시개발구역"
+   }
   },
   {
    "title": "배곧동 배곧 비즈라이브센터 (공장, 연면적 40천㎡)",
@@ -48652,10 +48665,6 @@
      37.35853
     ]
    },
-   "master_ref": {
-    "id": "M-41390DA2010001",
-    "title": "시흥 배곧신도시 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 40,997㎡ — 일자리:지식산업센터 B",
@@ -48681,7 +48690,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41390DA2010001",
+    "title": "시흥 배곧신도시 도시개발구역"
+   }
   },
   {
    "title": "논현동 431-1 (공장, 연면적 12천㎡)",
@@ -49275,8 +49288,6 @@
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 7,776㎡ — 인프라:공공시설 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -49287,7 +49298,9 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2022-04-15",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "능곡동 장현지구 8블록 1로트 업무시설 (업무시설, 연면적 16천㎡)",
@@ -49358,8 +49371,6 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 16,095㎡ — 일자리:오피스 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -49375,7 +49386,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2023-07-14",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "하중동 142-4 (노유자시설, 연면적 6천㎡)",
@@ -50630,8 +50643,6 @@
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 52,152㎡ — 일자리:지식산업센터 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -50647,7 +50658,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "당동 트리아츠 (공장, 연면적 244천㎡)",
@@ -50666,7 +50679,7 @@
    "block": "A-1",
    "lot": null,
    "geo_prec": "parcel_base",
-   "position_confidence": "보정 대장: 지번 경기도 군포시 당동 150 · 종전 좌표에서 902m 이동. 근거: \"군포역세권복합개발지구 / 위치: 당동 150-1번지 일원 / 면적: 48,121㎡ / 군포시고시 제2021-8호(2021.1.27)\" (https://www.gunpo.go.kr/www/contents.do?key=4437)",
+   "position_confidence": "보정 대장: 지번 경기도 군포시 당동 150 · 종전 좌표에서 0m 이동. 근거: \"군포역세권복합개발지구 / 위치: 당동 150-1번지 일원 / 면적: 48,121㎡ / 군포시고시 제2021-8호(2021.1.27)\" (https://www.gunpo.go.kr/www/contents.do?key=4437)",
    "hhld_cnt": 0,
    "ho_cnt": 1286,
    "vlrat": 499.6,
@@ -50721,9 +50734,7 @@
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 244,445㎡ — 일자리:지식산업센터 A",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
-   "geo_basis": "보정 대장: 지번 경기도 군포시 당동 150 · 종전 좌표에서 902m 이동. 근거: \"군포역세권복합개발지구 / 위치: 당동 150-1번지 일원 / 면적: 48,121㎡ / 군포시고시 제2021-8호(2021.1.27)\" (https://www.gunpo.go.kr/www/contents.do?key=4437)",
+   "geo_basis": "보정 대장: 지번 경기도 군포시 당동 150 · 종전 좌표에서 0m 이동. 근거: \"군포역세권복합개발지구 / 위치: 당동 150-1번지 일원 / 면적: 48,121㎡ / 군포시고시 제2021-8호(2021.1.27)\" (https://www.gunpo.go.kr/www/contents.do?key=4437)",
    "stage_history": [
     {
      "stage": "인가",
@@ -50812,8 +50823,6 @@
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 53,167㎡ — 일자리:지식산업센터 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -50829,7 +50838,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "당정동 군포 당정지구 일반공업지역 I BL 지식산업센터 신축공사 (공장, 연면적 99천㎡)",
@@ -51982,7 +51993,6 @@
      37.388014
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 12,551㎡ — 일자리:오피스 C",
@@ -54687,8 +54697,6 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 4,903,496㎡ — 교통 문턱미달",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -54703,7 +54711,9 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2023-02-24",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "운서동 3087-4 (제1종근린생활시설, 연면적 13천㎡)",
@@ -54792,8 +54802,6 @@
     "basis": "건축물대장 사용승인일"
    },
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -54813,7 +54821,9 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2026-02-05",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "운서동 인천국제공항 화물기정비시설(F1) (운수시설, 연면적 35천㎡)",
@@ -54884,8 +54894,6 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 35,693㎡ — 교통:환승·터미널 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -54900,7 +54908,9 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2025-01-13",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "운서동 T2 IOC (운수시설, 연면적 26천㎡)",
@@ -54971,8 +54981,6 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 26,073㎡ — 교통:환승·터미널 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -54987,7 +54995,9 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2025-02-20",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "신흥동3가 (업무시설, 연면적 15천㎡)",
@@ -55057,8 +55067,6 @@
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 15,365㎡ — 일자리:오피스 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "계획",
@@ -55073,7 +55081,9 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2026-07-26",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "신흥동3가 툴마트 (판매시설, 연면적 22천㎡)",
@@ -55142,8 +55152,6 @@
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 22,955㎡ — 인프라:판매 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "계획",
@@ -55158,7 +55166,9 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2026-07-26",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "항동7가 중구 항동7가 97번지 지식산업센터 (공장, 연면적 145천㎡)",
@@ -56177,10 +56187,6 @@
      37.441356
     ]
    },
-   "master_ref": {
-    "id": "M-28200DC2023001",
-    "title": "인천구월2 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 214,601㎡ — 인프라:판매 A",
@@ -56206,7 +56212,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2022-01-25",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28200DC2023001",
+    "title": "인천구월2 공공주택지구"
+   }
   },
   {
    "title": "구월동 343-3 (제1종근린생활시설, 연면적 14천㎡)",
@@ -56933,10 +56943,6 @@
      37.442568
     ]
    },
-   "master_ref": {
-    "id": "M-28200DC2023001",
-    "title": "인천구월2 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 12,790㎡ — 일자리:오피스 C",
@@ -56955,7 +56961,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-28200DC2023001",
+    "title": "인천구월2 공공주택지구"
+   }
   },
   {
    "title": "구월동 트레이더스 홀세일클럽 구월점 (판매시설, 연면적 49천㎡)",
@@ -57024,10 +57034,6 @@
      37.439613
     ]
    },
-   "master_ref": {
-    "id": "M-28200DC2023001",
-    "title": "인천구월2 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 49,826㎡ — 인프라:판매 C",
@@ -57072,7 +57078,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-02-04",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28200DC2023001",
+    "title": "인천구월2 공공주택지구"
+   }
   },
   {
    "title": "간석동 113-1번지외2필지 테마빌딩 신축 (운동시설, 연면적 29천㎡)",
@@ -57606,7 +57616,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41390LH2009001",
+    "title": "시흥은계 공공주택지구"
+   }
   },
   {
    "title": "대야동 신천 센트럴프라자 (제1종근린생활시설, 연면적 13천㎡)",
@@ -58137,10 +58151,6 @@
      37.473808
     ]
    },
-   "master_ref": {
-    "id": "M-41210LH2022002",
-    "title": "광명시흥 공공주택지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
@@ -58160,7 +58170,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-01-12",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41210LH2022002",
+    "title": "광명시흥 공공주택지구"
+   }
   },
   {
    "title": "노온사동 노온정수장 (제1종근린생활시설, 연면적 22천㎡)",
@@ -58227,10 +58241,6 @@
      37.449454
     ]
    },
-   "master_ref": {
-    "id": "M-41210LH2022002",
-    "title": "광명시흥 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "addr_verified": {
@@ -58255,7 +58265,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2026-04-28",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41210LH2022002",
+    "title": "광명시흥 공공주택지구"
+   }
   },
   {
    "title": "하안동 323-1 (제1종근린생활시설, 연면적 10천㎡)",
@@ -58807,10 +58821,6 @@
      37.44182
     ]
    },
-   "master_ref": {
-    "id": "M-41290MX2019001",
-    "title": "과천과천 공공주택지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
@@ -58837,7 +58847,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2024-07-23",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41290MX2019001",
+    "title": "과천과천 공공주택지구"
+   }
   },
   {
    "title": "중앙동 과천시립 요양원 (노유자시설, 연면적 4천㎡)",
@@ -59108,8 +59122,6 @@
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 23,254㎡ — 일자리:지식산업센터 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -59130,7 +59142,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-09-16",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "갈현동 근린공원4 (운동시설, 연면적 3천㎡)",
@@ -59201,8 +59215,6 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 3,438㎡ — 인프라:문화·관광·체육 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -59218,7 +59230,9 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2026-01-14",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "갈현동 과천지식정보타운 상업용지 2BL (업무시설, 연면적 29천㎡)",
@@ -61144,10 +61158,6 @@
      37.464362
     ]
    },
-   "master_ref": {
-    "id": "M-11710KL2006001",
-    "title": "위례 택지개발사업 예정지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -61167,7 +61177,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-11710KL2006001",
+    "title": "위례 택지개발사업 예정지구"
+   }
   },
   {
    "title": "창곡동 위례택지개발지구 도시지원시설용지 지원2 (교육연구시설, 연면적 254천㎡)",
@@ -61233,10 +61247,6 @@
      37.467238
     ]
    },
-   "master_ref": {
-    "id": "M-11710KL2006001",
-    "title": "위례 택지개발사업 예정지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 254,026㎡ — 일자리:오피스 A",
@@ -61256,7 +61266,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-11710KL2006001",
+    "title": "위례 택지개발사업 예정지구"
+   }
   },
   {
    "title": "상대원동 하이콘빌딩 (공장, 연면적 42천㎡)",
@@ -61786,10 +61800,6 @@
      37.465589
     ]
    },
-   "master_ref": {
-    "id": "M-11710KL2006001",
-    "title": "위례 택지개발사업 예정지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 27,498㎡ — 일자리:오피스 C",
@@ -61809,7 +61819,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-05-29",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11710KL2006001",
+    "title": "위례 택지개발사업 예정지구"
+   }
   },
   {
    "title": "시흥동 판교제2테크노밸리 기업성장센터 (공장, 연면적 26천㎡)",
@@ -62883,10 +62897,6 @@
      37.513817
     ]
    },
-   "master_ref": {
-    "id": "M-28110LH2010001",
-    "title": "인천경제자유구역 영종국제도시 영종하늘도시"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 132,405㎡ — 일자리:공장 A",
@@ -62905,7 +62915,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2024-03-27",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28110LH2010001",
+    "title": "인천경제자유구역 영종국제도시 영종하늘도시"
+   }
   },
   {
    "title": "운남동 1700-1 (제2종근린생활시설, 연면적 15천㎡)",
@@ -62970,17 +62984,11 @@
      37.488984
     ]
    },
-   "master_ref": {
-    "id": "M-28110LH2010001",
-    "title": "인천경제자유구역 영종국제도시 영종하늘도시"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 15,454㎡ — 인프라:판매 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "계획",
@@ -62995,7 +63003,13 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2026-07-26",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-28110LH2010001",
+    "title": "인천경제자유구역 영종국제도시 영종하늘도시"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "운남동 한빛타워 (제2종근린생활시설, 연면적 11천㎡)",
@@ -63064,10 +63078,6 @@
      37.488984
     ]
    },
-   "master_ref": {
-    "id": "M-28110LH2010001",
-    "title": "인천경제자유구역 영종국제도시 영종하늘도시"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 11,544㎡ — 인프라:판매 C",
@@ -63087,8 +63097,6 @@
     "basis": "건축물대장 사용승인일"
    },
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -63108,7 +63116,13 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2026-02-12",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28110LH2010001",
+    "title": "인천경제자유구역 영종국제도시 영종하늘도시"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "항동4가 인천중동우체국 (업무시설, 연면적 4천㎡)",
@@ -63258,17 +63272,11 @@
      37.498228
     ]
    },
-   "master_ref": {
-    "id": "M-28110LH2010001",
-    "title": "인천경제자유구역 영종국제도시 영종하늘도시"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 20,522㎡ — 인프라:판매 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "계획",
@@ -63283,7 +63291,13 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2026-07-26",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-28110LH2010001",
+    "title": "인천경제자유구역 영종국제도시 영종하늘도시"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "중산동 1947-4 (노유자시설, 연면적 35천㎡)",
@@ -63350,17 +63364,11 @@
      37.498228
     ]
    },
-   "master_ref": {
-    "id": "M-28110LH2010001",
-    "title": "인천경제자유구역 영종국제도시 영종하늘도시"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 35,201㎡ — 인프라:공공시설 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -63375,7 +63383,13 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2025-11-07",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28110LH2010001",
+    "title": "인천경제자유구역 영종국제도시 영종하늘도시"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "원창동 381-20,22 제1,2종근린생활시설 및 업무시설 [(주)더엠지씨] (제1종근린생활시설, 연면적 18천㎡)",
@@ -65637,8 +65651,6 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 59,455㎡ — 인프라:판매 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -65654,7 +65666,9 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2025-10-28",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "가정동 루원복합청사 (업무시설, 연면적 47천㎡)",
@@ -65725,8 +65739,6 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 47,301㎡ — 인프라:공공시설 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -65742,7 +65754,9 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2022-07-22",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "가정동 인천지방국세청 (업무시설, 연면적 23천㎡)",
@@ -65813,8 +65827,6 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 23,312㎡ — 일자리:오피스 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -65830,7 +65842,9 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2025-11-10",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "가정동 소상공인복합클러스터 (업무시설, 연면적 14천㎡)",
@@ -65903,8 +65917,6 @@
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 14,932㎡ — 일자리:오피스 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -65925,7 +65937,9 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2026-03-27",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "석남동 488-5 (업무시설, 연면적 10천㎡)",
@@ -68055,10 +68069,6 @@
      37.534159
     ]
    },
-   "master_ref": {
-    "id": "M-41190MX2020001",
-    "title": "부천대장 공공주택지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -68078,7 +68088,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41190MX2020001",
+    "title": "부천대장 공공주택지구"
+   }
   },
   {
    "title": "철산동 광명시청 (업무시설, 연면적 28천㎡)",
@@ -68683,10 +68697,6 @@
      37.487791
     ]
    },
-   "master_ref": {
-    "id": "M-11710KL2006001",
-    "title": "위례 택지개발사업 예정지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 8,711㎡ — 인프라:문화·관광·체육 C",
@@ -68712,7 +68722,11 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2024-06-07",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11710KL2006001",
+    "title": "위례 택지개발사업 예정지구"
+   }
   },
   {
    "title": "학암동 위례 C3-2블럭 업무시설 (업무시설, 연면적 14천㎡)",
@@ -68777,10 +68791,6 @@
      37.481122
     ]
    },
-   "master_ref": {
-    "id": "M-11710KL2006001",
-    "title": "위례 택지개발사업 예정지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 14,866㎡ — 일자리:오피스 C",
@@ -68799,7 +68809,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-11710KL2006001",
+    "title": "위례 택지개발사업 예정지구"
+   }
   },
   {
    "title": "학암동 경기도 하남시 위례택지지구 C3-3bl 업무시설 개발사업 (업무시설, 연면적 16천㎡)",
@@ -68864,10 +68878,6 @@
      37.479931
     ]
    },
-   "master_ref": {
-    "id": "M-11710KL2006001",
-    "title": "위례 택지개발사업 예정지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 16,342㎡ — 일자리:오피스 C",
@@ -68886,7 +68896,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-11710KL2006001",
+    "title": "위례 택지개발사업 예정지구"
+   }
   },
   {
    "title": "감일동 345kv 동서울변전소 (제1종근린생활시설, 연면적 33천㎡)",
@@ -69464,8 +69478,6 @@
     "basis": "건축물대장 사용승인일"
    },
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -69485,7 +69497,9 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2025-09-09",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "오류동 1650-1 (공장, 연면적 25천㎡)",
@@ -69555,8 +69569,6 @@
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 11,175㎡ — 일자리:공장 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -69566,7 +69578,9 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2022-12-28",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "오류동 검단 복합문화센터 (노유자시설, 연면적 4천㎡)",
@@ -69637,8 +69651,6 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 4,495㎡ — 인프라:문화·관광·체육 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -69653,7 +69665,9 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2023-11-21",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "백석동 G타워 (제1종근린생활시설, 연면적 10천㎡)",
@@ -69720,16 +69734,10 @@
      37.580258
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 10,704㎡ — 인프라:판매 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -69745,7 +69753,13 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2023-03-23",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "백석동 메가타워 (제1종근린생활시설, 연면적 11천㎡)",
@@ -69812,16 +69826,10 @@
      37.580258
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 11,581㎡ — 인프라:판매 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -69837,7 +69845,13 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2023-03-24",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "백석동 (제1종근린생활시설, 연면적 13천㎡)",
@@ -69902,17 +69916,11 @@
      37.580258
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 13,606㎡ — 인프라:판매 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -69928,7 +69936,13 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2026-07-26",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "검암동 검암정거장 (업무시설, 연면적 16천㎡)",
@@ -70396,17 +70410,11 @@
      37.587492
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 10,551㎡ — 인프라:판매 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -70421,7 +70429,13 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2023-12-06",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "당하동 인천지검 북부지청 (업무시설, 연면적 16천㎡)",
@@ -70488,16 +70502,10 @@
      37.587492
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 16,773㎡ — 일자리:오피스 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -70512,7 +70520,13 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2024-11-25",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "당하동 인천지방법원 북부지원청사 (업무시설, 연면적 20천㎡)",
@@ -70579,16 +70593,10 @@
      37.587492
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 20,415㎡ — 인프라:공공시설 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -70603,7 +70611,13 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2025-02-25",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "당하동 검단신도시 생활SOC복합청사 (업무시설, 연면적 7천㎡)",
@@ -70670,10 +70684,6 @@
      37.604629
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 7,557㎡ — 인프라:공공시설 C",
@@ -70693,7 +70703,11 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2023-12-04",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   }
   },
   {
    "title": "당하동 인천검단지구 도시지원시설용지 14-1블럭 지식산업센터 (공장, 연면적 182천㎡)",
@@ -70759,10 +70773,6 @@
      37.587924
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 182,554㎡ — 일자리:지식산업센터 A",
@@ -70782,7 +70792,11 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2026-07-26",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   }
   },
   {
    "title": "당하동 검단신도시 도시3 1 (운동시설, 연면적 27천㎡)",
@@ -70849,16 +70863,10 @@
      37.587492
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 27,423㎡ — 인프라:문화·관광·체육 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -70874,7 +70882,13 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2025-06-05",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "원당동 1043-6 (제2종근린생활시설, 연면적 14천㎡)",
@@ -70939,17 +70953,11 @@
      37.596167
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 14,662㎡ — 인프라:판매 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "계획",
@@ -70964,7 +70972,13 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2026-07-26",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "원당동 토마토 메디컬 검단 (제1종근린생활시설, 연면적 10천㎡)",
@@ -71033,10 +71047,6 @@
      37.596167
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 10,497㎡ — 인프라:판매 C",
@@ -71056,8 +71066,6 @@
     "basis": "건축물대장 사용승인일"
    },
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -71077,7 +71085,13 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2025-12-01",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "원당동 인천 검단신도시 101 역세권 개발사업 C9-2블록 숙박시설 (숙박시설, 연면적 126천㎡)",
@@ -71144,16 +71158,10 @@
      37.596167
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 126,473㎡ — 인프라:문화·관광·체육 A",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -71169,7 +71177,13 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2023-06-09",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "원당동 검단신도시 c16 1-2 (판매시설, 연면적 13천㎡)",
@@ -71234,16 +71248,10 @@
      37.596167
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 13,107㎡ — 인프라:판매 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -71259,7 +71267,13 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2026-07-26",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "원당동 엠파이어빌딩 (제1종근린생활시설, 연면적 12천㎡)",
@@ -71326,16 +71340,10 @@
      37.596167
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 12,021㎡ — 인프라:판매 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -71351,7 +71359,13 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2023-08-18",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "불로동 원당동 메트로2 (판매시설, 연면적 13천㎡)",
@@ -71420,10 +71434,6 @@
      37.607601
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 13,910㎡ — 인프라:판매 C",
@@ -71462,7 +71472,11 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2025-10-17",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   }
   },
   {
    "title": "동양동 계양구립종합누리센터 (노유자시설, 연면적 4천㎡)",
@@ -71529,10 +71543,6 @@
      37.563373
     ]
    },
-   "master_ref": {
-    "id": "M-28245MX2019001",
-    "title": "인천계양 테크노밸리 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 4,392㎡ — 인프라:공공시설 C",
@@ -71551,7 +71561,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2026-04-07",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28245MX2019001",
+    "title": "인천계양 테크노밸리 공공주택지구"
+   }
   },
   {
    "title": "덕은동 덕은 DMC (공장, 연면적 158천㎡)",
@@ -71929,10 +71943,6 @@
      37.597418
     ]
    },
-   "master_ref": {
-    "id": "M-41280MX2020001",
-    "title": "고양창릉 공공주택지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
@@ -71959,7 +71969,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-02-05",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41280MX2020001",
+    "title": "고양창릉 공공주택지구"
+   }
   },
   {
    "title": "교문동 구리시 교문동 277-3번지 업무시설 (업무시설, 연면적 13천㎡)",
@@ -72468,10 +72482,6 @@
      37.612921
     ]
    },
-   "master_ref": {
-    "id": "M-41360LH2009001",
-    "title": "남양주 다산진건 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 5,713㎡ — 인프라:공공시설 C",
@@ -72490,7 +72500,11 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2025-02-05",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41360LH2009001",
+    "title": "남양주 다산진건 공공주택지구"
+   }
   },
   {
    "title": "다산동 다산지금공공주택지구 자족1 공장(엠큐디벨롭먼트홀딩스(주)) (공장, 연면적 199천㎡)",
@@ -72557,10 +72571,6 @@
      37.598984
     ]
    },
-   "master_ref": {
-    "id": "M-41360KL2008001",
-    "title": "남양주 다산지금 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 199,942㎡ — 일자리:공장 A",
@@ -72579,7 +72589,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2022-05-03",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41360KL2008001",
+    "title": "남양주 다산지금 공공주택지구"
+   }
   },
   {
    "title": "다산동 6242 (교육연구시설, 연면적 34천㎡)",
@@ -72644,10 +72658,6 @@
      37.598984
     ]
    },
-   "master_ref": {
-    "id": "M-41360KL2008001",
-    "title": "남양주 다산지금 공공주택지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -72667,7 +72677,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41360KL2008001",
+    "title": "남양주 다산지금 공공주택지구"
+   }
   },
   {
    "title": "망월동 비씨카드 신금융연구소 (교육연구시설, 연면적 16천㎡)",
@@ -73885,8 +73899,6 @@
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 20,035㎡ — 일자리:공장 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "계획",
@@ -73901,7 +73913,9 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2026-07-26",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "금곡동 (업무시설, 연면적 10천㎡)",
@@ -73973,8 +73987,6 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 10,755㎡ — 일자리:오피스 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -73990,7 +74002,9 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2024-04-18",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "대곡동 노유자시설 신축공사 (노유자시설, 연면적 9천㎡)",
@@ -74141,10 +74155,6 @@
      37.61578
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 11,819㎡ — 인프라:판매 C",
@@ -74170,7 +74180,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   }
   },
   {
    "title": "사우동 489-2 근린공원 공원문화센터 (관광휴게시설, 연면적 3천㎡)",
@@ -74319,10 +74333,6 @@
      37.618434
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 21,163㎡ — 인프라:공공시설 B",
@@ -74343,7 +74353,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2023-06-14",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   }
   },
   {
    "title": "북변동 백년의 거리 어울림센터 (업무시설, 연면적 12천㎡)",
@@ -74684,7 +74698,6 @@
      37.644244
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 4,947㎡ — 인프라:공공시설 C",
@@ -75682,10 +75695,6 @@
      37.631042
     ]
    },
-   "master_ref": {
-    "id": "M-41280MX2020001",
-    "title": "고양창릉 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 7,474㎡ — 인프라:문화·관광·체육 C",
@@ -75704,7 +75713,11 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2025-01-13",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41280MX2020001",
+    "title": "고양창릉 공공주택지구"
+   }
   },
   {
    "title": "도내동 (주)명문코리아 (운동시설, 연면적 3천㎡)",
@@ -75769,10 +75782,6 @@
      37.629859
     ]
    },
-   "master_ref": {
-    "id": "M-41280MX2020001",
-    "title": "고양창릉 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 3,130㎡ — 인프라:문화·관광·체육 C",
@@ -75791,7 +75800,11 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2026-07-19",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41280MX2020001",
+    "title": "고양창릉 공공주택지구"
+   }
   },
   {
    "title": "동산동 한국환경공단 수도권서부환경본부 청사 (업무시설, 연면적 8천㎡)",
@@ -75858,10 +75871,6 @@
      37.641249
     ]
    },
-   "master_ref": {
-    "id": "M-41280MX2020001",
-    "title": "고양창릉 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 8,302㎡ — 인프라:공공시설 C",
@@ -75880,7 +75889,11 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2025-08-21",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41280MX2020001",
+    "title": "고양창릉 공공주택지구"
+   }
   },
   {
    "title": "화정동 정부고양지방합동청사 (업무시설, 연면적 12천㎡)",
@@ -76126,10 +76139,6 @@
      37.613361
     ]
    },
-   "master_ref": {
-    "id": "M-41280MX2020001",
-    "title": "고양창릉 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 17,057㎡ — 일자리:공장 C",
@@ -76150,7 +76159,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2022-09-05",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41280MX2020001",
+    "title": "고양창릉 공공주택지구"
+   }
   },
   {
    "title": "지축동 1044-1 (노유자시설, 연면적 8천㎡)",
@@ -76217,10 +76230,6 @@
      37.646293
     ]
    },
-   "master_ref": {
-    "id": "M-11380DA2010001",
-    "title": "은평 재정비촉진지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
@@ -76240,7 +76249,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2026-04-03",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-11380DA2010001",
+    "title": "은평 재정비촉진지구"
+   }
   },
   {
    "title": "지축동 고양지축 공공주택지구 B2-1BL 복합시설 신축공사 (공장, 연면적 104천㎡)",
@@ -76815,7 +76828,7 @@
    "title": "별내동 별내자이더스타이그제큐티브 4블럭 (숙박시설, 연면적 45천㎡)",
    "cat": "인프라",
    "sub": "판매",
-   "lvl": "B",
+   "lvl": "C",
    "area_m2": 45293,
    "purp": "숙박시설",
    "arch_gb": "신축",
@@ -76880,7 +76893,7 @@
    },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 45,293㎡ — 인프라:문화·관광·체육 B",
+   "lvl_basis": "연면적 45,293㎡ — 인프라:판매 C",
    "bldrgst": {
     "bld_nm": "별내자이더스타이그제큐티브 4블럭",
     "road_addr": "경기도 남양주시 별내중앙로 7-14 (별내동)",
@@ -76930,7 +76943,7 @@
    "title": "별내동 별내자이더스타이그제큐티브 3블럭 (숙박시설, 연면적 95천㎡)",
    "cat": "인프라",
    "sub": "판매",
-   "lvl": "A",
+   "lvl": "B",
    "area_m2": 95099,
    "purp": "숙박시설",
    "arch_gb": "신축",
@@ -76995,7 +77008,7 @@
    },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 95,099㎡ — 인프라:문화·관광·체육 A",
+   "lvl_basis": "연면적 95,099㎡ — 인프라:판매 B",
    "bldrgst": {
     "bld_nm": "별내자이더스타이그제큐티브 3블럭",
     "road_addr": "경기도 남양주시 별내1로 13-24 (별내동)",
@@ -77184,7 +77197,6 @@
      37.646759
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 11,548㎡ — 인프라:문화·관광·체육 B",
@@ -77390,10 +77402,6 @@
      37.722621
     ]
    },
-   "master_ref": {
-    "id": "M-41480KH2007003",
-    "title": "파주운정3 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 5,677㎡ — 인프라:공공시설 C",
@@ -77419,7 +77427,11 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2025-10-28",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41480KH2007003",
+    "title": "파주운정3 택지개발사업"
+   }
   },
   {
    "title": "동패동 운정종합병원 (의료시설, 연면적 62천㎡)",
@@ -77486,10 +77498,6 @@
      37.713429
     ]
    },
-   "master_ref": {
-    "id": "M-41480KH2007003",
-    "title": "파주운정3 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 62,560㎡ — 인프라:병원 A",
@@ -77508,7 +77516,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-05-06",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41480KH2007003",
+    "title": "파주운정3 택지개발사업"
+   }
   },
   {
    "title": "동패동 2078-2 (제1종근린생활시설, 연면적 12천㎡)",
@@ -77575,10 +77587,6 @@
      37.71237
     ]
    },
-   "master_ref": {
-    "id": "M-41480KH2007003",
-    "title": "파주운정3 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
@@ -77598,7 +77606,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-05-16",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41480KH2007003",
+    "title": "파주운정3 택지개발사업"
+   }
   },
   {
    "title": "동패동 유은10차 브이아이씨365메디컬타워 (교육연구시설, 연면적 20천㎡)",
@@ -77663,10 +77675,6 @@
      37.712924
     ]
    },
-   "master_ref": {
-    "id": "M-41480KH2007003",
-    "title": "파주운정3 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 20,528㎡ — 일자리:오피스 C",
@@ -77685,7 +77693,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41480KH2007003",
+    "title": "파주운정3 택지개발사업"
+   }
   },
   {
    "title": "동패동 운정6동 행정복지센터 (업무시설, 연면적 5천㎡)",
@@ -77752,10 +77764,6 @@
      37.710619
     ]
    },
-   "master_ref": {
-    "id": "M-41480KH2007003",
-    "title": "파주운정3 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 5,377㎡ — 인프라:공공시설 C",
@@ -77775,7 +77783,11 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2025-10-27",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41480KH2007003",
+    "title": "파주운정3 택지개발사업"
+   }
   },
   {
    "title": "설문동 706-93 VIP요양원 (김종호) (노유자시설, 연면적 5천㎡)",
@@ -78381,10 +78393,6 @@
      37.719267
     ]
    },
-   "master_ref": {
-    "id": "M-41480KH2007003",
-    "title": "파주운정3 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 6,337㎡ — 인프라:공공시설 C",
@@ -78410,7 +78418,11 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2025-11-20",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41480KH2007003",
+    "title": "파주운정3 택지개발사업"
+   }
   },
   {
    "title": "야당동 운정3동 행정복지센터 (업무시설, 연면적 4천㎡)",
@@ -78477,10 +78489,6 @@
      37.709736
     ]
    },
-   "master_ref": {
-    "id": "M-41480KH2007003",
-    "title": "파주운정3 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 4,427㎡ — 인프라:공공시설 C",
@@ -78506,7 +78514,11 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2024-06-19",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41480KH2007003",
+    "title": "파주운정3 택지개발사업"
+   }
   },
   {
    "title": "다율동 월드타워 17차 (제1종근린생활시설, 연면적 18천㎡)",
@@ -78571,10 +78583,6 @@
      37.734459
     ]
    },
-   "master_ref": {
-    "id": "M-41480KH2007003",
-    "title": "파주운정3 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 18,391㎡ — 인프라:판매 C",
@@ -78593,7 +78601,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41480KH2007003",
+    "title": "파주운정3 택지개발사업"
+   }
   },
   {
    "title": "다율동 교하 다목적 실내체육관 (운동시설, 연면적 8천㎡)",
@@ -78660,10 +78672,6 @@
      37.737853
     ]
    },
-   "master_ref": {
-    "id": "M-41480KH2007003",
-    "title": "파주운정3 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 8,983㎡ — 인프라:문화·관광·체육 C",
@@ -78683,7 +78691,11 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2023-09-11",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41480KH2007003",
+    "title": "파주운정3 택지개발사업"
+   }
   },
   {
    "title": "와동동 (업무시설, 연면적 11천㎡)",
@@ -78750,10 +78762,6 @@
      37.727238
     ]
    },
-   "master_ref": {
-    "id": "M-41480KH2007003",
-    "title": "파주운정3 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
@@ -78780,7 +78788,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-12-04",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41480KH2007003",
+    "title": "파주운정3 택지개발사업"
+   }
   },
   {
    "title": "와동동 운정푸르지오파크라인 2단지 (업무시설, 연면적 20천㎡)",
@@ -78849,10 +78861,6 @@
      37.736133
     ]
    },
-   "master_ref": {
-    "id": "M-41480KH2007003",
-    "title": "파주운정3 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 20,158㎡ — 일자리:오피스 C",
@@ -78897,7 +78905,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-09-30",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41480KH2007003",
+    "title": "파주운정3 택지개발사업"
+   }
   },
   {
    "title": "사리현동 유림티에스 IDC 사리현동 신축공사 (방송통신시설, 연면적 42천㎡)",
@@ -81248,10 +81260,6 @@
      37.820153
     ]
    },
-   "master_ref": {
-    "id": "M-41630KH2006001",
-    "title": "양주신도시(회천)택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 10,085㎡ — 인프라:판매 C",
@@ -81277,7 +81285,11 @@
    ],
    "first_seen": "2026-07-27",
    "last_movement": "2026-07-27",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41630KH2006001",
+    "title": "양주신도시(회천)택지개발사업"
+   }
   },
   {
    "title": "덕계동 888-2 (업무시설, 연면적 13천㎡)",
@@ -81342,10 +81354,6 @@
      37.820525
     ]
    },
-   "master_ref": {
-    "id": "M-41630KH2006001",
-    "title": "양주신도시(회천)택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -81365,7 +81373,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41630KH2006001",
+    "title": "양주신도시(회천)택지개발사업"
+   }
   },
   {
    "title": "덕계동 944 (업무시설, 연면적 12천㎡)",
@@ -81430,10 +81442,6 @@
      37.818862
     ]
    },
-   "master_ref": {
-    "id": "M-41630KH2006001",
-    "title": "양주신도시(회천)택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -81460,7 +81468,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41630KH2006001",
+    "title": "양주신도시(회천)택지개발사업"
+   }
   },
   {
    "title": "금오동 나라키움 의정부통합청사 (업무시설, 연면적 5천㎡)",
@@ -81820,10 +81832,6 @@
      37.82334
     ]
    },
-   "master_ref": {
-    "id": "M-41630KL2004002",
-    "title": "양주신도시(옥정)택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 12,129㎡ — 인프라:공공시설 B",
@@ -81837,7 +81845,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2024-09-30",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41630KL2004002",
+    "title": "양주신도시(옥정)택지개발사업"
+   }
   },
   {
    "title": "옥정동 964-1 (제2종근린생활시설, 연면적 12천㎡)",
@@ -81902,10 +81914,6 @@
      37.822134
     ]
    },
-   "master_ref": {
-    "id": "M-41630KL2004002",
-    "title": "양주신도시(옥정)택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -81925,7 +81933,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41630KL2004002",
+    "title": "양주신도시(옥정)택지개발사업"
+   }
   },
   {
    "title": "옥정동 양주시 옥정2동 행정복지센터 (업무시설, 연면적 6천㎡)",
@@ -81990,10 +82002,6 @@
      37.814438
     ]
    },
-   "master_ref": {
-    "id": "M-41630KL2004002",
-    "title": "양주신도시(옥정)택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 6,134㎡ — 인프라:공공시설 C",
@@ -82012,7 +82020,11 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2026-07-19",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41630KL2004002",
+    "title": "양주신도시(옥정)택지개발사업"
+   }
   },
   {
    "title": "덕정동 68-4 (공장, 연면적 98천㎡)",
@@ -82172,10 +82184,6 @@
      37.844014
     ]
    },
-   "master_ref": {
-    "id": "M-41630KH2006001",
-    "title": "양주신도시(회천)택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 10,013㎡ — 인프라:공공시설 B",
@@ -82222,7 +82230,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-03-05",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-41630KH2006001",
+    "title": "양주신도시(회천)택지개발사업"
+   }
   },
   {
    "title": "회정동 회정역사 (운수시설, 연면적 16천㎡)",
@@ -82287,10 +82299,6 @@
      37.83123
     ]
    },
-   "master_ref": {
-    "id": "M-41630KH2006001",
-    "title": "양주신도시(회천)택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 16,403㎡ — 교통:환승·터미널 C",
@@ -82309,7 +82317,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-41630KH2006001",
+    "title": "양주신도시(회천)택지개발사업"
+   }
   },
   {
    "title": "강정동 강창학구장 (운동시설, 연면적 16천㎡)",
@@ -85016,10 +85028,6 @@
      35.12454
     ]
    },
-   "master_ref": {
-    "id": "M-26440MX2016001",
-    "title": "부산 에코델타시티 친수구역"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -85039,7 +85047,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-26440MX2016001",
+    "title": "부산 에코델타시티 친수구역"
+   }
   },
   {
    "title": "명지동 부산에코델타시티 디에트르 지식산업센터 (공장, 연면적 128천㎡)",
@@ -85124,7 +85136,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-26440MX2016001",
+    "title": "부산 에코델타시티 친수구역"
+   }
   },
   {
    "title": "명지동 (주)혜성 (공장, 연면적 17천㎡)",
@@ -85211,7 +85227,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-01-12",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-26440MX2016001",
+    "title": "부산 에코델타시티 친수구역"
+   }
   },
   {
    "title": "명지동 부산에코델타시티 도시5BL (공장, 연면적 166천㎡)",
@@ -85298,7 +85318,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2023-06-21",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-26440MX2016001",
+    "title": "부산 에코델타시티 친수구역"
+   }
   },
   {
    "title": "명지동 명지지구 복합5블록 복합시설 신축공사 (숙박시설, 연면적 1167천㎡)",
@@ -85470,7 +85494,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-12-26",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-26440MX2016001",
+    "title": "부산 에코델타시티 친수구역"
+   }
   },
   {
    "title": "명지동 부산에코델타시티 친수구역 조성사업 변전소1블록 T5-1 (제1종근린생활시설, 연면적 18천㎡)",
@@ -89109,7 +89137,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-12-04",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-26440MX2016001",
+    "title": "부산 에코델타시티 친수구역"
+   }
   },
   {
    "title": "강동동 에코델타복지타운 (노유자시설, 연면적 7천㎡)",
@@ -97723,10 +97755,9 @@
      35.197214
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 3,095㎡ — 인프라:문화·관광·체육 C",
+   "lvl_basis": "연면적 3,095㎡ — 인프라:판매 C",
    "bldrgst": {
     "bld_nm": " ",
     "road_addr": "부산광역시 동래구 석사로18번길 41 (사직동)",
@@ -98206,8 +98237,6 @@
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 70,697㎡ — 일자리:지식산업센터 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -98223,7 +98252,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "금곡동 금곡센트럴파크 A-1 (공장, 연면적 52천㎡)",
@@ -98292,8 +98323,6 @@
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 52,312㎡ — 일자리:지식산업센터 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -98309,7 +98338,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "금곡동 금곡센트럴파크 B-2 (공장, 연면적 56천㎡)",
@@ -98378,8 +98409,6 @@
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 56,854㎡ — 일자리:지식산업센터 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -98395,7 +98424,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "금곡동 금곡센트럴파크 A-2 (공장, 연면적 47천㎡)",
@@ -98464,8 +98495,6 @@
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 47,817㎡ — 일자리:지식산업센터 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -98481,7 +98510,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "재송동 재송2동 복합청사 (업무시설, 연면적 5천㎡)",
@@ -101665,7 +101696,7 @@
    "title": "명촌동 현대자동차(주) (공장, 연면적 452천㎡)",
    "cat": "인프라",
    "sub": "판매",
-   "lvl": "S",
+   "lvl": "C",
    "area_m2": 452871,
    "purp": "공장",
    "arch_gb": "증축",
@@ -101730,7 +101761,7 @@
    },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "증축분 면적 14,207㎡ — 일자리:공장 C",
+   "lvl_basis": "증축분 면적 14,207㎡ — 인프라:판매 C",
    "bldrgst": {
     "bld_nm": "현대자동차",
     "road_addr": "울산광역시 북구 700 (명촌동)",
@@ -110837,7 +110868,6 @@
      35.891408
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 53,512㎡ — 일자리:오피스 B",
@@ -111015,7 +111045,6 @@
      35.891408
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 94,629㎡ — 일자리:오피스 B",
@@ -112581,8 +112610,6 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 25,831㎡ — 일자리:공장 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -112598,7 +112625,9 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2024-12-13",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "오식도동 CULC (공장, 연면적 71천㎡)",
@@ -112669,8 +112698,6 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 71,486㎡ — 일자리:공장 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -112686,7 +112713,9 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2023-07-17",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "오식도동 CULH (공장, 연면적 61천㎡)",
@@ -112757,8 +112786,6 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 61,721㎡ — 일자리:공장 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -112774,7 +112801,9 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2023-07-17",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "오식도동 (주)퓨처그라프 군산 구형흑연공장 (공장, 연면적 64천㎡)",
@@ -112845,8 +112874,6 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 64,572㎡ — 일자리:공장 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -112862,7 +112889,9 @@
    ],
    "first_seen": "2026-07-19",
    "last_movement": "2025-11-24",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "지곡동 군산시 지곡동 64-1외 12필지 근린생활시설 (제2종근린생활시설, 연면적 10천㎡)",
@@ -119467,10 +119496,6 @@
      36.499284
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
@@ -119490,7 +119515,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2022-11-15",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "소담동 (의료시설, 연면적 15천㎡)",
@@ -119555,17 +119584,11 @@
      36.483963
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 15,848㎡ — 인프라:병원 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -119581,7 +119604,13 @@
    ],
    "first_seen": "2026-07-27",
    "last_movement": "2026-07-27",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "소담동 3-3생활권 C10-1BL 의료시설 및 근린생활시설 (의료시설, 연면적 17천㎡)",
@@ -119647,10 +119676,6 @@
      36.485509
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -119671,7 +119696,11 @@
    ],
    "first_seen": "2026-07-27",
    "last_movement": "2026-07-27",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "소담동 우빈가온 로펌타운 (업무시설, 연면적 11천㎡)",
@@ -119736,16 +119765,10 @@
      36.483963
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 11,265㎡ — 일자리:오피스 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -119761,7 +119784,13 @@
    ],
    "first_seen": "2026-07-27",
    "last_movement": "2026-07-27",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   },
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "나성동 868 (업무시설, 연면적 15천㎡)",
@@ -119828,10 +119857,6 @@
      36.486333
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
@@ -119851,7 +119876,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-05-13",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "나성동 주택도시보증공사 세종 교육업무시설 (업무시설, 연면적 13천㎡)",
@@ -119918,10 +119947,6 @@
      36.486297
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 13,349㎡ — 일자리:오피스 C",
@@ -119941,7 +119966,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-05-30",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "반곡동 890 (교육연구시설, 연면적 27천㎡)",
@@ -120006,10 +120035,6 @@
      36.493963
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -120029,7 +120054,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "대평동 복합업무지원센터 (업무시설, 연면적 15천㎡)",
@@ -120096,10 +120125,6 @@
      36.470489
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 15,360㎡ — 일자리:오피스 C",
@@ -120119,7 +120144,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-10-04",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "가람동 행정중심복합도시 S-2생활권 CR-2블럭 판매시설 (판매시설, 연면적 82천㎡)",
@@ -120184,10 +120213,6 @@
      36.471888
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 82,362㎡ — 인프라:판매 B",
@@ -120206,7 +120231,11 @@
    ],
    "first_seen": "2026-07-27",
    "last_movement": "2026-07-27",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "둔곡동 (공장, 연면적 23천㎡)",
@@ -120632,10 +120661,6 @@
      36.496842
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -120655,7 +120680,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "집현동 1093 (교육연구시설, 연면적 25천㎡)",
@@ -120720,10 +120749,6 @@
      36.496235
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -120743,7 +120768,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "집현동 (주)레인보우로보틱스 세종 사옥 (교육연구시설, 연면적 14천㎡)",
@@ -120812,13 +120841,9 @@
      36.495499
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 14,830㎡ — 일자리:오피스 C",
+   "lvl_basis": "연면적 14,830㎡ — 일자리:공장 C",
    "bldrgst": {
     "bld_nm": "(주)레인보우로보틱스 세종 사옥",
     "road_addr": "세종특별자치시 집현중앙3로 8 (집현동)",
@@ -120862,7 +120887,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-03-27",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "집현동 엘리스 AI 캠퍼스 (업무시설, 연면적 28천㎡)",
@@ -120927,10 +120956,6 @@
      36.493956
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 28,093㎡ — 일자리:오피스 C",
@@ -120949,7 +120974,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "집현동 코메스타(주) (업무시설, 연면적 22천㎡)",
@@ -121017,10 +121046,6 @@
      36.489474
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 22,186㎡ — 일자리:오피스 C",
@@ -121040,7 +121065,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2022-04-27",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "집현동 복합커뮤니티센터 (운동시설, 연면적 13천㎡)",
@@ -121110,10 +121139,6 @@
      36.494995
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 13,564㎡ — 인프라:공공시설 B",
@@ -121138,7 +121163,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-12-23",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "집현동 4-2생활권 복합4-4-1블록 교육연구시설 (교육연구시설, 연면적 28천㎡)",
@@ -121204,10 +121233,6 @@
      36.494203
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -121228,7 +121253,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "집현동 공공임대형 지식산업센터 (공장, 연면적 14천㎡)",
@@ -121296,10 +121325,6 @@
      36.498656
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 14,850㎡ — 일자리:지식산업센터 C",
@@ -121319,7 +121344,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-07-05",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "집현동 공주대학교 세종캠퍼스 (교육연구시설, 연면적 12천㎡)",
@@ -121386,10 +121415,6 @@
      36.498116
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 12,000㎡ — 일자리:오피스 C",
@@ -121409,7 +121434,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-01-16",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "초산동 (주)올품 상주공장 (공장, 연면적 100천㎡)",
@@ -121648,10 +121677,6 @@
      36.532278
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 12,060㎡ — 인프라:공공시설 B",
@@ -121671,7 +121696,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-02-23",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "산울동 평생교육원 (교육연구시설, 연면적 13천㎡)",
@@ -121741,10 +121770,6 @@
      36.534925
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 13,645㎡ — 일자리:오피스 C",
@@ -121769,7 +121794,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-09-04",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "아름동 세종중앙농협 아름동 종합시설 (판매시설, 연면적 29천㎡)",
@@ -121834,10 +121863,6 @@
      36.511497
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 29,748㎡ — 인프라:판매 C",
@@ -121856,7 +121881,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "강내면 청주하이테크밸리 산업 D14-1 (공장, 연면적 13천㎡)",
@@ -121927,8 +121956,6 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 13,599㎡ — 일자리:공장 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -121944,7 +121971,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-01-13",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "강내면 디아이동일(주) 청주공장 (공장, 연면적 25천㎡)",
@@ -122015,8 +122044,6 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 25,562㎡ — 일자리:공장 C",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -122032,7 +122059,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2024-09-13",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "합강동 5-1생활권 청5-11 (업무시설, 연면적 19천㎡)",
@@ -122100,10 +122129,6 @@
      36.518639
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
@@ -122124,7 +122149,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-02-19",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "합강동 5-1생활권 스마트 복합커뮤니티센터 (제1종근린생활시설, 연면적 12천㎡)",
@@ -122192,10 +122221,6 @@
      36.526673
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
@@ -122216,7 +122241,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2023-08-30",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "다솜동 복합커뮤니티센터 (운동시설, 연면적 14천㎡)",
@@ -122281,10 +122310,6 @@
      36.535526
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 14,315㎡ — 인프라:공공시설 B",
@@ -122304,7 +122329,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   }
   },
   {
    "title": "옥산면 센트럴밸리일반산업단지 (주)엠플러스 공장 (공장, 연면적 59천㎡)",
@@ -122373,8 +122402,6 @@
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 59,784㎡ — 일자리:공장 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -122390,7 +122417,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "옥산면 씨앤씨인터내셔널 청주공장 (공장, 연면적 35천㎡)",
@@ -122461,8 +122490,6 @@
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 35,422㎡ — 일자리:공장 B",
    "geo_approx": true,
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "block_unresolved": true,
    "stage_history": [
     {
@@ -122478,7 +122505,9 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-02-10",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "map_hidden": true,
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)"
   },
   {
    "title": "분평동 청주 보호관찰소 청사 (업무시설, 연면적 4천㎡)",
@@ -125972,10 +126001,6 @@
      36.8171
     ]
    },
-   "master_ref": {
-    "id": "M-44200KH2005001",
-    "title": "아산탕정 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
@@ -125995,7 +126020,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-44200KH2005001",
+    "title": "아산탕정 택지개발사업"
+   }
   },
   {
    "title": "불당동 1536-1 근린생활시설 및 복합시설 (제1종근린생활시설, 연면적 15천㎡)",
@@ -126062,10 +126091,6 @@
      36.814424
     ]
    },
-   "master_ref": {
-    "id": "M-44200KH2005001",
-    "title": "아산탕정 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
@@ -126085,7 +126110,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-06-27",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-44200KH2005001",
+    "title": "아산탕정 택지개발사업"
+   }
   },
   {
    "title": "불당동 나라키움 천안 통합청사 (업무시설, 연면적 10천㎡)",
@@ -126152,10 +126181,6 @@
      36.808335
     ]
    },
-   "master_ref": {
-    "id": "M-44200KH2005001",
-    "title": "아산탕정 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 10,546㎡ — 인프라:공공시설 B",
@@ -126175,7 +126200,11 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2025-04-25",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-44200KH2005001",
+    "title": "아산탕정 택지개발사업"
+   }
   },
   {
    "title": "원성동 천안오룡지구 민관협력형 도시재생리츠사업 (체육시설) (운동시설, 연면적 20천㎡)",
@@ -131882,10 +131911,6 @@
      34.811661
     ]
    },
-   "master_ref": {
-    "id": "M-46110DA2001001",
-    "title": "남악신도시 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 12,927㎡ — 인프라:판매 C",
@@ -131904,7 +131929,11 @@
    ],
    "first_seen": "2026-07-26",
    "last_movement": "2026-07-26",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-46110DA2001001",
+    "title": "남악신도시 택지개발사업"
+   }
   },
   {
    "title": "용당동 (운동시설, 연면적 3천㎡)",
@@ -135617,10 +135646,6 @@
      35.158202
     ]
    },
-   "master_ref": {
-    "id": "M-29140DA1992001",
-    "title": "광주상무1지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 11,640㎡ — 인프라:문화·관광·체육 B",
@@ -135646,7 +135671,11 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2022-11-01",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "master_ref": {
+    "id": "M-29140DA1992001",
+    "title": "광주상무1지구 택지개발사업"
+   }
   },
   {
    "title": "송하동 (운동시설, 연면적 20천㎡)",
@@ -137025,7 +137054,6 @@
      35.202228
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 14,424㎡ — 일자리:공장 C",
