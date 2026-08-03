@@ -1,6 +1,6 @@
 {
  "_note": "공공건축 설계공모(건축HUB 설계공모 정보서비스) → 계획단계 후보. 위치·연면적·총사업비는 공고 원문값. 등급=**금액 우선**(총사업비 있으면 사업비, 없으면 연면적) — 눈금 SSOT: grade.py [인프라 S10000억/A500억/B150억/C30억]. 지자체 자체 공모는 미등록될 수 있어 커버리지 100% 아님(정직 표기).",
- "generated": "2026-07-29 18:28",
+ "generated": "2026-08-03 11:14",
  "signals": [
   {
    "title": "[1단계] 보령 원산도 해양레포츠센터 조성사업 2단계공모",
@@ -95,6 +95,60 @@
     }
    ],
    "first_seen": "2026-07-18",
+   "last_movement_basis": "source"
+  },
+  {
+   "title": "일도2동 꼬부리경제키움센터 조성사업",
+   "cat": "인프라",
+   "sub": "공공시설",
+   "lvl": "C",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.535296,
+     33.512873
+    ]
+   },
+   "sd": "제주",
+   "sg": "제주시",
+   "addr": "제주특별자치도 제주시 일도이동 991-4번지 외 2필지",
+   "area_m2": 948,
+   "cost_won": 4698800000,
+   "purp": "제1종근린생활시설",
+   "arch_act": "증축",
+   "order_inst": "제주특별자치도",
+   "inst_type": "지자체",
+   "phase": "계획",
+   "current_stage": "설계공모 완료·심사결과등록",
+   "status": "활성",
+   "confirmed": false,
+   "notice_day": "2026-05-22",
+   "last_movement": "2026-05-22",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://www.hub.go.kr/portal/dps/dsr/idx-dsr-selectDesignPbpPbancList.do",
+   "pbanc_no": "D262001306C",
+   "_dps": true,
+   "gate": "신호",
+   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "lvl_basis": "연면적 948㎡ — 인프라:공공시설 C",
+   "addr_verified": {
+    "road_addr": "제주특별자치도 제주시 동문로18길 10-1 (일도이동)",
+    "jibun_addr": "제주특별자치도 제주시 일도이동 991-4",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "제주특별자치도 제주시 동문로18길 10-1 (일도이동)",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-05-22",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-07-29",
    "last_movement_basis": "source"
   },
   {
@@ -1185,6 +1239,60 @@
     }
    ],
    "first_seen": "2026-07-18",
+   "last_movement_basis": "source"
+  },
+  {
+   "title": "광양경로당 및 청소년시설 건립사업",
+   "cat": "인프라",
+   "sub": "공공시설",
+   "lvl": "C",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.526216,
+     33.501821
+    ]
+   },
+   "sd": "제주",
+   "sg": "제주시",
+   "addr": "제주특별자치도 제주시 이도일동 1664-7 외 5필지",
+   "area_m2": 800,
+   "cost_won": 4956000000,
+   "purp": "노유자시설",
+   "arch_act": "증축",
+   "order_inst": "제주특별자치도",
+   "inst_type": "지자체",
+   "phase": "계획",
+   "current_stage": "설계공모 완료·심사결과등록",
+   "status": "활성",
+   "confirmed": false,
+   "notice_day": "2025-09-08",
+   "last_movement": "2025-09-08",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://www.hub.go.kr/portal/dps/dsr/idx-dsr-selectDesignPbpPbancList.do",
+   "pbanc_no": "D253501007C",
+   "_dps": true,
+   "gate": "신호",
+   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "lvl_basis": "연면적 800㎡ — 인프라:공공시설 C",
+   "addr_verified": {
+    "road_addr": "제주특별자치도 제주시 서광로29길 17 (이도일동)",
+    "jibun_addr": "제주특별자치도 제주시 이도일동 1664-7 제주시참사랑문화의집",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "제주특별자치도 제주시 서광로29길 17 (이도일동)",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2025-09-08",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
    "last_movement_basis": "source"
   },
   {
@@ -3380,6 +3488,60 @@
    "last_movement_basis": "source"
   },
   {
+   "title": "아이천국 육아친화 두레마을 조성 상주늘이음센터 건립공사 설계공모",
+   "cat": "인프라",
+   "sub": "공공시설",
+   "lvl": "C",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.154585,
+     36.420739
+    ]
+   },
+   "sd": "경북",
+   "sg": "상주시",
+   "addr": "경상북도 상주시 무양동 164-23번지 외 5필지",
+   "area_m2": 1700,
+   "cost_won": 11700000000,
+   "purp": "노유자시설",
+   "arch_act": "증축",
+   "order_inst": "경상북도 상주시",
+   "inst_type": "지자체",
+   "phase": "계획",
+   "current_stage": "설계공모 완료·심사결과미등록",
+   "status": "활성",
+   "confirmed": false,
+   "notice_day": "2026-06-12",
+   "last_movement": "2026-06-12",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://www.hub.go.kr/portal/dps/dsr/idx-dsr-selectDesignPbpPbancList.do",
+   "pbanc_no": "D262201312C",
+   "_dps": true,
+   "gate": "신호",
+   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "lvl_basis": "연면적 1,700㎡ — 인프라:공공시설 C",
+   "addr_verified": {
+    "road_addr": "경상북도 상주시 무양2길 49 (무양동)",
+    "jibun_addr": "경상북도 상주시 무양동 164-23",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "경상북도 상주시 무양2길 49 (무양동)",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-06-12",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "source"
+  },
+  {
    "title": "남양주시 별내동 복합커뮤니티센터 건립 설계 용역",
    "cat": "인프라",
    "sub": "문화·관광·체육",
@@ -3474,60 +3636,6 @@
    "last_movement_basis": "source"
   },
   {
-   "title": "일도2동 꼬부리경제키움센터 조성사업",
-   "cat": "인프라",
-   "sub": "공공시설",
-   "lvl": "C",
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.535296,
-     33.512873
-    ]
-   },
-   "sd": "제주",
-   "sg": "제주시",
-   "addr": "제주특별자치도 제주시 일도이동 991-4번지 외 2필지",
-   "area_m2": 948,
-   "cost_won": 4698800000,
-   "purp": "제1종근린생활시설",
-   "arch_act": "증축",
-   "order_inst": "제주특별자치도",
-   "inst_type": "지자체",
-   "phase": "계획",
-   "current_stage": "설계공모 완료·심사결과미등록",
-   "status": "활성",
-   "confirmed": false,
-   "notice_day": "2026-05-22",
-   "last_movement": "2026-05-22",
-   "pt_type": "facility",
-   "geo_prec": "parcel",
-   "src_tier": "official_notice",
-   "src": "https://www.hub.go.kr/portal/dps/dsr/idx-dsr-selectDesignPbpPbancList.do",
-   "pbanc_no": "D262001306C",
-   "_dps": true,
-   "gate": "신호",
-   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 948㎡ — 인프라:공공시설 C",
-   "addr_verified": {
-    "road_addr": "제주특별자치도 제주시 동문로18길 10-1 (일도이동)",
-    "jibun_addr": "제주특별자치도 제주시 일도이동 991-4",
-    "bld_nm": null,
-    "src": "행안부 도로명주소 검색 API"
-   },
-   "road_addr": "제주특별자치도 제주시 동문로18길 10-1 (일도이동)",
-   "geo_approx": false,
-   "stage_history": [
-    {
-     "stage": "계획",
-     "date": "2026-05-22",
-     "basis": "source"
-    }
-   ],
-   "first_seen": "2026-07-29",
-   "last_movement_basis": "source"
-  },
-  {
    "title": "해양체육관 건립사업 설계공모",
    "cat": "인프라",
    "sub": "문화·관광·체육",
@@ -3610,6 +3718,10 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 16,805㎡ — 인프라:공공시설 B",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -3619,11 +3731,7 @@
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement_basis": "source",
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   }
+   "last_movement_basis": "source"
   },
   {
    "title": "현남행정문화복합센터 조성사업 설계공모",
