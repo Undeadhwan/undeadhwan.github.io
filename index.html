@@ -488,14 +488,10 @@
   }
   /* 폴리곤 클릭 시 브라우저 기본 포커스 외곽선(bounding box 검은 네모) 제거 */
   .leaflet-interactive:focus, .leaflet-container path:focus, .leaflet-interactive:focus-visible { outline: none !important; }
-  /* 정비구역 유형 범례 (지도 좌하단, 동 레벨 이상에서만) */
-  .jb-legend { background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:8px;
-    padding:7px 9px 8px; box-shadow:0 1px 6px rgba(0,0,0,.14); font-size:11px; line-height:1.5;
-    max-width:150px; }
-  .jb-legend b { display:block; font-size:10.5px; color:#555; margin-bottom:3px; font-weight:700; letter-spacing:.2px; }
-  .jb-legend .jl { display:flex; align-items:center; gap:5px; white-space:nowrap; color:#333; }
-  .jb-legend .jl i { width:11px; height:11px; border-radius:2px; flex-shrink:0; opacity:.85; border:1px solid rgba(0,0,0,.15); }
-  .jb-legend .jhint { margin-top:4px; padding-top:4px; border-top:1px solid var(--line); color:#8a90a0; font-size:9.5px; line-height:1.35; }
+  /* 정비구역 범례 폐기 (2026-08-03 사용자 확정 "정비구역 범례 없애자 모바일이건 웹이건").
+     좌하단 상시 노출이 지도를 가렸고, 담고 있던 정보(색·단계·출처)는 구역 클릭·툴팁·우측 상세에
+     이미 다 있다. 우하단 호재 범례(.hj-legend)가 색=분류 문법을 이미 설명한다 — 중복이었다.
+     CSS·생성·토글·호출 4종을 전부 걷어냈다(부품을 지우면 그 부품을 지키던 코드도 함께 지운다). */
   /* 호재 범례 (지도 우하단 상시) — 색=분류 / 선=단계 / 크기=등급. 지도의 문법 전체를 한 장에 (2026-07-18 사용자 요청:
      "가장 중요한 정보인데 나조차 볼 때마다 헷갈린다"). 접을 수 있게 해 지도를 가리지 않는다. */
   .hj-legend { background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:9px;
@@ -2976,16 +2972,7 @@ function initLeaflet() {
   }
   // 정비구역 경계 폴리곤(서울 의제처리구역 SHP → geojson): 지정고시된 개별 구역 = 실선 폴리곤(사실, P2·P5).
   // 색 = 분류색 단일(주거개발) — 단계별 색은 과다해 제외(사용자 확정 2026-07-16). 단계는 툴팁·상세·카드에서.
-  // 범례 — 동 레벨 이상, 폴리곤 데이터 있을 때만 노출
-  const JB_LEGEND_ITEMS = [["정비구역(주거개발)", CAT_COLOR["주거개발"]], ["단계 미상(고시 경계만)", "#aeb4c0"], ["종결·무산", "#9aa3b2"]];
-  const jbLegend = L.control({ position: "bottomleft" });
-  jbLegend.onAdd = () => {
-    const div = L.DomUtil.create("div", "jb-legend");
-    div.innerHTML = "<b>정비구역</b>"
-      + JB_LEGEND_ITEMS.map(([n, c]) => `<span class="jl"><i style="background:${c}"></i>${n}</span>`).join("")
-      + `<div class="jhint">진행 단계는 구역 클릭·툴팁에서 확인 (색은 4대 분류 통일 — 교통 파랑 / 주거 마젠타).<br>출처: 서울특별시 도시공간본부(공공누리 4유형)</div>`;
-    return div;
-  };
+  // 범례 폐기 (2026-08-03) — 위 CSS 주석 참조.
   // ── 호재 범례(우하단 상시) — 지도 문법 전체를 한 장에: 색=분류 / 선=단계 / 크기=등급.
   // 라벨은 실제 상수(CAT_COLOR·PHASES·GRADES)에서 뽑아 쓴다 — 하드코딩하면 규칙이 바뀔 때 범례가 거짓말을 한다.
   const hjLegend = L.control({ position: "bottomright" });
@@ -3019,11 +3006,6 @@ function initLeaflet() {
   };
   // addTo는 HJ_R(등급 크기) 정의 이후에 호출한다 — onAdd가 즉시 실행돼 TDZ 참조 오류가 난다.
 
-  let jbLegendOn = false;
-  const toggleJbLegend = (show) => {
-    if (show && !jbLegendOn) { jbLegend.addTo(map); jbLegendOn = true; }
-    else if (!show && jbLegendOn) { map.removeControl(jbLegend); jbLegendOn = false; }
-  };
   let jbPolys = [], jbDrawnRings = [];   // jbDrawnRings: 현재 그려진 폴리곤 외곽링([lon,lat]) — 마커 중복 억제용
   const clearJeongbiPoly = () => { jbPolys.forEach(l => map.removeLayer(l)); jbPolys = []; jbDrawnRings = []; };
   const featBbox = f => {
@@ -3045,7 +3027,7 @@ function initLeaflet() {
   const renderJeongbiPoly = () => {
     clearJeongbiPoly();
     // 분류 필터: '정비' 꺼져 있으면 폴리곤 전체 숨김(전 화면 필터 일관)
-    if (map.getZoom() < DONG_ZOOM || !JEONGBI_POLY.length || !filter.cat.has("주거개발")) { toggleJbLegend(false); return; }   // (분류 재정의: 정비→주거개발)
+    if (map.getZoom() < DONG_ZOOM || !JEONGBI_POLY.length || !filter.cat.has("주거개발")) return;   // (분류 재정의: 정비→주거개발)
     const phaseFiltering = filter.phase.size < PHASES.length;   // 단계 조회축이 부분선택이면 4단계 필터 적용
     const b = map.getBounds(), bx0 = b.getWest(), by0 = b.getSouth(), bx1 = b.getEast(), by1 = b.getNorth();
     let n = 0;
@@ -3080,7 +3062,6 @@ function initLeaflet() {
       jbPolys.push(poly);
       if (tracked) jbDrawnRings.push(f.geometry.coordinates[0]);   // 매칭된 구역만 마커 억제(미상 구역은 신호 마커 유지)
     }
-    toggleJbLegend(n > 0);   // 화면에 폴리곤이 있을 때만 범례 노출
   };
   // 정비 추진 신호 마커(정비몽땅+공공데이터): 폴리곤 없는 추진건만 점선 표시(폴리곤과 겹치면 억제 = 중복 방지)
   /* ══ 호재 상시 표시(호재 중심 개편 2026-07-16) — 모든 점 신호를 원으로. 크기=등급, 색=분류, 미확정=점선(§7).
@@ -3635,16 +3616,12 @@ function initKakao() {
   // 정비구역 폴리곤 + 범례
   const featBbox = f => { if (f._bb) return f._bb; let x0 = 180, y0 = 90, x1 = -180, y1 = -90;
     f.geometry.coordinates.forEach(r => r.forEach(([x, y]) => { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; })); return (f._bb = [x0, y0, x1, y1]); };
-  let jbLegendEl = null;
-  const toggleJbLegend = show => { if (show && !jbLegendEl) { jbLegendEl = document.createElement("div"); jbLegendEl.className = "jb-legend"; jbLegendEl.style.cssText = "position:absolute;left:10px;bottom:26px;z-index:40";
-      const items = [["정비구역(주거개발)", CAT_COLOR["주거개발"]], ["단계 미상(고시 경계만)", "#aeb4c0"], ["종결·무산", "#9aa3b2"]];
-      jbLegendEl.innerHTML = "<b>정비구역</b>" + items.map(([n, c]) => '<span class="jl"><i style="background:' + c + '"></i>' + n + '</span>').join("") + '<div class="jhint">진행 단계는 구역 클릭·툴팁에서 확인 (색은 4대 분류 통일 — 교통 파랑 / 주거 마젠타).<br>출처: 서울특별시 도시공간본부(공공누리 4유형)</div>';
-      mapEl.appendChild(jbLegendEl); } else if (!show && jbLegendEl) { jbLegendEl.remove(); jbLegendEl = null; } };
+  // 정비구역 범례 폐기 (2026-08-03) — 카카오 경로와 같이 제거. 위 CSS 주석 참조.
   // 정비 폴리곤: feature에 1회 캐시(_kjb) — 줌/이동마다 재생성하지 않고 setMap 토글만(줌 버벅임 해소)
   let shownJb = [];
   const renderJeongbiPoly = () => {
     shownJb.forEach(o => o.setMap(null)); shownJb = [];
-    if (map.getLevel() > DONG_LV || !JEONGBI_POLY.length || !filter.cat.has("주거개발")) { toggleJbLegend(false); return; }
+    if (map.getLevel() > DONG_LV || !JEONGBI_POLY.length || !filter.cat.has("주거개발")) return;
     const phaseFiltering = filter.phase.size < PHASES.length; const b = map.getBounds(), sw = b.getSouthWest(), ne = b.getNorthEast();
     const bx0 = sw.getLng(), by0 = sw.getLat(), bx1 = ne.getLng(), by1 = ne.getLat(); let n = 0;
     for (const f of JEONGBI_POLY) { const [x0, y0, x1, y1] = featBbox(f); if (x1 < bx0 || x0 > bx1 || y1 < by0 || y0 > by1) continue;
@@ -3659,8 +3636,7 @@ function initKakao() {
         K.event.addListener(poly, "click", () => { _ovClickTs = Date.now(); hideTip(); const ring = f.geometry.coordinates[0]; let sx = 0, sy = 0; ring.forEach(([x, y]) => { sx += x; sy += y; }); showSignal(jeongbiPolyToSignal(p, [sx / ring.length, sy / ring.length]), false); });
         f._kjb = poly;
       }
-      f._kjb.setMap(map); shownJb.push(f._kjb); }
-    toggleJbLegend(n > 0); };
+      f._kjb.setMap(map); shownJb.push(f._kjb); } };
 
   // 신도시·대형지구 딱지 영역 렌더 폐기(2026-07-22 사용자 — convex hull 경계 부정확(엉터리)=P5 위반).
   // 정확 경계 소스(필지 폴리곤/고시 지형도면) 확보 전까지 마스터 미표시. 신도시는 개별 호재건으로 드러난다.
@@ -4046,7 +4022,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260803y");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260803z");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4208,7 +4184,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260803y"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260803z"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4234,7 +4210,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260803y");
+  const CB = "?b=" + (window.BUILD || "20260803z");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
