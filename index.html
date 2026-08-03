@@ -3542,12 +3542,17 @@ function initKakao() {
          그 사이로 경로가 지난다는 건 안다. 그래서 끊지 않고 잇되, 그 구간만 **연하게** 그려
          "여기 형상은 근거가 없다"를 눈으로 알 수 있게 한다(P2 — 이으면서 숨기지는 않는다).
          선이 통째로 성긴 노선(GTX A 중앙 6.95km 등)은 여전히 끊는다 — 그건 보간이 아니라 추측이다. */
+      /* ⚠ 보간 구간의 dash를 별도 패턴(shortdash)으로 쓰면 **단계 문법과 충돌**한다
+         (2026-08-03 사용자 "터널은 점선이야? 그럼 단계구분이랑 혼동되자너") — 착공 노선(실선 문법)의
+         터널 보간이 점선으로 나와 계획 단계처럼 읽혔다. 시각 채널을 가른다:
+         **dash = 단계**(실선=착공↑ · 점선=계획, 전 화면 공통 문법 그대로) / **투명도 = 형상 확실성**
+         (보간은 연하게만). 한 채널에 두 사실을 싣지 않는다(§필드 하나가 두 뜻). */
       (p.geom_bridges || []).forEach(seg => {
         const bp = seg.map(([x, y]) => LL(x, y));
-        objs.push(new K.Polyline({ path: bp, strokeColor: "#ffffff", strokeWeight: 5,
-          strokeOpacity: .55, strokeStyle: "solid", zIndex: 2 }));
-        objs.push(new K.Polyline({ path: bp, strokeColor: col, strokeWeight: 2.2,
-          strokeOpacity: .42, strokeStyle: "shortdash", zIndex: 3 }));
+        objs.push(new K.Polyline({ path: bp, strokeColor: "#ffffff", strokeWeight: dashed ? 6 : 5,
+          strokeOpacity: .5, strokeStyle: "solid", zIndex: 2 }));
+        objs.push(new K.Polyline({ path: bp, strokeColor: col, strokeWeight: dashed ? 3.6 : 2.6,
+          strokeOpacity: .38, strokeStyle: dashed ? "shortdot" : "solid", zIndex: 3 }));
       });
       segs.forEach(seg => {
         const path = seg.map(([x, y]) => LL(x, y));
@@ -4024,7 +4029,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260803d");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260803e");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4186,7 +4191,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260803d"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260803e"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4212,7 +4217,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260803d");
+  const CB = "?b=" + (window.BUILD || "20260803e");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
