@@ -703,7 +703,11 @@ const STAGE_TRACKS = {
   "정비사업": [["구역지정","계획"],["정비계획","계획"],["조합설립","인가"],["사업시행인가","인가"],["관리처분","인가"],["이주","착공"],["철거","착공"],["착공","착공"],["준공","준공·개통"]]
 };
 /* 표시 라벨 — 저장값(계획/인가/착공/준공·개통) → 화면 문구. thresholds.json 단계_백본.표시라벨이 SSOT. */
-let PHASE_LABEL = { "계획": "계획", "인가": "확정·인가", "착공": "착공", "준공·개통": "준공·개통" };
+let PHASE_LABEL = { "계획": "계획", "인가": "확정·인가", "착공": "착공", "준공·개통": "준공·개통",
+  /* 마일스톤 phase는 전 소스가 관행상 "준공" 약칭을 쓴다(1,834건, 8개 파일). **저장값은 바꾸지
+     않는다** — thresholds 단계_백본 `_저장값_주의`가 일괄 치환을 금한다(백본 밖 값이 섞이는 새
+     사고를 만든다). 화면 통일은 여기서 한 줄로 한다(2026-08-03). */
+  "준공": "준공·개통" };
 const phaseLabel = p => PHASE_LABEL[p] || p;
 /* current_stage → 국면. 우선순위: 신호 명시 phase → 트랙 내 매칭 → 키워드 분류 → 계획(기본).
    유형별 세부단계 이름이 자유로워도 4국면 필터가 항상 성립하도록 하는 매핑층. */
@@ -920,7 +924,7 @@ function msTrack(s) {
     if (!fut.length) return;
     const eta = fut.map(m => m.eta).filter(Boolean).pop();
     out.push(`<div class="msrow future"><span class="msdot"></span><div class="msbody">
-      <div class="msttl">${fut.map(m => (m.stage && m.stage !== m.phase) ? m.stage : m.phase).join(" → ")}</div>
+      <div class="msttl">${fut.map(m => (m.stage && m.stage !== m.phase) ? m.stage : phaseLabel(m.phase)).join(" → ")}</div>
       <div class="msmeta">${eta ? `최종 ${eta} 목표` : "미도래 — 시기 미정"}</div></div></div>`);
     fut = [];
   };
@@ -930,7 +934,7 @@ function msTrack(s) {
     const when = m.date ? `<span class="msdate">${m.date}</span>`
               : m.eta ? `<span class="mseta">${m.eta} 목표</span>` : `<span class="msmeta">시기 미정</span>`;
     out.push(`<div class="msrow ${m.state}"><span class="msdot"></span><div class="msbody">
-      <div class="msttl">${m.phase} — ${m.stage || ""} ${m.state === "stalled" ? "⚠" : ""}</div>
+      <div class="msttl">${phaseLabel(m.phase)} — ${m.stage || ""} ${m.state === "stalled" ? "⚠" : ""}</div>
       <div class="msmeta">${when}${m.src ? ` · 근거: ${m.src}` : ""}${m.state === "current" ? " · <b>현재</b>" : ""}</div>
     </div></div>`);
   }
@@ -4032,7 +4036,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260803w");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260803x");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4194,7 +4198,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260803w"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260803x"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4220,7 +4224,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260803w");
+  const CB = "?b=" + (window.BUILD || "20260803x");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
