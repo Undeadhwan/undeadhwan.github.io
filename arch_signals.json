@@ -882,7 +882,6 @@
      37.49213
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 30,458㎡ — 인프라:병원 B",
@@ -2601,7 +2600,6 @@
      37.489725
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 3,496㎡ — 인프라:공공시설 C",
@@ -3455,7 +3453,6 @@
      37.500434
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 13,752㎡ — 일자리:오피스 C",
@@ -4046,7 +4043,7 @@
    "title": "서초동 서울검찰청사 (업무시설, 연면적 122천㎡)",
    "cat": "인프라",
    "sub": "공공시설",
-   "lvl": "A",
+   "lvl": "B",
    "area_m2": 122109,
    "purp": "업무시설",
    "arch_gb": "증축",
@@ -4107,7 +4104,7 @@
    },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "증축분 면적 31,312㎡ — 일자리:오피스 B",
+   "lvl_basis": "증축분 면적 31,312㎡ — 인프라:공공시설 B",
    "addr_verified": {
     "road_addr": "서울특별시 서초구 반포대로 158 (서초동)",
     "jibun_addr": "서울특별시 서초구 서초동 1724 서울중앙지방검찰청",
@@ -5339,7 +5336,6 @@
      37.486238
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 15,503㎡ — 일자리:오피스 C",
@@ -5969,13 +5965,13 @@
      37.471862
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 867,428㎡ — 일자리:오피스 S",
    "master_ref": {
     "id": "M-11710KL2006001",
     "title": "위례 택지개발사업 예정지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 867,428㎡ — 일자리:오피스 S",
    "geo_basis": "택지정보 가구획지 — 11710KL2006001 블록 E1-2 필지 E1-2 (복합용지) · 종전 좌표에서 936m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -9150,7 +9146,7 @@
    },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 83,978㎡ — 일자리:지식산업센터 B",
+   "lvl_basis": "연면적 83,978㎡ — 인프라:판매 B",
    "bldrgst": {
     "bld_nm": " ",
     "road_addr": " ",
@@ -9265,7 +9261,7 @@
    },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 24,468㎡ — 일자리:지식산업센터 C",
+   "lvl_basis": "연면적 24,468㎡ — 인프라:판매 C",
    "bldrgst": {
     "bld_nm": " ",
     "road_addr": " ",
@@ -15847,13 +15843,13 @@
      37.488818
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 33,050㎡ — 인프라:공공시설 B",
    "master_ref": {
     "id": "M-11710KL2006001",
     "title": "위례 택지개발사업 예정지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 33,050㎡ — 인프라:공공시설 B",
    "geo_basis": "택지정보 가구획지 — 11710KL2006001 블록 업무16 필지 업무16 (업무시설) · 종전 좌표에서 324m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -16287,10 +16283,6 @@
      37.570868
     ]
    },
-   "master_ref": {
-    "id": "M-11500DA2010001",
-    "title": "마곡 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 49,488㎡ — 일자리:오피스 B",
@@ -16308,6 +16300,10 @@
    "completion_verified": {
     "date": "2026-04-24",
     "basis": "건축물대장 사용승인일"
+   },
+   "master_ref": {
+    "id": "M-11500DA2010001",
+    "title": "마곡 도시개발구역"
    },
    "addr_verified": {
     "road_addr": "서울특별시 강서구 마곡중앙로 192 (마곡동)",
@@ -16404,10 +16400,6 @@
      37.570249
     ]
    },
-   "master_ref": {
-    "id": "M-11500DA2010001",
-    "title": "마곡 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 41,610㎡ — 일자리:오피스 B",
@@ -16425,6 +16417,10 @@
    "completion_verified": {
     "date": "2026-01-07",
     "basis": "건축물대장 사용승인일"
+   },
+   "master_ref": {
+    "id": "M-11500DA2010001",
+    "title": "마곡 도시개발구역"
    },
    "addr_verified": {
     "road_addr": "서울특별시 강서구 마곡중앙로 188 (마곡동)",
@@ -16521,10 +16517,6 @@
      37.562776
     ]
    },
-   "master_ref": {
-    "id": "M-11500DA2010001",
-    "title": "마곡 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 157,114㎡ — 인프라:공공시설 A",
@@ -16542,6 +16534,10 @@
    "completion_verified": {
     "date": "2025-09-24",
     "basis": "건축물대장 사용승인일"
+   },
+   "master_ref": {
+    "id": "M-11500DA2010001",
+    "title": "마곡 도시개발구역"
    },
    "addr_verified": {
     "road_addr": "서울특별시 강서구 마곡중앙3로 16 (마곡동)",
@@ -16638,10 +16634,6 @@
      37.565705
     ]
    },
-   "master_ref": {
-    "id": "M-11500DA2010001",
-    "title": "마곡 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 75,813㎡ — 일자리:오피스 B",
@@ -16659,6 +16651,10 @@
    "completion_verified": {
     "date": "2026-05-08",
     "basis": "건축물대장 사용승인일"
+   },
+   "master_ref": {
+    "id": "M-11500DA2010001",
+    "title": "마곡 도시개발구역"
    },
    "addr_verified": {
     "road_addr": "서울특별시 강서구 마곡중앙8로5길 56 (마곡동)",
@@ -16753,14 +16749,14 @@
      37.559184
     ]
    },
-   "master_ref": {
-    "id": "M-11500DA2010001",
-    "title": "마곡 도시개발구역"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 22,052㎡ — 일자리:오피스 C",
+   "master_ref": {
+    "id": "M-11500DA2010001",
+    "title": "마곡 도시개발구역"
+   },
    "addr_verified": {
     "road_addr": "서울특별시 강서구 공항대로 186 (마곡동)",
     "jibun_addr": "서울특별시 강서구 마곡동 799-1 로뎀타워",
@@ -16850,13 +16846,13 @@
      37.556881
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 12,536㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-11500DA2010001",
     "title": "마곡 도시개발구역"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 12,536㎡ — 일자리:오피스 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -16938,13 +16934,13 @@
      37.572321
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 14,394㎡ — 인프라:판매 C",
    "master_ref": {
     "id": "M-11500DA2010001",
     "title": "마곡 도시개발구역"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 14,394㎡ — 인프라:판매 C",
    "geo_basis": "택지정보 가구획지 — 11500DA2010001 블록 지DSP1 필지 1 (지원시설) · 종전 좌표에서 300m 이동",
    "geo_approx": true,
    "map_hidden": true,
@@ -17030,13 +17026,13 @@
      37.571591
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 54,127㎡ — 일자리:오피스 B",
    "master_ref": {
     "id": "M-11500DA2010001",
     "title": "마곡 도시개발구역"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 54,127㎡ — 일자리:오피스 B",
    "geo_basis": "택지정보 가구획지 — 11500DA2010001 블록 지DSP2 필지 1 (지원시설) · 종전 좌표에서 270m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -17121,13 +17117,13 @@
      37.561104
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 59,314㎡ — 인프라:공공시설 A",
    "master_ref": {
     "id": "M-11500DA2010001",
     "title": "마곡 도시개발구역"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 59,314㎡ — 인프라:공공시설 A",
    "geo_basis": "택지정보 가구획지 — 11500DA2010001 블록 공7 필지 공7 (공공청사) · 종전 좌표에서 373m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -17212,13 +17208,13 @@
      37.567523
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 46,304㎡ — 일자리:지식산업센터 B",
    "master_ref": {
     "id": "M-11500DA2010001",
     "title": "마곡 도시개발구역"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 46,304㎡ — 일자리:지식산업센터 B",
    "geo_approx": true,
    "geo_basis": "보정 대장: 마곡 도시개발구역 산업시설용지 D15 + 지원시설용지 Ds13 (5필지 통합 중심). 블록 근거: 서울시 보도자료 원문(2020-12-10, HWPX) — \"대상지는 강서구에 위치한 마곡도시개발사업 지구단위계획구역 내 산업시설용지(D15, 9,080㎡) 및 지원시설용지(Ds13, 3,869㎡)\". 사업 실재·발주처 확인: 서울시 건설알림이(발주 서울주택도시공사, 착공 2023-11-09). 동일 사업 확증: 건축HUB 연면적 46,304㎡. 좌표 출처: 국토부 택지정보시스템 가구및획지경계도(2026-07-08). 종전 지구명 POI 좌표에서 1,828m 이동. (https://opengov.seoul.go.kr/press/21803760)",
    "stage_history": [
@@ -17300,13 +17296,13 @@
      37.573369
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 21,190㎡ — 인프라:판매 C",
    "master_ref": {
     "id": "M-11500DA2010001",
     "title": "마곡 도시개발구역"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 21,190㎡ — 인프라:판매 C",
    "geo_approx": true,
    "block_unresolved": true,
    "group_n": 2,
@@ -20301,7 +20297,6 @@
      37.561601
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 22,569㎡ — 일자리:오피스 C",
@@ -22299,97 +22294,6 @@
    "first_seen": "2026-07-18",
    "last_movement": "2023-04-05",
    "last_movement_basis": "source"
-  },
-  {
-   "title": "옥인동 공영주차장 및 복합시설 (자동차관련시설, 연면적 4천㎡)",
-   "cat": "인프라",
-   "sub": "공공시설",
-   "lvl": "C",
-   "area_m2": 4997,
-   "purp": "자동차관련시설",
-   "arch_gb": "신축",
-   "ext_delta_m2": null,
-   "ext_basis": null,
-   "nm_basis": "건물명=건축물대장 표제부 `bldNm` — 같은 지번 + 주용도 일치(자동차관련시설) + 연면적 근사(대장 4,998㎡ ↔ 허가 4,997㎡, 차이 0%). 허가 레코드는 공백이었다",
-   "area_kind": "연면적",
-   "pk": "1002100061674",
-   "splot": null,
-   "block": null,
-   "lot": null,
-   "geo_prec": "parcel",
-   "position_confidence": null,
-   "hhld_cnt": 0,
-   "ho_cnt": 0,
-   "vlrat": 116.3662,
-   "plat_area": 1038.24,
-   "jiyuk": "도시지역",
-   "sd": "서울",
-   "sg": "종로구",
-   "dong": "옥인동",
-   "addr": "서울특별시 종로구 옥인동 47-16번지",
-   "confirmed": false,
-   "current_stage": "건축허가",
-   "phase": "인가",
-   "status": "활성",
-   "arch_pms_day": "20220719",
-   "real_stcns_day": null,
-   "use_apr_day": null,
-   "milestones": [
-    {
-     "phase": "인가",
-     "stage": "건축허가",
-     "date": "2022-07-19",
-     "state": "current",
-     "src": "건축HUB"
-    },
-    {
-     "phase": "착공",
-     "stage": "착공",
-     "state": "future"
-    },
-    {
-     "phase": "준공·개통",
-     "stage": "사용승인",
-     "state": "future"
-    }
-   ],
-   "src_tier": "official_report",
-   "pt_type": "facility",
-   "rcept_dt": "20220719",
-   "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
-   "geometry": {
-    "coordinates": [
-     126.96729,
-     37.582722
-    ]
-   },
-   "name_status": "미확보",
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 4,997㎡ — 인프라:공공시설 C",
-   "addr_verified": {
-    "road_addr": "서울특별시 종로구 필운대로 75 (옥인동)",
-    "jibun_addr": "서울특별시 종로구 옥인동 47-16",
-    "bld_nm": null,
-    "src": "행안부 도로명주소 검색 API"
-   },
-   "road_addr": "서울특별시 종로구 필운대로 75 (옥인동)",
-   "geo_approx": false,
-   "stage_history": [
-    {
-     "stage": "계획",
-     "date": "2026-07-19",
-     "basis": "observed"
-    },
-    {
-     "stage": "인가",
-     "date": "2022-07-19",
-     "basis": "source"
-    }
-   ],
-   "first_seen": "2026-07-19",
-   "last_movement": "2026-07-19",
-   "last_movement_basis": "observed"
   },
   {
    "title": "안암동5가 자연계 중앙광장 (교육연구시설, 연면적 953천㎡)",
@@ -24729,13 +24633,13 @@
      37.571667
     ]
    },
+   "gate": "신호",
+   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "lvl_basis": "연면적 7,534㎡ — 인프라:공공시설 C",
    "master_ref": {
     "id": "M-11740DC2012002",
     "title": "서울고덕강일 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 7,534㎡ — 인프라:공공시설 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -24756,124 +24660,6 @@
    ],
    "first_seen": "2026-07-31",
    "last_movement": "2025-10-01",
-   "last_movement_basis": "source"
-  },
-  {
-   "title": "고덕동 강동구 자원순환센터 (자원순환관련시설, 연면적 45천㎡)",
-   "cat": "인프라",
-   "sub": "공공시설",
-   "lvl": "B",
-   "area_m2": 45550,
-   "purp": "자원순환관련시설",
-   "arch_gb": "신축",
-   "ext_delta_m2": null,
-   "ext_basis": null,
-   "nm_basis": "건물명=건축물대장 표제부 `bldNm` — 같은 지번 + 주용도 일치(자원순환관련시설) + 연면적 근사(대장 37,501㎡ ↔ 허가 45,550㎡, 차이 18%). 허가 레코드는 공백이었다",
-   "area_kind": "연면적",
-   "pk": "1026100077731",
-   "splot": null,
-   "block": null,
-   "lot": null,
-   "geo_prec": "parcel",
-   "position_confidence": null,
-   "hhld_cnt": 0,
-   "ho_cnt": 0,
-   "vlrat": 12.7666,
-   "plat_area": 41153,
-   "jiyuk": "자연녹지지역",
-   "sd": "서울",
-   "sg": "강동구",
-   "dong": "고덕동",
-   "addr": "서울특별시 강동구 고덕동 85번지",
-   "confirmed": false,
-   "current_stage": "사용승인",
-   "phase": "준공·개통",
-   "status": "활성",
-   "arch_pms_day": "20201223",
-   "real_stcns_day": "20210513",
-   "use_apr_day": "20251121",
-   "milestones": [
-    {
-     "phase": "인가",
-     "stage": "건축허가",
-     "date": "2020-12-23",
-     "state": "done",
-     "src": "건축HUB"
-    },
-    {
-     "phase": "착공",
-     "stage": "착공",
-     "date": "2021-05-13",
-     "state": "done",
-     "src": "건축HUB"
-    },
-    {
-     "phase": "준공·개통",
-     "stage": "사용승인",
-     "date": "2025-11-21",
-     "state": "current",
-     "src": "건축HUB"
-    }
-   ],
-   "src_tier": "official_report",
-   "pt_type": "facility",
-   "rcept_dt": "20251121",
-   "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
-   "geometry": {
-    "coordinates": [
-     127.160679,
-     37.569956
-    ]
-   },
-   "master_ref": {
-    "id": "M-11740DC2012002",
-    "title": "서울고덕강일 공공주택지구"
-   },
-   "name_status": "미확보",
-   "gate": "신호",
-   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 45,550㎡ — 인프라:공공시설 B",
-   "bldrgst": {
-    "bld_nm": "강동구 자원순환센터",
-    "road_addr": "서울특별시 강동구 아리수로87길 272 (고덕동)",
-    "main_purps": "자원순환관련시설",
-    "tot_area": 37500.61,
-    "use_apr_day": "20251030",
-    "hhld_cnt": 0,
-    "ho_cnt": 0,
-    "src": "국토부 건축HUB 건축물대장 표제부"
-   },
-   "road_addr": "서울특별시 강동구 아리수로87길 272 (고덕동)",
-   "completion_verified": {
-    "date": "2025-10-30",
-    "basis": "건축물대장 사용승인일"
-   },
-   "addr_verified": {
-    "road_addr": "서울특별시 강동구 아리수로87길 272 (고덕동)",
-    "jibun_addr": "서울특별시 강동구 고덕동 85 강동구 자원순환센터",
-    "bld_nm": null,
-    "src": "행안부 도로명주소 검색 API"
-   },
-   "geo_approx": false,
-   "stage_history": [
-    {
-     "stage": "인가",
-     "date": "2020-12-23",
-     "basis": "source"
-    },
-    {
-     "stage": "착공",
-     "date": "2021-05-13",
-     "basis": "source"
-    },
-    {
-     "stage": "준공·개통",
-     "date": "2025-11-21",
-     "basis": "source"
-    }
-   ],
-   "first_seen": "2026-07-18",
-   "last_movement": "2025-11-21",
    "last_movement_basis": "source"
   },
   {
@@ -24939,13 +24725,13 @@
      37.564902
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 69,294㎡ — 일자리:오피스 B",
    "master_ref": {
     "id": "M-11740DC2012002",
     "title": "서울고덕강일 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 69,294㎡ — 일자리:오피스 B",
    "geo_approx": false,
    "stage_history": [
     {
@@ -25026,13 +24812,13 @@
      37.574853
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 59,529㎡ — 일자리:오피스 B",
    "master_ref": {
     "id": "M-11740DC2012002",
     "title": "서울고덕강일 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 59,529㎡ — 일자리:오피스 B",
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -25117,13 +24903,13 @@
      37.567107
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 12,185㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-11740DC2012002",
     "title": "서울고덕강일 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 12,185㎡ — 일자리:오피스 C",
    "geo_basis": "택지정보 가구획지 — 11740DC2012002 블록 자족5 필지 1 (자족기능확보시설) · 종전 좌표에서 1370m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -25209,14 +24995,14 @@
      37.565126
     ]
    },
-   "master_ref": {
-    "id": "M-11740DC2012002",
-    "title": "서울고덕강일 공공주택지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 13,514㎡ — 일자리:오피스 C",
+   "master_ref": {
+    "id": "M-11740DC2012002",
+    "title": "서울고덕강일 공공주택지구"
+   },
    "geo_approx": true,
    "block_unresolved": true,
    "stage_history": [
@@ -25305,13 +25091,13 @@
      37.574853
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 15,306㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-11740DC2012002",
     "title": "서울고덕강일 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 15,306㎡ — 일자리:오피스 C",
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -25397,14 +25183,14 @@
      37.629378
     ]
    },
-   "master_ref": {
-    "id": "M-11380DA2010001",
-    "title": "은평 재정비촉진지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 34,300㎡ — 인프라:공공시설 B",
+   "master_ref": {
+    "id": "M-11380DA2010001",
+    "title": "은평 재정비촉진지구"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -25485,13 +25271,13 @@
      37.639839
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 41,065㎡ — 인프라:공공시설 B",
    "master_ref": {
     "id": "M-11380DA2010001",
     "title": "은평 재정비촉진지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 41,065㎡ — 인프라:공공시설 B",
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -25572,13 +25358,13 @@
      37.639839
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 51,439㎡ — 인프라:공공시설 A",
    "master_ref": {
     "id": "M-11380DA2010001",
     "title": "은평 재정비촉진지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 51,439㎡ — 인프라:공공시설 A",
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -26190,10 +25976,6 @@
      37.035546
     ]
    },
-   "master_ref": {
-    "id": "M-41220MX2006001",
-    "title": "고덕 국제화계획지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 4,709,471㎡ — 일자리:공장 S",
@@ -26211,6 +25993,10 @@
    "completion_verified": {
     "date": "2026-04-27",
     "basis": "건축물대장 사용승인일"
+   },
+   "master_ref": {
+    "id": "M-41220MX2006001",
+    "title": "고덕 국제화계획지구 택지개발사업"
    },
    "addr_verified": {
     "road_addr": "경기도 평택시 삼성1로 469 (고덕동)",
@@ -26307,10 +26093,6 @@
      37.031933
     ]
    },
-   "master_ref": {
-    "id": "M-41220MX2006001",
-    "title": "고덕 국제화계획지구 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
@@ -26329,6 +26111,10 @@
    "completion_verified": {
     "date": "2026-01-05",
     "basis": "건축물대장 사용승인일"
+   },
+   "master_ref": {
+    "id": "M-41220MX2006001",
+    "title": "고덕 국제화계획지구 택지개발사업"
    },
    "addr_verified": {
     "road_addr": "경기도 평택시 삼성로 41 (고덕동)",
@@ -26423,13 +26209,13 @@
      37.026726
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 14,975㎡ — 일자리:공장 C",
    "master_ref": {
     "id": "M-41220MX2006001",
     "title": "고덕 국제화계획지구 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 14,975㎡ — 일자리:공장 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -26510,14 +26296,14 @@
      37.056078
     ]
    },
-   "master_ref": {
-    "id": "M-41220MX2006001",
-    "title": "고덕 국제화계획지구 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 78,084㎡ — 인프라:판매 B",
+   "master_ref": {
+    "id": "M-41220MX2006001",
+    "title": "고덕 국제화계획지구 택지개발사업"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -26600,13 +26386,13 @@
      37.057916
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 3,707㎡ — 인프라:공공시설 C",
    "master_ref": {
     "id": "M-41220MX2006001",
     "title": "고덕 국제화계획지구 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 3,707㎡ — 인프라:공공시설 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -26689,13 +26475,13 @@
      37.054672
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 3,322㎡ — 인프라:공공시설 C",
    "master_ref": {
     "id": "M-41220MX2006001",
     "title": "고덕 국제화계획지구 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 3,322㎡ — 인프라:공공시설 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -26776,14 +26562,14 @@
      37.047875
     ]
    },
-   "master_ref": {
-    "id": "M-41220MX2006001",
-    "title": "고덕 국제화계획지구 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 10,881㎡ — 일자리:오피스 C",
+   "master_ref": {
+    "id": "M-41220MX2006001",
+    "title": "고덕 국제화계획지구 택지개발사업"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -26864,13 +26650,13 @@
      37.04718
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 52,916㎡ — 인프라:공공시설 A",
    "master_ref": {
     "id": "M-41220MX2006001",
     "title": "고덕 국제화계획지구 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 52,916㎡ — 인프라:공공시설 A",
    "geo_approx": false,
    "stage_history": [
     {
@@ -26954,13 +26740,13 @@
      37.04617
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 9,960㎡ — 인프라:공공시설 C",
    "master_ref": {
     "id": "M-41220MX2006001",
     "title": "고덕 국제화계획지구 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 9,960㎡ — 인프라:공공시설 C",
    "geo_basis": "택지정보 가구획지 — 41220MX2006001 블록 업무5 필지 업무5 (업무시설) · 종전 좌표에서 756m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -27233,14 +27019,14 @@
      37.036243
     ]
    },
-   "master_ref": {
-    "id": "M-41220PV2016002",
-    "title": "평택 브레인시티 일반산업단지"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 29,963㎡ — 일자리:지식산업센터 C",
+   "master_ref": {
+    "id": "M-41220PV2016002",
+    "title": "평택 브레인시티 일반산업단지"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -27414,13 +27200,13 @@
      37.034081
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 15,756㎡ — 일자리:공장 C",
    "master_ref": {
     "id": "M-41220PV2016002",
     "title": "평택 브레인시티 일반산업단지"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 15,756㎡ — 일자리:공장 C",
    "geo_basis": "택지정보 가구획지 — 41220PV2016002 블록 산업21 필지 2 (산업용지) · 종전 좌표에서 746m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -27504,13 +27290,13 @@
      37.049923
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 12,398㎡ — 인프라:판매 C",
    "master_ref": {
     "id": "M-41220PV2016002",
     "title": "평택 브레인시티 일반산업단지"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 12,398㎡ — 인프라:판매 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -27769,7 +27555,7 @@
    },
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 5,049㎡ — 인프라:공공시설 C",
+   "lvl_basis": "연면적 5,049㎡ — 일자리:오피스 C",
    "addr_verified": {
     "road_addr": "경기도 평택시 경기대로 777 (지제동)",
     "jibun_addr": "경기도 평택시 지제동 559-4 지제역.",
@@ -27859,7 +27645,7 @@
    },
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 8,396㎡ — 인프라:공공시설 C",
+   "lvl_basis": "연면적 8,396㎡ — 인프라:문화·관광·체육 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -28289,14 +28075,14 @@
      37.033219
     ]
    },
-   "master_ref": {
-    "id": "M-41220PV2016002",
-    "title": "평택 브레인시티 일반산업단지"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 199,555㎡ — 일자리:지식산업센터 A",
+   "master_ref": {
+    "id": "M-41220PV2016002",
+    "title": "평택 브레인시티 일반산업단지"
+   },
    "addr_verified": {
     "road_addr": "경기도 평택시 산단로 255 (칠괴동)",
     "jibun_addr": "경기도 평택시 칠괴동 577-6",
@@ -28386,13 +28172,13 @@
      37.038635
     ]
    },
+   "name_status": "미확보",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "master_ref": {
     "id": "M-41220PV2016002",
     "title": "평택 브레인시티 일반산업단지"
    },
-   "name_status": "미확보",
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "geo_approx": true,
    "block_unresolved": true,
    "stage_history": [
@@ -28475,14 +28261,14 @@
      37.049821
     ]
    },
-   "master_ref": {
-    "id": "M-41220PV2016002",
-    "title": "평택 브레인시티 일반산업단지"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 12,306㎡ — 일자리:공장 C",
+   "master_ref": {
+    "id": "M-41220PV2016002",
+    "title": "평택 브레인시티 일반산업단지"
+   },
    "geo_basis": "택지정보 가구획지 — 41220PV2016002 블록 산업12 필지 4 (산업용지) · 종전 좌표에서 364m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -28568,13 +28354,13 @@
      37.045802
     ]
    },
+   "gate": "신호",
+   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "lvl_basis": "연면적 26,176㎡ — 일자리:공장 C",
    "master_ref": {
     "id": "M-41220PV2016002",
     "title": "평택 브레인시티 일반산업단지"
    },
-   "gate": "신호",
-   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 26,176㎡ — 일자리:공장 C",
    "geo_approx": true,
    "block_unresolved": true,
    "stage_history": [
@@ -28664,13 +28450,13 @@
      37.039487
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 49,181㎡ — 일자리:공장 B",
    "master_ref": {
     "id": "M-41220PV2016002",
     "title": "평택 브레인시티 일반산업단지"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 49,181㎡ — 일자리:공장 B",
    "geo_basis": "택지정보 가구획지 — 41220PV2016002 블록 산업18 필지 1 (산업용지) · 종전 좌표에서 515m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -29292,13 +29078,13 @@
      37.153992
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 1,530,093㎡ — 일자리:공장 S",
    "master_ref": {
     "id": "M-41463PV2023008",
     "title": "용인 반도체 클러스터 일반산업단지"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 1,530,093㎡ — 일자리:공장 S",
    "geo_basis": "택지정보 가구획지 — 41463PV2023008 블록 A15 필지 A15 (산업용지) · 종전 좌표에서 1102m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -29552,13 +29338,13 @@
      37.157816
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 30,735㎡ — 인프라:판매 C",
    "master_ref": {
     "id": "M-41370DA2004001",
     "title": "오산세교2지구 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 30,735㎡ — 인프라:판매 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -30738,10 +30524,6 @@
      37.144689
     ]
    },
-   "master_ref": {
-    "id": "M-41370DA2004001",
-    "title": "오산세교2지구 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
@@ -30760,6 +30542,10 @@
    "completion_verified": {
     "date": "2025-10-17",
     "basis": "건축물대장 사용승인일"
+   },
+   "master_ref": {
+    "id": "M-41370DA2004001",
+    "title": "오산세교2지구 택지개발사업"
    },
    "addr_verified": {
     "road_addr": "경기도 오산시 가수행복1길 4 (가수동)",
@@ -30854,13 +30640,13 @@
      37.146367
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 7,065㎡ — 인프라:공공시설 C",
    "master_ref": {
     "id": "M-41370DA2004001",
     "title": "오산세교2지구 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 7,065㎡ — 인프라:공공시설 C",
    "geo_approx": true,
    "block_unresolved": true,
    "stage_history": [
@@ -30944,13 +30730,13 @@
      37.200736
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 13,363㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-41590MX2008001",
     "title": "화성동탄2 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 13,363㎡ — 일자리:오피스 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -31031,13 +30817,13 @@
      37.197696
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 35,577㎡ — 일자리:오피스 B",
    "master_ref": {
     "id": "M-41590MX2008001",
     "title": "화성동탄2 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 35,577㎡ — 일자리:오피스 B",
    "geo_approx": false,
    "stage_history": [
     {
@@ -31118,13 +30904,13 @@
      37.197376
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 33,782㎡ — 일자리:오피스 B",
    "master_ref": {
     "id": "M-41590MX2008001",
     "title": "화성동탄2 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 33,782㎡ — 일자리:오피스 B",
    "geo_approx": false,
    "stage_history": [
     {
@@ -31207,14 +30993,14 @@
      37.187099
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 12,253㎡ — 인프라:병원 C",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -31297,13 +31083,13 @@
      37.187095
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 17,152㎡ — 인프라:병원 C",
    "master_ref": {
     "id": "M-41590MX2008001",
     "title": "화성동탄2 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 17,152㎡ — 인프라:병원 C",
    "addr_verified": {
     "road_addr": "경기도 화성시 동탄구 동탄기흥로307번길 22 (여울동)",
     "jibun_addr": "경기도 화성시 동탄구 여울동 1009-2",
@@ -31393,13 +31179,13 @@
      37.187547
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 10,653㎡ — 인프라:병원 C",
    "master_ref": {
     "id": "M-41590MX2008001",
     "title": "화성동탄2 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 10,653㎡ — 인프라:병원 C",
    "addr_verified": {
     "road_addr": "경기도 화성시 동탄구 동탄기흥로307번길 26 (여울동)",
     "jibun_addr": "경기도 화성시 동탄구 여울동 1009-3",
@@ -31487,13 +31273,13 @@
      37.185307
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 13,106㎡ — 일자리:데이터센터 C",
    "master_ref": {
     "id": "M-41590MX2008001",
     "title": "화성동탄2 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 13,106㎡ — 일자리:데이터센터 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -31575,13 +31361,13 @@
      37.209343
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 13,337㎡ — 인프라:판매 C",
    "master_ref": {
     "id": "M-41590MX2008001",
     "title": "화성동탄2 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 13,337㎡ — 인프라:판매 C",
    "geo_basis": "택지정보 가구획지 — 41590MX2008001 블록 G32 필지 2 (근린생활시설용지) · 종전 좌표에서 2495m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -31663,14 +31449,14 @@
      37.170426
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 17,895㎡ — 인프라:판매 C",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -31751,14 +31537,14 @@
      37.174819
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 54,681㎡ — 일자리:오피스 B",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -31841,12 +31627,12 @@
      37.175518
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "master_ref": {
     "id": "M-41590MX2008001",
     "title": "화성동탄2 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "geo_approx": false,
    "stage_history": [
     {
@@ -32629,13 +32415,13 @@
      37.225865
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 4,315㎡ — 인프라:문화·관광·체육 C",
    "master_ref": {
     "id": "M-41590KL2001001",
     "title": "화성동탄지구 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 4,315㎡ — 인프라:문화·관광·체육 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -32720,7 +32506,6 @@
      37.245902
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 10,623㎡ — 일자리:오피스 C",
@@ -34325,12 +34110,12 @@
      37.215181
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "master_ref": {
     "id": "M-41590KL2001001",
     "title": "화성동탄지구 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "geo_approx": false,
    "stage_history": [
     {
@@ -34413,13 +34198,13 @@
      37.185953
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 4,742㎡ — 인프라:공공시설 C",
    "master_ref": {
     "id": "M-41590MX2008001",
     "title": "화성동탄2 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 4,742㎡ — 인프라:공공시설 C",
    "geo_approx": true,
    "stage_history": [
     {
@@ -34500,14 +34285,14 @@
      37.222866
     ]
    },
-   "master_ref": {
-    "id": "M-41590KL2001001",
-    "title": "화성동탄지구 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 15,779㎡ — 일자리:공장 C",
+   "master_ref": {
+    "id": "M-41590KL2001001",
+    "title": "화성동탄지구 택지개발사업"
+   },
    "addr_verified": {
     "road_addr": "경기도 화성시 동탄구 삼성1로4길 30 (석우동)",
     "jibun_addr": "경기도 화성시 동탄구 석우동 2-10",
@@ -34595,14 +34380,14 @@
      37.222718
     ]
    },
-   "master_ref": {
-    "id": "M-41590KL2001001",
-    "title": "화성동탄지구 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 14,349㎡ — 일자리:공장 C",
+   "master_ref": {
+    "id": "M-41590KL2001001",
+    "title": "화성동탄지구 택지개발사업"
+   },
    "addr_verified": {
     "road_addr": "경기도 화성시 동탄구 삼성1로4길 34 (석우동)",
     "jibun_addr": "경기도 화성시 동탄구 석우동 2-11",
@@ -34692,14 +34477,14 @@
      37.218211
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 17,554㎡ — 인프라:판매 C",
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -34782,13 +34567,13 @@
      37.216718
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 22,378㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-41590MX2008001",
     "title": "화성동탄2 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 22,378㎡ — 일자리:오피스 C",
    "geo_approx": true,
    "stage_history": [
     {
@@ -34871,13 +34656,13 @@
      37.212061
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "증축분 면적 10,028㎡ — 일자리:공장 C",
    "master_ref": {
     "id": "M-41590MX2008001",
     "title": "화성동탄2 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "증축분 면적 10,028㎡ — 일자리:공장 C",
    "addr_verified": {
     "road_addr": "경기도 화성시 동탄구 동탄첨단산업1로 28 (영천동)",
     "jibun_addr": "경기도 화성시 동탄구 영천동 830-1",
@@ -34965,13 +34750,13 @@
      37.21399
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 28,576㎡ — 일자리:지식산업센터 C",
    "master_ref": {
     "id": "M-41590MX2008001",
     "title": "화성동탄2 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 28,576㎡ — 일자리:지식산업센터 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -35056,10 +34841,6 @@
      37.216008
     ]
    },
-   "master_ref": {
-    "id": "M-41590MX2008001",
-    "title": "화성동탄2 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 82,303㎡ — 일자리:지식산업센터 B",
@@ -35077,6 +34858,10 @@
    "completion_verified": {
     "date": "2026-02-24",
     "basis": "건축물대장 사용승인일"
+   },
+   "master_ref": {
+    "id": "M-41590MX2008001",
+    "title": "화성동탄2 택지개발사업"
    },
    "addr_verified": {
     "road_addr": "경기도 화성시 동탄구 동탄첨단산업3로 40 (영천동)",
@@ -35169,13 +34954,13 @@
      37.218098
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 68,757㎡ — 일자리:지식산업센터 B",
    "master_ref": {
     "id": "M-41590MX2008001",
     "title": "화성동탄2 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 68,757㎡ — 일자리:지식산업센터 B",
    "geo_approx": false,
    "stage_history": [
     {
@@ -35256,13 +35041,13 @@
      37.218098
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 80,990㎡ — 일자리:지식산업센터 B",
    "master_ref": {
     "id": "M-41590MX2008001",
     "title": "화성동탄2 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 80,990㎡ — 일자리:지식산업센터 B",
    "geo_approx": false,
    "stage_history": [
     {
@@ -35343,13 +35128,13 @@
      37.218098
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 29,055㎡ — 일자리:지식산업센터 C",
    "master_ref": {
     "id": "M-41590MX2008001",
     "title": "화성동탄2 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 29,055㎡ — 일자리:지식산업센터 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -35430,12 +35215,12 @@
      37.218098
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "master_ref": {
     "id": "M-41590MX2008001",
     "title": "화성동탄2 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "geo_approx": false,
    "stage_history": [
     {
@@ -35511,13 +35296,13 @@
      37.218098
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 24,935㎡ — 일자리:지식산업센터 C",
    "master_ref": {
     "id": "M-41590MX2008001",
     "title": "화성동탄2 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 24,935㎡ — 일자리:지식산업센터 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -39721,13 +39506,13 @@
      37.284845
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 90,944㎡ — 일자리:지식산업센터 B",
    "master_ref": {
     "id": "M-41390MX2010005",
     "title": "반월특수지역 개발구역 중 시화2단계(송산그린시티) 개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 90,944㎡ — 일자리:지식산업센터 B",
    "geo_approx": false,
    "stage_history": [
     {
@@ -40337,13 +40122,13 @@
      37.323192
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 4,072㎡ — 인프라:공공시설 C",
    "master_ref": {
     "id": "M-41430MX2023010",
     "title": "의왕군포안산 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 4,072㎡ — 인프라:공공시설 C",
    "addr_verified": {
     "road_addr": "경기도 군포시 번영로 10 (부곡동)",
     "jibun_addr": "경기도 군포시 부곡동 1110-2 송부종합사회복지관",
@@ -40433,13 +40218,13 @@
      37.325598
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 13,917㎡ — 일자리:공장 C",
    "master_ref": {
     "id": "M-41430MX2023010",
     "title": "의왕군포안산 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 13,917㎡ — 일자리:공장 C",
    "addr_verified": {
     "road_addr": "경기도 군포시 군포첨단산업1로 7 (부곡동)",
     "jibun_addr": "경기도 군포시 부곡동 1234-6",
@@ -40892,13 +40677,13 @@
      37.325735
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "증축분 면적 15,385㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-41430MX2023010",
     "title": "의왕군포안산 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "증축분 면적 15,385㎡ — 일자리:오피스 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -40981,13 +40766,13 @@
      37.320818
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 5,206㎡ — 인프라:공공시설 C",
    "master_ref": {
     "id": "M-41430MX2023010",
     "title": "의왕군포안산 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 5,206㎡ — 인프라:공공시설 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -41171,99 +40956,6 @@
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
    "last_movement_basis": "observed"
-  },
-  {
-   "title": "호매실동 수원시 빛누리아트홀 (문화및집회시설, 연면적 5천㎡)",
-   "cat": "인프라",
-   "sub": "공공시설",
-   "lvl": "C",
-   "area_m2": 5237,
-   "purp": "문화및집회시설",
-   "arch_gb": "신축",
-   "ext_delta_m2": null,
-   "ext_basis": null,
-   "nm_basis": "건물명=건축물대장 표제부 `bldNm` — 같은 지번 + 주용도 일치(문화및집회시설) + 연면적 근사(대장 5,237㎡ ↔ 허가 5,237㎡, 차이 0%). 허가 레코드는 공백이었다",
-   "area_kind": "연면적",
-   "pk": "1084100073346",
-   "splot": null,
-   "block": null,
-   "lot": null,
-   "geo_prec": "parcel",
-   "position_confidence": null,
-   "hhld_cnt": 0,
-   "ho_cnt": 0,
-   "vlrat": 99.46,
-   "plat_area": 3686.9,
-   "jiyuk": "도시지역",
-   "sd": "경기",
-   "sg": "수원시",
-   "dong": "호매실동",
-   "addr": "경기도 수원시 권선구 호매실동 1366번지",
-   "confirmed": false,
-   "current_stage": "착공",
-   "phase": "착공",
-   "status": "활성",
-   "arch_pms_day": "20220124",
-   "real_stcns_day": "20220616",
-   "use_apr_day": null,
-   "milestones": [
-    {
-     "phase": "인가",
-     "stage": "건축허가",
-     "date": "2022-01-24",
-     "state": "done",
-     "src": "건축HUB"
-    },
-    {
-     "phase": "착공",
-     "stage": "착공",
-     "date": "2022-06-16",
-     "state": "current",
-     "src": "건축HUB"
-    },
-    {
-     "phase": "준공·개통",
-     "stage": "사용승인",
-     "state": "future"
-    }
-   ],
-   "src_tier": "official_report",
-   "pt_type": "facility",
-   "rcept_dt": "20220616",
-   "src": "https://www.hub.go.kr/portal/opn/tyb/idx-acpmslg.do",
-   "geometry": {
-    "coordinates": [
-     126.95662,
-     37.265361
-    ]
-   },
-   "name_status": "미확보",
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 5,237㎡ — 인프라:공공시설 C",
-   "addr_verified": {
-    "road_addr": "경기도 수원시 권선구 호매실로 237 (호매실동)",
-    "jibun_addr": "경기도 수원시 권선구 호매실동 1366 수원시 빛누리아트홀",
-    "bld_nm": null,
-    "src": "행안부 도로명주소 검색 API"
-   },
-   "road_addr": "경기도 수원시 권선구 호매실로 237 (호매실동)",
-   "geo_approx": false,
-   "stage_history": [
-    {
-     "stage": "인가",
-     "date": "2022-01-24",
-     "basis": "source"
-    },
-    {
-     "stage": "착공",
-     "date": "2022-06-16",
-     "basis": "source"
-    }
-   ],
-   "first_seen": "2026-07-19",
-   "last_movement": "2022-06-16",
-   "last_movement_basis": "source"
   },
   {
    "title": "호매실동 1395-2 (업무시설, 연면적 10천㎡)",
@@ -42185,12 +41877,12 @@
      37.302365
     ]
    },
+   "gate": "신호",
+   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "master_ref": {
     "id": "M-41115MX2004001",
     "title": "광교지구 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -42278,12 +41970,12 @@
      37.300301
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "master_ref": {
     "id": "M-41115MX2004001",
     "title": "광교지구 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "geo_approx": true,
    "block_unresolved": true,
    "stage_history": [
@@ -42536,10 +42228,6 @@
      37.300833
     ]
    },
-   "master_ref": {
-    "id": "M-41115MX2004001",
-    "title": "광교지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "증축분 면적 22,339㎡ — 인프라:판매 C",
@@ -42557,6 +42245,10 @@
    "completion_verified": {
     "date": "2023-12-28",
     "basis": "건축물대장 사용승인일"
+   },
+   "master_ref": {
+    "id": "M-41115MX2004001",
+    "title": "광교지구 택지개발사업"
    },
    "addr_verified": {
     "road_addr": "경기도 용인시 수지구 만현로 143 (상현동)",
@@ -42649,13 +42341,13 @@
      37.3069
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 140,212㎡ — 일자리:지식산업센터 A",
    "master_ref": {
     "id": "M-41115MX2004001",
     "title": "광교지구 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 140,212㎡ — 일자리:지식산업센터 A",
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -42739,14 +42431,14 @@
      37.3069
     ]
    },
-   "master_ref": {
-    "id": "M-41115MX2004001",
-    "title": "광교지구 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 191,091㎡ — 일자리:지식산업센터 A",
+   "master_ref": {
+    "id": "M-41115MX2004001",
+    "title": "광교지구 택지개발사업"
+   },
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -43000,13 +42692,13 @@
      37.269071
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 346,350㎡ — 일자리:지식산업센터 S",
    "master_ref": {
     "id": "M-41115MX2004001",
     "title": "광교지구 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 346,350㎡ — 일자리:지식산업센터 S",
    "geo_approx": false,
    "stage_history": [
     {
@@ -44101,10 +43793,6 @@
      37.27901
     ]
    },
-   "master_ref": {
-    "id": "M-41115MX2004001",
-    "title": "광교지구 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 9,509㎡ — 인프라:공공시설 C",
@@ -44122,6 +43810,10 @@
    "completion_verified": {
     "date": "2025-08-08",
     "basis": "건축물대장 사용승인일"
+   },
+   "master_ref": {
+    "id": "M-41115MX2004001",
+    "title": "광교지구 택지개발사업"
    },
    "addr_verified": {
     "road_addr": "경기도 수원시 영통구 월드컵로150번길 43 (원천동)",
@@ -44218,12 +43910,12 @@
      37.283388
     ]
    },
+   "gate": "신호",
+   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "master_ref": {
     "id": "M-41115MX2004001",
     "title": "광교지구 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -44309,12 +44001,12 @@
      37.283388
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "master_ref": {
     "id": "M-41115MX2004001",
     "title": "광교지구 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "geo_approx": false,
    "stage_history": [
     {
@@ -46922,13 +46614,13 @@
      37.381368
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "증축분 면적 290,068㎡ — 일자리:오피스 A",
    "master_ref": {
     "id": "M-28185DA2016001",
     "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "증축분 면적 290,068㎡ — 일자리:오피스 A",
    "addr_verified": {
     "road_addr": "인천광역시 연수구 송도과학로 85 (송도동)",
     "jibun_addr": "인천광역시 연수구 송도동 162-1 연세대학교 국제캠퍼스",
@@ -47016,13 +46708,13 @@
      37.381368
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "증축분 면적 556,459㎡ — 일자리:오피스 S",
    "master_ref": {
     "id": "M-28185DA2016001",
     "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "증축분 면적 556,459㎡ — 일자리:오피스 S",
    "addr_verified": {
     "road_addr": "인천광역시 연수구 송도과학로 85 (송도동)",
     "jibun_addr": "인천광역시 연수구 송도동 162-1 연세대학교 국제캠퍼스",
@@ -47105,13 +46797,13 @@
      37.379694
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 22,447㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-28185DA2016001",
     "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 22,447㎡ — 일자리:오피스 C",
    "addr_verified": {
     "road_addr": "인천광역시 연수구 연구단지로55번길 33 (송도동)",
     "jibun_addr": "인천광역시 연수구 송도동 173-5",
@@ -47203,10 +46895,6 @@
      37.37685
     ]
    },
-   "master_ref": {
-    "id": "M-28185DA2016001",
-    "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 65,388㎡ — 일자리:오피스 B",
@@ -47224,6 +46912,10 @@
    "completion_verified": {
     "date": "2025-11-21",
     "basis": "건축물대장 사용승인일"
+   },
+   "master_ref": {
+    "id": "M-28185DA2016001",
+    "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
    },
    "addr_verified": {
     "road_addr": "인천광역시 연수구 연구단지로 38 (송도동)",
@@ -47516,13 +47208,13 @@
      37.363761
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 87,053㎡ — 일자리:공장 B",
    "master_ref": {
     "id": "M-28185DA2016001",
     "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 87,053㎡ — 일자리:공장 B",
    "geo_approx": false,
    "stage_history": [
     {
@@ -47607,10 +47299,6 @@
      37.354736
     ]
    },
-   "master_ref": {
-    "id": "M-28185DA2016001",
-    "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 99,575㎡ — 일자리:공장 B",
@@ -47628,6 +47316,10 @@
    "completion_verified": {
     "date": "2026-06-12",
     "basis": "건축물대장 사용승인일"
+   },
+   "master_ref": {
+    "id": "M-28185DA2016001",
+    "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
    },
    "addr_verified": {
     "road_addr": "인천광역시 연수구 인천신항대로 450 (송도동)",
@@ -47722,13 +47414,13 @@
      37.363287
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 25,104㎡ — 일자리:공장 C",
    "master_ref": {
     "id": "M-28185DA2016001",
     "title": "인천경제자유구역 송도국제도시 첨단산업클러스터C "
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 25,104㎡ — 일자리:공장 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -48161,14 +47853,14 @@
      37.399753
     ]
    },
-   "master_ref": {
-    "id": "M-28200KH1997001",
-    "title": "인천 논현2지구 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 116,432㎡ — 일자리:공장 A",
+   "master_ref": {
+    "id": "M-28200KH1997001",
+    "title": "인천 논현2지구 택지개발사업"
+   },
    "addr_verified": {
     "road_addr": "인천광역시 남동구 청능대로 451 (고잔동)",
     "jibun_addr": "인천광역시 남동구 고잔동 649",
@@ -48260,10 +47952,6 @@
      37.381951
     ]
    },
-   "master_ref": {
-    "id": "M-41390DA2010001",
-    "title": "시흥 배곧신도시 도시개발구역"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 7,148㎡ — 인프라:공공시설 C",
@@ -48281,6 +47969,10 @@
    "completion_verified": {
     "date": "2026-02-02",
     "basis": "건축물대장 사용승인일"
+   },
+   "master_ref": {
+    "id": "M-41390DA2010001",
+    "title": "시흥 배곧신도시 도시개발구역"
    },
    "addr_verified": {
     "road_addr": "경기도 시흥시 배곧5로 66-20 (배곧동)",
@@ -48373,13 +48065,13 @@
      37.36684
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "증축분 면적 28,532㎡ — 인프라:문화·관광·체육 B",
    "master_ref": {
     "id": "M-41390DA2010001",
     "title": "시흥 배곧신도시 도시개발구역"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "증축분 면적 28,532㎡ — 인프라:문화·관광·체육 B",
    "addr_verified": {
     "road_addr": "경기도 시흥시 서울대학로 173 (배곧동)",
     "jibun_addr": "경기도 시흥시 배곧동 242 서울대학교 시흥캠퍼스",
@@ -48464,13 +48156,13 @@
      37.364664
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 112,896㎡ — 인프라:병원 A",
    "master_ref": {
     "id": "M-41390DA2010001",
     "title": "시흥 배곧신도시 도시개발구역"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 112,896㎡ — 인프라:병원 A",
    "addr_verified": {
     "road_addr": "경기도 시흥시 서울대학로 200 (배곧동)",
     "jibun_addr": "경기도 시흥시 배곧동 248 배곧서울대학교병원",
@@ -48558,13 +48250,13 @@
      37.358107
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 36,757㎡ — 일자리:지식산업센터 B",
    "master_ref": {
     "id": "M-41390DA2010001",
     "title": "시흥 배곧신도시 도시개발구역"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 36,757㎡ — 일자리:지식산업센터 B",
    "addr_verified": {
     "road_addr": "경기도 시흥시 서울대학로 59-72 (배곧동)",
     "jibun_addr": "경기도 시흥시 배곧동 295-1",
@@ -48652,13 +48344,13 @@
      37.35853
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 40,997㎡ — 일자리:지식산업센터 B",
    "master_ref": {
     "id": "M-41390DA2010001",
     "title": "시흥 배곧신도시 도시개발구역"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 40,997㎡ — 일자리:지식산업센터 B",
    "addr_verified": {
     "road_addr": "경기도 시흥시 서울대학로 59-40 (배곧동)",
     "jibun_addr": "경기도 시흥시 배곧동 297-3",
@@ -51982,7 +51674,6 @@
      37.388014
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 12,551㎡ — 일자리:오피스 C",
@@ -56177,13 +55868,13 @@
      37.441356
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "증축분 면적 214,601㎡ — 인프라:판매 A",
    "master_ref": {
     "id": "M-28200DC2023001",
     "title": "인천구월2 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "증축분 면적 214,601㎡ — 인프라:판매 A",
    "addr_verified": {
     "road_addr": "인천광역시 미추홀구 연남로 35 (관교동)",
     "jibun_addr": "인천광역시 미추홀구 관교동 15 인천종합터미널,롯데백화점",
@@ -56933,13 +56624,13 @@
      37.442568
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 12,790㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-28200DC2023001",
     "title": "인천구월2 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 12,790㎡ — 일자리:오피스 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -57024,10 +56715,6 @@
      37.439613
     ]
    },
-   "master_ref": {
-    "id": "M-28200DC2023001",
-    "title": "인천구월2 공공주택지구"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 49,826㎡ — 인프라:판매 C",
@@ -57045,6 +56732,10 @@
    "completion_verified": {
     "date": "2026-02-04",
     "basis": "건축물대장 사용승인일"
+   },
+   "master_ref": {
+    "id": "M-28200DC2023001",
+    "title": "인천구월2 공공주택지구"
    },
    "addr_verified": {
     "road_addr": "인천광역시 남동구 매소홀로 759 (구월동)",
@@ -58137,14 +57828,14 @@
      37.473808
     ]
    },
-   "master_ref": {
-    "id": "M-41210LH2022002",
-    "title": "광명시흥 공공주택지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 10,549㎡ — 인프라:판매 C",
+   "master_ref": {
+    "id": "M-41210LH2022002",
+    "title": "광명시흥 공공주택지구"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -58227,12 +57918,12 @@
      37.449454
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "master_ref": {
     "id": "M-41210LH2022002",
     "title": "광명시흥 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "addr_verified": {
     "road_addr": "경기도 광명시 밤일로 75 (노온사동)",
     "jibun_addr": "경기도 광명시 노온사동 2-1",
@@ -58807,14 +58498,14 @@
      37.44182
     ]
    },
-   "master_ref": {
-    "id": "M-41290MX2019001",
-    "title": "과천과천 공공주택지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 7,183㎡ — 인프라:문화·관광·체육 C",
+   "master_ref": {
+    "id": "M-41290MX2019001",
+    "title": "과천과천 공공주택지구"
+   },
    "addr_verified": {
     "road_addr": "경기도 과천시 중앙로 294 (관문동)",
     "jibun_addr": "경기도 과천시 관문동 3",
@@ -61144,14 +60835,14 @@
      37.464362
     ]
    },
-   "master_ref": {
-    "id": "M-11710KL2006001",
-    "title": "위례 택지개발사업 예정지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 55,562㎡ — 인프라:문화·관광·체육 A",
+   "master_ref": {
+    "id": "M-11710KL2006001",
+    "title": "위례 택지개발사업 예정지구"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -61233,13 +60924,13 @@
      37.467238
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 254,026㎡ — 일자리:오피스 A",
    "master_ref": {
     "id": "M-11710KL2006001",
     "title": "위례 택지개발사업 예정지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 254,026㎡ — 일자리:오피스 A",
    "geo_basis": "택지정보 가구획지 — 11710KL2006001 블록 지원2 필지 지원2 (도시지원시설용지) · 종전 좌표에서 1327m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -61786,13 +61477,13 @@
      37.465589
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 27,498㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-11710KL2006001",
     "title": "위례 택지개발사업 예정지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 27,498㎡ — 일자리:오피스 C",
    "geo_basis": "택지정보 가구획지 — 41130LH2018001 블록 업1 필지 1 (업무시설) · 종전 좌표에서 715m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -62883,13 +62574,13 @@
      37.513817
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "증축분 면적 132,405㎡ — 일자리:공장 A",
    "master_ref": {
     "id": "M-28110LH2010001",
     "title": "인천경제자유구역 영종국제도시 영종하늘도시"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "증축분 면적 132,405㎡ — 일자리:공장 A",
    "geo_approx": true,
    "stage_history": [
     {
@@ -62970,14 +62661,14 @@
      37.488984
     ]
    },
-   "master_ref": {
-    "id": "M-28110LH2010001",
-    "title": "인천경제자유구역 영종국제도시 영종하늘도시"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 15,454㎡ — 인프라:판매 C",
+   "master_ref": {
+    "id": "M-28110LH2010001",
+    "title": "인천경제자유구역 영종국제도시 영종하늘도시"
+   },
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -63064,10 +62755,6 @@
      37.488984
     ]
    },
-   "master_ref": {
-    "id": "M-28110LH2010001",
-    "title": "인천경제자유구역 영종국제도시 영종하늘도시"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 11,544㎡ — 인프라:판매 C",
@@ -63085,6 +62772,10 @@
    "completion_verified": {
     "date": "2026-02-12",
     "basis": "건축물대장 사용승인일"
+   },
+   "master_ref": {
+    "id": "M-28110LH2010001",
+    "title": "인천경제자유구역 영종국제도시 영종하늘도시"
    },
    "geo_approx": true,
    "map_hidden": true,
@@ -63258,14 +62949,14 @@
      37.498228
     ]
    },
-   "master_ref": {
-    "id": "M-28110LH2010001",
-    "title": "인천경제자유구역 영종국제도시 영종하늘도시"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 20,522㎡ — 인프라:판매 C",
+   "master_ref": {
+    "id": "M-28110LH2010001",
+    "title": "인천경제자유구역 영종국제도시 영종하늘도시"
+   },
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -63350,14 +63041,14 @@
      37.498228
     ]
    },
-   "master_ref": {
-    "id": "M-28110LH2010001",
-    "title": "인천경제자유구역 영종국제도시 영종하늘도시"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 35,201㎡ — 인프라:공공시설 B",
+   "master_ref": {
+    "id": "M-28110LH2010001",
+    "title": "인천경제자유구역 영종국제도시 영종하늘도시"
+   },
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -68055,14 +67746,14 @@
      37.534159
     ]
    },
-   "master_ref": {
-    "id": "M-41190MX2020001",
-    "title": "부천대장 공공주택지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 99,819㎡ — 인프라:판매 B",
+   "master_ref": {
+    "id": "M-41190MX2020001",
+    "title": "부천대장 공공주택지구"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -68683,13 +68374,13 @@
      37.487791
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 8,711㎡ — 인프라:문화·관광·체육 C",
    "master_ref": {
     "id": "M-11710KL2006001",
     "title": "위례 택지개발사업 예정지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 8,711㎡ — 인프라:문화·관광·체육 C",
    "addr_verified": {
     "road_addr": "경기도 하남시 위례대로 330 (학암동)",
     "jibun_addr": "경기도 하남시 학암동 649",
@@ -68777,13 +68468,13 @@
      37.481122
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 14,866㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-11710KL2006001",
     "title": "위례 택지개발사업 예정지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 14,866㎡ — 일자리:오피스 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -68864,13 +68555,13 @@
      37.479931
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 16,342㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-11710KL2006001",
     "title": "위례 택지개발사업 예정지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 16,342㎡ — 일자리:오피스 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -69720,13 +69411,13 @@
      37.580258
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 10,704㎡ — 인프라:판매 C",
    "master_ref": {
     "id": "M-28260MX2007002",
     "title": "인천검단지구 택지개발지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 10,704㎡ — 인프라:판매 C",
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -69812,13 +69503,13 @@
      37.580258
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 11,581㎡ — 인프라:판매 C",
    "master_ref": {
     "id": "M-28260MX2007002",
     "title": "인천검단지구 택지개발지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 11,581㎡ — 인프라:판매 C",
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -69902,14 +69593,14 @@
      37.580258
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 13,606㎡ — 인프라:판매 C",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   },
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -70396,14 +70087,14 @@
      37.587492
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 10,551㎡ — 인프라:판매 C",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   },
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -70488,13 +70179,13 @@
      37.587492
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 16,773㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-28260MX2007002",
     "title": "인천검단지구 택지개발지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 16,773㎡ — 일자리:오피스 C",
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -70579,13 +70270,13 @@
      37.587492
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 20,415㎡ — 인프라:공공시설 B",
    "master_ref": {
     "id": "M-28260MX2007002",
     "title": "인천검단지구 택지개발지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 20,415㎡ — 인프라:공공시설 B",
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -70670,13 +70361,13 @@
      37.604629
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 7,557㎡ — 인프라:공공시설 C",
    "master_ref": {
     "id": "M-28260MX2007002",
     "title": "인천검단지구 택지개발지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 7,557㎡ — 인프라:공공시설 C",
    "geo_approx": true,
    "block_unresolved": true,
    "stage_history": [
@@ -70759,13 +70450,13 @@
      37.587924
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 182,554㎡ — 일자리:지식산업센터 A",
    "master_ref": {
     "id": "M-28260MX2007002",
     "title": "인천검단지구 택지개발지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 182,554㎡ — 일자리:지식산업센터 A",
    "geo_basis": "택지정보 가구획지 — 28260MX2007002 블록 도시14 필지 1 (도시지원시설용지) · 종전 좌표에서 561m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -70849,13 +70540,13 @@
      37.587492
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 27,423㎡ — 인프라:문화·관광·체육 B",
    "master_ref": {
     "id": "M-28260MX2007002",
     "title": "인천검단지구 택지개발지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 27,423㎡ — 인프라:문화·관광·체육 B",
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -70939,14 +70630,14 @@
      37.596167
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 14,662㎡ — 인프라:판매 C",
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
+   },
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -71033,10 +70724,6 @@
      37.596167
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 10,497㎡ — 인프라:판매 C",
@@ -71054,6 +70741,10 @@
    "completion_verified": {
     "date": "2025-12-01",
     "basis": "건축물대장 사용승인일"
+   },
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
    },
    "geo_approx": true,
    "map_hidden": true,
@@ -71144,13 +70835,13 @@
      37.596167
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 126,473㎡ — 인프라:문화·관광·체육 A",
    "master_ref": {
     "id": "M-28260MX2007002",
     "title": "인천검단지구 택지개발지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 126,473㎡ — 인프라:문화·관광·체육 A",
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -71234,13 +70925,13 @@
      37.596167
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 13,107㎡ — 인프라:판매 C",
    "master_ref": {
     "id": "M-28260MX2007002",
     "title": "인천검단지구 택지개발지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 13,107㎡ — 인프라:판매 C",
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -71326,13 +71017,13 @@
      37.596167
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 12,021㎡ — 인프라:판매 C",
    "master_ref": {
     "id": "M-28260MX2007002",
     "title": "인천검단지구 택지개발지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 12,021㎡ — 인프라:판매 C",
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -71420,10 +71111,6 @@
      37.607601
     ]
    },
-   "master_ref": {
-    "id": "M-28260MX2007002",
-    "title": "인천검단지구 택지개발지구"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 13,910㎡ — 인프라:판매 C",
@@ -71441,6 +71128,10 @@
    "completion_verified": {
     "date": "2025-10-17",
     "basis": "건축물대장 사용승인일"
+   },
+   "master_ref": {
+    "id": "M-28260MX2007002",
+    "title": "인천검단지구 택지개발지구"
    },
    "geo_approx": true,
    "stage_history": [
@@ -71529,13 +71220,13 @@
      37.563373
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 4,392㎡ — 인프라:공공시설 C",
    "master_ref": {
     "id": "M-28245MX2019001",
     "title": "인천계양 테크노밸리 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 4,392㎡ — 인프라:공공시설 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -71929,14 +71620,14 @@
      37.597418
     ]
    },
-   "master_ref": {
-    "id": "M-41280MX2020001",
-    "title": "고양창릉 공공주택지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 22,027㎡ — 일자리:데이터센터 C",
+   "master_ref": {
+    "id": "M-41280MX2020001",
+    "title": "고양창릉 공공주택지구"
+   },
    "addr_verified": {
     "road_addr": "경기도 고양시 덕양구 향동로 77 (향동동)",
     "jibun_addr": "경기도 고양시 덕양구 향동동 583",
@@ -72468,13 +72159,13 @@
      37.612921
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 5,713㎡ — 인프라:공공시설 C",
    "master_ref": {
     "id": "M-41360LH2009001",
     "title": "남양주 다산진건 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 5,713㎡ — 인프라:공공시설 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -72557,13 +72248,13 @@
      37.598984
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 199,942㎡ — 일자리:공장 A",
    "master_ref": {
     "id": "M-41360KL2008001",
     "title": "남양주 다산지금 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 199,942㎡ — 일자리:공장 A",
    "geo_approx": false,
    "stage_history": [
     {
@@ -72644,14 +72335,14 @@
      37.598984
     ]
    },
-   "master_ref": {
-    "id": "M-41360KL2008001",
-    "title": "남양주 다산지금 공공주택지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 34,990㎡ — 일자리:오피스 B",
+   "master_ref": {
+    "id": "M-41360KL2008001",
+    "title": "남양주 다산지금 공공주택지구"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -74141,13 +73832,13 @@
      37.61578
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 11,819㎡ — 인프라:판매 C",
    "master_ref": {
     "id": "M-28260MX2007002",
     "title": "인천검단지구 택지개발지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 11,819㎡ — 인프라:판매 C",
    "addr_verified": {
     "road_addr": "경기도 김포시 조리미로 22 (사우동)",
     "jibun_addr": "경기도 김포시 사우동 337-5",
@@ -74319,13 +74010,13 @@
      37.618434
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 21,163㎡ — 인프라:공공시설 B",
    "master_ref": {
     "id": "M-28260MX2007002",
     "title": "인천검단지구 택지개발지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 21,163㎡ — 인프라:공공시설 B",
    "addr_verified": {
     "road_addr": "경기도 김포시 봉화로51번길 30 (사우동)",
     "jibun_addr": "경기도 김포시 사우동 1245",
@@ -74684,7 +74375,6 @@
      37.644244
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 4,947㎡ — 인프라:공공시설 C",
@@ -75682,13 +75372,13 @@
      37.631042
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 7,474㎡ — 인프라:문화·관광·체육 C",
    "master_ref": {
     "id": "M-41280MX2020001",
     "title": "고양창릉 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 7,474㎡ — 인프라:문화·관광·체육 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -75769,13 +75459,13 @@
      37.629859
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 3,130㎡ — 인프라:문화·관광·체육 C",
    "master_ref": {
     "id": "M-41280MX2020001",
     "title": "고양창릉 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 3,130㎡ — 인프라:문화·관광·체육 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -75858,13 +75548,13 @@
      37.641249
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 8,302㎡ — 인프라:공공시설 C",
    "master_ref": {
     "id": "M-41280MX2020001",
     "title": "고양창릉 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 8,302㎡ — 인프라:공공시설 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -76126,13 +75816,13 @@
      37.613361
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "증축분 면적 17,057㎡ — 일자리:공장 C",
    "master_ref": {
     "id": "M-41280MX2020001",
     "title": "고양창릉 공공주택지구"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "증축분 면적 17,057㎡ — 일자리:공장 C",
    "addr_verified": {
     "road_addr": "경기도 고양시 덕양구 소원로 219 (행신동)",
     "jibun_addr": "경기도 고양시 덕양구 행신동 1098",
@@ -76217,14 +75907,14 @@
      37.646293
     ]
    },
-   "master_ref": {
-    "id": "M-11380DA2010001",
-    "title": "은평 재정비촉진지구"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 8,440㎡ — 인프라:공공시설 C",
+   "master_ref": {
+    "id": "M-11380DA2010001",
+    "title": "은평 재정비촉진지구"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -76815,7 +76505,7 @@
    "title": "별내동 별내자이더스타이그제큐티브 4블럭 (숙박시설, 연면적 45천㎡)",
    "cat": "인프라",
    "sub": "판매",
-   "lvl": "B",
+   "lvl": "C",
    "area_m2": 45293,
    "purp": "숙박시설",
    "arch_gb": "신축",
@@ -76880,7 +76570,7 @@
    },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 45,293㎡ — 인프라:문화·관광·체육 B",
+   "lvl_basis": "연면적 45,293㎡ — 인프라:판매 C",
    "bldrgst": {
     "bld_nm": "별내자이더스타이그제큐티브 4블럭",
     "road_addr": "경기도 남양주시 별내중앙로 7-14 (별내동)",
@@ -76930,7 +76620,7 @@
    "title": "별내동 별내자이더스타이그제큐티브 3블럭 (숙박시설, 연면적 95천㎡)",
    "cat": "인프라",
    "sub": "판매",
-   "lvl": "A",
+   "lvl": "B",
    "area_m2": 95099,
    "purp": "숙박시설",
    "arch_gb": "신축",
@@ -76995,7 +76685,7 @@
    },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 95,099㎡ — 인프라:문화·관광·체육 A",
+   "lvl_basis": "연면적 95,099㎡ — 인프라:판매 B",
    "bldrgst": {
     "bld_nm": "별내자이더스타이그제큐티브 3블럭",
     "road_addr": "경기도 남양주시 별내1로 13-24 (별내동)",
@@ -77184,7 +76874,6 @@
      37.646759
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 11,548㎡ — 인프라:문화·관광·체육 B",
@@ -77390,13 +77079,13 @@
      37.722621
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 5,677㎡ — 인프라:공공시설 C",
    "master_ref": {
     "id": "M-41480KH2007003",
     "title": "파주운정3 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 5,677㎡ — 인프라:공공시설 C",
    "addr_verified": {
     "road_addr": "경기도 파주시 숲속노을로 256 (동패동)",
     "jibun_addr": "경기도 파주시 동패동 1692 교하도서관",
@@ -77486,13 +77175,13 @@
      37.713429
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 62,560㎡ — 인프라:병원 A",
    "master_ref": {
     "id": "M-41480KH2007003",
     "title": "파주운정3 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 62,560㎡ — 인프라:병원 A",
    "geo_approx": false,
    "stage_history": [
     {
@@ -77575,14 +77264,14 @@
      37.71237
     ]
    },
-   "master_ref": {
-    "id": "M-41480KH2007003",
-    "title": "파주운정3 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 12,562㎡ — 인프라:판매 C",
+   "master_ref": {
+    "id": "M-41480KH2007003",
+    "title": "파주운정3 택지개발사업"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -77663,13 +77352,13 @@
      37.712924
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 20,528㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-41480KH2007003",
     "title": "파주운정3 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 20,528㎡ — 일자리:오피스 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -77752,13 +77441,13 @@
      37.710619
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 5,377㎡ — 인프라:공공시설 C",
    "master_ref": {
     "id": "M-41480KH2007003",
     "title": "파주운정3 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 5,377㎡ — 인프라:공공시설 C",
    "geo_approx": true,
    "block_unresolved": true,
    "stage_history": [
@@ -78381,13 +78070,13 @@
      37.719267
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 6,337㎡ — 인프라:공공시설 C",
    "master_ref": {
     "id": "M-41480KH2007003",
     "title": "파주운정3 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 6,337㎡ — 인프라:공공시설 C",
    "addr_verified": {
     "road_addr": "경기도 파주시 하우3길 77 (야당동)",
     "jibun_addr": "경기도 파주시 야당동 54-1 운정4동 행정복지센터",
@@ -78477,13 +78166,13 @@
      37.709736
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 4,427㎡ — 인프라:공공시설 C",
    "master_ref": {
     "id": "M-41480KH2007003",
     "title": "파주운정3 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 4,427㎡ — 인프라:공공시설 C",
    "addr_verified": {
     "road_addr": "경기도 파주시 미래로 350 (야당동)",
     "jibun_addr": "경기도 파주시 야당동 1022-7",
@@ -78571,13 +78260,13 @@
      37.734459
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 18,391㎡ — 인프라:판매 C",
    "master_ref": {
     "id": "M-41480KH2007003",
     "title": "파주운정3 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 18,391㎡ — 인프라:판매 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -78660,13 +78349,13 @@
      37.737853
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 8,983㎡ — 인프라:문화·관광·체육 C",
    "master_ref": {
     "id": "M-41480KH2007003",
     "title": "파주운정3 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 8,983㎡ — 인프라:문화·관광·체육 C",
    "geo_approx": true,
    "block_unresolved": true,
    "stage_history": [
@@ -78750,14 +78439,14 @@
      37.727238
     ]
    },
-   "master_ref": {
-    "id": "M-41480KH2007003",
-    "title": "파주운정3 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 11,040㎡ — 일자리:오피스 C",
+   "master_ref": {
+    "id": "M-41480KH2007003",
+    "title": "파주운정3 택지개발사업"
+   },
    "addr_verified": {
     "road_addr": "경기도 파주시 와석순환로515번길 61 (와동동)",
     "jibun_addr": "경기도 파주시 와동동 1450-1 송림메디컬프라자",
@@ -78849,10 +78538,6 @@
      37.736133
     ]
    },
-   "master_ref": {
-    "id": "M-41480KH2007003",
-    "title": "파주운정3 택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 20,158㎡ — 일자리:오피스 C",
@@ -78870,6 +78555,10 @@
    "completion_verified": {
     "date": "2025-09-30",
     "basis": "건축물대장 사용승인일"
+   },
+   "master_ref": {
+    "id": "M-41480KH2007003",
+    "title": "파주운정3 택지개발사업"
    },
    "addr_verified": {
     "road_addr": "경기도 파주시 가람로150번길 60 (와동동)",
@@ -81248,13 +80937,13 @@
      37.820153
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 10,085㎡ — 인프라:판매 C",
    "master_ref": {
     "id": "M-41630KH2006001",
     "title": "양주신도시(회천)택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 10,085㎡ — 인프라:판매 C",
    "addr_verified": {
     "road_addr": "경기도 양주시 평화로 1449 (덕계동)",
     "jibun_addr": "경기도 양주시 덕계동 466-5",
@@ -81342,14 +81031,14 @@
      37.820525
     ]
    },
-   "master_ref": {
-    "id": "M-41630KH2006001",
-    "title": "양주신도시(회천)택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 13,522㎡ — 일자리:오피스 C",
+   "master_ref": {
+    "id": "M-41630KH2006001",
+    "title": "양주신도시(회천)택지개발사업"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -81430,14 +81119,14 @@
      37.818862
     ]
    },
-   "master_ref": {
-    "id": "M-41630KH2006001",
-    "title": "양주신도시(회천)택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 12,169㎡ — 일자리:오피스 C",
+   "master_ref": {
+    "id": "M-41630KH2006001",
+    "title": "양주신도시(회천)택지개발사업"
+   },
    "addr_verified": {
     "road_addr": "경기도 양주시 덕계로4길 4 (덕계동)",
     "jibun_addr": "경기도 양주시 덕계동 944-4",
@@ -81820,13 +81509,13 @@
      37.82334
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 12,129㎡ — 인프라:공공시설 B",
    "master_ref": {
     "id": "M-41630KL2004002",
     "title": "양주신도시(옥정)택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 12,129㎡ — 인프라:공공시설 B",
    "geo_approx": false,
    "stage_history": [
     {
@@ -81902,14 +81591,14 @@
      37.822134
     ]
    },
-   "master_ref": {
-    "id": "M-41630KL2004002",
-    "title": "양주신도시(옥정)택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 12,661㎡ — 인프라:판매 C",
+   "master_ref": {
+    "id": "M-41630KL2004002",
+    "title": "양주신도시(옥정)택지개발사업"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -81990,13 +81679,13 @@
      37.814438
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 6,134㎡ — 인프라:공공시설 C",
    "master_ref": {
     "id": "M-41630KL2004002",
     "title": "양주신도시(옥정)택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 6,134㎡ — 인프라:공공시설 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -82172,10 +81861,6 @@
      37.844014
     ]
    },
-   "master_ref": {
-    "id": "M-41630KH2006001",
-    "title": "양주신도시(회천)택지개발사업"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 10,013㎡ — 인프라:공공시설 B",
@@ -82196,6 +81881,10 @@
    },
    "purp_registry": "업무시설",
    "purp_basis": "건축물대장(준공 확정 용도) — 허가 용도와 상이하여 대장 기준 적용",
+   "master_ref": {
+    "id": "M-41630KH2006001",
+    "title": "양주신도시(회천)택지개발사업"
+   },
    "addr_verified": {
     "road_addr": "경기도 양주시 덕정길 67 (덕정동)",
     "jibun_addr": "경기도 양주시 덕정동 140-1",
@@ -82287,13 +81976,13 @@
      37.83123
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 16,403㎡ — 교통:환승·터미널 C",
    "master_ref": {
     "id": "M-41630KH2006001",
     "title": "양주신도시(회천)택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 16,403㎡ — 교통:환승·터미널 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -85016,14 +84705,14 @@
      35.12454
     ]
    },
-   "master_ref": {
-    "id": "M-26440MX2016001",
-    "title": "부산 에코델타시티 친수구역"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 58,234㎡ — 일자리:데이터센터 B",
+   "master_ref": {
+    "id": "M-26440MX2016001",
+    "title": "부산 에코델타시티 친수구역"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -97723,10 +97412,9 @@
      35.197214
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 3,095㎡ — 인프라:문화·관광·체육 C",
+   "lvl_basis": "연면적 3,095㎡ — 인프라:판매 C",
    "bldrgst": {
     "bld_nm": " ",
     "road_addr": "부산광역시 동래구 석사로18번길 41 (사직동)",
@@ -101665,7 +101353,7 @@
    "title": "명촌동 현대자동차(주) (공장, 연면적 452천㎡)",
    "cat": "인프라",
    "sub": "판매",
-   "lvl": "S",
+   "lvl": "C",
    "area_m2": 452871,
    "purp": "공장",
    "arch_gb": "증축",
@@ -101730,7 +101418,7 @@
    },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "증축분 면적 14,207㎡ — 일자리:공장 C",
+   "lvl_basis": "증축분 면적 14,207㎡ — 인프라:판매 C",
    "bldrgst": {
     "bld_nm": "현대자동차",
     "road_addr": "울산광역시 북구 700 (명촌동)",
@@ -110837,7 +110525,6 @@
      35.891408
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 53,512㎡ — 일자리:오피스 B",
@@ -111015,7 +110702,6 @@
      35.891408
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "증축분 면적 94,629㎡ — 일자리:오피스 B",
@@ -119467,14 +119153,14 @@
      36.499284
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 67,815㎡ — 인프라:문화·관광·체육 A",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -119555,14 +119241,14 @@
      36.483963
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 15,848㎡ — 인프라:병원 C",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   },
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -119647,14 +119333,14 @@
      36.485509
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 17,602㎡ — 인프라:병원 C",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   },
    "geo_basis": "택지정보 가구획지 — 44730KL2010001 블록 C10 필지 1 (상업업무용지) · 종전 좌표에서 171m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -119736,13 +119422,13 @@
      36.483963
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 11,265㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-44730KL2010001",
     "title": "행정중심복합도시건설사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 11,265㎡ — 일자리:오피스 C",
    "geo_approx": true,
    "map_hidden": true,
    "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
@@ -119828,14 +119514,14 @@
      36.486333
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 15,468㎡ — 일자리:오피스 C",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -119918,13 +119604,13 @@
      36.486297
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 13,349㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-44730KL2010001",
     "title": "행정중심복합도시건설사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 13,349㎡ — 일자리:오피스 C",
    "geo_approx": true,
    "block_unresolved": true,
    "stage_history": [
@@ -120006,14 +119692,14 @@
      36.493963
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 27,096㎡ — 일자리:오피스 C",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -120096,13 +119782,13 @@
      36.470489
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 15,360㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-44730KL2010001",
     "title": "행정중심복합도시건설사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 15,360㎡ — 일자리:오피스 C",
    "geo_approx": true,
    "block_unresolved": true,
    "stage_history": [
@@ -120184,13 +119870,13 @@
      36.471888
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 82,362㎡ — 인프라:판매 B",
    "master_ref": {
     "id": "M-44730KL2010001",
     "title": "행정중심복합도시건설사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 82,362㎡ — 인프라:판매 B",
    "geo_approx": true,
    "stage_history": [
     {
@@ -120632,14 +120318,14 @@
      36.496842
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 30,314㎡ — 일자리:공장 B",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -120720,14 +120406,14 @@
      36.496235
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 25,985㎡ — 일자리:오피스 C",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -120812,13 +120498,9 @@
      36.495499
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 14,830㎡ — 일자리:오피스 C",
+   "lvl_basis": "연면적 14,830㎡ — 일자리:공장 C",
    "bldrgst": {
     "bld_nm": "(주)레인보우로보틱스 세종 사옥",
     "road_addr": "세종특별자치시 집현중앙3로 8 (집현동)",
@@ -120836,6 +120518,10 @@
    },
    "purp_registry": "공장",
    "purp_basis": "건축물대장(준공 확정 용도) — 허가 용도와 상이하여 대장 기준 적용",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   },
    "addr_verified": {
     "road_addr": "세종특별자치시 집현중앙3로 8 (집현동)",
     "jibun_addr": "세종특별자치시 집현동 1095",
@@ -120927,13 +120613,13 @@
      36.493956
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 28,093㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-44730KL2010001",
     "title": "행정중심복합도시건설사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 28,093㎡ — 일자리:오피스 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -121017,13 +120703,13 @@
      36.489474
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 22,186㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-44730KL2010001",
     "title": "행정중심복합도시건설사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 22,186㎡ — 일자리:오피스 C",
    "geo_basis": "택지정보 가구획지 — 44730KL2010001 블록 복합4-7 필지 1 (복합용지) · 종전 좌표에서 1122m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -121110,13 +120796,13 @@
      36.494995
     ]
    },
+   "gate": "신호",
+   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "lvl_basis": "연면적 13,564㎡ — 인프라:공공시설 B",
    "master_ref": {
     "id": "M-44730KL2010001",
     "title": "행정중심복합도시건설사업"
    },
-   "gate": "신호",
-   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 13,564㎡ — 인프라:공공시설 B",
    "geo_basis": "택지정보 가구획지 — 44730KL2010001 블록 청4-4 필지 청4-4 (공공청사) · 종전 좌표에서 552m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -121204,14 +120890,14 @@
      36.494203
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 28,742㎡ — 일자리:오피스 C",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   },
    "geo_basis": "택지정보 가구획지 — 44730KL2010001 블록 복합4-4 필지 1 (복합용지) · 종전 좌표에서 624m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -121296,13 +120982,13 @@
      36.498656
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 14,850㎡ — 일자리:지식산업센터 C",
    "master_ref": {
     "id": "M-44730KL2010001",
     "title": "행정중심복합도시건설사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 14,850㎡ — 일자리:지식산업센터 C",
    "geo_basis": "택지정보 가구획지 — 44730KL2010001 블록 산업4-10 필지 1 (산업용지) · 종전 좌표에서 294m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -121386,13 +121072,13 @@
      36.498116
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 12,000㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-44730KL2010001",
     "title": "행정중심복합도시건설사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 12,000㎡ — 일자리:오피스 C",
    "geo_approx": true,
    "block_unresolved": true,
    "stage_history": [
@@ -121648,13 +121334,13 @@
      36.532278
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 12,060㎡ — 인프라:공공시설 B",
    "master_ref": {
     "id": "M-44730KL2010001",
     "title": "행정중심복합도시건설사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 12,060㎡ — 인프라:공공시설 B",
    "geo_basis": "택지정보 가구획지 — 44730KL2010001 블록 청6-3 필지 청6-3 (공공청사) · 종전 좌표에서 822m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -121741,13 +121427,13 @@
      36.534925
     ]
    },
+   "gate": "신호",
+   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "lvl_basis": "연면적 13,645㎡ — 일자리:오피스 C",
    "master_ref": {
     "id": "M-44730KL2010001",
     "title": "행정중심복합도시건설사업"
    },
-   "gate": "신호",
-   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
-   "lvl_basis": "연면적 13,645㎡ — 일자리:오피스 C",
    "geo_basis": "택지정보 가구획지 — 44730KL2010001 블록 청6-5 필지 청6-5 (공공청사) · 종전 좌표에서 800m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -121834,13 +121520,13 @@
      36.511497
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 29,748㎡ — 인프라:판매 C",
    "master_ref": {
     "id": "M-44730KL2010001",
     "title": "행정중심복합도시건설사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 29,748㎡ — 인프라:판매 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -122100,14 +121786,14 @@
      36.518639
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 19,390㎡ — 일자리:오피스 C",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   },
    "geo_basis": "택지정보 가구획지 — 44730KL2010001 블록 청5-11 필지 청5-11 (공공청사) · 종전 좌표에서 562m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -122192,14 +121878,14 @@
      36.526673
     ]
    },
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 12,587㎡ — 인프라:공공시설 B",
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   },
    "geo_basis": "택지정보 가구획지 — 44730KL2010001 블록 청5-1 필지 청5-1 (공공청사) · 종전 좌표에서 481m 이동",
    "geo_approx": true,
    "stage_history": [
@@ -122281,13 +121967,13 @@
      36.535526
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 14,315㎡ — 인프라:공공시설 B",
    "master_ref": {
     "id": "M-44730KL2010001",
     "title": "행정중심복합도시건설사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 14,315㎡ — 인프라:공공시설 B",
    "geo_approx": true,
    "block_unresolved": true,
    "stage_history": [
@@ -125972,14 +125658,14 @@
      36.8171
     ]
    },
-   "master_ref": {
-    "id": "M-44200KH2005001",
-    "title": "아산탕정 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "lvl_basis": "연면적 82,479㎡ — 일자리:오피스 B",
+   "master_ref": {
+    "id": "M-44200KH2005001",
+    "title": "아산탕정 택지개발사업"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -126062,14 +125748,14 @@
      36.814424
     ]
    },
-   "master_ref": {
-    "id": "M-44200KH2005001",
-    "title": "아산탕정 택지개발사업"
-   },
    "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 15,382㎡ — 인프라:판매 C",
+   "master_ref": {
+    "id": "M-44200KH2005001",
+    "title": "아산탕정 택지개발사업"
+   },
    "geo_approx": false,
    "stage_history": [
     {
@@ -126152,13 +125838,13 @@
      36.808335
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 10,546㎡ — 인프라:공공시설 B",
    "master_ref": {
     "id": "M-44200KH2005001",
     "title": "아산탕정 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 10,546㎡ — 인프라:공공시설 B",
    "geo_approx": true,
    "block_unresolved": true,
    "stage_history": [
@@ -131882,13 +131568,13 @@
      34.811661
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 12,927㎡ — 인프라:판매 C",
    "master_ref": {
     "id": "M-46110DA2001001",
     "title": "남악신도시 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
-   "lvl_basis": "연면적 12,927㎡ — 인프라:판매 C",
    "geo_approx": false,
    "stage_history": [
     {
@@ -135617,13 +135303,13 @@
      35.158202
     ]
    },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "증축분 면적 11,640㎡ — 인프라:문화·관광·체육 B",
    "master_ref": {
     "id": "M-29140DA1992001",
     "title": "광주상무1지구 택지개발사업"
    },
-   "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
-   "lvl_basis": "증축분 면적 11,640㎡ — 인프라:문화·관광·체육 B",
    "addr_verified": {
     "road_addr": "전남광주통합특별시 서구 내방로 2 (치평동)",
     "jibun_addr": "전남광주통합특별시 서구 치평동 1163",
@@ -137025,7 +136711,6 @@
      35.202228
     ]
    },
-   "name_status": "미확보",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "lvl_basis": "연면적 14,424㎡ — 일자리:공장 C",
@@ -137604,6 +137289,994 @@
    "first_seen": "2026-07-26",
    "last_movement": "2026-04-02",
    "last_movement_basis": "source"
+  },
+  {
+   "title": "등촌동 서울특별시 어울림플라자 (노유자시설, 연면적 23천㎡)",
+   "cat": "인프라",
+   "sub": "공공시설",
+   "lvl": "B",
+   "area_m2": 23915.18,
+   "purp": "노유자시설",
+   "arch_gb": "신축",
+   "pk": "1017100099520",
+   "sd": "서울",
+   "sg": "강서구",
+   "dong": "등촌동",
+   "addr": "서울특별시 강서구 등촌동 645-11번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20220210",
+   "apr": "20251118",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(서울특별시 강서구 등촌동 645-11번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정(사용승인 20251118)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.861395,
+     37.553544
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "lvl_basis": "연면적 23,915㎡ — 인프라:공공시설 B",
+   "bldrgst": {
+    "bld_nm": "서울특별시 어울림플라자",
+    "road_addr": "서울특별시 강서구 공항대로 489 (등촌동)",
+    "main_purps": "노유자시설",
+    "tot_area": 23915.18,
+    "use_apr_day": "20251118",
+    "hhld_cnt": 0,
+    "ho_cnt": 34,
+    "src": "국토부 건축HUB 건축물대장 표제부"
+   },
+   "road_addr": "서울특별시 강서구 공항대로 489 (등촌동)",
+   "completion_verified": {
+    "date": "2025-11-18",
+    "basis": "건축물대장 사용승인일"
+   },
+   "milestones": [],
+   "addr_verified": {
+    "road_addr": "서울특별시 강서구 공항대로 489 (등촌동)",
+    "jibun_addr": "서울특별시 강서구 등촌동 645-11",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "여의도동 서울시 영등포구 여의도동 23-4 복합시설 (숙박시설, 연면적 56천㎡)",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "A",
+   "area_m2": 56361.93,
+   "purp": "숙박시설",
+   "arch_gb": "신축",
+   "pk": "1001100004705",
+   "sd": "서울",
+   "sg": "영등포구",
+   "dong": "여의도동",
+   "addr": "서울특별시 영등포구 여의도동 23-4번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20220224",
+   "apr": null,
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(서울특별시 영등포구 여의도동 23-4번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.923379,
+     37.524216
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 56,362㎡ — 인프라:기타시설 A",
+   "milestones": [],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "종암동 3-1260 (서울경찰청장) (업무시설, 연면적 14천㎡)",
+   "cat": "일자리",
+   "sub": "오피스",
+   "lvl": "C",
+   "area_m2": 14188.58,
+   "purp": "업무시설",
+   "arch_gb": "신축",
+   "pk": "1009100081162",
+   "sd": "서울",
+   "sg": "성북구",
+   "dong": "종암동",
+   "addr": "서울특별시 성북구 종암동 3-1260번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20221213",
+   "apr": null,
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(서울특별시 성북구 종암동 3-1260번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.032249,
+     37.602017
+    ]
+   },
+   "name_status": "미확보",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 14,189㎡ — 일자리 C",
+   "milestones": [],
+   "addr_verified": {
+    "road_addr": "서울특별시 성북구 종암로 137 (종암동)",
+    "jibun_addr": "서울특별시 성북구 종암동 3-1260 서울종암경찰서",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "서울특별시 성북구 종암로 137 (종암동)",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "병점동 더 케이 병점 (제2종근린생활시설, 연면적 13천㎡)",
+   "cat": "인프라",
+   "sub": "판매",
+   "lvl": "B",
+   "area_m2": 13859.9375,
+   "purp": "제2종근린생활시설",
+   "arch_gb": "신축",
+   "pk": "1124100291964",
+   "sd": "경기",
+   "sg": "화성시",
+   "dong": "병점동",
+   "addr": "경기도 화성시 병점구 병점동 886-4번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20221208",
+   "apr": null,
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(경기도 화성시 병점구 병점동 886-4번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.030804,
+     37.206842
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 13,860㎡ — 인프라:기타시설 B",
+   "milestones": [],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "초지동 (주)대일스마트허브스퀘어 (공장, 연면적 24천㎡)",
+   "cat": "일자리",
+   "sub": "공장",
+   "lvl": "C",
+   "area_m2": 24595.13,
+   "purp": "공장",
+   "arch_gb": "신축",
+   "pk": "1101100217595",
+   "sd": "경기",
+   "sg": "안산시",
+   "dong": "초지동",
+   "addr": "경기도 안산시 단원구 초지동 670-5번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20221209",
+   "apr": null,
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(경기도 안산시 단원구 초지동 670-5번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.80462,
+     37.29918
+    ]
+   },
+   "nm_basis": "허가 원본 이름의 괄호 안 법인명 '(주)대일스마트허브스퀘어'",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 24,595㎡ — 일자리 C",
+   "milestones": [],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "월곶동 (업무시설, 연면적 19천㎡)",
+   "cat": "일자리",
+   "sub": "오피스",
+   "lvl": "C",
+   "area_m2": 19517.9912,
+   "purp": "업무시설",
+   "arch_gb": "신축",
+   "pk": "1112100143812",
+   "sd": "경기",
+   "sg": "시흥시",
+   "dong": "월곶동",
+   "addr": "경기도 시흥시 월곶동 1004-4번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20220322",
+   "apr": null,
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(경기도 시흥시 월곶동 1004-4번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.741383,
+     37.390251
+    ]
+   },
+   "name_status": "미확보",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 19,518㎡ — 일자리 C",
+   "milestones": [],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "신현동 신현 문화체육복합센터 (업무시설, 연면적 14천㎡)",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "B",
+   "area_m2": 14384.67,
+   "purp": "업무시설",
+   "arch_gb": "신축",
+   "pk": "1125100296759",
+   "sd": "경기",
+   "sg": "광주시",
+   "dong": "신현동",
+   "addr": "경기도 광주시 신현동 623-1번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20220127",
+   "apr": null,
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(경기도 광주시 신현동 623-1번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.158753,
+     37.365244
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 14,385㎡ — 인프라:공공시설 B",
+   "milestones": [],
+   "addr_verified": {
+    "road_addr": "경기도 광주시 머루숯길 70 (신현동)",
+    "jibun_addr": "경기도 광주시 신현동 623-1",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "경기도 광주시 머루숯길 70 (신현동)",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "상대원동 동원 성남복합공장 (공장, 연면적 116천㎡)",
+   "cat": "일자리",
+   "sub": "공장",
+   "lvl": "A",
+   "area_m2": 116985.58,
+   "purp": "공장",
+   "arch_gb": "신축",
+   "pk": "1089100062214",
+   "sd": "경기",
+   "sg": "성남시",
+   "dong": "상대원동",
+   "addr": "경기도 성남시 중원구 상대원동 369-3번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20221220",
+   "apr": null,
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(경기도 성남시 중원구 상대원동 369-3번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.177682,
+     37.435607
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 116,986㎡ — 일자리 A",
+   "milestones": [],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "다산동 (케이비부동산신탁주식회사) (공장, 연면적 79천㎡)",
+   "cat": "일자리",
+   "sub": "공장",
+   "lvl": "B",
+   "area_m2": 79697.04,
+   "purp": "공장",
+   "arch_gb": "신축",
+   "pk": "1110100095430",
+   "sd": "경기",
+   "sg": "남양주시",
+   "dong": "다산동",
+   "addr": "경기도 남양주시 다산동 6243번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20220517",
+   "apr": null,
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(경기도 남양주시 다산동 6243번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.177367,
+     37.597697
+    ]
+   },
+   "master_ref": {
+    "id": "M-41360KL2008001",
+    "title": "남양주 다산지금 공공주택지구"
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 79,697㎡ — 일자리 B",
+   "milestones": [],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "별내동 (공장, 연면적 33천㎡)",
+   "cat": "일자리",
+   "sub": "공장",
+   "lvl": "B",
+   "area_m2": 33546.53,
+   "purp": "공장",
+   "arch_gb": "신축",
+   "pk": "1110100087842",
+   "sd": "경기",
+   "sg": "남양주시",
+   "dong": "별내동",
+   "addr": "경기도 남양주시 별내동 970번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20220513",
+   "apr": null,
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(경기도 남양주시 별내동 970번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.129442,
+     37.654779
+    ]
+   },
+   "name_status": "미확보",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 33,547㎡ — 일자리 B",
+   "milestones": [],
+   "addr_verified": {
+    "road_addr": "경기도 남양주시 송산로 123 (별내동)",
+    "jibun_addr": "경기도 남양주시 별내동 970-2",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "경기도 남양주시 송산로 123 (별내동)",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "색달동 (노유자시설, 연면적 20천㎡)",
+   "cat": "인프라",
+   "sub": "공공시설",
+   "lvl": "B",
+   "area_m2": 20682.046,
+   "purp": "노유자시설",
+   "arch_gb": "신축",
+   "pk": "1277100202165",
+   "sd": "제주",
+   "sg": "서귀포시",
+   "dong": "색달동",
+   "addr": "제주특별자치도 서귀포시 색달동 873번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20220831",
+   "apr": null,
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(제주특별자치도 서귀포시 색달동 873번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.397964,
+     33.272419
+    ]
+   },
+   "name_status": "미확보",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 20,682㎡ — 인프라:공공시설 B",
+   "milestones": [],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "충무공동 진주혁신도시 상업5블럭 신축공사 (숙박시설, 연면적 191천㎡)",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "A",
+   "area_m2": 191739.55,
+   "purp": "숙박시설",
+   "arch_gb": "신축",
+   "pk": "1258100167007",
+   "sd": "경남",
+   "sg": "진주시",
+   "dong": "충무공동",
+   "addr": "경상남도 진주시 충무공동 292번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20221104",
+   "apr": null,
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(경상남도 진주시 충무공동 292번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.14385,
+     35.174697
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 191,740㎡ — 인프라:기타시설 A",
+   "milestones": [],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "대명동 대구대표도서관 (교육연구시설, 연면적 14천㎡)",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "B",
+   "area_m2": 14957.33,
+   "purp": "교육연구시설",
+   "arch_gb": "신축",
+   "pk": "1048100068549",
+   "sd": "대구",
+   "sg": "남구",
+   "dong": "대명동",
+   "addr": "대구광역시 남구 대명동 67-2번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20220607",
+   "apr": null,
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(대구광역시 남구 대명동 67-2번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.592039,
+     35.842435
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 14,957㎡ — 인프라:공공시설 B",
+   "milestones": [],
+   "addr_verified": {
+    "road_addr": "대구광역시 남구 중앙대로22길 26 (대명동)",
+    "jibun_addr": "대구광역시 남구 대명동 67-2 대구도서관",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "대구광역시 남구 중앙대로22길 26 (대명동)",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "도동 주식회사 엘케이 (운동시설, 연면적 3천㎡)",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "C",
+   "area_m2": 3616.11,
+   "purp": "운동시설",
+   "arch_gb": "신축",
+   "pk": "1234100134481",
+   "sd": "경북",
+   "sg": "영천시",
+   "dong": "도동",
+   "addr": "경상북도 영천시 도동 259-4번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20220303",
+   "apr": null,
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(경상북도 영천시 도동 259-4번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.929509,
+     35.944576
+    ]
+   },
+   "nm_basis": "허가 원본 이름의 괄호 안 법인명 '주식회사 엘케이'",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 3,616㎡ — 인프라:공공시설 C",
+   "milestones": [],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "황지동 태호 주식회사 (노유자시설, 연면적 3천㎡)",
+   "cat": "인프라",
+   "sub": "공공시설",
+   "lvl": "C",
+   "area_m2": 3727.21,
+   "purp": "노유자시설",
+   "arch_gb": "신축",
+   "pk": "1137100033642",
+   "sd": "강원",
+   "sg": "태백시",
+   "dong": "황지동",
+   "addr": "강원특별자치도 태백시 황지동 405번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20220812",
+   "apr": null,
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(강원특별자치도 태백시 황지동 405번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.981972,
+     37.158747
+    ]
+   },
+   "nm_basis": "허가 원본 이름의 괄호 안 법인명 '태호 주식회사'",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 3,727㎡ — 인프라:공공시설 C",
+   "milestones": [],
+   "addr_verified": {
+    "road_addr": "강원특별자치도 태백시 대학길 35 (황지동)",
+    "jibun_addr": "강원특별자치도 태백시 황지동 405-15",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "강원특별자치도 태백시 대학길 35 (황지동)",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "소양로3가 명성제일개발주식회사 (숙박시설, 연면적 14천㎡)",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "B",
+   "area_m2": 14790.37,
+   "purp": "숙박시설",
+   "arch_gb": "신축",
+   "pk": "1133100123854",
+   "sd": "강원",
+   "sg": "춘천시",
+   "dong": "소양로3가",
+   "addr": "강원특별자치도 춘천시 소양로3가 66-1번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20220726",
+   "apr": null,
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(강원특별자치도 춘천시 소양로3가 66-1번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.725286,
+     37.883289
+    ]
+   },
+   "nm_basis": "허가 원본 이름의 괄호 안 법인명 '명성제일개발주식회사'",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 14,790㎡ — 인프라:기타시설 B",
+   "milestones": [],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "조양동 속초 블루 스테이 (숙박시설, 연면적 22천㎡)",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "B",
+   "area_m2": 22660.37,
+   "purp": "숙박시설",
+   "arch_gb": "신축",
+   "pk": "1138100062229",
+   "sd": "강원",
+   "sg": "속초시",
+   "dong": "조양동",
+   "addr": "강원특별자치도 속초시 조양동 1379-5번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20220429",
+   "apr": null,
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(강원특별자치도 속초시 조양동 1379-5번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.600617,
+     38.18623
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 22,660㎡ — 인프라:기타시설 B",
+   "milestones": [],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "봉산동 케이비부동산신탁(주) (숙박시설, 연면적 17천㎡)",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "B",
+   "area_m2": 17621.066,
+   "purp": "숙박시설",
+   "arch_gb": "신축",
+   "pk": "1204100185878",
+   "sd": "전남광주",
+   "sg": "여수시",
+   "dong": "봉산동",
+   "addr": "전라남도 여수시 봉산동 275-7번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20220328",
+   "apr": null,
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(전라남도 여수시 봉산동 275-7번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.722923,
+     34.731749
+    ]
+   },
+   "nm_basis": "허가 원본 이름의 괄호 안 법인명 '케이비부동산신탁(주)'",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 17,621㎡ — 인프라:기타시설 B",
+   "milestones": [],
+   "addr_verified": {
+    "road_addr": "전남광주통합특별시 여수시 봉산남8길 11 (봉산동)",
+    "jibun_addr": "전남광주통합특별시 여수시 봉산동 275-7",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "전남광주통합특별시 여수시 봉산남8길 11 (봉산동)",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "연제동 지식산업센터 (공장, 연면적 62천㎡)",
+   "cat": "일자리",
+   "sub": "지식산업센터",
+   "lvl": "B",
+   "area_m2": 62476.11,
+   "purp": "공장",
+   "arch_gb": "신축",
+   "pk": "1068120063455",
+   "sd": "전남광주",
+   "sg": "북구",
+   "dong": "연제동",
+   "addr": "광주광역시 북구 연제동 1097번지",
+   "confirmed": false,
+   "current_stage": "허가 전",
+   "phase": "계획",
+   "status": "활성",
+   "pms": null,
+   "stcns": "20220322",
+   "apr": null,
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(광주광역시 북구 연제동 1097번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.868328,
+     35.197273
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 62,476㎡ — 일자리 B",
+   "milestones": [],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed"
   }
  ]
 }
