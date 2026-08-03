@@ -480,7 +480,11 @@
        깨진 게 79px로 가장 컸다. 한 줄로 붙이고 로고 부제를 숨겨 **194px**로 줄인다. */
     header .logo small { display:none; }
     .regionbar { flex-wrap:nowrap; gap:6px; }
-    .regionbar > * { min-width:0; flex:1 1 0; font-size:13px; }
+    /* ⚠ `.regionbar > *`로는 안 먹는다 — 데스크톱 규칙 `.regionbar select { min-width:94px }`가
+       선택자 우선순위(0,1,1 > 0,1,0)에서 이긴다. 같은 선택자로 눌러야 한다.
+       안 눌리면 셀렉트 3개가 391px을 요구해 **body가 401px로 늘어나고**, 그러면 `left:0;right:0`인
+       바텀시트까지 26px 삐져나가 ✕ 버튼이 화면 밖으로 나간다(2026-08-03 실측). */
+    .regionbar select { min-width:0; flex:1 1 0; font-size:13px; padding:8px 6px; }
     /* ★ 상세 = 바텀시트 (2026-08-03 사용자 제보 "모바일에서 가장 불편한 게 호재 상세 보기").
        종전 모바일 규칙은 width/order/flex만 바꾸고 **position:absolute와 left:338px를 안 풀었다**.
        절대위치는 흐름 밖이라 order·flex가 무시되고, 패널이 375px 화면에서 338px 오른쪽에 붙어
@@ -4032,7 +4036,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260803aa");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260803ab");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4194,7 +4198,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260803aa"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260803ab"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4220,7 +4224,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260803aa");
+  const CB = "?b=" + (window.BUILD || "20260803ab");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
