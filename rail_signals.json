@@ -343424,270 +343424,6 @@
    "type": "Feature",
    "properties": {
     "kind": "line",
-    "name": "부산 기장선",
-    "full": "부산 기장선",
-    "linekind": "도시철도",
-    "lvl": "B",
-    "lvl_basis": "위계 B (도시철도)",
-    "gate": "계획안",
-    "gate_basis": "법정계획 (안)·공람 단계 — 「(안)」",
-    "phase": "계획",
-    "status": "제2차 부산 도시철도망 구축계획(안) 대상노선",
-    "confirmed": false,
-    "dashed": true,
-    "approx": true,
-    "drop": null,
-    "note": "기장∼반송 5.6km · 정관선과 별개 노선 · 정거장 위치 미공표(기·종점만 표시)",
-    "src_name": "부산광역시",
-    "src_url": "https://www.busan.go.kr/nbtnewsBU/1679630",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "계획",
-      "stage": "제2차 부산 도시철도망 구축계획(안) 대상노선",
-      "state": "current",
-      "src": "부산광역시"
-     },
-     {
-      "phase": "인가",
-      "stage": "인가",
-      "state": "future"
-     },
-     {
-      "phase": "착공",
-      "stage": "착공",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통",
-      "state": "future"
-     }
-    ],
-    "route_verified": null,
-    "audited": "2026-08-04",
-    "geom_src": "역 앵커 연결(근사)",
-    "stage_checked": "2026-08-04",
-    "geom_adequacy": "endpoints_only",
-    "geom_adequacy_note": "위치 확보 정거장 2개뿐 — 공식 노선도 없이는 직선 외 표현 불가",
-    "geom_tail_trimmed_km": 0.5,
-    "_geom_full": [
-     [
-      129.218813,
-      35.244702
-     ],
-     [
-      129.155456,
-      35.23321
-     ]
-    ],
-    "geom_anchored": 1,
-    "geom_anchor_note": "공식 지점 1개를 선형에 얹었다(선 위 거리 0) — 선을 그 지점으로 당겨 맞췄다. §선형은 공식 지점을 반드시 지난다(2026-08-01)",
-    "geom_bridges": [
-     [
-      [
-       129.218813,
-       35.244702
-      ],
-      [
-       129.155456,
-       35.23321
-      ]
-     ]
-    ],
-    "geom_bridged_km": 5.9,
-    "geom_solid": [],
-    "geom_bridge_note": "이 선의 100%(5.9km)는 **근거 없는 구간**이다 — 정점 간격 중앙값이 5.90km라 지점 사이를 직선으로 이은 것이고, 실제 경로는 다를 수 있다(연한 점선). 공식 노선도를 확보하면 대체된다",
-    "geom_src_orig": "역 앵커 연결(근사)",
-    "geom_downgrade_reason": "정직화 — 근거 없는 구간을 **연한 점선**으로 구분 표기(2026-08-01 표준: 지우지 않고 말한다)",
-    "geo_prec": "line",
-    "geo_approx": false,
-    "geometry": {
-     "type": "LineString",
-     "coordinates": [
-      [
-       129.218813,
-       35.244702
-      ],
-      [
-       129.155456,
-       35.23321
-      ]
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "계획",
-      "date": "2026-08-04",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-08-04",
-    "last_movement": "2026-08-04",
-    "last_movement_basis": "observed"
-   },
-   "geometry": {
-    "type": "LineString",
-    "coordinates": [
-     [
-      129.218813,
-      35.244702
-     ],
-     [
-      129.155456,
-      35.23321
-     ]
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "기장역",
-    "line": "부산 기장선",
-    "lvl": "B",
-    "gate": "계획안",
-    "confirmed": false,
-    "status": "제2차 부산 도시철도망 구축계획(안) 대상노선",
-    "phase": "계획",
-    "st_status": "미정",
-    "approx": false,
-    "geo_prec": "station_poi",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "계획",
-      "stage": "제2차 부산 도시철도망 구축계획(안) 대상노선",
-      "state": "current",
-      "src": "부산광역시"
-     },
-     {
-      "phase": "인가",
-      "stage": "인가",
-      "state": "future"
-     },
-     {
-      "phase": "착공",
-      "stage": "착공",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통",
-      "state": "future"
-     }
-    ],
-    "note": "구간 표기 지점 · 정거장 위치 미공표",
-    "audited": "2026-08-04",
-    "drop": null,
-    "stage_checked": "2026-08-04",
-    "gate_basis": "법정계획 (안)·공람 단계 — 「(안)」",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      129.218813,
-      35.244702
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "계획",
-      "date": "2026-08-04",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-08-04",
-    "last_movement": "2026-08-04",
-    "last_movement_basis": "observed"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     129.218813,
-     35.244702
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "station",
-    "name": "반송(종점)",
-    "line": "부산 기장선",
-    "lvl": "B",
-    "gate": "계획안",
-    "confirmed": false,
-    "status": "제2차 부산 도시철도망 구축계획(안) 대상노선",
-    "phase": "계획",
-    "st_status": "미정",
-    "approx": true,
-    "geo_prec": "landmark",
-    "pt_type": "rail_station",
-    "src_tier": "official_report",
-    "milestones": [
-     {
-      "phase": "계획",
-      "stage": "제2차 부산 도시철도망 구축계획(안) 대상노선",
-      "state": "current",
-      "src": "부산광역시"
-     },
-     {
-      "phase": "인가",
-      "stage": "인가",
-      "state": "future"
-     },
-     {
-      "phase": "착공",
-      "stage": "착공",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개통",
-      "state": "future"
-     }
-    ],
-    "note": "구간 표기 지점 · 정거장 위치 미공표",
-    "audited": "2026-08-04",
-    "drop": null,
-    "stage_checked": "2026-08-04",
-    "gate_basis": "법정계획 (안)·공람 단계 — 「(안)」",
-    "geo_basis": "구글맵 POI 정확일치 밀집 클러스터(3개) — '반송' 실존 시설 실위치, 현재 좌표에서 647m",
-    "geo_approx": true,
-    "position_confidence": null,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      129.155456,
-      35.23321
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "계획",
-      "date": "2026-08-04",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-08-04",
-    "last_movement": "2026-08-04",
-    "last_movement_basis": "observed"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     129.155456,
-     35.23321
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "line",
     "name": "GTX F",
     "full": "GTX F",
     "linekind": "광역급행철도",
@@ -349085,6 +348821,6763 @@
     "coordinates": [
      126.871949,
      37.460687
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "부산 기장선",
+    "full": "부산 기장선",
+    "linekind": "도시철도",
+    "lvl": "B",
+    "lvl_basis": "위계 B (도시철도)",
+    "gate": "신호",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "phase": "계획",
+    "status": "부산 2차 도시철도망 대상노선 — 예타 전",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "안평역(4호선)~기장초~기장중~기장역(동해선)~일광신도시 7.10km · K-AGT · 사업비 4,697억 · 정관선과 별개 노선 · 정거장 위치 미공표",
+    "src_name": "부산광역시",
+    "src_url": "https://www.busan.go.kr/nbtnewsBU/1679630",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-04",
+    "geom_src": "공식 지점 인접 구간만 연결(≤5.0km) — 넓은 구간은 경로 미상으로 끊음 · 원 출처: 역 앵커 연결(근사)",
+    "stage_checked": "2026-08-04",
+    "gate_history": [
+     {
+      "date": "2026-08-04",
+      "gate": "계획안",
+      "basis": "법정계획 (안)·공람 단계 — 「(안)」"
+     },
+     {
+      "date": "2026-08-05",
+      "gate": "신호",
+      "basis": "절차 문서 확인 — 「예타」"
+     }
+    ],
+    "geom_adequacy": "sparse",
+    "geom_adequacy_note": "정거장 간격 4.3km — 회랑이 실제 경로와 다를 수 있음(공식 노선도 필요)",
+    "_geom_full": [
+     [
+      129.172046,
+      35.237514
+     ],
+     [
+      129.218813,
+      35.244702
+     ],
+     [
+      129.239013,
+      35.279968
+     ]
+    ],
+    "geom_downgrade_reason": "정직화 — 인접 구간만 연결(좌표 정밀화의 정상 결과)",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       129.172046,
+       35.237514
+      ],
+      [
+       129.218813,
+       35.244702
+      ],
+      [
+       129.239013,
+       35.279968
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-04",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-04",
+    "last_movement": "2026-08-04",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      129.172046,
+      35.237514
+     ],
+     [
+      129.218813,
+      35.244702
+     ],
+     [
+      129.239013,
+      35.279968
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "안평역",
+    "line": "부산 기장선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.172046,
+      35.237514
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.172046,
+     35.237514
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "기장역",
+    "line": "부산 기장선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "gate_history": [
+     {
+      "date": "2026-08-04",
+      "gate": "계획안",
+      "basis": "법정계획 (안)·공람 단계 — 「(안)」"
+     },
+     {
+      "date": "2026-08-05",
+      "gate": "신호",
+      "basis": "절차 문서 확인 — 「예타」"
+     }
+    ],
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.218813,
+      35.244702
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-04",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-04",
+    "last_movement": "2026-08-04",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.218813,
+     35.244702
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "일광신도시",
+    "line": "부산 기장선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": true,
+    "geo_prec": "dong",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": true,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.239013,
+      35.279968
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.239013,
+     35.279968
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "부산 강서선",
+    "full": "부산 강서선",
+    "linekind": "도시철도",
+    "lvl": "B",
+    "lvl_basis": "위계 B (도시철도)",
+    "gate": "신호",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "phase": "계획",
+    "status": "부산 2차 도시철도망 대상노선 — 예타 전",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "명지오션시티~에코델타시티~대저역(3호선) 21.10km · 노면전차 · 사업비 7,252억",
+    "src_name": "부산광역시",
+    "src_url": "https://www.busan.go.kr/nbtnewsBU/1679630",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-04",
+    "geom_src": "역 앵커 연결(근사)",
+    "stage_checked": "2026-08-04",
+    "geom_adequacy": "dense_anchor",
+    "geom_adequacy_note": "정거장 간격 2.3km — 앵커 체인이 곧 경로(§2b, 작도 불필요)",
+    "_geom_full": [
+     [
+      128.896752,
+      35.088512
+     ],
+     [
+      128.923399,
+      35.183869
+     ],
+     [
+      128.960579,
+      35.213052
+     ]
+    ],
+    "geom_bridges": [
+     [
+      [
+       128.896752,
+       35.088512
+      ],
+      [
+       128.923399,
+       35.183869
+      ]
+     ]
+    ],
+    "geom_bridged_km": 10.82,
+    "geom_solid": [
+     [
+      [
+       128.923399,
+       35.183869
+      ],
+      [
+       128.960579,
+       35.213052
+      ]
+     ]
+    ],
+    "geom_bridge_note": "이 선의 70%(10.82km)는 **근거 없는 구간**이다 — 정점 간격 중앙값이 10.82km라 지점 사이를 직선으로 이은 것이고, 실제 경로는 다를 수 있다(연한 점선). 공식 노선도를 확보하면 대체된다",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geom_downgrade_reason": "정직화 — 근거 없는 구간을 **연한 점선**으로 구분 표기(2026-08-01 표준: 지우지 않고 말한다)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       128.896752,
+       35.088512
+      ],
+      [
+       128.923399,
+       35.183869
+      ],
+      [
+       128.960579,
+       35.213052
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      128.896752,
+      35.088512
+     ],
+     [
+      128.923399,
+      35.183869
+     ],
+     [
+      128.960579,
+      35.213052
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "명지오션시티",
+    "line": "부산 강서선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.896752,
+      35.088512
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.896752,
+     35.088512
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "에코델타시티",
+    "line": "부산 강서선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": true,
+    "geo_prec": "dong",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": true,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.923399,
+      35.183869
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.923399,
+     35.183869
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "대저역",
+    "line": "부산 강서선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.960579,
+      35.213052
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.960579,
+     35.213052
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "노포역",
+    "line": "부산 1호선 급행화",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 대상노선 — 기존선 개량",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 대상노선 — 기존선 개량",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.09655,
+      35.28392
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-07-18",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.09655,
+     35.28392
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "다대포해수욕장역",
+    "line": "부산 1호선 급행화",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 대상노선 — 기존선 개량",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 대상노선 — 기존선 개량",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.965721,
+      35.048261
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.965721,
+     35.048261
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "양산역",
+    "line": "부산 2호선 급행화",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 대상노선 — 기존선 개량",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 대상노선 — 기존선 개량",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.026872,
+      35.338638
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.026872,
+     35.338638
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "장산역",
+    "line": "부산 2호선 급행화",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 대상노선 — 기존선 개량",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 대상노선 — 기존선 개량",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.176224,
+      35.16885
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-07-18",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.176224,
+     35.16885
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "부산 오륙도선",
+    "full": "부산 오륙도선",
+    "linekind": "도시철도",
+    "lvl": "B",
+    "lvl_basis": "위계 B (도시철도)",
+    "gate": "신호",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "phase": "계획",
+    "status": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "경성대·부경대역(2호선)~이기대어귀삼거리~오륙도 해맞이공원 5.15km · 노면전차 · 사업비 2,527억",
+    "src_name": "부산광역시",
+    "src_url": "https://www.busan.go.kr/nbtnewsBU/1679630",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-04",
+    "geom_src": "공식 지점 인접 구간만 연결(≤5.0km) — 넓은 구간은 경로 미상으로 끊음 · 원 출처: 역 앵커 연결(근사)",
+    "stage_checked": "2026-08-04",
+    "geom_adequacy": "endpoints_only",
+    "geom_adequacy_note": "위치 확보 정거장 2개뿐 — 공식 노선도 없이는 직선 외 표현 불가",
+    "_geom_full": [
+     [
+      129.100498,
+      35.137558
+     ],
+     [
+      129.122734,
+      35.102926
+     ]
+    ],
+    "geom_downgrade_reason": "정직화 — 인접 구간만 연결(좌표 정밀화의 정상 결과)",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       129.100498,
+       35.137558
+      ],
+      [
+       129.122734,
+       35.102926
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      129.100498,
+      35.137558
+     ],
+     [
+      129.122734,
+      35.102926
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "경성대·부경대역",
+    "line": "부산 오륙도선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.100498,
+      35.137558
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.100498,
+     35.137558
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "오륙도 해맞이공원",
+    "line": "부산 오륙도선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.122734,
+      35.102926
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.122734,
+     35.102926
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "부산 주례~부산역 연결지선",
+    "full": "부산 주례~부산역 연결지선",
+    "linekind": "도시철도",
+    "lvl": "B",
+    "lvl_basis": "위계 B (도시철도)",
+    "gate": "신호",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "phase": "계획",
+    "status": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "주례역(2호선)~학장교차로~구덕공설운동장~부산역(1호선) 8.26km · K-AGT · 사업비 5,788억",
+    "src_name": "부산광역시",
+    "src_url": "https://www.busan.go.kr/nbtnewsBU/1679630",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-04",
+    "geom_src": "역 앵커 연결(근사)",
+    "stage_checked": "2026-08-04",
+    "geom_adequacy": "endpoints_only",
+    "geom_adequacy_note": "위치 확보 정거장 2개뿐 — 공식 노선도 없이는 직선 외 표현 불가",
+    "_geom_full": [
+     [
+      129.002927,
+      35.15054
+     ],
+     [
+      129.043188,
+      35.117352
+     ]
+    ],
+    "geom_bridges": [
+     [
+      [
+       129.002927,
+       35.15054
+      ],
+      [
+       129.043188,
+       35.117352
+      ]
+     ]
+    ],
+    "geom_bridged_km": 5.19,
+    "geom_solid": [],
+    "geom_bridge_note": "이 선의 100%(5.19km)는 **근거 없는 구간**이다 — 정점 간격 중앙값이 5.19km라 지점 사이를 직선으로 이은 것이고, 실제 경로는 다를 수 있다(연한 점선). 공식 노선도를 확보하면 대체된다",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geom_downgrade_reason": "정직화 — 근거 없는 구간을 **연한 점선**으로 구분 표기(2026-08-01 표준: 지우지 않고 말한다)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       129.002927,
+       35.15054
+      ],
+      [
+       129.043188,
+       35.117352
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      129.002927,
+      35.15054
+     ],
+     [
+      129.043188,
+      35.117352
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "주례역",
+    "line": "부산 주례~부산역 연결지선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.002927,
+      35.15054
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.002927,
+     35.15054
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "부산역",
+    "line": "부산 주례~부산역 연결지선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.043188,
+      35.117352
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-07-18",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.043188,
+     35.117352
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "부산 동부산선",
+    "full": "부산 동부산선",
+    "linekind": "도시철도",
+    "lvl": "B",
+    "lvl_basis": "위계 B (도시철도)",
+    "gate": "신호",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "phase": "계획",
+    "status": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "장산역(2호선)~송정해수욕장~동부산관광단지~기장역(동해선) 11.49km · K-AGT · 사업비 6,649억",
+    "src_name": "부산광역시",
+    "src_url": "https://www.busan.go.kr/nbtnewsBU/1679630",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-04",
+    "geom_src": "역 앵커 연결(근사)",
+    "stage_checked": "2026-08-04",
+    "geom_adequacy": "dense_anchor",
+    "geom_adequacy_note": "정거장 간격 1.2km — 앵커 체인이 곧 경로(§2b, 작도 불필요)",
+    "_geom_full": [
+     [
+      129.176224,
+      35.16885
+     ],
+     [
+      129.19964,
+      35.178712
+     ],
+     [
+      129.218813,
+      35.244702
+     ]
+    ],
+    "geom_bridges": [
+     [
+      [
+       129.19964,
+       35.178712
+      ],
+      [
+       129.218813,
+       35.244702
+      ]
+     ]
+    ],
+    "geom_bridged_km": 7.5,
+    "geom_solid": [
+     [
+      [
+       129.176224,
+       35.16885
+      ],
+      [
+       129.19964,
+       35.178712
+      ]
+     ]
+    ],
+    "geom_bridge_note": "이 선의 76%(7.5km)는 **근거 없는 구간**이다 — 정점 간격 중앙값이 7.50km라 지점 사이를 직선으로 이은 것이고, 실제 경로는 다를 수 있다(연한 점선). 공식 노선도를 확보하면 대체된다",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geom_downgrade_reason": "정직화 — 근거 없는 구간을 **연한 점선**으로 구분 표기(2026-08-01 표준: 지우지 않고 말한다)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       129.176224,
+       35.16885
+      ],
+      [
+       129.19964,
+       35.178712
+      ],
+      [
+       129.218813,
+       35.244702
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      129.176224,
+      35.16885
+     ],
+     [
+      129.19964,
+      35.178712
+     ],
+     [
+      129.218813,
+      35.244702
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "장산역",
+    "line": "부산 동부산선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.176224,
+      35.16885
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-07-18",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.176224,
+     35.16885
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "송정해수욕장",
+    "line": "부산 동부산선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.19964,
+      35.178712
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.19964,
+     35.178712
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "기장역",
+    "line": "부산 동부산선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.218813,
+      35.244702
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.218813,
+     35.244702
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "부산 덕천~초읍~서면선",
+    "full": "부산 덕천~초읍~서면선",
+    "linekind": "도시철도",
+    "lvl": "B",
+    "lvl_basis": "위계 B (도시철도)",
+    "gate": "신호",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "phase": "계획",
+    "status": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "덕천역(2·3호선)~백양산~초읍~부산시민공원~부전역(동해선)~서면역(1·2호선) 8.92km · AGT · 사업비 9,056억",
+    "src_name": "부산광역시",
+    "src_url": "https://www.busan.go.kr/nbtnewsBU/1679630",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-04",
+    "geom_src": "역 앵커 연결(근사)",
+    "stage_checked": "2026-08-04",
+    "geom_adequacy": "dense_anchor",
+    "geom_adequacy_note": "정거장 간격 0.6km — 앵커 체인이 곧 경로(§2b, 작도 불필요)",
+    "_geom_full": [
+     [
+      129.007865,
+      35.210854
+     ],
+     [
+      129.057288,
+      35.168323
+     ],
+     [
+      129.054487,
+      35.158323
+     ]
+    ],
+    "geom_bridges": [
+     [
+      [
+       129.007865,
+       35.210854
+      ],
+      [
+       129.057288,
+       35.168323
+      ]
+     ]
+    ],
+    "geom_bridged_km": 6.51,
+    "geom_solid": [
+     [
+      [
+       129.057288,
+       35.168323
+      ],
+      [
+       129.054487,
+       35.158323
+      ]
+     ]
+    ],
+    "geom_bridge_note": "이 선의 85%(6.51km)는 **근거 없는 구간**이다 — 정점 간격 중앙값이 6.51km라 지점 사이를 직선으로 이은 것이고, 실제 경로는 다를 수 있다(연한 점선). 공식 노선도를 확보하면 대체된다",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geom_downgrade_reason": "정직화 — 근거 없는 구간을 **연한 점선**으로 구분 표기(2026-08-01 표준: 지우지 않고 말한다)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       129.007865,
+       35.210854
+      ],
+      [
+       129.057288,
+       35.168323
+      ],
+      [
+       129.054487,
+       35.158323
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      129.007865,
+      35.210854
+     ],
+     [
+      129.057288,
+      35.168323
+     ],
+     [
+      129.054487,
+      35.158323
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "덕천역",
+    "line": "부산 덕천~초읍~서면선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.007865,
+      35.210854
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.007865,
+     35.210854
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "부산시민공원",
+    "line": "부산 덕천~초읍~서면선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.057288,
+      35.168323
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     },
+     {
+      "stage": "인가",
+      "date": "2026-07-29",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-29",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.057288,
+     35.168323
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "서면역",
+    "line": "부산 덕천~초읍~서면선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 **후보노선** — 경제성 확보 시 추진",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.054487,
+      35.158323
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.054487,
+     35.158323
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "대전 도시철도 3호선",
+    "full": "대전 도시철도 3호선",
+    "linekind": "도시철도",
+    "lvl": "B",
+    "lvl_basis": "위계 B (도시철도)",
+    "gate": "신호",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "phase": "계획",
+    "status": "대전 1차 도시철도망 대상노선 — 예타 전",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "신탄진역~둔산~부사~석교~가오~산내 29.2km · 대덕·유성·서구·중구·동구를 잇는 남북축 · 정거장 위치 미확정",
+    "src_name": "대전광역시",
+    "src_url": "https://www.daejeon.go.kr/drh/board/boardNormalView.do?boardId=normal_0189&menuSeq=1632&ntatcSeq=1482334924",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대전 1차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "대전광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-04",
+    "geom_src": "역 앵커 연결(근사)",
+    "stage_checked": "2026-08-04",
+    "geom_adequacy": "dense_anchor",
+    "geom_adequacy_note": "정거장 간격 0.0km — 앵커 체인이 곧 경로(§2b, 작도 불필요)",
+    "_geom_full": [
+     [
+      127.428591,
+      36.449813
+     ],
+     [
+      127.385804,
+      36.35765
+     ],
+     [
+      127.479845,
+      36.286822
+     ]
+    ],
+    "geom_bridges": [
+     [
+      [
+       127.428591,
+       36.449813
+      ],
+      [
+       127.385804,
+       36.35765
+      ]
+     ],
+     [
+      [
+       127.385804,
+       36.35765
+      ],
+      [
+       127.479845,
+       36.286822
+      ]
+     ]
+    ],
+    "geom_bridged_km": 22.39,
+    "geom_solid": [],
+    "geom_bridge_note": "이 선의 100%(22.39km)는 **근거 없는 구간**이다 — 정점 간격 중앙값이 11.51km라 지점 사이를 직선으로 이은 것이고, 실제 경로는 다를 수 있다(연한 점선). 공식 노선도를 확보하면 대체된다",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geom_downgrade_reason": "정직화 — 근거 없는 구간을 **연한 점선**으로 구분 표기(2026-08-01 표준: 지우지 않고 말한다)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       127.428591,
+       36.449813
+      ],
+      [
+       127.385804,
+       36.35765
+      ],
+      [
+       127.479845,
+       36.286822
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      127.428591,
+      36.449813
+     ],
+     [
+      127.385804,
+      36.35765
+     ],
+     [
+      127.479845,
+      36.286822
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "신탄진역",
+    "line": "대전 도시철도 3호선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "대전 1차 도시철도망 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대전 1차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "대전광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.428591,
+      36.449813
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     },
+     {
+      "stage": "착공",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.428591,
+     36.449813
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "둔산",
+    "line": "대전 도시철도 3호선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "대전 1차 도시철도망 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대전 1차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "대전광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.385804,
+      36.35765
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.385804,
+     36.35765
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "산내",
+    "line": "대전 도시철도 3호선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "대전 1차 도시철도망 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": true,
+    "geo_prec": "dong",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대전 1차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "대전광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": true,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.479845,
+      36.286822
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.479845,
+     36.286822
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "대전 도시철도 4호선",
+    "full": "대전 도시철도 4호선",
+    "linekind": "도시철도",
+    "lvl": "B",
+    "lvl_basis": "위계 B (도시철도)",
+    "gate": "신호",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "phase": "계획",
+    "status": "대전 1차 도시철도망 대상노선 — 예타 전",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "덕명지구~도안~대전복합터미널~송촌 19.0km · 동서축 · 정거장 위치 미확정",
+    "src_name": "대전광역시",
+    "src_url": "https://www.daejeon.go.kr/drh/board/boardNormalView.do?boardId=normal_0189&menuSeq=1632&ntatcSeq=1482334924",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대전 1차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "대전광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-04",
+    "geom_src": "역 앵커 연결(근사)",
+    "stage_checked": "2026-08-04",
+    "geom_adequacy": "dense_anchor",
+    "geom_adequacy_note": "정거장 간격 0.7km — 앵커 체인이 곧 경로(§2b, 작도 불필요)",
+    "_geom_full": [
+     [
+      127.289982,
+      36.346526
+     ],
+     [
+      127.437317,
+      36.352017
+     ],
+     [
+      127.439636,
+      36.363895
+     ]
+    ],
+    "geom_bridges": [
+     [
+      [
+       127.289982,
+       36.346526
+      ],
+      [
+       127.437317,
+       36.352017
+      ]
+     ]
+    ],
+    "geom_bridged_km": 13.22,
+    "geom_solid": [
+     [
+      [
+       127.437317,
+       36.352017
+      ],
+      [
+       127.439636,
+       36.363895
+      ]
+     ]
+    ],
+    "geom_bridge_note": "이 선의 91%(13.22km)는 **근거 없는 구간**이다 — 정점 간격 중앙값이 13.22km라 지점 사이를 직선으로 이은 것이고, 실제 경로는 다를 수 있다(연한 점선). 공식 노선도를 확보하면 대체된다",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geom_downgrade_reason": "정직화 — 근거 없는 구간을 **연한 점선**으로 구분 표기(2026-08-01 표준: 지우지 않고 말한다)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       127.289982,
+       36.346526
+      ],
+      [
+       127.437317,
+       36.352017
+      ],
+      [
+       127.439636,
+       36.363895
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      127.289982,
+      36.346526
+     ],
+     [
+      127.437317,
+      36.352017
+     ],
+     [
+      127.439636,
+      36.363895
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "덕명지구",
+    "line": "대전 도시철도 4호선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "대전 1차 도시철도망 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": true,
+    "geo_prec": "dong",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대전 1차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "대전광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": true,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.289982,
+      36.346526
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.289982,
+     36.346526
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "대전복합터미널",
+    "line": "대전 도시철도 4호선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "대전 1차 도시철도망 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대전 1차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "대전광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.437317,
+      36.352017
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.437317,
+     36.352017
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "송촌",
+    "line": "대전 도시철도 4호선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "대전 1차 도시철도망 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대전 1차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "대전광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.439636,
+      36.363895
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.439636,
+     36.363895
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "대전 도시철도 5호선",
+    "full": "대전 도시철도 5호선",
+    "linekind": "도시철도",
+    "lvl": "B",
+    "lvl_basis": "위계 B (도시철도)",
+    "gate": "신호",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "phase": "계획",
+    "status": "대전 1차 도시철도망 대상노선 — 예타 전",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "컨벤션센터네거리~정부청사~대전오월드 13.2km · 도심부 남북 연결 · 정거장 위치 미확정",
+    "src_name": "대전광역시",
+    "src_url": "https://www.daejeon.go.kr/drh/board/boardNormalView.do?boardId=normal_0189&menuSeq=1632&ntatcSeq=1482334924",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대전 1차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "대전광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-04",
+    "geom_src": "역 앵커 연결(근사)",
+    "stage_checked": "2026-08-04",
+    "geom_adequacy": "dense_anchor",
+    "geom_adequacy_note": "정거장 간격 1.0km — 앵커 체인이 곧 경로(§2b, 작도 불필요)",
+    "_geom_full": [
+     [
+      127.39189,
+      36.375226
+     ],
+     [
+      127.385804,
+      36.35765
+     ],
+     [
+      127.398881,
+      36.289271
+     ]
+    ],
+    "geom_bridges": [
+     [
+      [
+       127.385804,
+       36.35765
+      ],
+      [
+       127.398881,
+       36.289271
+      ]
+     ]
+    ],
+    "geom_bridged_km": 7.65,
+    "geom_solid": [
+     [
+      [
+       127.39189,
+       36.375226
+      ],
+      [
+       127.385804,
+       36.35765
+      ]
+     ]
+    ],
+    "geom_bridge_note": "이 선의 79%(7.65km)는 **근거 없는 구간**이다 — 정점 간격 중앙값이 7.65km라 지점 사이를 직선으로 이은 것이고, 실제 경로는 다를 수 있다(연한 점선). 공식 노선도를 확보하면 대체된다",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geom_downgrade_reason": "정직화 — 근거 없는 구간을 **연한 점선**으로 구분 표기(2026-08-01 표준: 지우지 않고 말한다)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       127.39189,
+       36.375226
+      ],
+      [
+       127.385804,
+       36.35765
+      ],
+      [
+       127.398881,
+       36.289271
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      127.39189,
+      36.375226
+     ],
+     [
+      127.385804,
+      36.35765
+     ],
+     [
+      127.398881,
+      36.289271
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "대전컨벤션센터",
+    "line": "대전 도시철도 5호선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "대전 1차 도시철도망 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대전 1차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "대전광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.39189,
+      36.375226
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.39189,
+     36.375226
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "정부대전청사",
+    "line": "대전 도시철도 5호선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "대전 1차 도시철도망 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대전 1차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "대전광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.385804,
+      36.35765
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-07-18",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.385804,
+     36.35765
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "대전오월드",
+    "line": "대전 도시철도 5호선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "대전 1차 도시철도망 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대전 1차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "대전광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.398881,
+      36.289271
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.398881,
+     36.289271
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "진잠네거리",
+    "line": "대전 2호선 교촌지선",
+    "lvl": "C",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "대전 1차 도시철도망 반영 — 2호선 본선 개통 시기 맞춰 추진",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대전 1차 도시철도망 반영 — 2호선 본선 개통 시기 맞춰 추진",
+      "state": "current",
+      "src": "대전광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「개통」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.32433,
+      36.298171
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.32433,
+     36.298171
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "교촌삼거리",
+    "line": "대전 2호선 교촌지선",
+    "lvl": "C",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "대전 1차 도시철도망 반영 — 2호선 본선 개통 시기 맞춰 추진",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": true,
+    "geo_prec": "dong",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대전 1차 도시철도망 반영 — 2호선 본선 개통 시기 맞춰 추진",
+      "state": "current",
+      "src": "대전광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「개통」",
+    "geo_approx": true,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.311978,
+      36.306745
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.311978,
+     36.306745
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "대전 2호선 회덕지선",
+    "full": "대전 2호선 회덕지선",
+    "linekind": "트램",
+    "lvl": "C",
+    "lvl_basis": "위계 C (트램)",
+    "gate": "신호",
+    "gate_basis": "절차 문서 확인 — 「개통」",
+    "phase": "계획",
+    "status": "대전 1차 도시철도망 반영 — 2호선 본선 개통 시기 맞춰 추진",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "연축지구~회덕역 1.22km · 2호선(트램) 지선 · 착공 중인 연축지선(용전~연축)과는 별개 구간",
+    "src_name": "대전광역시",
+    "src_url": "https://www.daejeon.go.kr/drh/board/boardNormalView.do?boardId=normal_0189&menuSeq=1632&ntatcSeq=1482334924",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대전 1차 도시철도망 반영 — 2호선 본선 개통 시기 맞춰 추진",
+      "state": "current",
+      "src": "대전광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-04",
+    "geom_src": "공식 지점 인접 구간만 연결(≤5.0km) — 넓은 구간은 경로 미상으로 끊음 · 원 출처: 역 앵커 연결(근사)",
+    "stage_checked": "2026-08-04",
+    "geom_adequacy": "endpoints_only",
+    "geom_adequacy_note": "위치 확보 정거장 2개뿐 — 공식 노선도 없이는 직선 외 표현 불가",
+    "_geom_full": [
+     [
+      127.428799,
+      36.389365
+     ],
+     [
+      127.421768,
+      36.402128
+     ]
+    ],
+    "geom_downgrade_reason": "정직화 — 인접 구간만 연결(좌표 정밀화의 정상 결과)",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       127.428799,
+       36.389365
+      ],
+      [
+       127.421768,
+       36.402128
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      127.428799,
+      36.389365
+     ],
+     [
+      127.421768,
+      36.402128
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "연축지구",
+    "line": "대전 2호선 회덕지선",
+    "lvl": "C",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "대전 1차 도시철도망 반영 — 2호선 본선 개통 시기 맞춰 추진",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": true,
+    "geo_prec": "dong",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대전 1차 도시철도망 반영 — 2호선 본선 개통 시기 맞춰 추진",
+      "state": "current",
+      "src": "대전광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「개통」",
+    "geo_approx": true,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.428799,
+      36.389365
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.428799,
+     36.389365
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "회덕역",
+    "line": "대전 2호선 회덕지선",
+    "lvl": "C",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "대전 1차 도시철도망 반영 — 2호선 본선 개통 시기 맞춰 추진",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "landmark",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대전 1차 도시철도망 반영 — 2호선 본선 개통 시기 맞춰 추진",
+      "state": "current",
+      "src": "대전광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「개통」",
+    "geo_approx": true,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.421768,
+      36.402128
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     },
+     {
+      "stage": "착공",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.421768,
+     36.402128
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "대구 도시철도 5호선(순환선)",
+    "full": "대구 도시철도 5호선(순환선)",
+    "linekind": "도시철도",
+    "lvl": "B",
+    "lvl_basis": "위계 B (도시철도)",
+    "gate": "계획안",
+    "gate_basis": "법정계획 (안)·공람 단계 — 「(안)」",
+    "phase": "계획",
+    "status": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "서대구역~두류공원~캠프워커~황금·만촌~제2작전사령부~K-2 후적지~엑스코~서대구역 33.9km · 6개 구 순환 · AGT · 사업비 3조2,385억 · 정거장 위치 미확정",
+    "src_name": "대구광역시",
+    "src_url": "https://www.daegu.go.kr/tra/index.do?menu_id=00000351",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+      "state": "current",
+      "src": "대구광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-04",
+    "geom_src": "역 앵커 연결(근사)",
+    "stage_checked": "2026-08-04",
+    "geom_adequacy": "dense_anchor",
+    "geom_adequacy_note": "정거장 간격 2.8km — 앵커 체인이 곧 경로(§2b, 작도 불필요)",
+    "geom_tail_trimmed_km": 6.9,
+    "_geom_full": [
+     [
+      128.54011,
+      35.88145
+     ],
+     [
+      128.558984,
+      35.851567
+     ],
+     [
+      128.581243,
+      35.833915
+     ],
+     [
+      128.645012,
+      35.858865
+     ],
+     [
+      128.64288,
+      35.900284
+     ],
+     [
+      128.610613,
+      35.907856
+     ]
+    ],
+    "geom_anchored": 0,
+    "geom_anchor_note": "공식 지점 0개를 선형에 얹었다(선 위 거리 0) — 선을 그 지점으로 당겨 맞췄다. §선형은 공식 지점을 반드시 지난다(2026-08-01)",
+    "geom_bridges": [
+     [
+      [
+       128.581243,
+       35.833915
+      ],
+      [
+       128.645012,
+       35.858865
+      ]
+     ]
+    ],
+    "geom_bridged_km": 6.38,
+    "geom_solid": [
+     [
+      [
+       128.54011,
+       35.88145
+      ],
+      [
+       128.558984,
+       35.851567
+      ],
+      [
+       128.581243,
+       35.833915
+      ]
+     ],
+     [
+      [
+       128.645012,
+       35.858865
+      ],
+      [
+       128.64288,
+       35.900284
+      ],
+      [
+       128.610613,
+       35.907856
+      ]
+     ]
+    ],
+    "geom_bridge_note": "정점 사이 빈틈 1곳(6.38km)은 **보간**이다 — 이 선의 정점 간격 중앙값이 3.72km라 그 사이로 경로가 지난다는 것은 알지만, 그 구간의 정확한 형상은 근거가 없다(연한 선으로 표시)",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       128.54011,
+       35.88145
+      ],
+      [
+       128.558984,
+       35.851567
+      ],
+      [
+       128.581243,
+       35.833915
+      ],
+      [
+       128.645012,
+       35.858865
+      ],
+      [
+       128.64288,
+       35.900284
+      ],
+      [
+       128.610613,
+       35.907856
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      128.54011,
+      35.88145
+     ],
+     [
+      128.558984,
+      35.851567
+     ],
+     [
+      128.581243,
+      35.833915
+     ],
+     [
+      128.645012,
+      35.858865
+     ],
+     [
+      128.64288,
+      35.900284
+     ],
+     [
+      128.610613,
+      35.907856
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "서대구역",
+    "line": "대구 도시철도 5호선(순환선)",
+    "lvl": "B",
+    "gate": "계획안",
+    "confirmed": false,
+    "status": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+      "state": "current",
+      "src": "대구광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "법정계획 (안)·공람 단계 — 「(안)」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.54011,
+      35.88145
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     },
+     {
+      "stage": "착공",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.54011,
+     35.88145
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "두류공원",
+    "line": "대구 도시철도 5호선(순환선)",
+    "lvl": "B",
+    "gate": "계획안",
+    "confirmed": false,
+    "status": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+      "state": "current",
+      "src": "대구광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "법정계획 (안)·공람 단계 — 「(안)」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.558984,
+      35.851567
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.558984,
+     35.851567
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "캠프워커",
+    "line": "대구 도시철도 5호선(순환선)",
+    "lvl": "B",
+    "gate": "계획안",
+    "confirmed": false,
+    "status": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": true,
+    "geo_prec": "dong",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+      "state": "current",
+      "src": "대구광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "법정계획 (안)·공람 단계 — 「(안)」",
+    "geo_approx": true,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.581243,
+      35.833915
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.581243,
+     35.833915
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "만촌역",
+    "line": "대구 도시철도 5호선(순환선)",
+    "lvl": "B",
+    "gate": "계획안",
+    "confirmed": false,
+    "status": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+      "state": "current",
+      "src": "대구광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "법정계획 (안)·공람 단계 — 「(안)」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.645012,
+      35.858865
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.645012,
+     35.858865
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "K-2 후적지",
+    "line": "대구 도시철도 5호선(순환선)",
+    "lvl": "B",
+    "gate": "계획안",
+    "confirmed": false,
+    "status": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": true,
+    "geo_prec": "dong",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+      "state": "current",
+      "src": "대구광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "법정계획 (안)·공람 단계 — 「(안)」",
+    "geo_approx": true,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.64288,
+      35.900284
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.64288,
+     35.900284
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "엑스코",
+    "line": "대구 도시철도 5호선(순환선)",
+    "lvl": "B",
+    "gate": "계획안",
+    "confirmed": false,
+    "status": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+      "state": "current",
+      "src": "대구광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "법정계획 (안)·공람 단계 — 「(안)」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.610613,
+      35.907856
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.610613,
+     35.907856
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "대구 도시철도 6호선(수성남부선)",
+    "full": "대구 도시철도 6호선(수성남부선)",
+    "linekind": "도시철도",
+    "lvl": "B",
+    "lvl_basis": "위계 B (도시철도)",
+    "gate": "계획안",
+    "gate_basis": "법정계획 (안)·공람 단계 — 「(안)」",
+    "phase": "계획",
+    "status": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "대구은행역~수성로~수성못~스파밸리(가창) 9.3km · AGT · 정거장 위치 미확정",
+    "src_name": "대구광역시",
+    "src_url": "https://www.daegu.go.kr/tra/index.do?menu_id=00000351",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+      "state": "current",
+      "src": "대구광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-04",
+    "geom_src": "공식 지점 인접 구간만 연결(≤5.0km) — 넓은 구간은 경로 미상으로 끊음 · 원 출처: 역 앵커 연결(근사)",
+    "stage_checked": "2026-08-04",
+    "geom_adequacy": "sparse",
+    "geom_adequacy_note": "정거장 간격 4.1km — 회랑이 실제 경로와 다를 수 있음(공식 노선도 필요)",
+    "_geom_full": [
+     [
+      128.614227,
+      35.85974
+     ],
+     [
+      128.61799,
+      35.82739
+     ],
+     [
+      128.635132,
+      35.78824
+     ]
+    ],
+    "geom_downgrade_reason": "정직화 — 인접 구간만 연결(좌표 정밀화의 정상 결과)",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       128.614227,
+       35.85974
+      ],
+      [
+       128.61799,
+       35.82739
+      ],
+      [
+       128.635132,
+       35.78824
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      128.614227,
+      35.85974
+     ],
+     [
+      128.61799,
+      35.82739
+     ],
+     [
+      128.635132,
+      35.78824
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "대구은행역",
+    "line": "대구 도시철도 6호선(수성남부선)",
+    "lvl": "B",
+    "gate": "계획안",
+    "confirmed": false,
+    "status": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+      "state": "current",
+      "src": "대구광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "법정계획 (안)·공람 단계 — 「(안)」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.614227,
+      35.85974
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.614227,
+     35.85974
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "수성못",
+    "line": "대구 도시철도 6호선(수성남부선)",
+    "lvl": "B",
+    "gate": "계획안",
+    "confirmed": false,
+    "status": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+      "state": "current",
+      "src": "대구광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "법정계획 (안)·공람 단계 — 「(안)」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.61799,
+      35.82739
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.61799,
+     35.82739
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "스파밸리",
+    "line": "대구 도시철도 6호선(수성남부선)",
+    "lvl": "B",
+    "gate": "계획안",
+    "confirmed": false,
+    "status": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "대구 도시철도망 구축계획(안) 대상노선 — 국토부 승인 신청 중",
+      "state": "current",
+      "src": "대구광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "법정계획 (안)·공람 단계 — 「(안)」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.635132,
+      35.78824
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.635132,
+     35.78824
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "창원 도시철도 1호선",
+    "full": "창원 도시철도 1호선",
+    "linekind": "트램",
+    "lvl": "C",
+    "lvl_basis": "위계 C (트램)",
+    "gate": "신호",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "phase": "계획",
+    "status": "경남 도시철도망 승인('23.5) — 예타 단계",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "마산역~창원중앙역 15.82km · 노면전차 · 사업비 2,993억 · 마산자유무역지역·국가산단 경유",
+    "src_name": "경상남도·창원시",
+    "src_url": "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&gcode=1011&idx=754990",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "경남 도시철도망 승인('23.5) — 예타 단계",
+      "state": "current",
+      "src": "경상남도·창원시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-04",
+    "geom_src": "역 앵커 연결(근사)",
+    "stage_checked": "2026-08-04",
+    "geom_adequacy": "endpoints_only",
+    "geom_adequacy_note": "위치 확보 정거장 2개뿐 — 공식 노선도 없이는 직선 외 표현 불가",
+    "_geom_full": [
+     [
+      128.5769,
+      35.23625
+     ],
+     [
+      128.701094,
+      35.243218
+     ]
+    ],
+    "geom_bridges": [
+     [
+      [
+       128.5769,
+       35.23625
+      ],
+      [
+       128.701094,
+       35.243218
+      ]
+     ]
+    ],
+    "geom_bridged_km": 11.32,
+    "geom_solid": [],
+    "geom_bridge_note": "이 선의 100%(11.32km)는 **근거 없는 구간**이다 — 정점 간격 중앙값이 11.32km라 지점 사이를 직선으로 이은 것이고, 실제 경로는 다를 수 있다(연한 점선). 공식 노선도를 확보하면 대체된다",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geom_downgrade_reason": "정직화 — 근거 없는 구간을 **연한 점선**으로 구분 표기(2026-08-01 표준: 지우지 않고 말한다)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       128.5769,
+       35.23625
+      ],
+      [
+       128.701094,
+       35.243218
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      128.5769,
+      35.23625
+     ],
+     [
+      128.701094,
+      35.243218
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "마산역",
+    "line": "창원 도시철도 1호선",
+    "lvl": "C",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "경남 도시철도망 승인('23.5) — 예타 단계",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "경남 도시철도망 승인('23.5) — 예타 단계",
+      "state": "current",
+      "src": "경상남도·창원시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.5769,
+      35.23625
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     },
+     {
+      "stage": "착공",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.5769,
+     35.23625
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "창원중앙역",
+    "line": "창원 도시철도 1호선",
+    "lvl": "C",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "경남 도시철도망 승인('23.5) — 예타 단계",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "landmark",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "경남 도시철도망 승인('23.5) — 예타 단계",
+      "state": "current",
+      "src": "경상남도·창원시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": true,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.701094,
+      35.243218
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     },
+     {
+      "stage": "착공",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.701094,
+     35.243218
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "창원 도시철도 2호선",
+    "full": "창원 도시철도 2호선",
+    "linekind": "트램",
+    "lvl": "C",
+    "lvl_basis": "위계 C (트램)",
+    "gate": "신호",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "phase": "계획",
+    "status": "경남 도시철도망 승인('23.5) — 예타 단계",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "창원역~진해역 19.28km · 노면전차 · 사업비 1,840억 · 국가산단·진해첨단산업연구단지 경유",
+    "src_name": "경상남도·창원시",
+    "src_url": "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&gcode=1011&idx=754990",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "경남 도시철도망 승인('23.5) — 예타 단계",
+      "state": "current",
+      "src": "경상남도·창원시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-04",
+    "geom_src": "역 앵커 연결(근사)",
+    "stage_checked": "2026-08-04",
+    "geom_adequacy": "endpoints_only",
+    "geom_adequacy_note": "위치 확보 정거장 2개뿐 — 공식 노선도 없이는 직선 외 표현 불가",
+    "_geom_full": [
+     [
+      128.606499,
+      35.25704
+     ],
+     [
+      128.661709,
+      35.153499
+     ]
+    ],
+    "geom_bridges": [
+     [
+      [
+       128.606499,
+       35.25704
+      ],
+      [
+       128.661709,
+       35.153499
+      ]
+     ]
+    ],
+    "geom_bridged_km": 12.5,
+    "geom_solid": [],
+    "geom_bridge_note": "이 선의 100%(12.5km)는 **근거 없는 구간**이다 — 정점 간격 중앙값이 12.50km라 지점 사이를 직선으로 이은 것이고, 실제 경로는 다를 수 있다(연한 점선). 공식 노선도를 확보하면 대체된다",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geom_downgrade_reason": "정직화 — 근거 없는 구간을 **연한 점선**으로 구분 표기(2026-08-01 표준: 지우지 않고 말한다)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       128.606499,
+       35.25704
+      ],
+      [
+       128.661709,
+       35.153499
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      128.606499,
+      35.25704
+     ],
+     [
+      128.661709,
+      35.153499
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "창원역",
+    "line": "창원 도시철도 2호선",
+    "lvl": "C",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "경남 도시철도망 승인('23.5) — 예타 단계",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "경남 도시철도망 승인('23.5) — 예타 단계",
+      "state": "current",
+      "src": "경상남도·창원시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.606499,
+      35.25704
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.606499,
+     35.25704
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "진해역",
+    "line": "창원 도시철도 2호선",
+    "lvl": "C",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "경남 도시철도망 승인('23.5) — 예타 단계",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "경남 도시철도망 승인('23.5) — 예타 단계",
+      "state": "current",
+      "src": "경상남도·창원시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.661709,
+      35.153499
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.661709,
+     35.153499
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "창원 도시철도 3호선",
+    "full": "창원 도시철도 3호선",
+    "linekind": "트램",
+    "lvl": "C",
+    "lvl_basis": "위계 C (트램)",
+    "gate": "신호",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "phase": "계획",
+    "status": "경남 도시철도망 승인('23.5) — 예타 단계",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "월영광장~진해구청 33.23km · 노면전차(BRT 전환 구간 18.0km 포함) · 사업비 6,819억 · 마산~창원~진해 연결",
+    "src_name": "경상남도·창원시",
+    "src_url": "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&gcode=1011&idx=754990",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "경남 도시철도망 승인('23.5) — 예타 단계",
+      "state": "current",
+      "src": "경상남도·창원시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-04",
+    "geom_src": "역 앵커 연결(근사)",
+    "stage_checked": "2026-08-04",
+    "geom_adequacy": "endpoints_only",
+    "geom_adequacy_note": "위치 확보 정거장 2개뿐 — 공식 노선도 없이는 직선 외 표현 불가",
+    "_geom_full": [
+     [
+      128.557784,
+      35.180189
+     ],
+     [
+      128.70955,
+      35.132666
+     ]
+    ],
+    "geom_bridges": [
+     [
+      [
+       128.557784,
+       35.180189
+      ],
+      [
+       128.70955,
+       35.132666
+      ]
+     ]
+    ],
+    "geom_bridged_km": 14.78,
+    "geom_solid": [],
+    "geom_bridge_note": "이 선의 100%(14.78km)는 **근거 없는 구간**이다 — 정점 간격 중앙값이 14.78km라 지점 사이를 직선으로 이은 것이고, 실제 경로는 다를 수 있다(연한 점선). 공식 노선도를 확보하면 대체된다",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geom_downgrade_reason": "정직화 — 근거 없는 구간을 **연한 점선**으로 구분 표기(2026-08-01 표준: 지우지 않고 말한다)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       128.557784,
+       35.180189
+      ],
+      [
+       128.70955,
+       35.132666
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      128.557784,
+      35.180189
+     ],
+     [
+      128.70955,
+      35.132666
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "월영광장",
+    "line": "창원 도시철도 3호선",
+    "lvl": "C",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "경남 도시철도망 승인('23.5) — 예타 단계",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "경남 도시철도망 승인('23.5) — 예타 단계",
+      "state": "current",
+      "src": "경상남도·창원시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.557784,
+      35.180189
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.557784,
+     35.180189
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "진해구청",
+    "line": "창원 도시철도 3호선",
+    "lvl": "C",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "경남 도시철도망 승인('23.5) — 예타 단계",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "경남 도시철도망 승인('23.5) — 예타 단계",
+      "state": "current",
+      "src": "경상남도·창원시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.70955,
+      35.132666
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.70955,
+     35.132666
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "모란판교선",
+    "full": "모란판교선",
+    "linekind": "도시철도",
+    "lvl": "B",
+    "lvl_basis": "위계 B (도시철도)",
+    "gate": "관찰",
+    "gate_basis": "절차 진입 전 — 「절차 미착수」",
+    "phase": "계획",
+    "status": "경기 2차 도시철도망 대상노선('25.12 고시) — 절차 미착수",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "모란역~판교역 3.94km · 성남 도시철도 1호선(판교~상대원)·2호선(금토~정자)과 별개 노선",
+    "src_name": "국토교통부·경기도",
+    "src_url": "https://www.molit.go.kr/LCMS/DWN.jsp?fold=/N01_B/&fileName=%EC%A0%9C2%EC%B0%A8_%EA%B2%BD%EA%B8%B0%EB%8F%84_%EB%8F%84%EC%8B%9C%EC%B2%A0%EB%8F%84%EB%A7%9D_%EA%B5%AC%EC%B6%95%EA%B3%84%ED%9A%8D_%EC%8A%B9%EC%9D%B8_%EA%B3%A0%EC%8B%9C%EB%AC%B8.pdf",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "경기 2차 도시철도망 대상노선('25.12 고시) — 절차 미착수",
+      "state": "current",
+      "src": "국토교통부·경기도"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-04",
+    "geom_src": "공식 지점 인접 구간만 연결(≤5.0km) — 넓은 구간은 경로 미상으로 끊음 · 원 출처: 역 앵커 연결(근사)",
+    "stage_checked": "2026-08-04",
+    "geom_adequacy": "endpoints_only",
+    "geom_adequacy_note": "위치 확보 정거장 2개뿐 — 공식 노선도 없이는 직선 외 표현 불가",
+    "_geom_full": [
+     [
+      127.128742,
+      37.434072
+     ],
+     [
+      127.11078,
+      37.39485
+     ]
+    ],
+    "geom_downgrade_reason": "정직화 — 인접 구간만 연결(좌표 정밀화의 정상 결과)",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       127.128742,
+       37.434072
+      ],
+      [
+       127.11078,
+       37.39485
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      127.128742,
+      37.434072
+     ],
+     [
+      127.11078,
+      37.39485
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "모란역",
+    "line": "모란판교선",
+    "lvl": "B",
+    "gate": "관찰",
+    "confirmed": false,
+    "status": "경기 2차 도시철도망 대상노선('25.12 고시) — 절차 미착수",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "경기 2차 도시철도망 대상노선('25.12 고시) — 절차 미착수",
+      "state": "current",
+      "src": "국토교통부·경기도"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 진입 전 — 「절차 미착수」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.128742,
+      37.434072
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     },
+     {
+      "stage": "인가",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.128742,
+     37.434072
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "판교역",
+    "line": "모란판교선",
+    "lvl": "B",
+    "gate": "관찰",
+    "confirmed": false,
+    "status": "경기 2차 도시철도망 대상노선('25.12 고시) — 절차 미착수",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "parcel",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "경기 2차 도시철도망 대상노선('25.12 고시) — 절차 미착수",
+      "state": "current",
+      "src": "국토교통부·경기도"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 진입 전 — 「절차 미착수」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.11078,
+      37.39485
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     },
+     {
+      "stage": "착공",
+      "date": "2026-07-18",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.11078,
+     37.39485
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "주안연수선",
+    "full": "주안연수선",
+    "linekind": "도시철도",
+    "lvl": "B",
+    "lvl_basis": "위계 B (도시철도)",
+    "gate": "신호",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "phase": "계획",
+    "status": "인천 2차 도시철도망 **후보노선** — 여건 변화 시 최우선 추진",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "주안역~시민공원역~청학역(예정)~인천대입구역 9.7km · 정거장 8개소 · 사업비 1조4,416억 · GTX-B와 인천대입구~청학 약 5.2km 중복(추진 시 검토 필요)",
+    "src_name": "국토교통부·인천시 고시 제2026-75호",
+    "src_url": "https://www.incheon.go.kr/traffic/TR060002/3064016",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "인천 2차 도시철도망 **후보노선** — 여건 변화 시 최우선 추진",
+      "state": "current",
+      "src": "국토교통부·인천시 고시 제2026-75호"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-04",
+    "geom_src": "역 앵커 연결(근사)",
+    "stage_checked": "2026-08-04",
+    "geom_adequacy": "dense_anchor",
+    "geom_adequacy_note": "정거장 간격 0.5km — 앵커 체인이 곧 경로(§2b, 작도 불필요)",
+    "_geom_full": [
+     [
+      126.680221,
+      37.46338
+     ],
+     [
+      126.679856,
+      37.454779
+     ],
+     [
+      126.639419,
+      37.386217
+     ]
+    ],
+    "geom_bridges": [
+     [
+      [
+       126.679856,
+       37.454779
+      ],
+      [
+       126.639419,
+       37.386217
+      ]
+     ]
+    ],
+    "geom_bridged_km": 8.38,
+    "geom_solid": [
+     [
+      [
+       126.680221,
+       37.46338
+      ],
+      [
+       126.679856,
+       37.454779
+      ]
+     ]
+    ],
+    "geom_bridge_note": "이 선의 90%(8.38km)는 **근거 없는 구간**이다 — 정점 간격 중앙값이 8.38km라 지점 사이를 직선으로 이은 것이고, 실제 경로는 다를 수 있다(연한 점선). 공식 노선도를 확보하면 대체된다",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geom_downgrade_reason": "정직화 — 근거 없는 구간을 **연한 점선**으로 구분 표기(2026-08-01 표준: 지우지 않고 말한다)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       126.680221,
+       37.46338
+      ],
+      [
+       126.679856,
+       37.454779
+      ],
+      [
+       126.639419,
+       37.386217
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      126.680221,
+      37.46338
+     ],
+     [
+      126.679856,
+      37.454779
+     ],
+     [
+      126.639419,
+      37.386217
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "주안역",
+    "line": "주안연수선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "인천 2차 도시철도망 **후보노선** — 여건 변화 시 최우선 추진",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "인천 2차 도시철도망 **후보노선** — 여건 변화 시 최우선 추진",
+      "state": "current",
+      "src": "국토교통부·인천시 고시 제2026-75호"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.680221,
+      37.46338
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.680221,
+     37.46338
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "인천시민공원역",
+    "line": "주안연수선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "인천 2차 도시철도망 **후보노선** — 여건 변화 시 최우선 추진",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": true,
+    "geo_prec": "dong",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "인천 2차 도시철도망 **후보노선** — 여건 변화 시 최우선 추진",
+      "state": "current",
+      "src": "국토교통부·인천시 고시 제2026-75호"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": true,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.679856,
+      37.454779
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.679856,
+     37.454779
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "인천대입구역",
+    "line": "주안연수선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "인천 2차 도시철도망 **후보노선** — 여건 변화 시 최우선 추진",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "인천 2차 도시철도망 **후보노선** — 여건 변화 시 최우선 추진",
+      "state": "current",
+      "src": "국토교통부·인천시 고시 제2026-75호"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.639419,
+      37.386217
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.639419,
+     37.386217
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "부산 연산제2센텀선",
+    "full": "부산 연산제2센텀선",
+    "linekind": "도시철도",
+    "lvl": "B",
+    "lvl_basis": "위계 B (도시철도)",
+    "gate": "신호",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "phase": "계획",
+    "status": "부산 2차 도시철도망 신규 대상노선 — 예타 전",
+    "confirmed": false,
+    "dashed": true,
+    "approx": true,
+    "drop": null,
+    "note": "연산역(1·3호선)~토곡사거리~원동역(동해선)~센텀2지구 산업단지~석대역(4호선) 8.03km · K-AGT · 사업비 7,148억",
+    "src_name": "부산광역시",
+    "src_url": "https://www.busan.go.kr/nbtnewsBU/1679630",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 신규 대상노선 — 예타 전",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-04",
+    "geom_src": "공식 지점 인접 구간만 연결(≤5.0km) — 넓은 구간은 경로 미상으로 끊음 · 원 출처: 역 앵커 연결(근사)",
+    "stage_checked": "2026-08-04",
+    "geom_adequacy": "sparse",
+    "geom_adequacy_note": "정거장 간격 3.1km — 회랑이 실제 경로와 다를 수 있음(공식 노선도 필요)",
+    "_geom_full": [
+     [
+      129.081578,
+      35.186137
+     ],
+     [
+      129.128221,
+      35.206705
+     ],
+     [
+      129.136859,
+      35.218113
+     ]
+    ],
+    "geom_downgrade_reason": "정직화 — 인접 구간만 연결(좌표 정밀화의 정상 결과)",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       129.081578,
+       35.186137
+      ],
+      [
+       129.128221,
+       35.206705
+      ],
+      [
+       129.136859,
+       35.218113
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      129.081578,
+      35.186137
+     ],
+     [
+      129.128221,
+      35.206705
+     ],
+     [
+      129.136859,
+      35.218113
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "연산역",
+    "line": "부산 연산제2센텀선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 신규 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 신규 대상노선 — 예타 전",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.081578,
+      35.186137
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.081578,
+     35.186137
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "센텀2지구",
+    "line": "부산 연산제2센텀선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 신규 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": true,
+    "geo_prec": "dong",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 신규 대상노선 — 예타 전",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": true,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.128221,
+      35.206705
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.128221,
+     35.206705
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "석대역",
+    "line": "부산 연산제2센텀선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 신규 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 신규 대상노선 — 예타 전",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.136859,
+      35.218113
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.136859,
+     35.218113
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "자갈치역",
+    "line": "부산 송도선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.029535,
+      35.098186
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.029535,
+     35.098186
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "송도해수욕장",
+    "line": "부산 송도선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.017339,
+      35.075721
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.017339,
+     35.075721
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "장림역",
+    "line": "부산 송도선",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "부산 2차 도시철도망 대상노선 — 예타 전",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "부산 2차 도시철도망 대상노선 — 예타 전",
+      "state": "current",
+      "src": "부산광역시"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "절차 문서 확인 — 「예타」",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.977458,
+      35.080159
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.977458,
+     35.080159
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "용유역",
+    "line": "영종 자기부상열차 확장",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "인천 2차 도시철도망 **후보노선** — 도시철도 운행 중단('23.9), 궤도시설 전환 검토",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "인천 2차 도시철도망 **후보노선** — 도시철도 운행 중단('23.9), 궤도시설 전환 검토",
+      "state": "current",
+      "src": "국토교통부·인천시 고시 제2026-75호"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.422345,
+      37.42645
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.422345,
+     37.42645
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "을왕리해수욕장",
+    "line": "영종 자기부상열차 확장",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "인천 2차 도시철도망 **후보노선** — 도시철도 운행 중단('23.9), 궤도시설 전환 검토",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "인천 2차 도시철도망 **후보노선** — 도시철도 운행 중단('23.9), 궤도시설 전환 검토",
+      "state": "current",
+      "src": "국토교통부·인천시 고시 제2026-75호"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.375171,
+      37.446038
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.375171,
+     37.446038
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "왕산해수욕장",
+    "line": "영종 자기부상열차 확장",
+    "lvl": "B",
+    "gate": "신호",
+    "confirmed": false,
+    "status": "인천 2차 도시철도망 **후보노선** — 도시철도 운행 중단('23.9), 궤도시설 전환 검토",
+    "phase": "계획",
+    "st_status": "미정",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "pt_type": "rail_station",
+    "src_tier": "official_notice",
+    "milestones": [
+     {
+      "phase": "계획",
+      "stage": "인천 2차 도시철도망 **후보노선** — 도시철도 운행 중단('23.9), 궤도시설 전환 검토",
+      "state": "current",
+      "src": "국토교통부·인천시 고시 제2026-75호"
+     },
+     {
+      "phase": "인가",
+      "stage": "인가",
+      "state": "future"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "state": "future"
+     }
+    ],
+    "note": "구간 표기 지점 · 정거장 위치 미공표",
+    "audited": "2026-08-04",
+    "drop": null,
+    "stage_checked": "2026-08-04",
+    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.369319,
+      37.455594
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-08-05",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-05",
+    "last_movement": "2026-08-05",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.369319,
+     37.455594
     ]
    }
   },
