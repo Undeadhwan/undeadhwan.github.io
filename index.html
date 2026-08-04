@@ -3367,6 +3367,10 @@ function initLeaflet() {
       const [x, y] = f.geometry.coordinates;
       routeHl.push(L.circleMarker([y, x], { pane: "sig", radius: 9, color: "#fff", weight: 3.5, fill: false, opacity: .95, interactive: false }).addTo(map));
       routeHl.push(L.circleMarker([y, x], { pane: "sig", radius: 9, color: col, weight: 1.5, fill: false, opacity: .9, interactive: false }).addTo(map));
+      // 역명 라벨 파리티(아실 벤치마크 2026-08-04) — 카카오판과 같은 .rail-name 재사용.
+      // ⚠ 폴백 렌더러는 선 레지스트리 구조가 달라(신호 단위 drawLine) 노선 격리는 카카오판만.
+      routeHl.push(L.marker([y, x], { pane: "sig", interactive: false,
+        icon: L.divIcon({ className: "", html: `<div class="rail-name">${p.name}</div>`, iconSize: null }) }).addTo(map));
     }
     if (fit && routeHl.length) {
       try { map.fitBounds(L.featureGroup(routeHl).getBounds().pad(0.12)); } catch (e) {}
@@ -3598,7 +3602,7 @@ function initKakao() {
   /* 노선 선형: 뷰포트와 무관하므로 **1회 생성 후 setMap 토글만**(줌마다 149개·수천 정점 재생성이 버벅임 주범).
      클릭 판정: 카카오는 히트 영역이 선 굵기 그대로라 3px 선은 못 누른다 → 투명 굵은 히트선(14px)을 위에 깔고
      클릭·hover를 거기서 받는다. phase 미상(예타 등 고시 전) 노선은 "계획"으로 취급해 단계 필터에 반응(사용자 2026-07-21 — 5호선 김포연장이 필터에 안 죽던 원인). */
-  let railLabels = [], railLineObjs = null, _railCacheN = -1;
+  let railLabels = [], railLineObjs = null, _railCacheN = -1, routeIsoName = null;
   const buildRailLines = () => {
     if (railLineObjs) railLineObjs.forEach(o => o.objs.forEach(l => l.setMap(null)));
     railLineObjs = [];
@@ -3690,6 +3694,7 @@ function initKakao() {
         hits.push(hit);
       });
       railLineObjs.push({ objs, hits, isRoad, ph: p.phase || "계획",
+        nms: [p.name, p.full, p.official_name].filter(Boolean),   // 노선 격리(상세 하이라이트) 매칭 키
         lvl: p.lvl || (isRoad ? "C" : railLevelOf(p.full || p.name, p.linekind)) });   // 등급 LOD용(어댑터와 같은 폴백)
     }
   };
@@ -3710,7 +3715,10 @@ function initKakao() {
          methodology §지도 LOD의 명문 규칙은 정반대다: "줌아웃엔 **선만**". 등급은 굵기·zIndex에만 쓴다.
          (2026-07-30 사용자 제보 "서남선은 역사는 있는데 노선이 안보여 … 자꾸 기준이 바뀌면 곤란해") */
       const show = (o.isRoad ? filter.lines.has("도로선") : filter.lines.has("철도선"))
-        && (!phaseFiltering || filter.phase.has(o.ph));
+        && (!phaseFiltering || filter.phase.has(o.ph))
+        // 노선 상세 격리(2026-08-04 아실 벤치마크) — 상세를 열면 그 노선만 남긴다.
+        // 여기(가시성 단일 결정점)에 넣어야 지도 이동·재렌더에도 격리가 유지된다.
+        && (!routeIsoName || (o.nms || []).includes(routeIsoName));
       o.objs.forEach(l => l.setMap(show ? map : null));
       o.hits.forEach(l => l.setMap(show ? map : null));
     }
@@ -3723,6 +3731,8 @@ function initKakao() {
       if (p.gate === "관찰") continue;   // 관찰 게이트 — 라벨도 미표시
       if (!(filter.sub.has(subId("교통", isRoad ? "도로" : "철도")) || filter.lines.has(isRoad ? "도로선" : "철도선"))) continue;   // 철도·역 또는 노선선형(2026-07-23)
       if (phaseFiltering && !filter.phase.has(p.phase || "계획")) continue;
+      // 격리 중인 노선의 소속역 라벨은 하이라이트가 자체 표시한다(중복 라벨 방지)
+      if (routeIsoName && (p.line === routeIsoName || p.line_official === routeIsoName)) continue;
       const [x, y] = f.geometry.coordinates; if (!b.contain(LL(x, y))) continue;
       const elx = document.createElement("div"); elx.className = "rail-name"; elx.textContent = p.name; elx.style.pointerEvents = "none";
       railLabels.push(new K.CustomOverlay({ map, position: LL(x, y), content: elx, zIndex: 7, yAnchor: .5, xAnchor: .5 }));
@@ -3859,14 +3869,22 @@ function initKakao() {
       roadLinePoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 0, strokeOpacity: 0, fillColor: col, fillOpacity: .05, zIndex: 5 }))); return; }
     signalPoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 1.5, strokeColor: col, strokeOpacity: .85, fillColor: col, fillOpacity: .14, zIndex: 5 }))); };
   const showRadius = s => { clearRadius(); addRadius(s); }; const showRadiusMany = list => { clearRadius(); list.forEach(addRadius); };
-  let routeHl = []; const clearRoute = () => { routeHl.forEach(o => o.setMap(null)); routeHl = []; };
+  let routeHl = []; const clearRoute = () => { routeHl.forEach(o => o.setMap(null)); routeHl = [];
+    if (routeIsoName) { routeIsoName = null; try { renderRail(); } catch (e) {} } };   // 격리 해제 → 필터 기준 복원
   const highlightRoute = (lineName, fit) => { clearRoute(); if (!lineName) return; const col = CAT_COLOR["교통"]; let bounds = new K.LatLngBounds();
     for (const f of RAIL.concat(ROADF)) { const p = f.properties; if (f.geometry.type === "Point") continue; if (p.geom_omitted) continue;   // 숨긴 선형은 하이라이트에서도 안 그린다(2026-07-29 — 지점 링만)
       if (p.name !== lineName && p.full !== lineName && p.official_name !== lineName) continue;
       const segs = f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates]; const dashed = (!["착공", "준공"].some(k => (p.phase || "").startsWith(k)));
       segs.forEach(seg => { const ll = seg.map(([x, y]) => { const q = LL(x, y); bounds.extend(q); return q; }); routeHl.push(new K.Polyline({ map, path: ll, strokeColor: "#fff", strokeWeight: 11, strokeOpacity: .85, zIndex: 21 })); routeHl.push(new K.Polyline({ map, path: ll, strokeColor: col, strokeWeight: 5.5, strokeOpacity: .95, strokeStyle: dashed ? "shortdash" : "solid", zIndex: 22 })); }); }
     for (const f of RAIL.concat(ROADF)) { const p = f.properties; if (p.kind !== "station" || p.signal === false) continue; if (p.line !== lineName && p.line_official !== lineName) continue; const [x, y] = f.geometry.coordinates;
-      const elx = document.createElement("div"); elx.style.cssText = "width:18px;height:18px;border-radius:50%;border:3.5px solid #fff;box-shadow:0 0 0 1.5px " + col + ";pointer-events:none"; routeHl.push(new K.CustomOverlay({ map, position: LL(x, y), content: elx, zIndex: 23, yAnchor: .5, xAnchor: .5 })); }
+      const elx = document.createElement("div"); elx.style.cssText = "width:18px;height:18px;border-radius:50%;border:3.5px solid #fff;box-shadow:0 0 0 1.5px " + col + ";pointer-events:none"; routeHl.push(new K.CustomOverlay({ map, position: LL(x, y), content: elx, zIndex: 23, yAnchor: .5, xAnchor: .5 }));
+      // 역명 라벨 — 상세(하이라이트) 중엔 줌과 무관하게 소속역 이름을 단다(2026-08-04 아실 벤치마크).
+      // 기존 z14+ 라벨 컴포넌트(.rail-name) 재사용 — 새 문법 추가 없음(DESIGN.md 불변).
+      const lb = document.createElement("div"); lb.className = "rail-name"; lb.textContent = p.name; lb.style.pointerEvents = "none";
+      routeHl.push(new K.CustomOverlay({ map, position: LL(x, y), content: lb, zIndex: 24, yAnchor: .5, xAnchor: .5 })); }
+    // ── 노선 격리(아실 벤치마크 2026-08-04 — "노선을 클릭했을 때는 노선 자체만") ──
+    // 실제 숨김·복원은 renderRail(가시성 단일 결정점)이 한다 — 여기서는 대상 이름만 선언.
+    if (routeHl.length) { routeIsoName = lineName; try { renderRail(); } catch (e) {} }
     if (fit && !bounds.isEmpty()) { try { map.setBounds(bounds); } catch (e) {} } };
   let aptMarker = null;
   const showAptAnchor = a => { if (aptMarker) aptMarker.setMap(null); const elx = document.createElement("div"); elx.className = "dong-badge"; elx.style.cssText = "border-color:var(--c-house);color:var(--c-house)"; elx.textContent = "◎ " + a.n;
@@ -4138,7 +4156,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260804i");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260804j");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4300,7 +4318,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260804i"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260804j"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4326,7 +4344,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260804i");
+  const CB = "?b=" + (window.BUILD || "20260804j");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
