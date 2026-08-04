@@ -3249,7 +3249,11 @@ function initLeaflet() {
     goHome();
   });
   refreshJeongbiPoly = renderJeongbiPoly;   // 시점 슬라이더 → 폴리곤 재렌더 브리지
-  window._dbg = { applyLOD, renderDongLabels, renderHojae, renderAptDots, get badges() { return badges; }, get hjDots() { return hjDots; }, map, get jbPoly() { return JEONGBI_POLY; }, get jbPolys() { return jbPolys; } };
+  // ⚠ renderHojae는 **카카오판에만 있는 이름**이다(3235 가드와 같은 사정). 여기서 맨이름으로
+  //    참조하면 ReferenceError가 나 initLeaflet이 **이 줄에서 통째로 중단**된다 — 아래 노선
+  //    레이어(lines·drawLine) 초기화가 전부 미실행. 3235는 가드했는데 17줄 뒤에서 되살아났다.
+  //    **가드는 부르는 곳뿐 아니라 참조하는 곳 전부에 건다.** (2026-08-05 폴백 화면 실측)
+  window._dbg = { applyLOD, renderDongLabels, renderHojae: typeof renderHojae === "function" ? renderHojae : null, renderAptDots, get badges() { return badges; }, get hjDots() { return hjDots; }, map, get jbPoly() { return JEONGBI_POLY; }, get jbPolys() { return jbPolys; } };
 
   let lines = [];
   const clearLines = () => { lines.forEach(l => map.removeLayer(l)); lines = []; };
@@ -3536,7 +3540,16 @@ function initKakao() {
       // lv8에서 B급 정비구역 65개는 보이는데 **S급 GTX 역은 0개**였다 — 등급 LOD와 역·IC LOD가
       // 서로 다른 축으로 돌아 등급 높은 신호가 먼저 사라졌다. lv8에서 역·IC 71개(S 17·A 33·B 21).
       // Leaflet 폴백의 z≥10과 같은 경계다(lv = 18 − z) — 두 렌더러가 어긋나면 폴백에서 다르게 보인다.
-      .filter(s => lv <= 8 || !(s.pt_type === "rail_station" || s.pt_type === "road_ic"))
+      // ★ 예외(2026-08-05 사용자 확정): **그 수단의 선형 토글이 꺼져 있으면 숨기지 않는다.**
+      // "줌아웃엔 선만"의 전제는 *선이 대신 보여준다*는 것이다. 선을 끄면 그 전제가 사라져,
+      // 교통만 켠 광역 화면에 역·IC가 **아닌** 점(환승·터미널·대표점 사업)만 남아 무엇을
+      // 기준으로 찍힌 점인지 알 수 없는 화면이 됐다. 철도선/도로선은 각각 자기 수단만 푼다.
+      .filter(s => {
+        if (lv <= 8) return true;
+        if (s.pt_type === "rail_station") return !filter.lines.has("철도선");
+        if (s.pt_type === "road_ic") return !filter.lines.has("도로선");
+        return true;
+      })
       .filter(s => s.geometry && s.geometry.coordinates)
       .filter(s => { const c = s.geometry.coordinates; return b.contain(LL(c[0], c[1])); });
     // 표시 규칙(2026-07-27 사용자 확정): 뷰포트 내 후보를 **등급 우선 → 중심 가까운 순**으로 정렬해
@@ -4204,7 +4217,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260805a");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260805b");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4366,7 +4379,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260805a"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260805b"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4392,7 +4405,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260805a");
+  const CB = "?b=" + (window.BUILD || "20260805b");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
