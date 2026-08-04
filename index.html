@@ -433,7 +433,8 @@
   /* 노선명 배지(2026-08-04 아실 벤치마크, 사용자 확정: 줌 구간 한정·색=분류 유지·단계=우리 백본+목표년도).
      광역 줌(lv5~11)에서 노선당 1개(중점) — 확대하면 역명 라벨(.rail-name)과 교대한다. */
   .line-badge { background:rgba(255,255,255,.95); border:1.5px solid var(--c-traffic); border-radius:9px;
-    padding:3px 9px; box-shadow:0 1px 4px rgba(0,0,0,.2); cursor:pointer; white-space:nowrap; text-align:center; }
+    padding:3px 9px; box-shadow:0 1px 4px rgba(0,0,0,.2); cursor:pointer; white-space:nowrap; text-align:center;
+    user-select:none; -webkit-user-select:none; }   /* 실클릭 시 텍스트 캐럿·선택 방지(2026-08-04 사용자 "프롬프트가 깜빡여") */
   .line-badge b { display:block; font-size:12px; color:var(--ink); font-weight:700; line-height:1.25; }
   .line-badge small { display:block; font-size:10px; color:var(--ink2); line-height:1.3; }
   /* 카카오 CustomOverlay 래퍼 div는 pe:auto가 기본이라 역명 라벨이 그 아래 호재원 마커의 호버를 가로챈다
@@ -3567,11 +3568,14 @@ function initKakao() {
         if (!ov) {
           const el = document.createElement("div"); el.className = "cl-badge";
           el.onclick = () => { hideTip(); showCluster(el._g); };
-          ov = new K.CustomOverlay({ position: ll, content: el, zIndex: 11, yAnchor: .5, xAnchor: .5 });
+          // clickable:true + mousedown 차단 — 실마우스 클릭이 지도 패닝·텍스트 선택으로 새는 것 방지
+          // (line-badge와 같은 사고 클래스, 2026-08-04)
+          el.onmousedown = ev => { ev.preventDefault(); ev.stopPropagation(); };
+          ov = new K.CustomOverlay({ position: ll, content: el, zIndex: 11, yAnchor: .5, xAnchor: .5, clickable: true });
           ov._el = el; clusterOv.set(gk, ov);
         } else ov.setPosition(ll);   // 멤버 중심 갱신(팬/멤버 변화 반영)
         ov._el._g = g; ov._el.textContent = "+" + g.length;   // 현재 표시 조건의 멤버·개수로 갱신
-        ov._el.style.opacity = routeIsoName ? .25 : 1;        // 노선 격리 중 흐림(베일이 오버레이층엔 안 닿음)
+        ov._el.style.display = routeIsoName ? "none" : "";    // 노선 격리 중 숨김(호재 원과 함께 — 노선만 남긴다)
         ov.setMap(map); nextCl.add(gk);
         g.forEach(m => { if (m._kmk) m._kmk.setMap(null); hjShown.delete(m); });   // 개별 마커 숨김
         continue;
@@ -3587,9 +3591,10 @@ function initKakao() {
         K.event.addListener(mk, "click", () => { hideTip(); showSignal(s, false); });
         s._kmk = mk; s._kmkKey = key;
       } else if (s._kmkKey !== key) { s._kmk.setImage(hojaeMarkerImage(t.col, t.r, t.bw, t.solid, t.fillOp, t.alpha, isApprox(s))); s._kmkKey = key; }
-      // 노선 격리 중엔 소속역 외 호재 원을 흐린다(베일이 마커층엔 안 닿아서 — 2026-08-04 아실 벤치마크)
-      s._kmk.setOpacity(routeIsoName && s.line !== routeIsoName ? .22 : 1);
-      s._kmk.setMap(map); next.add(s); hjShown.delete(s); }
+      // 노선 격리 중엔 호재 원을 **숨긴다**(2026-08-04 사용자 "호재별 원표시도 없애" — 흐림→제거.
+      // 소속역은 하이라이트 링·역명 라벨이 대신 표기한다). 해제 시 clearRoute→renderHojae가 복원.
+      s._kmk.setOpacity(1);
+      s._kmk.setMap(routeIsoName ? null : map); next.add(s); hjShown.delete(s); }
     hjShown.forEach(s => s._kmk && s._kmk.setMap(null));   // 이번에 빠진 개별 마커 끔
     hjShown = next;
     clusterOv.forEach((ov, gk) => { if (!nextCl.has(gk)) ov.setMap(null); }); };   // 이번에 빠진 배지 끔
@@ -3750,9 +3755,13 @@ function initKakao() {
         be.innerHTML = "<b></b><small></small>";
         be.firstChild.textContent = o.bnm;
         be.lastChild.textContent = o.ph + (o.beta ? " · 목표 '" + o.beta : "");
+        // ⚠ 실마우스 클릭은 mousedown이 지도 패닝·텍스트 선택으로 새면 click이 안 만들어진다
+        //   (2026-08-04 사용자 "클릭하면 프롬프트가 깜빡여. 선택이 안되" — 프로그램 click()은 정상,
+        //    실클릭만 불능이었다). mousedown 차단 + CustomOverlay clickable:true(지도 전파 차단)가 처방.
+        be.addEventListener("mousedown", ev => { ev.preventDefault(); ev.stopPropagation(); });
         be.addEventListener("click", ev => { ev.stopPropagation(); o.ck && o.ck(); });
         // zIndex 20 = 다른 오버레이(라벨 7·+N 11)보다 앞, 하이라이트(21+)보다는 뒤("맨 앞으로")
-        lineBadges.push(new K.CustomOverlay({ map, position: LL(o.mid[0], o.mid[1]), content: be, zIndex: 20, yAnchor: .5, xAnchor: .5 }));
+        lineBadges.push(new K.CustomOverlay({ map, position: LL(o.mid[0], o.mid[1]), content: be, zIndex: 20, yAnchor: .5, xAnchor: .5, clickable: true }));
       }
     }
     // 역명 라벨(z<=APT_LV, 뷰포트 의존 — 매번 재계산)
@@ -4194,7 +4203,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260804m");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260804n");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4356,7 +4365,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260804m"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260804n"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4382,7 +4391,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260804m");
+  const CB = "?b=" + (window.BUILD || "20260804n");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
