@@ -206,9 +206,14 @@
   /* ── 아파트 비교 (§4.5 가드레일: 점수·승자 없음, 컬럼 등가) ── */
   .cmpbar { position:fixed; left:50%; bottom:16px; transform:translateX(-50%); z-index:3000; background:#1a1a1a; color:#fff;
             border-radius:14px; padding:9px 12px; display:flex; align-items:center; gap:8px; box-shadow:0 8px 26px rgba(0,0,0,.32); max-width:92vw; }
-  .cmpbar .cchip { background:#333; border-radius:8px; padding:5px 8px; font-size:12px; display:flex; align-items:center; gap:6px; white-space:nowrap; }
+  /* 칩만 가로 스크롤 · 「비교하기」는 절대 안 밀린다(flex-shrink:0). 종전엔 칩과 버튼이 같은
+     flex 자식이라 칩 3개부터 버튼이 화면 밖으로 나가 **누를 수가 없었다**(2026-08-04 실기기 제보). */
+  .cmpbar .cchips { display:flex; align-items:center; gap:8px; overflow-x:auto; min-width:0;
+                    flex:1 1 auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+  .cmpbar .cchips::-webkit-scrollbar { display:none; }
+  .cmpbar .cchip { background:#333; border-radius:8px; padding:5px 8px; font-size:12px; display:flex; align-items:center; gap:6px; white-space:nowrap; flex-shrink:0; }
   .cmpbar .cchip .x { cursor:pointer; opacity:.7; } .cmpbar .cchip .x:hover { opacity:1; }
-  .cmpbar .cgo { background:#fff; color:#1a1a1a; font-weight:800; border-radius:9px; padding:7px 13px; cursor:pointer; font-size:13px; white-space:nowrap; }
+  .cmpbar .cgo { background:#fff; color:#1a1a1a; font-weight:800; border-radius:9px; padding:7px 13px; cursor:pointer; font-size:13px; white-space:nowrap; flex-shrink:0; }
   .cmpbar .cgo.dim { opacity:.4; pointer-events:none; }
   .cmpAdd { display:inline-block; font-size:11px; font-weight:700; border:1.5px solid #1a1a1a; border-radius:8px; padding:3px 9px; cursor:pointer; background:#fff; color:#1a1a1a; }
   .cmpAdd.in { background:#1a1a1a; color:#fff; }
@@ -231,6 +236,19 @@
   /* ⚠ min-width:max-content 금지 — 1fr이 제목 길이만큼 벌어져 첫 컬럼이 화면을 다 먹고
      나머지 단지가 스크롤 밖으로 밀린다(2026-07-30 4단지 비교에서 1개만 보임). 컬럼은 모달 폭을 나눈다. */
   .cmpg { display:grid; gap:0 20px; }
+  /* ── 모바일 비교 (2026-08-04 사용자 제보 "비교 상세에서 텍스트가 넘침") ──────────────
+     `.cmpg`는 `minmax(236px,1fr)` 열을 단지 수만큼 만든다. 375px 화면에서 2단지면 두 열이
+     최소 472px을 요구해 **오른쪽 열이 통째로 잘렸다**(제목·거리·단계가 다 깨져 읽을 수 없음).
+     세로로 쌓으면 '나란히 비교'라는 목적 자체가 사라지므로, **한 열이 화면을 채우고 옆으로
+     넘기는** 방식으로 간다(모바일 비교의 표준). 스크롤 스냅으로 열 경계에 딱 멈춘다. */
+  @media (max-width: 768px) {
+    #cmpModal .rmpanel { width:96vw; }
+    #cmpModal .bd { scroll-snap-type:x mandatory; overscroll-behavior-x:contain; }
+    .cmpg { grid-template-columns:none !important; grid-auto-flow:column;
+            grid-auto-columns:82vw; gap:0 14px; }
+    .cmpg > * { scroll-snap-align:start; min-width:0; }
+    .cmpnote { font-size:11.5px; }
+  }
   .cmpcol .apth { padding:2px 0 9px; border-bottom:1px solid var(--line); }
   .cmpcol .apth b { font-size:16px; }
   .cmpcol .apth .m { color:var(--ink2); font-size:var(--fs-s); margin-top:3px; }
@@ -2229,8 +2247,12 @@ function renderCompareBar() {
   const bar = document.getElementById("cmpBar");
   if (!compareSet.length) { bar.className = ""; bar.innerHTML = ""; return; }
   bar.className = "cmpbar";
+  // 칩은 **스크롤 영역 안에**, 「비교하기」는 **밖에** 둔다 — 종전엔 둘이 같은 flex 자식이라
+  // 칩 3개부터 버튼이 화면 밖으로 밀려 누를 수가 없었다(2026-08-04 사용자 제보, 실기기 375px).
   bar.innerHTML =
-    compareSet.map((a, i) => `<span class="cchip">${a.n.length > 10 ? a.n.slice(0, 10) + "…" : a.n}<span class="x" data-i="${i}">✕</span></span>`).join("")
+    `<span class="cchips">`
+    + compareSet.map((a, i) => `<span class="cchip">${a.n.length > 10 ? a.n.slice(0, 10) + "…" : a.n}<span class="x" data-i="${i}">✕</span></span>`).join("")
+    + `</span>`
     + `<span class="cgo ${compareSet.length < 2 ? "dim" : ""}" id="cgo">비교하기 (${compareSet.length})</span>`;
   bar.querySelectorAll(".cchip .x").forEach(x => x.onclick = () => { compareSet.splice(+x.dataset.i, 1); renderCompareBar(); if (view.mode === "apt") renderPanel(); });
   const go = bar.querySelector("#cgo");
@@ -2315,6 +2337,10 @@ function cmpColumn(a) {
 }
 function openCompare() {
   if (compareSet.length < 2) return;
+  // 지도 위 단지 말풍선(「✓ 비교함」)을 닫는다 — 모달을 열어도 뒤에 계속 떠 있었고, 모달을 닫은
+  // 뒤에도 남아 손으로 지도를 눌러야 사라졌다(2026-08-04 실기기 제보). 마우스는 딴 데 클릭하면
+  // 닫히지만 터치에선 그 동작이 없다.
+  mapApi?.hideTip?.(); mapApi?.closeAptPop?.();
   renderCompareBody();
   document.getElementById("cmpModal").style.display = "block";
 }
@@ -3362,7 +3388,9 @@ function initLeaflet() {
   };
   mapApi = { refreshPins, panTo: ll => map.panTo([ll[1], ll[0]]), showRadius, showRadiusMany, clearRadius, showAptAnchor,
              highlightRings, clearHighlight, clearAptMarker, emphasizePin, radarPulse, sggRings: () => window._sggRings,
-             highlightRoute, clearRoute };   // viewFilter 제거(2026-07-27) — 소비처 없는 죽은 API였다
+             highlightRoute, clearRoute,
+             closeAptPop: () => map.closePopup() };   // Leaflet판 단지 말풍선은 leaflet popup이다(카카오판과 구현이 다름)
+  // viewFilter 제거(2026-07-27) — 소비처 없는 죽은 API였다
   // (뱃지 카운트는 지역/필터 기준 고정 — 지도 이동마다 갱신하지 않는다, 2026-07-23)
   refreshPins();
 }
@@ -3845,7 +3873,7 @@ function initKakao() {
   let hlPolys = []; const clearHighlight = () => { hlPolys.forEach(o => o.setMap(null)); hlPolys = []; };
   const highlightRings = ringsXY => { clearHighlight(); if (!ringsXY || !ringsXY.length) return; ringsXY.forEach(r => hlPolys.push(new K.Polygon({ map, path: r.map(([x, y]) => LL(x, y)), strokeWeight: 2.5, strokeColor: "#5b3fd4", strokeOpacity: .95, fillColor: "#5b3fd4", fillOpacity: .12, zIndex: 6 }))); };
   const sggRingsFn = () => { if (window._sggRings) return window._sggRings; const m = {}; SGG_GEO.features.forEach(f => { const disp = f.properties.sido + " " + sggDisplayName(f.properties.name); ringsOf(f).forEach(r => (m[disp] = m[disp] || []).push(r)); }); return (window._sggRings = m); };
-  mapApi = { refreshPins, panTo: ll => map.panTo(LL(ll[0], ll[1])), showRadius, showRadiusMany, clearRadius, showAptAnchor, highlightRings, clearHighlight, clearAptMarker, emphasizePin, radarPulse, sggRings: sggRingsFn, highlightRoute, clearRoute, hideTip };   // viewFilter 제거(2026-07-27) — 소비처 없는 죽은 API였다
+  mapApi = { refreshPins, panTo: ll => map.panTo(LL(ll[0], ll[1])), showRadius, showRadiusMany, clearRadius, showAptAnchor, highlightRings, clearHighlight, clearAptMarker, emphasizePin, radarPulse, sggRings: sggRingsFn, highlightRoute, clearRoute, hideTip, closeAptPop };   // viewFilter 제거(2026-07-27) — 소비처 없는 죽은 API였다
   // (뱃지 카운트는 지역/필터 기준 고정 — 지도 이동마다 갱신하지 않는다, 2026-07-23)
   refreshPins();
 }
@@ -4103,7 +4131,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260804a");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260804b");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4265,7 +4293,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260804a"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260804b"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4291,7 +4319,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260804a");
+  const CB = "?b=" + (window.BUILD || "20260804b");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
