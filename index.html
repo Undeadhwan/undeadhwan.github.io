@@ -3549,12 +3549,11 @@ function initKakao() {
         return ((ca[0] - _ccx) ** 2 + (ca[1] - _ccy) ** 2) - ((cb[0] - _ccx) ** 2 + (cb[1] - _ccy) ** 2); })
       .slice(0, MAX_DOTS);
     // 겹침 배지 기준 이력: 30px 격자(남발) → 완전 동일 좌표만(2026-07-27 사용자 "정확히 똑같은
-    // 위치가 아니면 묶지 마라") → **소폭 허용오차**(2026-08-04 사용자 "이렇게 미세한 차이는 중첩
-    // 적용 되야 할듯" — 검단 신도시에서 수십 m 차 원들이 겹쳐 구분 불가). 14px 격자: 이전 남발
-    // (30px)의 절반 이하라 이웃 호재를 삼키지 않으면서, 화면상 실제로 포개지는 것만 묶는다.
+    // 위치가 아니면 묶지 마라") → 14px(2026-08-04 "미세한 차이는 중첩 적용") → **5px**(같은 날
+    // 사용자 "14px로 하니깐 중첩이 너무 많이 되네. 5px정도로" — 사실상 맞닿은 것만 묶는다).
     const _dppx = (() => { try { const bb = map.getBounds();
       return (bb.getSouthWest() ? Math.abs(bb.getNorthEast().getLng() - bb.getSouthWest().getLng()) : .1) / (mapEl.clientWidth || 800); } catch (e) { return 1e-4; } })();
-    const _cell = _dppx * 14;
+    const _cell = _dppx * 5;
     const cellKey = (x, y) => Math.round(x / _cell) + "," + Math.round(y / _cell);
     const groups = new Map();
     for (const s of pool) { const c = s.geometry.coordinates; const gk = cellKey(c[0], c[1]);
@@ -3761,7 +3760,9 @@ function initKakao() {
         be.addEventListener("mousedown", ev => { ev.preventDefault(); ev.stopPropagation(); });
         be.addEventListener("click", ev => { ev.stopPropagation(); o.ck && o.ck(); });
         // zIndex 20 = 다른 오버레이(라벨 7·+N 11)보다 앞, 하이라이트(21+)보다는 뒤("맨 앞으로")
-        lineBadges.push(new K.CustomOverlay({ map, position: LL(o.mid[0], o.mid[1]), content: be, zIndex: 20, yAnchor: .5, xAnchor: .5, clickable: true }));
+        // yAnchor 1.55 = 기점 **위로 띄운다**(아실 방식) — 기점에 겹쳐 두면 역명 라벨(.rail-name,
+        // 오른쪽 오프셋)과 서로 가린다(2026-08-04 사용자 "노선 뱃지를 가려. 옆으로 옮겨야 할듯").
+        lineBadges.push(new K.CustomOverlay({ map, position: LL(o.mid[0], o.mid[1]), content: be, zIndex: 20, yAnchor: 1.55, xAnchor: .5, clickable: true }));
       }
     }
     // 역명 라벨(z<=APT_LV, 뷰포트 의존 — 매번 재계산)
@@ -4203,7 +4204,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260804n");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260804o");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4365,7 +4366,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260804n"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260804o"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4391,7 +4392,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260804n");
+  const CB = "?b=" + (window.BUILD || "20260804o");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
