@@ -430,6 +430,12 @@
   .rail-name { font-size:10.5px; font-weight:700; color:var(--ink); background:rgba(255,255,255,.92);
     border:1px solid var(--c-traffic); border-radius:8px; padding:1px 5px; white-space:nowrap;
     transform:translate(10px,-50%); box-shadow:0 1px 3px rgba(0,0,0,.18); }   /* z14+ 역명 라벨(원은 renderHojae) */
+  /* 노선명 배지(2026-08-04 아실 벤치마크, 사용자 확정: 줌 구간 한정·색=분류 유지·단계=우리 백본+목표년도).
+     광역 줌(lv5~11)에서 노선당 1개(중점) — 확대하면 역명 라벨(.rail-name)과 교대한다. */
+  .line-badge { background:rgba(255,255,255,.95); border:1.5px solid var(--c-traffic); border-radius:9px;
+    padding:3px 9px; box-shadow:0 1px 4px rgba(0,0,0,.2); cursor:pointer; white-space:nowrap; text-align:center; }
+  .line-badge b { display:block; font-size:12px; color:var(--ink); font-weight:700; line-height:1.25; }
+  .line-badge small { display:block; font-size:10px; color:var(--ink2); line-height:1.3; }
   /* 카카오 CustomOverlay 래퍼 div는 pe:auto가 기본이라 역명 라벨이 그 아래 호재원 마커의 호버를 가로챈다
      (가정역 실측: 중심/라벨 위 배지 안 뜸). 내부 .rail-name은 pe:none인데 래퍼는 아니므로 래퍼도 통과시킨다. */
   div:has(> .rail-name) { pointer-events:none; }
@@ -3602,7 +3608,7 @@ function initKakao() {
   /* 노선 선형: 뷰포트와 무관하므로 **1회 생성 후 setMap 토글만**(줌마다 149개·수천 정점 재생성이 버벅임 주범).
      클릭 판정: 카카오는 히트 영역이 선 굵기 그대로라 3px 선은 못 누른다 → 투명 굵은 히트선(14px)을 위에 깔고
      클릭·hover를 거기서 받는다. phase 미상(예타 등 고시 전) 노선은 "계획"으로 취급해 단계 필터에 반응(사용자 2026-07-21 — 5호선 김포연장이 필터에 안 죽던 원인). */
-  let railLabels = [], railLineObjs = null, _railCacheN = -1, routeIsoName = null;
+  let railLabels = [], lineBadges = [], railLineObjs = null, _railCacheN = -1, routeIsoName = null;
   const buildRailLines = () => {
     if (railLineObjs) railLineObjs.forEach(o => o.objs.forEach(l => l.setMap(null)));
     railLineObjs = [];
@@ -3693,19 +3699,25 @@ function initKakao() {
         K.event.addListener(hit, "mouseout", hideTip);
         hits.push(hit);
       });
+      // 노선명 배지 재료 — 중점 좌표·목표년도(마일스톤 eta = 소스가 준 목표만, 없으면 미표기 P2)
+      const _bflat = segs.flat();
+      const _beta = (((p.milestones || []).filter(m => m.eta).pop() || {}).eta || "").slice(2, 4);
       railLineObjs.push({ objs, hits, isRoad, ph: p.phase || "계획",
         nms: [p.name, p.full, p.official_name].filter(Boolean),   // 노선 격리(상세 하이라이트) 매칭 키
+        ck: clickHandler, bnm: p.name, beta: _beta, mid: _bflat[Math.floor(_bflat.length / 2)],
         lvl: p.lvl || (isRoad ? "C" : railLevelOf(p.full || p.name, p.linekind)) });   // 등급 LOD용(어댑터와 같은 폴백)
     }
   };
   const renderRail = () => {
     railLabels.forEach(o => o.setMap(null)); railLabels = [];
+    lineBadges.forEach(o => o.setMap(null)); lineBadges = [];
     const nData = RAIL.length + ROADF.length;
     if (!nData) return;
     if (nData !== _railCacheN) { buildRailLines(); _railCacheN = nData; }   // 지연 로드 대응 — 데이터가 바뀐 경우만 재생성
     const catOn = filter.cat.has("교통");
     const phaseFiltering = filter.phase.size < PHASES.length;
     const lodSet = new Set(lodGrades(map.getLevel()));   // 선도 핀과 같은 등급 LOD(줌아웃=S만, 2026-07-22)
+    const _bLv = map.getLevel(), _bB = (_bLv >= 5 && _bLv <= 11) ? map.getBounds() : null;   // 노선명 배지 줌 구간
     for (const o of railLineObjs) {
       // 선형은 **노선 선형 토글(filter.lines)만**으로 표시한다(2026-07-23 분리). 점 호재(역 원)와 독립 —
       // "철도선만 보기"(전체해제 + 철도선)가 가능. 교통 분류/철도·역 토글은 역 원만 좌우한다.
@@ -3721,6 +3733,16 @@ function initKakao() {
         && (!routeIsoName || (o.nms || []).includes(routeIsoName));
       o.objs.forEach(l => l.setMap(show ? map : null));
       o.hits.forEach(l => l.setMap(show ? map : null));
+      // 노선명 배지(2026-08-04 사용자 확정: 광역 줌 lv5~11 한정·노선당 1개(중점)·색=분류 유지·
+      // 단계=우리 백본 + 목표년도는 소스가 준 것만 「목표 'NN」로). 확대(lv≤4)하면 역명 라벨과 교대.
+      if (show && o.mid && _bLv >= 5 && _bLv <= 11 && _bB && _bB.contain(LL(o.mid[0], o.mid[1]))) {
+        const be = document.createElement("div"); be.className = "line-badge";
+        be.innerHTML = "<b></b><small></small>";
+        be.firstChild.textContent = o.bnm;
+        be.lastChild.textContent = o.ph + (o.beta ? " · 목표 '" + o.beta : "");
+        be.addEventListener("click", ev => { ev.stopPropagation(); o.ck && o.ck(); });
+        lineBadges.push(new K.CustomOverlay({ map, position: LL(o.mid[0], o.mid[1]), content: be, zIndex: 8, yAnchor: .5, xAnchor: .5 }));
+      }
     }
     // 역명 라벨(z<=APT_LV, 뷰포트 의존 — 매번 재계산)
     if (!catOn || map.getLevel() > APT_LV) return;
@@ -4156,7 +4178,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260804j");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260804k");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4318,7 +4340,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260804j"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260804k"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4344,7 +4366,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260804j");
+  const CB = "?b=" + (window.BUILD || "20260804k");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
