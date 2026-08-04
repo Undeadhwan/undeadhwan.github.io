@@ -2660,6 +2660,7 @@ function showSignal(s, pan) {
   mapApi?.refreshPins?.();
   if (pan && s._pan) s._pan();
   if (s.area_shape) mapApi?.clearRadius?.();   // 지구 딱지 = 영역(폴리곤)이 곧 범위 — 영향 반경 원 안 그림
+  else if (s._line) mapApi?.clearRadius?.();   // 노선 자체 클릭 = 선 하이라이트만 — 중점 영향원은 거짓 표시(2026-08-04)
   else mapApi?.showRadius(s);   // 영향 반경 원 표시 (§3.3.1 기준표)
   // 노선 소속 신호(역·IC·노선 자체)면 소속 노선 전체를 하이라이트. 전체경로 줌맞춤(fit)은 제거 —
   // 보던 위치가 바뀌어 불편(사용자 2026-07-21). 하이라이트만 하고 지도는 그대로 둔다.
@@ -3400,7 +3401,10 @@ function initLeaflet() {
 /* 노선 → 신호 상세 어댑트(우측 패널) — 전역(카카오·Leaflet 두 렌더러 공유, 2026-07-21) */
 function railToSignal(p, cen) {
   return {
-    _rail: true, title: p.full || p.name, line: p.name, cat: "교통", sub: "철도",
+    // _line — 이 신호는 **노선 자체**다. 영향원(점 신호 문법)을 그리면 노선 중점에 원이 하나 떠서
+    // "역 1개만 영향범위가 보이는" 화면이 된다(2026-08-04 사용자 — GTX D 중점이 신림 부근이라
+    // 신림역 영향원처럼 보였다). 노선 클릭은 선 하이라이트만(showSignal이 이 플래그로 원 생략).
+    _rail: true, _line: true, title: p.full || p.name, line: p.name, cat: "교통", sub: "철도",
     lvl: p.lvl || railLevelOf(p.full || p.name, p.linekind),   // 파이프라인 판정(grade.rail_level) 우선, 없으면 폴백
     lvl_basis: p.lvl_basis, gate: p.gate, gate_basis: p.gate_basis,
     template_type: "철도", current_stage: p.status, phase: p.phase, status: p.drop ? "종결" : "활성", confirmed: p.confirmed,
@@ -4134,7 +4138,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260804h");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260804i");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4296,7 +4300,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260804h"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260804i"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4322,7 +4326,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260804h");
+  const CB = "?b=" + (window.BUILD || "20260804i");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
