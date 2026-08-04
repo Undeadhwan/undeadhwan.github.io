@@ -568,9 +568,12 @@
      상하 여백(margin 상쇄 padding)으로 **28×30px 과녁**을 만든다 — 레이아웃은 그대로 두고
      클릭 영역만 넓히는 방식(줄 높이가 늘면 목록 전체가 길어져 다른 것이 안 보인다). */
   #dock .cat-h .chev { color:var(--ink3); font-size:11px; width:16px; padding:10px 6px; margin:-10px -6px;
-    flex-shrink:0; text-align:center; transition:transform .15s; border-radius:6px; }
+    flex-shrink:0; text-align:center; border-radius:6px; }
   #dock .cat-h .chev:hover { color:var(--ink); background:var(--line); }
-  #dock .cat.open .cat-h .chev { transform:rotate(90deg); }
+  /* 회전은 **글리프만** — 상자(과녁 28×30 + hover 배경)째 돌리면 세로 상자가 가로로 누워
+     옆의 색 점을 5.8px 덮는다(2026-08-04 실측, 사용자 "접기 눌렀을 때 옆에 모양이 넘친다"). */
+  #dock .cat-h .chev::before { content:"▶"; display:inline-block; transition:transform .15s; }
+  #dock .cat.open .cat-h .chev::before { transform:rotate(90deg); }
   #dock .cat-h .cd { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
   #dock .cat-h .nm { font-weight:600; font-size:15.5px; }
   #dock .cat-h .cn { margin-left:auto; font-size:var(--fs); color:var(--ink2); font-variant-numeric:tabular-nums; }
@@ -2734,7 +2737,7 @@ function renderDock() {
         <span class="tick"></span><span class="nm">${sk === "철도" ? "철도 · 역" : sk === "미상" ? "유형 미상" : sk}</span><span class="n">${n}</span></div>`; }).join("");
     return `<div class="cat${dockOpen.has(cat) ? " open" : ""}${on ? "" : " off"}">
       <div class="cat-h" data-tog="cat" data-k="${cat}">
-        <span class="chev" data-open="${cat}" title="${dockOpen.has(cat) ? "접기" : "펼치기"}">▶</span>
+        <span class="chev" data-open="${cat}" title="${dockOpen.has(cat) ? "접기" : "펼치기"}"></span>
         <i class="cd" style="background:${col}"></i><span class="nm">${cat}</span>
         <button class="solo" data-solo="${cat}" title="이 분류만 남기고 나머지 끄기">only</button>
         <span class="cn">${(C.cat[cat] || 0).toLocaleString()}</span>
@@ -4131,7 +4134,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260804f");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260804g");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4293,7 +4296,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260804f"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260804g"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4319,7 +4322,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260804f");
+  const CB = "?b=" + (window.BUILD || "20260804g");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
