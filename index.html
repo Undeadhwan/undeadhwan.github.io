@@ -869,7 +869,7 @@ const SUB_CAVEAT = {
    진출입)과 국도·국지도(연도 접근)는 성격이 다르므로 조회축을 가른다.
    ⚠ 매핑은 **강한 쪽만 열거**한다(roadSubOf) — 「국도」/「일반국도」처럼 같은 것이 두 이름으로
    있고 앞으로도 늘 수 있어서, 약한 쪽을 열거하면 반드시 낡는다. */
-const SUB_KEYS = { "교통": ["철도", "고속·전용", "국도·국지도", "환승·터미널"], "일자리": ["오피스", "지식산업센터", "공장", "데이터센터", "복합단지", "미상"],
+const SUB_KEYS = { "교통": ["철도", "고속·전용", "국도·국지도", "환승·터미널", "미상"], "일자리": ["오피스", "지식산업센터", "공장", "데이터센터", "복합단지", "미상"],
   "인프라": ["병원", "공원·녹지", "판매", "문화·관광·체육", "학교", "공공시설", "공항", "항만", "기타시설", "미상"],
   "주거개발": ["재개발", "재건축", "주거환경개선", "소규모정비", "리모델링", "재정비촉진지구", "지역주택조합", "택지·지구", "미상"] };
 /* 주거개발 중분류(2026-07-30 신설) — 축은 **법정 사업유형**이다.
@@ -883,7 +883,7 @@ const SUB_KEYS = { "교통": ["철도", "고속·전용", "국도·국지도", "
    이름은 표시용, 키는 subId()로만 만든다. */
 const subId = (cat, sub) => cat + "|" + sub;
 const ALL_SUBS = CAT_KEYS.flatMap(c => (SUB_KEYS[c] || []).map(s => subId(c, s)));
-const CAT_SUB = { "교통": "철도 / 고속·전용 / 국도·국지도 / 환승·터미널", "일자리": "오피스 / 지식산업센터 / 공장 / 데이터센터 / 복합단지", "인프라": "병원 / 공원·녹지 / 판매 / 문화·관광·체육 / 학교(특목) / 공공시설 / 공항 / 항만 / 기타시설", "주거개발": "재개발 / 재건축 / 주거환경개선 / 소규모정비 / 지역주택조합 / 택지·지구" };
+const CAT_SUB = { "교통": "철도 / 고속·전용 / 국도·국지도 / 환승·터미널 / 미상", "일자리": "오피스 / 지식산업센터 / 공장 / 데이터센터 / 복합단지", "인프라": "병원 / 공원·녹지 / 판매 / 문화·관광·체육 / 학교(특목) / 공공시설 / 공항 / 항만 / 기타시설", "주거개발": "재개발 / 재건축 / 주거환경개선 / 소규모정비 / 지역주택조합 / 택지·지구" };
 // S 눈금(2026-07-22): 일자리·인프라 = 1조↑ 또는 연면적 30만㎡↑ / 주거 1만세대↑ / 교통 = 위계(thresholds 교통_위계)
 const LEVEL_DESC = {
   "교통": {
@@ -1266,13 +1266,17 @@ function houseSubOf(s) {
    약한 쪽을 열거하면 반드시 낡는다 — 원장에 이미 「국도」와 「일반국도」가 같은 뜻으로 공존하고,
    새 유형이 생기면 그 순간 미분류로 샌다(상류 교정을 하류가 덮는 사고와 같은 형태). */
 const ROAD_EXPRESS = new Set(["고속도로", "자동차전용", "도시고속화"]);
-const roadSubOf = p => ROAD_EXPRESS.has(p && (p.official_type || p.linekind)) ? "고속·전용" : "국도·국지도";
+const roadSubOf = p => {
+  const t = p && (p.official_type || p.linekind);
+  if (!t) return "미상";                       // 모르는 것을 아는 척 분류하지 않는다(P2) — 3번째 상태
+  return ROAD_EXPRESS.has(t) ? "고속·전용" : "국도·국지도";
+};
 /* 반경표 키는 중분류와 **다른 축**이다 — 중분류는 위계, 반경은 접근 방식(전용 IC 점 버퍼 vs
    연도 회랑)으로 갈린다. 같은 키로 쓰면 중분류를 쪼갠 순간 CLASSES.교통 조회가 빗나가고
    `SUB_KEYS["교통"][0]`(=철도) 반경표로 조용히 폴백한다. 그래서 되돌려 주는 표를 따로 둔다. */
-const RADIUS_SUB = { "고속·전용": "도로", "국도·국지도": "도로" };
+const RADIUS_SUB = { "고속·전용": "도로", "국도·국지도": "도로", "미상": "도로" };
 const radiusSubOf = s => RADIUS_SUB[subOf(s)] || subOf(s);
-const subOf = s => s.sub || (s.template_type === "도로" ? "국도·국지도"
+const subOf = s => s.sub || (s.template_type === "도로" ? "미상"   // 교량 등 유형 미상 도로 — 단정하지 않는다
   : catOf(s) === "인프라" ? infraSubOf(s)
   : catOf(s) === "일자리" ? jobSubOf(s)
   : catOf(s) === "교통" ? "철도"          // 교통은 세부 미상이면 철도(역·노선이 기본형)
@@ -4237,7 +4241,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260805d");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260805e");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4399,7 +4403,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260805d"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260805e"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4425,7 +4429,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260805d");
+  const CB = "?b=" + (window.BUILD || "20260805e");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
