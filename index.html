@@ -943,7 +943,18 @@ const LVL_STYLE = { S: "background:#b8860b;color:#fff;", A: "background:#d6156d;
 /* 호재 원 표시 규칙(2026-07-27 사용자 확정): 뷰포트 조회 → 등급 우선 → 중심 가까운 순, 상한까지.
    두 렌더러(Leaflet·카카오) 공통 상수 — 기준 일원화. */
 const LVL_RANK = { S: 0, A: 1, B: 2, C: 3, "미정": 4 };
-const MAX_DOTS = 600;   // 표시 상한 — 초과분은 낮은 등급·중심에서 먼 것부터 탈락
+const MAX_DOTS = 600;   // 표시 상한(도시 뷰) — 초과분은 낮은 등급·중심에서 먼 것부터 탈락
+/* 줌아웃일수록 상한을 **조인다** (2026-08-05 사용자 "줌아웃시 호재원 등급이 S부터, 중심부부터
+   보여져야 하는건데 등급도 중구난방이네"). 정렬이 이미 「등급 우선 → 중심 가까운 순」이므로
+   **상한만 낮추면 자동으로 S부터·중심부터** 남는다. 종전엔 600 고정이라 광역에서도 600을
+   채우느라 B·C가 대량으로 딸려 들어왔다(실측: 수도권 lv9~11 모두 상한 600에 걸려 있었다).
+   ⚠ **절대 등급 컷(lodGrades)은 되살리지 않는다** — 2026-07-27에 호재 원에서 폐기한 이유가
+     그대로 유효하다("드래그마다 등급이 들쑥날쑥했고 지방에선 B·C가 통째로 사라졌다").
+     상한은 **상대 컷**이라 후보가 적은 지방 뷰에서는 아예 걸리지 않아 B·C가 그대로 보인다
+     (실측: 대구권 lv10 = 246건으로 상한 미달). 두 방식의 결정적 차이다.
+   값의 근거: 전국 S가 **221건**이다(S221·A482·B787·C1398·미정320) — 전국·광역 뷰 상한 200은
+     "사실상 S만 남는다"와 같은 뜻이 된다. 중간 줌은 그 사이를 완만히 잇는다. */
+const MAX_DOTS_LV = lv => lv >= 11 ? 200 : lv >= 10 ? 300 : lv >= 9 ? 450 : MAX_DOTS;
 const LVL_TXT = LVL_COLOR;
 const LVL_LETTER = { S: "S", A: "A", B: "B", C: "C", "미정": "?" };   // 배지 글자(미정=?)
 function lvlPill(l) { return `<span class="lvtag" style="${LVL_STYLE[l]}">${LEVEL_NAME[l]}</span>`; }
@@ -3608,7 +3619,7 @@ function initKakao() {
         if (ra !== rb) return ra - rb;
         const ca = a.geometry.coordinates, cb = b2.geometry.coordinates;
         return ((ca[0] - _ccx) ** 2 + (ca[1] - _ccy) ** 2) - ((cb[0] - _ccx) ** 2 + (cb[1] - _ccy) ** 2); })
-      .slice(0, MAX_DOTS);
+      .slice(0, MAX_DOTS_LV(lv));
     // 겹침 배지 기준 이력: 30px 격자(남발) → 완전 동일 좌표만(2026-07-27 사용자 "정확히 똑같은
     // 위치가 아니면 묶지 마라") → 14px(2026-08-04 "미세한 차이는 중첩 적용") → **5px**(같은 날
     // 사용자 "14px로 하니깐 중첩이 너무 많이 되네. 5px정도로" — 사실상 맞닿은 것만 묶는다).
@@ -4265,7 +4276,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260805k");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260805l");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4427,7 +4438,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260805k"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260805l"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4453,7 +4464,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260805k");
+  const CB = "?b=" + (window.BUILD || "20260805l");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
