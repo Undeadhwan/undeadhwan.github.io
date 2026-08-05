@@ -1583,7 +1583,8 @@ function buildRoadSignals() {
     const pts = sample(dp.solid, step).map(c => ({ c, weak: false }))
       .concat(sample(dp.bridges, step).map(c => ({ c, weak: true })));
     if (!pts.length) continue;
-    const anchor = (pts.find(z => !z.weak) || pts[0]).c;   // 대표점은 근거 있는 구간에서 고른다
+    // 대표점 = **선의 길이 중점**(lineMid) — 노선 전체를 대표한다. 종전엔 시작점이라 구석에 붙었다.
+    const anchor = lineMid(dp.solid.length ? dp.solid : dp.bridges) || pts[0].c;
     // 표시명 = 공식 사업명 우선(OSM 이름은 선형 매칭용일 뿐 — 공식 SSOT 사상 2026-07-17)
     ROAD_SIG.push({ _road: true, title: p.official_name || `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "C",
       template_type: "도로", current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
@@ -1874,6 +1875,31 @@ function drawnParts(p, geom) {
   const segs = geom.type === "MultiLineString" ? geom.coordinates : [geom.coordinates];
   return { solid: Array.isArray(p.geom_solid) ? p.geom_solid : segs,
            bridges: Array.isArray(p.geom_bridges) ? p.geom_bridges : [] };
+}
+/* 선의 **길이 중점** — 연도 회랑 도로의 대표 표식 자리 (2026-08-06 사용자
+   *"도로변접근의 경우만 호재원이 없어서 아쉬워"*).
+   ☠ 종전엔 대표점이 **선의 시작점(0%)**이었다. 지도에서 그 핀은 노선 끝에 치우쳐 붙어 있어
+     "이 선이 호재다"로 읽히지 않았다 — 회랑 띠는 테두리가 없어 약하고, 핀은 구석에 있었으니
+     이 축만 호재 문법에서 빠져 보인 것이다. 중점에 두면 선 전체를 대표한다.
+   ⚠ **영향권 원을 중점에 그리는 것은 아니다.** 그건 "여기가 수혜"라는 뜻이 되어 사실과 다르다
+     (검단~경명로 실측: 중점 300m 원은 3.76km 노선의 8%만 덮는다). 영향권은 여전히 띠다. */
+function lineMid(segs) {
+  const flat = [];
+  for (const s of segs || []) for (const c of s || []) flat.push(c);
+  if (flat.length < 2) return flat[0] || null;
+  let total = 0;
+  for (let i = 0; i < flat.length - 1; i++) total += meters(flat[i], flat[i + 1]);
+  let acc = 0;
+  for (let i = 0; i < flat.length - 1; i++) {
+    const d = meters(flat[i], flat[i + 1]);
+    if (acc + d >= total / 2) {
+      const t = d ? (total / 2 - acc) / d : 0;
+      return [flat[i][0] + t * (flat[i + 1][0] - flat[i][0]),
+              flat[i][1] + t * (flat[i + 1][1] - flat[i][1])];
+    }
+    acc += d;
+  }
+  return flat[Math.floor(flat.length / 2)];
 }
 /* 동 경계 bbox 캐시 (feature에 1회 계산) — dongRelation 프리필터용 */
 function dongBB(f) {
@@ -3466,7 +3492,7 @@ function initLeaflet() {
       roadLinePoints(s).forEach(p => {
         circles.push(L.circle([p.coord[1], p.coord[0]], {
           radius: getRadius(s), stroke: false, fillColor: col,
-          fillOpacity: p.weak ? 0.025 : 0.05, interactive: false }).addTo(map));
+          fillOpacity: p.weak ? 0.035 : 0.07, interactive: false }).addTo(map));
       });
       return;
     }
@@ -3665,7 +3691,16 @@ function initKakao() {
     const lv = map.getLevel(); const b = map.getBounds();
     const _cen = map.getCenter(), _ccx = _cen.getLng(), _ccy = _cen.getLat();   // 화면 중심 — 상한 컬링을 중심거리순으로(2026-07-23)
     const prelim = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, UPIS_SIG, DPS_SIG, SH_SIG)
-      .filter(s => !(s._road && s.access_points)).filter(s => !s.area_shape).filter(s => s.signal !== false)
+      /* ★ **연도 회랑 도로에도 호재원을 준다** (2026-08-06 사용자 *"호재원 자체가 호재를 의미하는데
+         도로변접근의 경우만 호재원이 없어서 아쉬워"*).
+         ☠ 종전엔 선형 도로 신호를 **전부** 뺐다. 전용도로는 IC 점이 각자 호재원을 갖고 있어서
+           선에까지 원을 그리면 중복이지만, **일반도로(도로변 접근)는 IC 점이 아예 없다** —
+           그래서 이 축만 지도의 「여기 호재 있다」 문법에서 통째로 빠져 있었다(88개 노선).
+         ⚠ 이 원은 **영향권이 아니다** — 크기는 등급(HJR[lvl])이고 위치는 신호 좌표다.
+           영향권(회랑 띠)은 클릭 시 별도 층이 그린다. 그래서 선 중점에 찍어도 과대 표기가 아니다.
+           대표점은 `lineMid`로 **선의 길이 중점**이라 노선 전체를 대표한다. */
+      .filter(s => !(s._road && s.access_points && s.road_kind === "전용"))
+      .filter(s => !s.area_shape).filter(s => s.signal !== false)
       .filter(s => aptFocus ? (aptFocus.has(s) && !isStaleFinished(s)) : visible(s))   // 아파트 포커스=그 단지 호재만(필터 무관, 2026-07-29)
       // 망형(전철·도로): 광역 뷰(lv≥9=4km)엔 선만, **도시 뷰(lv≤8=2km)부터 역·IC**.
       // 2026-07-22엔 lv≤7이었는데 실측 결과 **기준이 뒤집혀 있었다**(2026-07-23 사용자 제보):
@@ -4090,7 +4125,7 @@ function initKakao() {
   const addRadius = s => { const col = colorOf(s);
     if (s._road && s.access_points) { if (s.road_kind === "전용") { (s.ic_points || []).forEach(ap => circles.push(new K.Circle({ map, center: LL(ap.coordinates[0], ap.coordinates[1]), radius: getRadius(s), strokeWeight: 1.5, strokeColor: col, strokeOpacity: .85, fillColor: col, fillOpacity: .14, zIndex: 5 }))); return; }
       // 회랑 = **그려진 선의 버퍼**. 보간 구간(선이 연한 점선인 자리)은 회랑도 연하게 — 선과 강약을 맞춘다.
-      roadLinePoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 0, strokeOpacity: 0, fillColor: col, fillOpacity: p.weak ? .025 : .05, zIndex: 5 }))); return; }
+      roadLinePoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 0, strokeOpacity: 0, fillColor: col, fillOpacity: p.weak ? .035 : .07, zIndex: 5 }))); return; }
     signalPoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 1.5, strokeColor: col, strokeOpacity: .85, fillColor: col, fillOpacity: .14, zIndex: 5 }))); };
   const showRadius = s => { clearRadius(); addRadius(s); }; const showRadiusMany = list => { clearRadius(); list.forEach(addRadius); };
   let routeHl = []; const clearRoute = () => { routeHl.forEach(o => o.setMap(null)); routeHl = [];
@@ -4390,7 +4425,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260806c");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260806d");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4552,7 +4587,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260806c"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260806d"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4578,7 +4613,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260806c");
+  const CB = "?b=" + (window.BUILD || "20260806d");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
