@@ -5,10 +5,6 @@
   {
    "고시": "국토교통부공고제2026-824호(서울양재 공공주택지구 지정에 관한 주민 등의 의견 청취 공고)",
    "사유": "위치·면적 미기재(지정 전 단계 공고로 보임)"
-  },
-  {
-   "고시": "국토교통부고시제2026-54호(서울서리풀1 공공주택지구의 지정 및 지형도면 등)",
-   "사유": "위치·면적 미기재(지정 전 단계 공고로 보임)"
   }
  ],
  "signals": [
@@ -104,6 +100,58 @@
     "coordinates": [
      127.130421,
      37.585968
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22",
+   "last_movement_basis": "observed"
+  },
+  {
+   "id": "G-665696420000",
+   "title": "서울서리풀1 공공주택지구",
+   "cat": "주거개발",
+   "area_m2": 2018074,
+   "area_kind": "부지",
+   "phase": "계획",
+   "current_stage": "지구 지정",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「지구 지정」",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "지구 지정",
+     "date": "2026-02-02",
+     "state": "current",
+     "src": "관보 고시"
+    }
+   ],
+   "sd": "서울",
+   "sg": "서초구",
+   "loc": "서울특별시 서초구 원지동, 신원동, 염곡동, 내곡동 일원",
+   "last_movement": "2026-07-22",
+   "src_tier": "official_notice",
+   "sources": [
+    "https://gwanbo.go.kr/ezpdf/customLayout.jsp?contentId=I0000000000000001769665696420000&tocId=I0000000000000001769573603912000&isTocOrder=N"
+   ],
+   "src_name": "관보 공공택지기획과",
+   "gosi_title": "국토교통부고시제2026-54호(서울서리풀1 공공주택지구의 지정 및 지형도면 등)",
+   "parcels_n": 2487,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "고시 붙임 편입필지 24개 평균(지구 근사)",
+   "confirmed": false,
+   "template_type": "정비사업",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.045517,
+     37.459451
     ]
    },
    "stage_history": [
