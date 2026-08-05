@@ -813,12 +813,21 @@ function phaseOf(s) {
 const CLASSES_DEFAULT = {
   "교통": {   // 세부: 철도(역세권)/도로(차량 이동)/환승·터미널(버스터미널·복합환승센터, §7b 운수 이관 2026-07-18)
     "철도": { S: 3.0, A: 3.0, B: 1.5, C: 0.8 },
-    "도로": { S: 5.0, A: 5.0, B: 3.0, C: 1.5 },
-    // ⚠ 위 "도로" 반경은 **전용도로 IC 점 버퍼**다. 연도(沿道) 접근이 가능한 일반도로·지하화는
+    /* ☠ **키 이름이 어긋나 기준 설정이 통째로 무시되고 있었다** (2026-08-06 사용자 발견:
+         *"여기 키로미터 변경하면 도로변접근 회랑에 바로 반영되는가?"* — 답은 **아니오**였다).
+       도로 축은 위계 → 접근 방식으로 재정의되며 이름이 바뀌었는데(도로 → IC 진출입 ·
+       도로(연도 회랑) → 도로변 접근), `thresholds.json`·`SUB_KEYS`·`radiusSubOf`는 새 이름을 쓰고
+       **이 표만 옛 이름으로 남았다.** `applyThresholds`는 `!CLASSES[cat][sub]`면 조용히 건너뛰므로
+       설정값이 **아무 데도 도달하지 않았다**. 실측 피해:
+         · 도로변 접근 — 설정 1.0km ↔ 지도 **0.3km**(roadCorridorKm 하드코딩 폴백)
+         · IC 진출입  — 설정 2.5km(B) ↔ 지도 **1.2km**. 폴백이 `SUB_KEYS[c][0]`= **철도** 표라
+           카드가 「IC 진출입 · 영향 1.2km」라고 적고 그 값은 **철도 반경**이었다(화면이 거짓말).
+       → 이름을 **한 축으로 통일**한다. 재발은 html_check가 thresholds 키와 대조해 막는다. */
+    "IC 진출입": { S: 5.0, A: 5.0, B: 3.0, C: 1.5 },
+    // ⚠ 위 반경은 **전용도로 IC 점 버퍼**다. 연도(沿道) 접근이 가능한 일반도로·지하화는
     //   선 자체가 버퍼라 훨씬 좁다 — 별도 축으로 둔다(2026-08-01 사용자 "기준설정에서 일반도로의
-    //   영향거리 설정하는게 없는데 추가해야겠네"). 종전엔 index.html에 상수로만 박혀 있어
-    //   기준 설정 화면에서 보이지도 바꾸지도 못했다(기준 일원화 원칙 위반).
-    "도로(연도 회랑)": { S: 1.0, A: 0.7, B: 0.5, C: 0.3 },
+    //   영향거리 설정하는게 없는데 추가해야겠네").
+    "도로변 접근": { S: 1.0, A: 0.7, B: 0.5, C: 0.3 },
     "환승·터미널": { S: 3.0, A: 3.0, B: 1.5, C: 0.8 }
   },
   "일자리": {   // 세부 = **시설 종류**(2026-07-18 사용자 확정). 종전 면적/금액 축은 폐기 — 그 둘은 축이 아니라
@@ -1342,8 +1351,21 @@ const getRadius = s => {
   const c = catOf(s), l = levelOf(s);
   if (s._road && s.road_kind === "일반") return roadCorridorKm(l) * 1000;   // 간선=좁은 회랑(기준 SSOT)
   let tbl = CLASSES[c];
-  if (SUB_KEYS[c]) tbl = (tbl[radiusSubOf(s)] || tbl[SUB_KEYS[c][0]]);   // 교통=철도/도로 세부표(반경 키로 되돌림)
-  return ((tbl && tbl[l]) || 0.8) * 1000;
+  /* ☠ 종전 폴백은 `|| tbl[SUB_KEYS[c][0]]` — 축이 표에 없으면 **다른 중분류의 반경을 빌려 썼다**.
+     실측(2026-08-06): 「IC 진출입」이 표에 없어 SUB_KEYS[0]=**철도** 표로 떨어졌고, 카드가
+     「IC 진출입 · 영향 1.2km」라고 적었는데 그 1.2km는 **철도 B급 반경**이었다 — 화면이 거짓말했다.
+     빌려 쓰면 틀린 값이 **그럴듯하게** 나와 아무도 눈치채지 못한다. 빌리지 않는다. */
+  /* ☠ **중분류표인지 등급표인지를 표에 묻는다** (2026-08-06 전수조사에서 발각).
+     종전엔 `SUB_KEYS[c]`가 있으면 **무조건** 중분류로 내려갔다. 그런데 주거개발은 조회축엔
+     중분류가 있어도 반경표는 `_중분류없음`(등급표 {S,A,B,C})이라 `tbl["재개발"]`이 undefined가 되고,
+     **2,393건 전부가 등급과 무관하게 기본값 0.8km**로 떨어졌다(설정은 S2/A1/B0.5/C0.3km).
+     축의 존재와 표의 모양은 **다른 사실**이다 — 표의 모양은 표가 말하게 한다. */
+  const isSubTable = tbl && Object.values(tbl).some(v => v && typeof v === "object");
+  if (isSubTable) tbl = tbl[radiusSubOf(s)] || null;
+  /* 등급 미정은 그 표의 **가장 좁은 값(C)**으로 떨어뜨린다 — 종전 고정 0.8km는 주거개발 C(0.3km)의
+     **2.7배**라, 등급을 모를수록 영향권이 넓어지는 역설이었다. 모르는 것을 넓게 잡으면 과대 표기다
+     (`RADIUS_SUB.미상`이 이미 같은 원칙을 쓴다: "모르는 것을 넓게 잡으면 과대 표기다"). */
+  return ((tbl && (tbl[l] != null ? tbl[l] : tbl.C)) || 0.8) * 1000;
 };
 /* 성능용 bbox 프리필터의 반경(도 단위) — **반경표(CLASSES)에서 도출**한다.
    상수로 두면 반경표만 키웠을 때 조용히 반경 규칙을 이긴다(CJ부지 실측, 2026-08-02). */
@@ -1467,15 +1489,23 @@ function railLevelOf(name, kind) {
   return "B";   // 일반 지하철·광역철도·IC
 }
 function buildRailSignals() {
-  const lvlByLine = {};
-  RAIL.filter(f => f.properties.kind === "line").forEach(f =>
-    lvlByLine[f.properties.name] = f.properties.lvl || railLevelOf(f.properties.name, f.properties.linekind));
+  const lvlByLine = {}, basisByLine = {};
+  RAIL.filter(f => f.properties.kind === "line").forEach(f => {
+    lvlByLine[f.properties.name] = f.properties.lvl || railLevelOf(f.properties.name, f.properties.linekind);
+    // 역 등급은 **노선에서 온다**(lvlByLine) — 그러면 근거도 노선 것이어야 한다. 근거만 빼놓으면
+    // 카드가 등급은 말하고 왜 그 등급인지는 말하지 않는다(2026-08-06 전수조사).
+    if (f.properties.lvl_basis) basisByLine[f.properties.name] = f.properties.lvl_basis;
+  });
   RAIL_SIG = RAIL.filter(f => f.properties.kind === "station")
     .filter(f => f.properties.gate !== "관찰")   // 관찰 게이트 = 지도 기본 뷰 미표시(§0-1 — 절차 진입 전)
     .map(f => ({
     _rail: true, title: f.properties.line && f.properties.line !== f.properties.name ? `${f.properties.name} (${f.properties.line})` : f.properties.name,
     line: f.properties.line, cat: "교통", sub: "철도", lvl: f.properties.lvl || lvlByLine[f.properties.line] || "B",
-    gate: f.properties.gate,
+    // ☠ `lvl_basis`(등급 근거)가 빠져 **교통 카드만 등급 근거가 빈칸**이었다(2026-08-06 전수조사).
+    //   데이터엔 도로 230건·철도 160건이 있는데 어댑터가 안 실어 `gradeBasisHtml`이 ""를 냈다 —
+    //   세션33에서 「등급을 사업비로」 바꾼 그 근거가 화면에 도달한 적이 없다(어댑터 함정 7호).
+    gate: f.properties.gate, gate_basis: f.properties.gate_basis,
+    lvl_basis: f.properties.lvl_basis || basisByLine[f.properties.line],
     template_type: "철도", current_stage: f.properties.status,
     phase: f.properties.phase || (f.properties.confirmed ? "착공" : "계획"),   // 전수검사('26.7)부터 명시 phase 우선(인가 등)
     status: f.properties.drop ? "종결" : "활성",   // 무산 노선(인동선 지선 등) = 종결 표식(P5 — 숨기지 않고 표시)
@@ -1552,6 +1582,7 @@ function buildRoadSignals() {
     const p = f.properties;
     if (p.kind === "station") {   // IC·JC 점
       ROAD_SIG.push({ _road: true, title: p.name, cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "A",
+        lvl_basis: p.lvl_basis, gate: p.gate, gate_basis: p.gate_basis,   // 등급 근거·게이트 — 카드가 읽는다(어댑터 함정 7호)
         template_type: "도로", current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
         src_tier: p.src_tier, ic_loc: p.loc, ic_status: p.ic_status, ic_note: p.ic_note, pt_type: p.pt_type, geo_prec: p.geo_prec, geo_approx: !!p.geo_approx, geo_basis: p.geo_basis || null, milestones: p.milestones,
         stage_checked: p.stage_checked, stage_src: p.stage_src,
@@ -1587,6 +1618,7 @@ function buildRoadSignals() {
     const anchor = lineMid(dp.solid.length ? dp.solid : dp.bridges) || pts[0].c;
     // 표시명 = 공식 사업명 우선(OSM 이름은 선형 매칭용일 뿐 — 공식 SSOT 사상 2026-07-17)
     ROAD_SIG.push({ _road: true, title: p.official_name || `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "C",
+      lvl_basis: p.lvl_basis, gate: p.gate, gate_basis: p.gate_basis,   // 등급 근거·게이트 — 카드가 읽는다(어댑터 함정 7호)
       template_type: "도로", current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
       status: "활성", confirmed: !!p.confirmed, sd: null, road_kind: roadKindOf(p), src_tier: p.src_tier,   // 소재 시도=_sggs(다중 귀속)
       owner: p.owner, osm_name: p.name, line: p.name, geom_src: p.geom_src, geom_status: p.geom_status || null, milestones: p.milestones,   // line=노선 하이라이트 키
@@ -3699,7 +3731,12 @@ function initKakao() {
          ⚠ 이 원은 **영향권이 아니다** — 크기는 등급(HJR[lvl])이고 위치는 신호 좌표다.
            영향권(회랑 띠)은 클릭 시 별도 층이 그린다. 그래서 선 중점에 찍어도 과대 표기가 아니다.
            대표점은 `lineMid`로 **선의 길이 중점**이라 노선 전체를 대표한다. */
-      .filter(s => !(s._road && s.access_points && s.road_kind === "전용"))
+      /* ⚠ 전용도로도 **IC 점이 하나도 없으면** 선에 호재원을 준다 (2026-08-06 사용자 *"이건 IC가 없어"*).
+         IC가 있어야 "IC가 대신 표시한다"가 성립한다. IC 명단 미확보 노선(고속국도 제50호선 서창~안산
+         확장 · 남양주왕숙 국도47호선 이설 등)은 그 대신이 없어 **지도에서 호재가 통째로 사라졌다** —
+         카드는 「진출입 지점 미확정 — 영향권 미산정」이라고 정직하게 말하는데, 그 카드에 닿을
+         마커 자체가 없었다(정직한 결손은 소리를 내지 않는다). */
+      .filter(s => !(s._road && s.access_points && s.road_kind === "전용" && (s.ic_points || []).length))
       .filter(s => !s.area_shape).filter(s => s.signal !== false)
       .filter(s => aptFocus ? (aptFocus.has(s) && !isStaleFinished(s)) : visible(s))   // 아파트 포커스=그 단지 호재만(필터 무관, 2026-07-29)
       // 망형(전철·도로): 광역 뷰(lv≥9=4km)엔 선만, **도시 뷰(lv≤8=2km)부터 역·IC**.
@@ -4425,7 +4462,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260806e");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260806f");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4587,7 +4624,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260806e"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260806f"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4613,7 +4650,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260806e");
+  const CB = "?b=" + (window.BUILD || "20260806f");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
