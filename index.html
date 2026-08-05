@@ -1517,15 +1517,33 @@ function buildRoadSignals() {
      가장 가까운 점이 663m라 500m 회랑 밖으로 판정돼 카드에서 통째로 빠졌다.
      전용도로(IC 점이 버퍼 주체)는 무관하지만, **일반도로는 선 자체가 버퍼**라 치명적이다.
      연도 회랑은 C급 300m가 최소이므로 그 절반인 150m 이하로 잡는다. */
+  /* 선을 **일정 간격으로 훑는다** — 정점이 아니라 선 위를 걷는다(2026-08-06 사용자 제보
+     *"이 노선의 중간부분은 회랑이 없어"*).
+     ☠ 종전엔 **기존 정점만** 내보냈다(`pts.push(seg[i])`). 그래서 정점이 성긴 구간에는
+       표본이 아예 없고, 회랑(=표본점마다 반경 원)에 **구멍이 뚫렸다** — 검단~경명로 실측:
+       13정점/3.76km인데 한 구간이 1.17km(교량·하천 횡단이라 편입 필지가 없는 자리)로,
+       반경 0.3km 원 두 개가 닿지 못했다.
+     ★ 간격을 반경의 절반으로 잡아 둔 기존 설계는 옳았다 — 다만 **그 간격대로 점을 만들지
+       않았다.** 정점 사이를 보간해 채우면 간격 보장이 실제로 성립한다(구조적 봉인). */
   const sample = (coords, step) => {
     const S = step || SAMPLE_M;
     const pts = [];
     for (const seg of coords) {
-      let acc = S;   // 각 세그 시작점 포함
-      for (let i = 0; i < seg.length; i++) {
-        if (i === 0 || acc >= S) { pts.push(seg[i]); acc = 0; }
-        if (i < seg.length - 1) acc += meters(seg[i], seg[i + 1]);
+      if (!seg || seg.length < 1) continue;
+      pts.push(seg[0]);
+      let acc = 0;                                  // 마지막 표본 이후 걸어온 거리
+      for (let i = 0; i < seg.length - 1; i++) {
+        const a = seg[i], b = seg[i + 1], d = meters(a, b);
+        if (!d) continue;
+        let t0 = 0;                                 // 이 세그먼트에서 이미 지나온 비율
+        while (acc + d * (1 - t0) >= S) {
+          const t = t0 + (S - acc) / d;
+          pts.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]);
+          t0 = t; acc = 0;
+        }
+        acc += d * (1 - t0);
       }
+      pts.push(seg[seg.length - 1]);                // 종점도 회랑에 들어가야 한다
     }
     return pts;
   };
@@ -1550,11 +1568,22 @@ function buildRoadSignals() {
     // ⚠ **간격을 상수로 두지 않는다** — 기준 설정에서 회랑 반경을 줄이면 상수는 그대로라
     //   회랑에 구멍이 다시 뚫린다(이번 사고가 정확히 그것: 반경 500m ↔ 간격 1,200m).
     //   **반경의 절반**으로 도출하면 반경을 어떻게 바꾸든 구멍이 생기지 않는다(구조적 봉인).
-    const pts = sample(f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates],
-                       roadKindOf(p) === "일반"
-                         ? Math.max(50, roadCorridorKm(p.lvl || "C") * 1000 / 2)
-                         : SAMPLE_M);
+    /* ★ **그려진 선이 SSOT다 — 영향권은 그 선을 따라간다** (2026-08-06 사용자 확정:
+         *"선이 SSOT라고 보면 영향권은 자동으로 그 선에 연동되어야 하는거 아냐?"*).
+       선 레이어와 회랑이 **각자 규칙을 가지면 반드시 어긋난다.** 실제로 어긋나 있었다 —
+       선은 `drawnParts`대로 근거 구간/보간 구간을 갈라 그리는데, 회랑은 원본 형상의 **정점만**
+       훑어 성긴 자리에 구멍이 뚫렸다(연도 회랑 88개 중 **40개**, 최악 64.7km).
+       → 이제 둘 다 `drawnParts`를 쓴다. 회랑은 **그려진 선의 버퍼**이므로 정의상 구멍이 없다. */
+    const dp = drawnParts(p, f.geometry);
+    const step = roadKindOf(p) === "일반"
+      ? Math.max(50, roadCorridorKm(p.lvl || "C") * 1000 / 2)   // 반경의 절반 — 반경을 바꿔도 안 뚫린다
+      : SAMPLE_M;
+    // 근거 구간과 보간 구간을 **둘 다** 훑되 어느 쪽인지 표식을 남긴다 — 선이 연하게 그린 구간은
+    // 회랑도 연하게 그린다(P2: 이으면서 숨기지 않는다).
+    const pts = sample(dp.solid, step).map(c => ({ c, weak: false }))
+      .concat(sample(dp.bridges, step).map(c => ({ c, weak: true })));
     if (!pts.length) continue;
+    const anchor = (pts.find(z => !z.weak) || pts[0]).c;   // 대표점은 근거 있는 구간에서 고른다
     // 표시명 = 공식 사업명 우선(OSM 이름은 선형 매칭용일 뿐 — 공식 SSOT 사상 2026-07-17)
     ROAD_SIG.push({ _road: true, title: p.official_name || `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "C",
       template_type: "도로", current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
@@ -1567,9 +1596,10 @@ function buildRoadSignals() {
       //   실제로는 공식 경유지 연결인데 화면이 OSM이라 거짓말했다(2026-07-23 사용자 제보로 발견, P2 위반).
       stage_note: `${p.linekind || "도로"} · ${p.status}${p.geom_src ? " · " + p.geom_src : ""}`,
       // 선을 못 그리는 코리더 도로(IC 없음)는 **대표 점**으로 표시(경로 미확정 근사). 그 외는 선/IC점이 담당.
-      geometry: { coordinates: p.geom_point_only && p.geom_point ? p.geom_point : pts[0] },
+      geometry: { coordinates: p.geom_point_only && p.geom_point ? p.geom_point : anchor },
       geo_approx: !!(p.geom_point_only || p.geom_partial),
-      ...(p.geom_point_only ? {} : { access_points: pts.slice(1).map(c => ({ coordinates: c, name: null, status: "노선 경유" })) })
+      ...(p.geom_point_only ? {} : { access_points: pts.filter(z => z.c !== anchor)
+        .map(z => ({ coordinates: z.c, name: null, status: "노선 경유", weak: z.weak })) })
     });
   }
   // 전용도로 ↔ 소속 IC 연결(표시·반경 렌더용): IC 점 신호가 영향권(버퍼)의 주체 — 노선 상세엔 접속 IC로 나열만(이중 카운트 없음).
@@ -1803,9 +1833,47 @@ function signalPoints(sig) {
 /* 노선 전체 점(선형 사실 — 버퍼 아님): 시군구 귀속·회랑 밴드 표시용. 전용도로 포함 항상 선 샘플점 반환 */
 function roadLinePoints(sig) {
   const pts = [];
-  if (sig.geometry?.coordinates) pts.push({ coord: sig.geometry.coordinates, name: null });
-  for (const ap of sig.access_points || []) if (ap.coordinates) pts.push({ coord: ap.coordinates, name: ap.name });
+  if (sig.geometry?.coordinates) pts.push({ coord: sig.geometry.coordinates, name: null, weak: false });
+  for (const ap of sig.access_points || []) if (ap.coordinates) pts.push({ coord: ap.coordinates, name: ap.name, weak: !!ap.weak });
   return pts;
+}
+/* ★ **노선명 배지 겹침 회피** (2026-08-06 사용자 *"이렇게 뱃지가 겹치는 경우 안생기도록 해"*).
+   배지는 노선 **기점**에 달리는데, 기점이 가까운 노선들(같은 시가지에서 갈라지는 국지도 등)은
+   배지끼리 포개져 **둘 다 못 읽는다**. 지도 라벨의 표준 처방대로 **충돌 회피 배치**를 한다:
+   우선순위대로 놓고, 겹치면 위로 한 칸씩 밀어 보고, 자리가 없으면 그 줌에서는 내려놓는다.
+   ⚠ 이건 **표시 규칙**이지 데이터 은폐가 아니다 — 배지는 이미 줌 lv5~11·등급 LOD로 제한돼 있고,
+     노선 자체(선·클릭 영역)는 그대로 있다.
+   순수 함수로 둔 이유: 지도 SDK 없이도 검증할 수 있어야 한다(카카오가 막힌 환경에서도 테스트된다). */
+function placeBadges(cands, opt) {
+  const o = opt || {}, gap = o.gap == null ? 2 : o.gap;
+  // 한 칸 = **배지 높이 + 간격**. 그보다 좁게 밀면 밀어도 여전히 겹쳐 헛걸음이 된다
+  // (실측: 26px씩 밀자 빽빽한 8개 중 2개만 남았다 — 36px로 하니 5개가 자리를 찾았다).
+  const stepY = o.stepY || 36, tries = o.tries == null ? 4 : o.tries;   // 최대 144px — 그 이상은 기점에서 멀어 오히려 오독
+  const hit = (a, b) => !(a.x + a.w / 2 + gap <= b.x - b.w / 2 || b.x + b.w / 2 + gap <= a.x - a.w / 2
+                       || a.y + gap <= b.y - b.h || b.y + gap <= a.y - a.h);   // y=배지 아래끝(기점 위로 뜬다)
+  const placed = [];
+  for (const c of cands) {
+    let put = null;
+    for (let k = 0; k <= tries; k++) {
+      const box = { x: c.x, y: c.y - k * stepY, w: c.w, h: c.h };
+      if (!placed.some(q => hit(box, q))) { put = box; break; }
+    }
+    if (put) { placed.push(put); c.dy = c.y - put.y; c.shown = true; }   // dy>0 = 위로 민 픽셀
+    else c.shown = false;
+  }
+  return cands;
+}
+/* ★★ **무엇이 그려지는가 — 정의는 여기 하나뿐** (2026-08-06 사용자 확정 "선이 SSOT").
+   선 레이어(카카오·Leaflet)와 영향권 회랑이 **같은 이 함수**를 쓴다. 각자 형상을 해석하면
+   반드시 어긋난다 — 실제로 어긋나 있었다(선은 solid/bridges를 갈라 그리는데 회랑은 원본
+   정점만 훑어 88개 중 40개에 구멍이 뚫렸다).
+     · `geom_solid`  = road_geom_honest가 인정한 **근거 있는 구간** (진한 선)
+     · `geom_bridges`= 정점 사이를 이은 직선, 형상 근거 없음 (연한 점선)
+     · 키가 아예 없는 노선(실측 중심선)은 **전 구간이 근거 있는 형상**이다. */
+function drawnParts(p, geom) {
+  const segs = geom.type === "MultiLineString" ? geom.coordinates : [geom.coordinates];
+  return { solid: Array.isArray(p.geom_solid) ? p.geom_solid : segs,
+           bridges: Array.isArray(p.geom_bridges) ? p.geom_bridges : [] };
 }
 /* 동 경계 bbox 캐시 (feature에 1회 계산) — dongRelation 프리필터용 */
 function dongBB(f) {
@@ -3425,8 +3493,7 @@ function initLeaflet() {
       if (p.name !== lineName && p.full !== lineName && p.official_name !== lineName) continue;
       // 카카오 하이라이트와 **같은 규칙** — 근거 있는 구간(geom_solid)만 굵게, 보간(geom_bridges)은 연한 점선.
       // (한쪽 엔진에만 걸면 폴백에서 조용히 예외가 된다 — 이 저장소의 반복 사고 형태.)
-      const segsL = f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates];
-      const ll = (p.geom_solid ? p.geom_solid : segsL).map(seg => seg.map(([x, y]) => [y, x]));
+      const ll = drawnParts(p, f.geometry).solid.map(seg => seg.map(([x, y]) => [y, x]));   // 정의는 drawnParts 하나
       // 흰 글로우 케이싱 + 본선 굵게 — 색은 분류색 유지(표식 문법 v1.7), 미확정 선형은 점선 유지(§7)
       routeHl.push(L.polyline(ll, { pane: "sig", color: "#fff", weight: 11, opacity: .85, interactive: false }).addTo(map));
       routeHl.push(L.polyline(ll, { pane: "sig", color: col, weight: 5.5, opacity: .95,
@@ -3731,7 +3798,7 @@ function initKakao() {
          지우는 대신 말한다: `geom_solid`(근거 있음)는 진하게, `geom_bridges`(지점 사이 직선)는 연하게.
          `geom_solid`가 빈 배열이면 그 노선은 **전 구간이 연한 점선** — 있다는 사실과 모른다는 사실을
          동시에 보여준다(P2·P5). 선을 그릴 점이 2개 미만일 때만 여전히 미표시. */
-      const solid = p.geom_solid ? p.geom_solid : segs;
+      const solid = drawnParts(p, f.geometry).solid;   // 정의는 drawnParts 하나 — 회랑도 같은 것을 쓴다
       solid.forEach(seg => {
         const path = seg.map(([x, y]) => LL(x, y));
         // 흰 케이싱 + 색 본선(2026-07-30) — 지하철 노선도의 표준 문법. 종전엔 색 선 하나가
@@ -3808,6 +3875,7 @@ function initKakao() {
     const phaseFiltering = filter.phase.size < PHASES.length;
     const lodSet = new Set(lodGrades(map.getLevel()));   // 선도 핀과 같은 등급 LOD(줌아웃=S만, 2026-07-22)
     const _bLv = map.getLevel(), _bB = (_bLv >= 5 && _bLv <= 11) ? map.getBounds() : null;   // 노선명 배지 줌 구간
+    const badgeCands = [];   // 배지는 서로를 봐야 겹침이 풀린다 — 모아 두고 뒤에서 한꺼번에 배치
     for (const o of railLineObjs) {
       // 선형은 **노선 선형 토글(filter.lines)만**으로 표시한다(2026-07-23 분리). 점 호재(역 원)와 독립 —
       // "철도선만 보기"(전체해제 + 철도선)가 가능. 교통 분류/철도·역 토글은 역 원만 좌우한다.
@@ -3826,6 +3894,30 @@ function initKakao() {
       // 노선명 배지(2026-08-04 사용자 확정: 광역 줌 lv5~11 한정·노선당 1개(중점)·색=분류 유지·
       // 단계=우리 백본 + 목표년도는 소스가 준 것만 「목표 'NN」로). 확대(lv≤4)하면 역명 라벨과 교대.
       if (show && filter.lines.has("노선명") && o.mid && _bLv >= 5 && _bLv <= 11 && _bB && _bB.contain(LL(o.mid[0], o.mid[1]))) {
+        badgeCands.push(o);   // 배치는 뒤에서 한꺼번에 — 겹침은 **서로를 봐야** 풀린다(placeBadges)
+      }
+    }
+    // ── 노선명 배지 배치: 우선순위대로 놓고 겹치면 위로 민다(placeBadges) ──────────────
+    {
+      const prj = map.getProjection && map.getProjection();
+      const px = c => { try { return prj && prj.containerPointFromCoords(LL(c[0], c[1])); } catch (e) { return null; } };
+      const RANK = { S: 0, A: 1, B: 2, C: 3 };
+      const cands = [];
+      for (const o of badgeCands) {
+        const pt = px(o.mid);
+        const sub = o.ph + (o.beta ? " · 목표 '" + o.beta : "");
+        // 폭 추정: 한글 12px 굵게 ≈ 12px/자, 부제 10px ≈ 10px/자. 좌우 패딩·테두리 21px.
+        const w = Math.max(o.bnm.length * 12, sub.length * 10) + 21, h = 34;
+        cands.push({ o, x: pt ? pt.x : 0, y: pt ? pt.y : 0, w, h, shown: true, dy: 0, _noPt: !pt,
+                     rank: RANK[o.lvl] == null ? 4 : RANK[o.lvl] });
+      }
+      // 등급이 높은 노선이 자리를 먼저 갖는다(같으면 위쪽 = 화면에서 먼저 읽히는 순서)
+      cands.sort((a, b) => a.rank - b.rank || a.y - b.y);
+      // 좌표를 못 구하는 환경(투영 API 부재)에서는 **종전대로 전부 그린다** — 검증 못 하는 것을 지우지 않는다.
+      const laid = cands.every(c => c._noPt) ? cands : placeBadges(cands);
+      for (const c of laid) {
+        if (!c.shown) continue;
+        const o = c.o;
         const be = document.createElement("div"); be.className = "line-badge";
         be.innerHTML = "<b></b><small></small>";
         be.firstChild.textContent = o.bnm;
@@ -3838,6 +3930,7 @@ function initKakao() {
         // zIndex 20 = 다른 오버레이(라벨 7·+N 11)보다 앞, 하이라이트(21+)보다는 뒤("맨 앞으로")
         // yAnchor 1.55 = 기점 **위로 띄운다**(아실 방식) — 기점에 겹쳐 두면 역명 라벨(.rail-name,
         // 오른쪽 오프셋)과 서로 가린다(2026-08-04 사용자 "노선 뱃지를 가려. 옆으로 옮겨야 할듯").
+        if (c.dy) be.style.transform = `translateY(${-c.dy}px)`;   // 겹쳐서 위로 민 만큼(placeBadges)
         lineBadges.push(new K.CustomOverlay({ map, position: LL(o.mid[0], o.mid[1]), content: be, zIndex: 20, yAnchor: 1.55, xAnchor: .5, clickable: true }));
       }
     }
@@ -3849,7 +3942,15 @@ function initKakao() {
       if (f.geometry.type !== "Point") continue;
       const p = f.properties; const isRoad = p.mode === "road";
       if (p.gate === "관찰") continue;   // 관찰 게이트 — 라벨도 미표시
-      if (!(filter.sub.has(subId("교통", isRoad ? "도로" : "철도")) || filter.lines.has(isRoad ? "도로선" : "철도선"))) continue;   // 철도·역 또는 노선선형(2026-07-23)
+      /* ☠ 여기 조회 키가 **옛 중분류 이름 「도로」**였다(2026-08-06 사용자 제보로 발각).
+         도로 축은 위계 → 접근 방식으로 재정의되며 이름이 두 번 바뀌었는데(도로 → 고속·전용/
+         국도·국지도 → IC 진출입/도로변 접근) 여기만 옛 이름이 남았다. 그 키는 **UI가 켤 수
+         없으므로 항상 false** — 도로 지점 라벨이 「도로 선형」 스위치를 켰을 때만 나왔고,
+         「IC 진출입」을 켜도 아무 반응이 없었다(이름을 바꾸면 새는 그 형태, MEMORY 참조).
+         → 도로는 접근 방식 두 칸 중 **하나라도** 켜져 있으면 라벨을 낸다. */
+      const subOn = isRoad ? (filter.sub.has(subId("교통", "IC 진출입")) || filter.sub.has(subId("교통", "도로변 접근")))
+                           : filter.sub.has(subId("교통", "철도"));
+      if (!(subOn || filter.lines.has(isRoad ? "도로선" : "철도선"))) continue;   // 철도·역 또는 노선선형(2026-07-23)
       if (phaseFiltering && !filter.phase.has(p.phase || "계획")) continue;
       // 격리 중인 노선의 소속역 라벨은 하이라이트가 자체 표시한다(중복 라벨 방지)
       if (routeIsoName && (p.line === routeIsoName || p.line_official === routeIsoName)) continue;
@@ -3986,7 +4087,8 @@ function initKakao() {
     ov._el.style.width = ov._el.style.height = dia + "px"; ov._el.style.borderColor = on ? "#5b3fd4" : (ov._col || "#12263f"); ov._el.style.borderWidth = on ? "4px" : "3px"; ov.setZIndex(on ? 30 : 20); }); };
   const addRadius = s => { const col = colorOf(s);
     if (s._road && s.access_points) { if (s.road_kind === "전용") { (s.ic_points || []).forEach(ap => circles.push(new K.Circle({ map, center: LL(ap.coordinates[0], ap.coordinates[1]), radius: getRadius(s), strokeWeight: 1.5, strokeColor: col, strokeOpacity: .85, fillColor: col, fillOpacity: .14, zIndex: 5 }))); return; }
-      roadLinePoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 0, strokeOpacity: 0, fillColor: col, fillOpacity: .05, zIndex: 5 }))); return; }
+      // 회랑 = **그려진 선의 버퍼**. 보간 구간(선이 연한 점선인 자리)은 회랑도 연하게 — 선과 강약을 맞춘다.
+      roadLinePoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 0, strokeOpacity: 0, fillColor: col, fillOpacity: p.weak ? .025 : .05, zIndex: 5 }))); return; }
     signalPoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 1.5, strokeColor: col, strokeOpacity: .85, fillColor: col, fillOpacity: .14, zIndex: 5 }))); };
   const showRadius = s => { clearRadius(); addRadius(s); }; const showRadiusMany = list => { clearRadius(); list.forEach(addRadius); };
   let routeHl = []; const clearRoute = () => { routeHl.forEach(o => o.setMap(null)); routeHl = [];
@@ -4286,7 +4388,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260805v");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260806a");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4448,7 +4550,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260805v"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260806a"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4474,7 +4576,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260805v");
+  const CB = "?b=" + (window.BUILD || "20260806a");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
