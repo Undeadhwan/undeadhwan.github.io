@@ -134,7 +134,9 @@
   <tr><th>소스</th><th>주소</th><th>커버리지</th><th>왜 HTML인가</th></tr>
   <tr><td><span class="tag plan">HTML</span>국토부/서울시 보도자료</td><td><code>molit.go.kr</code>·<code>seoul.go.kr/news</code></td><td>전국·서울</td><td>대장홍대선·광명서울고속도로·김포공항 혁신지구 등 <b>승인·구상 발표</b>가 문서로 먼저 등장(고시 API 전 단계)</td></tr>
   <tr><td><span class="tag plan">HTML</span>서울시 도시철도망계획</td><td><code>news.seoul.go.kr/traffic</code></td><td>서울</td><td>서남선 등 신설노선 계획은 본보고서(문서)가 최초 소스</td></tr>
+  <tr><td><span class="tag plan">HTML</span>지자체 고시(citynet)</td><td><code>sido.{시도}.go.kr</code>·<code>announce.incheon.go.kr</code> <code>/citynet/…</code></td><td>시·도 9곳 실측</td><td><b>관보·토지이음이 못 닿는 층</b>. 국지도·지방도·도시계획시설 도로의 <b>도로구역·지형도면·실시계획인가 고시</b>가 여기에만 있다 — 착공 도로 선형의 유일한 근거(<code>local_gosi.py</code>)</td></tr>
 </table>
+<p class="note"><b>선형은 고시 첨부의 편입 지번에서 만든다</b> — 용지조서(표)가 1순위, 없으면 고시문 본문(구간 밖 지번이 섞이므로 과대 근사로 표기). 지번 → 좌표 → <b>필지 띠의 중심선</b>(<code>gosi_centerline.py</code> 주곡선). ⚠ 점을 최근접으로 잇는 방식은 <b>지그재그 낙서</b>가 되고 <b>총연장 검증을 통과한다</b>(2026-08-05 실측) — 길이와 함께 <b>띠 폭</b>(점→선 거리 중앙값, 도로 폭 규모면 정상)을 본다.</p>
 <p class="note">원칙: 새 소스는 API든 HTML이든 반드시 <code>sources.json</code>에 등록(주소·파서·지역·상태) 후 크롤러가 데이터로 순회. 코드에 기관 하드코딩 금지. 자치구 고시는 org·url만 바꿔 시군구 수만큼 복제.</p>
 
 <h2 id="extract">4. 추출 방법 (소스별)</h2>
