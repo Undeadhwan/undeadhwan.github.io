@@ -1624,12 +1624,18 @@ const filter = {
   phase: new Set(PHASES),   // 조회축 = 4단계 백본(계획/인가/착공/준공·개통). 정체·무산은 필터 아닌 항상표시 표식
   lvl: new Set(GRADES_DISP),   // 등급 조회축(A/B/C/미정) — 지도 원·카드·집계 전 화면 일관(호재 중심 개편 2026-07-16)
   // 노선 선형 표시(철도선/도로선) — 신호·집계는 불변, 지도 위 선만 on/off (호재 원 집중용, localStorage 유지)
-  lines: new Set(JSON.parse(localStorage.getItem("hojae_lines") || '["철도선","도로선"]')),
+  // 「노선명 배지」도 여기 담는다 — 선과 같은 **표시 옵션** 축이다(신호·집계 불변).
+  //  2026-08-05 사용자: "도로, 전철 뱃지 때문에 제대로 맵을 볼 수가 없네. 토글로 껐다 켰다 하자".
+  //  기본은 켜짐(종전 동작 유지) — 옛 저장값에 이 키가 없으면 켠 것으로 본다.
+  lines: new Set(JSON.parse(localStorage.getItem("hojae_lines") || '["철도선","도로선","노선명"]')),
   region: "",   // "" = 전체, "서울 강서구" 형태
   year: null    // null = 전체, 아니면 그 해까지 완료 범위 도달분만
 };
 /* 좌측 도크 대분류 펼침 상태 — 화면이 높으면 기본 펼침(큰 모니터는 클릭 수 그대로),
    좁으면 기본 접힘(노트북에서 4행이 한눈에). 한 번 펼치면 localStorage로 기억한다. */
+/* 옛 localStorage에는 "노선명" 키가 없다 → 그대로 두면 **있던 배지가 갑자기 사라진다**.
+   저장값에 철도선/도로선만 있고 노선명 흔적이 없으면 켠 것으로 복원한다(옛 이름 흡수와 같은 원칙). */
+if (!localStorage.getItem("hojae_lines_v2")) { filter.lines.add("노선명"); localStorage.setItem("hojae_lines_v2", "1"); }
 const dockOpen = new Set(JSON.parse(localStorage.getItem("hojae_dock_open")
   || (window.innerHeight >= 900 ? JSON.stringify(CAT_KEYS) : "[]")));
 let view = { mode: "home", dong: null, signal: null };
@@ -2775,7 +2781,7 @@ function renderDock() {
      안 따라간다(필터가 아니라 옵션이니 당연한데, 같은 자리에 있으니 고장으로 보인다)
      ③ 교통을 끄면 스위치가 화면에서 사라진다.
      **필터(무엇을 보나)와 옵션(어떻게 보나)은 자리부터 갈라 둔다** — DESIGN.md §3 원칙의 배치판. */
-  const LINE_OPTS = [["철도선", "철도 선형"], ["도로선", "도로 선형"]];
+  const LINE_OPTS = [["철도선", "철도 선형"], ["도로선", "도로 선형"], ["노선명", "노선명 배지"]];
   const catBlock = cat => {
     const col = CAT_COLOR[cat], keys = SUB_KEYS[cat] || [];
     const on = keys.length ? keys.some(sk => filter.sub.has(subId(cat, sk))) : filter.cat.has(cat);   // 대분류 헤더 = 하위 중 하나라도 켜지면 on
@@ -2877,7 +2883,7 @@ function initDock() {
 function resetFilters() {
   CAT_KEYS.forEach(k => filter.cat.add(k));
   ALL_SUBS.forEach(k => filter.sub.add(k));
-  ["철도선", "도로선"].forEach(k => filter.lines.add(k));
+  ["철도선", "도로선", "노선명"].forEach(k => filter.lines.add(k));   // 표시 옵션 초기화 = 전부 켜짐
   PHASES.forEach(k => filter.phase.add(k));
   GRADES_DISP.forEach(k => filter.lvl.add(k));
   localStorage.setItem("hojae_lines", JSON.stringify([...filter.lines]));
@@ -3804,7 +3810,7 @@ function initKakao() {
       o.hits.forEach(l => l.setMap(show ? map : null));
       // 노선명 배지(2026-08-04 사용자 확정: 광역 줌 lv5~11 한정·노선당 1개(중점)·색=분류 유지·
       // 단계=우리 백본 + 목표년도는 소스가 준 것만 「목표 'NN」로). 확대(lv≤4)하면 역명 라벨과 교대.
-      if (show && o.mid && _bLv >= 5 && _bLv <= 11 && _bB && _bB.contain(LL(o.mid[0], o.mid[1]))) {
+      if (show && filter.lines.has("노선명") && o.mid && _bLv >= 5 && _bLv <= 11 && _bB && _bB.contain(LL(o.mid[0], o.mid[1]))) {
         const be = document.createElement("div"); be.className = "line-badge";
         be.innerHTML = "<b></b><small></small>";
         be.firstChild.textContent = o.bnm;
@@ -4259,7 +4265,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260805j");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260805k");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4421,7 +4427,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260805j"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260805k"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4447,7 +4453,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260805j");
+  const CB = "?b=" + (window.BUILD || "20260805k");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
