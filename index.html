@@ -3462,9 +3462,11 @@ function initLeaflet() {
         return;
       }
       // 일반도로: 샘플점별 진한 원 겹침=얼룩 → 옅은 무테 원들로 회랑 밴드 근사
+      // 보간 구간은 선이 연하니 회랑도 연하게 — **카카오와 같은 규칙**(한쪽에만 걸면 폴백이 예외가 된다)
       roadLinePoints(s).forEach(p => {
         circles.push(L.circle([p.coord[1], p.coord[0]], {
-          radius: getRadius(s), stroke: false, fillColor: col, fillOpacity: 0.05, interactive: false }).addTo(map));
+          radius: getRadius(s), stroke: false, fillColor: col,
+          fillOpacity: p.weak ? 0.025 : 0.05, interactive: false }).addTo(map));
       });
       return;
     }
@@ -4388,7 +4390,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260806b");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260806c");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4550,7 +4552,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260806b"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260806c"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4576,7 +4578,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260806b");
+  const CB = "?b=" + (window.BUILD || "20260806c");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
