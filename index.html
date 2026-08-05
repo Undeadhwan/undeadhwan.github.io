@@ -864,7 +864,12 @@ const SUB_CAVEAT = {
   "데이터센터": "전력 수전설비·냉각탑을 수반하는 시설 — 고용 유발은 상주 수십 명 수준으로 오피스와 다름",
   "공장": "제조시설 — 업종에 따라 대기·소음 영향이 따를 수 있음",
 };
-const SUB_KEYS = { "교통": ["철도", "도로", "환승·터미널"], "일자리": ["오피스", "지식산업센터", "공장", "데이터센터", "복합단지", "미상"],
+/* 교통 중분류 — 도로를 **위계로 2분할**(2026-08-05 사용자 확정). 제5차 국도·국지도 건설계획
+   111건이 들어오면서 「도로」 한 덩어리가 국도로 덮이게 됐다. 고속·전용(단절 접근, IC에서만
+   진출입)과 국도·국지도(연도 접근)는 성격이 다르므로 조회축을 가른다.
+   ⚠ 매핑은 **강한 쪽만 열거**한다(roadSubOf) — 「국도」/「일반국도」처럼 같은 것이 두 이름으로
+   있고 앞으로도 늘 수 있어서, 약한 쪽을 열거하면 반드시 낡는다. */
+const SUB_KEYS = { "교통": ["철도", "고속·전용", "국도·국지도", "환승·터미널"], "일자리": ["오피스", "지식산업센터", "공장", "데이터센터", "복합단지", "미상"],
   "인프라": ["병원", "공원·녹지", "판매", "문화·관광·체육", "학교", "공공시설", "공항", "항만", "기타시설", "미상"],
   "주거개발": ["재개발", "재건축", "주거환경개선", "소규모정비", "리모델링", "재정비촉진지구", "지역주택조합", "택지·지구", "미상"] };
 /* 주거개발 중분류(2026-07-30 신설) — 축은 **법정 사업유형**이다.
@@ -878,12 +883,17 @@ const SUB_KEYS = { "교통": ["철도", "도로", "환승·터미널"], "일자�
    이름은 표시용, 키는 subId()로만 만든다. */
 const subId = (cat, sub) => cat + "|" + sub;
 const ALL_SUBS = CAT_KEYS.flatMap(c => (SUB_KEYS[c] || []).map(s => subId(c, s)));
-const CAT_SUB = { "교통": "철도 / 도로 / 환승·터미널", "일자리": "오피스 / 지식산업센터 / 공장 / 데이터센터 / 복합단지", "인프라": "병원 / 공원·녹지 / 판매 / 문화·관광·체육 / 학교(특목) / 공공시설 / 공항 / 항만 / 기타시설", "주거개발": "재개발 / 재건축 / 주거환경개선 / 소규모정비 / 지역주택조합 / 택지·지구" };
+const CAT_SUB = { "교통": "철도 / 고속·전용 / 국도·국지도 / 환승·터미널", "일자리": "오피스 / 지식산업센터 / 공장 / 데이터센터 / 복합단지", "인프라": "병원 / 공원·녹지 / 판매 / 문화·관광·체육 / 학교(특목) / 공공시설 / 공항 / 항만 / 기타시설", "주거개발": "재개발 / 재건축 / 주거환경개선 / 소규모정비 / 지역주택조합 / 택지·지구" };
 // S 눈금(2026-07-22): 일자리·인프라 = 1조↑ 또는 연면적 30만㎡↑ / 주거 1만세대↑ / 교통 = 위계(thresholds 교통_위계)
 const LEVEL_DESC = {
   "교통": {
     "철도": { S: "광역급행·고속철 / 급행급(45km/h↑) 3대 도심 직결 / 노선형 5조↑", A: "광역철도·고속화·지하화", B: "일반 지하철·도시철도 신설·연장", C: "지선·경전철·트램" },
-    "도로": { S: "노선형 사업비 5조↑ (신공항 연결·간선 지하화급)", A: "핵심 지하고속도로·주요 고속도로 IC 신설", B: "외곽순환 등 일반 IC·대형 터널", C: "일반 우회도로·진출입로 개선" },
+    // 도로 등급은 2026-08-05부터 **총사업비 눈금**으로 판정한다(thresholds 금액_눈금_억원.교통:도로노선).
+    // 종전엔 등급근거가 "정성"이라 아래 문구가 화면에만 있고 계산엔 안 들어갔고, 실제로는
+    // `고속도로면 A, 아니면 B` 이분법이었다 — 화면과 판정이 어긋나 있었다(기준 일원화 원칙 위반).
+    // 사업비가 없는 사업은 유형 폴백으로 두되 신호의 `lvl_basis`에 그 사실을 남긴다(P2).
+    "고속·전용": { S: "총사업비 5조↑ (신공항 연결·간선 지하화급)", A: "1조↑ — 핵심 지하고속도로·주요 고속도로", B: "3,000억↑ — 외곽순환 등 일반 IC·대형 터널", C: "3,000억 미만" },
+    "국도·국지도": { S: "총사업비 5조↑", A: "1조↑", B: "3,000억↑ — 국도 신설·확장급", C: "3,000억 미만 — 선형 개량·소규모 확장" },
     "환승·터미널": { S: "시설형 교통 1조↑ (영동대로 복합환승급)", A: "복합환승센터·대형 버스터미널 (연면적 10만㎡+)", B: "시외버스터미널급 (3~10만㎡)", C: "일반 터미널·환승시설 (1~3만㎡)" }
   },
   // 축은 시설 종류지만 **등급 근거는 그대로 면적·금액**(2026-07-18 — "면적이나 금액은 내부적으로 판단하는 근거").
@@ -1252,7 +1262,17 @@ function houseSubOf(s) {
     || houseTypeOf(s.title)
     || (s.master || s.area_kind ? "택지·지구" : "");   // 택지정보 대장(마스터플랜) 계열
 }
-const subOf = s => s.sub || (s.template_type === "도로" ? "도로"
+/* 도로 위계 → 중분류. **강한 쪽(고속·전용)만 열거**하고 나머지는 전부 국도·국지도로 보낸다.
+   약한 쪽을 열거하면 반드시 낡는다 — 원장에 이미 「국도」와 「일반국도」가 같은 뜻으로 공존하고,
+   새 유형이 생기면 그 순간 미분류로 샌다(상류 교정을 하류가 덮는 사고와 같은 형태). */
+const ROAD_EXPRESS = new Set(["고속도로", "자동차전용", "도시고속화"]);
+const roadSubOf = p => ROAD_EXPRESS.has(p && (p.official_type || p.linekind)) ? "고속·전용" : "국도·국지도";
+/* 반경표 키는 중분류와 **다른 축**이다 — 중분류는 위계, 반경은 접근 방식(전용 IC 점 버퍼 vs
+   연도 회랑)으로 갈린다. 같은 키로 쓰면 중분류를 쪼갠 순간 CLASSES.교통 조회가 빗나가고
+   `SUB_KEYS["교통"][0]`(=철도) 반경표로 조용히 폴백한다. 그래서 되돌려 주는 표를 따로 둔다. */
+const RADIUS_SUB = { "고속·전용": "도로", "국도·국지도": "도로" };
+const radiusSubOf = s => RADIUS_SUB[subOf(s)] || subOf(s);
+const subOf = s => s.sub || (s.template_type === "도로" ? "국도·국지도"
   : catOf(s) === "인프라" ? infraSubOf(s)
   : catOf(s) === "일자리" ? jobSubOf(s)
   : catOf(s) === "교통" ? "철도"          // 교통은 세부 미상이면 철도(역·노선이 기본형)
@@ -1289,7 +1309,7 @@ const getRadius = s => {
   const c = catOf(s), l = levelOf(s);
   if (s._road && s.road_kind === "일반") return roadCorridorKm(l) * 1000;   // 간선=좁은 회랑(기준 SSOT)
   let tbl = CLASSES[c];
-  if (SUB_KEYS[c]) tbl = (tbl[subOf(s)] || tbl[SUB_KEYS[c][0]]);   // 교통=철도/도로 세부표
+  if (SUB_KEYS[c]) tbl = (tbl[radiusSubOf(s)] || tbl[SUB_KEYS[c][0]]);   // 교통=철도/도로 세부표(반경 키로 되돌림)
   return ((tbl && tbl[l]) || 0.8) * 1000;
 };
 /* 성능용 bbox 프리필터의 반경(도 단위) — **반경표(CLASSES)에서 도출**한다.
@@ -1480,7 +1500,7 @@ function buildRoadSignals() {
   for (const f of ROADF) {
     const p = f.properties;
     if (p.kind === "station") {   // IC·JC 점
-      ROAD_SIG.push({ _road: true, title: p.name, cat: "교통", sub: "도로", lvl: p.lvl || "A",
+      ROAD_SIG.push({ _road: true, title: p.name, cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "A",
         template_type: "도로", current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
         src_tier: p.src_tier, ic_loc: p.loc, ic_status: p.ic_status, ic_note: p.ic_note, pt_type: p.pt_type, geo_prec: p.geo_prec, geo_approx: !!p.geo_approx, geo_basis: p.geo_basis || null, milestones: p.milestones,
         stage_checked: p.stage_checked, stage_src: p.stage_src,
@@ -1503,7 +1523,7 @@ function buildRoadSignals() {
                          : SAMPLE_M);
     if (!pts.length) continue;
     // 표시명 = 공식 사업명 우선(OSM 이름은 선형 매칭용일 뿐 — 공식 SSOT 사상 2026-07-17)
-    ROAD_SIG.push({ _road: true, title: p.official_name || `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: "도로", lvl: p.lvl || "C",
+    ROAD_SIG.push({ _road: true, title: p.official_name || `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "C",
       template_type: "도로", current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
       status: "활성", confirmed: !!p.confirmed, sd: null, road_kind: roadKindOf(p), src_tier: p.src_tier,   // 소재 시도=_sggs(다중 귀속)
       owner: p.owner, osm_name: p.name, line: p.name, geom_src: p.geom_src, geom_status: p.geom_status || null, milestones: p.milestones,   // line=노선 하이라이트 키
@@ -4217,7 +4237,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260805c");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260805d");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4379,7 +4399,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260805c"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260805d"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4405,7 +4425,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260805c");
+  const CB = "?b=" + (window.BUILD || "20260805d");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
