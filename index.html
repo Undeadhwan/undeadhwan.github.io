@@ -1014,7 +1014,12 @@ const isApprox = s => !!(s.geo_approx || s.approx) || ROUGH_PREC.has(s.geo_prec)
 function precNote(s) {
   const v = GEO_PREC[s.geo_prec];
   // 필드명은 geo_approx다. 종전엔 s.approx를 보고 있어 등급표에 없는 값이 "확정 좌표"로 나왔다.
-  return v ? `<b>${v.t}</b> — ${v.d}` : (s.geo_approx || s.approx ? "근사 — 위치 미확정" : "등급 미상 — 근사로 취급");
+  const head = v ? `<b>${v.t}</b> — ${v.d}` : (s.geo_approx || s.approx ? "근사 — 위치 미확정" : "등급 미상 — 근사로 취급");
+  // ☠ **등급은 말하고 근거는 말하지 않았다** (2026-08-06). `geo_basis`는 어댑터 3곳이 나르기만 하고
+  //   화면에서 **한 번도 그려진 적이 없다** — 「지번(~수십m)」이라 단정하면서 왜 그렇게 아는지는
+  //   침묵하는 상태다(P2·P5). 등급 근거(lvl_basis)와 같은 사고를 좌표 쪽에서 반복한 것.
+  const why = s.geo_basis ? `<div class="gbasis">${esc(String(s.geo_basis))}</div>` : "";
+  return head + why;
 }
 
 /* 마일스톤 트랙 (DATA_STANDARD §3b): 완료=날짜(사실) / 미래=목표·미정(추정 금지) / 진척률 % 없음(§7) */
@@ -4462,7 +4467,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260806m");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260806n");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4624,7 +4629,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260806m"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260806n"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4650,7 +4655,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260806m");
+  const CB = "?b=" + (window.BUILD || "20260806n");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
