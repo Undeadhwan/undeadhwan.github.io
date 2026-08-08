@@ -1,6 +1,6 @@
 {
  "_note": "공공건축 설계공모(건축HUB 설계공모 정보서비스) → 계획단계 후보. 위치·연면적·총사업비는 공고 원문값. 등급=**금액 우선**(총사업비 있으면 사업비, 없으면 연면적) — 눈금 SSOT: grade.py [인프라 S10000억/A500억/B150억/C30억]. 지자체 자체 공모는 미등록될 수 있어 커버리지 100% 아님(정직 표기).",
- "generated": "2026-08-06 19:22",
+ "generated": "2026-08-08 23:25",
  "signals": [
   {
    "title": "[1단계] 보령 원산도 해양레포츠센터 조성사업 2단계공모",
@@ -3813,6 +3813,58 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement_basis": "source"
+  },
+  {
+   "title": "한반도 평화공존센터 건립사업 설계용역",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "C",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.820184,
+     37.556369
+    ]
+   },
+   "sd": "서울",
+   "sg": "강서구",
+   "addr": "서울특별시 강서구 마곡동 749-5, 749-6, 749-7",
+   "area_m2": 5700,
+   "cost_won": 24510000000,
+   "purp": "문화 및 집회시설",
+   "arch_act": "신축",
+   "order_inst": "통일부",
+   "inst_type": "국가기관",
+   "phase": "계획",
+   "current_stage": "설계공모(부처 지명·제안)",
+   "status": "활성",
+   "confirmed": false,
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://unikorea.go.kr/web/unikorea/bbs/bbs_0000000000000001/59586",
+   "src_note": "부처 게시판 공고 원문(1.공고문_한반도평화공존센터건립사업.hwpx) — 나라장터·건축HUB DPS 미등록 부류",
+   "board_id": "unikorea-notice",
+   "board_no": "59586",
+   "_ministry": true,
+   "gate": "신호",
+   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "lvl_basis": "연면적 5,700㎡ — 인프라:문화·관광·체육 C",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-08",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-08",
+   "last_movement": "2026-08-08",
+   "last_movement_basis": "observed",
+   "master_ref": {
+    "id": "M-11500DA2010001",
+    "title": "마곡 도시개발구역"
+   }
   }
  ]
 }
