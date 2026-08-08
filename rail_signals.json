@@ -120474,6 +120474,8 @@
     "geom_from_traced": true,
     "geom_adequacy": "traced",
     "geom_adequacy_note": "공식 노선도 좌표변환 — 형상 확보",
+    "geom_partial": true,
+    "geom_cover_note": "선형 일부 구간만 확보 — 그린 길이 12.8km는 공식 연장 19.4km의 66%다(정거장은 모두 선 위에 있다 — 나머지 구간의 정거장 좌표가 아직 없다)",
     "geom_tail_trimmed_km": 0.2,
     "_geom_full": [
      [
@@ -238382,6 +238384,8 @@
     "geom_src": "공식 지점 인접 구간만 연결(≤5.0km) — 넓은 구간은 경로 미상으로 끊음 · 원 출처: 역 앵커 연결(근사)",
     "geom_adequacy": "dense_anchor",
     "geom_adequacy_note": "정거장 간격 2.2km — 앵커 체인이 곧 경로(§2b, 작도 불필요)",
+    "geom_partial": true,
+    "geom_cover_note": "선형 일부 구간만 확보 — 그린 길이 8.9km는 공식 연장 12.6km의 70%다(정거장은 모두 선 위에 있다 — 나머지 구간의 정거장 좌표가 아직 없다)",
     "_geom_full": [
      [
       128.62839,
@@ -247490,6 +247494,8 @@
     "geom_src": "공식 정거장 + 기존선 경유역(실존 운영역 POI) 연결(근사) — 실선형 아님",
     "geom_adequacy": "dense_anchor",
     "geom_adequacy_note": "정거장 간격 -0.0km — 앵커 체인이 곧 경로(§2b, 작도 불필요)",
+    "geom_partial": true,
+    "geom_cover_note": "선형 일부 구간만 확보 — 그린 길이 56.6km는 공식 연장 69.8km의 81%다(정거장은 모두 선 위에 있다 — 나머지 구간의 정거장 좌표가 아직 없다)",
     "_geom_full": [
      [
       128.18691,
@@ -300993,6 +300999,8 @@
     "geom_src": "역 앵커 연결(근사)",
     "geom_adequacy": "dense_anchor",
     "geom_adequacy_note": "정거장 간격 -0.0km — 앵커 체인이 곧 경로(§2b, 작도 불필요)",
+    "geom_partial": true,
+    "geom_cover_note": "선형 일부 구간만 확보 — 그린 길이 59.4km는 공식 연장 77.8km의 76%다(정거장은 모두 선 위에 있다 — 나머지 구간의 정거장 좌표가 아직 없다)",
     "_geom_full": [
      [
       126.789581,
@@ -301331,6 +301339,8 @@
     "geom_src": "공식 정거장 + 기존선 경유역(실존 운영역 POI) 연결(근사) — 실선형 아님",
     "geom_adequacy": "dense_anchor",
     "geom_adequacy_note": "정거장 간격 -0.0km — 앵커 체인이 곧 경로(§2b, 작도 불필요)",
+    "geom_partial": true,
+    "geom_cover_note": "선형 일부 구간만 확보 — 그린 길이 94.1km는 공식 연장 121.5km의 77%다(정거장은 모두 선 위에 있다 — 나머지 구간의 정거장 좌표가 아직 없다)",
     "_geom_full": [
      [
       126.789581,
@@ -313670,6 +313680,8 @@
     "geom_src": "역 앵커 연결(근사)",
     "geom_adequacy": "endpoints_only",
     "geom_adequacy_note": "위치 확보 정거장 2개뿐 — 공식 노선도 없이는 직선 외 표현 불가",
+    "geom_partial": true,
+    "geom_cover_note": "선형 일부 구간만 확보 — 그린 길이 12.8km는 공식 연장 20.1km의 63%다(정거장은 모두 선 위에 있다 — 나머지 구간의 정거장 좌표가 아직 없다)",
     "_geom_full": [
      [
       127.431595,
@@ -315314,6 +315326,8 @@
     "geom_from_traced": true,
     "geom_adequacy": "traced",
     "geom_adequacy_note": "공식 노선도 좌표변환 — 형상 확보",
+    "geom_partial": true,
+    "geom_cover_note": "선형 일부 구간만 확보 — 그린 길이 35.4km는 공식 연장 57.0km의 62%다(정거장은 모두 선 위에 있다 — 나머지 구간의 정거장 좌표가 아직 없다)",
     "geom_tail_trimmed_km": 1.59,
     "_geom_full": [
      [
@@ -366132,6 +366146,8 @@
     "geom_filled": true,
     "geom_bridged_km": 6.01,
     "geom_downgrade_reason": "정직화 — 근거 없는 구간을 **연한 점선**으로 구분 표기(2026-08-01 표준: 지우지 않고 말한다)",
+    "geom_partial": true,
+    "geom_cover_note": "선형 일부 구간만 확보 — 그린 길이 6.0km는 공식 연장 19.4km의 31%다(정거장은 모두 선 위에 있다 — 나머지 구간의 정거장 좌표가 아직 없다)",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
@@ -368784,6 +368800,8 @@
     "geom_downgrade_reason": "정직화 — 근거 없는 구간을 **연한 점선**으로 구분 표기(2026-08-01 표준: 지우지 않고 말한다)",
     "geom_filled": true,
     "geom_bridged_km": 15.37,
+    "geom_partial": true,
+    "geom_cover_note": "선형 일부 구간만 확보 — 그린 길이 15.4km는 공식 연장 57.0km의 27%다(정거장은 모두 선 위에 있다 — 나머지 구간의 정거장 좌표가 아직 없다)",
     "geo_prec": "line",
     "geo_approx": false,
     "geometry": {
