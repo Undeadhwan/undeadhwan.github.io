@@ -525,7 +525,10 @@
   #tabbar { display:none; position:fixed; left:0; right:0; z-index:1300;
             background:rgba(255,255,255,.96); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
             border-top:1px solid var(--line);
-            padding:10px 10px calc(12px + env(safe-area-inset-bottom, 0px)); }
+            /* 하단 공백을 넉넉히(2026-08-10 사용자 "하단에 공백을 좀 두라는거야. 호갱노노 봐봐") —
+               호갱노노는 라벨 아래로 ~20px 이상을 비워 홈 바와 겹치지 않는다. safe-area는 **더한다**
+               (아이폰에선 홈 바 높이만큼 자동으로 더 뜨고, 안드로이드·브라우저에선 22px이 공백이 된다). */
+            padding:10px 10px calc(22px + env(safe-area-inset-bottom, 0px)); }
   #tabbar .tb { flex:1 1 0; min-width:0; display:flex; flex-direction:column; align-items:center; gap:5px;
                 background:none; border:0; padding:2px; font-size:11px; letter-spacing:-.1px;
                 color:var(--ink3); font-family:inherit; cursor:pointer; position:relative; }
@@ -3940,6 +3943,8 @@ function initLeaflet() {
       if (YEAR_SEL && p.year && p.year > YEAR_SEL) continue;   // 시점 기준: 아직 고시 안 된 구역은 숨김
       // 4단계 조회: 부분선택이면 매칭 단계(p.phase)가 선택에 포함된 구역만(미상은 이때 숨김)
       if (phaseFiltering && (!p.phase || !filter.phase.has(p.phase))) continue;
+      // 미매칭(단계 미상) 구역은 동네 줌(z≥13)부터만 — 카카오판 유령 2차 봉인과 같은 규칙(2026-08-10)
+      if (!p.phase && map.getZoom() < DONG_ZOOM + 1) continue;
       if (++n > 240) break;   // 성능 상한
       const tracked = !!p.phase;   // 우리 신호와 매칭돼 진척도를 아는 구역
       // 색 = 분류색 단일(주거개발). 폴리곤은 조연(흐린 경계 문맥) — 호재 원이 주인공이라 대폭 감쇄(사용자 확정 2026-07-16)
@@ -3950,8 +3955,8 @@ function initLeaflet() {
          fill .03이라 밝은 베이스맵에서 **사실상 안 보였는데** hover·클릭은 전부 받았다 — 유령이다.
          고시 경계는 사실이므로 지우는 대신 **보이게** 올린다(경계가 읽히는 최소선). */
       const poly = L.polygon(latlngs, { pane: "jbpoly", color: col,
-        weight: tracked ? 1.1 : 1.1, opacity: tracked ? .45 : .5, dashArray: tracked ? null : "4 3",
-        fillColor: col, fillOpacity: tracked ? .06 : .05 }).addTo(map);
+        weight: tracked ? 1.1 : 1.4, opacity: tracked ? .45 : .65, dashArray: tracked ? null : "4 3",
+        fillColor: col, fillOpacity: tracked ? .06 : .07 }).addTo(map);
       poly.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${p.name || "정비구역"}</div>`
         + `<div class="apt-pop-sub">정비구역 · ${p.jtype}${p.area ? " · " + (p.area / 1e4).toFixed(1) + "만㎡" : ""}</div>`
         + `<div class="apt-pop-cats">${tracked
@@ -4740,12 +4745,16 @@ function initKakao() {
     const bx0 = sw.getLng(), by0 = sw.getLat(), bx1 = ne.getLng(), by1 = ne.getLat(); let n = 0;
     for (const f of JEONGBI_POLY) { const [x0, y0, x1, y1] = featBbox(f); if (x1 < bx0 || x0 > bx1 || y1 < by0 || y0 > by1) continue;
       const p = f.properties; if (_staleFin(p.stage, p.phase, null, p.date)) continue; if (YEAR_SEL && p.year && p.year > YEAR_SEL) continue; if (phaseFiltering && (!p.phase || !filter.phase.has(p.phase))) continue;
+      /* ⚠ 유령 2차 봉인(2026-08-10 사용자 "유령클릭 여전한데?") — 스타일을 올려도 광역 줌에선
+         작은 회색 점선 폴리곤이 여전히 안 읽힌다. 안 읽히는 줌에서는 **존재 자체를 없앤다**:
+         미매칭(단계 미상) 구역은 동네 줌(lv≤5)부터만 렌더 — 렌더가 없으면 이벤트도 없다. */
+      if (!p.phase && map.getLevel() > DONG_LV - 1) continue;
       if (++n > 240) break;
       if (!f._kjb) {
         const tracked = !!p.phase; const col = tracked ? CAT_COLOR["주거개발"] : "#aeb4c0";
         const path = f.geometry.coordinates.map(r => r.map(([x, y]) => LL(x, y)));
         // ⚠ 미매칭 구역이 안 보이는데 클릭되는 유령 — Leaflet판과 같은 교정(2026-08-10). 점선 경계로 「단계 미상」 문법도 겸한다.
-        const poly = new K.Polygon({ path, strokeColor: col, strokeWeight: 1.1, strokeOpacity: tracked ? .45 : .5, strokeStyle: tracked ? "solid" : "shortdash", fillColor: col, fillOpacity: tracked ? .06 : .05, zIndex: 2 });
+        const poly = new K.Polygon({ path, strokeColor: col, strokeWeight: tracked ? 1.1 : 1.4, strokeOpacity: tracked ? .45 : .65, strokeStyle: tracked ? "solid" : "shortdash", fillColor: col, fillOpacity: tracked ? .06 : .07, zIndex: 2 });
         const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + (p.name || "정비구역") + '</div><div class="apt-pop-sub">정비구역 · ' + p.jtype + (p.area ? " · " + (p.area / 1e4).toFixed(1) + "만㎡" : "") + '</div><div class="apt-pop-cats">' + (tracked ? '<span style="color:' + col + '">● ' + (p.stage || "추진 중") + '</span>' + (p.psrc ? '<span style="color:#8a90a0"> · ' + p.psrc + ' 기준</span>' : "") : '<span style="color:#8a90a0">단계 미상 · 고시 경계</span>') + (p.date ? " · 고시 " + p.date : "") + '</div></div>';
         K.event.addListener(poly, "mouseover", mev => showTip(html, evToClient(mev))); K.event.addListener(poly, "mousemove", mev => showTip(html, evToClient(mev))); K.event.addListener(poly, "mouseout", hideTip);
         K.event.addListener(poly, "click", () => { _ovClickTs = Date.now(); hideTip(); const ring = f.geometry.coordinates[0]; let sx = 0, sy = 0; ring.forEach(([x, y]) => { sx += x; sy += y; }); showSignal(jeongbiPolyToSignal(p, [sx / ring.length, sy / ring.length]), false); });
@@ -4809,7 +4818,7 @@ function initKakao() {
     div.querySelector(".hlt").addEventListener("click", () => { const off = div.classList.toggle("collapsed"); localStorage.setItem("hojae_legend_off", off ? "1" : "0"); div.querySelector(".car").textContent = off ? "▾" : "▴"; });
     mapEl.appendChild(div); }
 
-  const applyLOD = () => { renderDongPoly(); renderJeongbiPoly(); renderMasterArea(); renderHojae(); renderDongLabels(); renderSdPills(); renderAptDots(); renderRail(); loadBdong(); };
+  const applyLOD = () => { hideTip(); renderDongPoly(); renderJeongbiPoly(); renderMasterArea(); renderHojae(); renderDongLabels(); renderSdPills(); renderAptDots(); renderRail(); loadBdong(); };   // hideTip 먼저 — 줌이 바뀌며 걷힌 폴리곤의 툴팁이 잔류하면 유령이 된다(2026-08-10)
   K.event.addListener(map, "idle", applyLOD);
   // 줌 애니메이션 프레임마다 카카오가 살아있는 벡터·DOM 오버레이 전부를 재투영한다 — 그게 "딱딱 끊김"의 원인.
   // 애니메이션 동안 우리 오버레이 **전부**를 잠깐 내리고 idle의 applyLOD가 복귀시킨다(네이버지도 방식 —
@@ -5169,7 +5178,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260810b");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260810c");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -5335,7 +5344,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810b"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810c"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5361,7 +5370,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260810b");
+  const CB = "?b=" + (window.BUILD || "20260810c");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
