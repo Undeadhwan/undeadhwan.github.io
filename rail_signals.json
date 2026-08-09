@@ -367921,6 +367921,454 @@
   },
   {
    "type": "Feature",
+   "properties": {
+    "kind": "line",
+    "name": "서해선 파주 운정 연장",
+    "full": "서해선 파주 운정 연장(일산~운정)",
+    "linekind": "광역철도",
+    "lvl": "B",
+    "lvl_basis": "노선 명시 등급(사용자 확정)",
+    "gate": "신호",
+    "gate_basis": "단계 착공 — 법정 절차 진행 중",
+    "phase": "착공",
+    "status": "'25 착공 — '26 하반기 개통목표 (기존 경의선 선로 연장 운행 · 주박·관제·신호 개량)",
+    "confirmed": true,
+    "dashed": false,
+    "approx": true,
+    "drop": null,
+    "note": "일산~운정 5.3km · 사업비 115억('24~'26) · 국가철도공단 위탁 시행. '24.1.15 국토부 추진계획 확정 → '24 하반기 실시설계 → '25 상반기 착공(운정역 착공식). 신선 건설이 아니라 **기존 경의선 선로로 연장 운행** — 공사는 주박시설·관제·신호체계 개량. 2026-08-09 사용자 제보로 등재(커버리지 누락)",
+    "src_name": "국토교통부 추진계획 확정('24.1.15) · 파주시",
+    "src_url": "https://www.paju.go.kr/news/user/board/BD_board.list.do?bbsCd=1023",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "국토부 추진계획 확정",
+      "date": "2024-01-15",
+      "state": "done",
+      "src": "국토교통부"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공(운정역 착공식 '25 상반기)",
+      "state": "current",
+      "src": "파주시"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2026",
+      "state": "target",
+      "src": "파주시"
+     }
+    ],
+    "route_verified": null,
+    "audited": "2026-08-09",
+    "geom_src": "공식 지점 인접 구간만 연결(≤5.0km) — 넓은 구간은 경로 미상으로 끊음 · 원 출처: 역 앵커 연결(근사)",
+    "geom_adequacy": "dense_anchor",
+    "geom_adequacy_note": "정거장 간격 -0.0km — 앵커 체인이 곧 경로(§2b, 작도 불필요)",
+    "_geom_full": [
+     [
+      126.77012,
+      37.68195
+     ],
+     [
+      126.760975,
+      37.693064
+     ],
+     [
+      126.761535,
+      37.712749
+     ],
+     [
+      126.766617,
+      37.724578
+     ]
+    ],
+    "geom_downgrade_reason": "정직화 — 인접 구간만 연결(좌표 정밀화의 정상 결과)",
+    "geom_solid": [],
+    "geom_bridges": [
+     [
+      [
+       126.77012,
+       37.68195
+      ],
+      [
+       126.760975,
+       37.693064
+      ]
+     ],
+     [
+      [
+       126.760975,
+       37.693064
+      ],
+      [
+       126.761535,
+       37.712749
+      ]
+     ],
+     [
+      [
+       126.761535,
+       37.712749
+      ],
+      [
+       126.766617,
+       37.724578
+      ]
+     ]
+    ],
+    "geom_bridged_km": 5.03,
+    "geom_bridge_note": "이 선은 **전 구간이 공식 지점 연결**이다(5.03km) — 지점 사이를 직선으로 이은 것이라 실제 경로는 다를 수 있다(연한 점선). 공식 노선도를 확보하면 대체된다",
+    "geom_src_orig": "역 앵커 연결(근사)",
+    "geo_prec": "line",
+    "geo_approx": false,
+    "geometry": {
+     "type": "LineString",
+     "coordinates": [
+      [
+       126.77012,
+       37.68195
+      ],
+      [
+       126.760975,
+       37.693064
+      ],
+      [
+       126.761535,
+       37.712749
+      ],
+      [
+       126.766617,
+       37.724578
+      ]
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-08-09",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-09",
+    "last_movement": "2026-08-09",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      126.77012,
+      37.68195
+     ],
+     [
+      126.760975,
+      37.693064
+     ],
+     [
+      126.761535,
+      37.712749
+     ],
+     [
+      126.766617,
+      37.724578
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "일산역",
+    "line": "서해선 파주 운정 연장",
+    "lvl": "B",
+    "lvl_basis": "노선 명시 등급(사용자 확정)",
+    "gate": "신호",
+    "gate_basis": "단계 착공 — 법정 절차 진행 중",
+    "confirmed": true,
+    "status": "'25 착공 — '26 하반기 개통목표 (기존 경의선 선로 연장 운행 · 주박·관제·신호 개량)",
+    "phase": "착공",
+    "st_status": "기존",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "geo_basis": "기존 경의중앙선 일산역 — 실존역 POI",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "국토부 추진계획 확정",
+      "date": "2024-01-15",
+      "state": "done",
+      "src": "국토교통부"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공(운정역 착공식 '25 상반기)",
+      "state": "current",
+      "src": "파주시"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2026",
+      "state": "target",
+      "src": "파주시"
+     }
+    ],
+    "note": null,
+    "audited": "2026-08-09",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.77012,
+      37.68195
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "계획",
+      "date": "2026-07-18",
+      "basis": "observed"
+     },
+     {
+      "stage": "착공",
+      "date": "2026-08-09",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-18",
+    "last_movement": "2026-08-09",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.77012,
+     37.68195
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "탄현역",
+    "line": "서해선 파주 운정 연장",
+    "lvl": "B",
+    "lvl_basis": "노선 명시 등급(사용자 확정)",
+    "gate": "신호",
+    "gate_basis": "단계 착공 — 법정 절차 진행 중",
+    "confirmed": true,
+    "status": "'25 착공 — '26 하반기 개통목표 (기존 경의선 선로 연장 운행 · 주박·관제·신호 개량)",
+    "phase": "착공",
+    "st_status": "기존",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "geo_basis": "기존 경의중앙선 탄현역 — 실존역 POI 정확일치",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "국토부 추진계획 확정",
+      "date": "2024-01-15",
+      "state": "done",
+      "src": "국토교통부"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공(운정역 착공식 '25 상반기)",
+      "state": "current",
+      "src": "파주시"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2026",
+      "state": "target",
+      "src": "파주시"
+     }
+    ],
+    "note": null,
+    "audited": "2026-08-09",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.760975,
+      37.693064
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-08-09",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-09",
+    "last_movement": "2026-08-09",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.760975,
+     37.693064
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "야당역",
+    "line": "서해선 파주 운정 연장",
+    "lvl": "B",
+    "lvl_basis": "노선 명시 등급(사용자 확정)",
+    "gate": "신호",
+    "gate_basis": "단계 착공 — 법정 절차 진행 중",
+    "confirmed": true,
+    "status": "'25 착공 — '26 하반기 개통목표 (기존 경의선 선로 연장 운행 · 주박·관제·신호 개량)",
+    "phase": "착공",
+    "st_status": "기존",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "geo_basis": "기존 경의중앙선 야당역 — 실존역 POI 정확일치",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "국토부 추진계획 확정",
+      "date": "2024-01-15",
+      "state": "done",
+      "src": "국토교통부"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공(운정역 착공식 '25 상반기)",
+      "state": "current",
+      "src": "파주시"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2026",
+      "state": "target",
+      "src": "파주시"
+     }
+    ],
+    "note": null,
+    "audited": "2026-08-09",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.761535,
+      37.712749
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-08-09",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-09",
+    "last_movement": "2026-08-09",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.761535,
+     37.712749
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "운정역",
+    "line": "서해선 파주 운정 연장",
+    "lvl": "B",
+    "lvl_basis": "노선 명시 등급(사용자 확정)",
+    "gate": "신호",
+    "gate_basis": "단계 착공 — 법정 절차 진행 중",
+    "confirmed": true,
+    "status": "'25 착공 — '26 하반기 개통목표 (기존 경의선 선로 연장 운행 · 주박·관제·신호 개량)",
+    "phase": "착공",
+    "st_status": "기존",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "geo_basis": "기존 경의중앙선 운정역 — 실존역 POI 정확일치",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "국토부 추진계획 확정",
+      "date": "2024-01-15",
+      "state": "done",
+      "src": "국토교통부"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공(운정역 착공식 '25 상반기)",
+      "state": "current",
+      "src": "파주시"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2026",
+      "state": "target",
+      "src": "파주시"
+     }
+    ],
+    "note": null,
+    "audited": "2026-08-09",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.766617,
+      37.724578
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-08-09",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-09",
+    "last_movement": "2026-08-09",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.766617,
+     37.724578
+    ]
+   }
+  },
+  {
+   "type": "Feature",
    "geometry": {
     "type": "LineString",
     "coordinates": [
