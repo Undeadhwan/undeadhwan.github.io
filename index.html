@@ -518,14 +518,19 @@
   #flowv .fgh .why { font-size:var(--fs-s); color:var(--ink3); }
   #flowv .fempty { font-size:var(--fs-s); color:var(--ink3); padding:6px 0 2px; }
   /* ══ 하단 탭바(독) — 모바일 전용. 데스크톱은 헤더 칩이 같은 일을 한다(두 벌을 만들지 않는다) ══ */
-  #tabbar { display:none; position:fixed; left:0; right:0; z-index:1300; background:var(--bg);
-            border-top:1px solid var(--line); padding:4px 4px 2px; }
-  #tabbar .tb { flex:1 1 0; min-width:0; display:flex; flex-direction:column; align-items:center; gap:1px;
-                background:none; border:0; padding:6px 2px 5px; font-size:11.5px; color:var(--ink3);
-                font-family:inherit; cursor:pointer; position:relative; }
-  #tabbar .tb i { font-style:normal; font-size:17px; line-height:1.1; filter:grayscale(1); opacity:.55; }
-  #tabbar .tb.on { color:var(--ink); font-weight:700; }
-  #tabbar .tb.on i { filter:none; opacity:1; }
+  /* 문법(DESIGN §1): 무채색 뼈대 · 상태는 채움(굵기)으로. `env(safe-area-inset-bottom)` —
+     푸터를 숨겨 탭바가 최하단이 됐으므로 아이폰 홈 바를 침범하면 안 된다. */
+  #tabbar { display:none; position:fixed; left:0; right:0; z-index:1300;
+            background:rgba(255,255,255,.94); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+            border-top:1px solid var(--line);
+            padding:6px 8px calc(6px + env(safe-area-inset-bottom, 0px)); }
+  #tabbar .tb { flex:1 1 0; min-width:0; display:flex; flex-direction:column; align-items:center; gap:3px;
+                background:none; border:0; padding:4px 2px; font-size:10.5px; letter-spacing:-.1px;
+                color:var(--ink3); font-family:inherit; cursor:pointer; position:relative; }
+  #tabbar .tb svg { width:21px; height:21px; fill:none; stroke:currentColor; stroke-width:1.7;
+                    stroke-linecap:round; stroke-linejoin:round; }
+  #tabbar .tb.on { color:var(--ink); font-weight:600; }
+  #tabbar .tb.on svg { stroke-width:2.1; }
   /* 흐름 탭의 배지 = 이번 주 문서상 움직임. 0이면 안 붙인다(없는 걸 강조하지 않는다) */
   #tabbar .tbn { position:absolute; top:2px; left:50%; margin-left:6px; background:var(--c-traffic); color:#fff;
                  font-size:10.5px; font-weight:700; border-radius:999px; padding:0 5px; line-height:15px; }
@@ -534,6 +539,9 @@
     /* 헤더의 뷰 전환 칩은 탭바로 내려갔다 — 같은 것을 두 곳에 두면 헤더만 낭비된다(지도 높이가 준다) */
     #f-mode { display:none !important; }
     #flowv { padding:12px 12px 80px; }
+    /* 하단 고지 푸터는 모바일에서 숨긴다(2026-08-09 사용자 "코멘트 지우고 독을 내려") —
+       문구를 지우는 게 아니라 **조회조건 시트 하단(.dk-foot)으로 옮긴다**(P1·P5 문구는 접근 가능해야). */
+    footer { display:none; }
   }
   /* ── 모바일: 지도 위 + 패널 아래 세로 배치, 필터는 가로 스크롤 ── */
   @media (max-width: 768px) {
@@ -690,36 +698,22 @@
   #dock .seg .s i.dash { background:none; border:1.3px dashed currentColor; }
   #dock .dk-foot { padding:11px 14px 0; font-size:var(--fs-s); color:var(--ink3); line-height:1.6; }
   #dock .dk-foot a { color:var(--ink3); }
+  /* 고지 문구 — 모바일에서 푸터를 숨기는 대신 여기로(항상 렌더되지만 데스크톱에선 푸터와 중복 표시라 숨김) */
+  #dock .dk-legal { margin-top:7px; padding-top:6px; border-top:1px dashed var(--line); font-size:11.5px; }
+  @media (min-width: 769px) { #dock .dk-legal { display:none; } }
   /* ══ 모바일 조회조건 = 하단 시트 (2026-08-03 사용자 "많은 변화가 있어야 할 듯") ══
      종전엔 도크가 지도 아래 통째로 깔려(대분류 4 × 중분류 전개 + 선형·단계·등급) 세로 1,200px을
      먹었다. 지도 앱에서 필터가 화면을 그만큼 차지할 이유가 없다 — 필요할 때 열고 닫는다.
      상세 시트(#panel)와 **같은 문법**을 쓴다: 하단에서 올라오는 시트 · 손잡이 · 배경 딤. */
   .mo-only { display:none; }
   #dock-dim { display:none; position:fixed; inset:0; background:rgba(18,24,38,.38); z-index:1099; }
-  @media (max-width: 768px) {
-    .mo-only { display:inline-flex; }
-    /* 하단 요약 바 (2026-08-09 모바일 정보구조) — 화면에 **시간**을 들여놓는 자리.
-       종전 모바일 지도는 "무엇이 있나"만 말하고 "무엇이 새로운가"를 말하지 않았다.
-       네이버부동산이 하단에 「매물 253 │ 단지 107」을 상시 띄우는 자리와 같은 위치인데,
-       우리 숫자는 재고가 아니라 **변화**다. 탭하면 목록으로 넘어간다.
-       ⚠ 집계는 지도 뷰포트가 아니라 **조회조건(`visible`)** 기준이다 — 지도 구현이
-         카카오·Leaflet 둘이라 뷰포트로 세면 한쪽에만 걸린다(이 저장소의 반복 사고). */
-  }
-  #msum { display:none; position:absolute; left:10px; right:10px; bottom:10px; z-index:1001;
-          align-items:center; gap:9px; background:var(--bg); border:1px solid var(--line2);
-          border-radius:999px; padding:9px 14px; font-size:13.5px; color:var(--ink);
-          box-shadow:0 3px 12px rgba(25,35,60,.16); cursor:pointer; }
-  #msum b { font-weight:700; font-variant-numeric:tabular-nums; }
-  #msum .dv { color:var(--line2); }
-  #msum .mv { color:var(--c-traffic); font-weight:700; font-variant-numeric:tabular-nums; }
-  #msum .mv.zero { color:var(--ink3); }
-  #msum .ar { margin-left:auto; color:var(--ink3); }
+  @media (max-width: 768px) { .mo-only { display:inline-flex; } }
   /* ══ 모바일 축 칩 (2026-08-09) — 분류 4축을 지도 위에 **상시** 노출 ══
      종전 모바일은 무엇을 보고 있는지 알려면 ☰ 조회조건 → 시트(2탭)를 거쳐야 했다.
      경쟁 3사(호갱노노·아실·네이버부동산)는 전부 필터를 상단에 상시 편다.
      세부(중분류·단계·등급)는 시트에 그대로 남긴다 — 여기 있는 건 **대분류 4개뿐**이다.
      ⚠ 헤더에 넣지 않고 지도 위에 띄운다 — 헤더는 이미 194px이고, 여기서 더 먹으면
-       "지도가 첫 화면"(DESIGN §3-b) 규칙이 다시 무너진다. #msum과 같은 부유 문법. */
+       "지도가 첫 화면"(DESIGN §3-b) 규칙이 다시 무너진다. 지도 위 부유 문법. */
   #maxis { display:none; position:absolute; left:8px; right:8px; top:8px; z-index:1001;
            gap:5px; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;
            padding:1px; }
@@ -737,7 +731,7 @@
   #maxis .ax.off i { background:none !important; border:1.3px solid currentColor; }
   #maxis .ax.off .n { color:var(--ink3); }
   /* 모바일에서만 노출 — **기본 규칙 뒤**에 와야 display:none을 이긴다(캐스케이드 충돌 주의) */
-  @media (max-width: 768px) { #msum { display:flex; } #maxis { display:flex; } }
+  @media (max-width: 768px) { #maxis { display:flex; } }
   @media (max-width: 768px) {
     #dock { position:fixed; left:0; right:0; bottom:0; top:auto; width:auto;
             max-height:82vh; border:0; border-radius:16px 16px 0 0; z-index:1100;
@@ -796,7 +790,6 @@
   <!-- 모바일 하단 요약 바 — 조회조건에 맞는 신호 수 + 이번 주 **문서상** 움직임.
        ⚠ 관측일(basis=observed)은 「그날 움직였다」가 아니므로 이 숫자에 넣지 않는다
        (그걸 뭉쳐서 "이번 주 움직임 2,588건"이 됐던 사고 — §movBasis 주석). -->
-  <div id="msum" onclick="goList()" title="탭하면 같은 조건으로 목록을 봅니다"></div>
   <!-- 모바일 축 칩 — 분류 4축 상시 노출(색점 + 이름 + 건수). 세부는 ☰ 조회조건 시트에 남는다. -->
   <div id="maxis"></div>
   <!-- 흐름 모드 — 목록과 **같은 #wrap 안**에 둔다. 밖에 두면 지도가 숨어도 #wrap이 높이를 그대로
@@ -878,11 +871,13 @@
      ⚠ 마크업만 지우면 buildGantt가 getElementById("ghead")를 가드 없이 참조해 JS가 죽는다 —
      부품이 사라지면 그 부품을 쓰던 코드도 같이 없앤다(간결한 프로세스 원칙). -->
 <!-- 모바일 하단 탭바(독) — 프로토타입의 하단 독. 데스크톱은 헤더 칩이 같은 일을 하므로 CSS로 숨긴다. -->
+<!-- 아이콘 = 인라인 스트로크 SVG(currentColor) — 이모지는 OS마다 모양이 다르고 톤이 안 맞는다
+     (2026-08-09 사용자 "독 이미지가 너무 촌스러워 좀 심플하고 쌔끈한걸로"). -->
 <nav id="tabbar">
-  <button class="tb on" data-view="map"><i>🗺</i>지도</button>
-  <button class="tb" data-view="flow"><i>🕒</i>흐름<span class="tbn" id="tb-mv"></span></button>
-  <button class="tb" data-view="list"><i>☰</i>목록</button>
-  <button class="tb" data-view="filter"><i>⚙</i>조회조건</button>
+  <button class="tb on" data-view="map"><svg viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>지도</button>
+  <button class="tb" data-view="flow"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>흐름<span class="tbn" id="tb-mv"></span></button>
+  <button class="tb" data-view="list"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>목록</button>
+  <button class="tb" data-view="filter"><svg viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/><circle cx="9" cy="8" r="2.4"/><circle cx="15" cy="16" r="2.4"/></svg>조회조건</button>
 </nav>
 <footer>투자 권유 아님 · 모든 신호는 미확정 — 사실(단계·날짜·거리)만 표시하며 매수/매도 판단은 다루지 않습니다.</footer>
 
@@ -3486,7 +3481,8 @@ function renderDock() {
       <div class="seg">${["S", "A", "B", "C", "미정"].map(gp).join("")}</div>
     </div>
     <div class="dk-foot">흐릿한 후광 = 위치 근사 · 겹친 호재는 <b>+N</b>으로 묶임<br>
-      <a href="methodology.html" target="_blank">데이터 · 방법론</a></div>`;
+      <a href="methodology.html" target="_blank">데이터 · 방법론</a>
+      <div class="dk-legal">투자 권유 아님 · 모든 신호는 미확정 — 사실(단계·날짜·거리)만 표시하며 매수/매도 판단은 다루지 않습니다.</div></div>`;
 }
 function initDock() {
   const dock = document.getElementById("dock");
@@ -3538,43 +3534,21 @@ function resetFilters() {
   localStorage.setItem("hojae_lines", JSON.stringify([...filter.lines]));
   renderAll(); window._dbg?.applyLOD?.();
 }
-/* 하단 요약 바 (2026-08-09 모바일 정보구조).
-   ★ 두 숫자의 성격이 다르다 — 앞은 **재고**(조건에 맞는 신호), 뒤는 **변화**(이번 주 움직임).
-     우리는 delta를 다루는 매체이므로 변화가 색을 갖는다(0이면 회색 — 없는 걸 강조하지 않는다).
-   ⚠ 움직임은 `basis="source"`만 센다. 관측일은 「우리가 처음 본 날」이지 「그날 움직였다」가
-     아니다 — 그 둘을 뭉쳐 "이번 주 움직임 2,588건"(실제 3건)이 나왔던 자리다(§movBasis). */
-function updateSummary() {
-  const el = document.getElementById("msum");
-  if (!el) return;
-  const act = (typeof allSignalsFlat === "function" ? allSignalsFlat() : SIGNALS).filter(visible);
-  const moved = act.filter(s => movBasis(s) === "source" && weeksAgo(s.last_movement) === 0).length;
-  layoutBottom();   // 푸터·탭바 실측 높이만큼 부유 요소를 띄운다(아래 참조)
-  const where = filter.region ? filter.region.split(" ").slice(-1)[0] : "전체";
-  el.innerHTML = `<span>${where}</span><b>신호 ${act.length.toLocaleString()}</b><span class="dv">│</span>`
-    + `<span>이번 주 움직임 <span class="mv${moved ? "" : " zero"}">${moved}</span></span>`
-    + `<span class="ar">▸ 목록</span>`;
-}
+/* 하단 요약 바(#msum)는 폐기했다 (2026-08-09 사용자 "독이랑 중복되니 없애") — 재고 숫자는 도크
+   헤더가, 움직임은 탭바 흐름 배지가 이미 말한다. 같은 숫자를 세 곳이 말하면 두 곳이 낡는다. */
 /* 하단 고정 요소들의 쌓임 — **실측 높이로 계산한다**(상수 금지).
-   푸터(고지)는 항상 맨 아래, 그 위에 탭바(모바일), 그 위에 요약 바.
-   문구가 2줄이 되거나 탭바가 없는 데스크톱에서도 어긋나지 않으려면 매번 재야 한다
-   (2026-08-09: 탭바가 생기면서 요약 바가 탭바에 가리는 사고를 여기서 막는다). */
+   모바일은 푸터를 숨기고 탭바가 최하단(사용자 "코멘트 지우고 독을 내려"). 데스크톱은 푸터만. */
 function layoutBottom() {
   const ft = document.querySelector("footer");
   const tb = document.getElementById("tabbar");
-  const fh = ft && ft.offsetHeight ? ft.offsetHeight : 0;
+  const fh = ft && ft.offsetHeight ? ft.offsetHeight : 0;   // 모바일에선 CSS가 숨겨 0
   const th = tb && getComputedStyle(tb).display !== "none" ? tb.offsetHeight : 0;
   if (tb) tb.style.bottom = fh + "px";
-  const ms = document.getElementById("msum");
-  if (ms) ms.style.bottom = (fh + th + 10) + "px";
-  // 목록·흐름은 흐름 문서라 **아래 여백**으로 피한다(부유 요소가 마지막 카드를 덮지 않게)
+  // 목록·흐름은 흐름 문서라 **아래 여백**으로 피한다(고정 요소가 마지막 카드를 덮지 않게)
   const pad = fh + th + 16;
   ["listv", "flowv", "undet"].forEach(id => { const e = document.getElementById(id); if (e) e.style.paddingBottom = pad + "px"; });
 }
 addEventListener("resize", layoutBottom);
-function goList() {
-  const b = document.getElementById("v-list");
-  if (b) b.click();
-}
 /* ══════════ 흐름 — 시간축 (2026-08-09, HANDOFF ④) ══════════
    호갱노노의 '이야기' 자리에 우리가 놓는 것. 지도가 "무엇이 어디에"를 말한다면 흐름은
    **"무엇이 새로운가"**를 말한다 — level이 아니라 delta를 다루는 매체의 본진이다.
@@ -3647,7 +3621,7 @@ function updateTabbar() {
   el.textContent = n ? n : "";
   el.style.display = n ? "" : "none";
 }
-function renderAll() { renderChips(); renderDock(); renderAxis(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); if (VIEW_MODE === "list") renderList(); if (VIEW_MODE === "flow") renderFlow(); updateSummary(); updateTabbar(); }
+function renderAll() { renderChips(); renderDock(); renderAxis(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); if (VIEW_MODE === "list") renderList(); if (VIEW_MODE === "flow") renderFlow(); updateTabbar(); layoutBottom(); }
 
 /* ══════════ 지도: 카카오 → Leaflet 폴백 ══════════ */
 function bootMap() {
@@ -4201,11 +4175,14 @@ function initLeaflet() {
          「dash=단계 · 투명도=확실성」으로 갈랐는데 하이라이트에만 점 패턴이 남아, 착공 노선을
          클릭하는 순간 한강 터널 보간이 계획 점선처럼 읽혔다(2026-08-09 사용자 제보 김포~파주).
          같은 규칙이 한쪽 층에만 걸린 그 형태다. */
-      if (p.geom_bridges && p.geom_bridges.length)
-        routeHl.push(L.polyline(p.geom_bridges.map(seg => seg.map(([x, y]) => [y, x])),
-          { pane: "sig", color: col, weight: 3, opacity: .45,
-            dashArray: (!["착공", "준공"].some(k => (p.phase || "").startsWith(k))) ? "10 8" : null,
-            lineCap: "round", interactive: false }).addTo(map));
+      if (p.geom_bridges && p.geom_bridges.length) {
+        // 보간도 굵기·케이싱은 실선과 같다 — 투명도만 낮게(2026-08-09 "한강 구간만 왜 두께가 얇냐")
+        const bll = p.geom_bridges.map(seg => seg.map(([x, y]) => [y, x]));
+        routeHl.push(L.polyline(bll, { pane: "sig", color: "#fff", weight: 11, opacity: .45, interactive: false }).addTo(map));
+        routeHl.push(L.polyline(bll, { pane: "sig", color: col, weight: 5.5, opacity: .45,
+          dashArray: (!["착공", "준공"].some(k => (p.phase || "").startsWith(k))) ? "10 8" : null,
+          lineCap: "round", interactive: false }).addTo(map));
+      }
     }
     for (const f of RAIL.concat(ROADF)) {   // 소속 역·IC 강조 링
       const p = f.properties;
@@ -4599,11 +4576,14 @@ function initKakao() {
          터널 보간이 점선으로 나와 계획 단계처럼 읽혔다. 시각 채널을 가른다:
          **dash = 단계**(실선=착공↑ · 점선=계획, 전 화면 공통 문법 그대로) / **투명도 = 형상 확실성**
          (보간은 연하게만). 한 채널에 두 사실을 싣지 않는다(§필드 하나가 두 뜻). */
+      /* ⚠ 보간은 **굵기도 실선과 같다** (2026-08-09 사용자 "한강 구간만 왜 두께가 얇냐").
+         채널 분리 규칙의 완결형: dash=단계 · **투명도만** 확실성. 굵기까지 줄이면 세 번째
+         채널이 생겨 또 다른 뜻(덜 중요함?)으로 읽힌다 — 한 채널에 한 사실. */
       (p.geom_bridges || []).forEach(seg => {
         const bp = seg.map(([x, y]) => LL(x, y));
-        objs.push(new K.Polyline({ path: bp, strokeColor: "#ffffff", strokeWeight: dashed ? 6 : 5,
+        objs.push(new K.Polyline({ path: bp, strokeColor: "#ffffff", strokeWeight: dashed ? 6 : 5.6,
           strokeOpacity: .5, strokeStyle: "solid", zIndex: 2 }));
-        objs.push(new K.Polyline({ path: bp, strokeColor: col, strokeWeight: dashed ? 3.6 : 2.6,
+        objs.push(new K.Polyline({ path: bp, strokeColor: col, strokeWeight: dashed ? 3.6 : 3,
           strokeOpacity: .38, strokeStyle: dashed ? "shortdot" : "solid", zIndex: 3 }));
       });
       segs.forEach(seg => {
@@ -4883,7 +4863,10 @@ function initKakao() {
       const hlSolid = p.geom_solid ? p.geom_solid : segs;
       hlSolid.forEach(seg => { const ll = seg.map(([x, y]) => { const q = LL(x, y); bounds.extend(q); return q; }); routeHl.push(new K.Polyline({ map, path: ll, strokeColor: "#fff", strokeWeight: 11, strokeOpacity: .85, zIndex: 21 })); routeHl.push(new K.Polyline({ map, path: ll, strokeColor: col, strokeWeight: 5.5, strokeOpacity: .95, strokeStyle: dashed ? "shortdash" : "solid", zIndex: 22 })); });
       // ⚠ 보간의 dash 하드코딩 금지 — dash=단계·투명도=확실성(위 Leaflet판 주석과 같은 사고, 2026-08-09)
-      (p.geom_bridges || []).forEach(seg => { const ll = seg.map(([x, y]) => { const q = LL(x, y); bounds.extend(q); return q; }); routeHl.push(new K.Polyline({ map, path: ll, strokeColor: col, strokeWeight: 3, strokeOpacity: .45, strokeStyle: dashed ? "shortdot" : "solid", zIndex: 20 })); }); }
+      // 보간도 굵기·케이싱은 실선과 같다 — 투명도만 낮게(2026-08-09 "한강 구간만 왜 두께가 얇냐")
+      (p.geom_bridges || []).forEach(seg => { const ll = seg.map(([x, y]) => { const q = LL(x, y); bounds.extend(q); return q; });
+        routeHl.push(new K.Polyline({ map, path: ll, strokeColor: "#fff", strokeWeight: 11, strokeOpacity: .45, zIndex: 20 }));
+        routeHl.push(new K.Polyline({ map, path: ll, strokeColor: col, strokeWeight: 5.5, strokeOpacity: .45, strokeStyle: dashed ? "shortdot" : "solid", zIndex: 21 })); }); }
     for (const f of RAIL.concat(ROADF)) { const p = f.properties; if (p.kind !== "station" || p.signal === false) continue; if (p.line !== lineName && p.line_official !== lineName) continue; const [x, y] = f.geometry.coordinates;
       const elx = document.createElement("div"); elx.style.cssText = "width:18px;height:18px;border-radius:50%;border:3.5px solid #fff;box-shadow:0 0 0 1.5px " + col + ";pointer-events:none"; routeHl.push(new K.CustomOverlay({ map, position: LL(x, y), content: elx, zIndex: 23, yAnchor: .5, xAnchor: .5 }));
       // 역명 라벨 — 상세(하이라이트) 중엔 줌과 무관하게 소속역 이름을 단다(2026-08-04 아실 벤치마크).
@@ -4924,8 +4907,7 @@ function setView(mode) {
   document.getElementById("wrap").style.display = inWrap ? "flex" : "none";
   document.getElementById("map").style.display = mode === "map" ? "" : "none";
   // 요약 바는 **지도 위에 뜨는 부유 칩**이다 — 목록 위에 겹치면 목록을 가린다(상세 패널과 같은 이유).
-  const ms = document.getElementById("msum"); if (ms) ms.style.display = mode === "map" ? "" : "none";
-  // 축 칩도 같은 규칙 — 지도 위 부유 요소다. `""`로 되돌려야 미디어쿼리(모바일만 flex)가 되산다.
+  // 축 칩 = 지도 위 부유 요소. `""`로 되돌려야 미디어쿼리(모바일만 flex)가 되산다.
   const mx = document.getElementById("maxis"); if (mx) mx.style.display = mode === "map" ? "" : "none";
   document.getElementById("listv").style.display = mode === "list" ? "block" : "none";
   const fv = document.getElementById("flowv");
@@ -5173,7 +5155,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260809r");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260810a");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -5294,8 +5276,8 @@ function initSearch() {
   initRegionBar();
   initSearch();
   renderPanel();
-  updateSummary();   // 하단 요약 바 — 부트는 renderAll()을 안 부르고 개별 렌더만 하므로 여기서 한 번
-  initAxis();        // 모바일 축 칩 — 같은 이유로 부트에서 따로 한 번(클릭 위임도 여기서 건다)
+  initAxis();        // 모바일 축 칩 — 부트는 renderAll()을 안 부르므로 여기서 따로 한 번(클릭 위임 포함)
+  layoutBottom();
   bootMap();
   document.getElementById("v-map").onclick = () => setView("map");
   document.getElementById("v-flow").onclick = () => setView("flow");
@@ -5339,7 +5321,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260809r"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810a"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5365,7 +5347,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260809r");
+  const CB = "?b=" + (window.BUILD || "20260810a");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {

@@ -368369,6 +368369,144 @@
   },
   {
    "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "북삼역",
+    "line": "대구권 광역철도 북삼역 신설",
+    "lvl": "B",
+    "lvl_basis": "노선 명시 등급(사용자 확정)",
+    "gate": "신호",
+    "gate_basis": "절차 문서 확인 — 「개통」",
+    "confirmed": true,
+    "status": "'26.2.28 개통 — 대경선 1호 추가역(칠곡군 북삼읍)",
+    "phase": "준공·개통",
+    "st_status": "확정",
+    "approx": true,
+    "geo_prec": "dong",
+    "geo_basis": "북삼읍 율리 대표점 근사 — 신설역 POI 미등재(실좌표 아님)",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2023-12-01",
+      "state": "done",
+      "src": "국가철도공단"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통",
+      "date": "2026-02-28",
+      "state": "current",
+      "src": "경북도"
+     }
+    ],
+    "note": null,
+    "audited": "2026-08-09",
+    "drop": null,
+    "geo_approx": true,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.351088,
+      36.066315
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "준공·개통",
+      "date": "2026-08-09",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-09",
+    "last_movement_basis": "observed",
+    "fin_date_unknown": true,
+    "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.351088,
+     36.066315
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "station",
+    "name": "과천정보타운역",
+    "line": "4호선 과천정보타운역 신설",
+    "lvl": "B",
+    "lvl_basis": "노선 명시 등급(사용자 확정)",
+    "gate": "신호",
+    "gate_basis": "단계 착공 — 법정 절차 진행 중",
+    "confirmed": true,
+    "status": "'22.6 착공 — 공정 50.9%('25.12) · 준공목표 '27.1 · 개통 '27 하반기(안전공정 재검토로 유동)",
+    "phase": "착공",
+    "st_status": "가칭",
+    "approx": false,
+    "geo_prec": "station_poi",
+    "geo_basis": "POI 정확일치(공사 중 역사 위치)",
+    "pt_type": "rail_station",
+    "src_tier": "official_report",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "국토부 실시계획 승인",
+      "date": "2022-10-12",
+      "state": "done",
+      "src": "국토교통부"
+     },
+     {
+      "phase": "착공",
+      "stage": "착공",
+      "date": "2022-06-17",
+      "state": "current",
+      "src": "국가철도공단"
+     },
+     {
+      "phase": "준공",
+      "stage": "개통 목표",
+      "eta": "2027",
+      "state": "target",
+      "src": "국가철도공단"
+     }
+    ],
+    "note": null,
+    "audited": "2026-08-09",
+    "drop": null,
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.98064,
+      37.413623
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "착공",
+      "date": "2026-08-09",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-09",
+    "last_movement": "2026-08-09",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.98064,
+     37.413623
+    ]
+   }
+  },
+  {
+   "type": "Feature",
    "geometry": {
     "type": "LineString",
     "coordinates": [
