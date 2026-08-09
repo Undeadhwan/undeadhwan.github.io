@@ -625,6 +625,25 @@
   #dock-dim { display:none; position:fixed; inset:0; background:rgba(18,24,38,.38); z-index:1099; }
   @media (max-width: 768px) {
     .mo-only { display:inline-flex; }
+    /* 하단 요약 바 (2026-08-09 모바일 정보구조) — 화면에 **시간**을 들여놓는 자리.
+       종전 모바일 지도는 "무엇이 있나"만 말하고 "무엇이 새로운가"를 말하지 않았다.
+       네이버부동산이 하단에 「매물 253 │ 단지 107」을 상시 띄우는 자리와 같은 위치인데,
+       우리 숫자는 재고가 아니라 **변화**다. 탭하면 목록으로 넘어간다.
+       ⚠ 집계는 지도 뷰포트가 아니라 **조회조건(`visible`)** 기준이다 — 지도 구현이
+         카카오·Leaflet 둘이라 뷰포트로 세면 한쪽에만 걸린다(이 저장소의 반복 사고). */
+  }
+  #msum { display:none; position:absolute; left:10px; right:10px; bottom:10px; z-index:1001;
+          align-items:center; gap:9px; background:var(--bg); border:1px solid var(--line2);
+          border-radius:999px; padding:9px 14px; font-size:13.5px; color:var(--ink);
+          box-shadow:0 3px 12px rgba(25,35,60,.16); cursor:pointer; }
+  #msum b { font-weight:700; font-variant-numeric:tabular-nums; }
+  #msum .dv { color:var(--line2); }
+  #msum .mv { color:var(--c-traffic); font-weight:700; font-variant-numeric:tabular-nums; }
+  #msum .mv.zero { color:var(--ink3); }
+  #msum .ar { margin-left:auto; color:var(--ink3); }
+  /* 모바일에서만 노출 — **기본 규칙 뒤**에 와야 display:none을 이긴다(캐스케이드 충돌 주의) */
+  @media (max-width: 768px) { #msum { display:flex; } }
+  @media (max-width: 768px) {
     #dock { position:fixed; left:0; right:0; bottom:0; top:auto; width:auto;
             max-height:82vh; border:0; border-radius:16px 16px 0 0; z-index:1100;
             box-shadow:0 -6px 24px rgba(25,35,60,.20); overflow-y:auto;
@@ -677,6 +696,10 @@
   <aside id="dock"></aside>
   <aside id="panel"></aside>
   <div id="map"></div>
+  <!-- 모바일 하단 요약 바 — 조회조건에 맞는 신호 수 + 이번 주 **문서상** 움직임.
+       ⚠ 관측일(basis=observed)은 「그날 움직였다」가 아니므로 이 숫자에 넣지 않는다
+       (그걸 뭉쳐서 "이번 주 움직임 2,588건"이 됐던 사고 — §movBasis 주석). -->
+  <div id="msum" onclick="goList()" title="탭하면 같은 조건으로 목록을 봅니다"></div>
   <!-- 목록 모드: 지도와 **같은 도크(표시 조건)** 안에 산다. 필터를 두 벌 만들지 않는다(2026-07-30). -->
   <div id="listv">
     <div class="lvhead">
@@ -3039,7 +3062,30 @@ function resetFilters() {
   localStorage.setItem("hojae_lines", JSON.stringify([...filter.lines]));
   renderAll(); window._dbg?.applyLOD?.();
 }
-function renderAll() { renderChips(); renderDock(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); if (VIEW_MODE === "list") renderList(); }
+/* 하단 요약 바 (2026-08-09 모바일 정보구조).
+   ★ 두 숫자의 성격이 다르다 — 앞은 **재고**(조건에 맞는 신호), 뒤는 **변화**(이번 주 움직임).
+     우리는 delta를 다루는 매체이므로 변화가 색을 갖는다(0이면 회색 — 없는 걸 강조하지 않는다).
+   ⚠ 움직임은 `basis="source"`만 센다. 관측일은 「우리가 처음 본 날」이지 「그날 움직였다」가
+     아니다 — 그 둘을 뭉쳐 "이번 주 움직임 2,588건"(실제 3건)이 나왔던 자리다(§movBasis). */
+function updateSummary() {
+  const el = document.getElementById("msum");
+  if (!el) return;
+  const act = (typeof allSignalsFlat === "function" ? allSignalsFlat() : SIGNALS).filter(visible);
+  const moved = act.filter(s => movBasis(s) === "source" && weeksAgo(s.last_movement) === 0).length;
+  // 하단 고지 푸터(position:fixed·z1000)가 이 바를 덮는다 — 푸터 **실측 높이**만큼 띄운다.
+  // 상수로 박으면 문구가 한 줄/두 줄로 바뀔 때 어긋난다(모바일에서 실제로 2줄이 된다).
+  const ft = document.querySelector("footer");
+  if (ft && ft.offsetHeight) el.style.bottom = (ft.offsetHeight + 10) + "px";
+  const where = filter.region ? filter.region.split(" ").slice(-1)[0] : "전체";
+  el.innerHTML = `<span>${where}</span><b>신호 ${act.length.toLocaleString()}</b><span class="dv">│</span>`
+    + `<span>이번 주 움직임 <span class="mv${moved ? "" : " zero"}">${moved}</span></span>`
+    + `<span class="ar">▸ 목록</span>`;
+}
+function goList() {
+  const b = document.getElementById("v-list");
+  if (b) b.click();
+}
+function renderAll() { renderChips(); renderDock(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); if (VIEW_MODE === "list") renderList(); updateSummary(); }
 
 /* ══════════ 지도: 카카오 → Leaflet 폴백 ══════════ */
 function bootMap() {
@@ -4265,6 +4311,8 @@ function setView(mode) {
   const inWrap = mode === "map" || mode === "list";
   document.getElementById("wrap").style.display = inWrap ? "flex" : "none";
   document.getElementById("map").style.display = mode === "map" ? "" : "none";
+  // 요약 바는 **지도 위에 뜨는 부유 칩**이다 — 목록 위에 겹치면 목록을 가린다(상세 패널과 같은 이유).
+  const ms = document.getElementById("msum"); if (ms) ms.style.display = mode === "map" ? "" : "none";
   document.getElementById("listv").style.display = mode === "list" ? "block" : "none";
   document.getElementById("undet").style.display = mode === "undet" ? "block" : "none";
   const g = document.getElementById("gantt"); if (g) g.style.display = "none";
@@ -4506,7 +4554,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260809m");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260809n");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4627,6 +4675,7 @@ function initSearch() {
   initRegionBar();
   initSearch();
   renderPanel();
+  updateSummary();   // 하단 요약 바 — 부트는 renderAll()을 안 부르고 개별 렌더만 하므로 여기서 한 번
   bootMap();
   document.getElementById("v-map").onclick = () => setView("map");
   document.getElementById("v-list").onclick = () => setView("list");
@@ -4668,7 +4717,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260809m"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260809n"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4694,7 +4743,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260809m");
+  const CB = "?b=" + (window.BUILD || "20260809n");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
