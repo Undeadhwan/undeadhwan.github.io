@@ -1,6 +1,6 @@
 {
  "_note": "공공건축 설계공모(건축HUB 설계공모 정보서비스) → 계획단계 후보. 위치·연면적·총사업비는 공고 원문값. 등급=**금액 우선**(총사업비 있으면 사업비, 없으면 연면적) — 눈금 SSOT: grade.py [인프라 S10000억/A500억/B150억/C30억]. 지자체 자체 공모는 미등록될 수 있어 커버리지 100% 아님(정직 표기).",
- "generated": "2026-08-08 23:25",
+ "generated": "2026-08-10 05:28",
  "signals": [
   {
    "title": "[1단계] 보령 원산도 해양레포츠센터 조성사업 2단계공모",
@@ -133,6 +133,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 948㎡ — 인프라:공공시설 C",
+   "addr_verified": {
+    "road_addr": "제주특별자치도 제주시 동문로18길 10-1 (일도이동)",
+    "jibun_addr": "제주특별자치도 제주시 일도이동 991-4",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "제주특별자치도 제주시 동문로18길 10-1 (일도이동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -179,7 +186,31 @@
    "_dps": true,
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "gate_history": [
+    {
+     "date": "2026-07-22",
+     "gate": "신호",
+     "basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)"
+    },
+    {
+     "date": "2026-08-10",
+     "gate": "관찰",
+     "basis": "절차 진입 전 — 「용역」"
+    },
+    {
+     "date": "2026-08-10",
+     "gate": "신호",
+     "basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)"
+    }
+   ],
    "lvl_basis": "연면적 1,600㎡ — 인프라:공공시설 C",
+   "addr_verified": {
+    "road_addr": "제주특별자치도 서귀포시 남선동산로 26 (하효동)",
+    "jibun_addr": "제주특별자치도 서귀포시 하효동 152-1 효돈동주민센터",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "제주특별자치도 서귀포시 남선동산로 26 (하효동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -274,6 +305,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 2,250㎡ — 인프라:공공시설 C",
+   "addr_verified": {
+    "road_addr": "인천광역시 미추홀구 매소홀로 120 (용현동)",
+    "jibun_addr": "인천광역시 미추홀구 용현동 627-608 옹진군청",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "인천광역시 미추홀구 매소홀로 120 (용현동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -321,6 +359,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 2,200㎡ — 인프라:문화·관광·체육 C",
+   "addr_verified": {
+    "road_addr": "경상북도 상주시 경상대로 3061 (무양동)",
+    "jibun_addr": "경상북도 상주시 무양동 11-1",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "경상북도 상주시 경상대로 3061 (무양동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -415,6 +460,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 8,813㎡ — 인프라:문화·관광·체육 C",
+   "addr_verified": {
+    "road_addr": "서울특별시 강동구 고덕로24길 49 (암사동)",
+    "jibun_addr": "서울특별시 강동구 암사동 474-6 암사동주민자치회관",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "서울특별시 강동구 고덕로24길 49 (암사동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -556,6 +608,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 1,390㎡ — 인프라:문화·관광·체육 C",
+   "addr_verified": {
+    "road_addr": "충청북도 충주시 봉현로 107 (봉방동)",
+    "jibun_addr": "충청북도 충주시 봉방동 87-25",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "충청북도 충주시 봉현로 107 (봉방동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -744,6 +803,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 1,328㎡ — 인프라:문화·관광·체육 C",
+   "addr_verified": {
+    "road_addr": "충청남도 서산시 수석산업로 44 (수석동)",
+    "jibun_addr": "충청남도 서산시 수석동 1163",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "충청남도 서산시 수석산업로 44 (수석동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -885,6 +951,13 @@
    "_dps": true,
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "addr_verified": {
+    "road_addr": "강원특별자치도 원주시 학성길 120 (학성동)",
+    "jibun_addr": "강원특별자치도 원주시 학성동 223-75",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "강원특별자치도 원주시 학성길 120 (학성동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -1026,6 +1099,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 3,877㎡ — 인프라:공공시설 C",
+   "addr_verified": {
+    "road_addr": "경상북도 김천시 김천로 164 (남산동)",
+    "jibun_addr": "경상북도 김천시 남산동 24-19",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "경상북도 김천시 김천로 164 (남산동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -1119,7 +1199,31 @@
    "_dps": true,
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "gate_history": [
+    {
+     "date": "2026-07-22",
+     "gate": "신호",
+     "basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)"
+    },
+    {
+     "date": "2026-08-10",
+     "gate": "관찰",
+     "basis": "절차 진입 전 — 「용역」"
+    },
+    {
+     "date": "2026-08-10",
+     "gate": "신호",
+     "basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)"
+    }
+   ],
    "lvl_basis": "연면적 1,907㎡ — 인프라:문화·관광·체육 C",
+   "addr_verified": {
+    "road_addr": "제주특별자치도 제주시 과원북4길 12 (노형동)",
+    "jibun_addr": "제주특별자치도 제주시 노형동 731 제주특별자치도 노인복지관",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "제주특별자치도 제주시 과원북4길 12 (노형동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -1261,6 +1365,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 800㎡ — 인프라:공공시설 C",
+   "addr_verified": {
+    "road_addr": "제주특별자치도 제주시 서광로29길 17 (이도일동)",
+    "jibun_addr": "제주특별자치도 제주시 이도일동 1664-7 제주시참사랑문화의집",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "제주특별자치도 제주시 서광로29길 17 (이도일동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -1308,6 +1419,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 1,550㎡ — 인프라:문화·관광·체육 C",
+   "addr_verified": {
+    "road_addr": "강원특별자치도 원주시 흥양로 42 (태장동)",
+    "jibun_addr": "강원특별자치도 원주시 태장동 1052-1",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "강원특별자치도 원주시 흥양로 42 (태장동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -1355,6 +1473,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 2,630㎡ — 인프라:공공시설 C",
+   "addr_verified": {
+    "road_addr": "전북특별자치도 전주시 완산구 용머리로 192 (효자동1가)",
+    "jibun_addr": "전북특별자치도 전주시 완산구 효자동1가 133 효자주공아파트3단지",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "전북특별자치도 전주시 완산구 용머리로 192 (효자동1가)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -1919,6 +2044,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 38,443㎡ — 인프라:공공시설 B",
+   "addr_verified": {
+    "road_addr": "충청남도 서산시 부춘공원2로 14 (읍내동)",
+    "jibun_addr": "충청남도 서산시 읍내동 517",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "충청남도 서산시 부춘공원2로 14 (읍내동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -2107,6 +2239,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 2,690㎡ — 인프라:공공시설 C",
+   "addr_verified": {
+    "road_addr": "경상북도 포항시 북구 우미길 93 (용흥동)",
+    "jibun_addr": "경상북도 포항시 북구 용흥동 418-1 경상북도교육청과학원",
+    "bld_nm": "경상북도교육청과학원",
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "경상북도 포항시 북구 우미길 93 (용흥동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -2201,6 +2340,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 2,463㎡ — 인프라:문화·관광·체육 C",
+   "addr_verified": {
+    "road_addr": "강원특별자치도 원주시 이화5길 6 (단계동)",
+    "jibun_addr": "강원특별자치도 원주시 단계동 1223",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "강원특별자치도 원주시 이화5길 6 (단계동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -2812,6 +2958,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 735㎡ — 인프라:공공시설 C",
+   "addr_verified": {
+    "road_addr": "제주특별자치도 제주시 동문로 76-2 (일도이동)",
+    "jibun_addr": "제주특별자치도 제주시 일도이동 992-8",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "제주특별자치도 제주시 동문로 76-2 (일도이동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -3000,6 +3153,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 3,600㎡ — 인프라:공공시설 C",
+   "addr_verified": {
+    "road_addr": "경상북도 김천시 남김천대로 3363 (양천동)",
+    "jibun_addr": "경상북도 김천시 양천동 1153",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "경상북도 김천시 남김천대로 3363 (양천동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -3047,6 +3207,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 2,200㎡ — 인프라:공공시설 C",
+   "addr_verified": {
+    "road_addr": "경상북도 상주시 중앙로 179 (서문동)",
+    "jibun_addr": "경상북도 상주시 서문동 128-1",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "경상북도 상주시 중앙로 179 (서문동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -3188,6 +3355,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 3,112㎡ — 인프라:공공시설 C",
+   "addr_verified": {
+    "road_addr": "경상북도 영천시 봉계길 58 (녹전동)",
+    "jibun_addr": "경상북도 영천시 녹전동 116-1 영북초등학교",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "경상북도 영천시 봉계길 58 (녹전동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -3329,6 +3503,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 6,870㎡ — 인프라:문화·관광·체육 C",
+   "addr_verified": {
+    "road_addr": "강원특별자치도 원주시 중앙로 58-6 (중앙동)",
+    "jibun_addr": "강원특별자치도 원주시 중앙동 252",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "강원특별자치도 원주시 중앙로 58-6 (중앙동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -3470,6 +3651,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 2,688㎡ — 인프라:문화·관광·체육 C",
+   "addr_verified": {
+    "road_addr": "충청북도 충주시 거룡6길 35 (용산동)",
+    "jibun_addr": "충청북도 충주시 용산동 613 용산동행정복지센터",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "충청북도 충주시 거룡6길 35 (용산동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -3517,6 +3705,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 1,700㎡ — 인프라:공공시설 C",
+   "addr_verified": {
+    "road_addr": "경상북도 상주시 무양2길 49 (무양동)",
+    "jibun_addr": "경상북도 상주시 무양동 164-23",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "경상북도 상주시 무양2길 49 (무양동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -3705,6 +3900,13 @@
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 1,300㎡ — 인프라:공공시설 C",
+   "addr_verified": {
+    "road_addr": "전북특별자치도 군산시 대학로 215 (문화동)",
+    "jibun_addr": "전북특별자치도 군산시 문화동 919-2 신풍동주민센터",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "전북특별자치도 군산시 대학로 215 (문화동)",
    "geo_approx": false,
    "stage_history": [
     {
@@ -3749,6 +3951,10 @@
    "src": "https://www.hub.go.kr/portal/dps/dsr/idx-dsr-selectDesignPbpPbancList.do",
    "pbanc_no": "D261901289C",
    "_dps": true,
+   "master_ref": {
+    "id": "M-44730KL2010001",
+    "title": "행정중심복합도시건설사업"
+   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 16,805㎡ — 인프라:공공시설 B",
@@ -3761,11 +3967,7 @@
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement_basis": "source",
-   "master_ref": {
-    "id": "M-44730KL2010001",
-    "title": "행정중심복합도시건설사업"
-   }
+   "last_movement_basis": "source"
   },
   {
    "title": "현남행정문화복합센터 조성사업 설계공모",
@@ -3847,6 +4049,10 @@
    "board_id": "unikorea-notice",
    "board_no": "59586",
    "_ministry": true,
+   "master_ref": {
+    "id": "M-11500DA2010001",
+    "title": "마곡 도시개발구역"
+   },
    "gate": "신호",
    "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
    "lvl_basis": "연면적 5,700㎡ — 인프라:문화·관광·체육 C",
@@ -3860,11 +4066,760 @@
    ],
    "first_seen": "2026-08-08",
    "last_movement": "2026-08-08",
-   "last_movement_basis": "observed",
+   "last_movement_basis": "observed"
+  },
+  {
+   "title": "김제시 청소년 복합문화공간 조성사업 건축설계공모",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "C",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.901014,
+     35.815074
+    ]
+   },
+   "sd": "전북",
+   "sg": "김제시",
+   "addr": "전북특별자치도 김제시 검산동 산62-1외 9필지",
+   "area_m2": null,
+   "cost_won": 3181000000,
+   "design_fee_won": 231427000,
+   "purp": null,
+   "arch_act": "신축",
+   "order_inst": "전북특별자치도 김제시",
+   "inst_type": "국가기관",
+   "phase": "계획",
+   "current_stage": "설계공모(나라장터 용역공고)",
+   "status": "활성",
+   "confirmed": false,
+   "notice_day": "2026-07-14",
+   "last_movement": "2026-07-14",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01620923&bidPbancOrd=001",
+   "src_note": "나라장터 용역공고 첨부 원문(제안공모 과업지침서_김제청소년복합문화공간.pdf) — 규모·공사비는 공고 원문값. design_fee_won은 **설계용역비**이지 공사비가 아니다",
+   "pbanc_no": "R26BK01620923",
+   "unty_no": "R26BM00872146",
+   "_g2b": true,
+   "gate": "관찰",
+   "gate_basis": "절차 진입 전 — 「용역」",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-14",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
+  },
+  {
+   "title": "(집행대행) (가칭)경상북도교육청 영양교육체험센터 건립 설계공모",
+   "cat": "인프라",
+   "sub": "공공시설",
+   "lvl": "C",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.300502,
+     36.364124
+    ]
+   },
+   "sd": "경북",
+   "sg": "상주시",
+   "addr": "경북 상주시 낙동면 낙동리 278, 275 및 128-2 일대",
+   "area_m2": 1870,
+   "cost_won": 5356821000,
+   "design_fee_won": 292370000,
+   "purp": null,
+   "arch_act": "신축",
+   "order_inst": "경상북도교육청",
+   "inst_type": "국가기관",
+   "phase": "계획",
+   "current_stage": "설계공모(나라장터 용역공고)",
+   "status": "활성",
+   "confirmed": false,
+   "notice_day": "2026-07-15",
+   "last_movement": "2026-07-15",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01631043&bidPbancOrd=000",
+   "src_note": "나라장터 용역공고 첨부 원문(2. 건축설계 과업지침서_(가칭)경상북도교육청 영양교육체험센터 건립.hwp) — 규모·공사비는 공고 원문값. design_fee_won은 **설계용역비**이지 공사비가 아니다",
+   "pbanc_no": "R26BK01631043",
+   "unty_no": "R26BM00882836",
+   "_g2b": true,
+   "gate": "관찰",
+   "gate_basis": "절차 진입 전 — 「용역」",
+   "lvl_basis": "연면적 1,870㎡ — 인프라:공공시설 C",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-15",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
+  },
+  {
+   "title": "유기농산업복합서비스 지원단지 조성사업 설계공모",
+   "cat": "인프라",
+   "sub": "공공시설",
+   "lvl": "C",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.388815,
+     34.713137
+    ]
+   },
+   "sd": "전남광주",
+   "sg": "해남군",
+   "addr": "전남광주통합특별시 해남군 산이면 구성리 641-3번지",
+   "area_m2": 2092,
+   "cost_won": 11066000000,
+   "design_fee_won": 570722000,
+   "purp": null,
+   "arch_act": "신축",
+   "order_inst": "전남광주통합특별시 해남군",
+   "inst_type": "국가기관",
+   "phase": "계획",
+   "current_stage": "설계공모(나라장터 용역공고)",
+   "status": "활성",
+   "confirmed": false,
+   "notice_day": "2026-07-16",
+   "last_movement": "2026-07-16",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01637449&bidPbancOrd=000",
+   "src_note": "나라장터 용역공고 첨부 원문(설계공모지침서.hwpx) — 규모·공사비는 공고 원문값. design_fee_won은 **설계용역비**이지 공사비가 아니다",
+   "pbanc_no": "R26BK01637449",
+   "unty_no": "R26BM00886137",
+   "_g2b": true,
+   "gate": "관찰",
+   "gate_basis": "절차 진입 전 — 「용역」",
+   "lvl_basis": "연면적 2,092㎡ — 인프라:공공시설 C",
+   "geo_approx": false
+  },
+  {
+   "title": "남동온세대 건강문화센터 건립사업 설계용역(설계공모)",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "C",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.712227,
+     37.467868
+    ]
+   },
+   "sd": null,
+   "sg": "86-2번지",
+   "addr": "간석동 86-2번지 일원 (1,362.3㎡)",
+   "area_m2": null,
+   "cost_won": 13094800000,
+   "design_fee_won": 674000000,
+   "purp": null,
+   "arch_act": "신축",
+   "order_inst": "인천광역시 남동구",
+   "inst_type": "국가기관",
+   "phase": "계획",
+   "current_stage": "설계공모(나라장터 용역공고)",
+   "status": "활성",
+   "confirmed": false,
+   "notice_day": "2026-07-20",
+   "last_movement": "2026-07-20",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01638768&bidPbancOrd=000",
+   "src_note": "나라장터 용역공고 첨부 원문(설계공모지침서.hwpx) — 규모·공사비는 공고 원문값. design_fee_won은 **설계용역비**이지 공사비가 아니다",
+   "pbanc_no": "R26BK01638768",
+   "unty_no": "R26BM00887971",
+   "_g2b": true,
+   "gate": "관찰",
+   "gate_basis": "절차 진입 전 — 「용역」",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-20",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
+  },
+  {
+   "title": "구민회관 부지 복합개발사업(문화시설) 설계공모",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "B",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.073949,
+     37.567177
+    ]
+   },
+   "sd": "서울",
+   "sg": "동대문구",
+   "addr": "동대문구 장안동 356일대",
+   "area_m2": 11730,
+   "cost_won": null,
+   "design_fee_won": 3797681000,
+   "purp": null,
+   "arch_act": null,
+   "order_inst": "서울특별시 동대문구",
+   "inst_type": "국가기관",
+   "phase": "계획",
+   "current_stage": "설계공모(나라장터 용역공고)",
+   "status": "활성",
+   "confirmed": false,
+   "notice_day": "2026-07-20",
+   "last_movement": "2026-07-20",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01637739&bidPbancOrd=000",
+   "src_note": "나라장터 용역공고 첨부 원문(3.구민회관부지복합개발(문화시설)_설계공모지침서.pdf) — 규모·공사비는 공고 원문값. design_fee_won은 **설계용역비**이지 공사비가 아니다",
+   "pbanc_no": "R26BK01637739",
+   "unty_no": "R26BM00888229",
+   "_g2b": true,
+   "gate": "관찰",
+   "gate_basis": "절차 진입 전 — 「용역」",
+   "lvl_basis": "연면적 11,730㎡ — 인프라:문화·관광·체육 B",
+   "addr_verified": {
+    "road_addr": "서울특별시 동대문구 장안벚꽃로 67 (장안동)",
+    "jibun_addr": "서울특별시 동대문구 장안동 356 동대문구민 체육센터",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "서울특별시 동대문구 장안벚꽃로 67 (장안동)",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-20",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
+  },
+  {
+   "title": "경남소방인재개발원 생활관 별동 증축사업 설계공모",
+   "cat": "인프라",
+   "sub": "공공시설",
+   "lvl": "C",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.232918,
+     35.376671
+    ]
+   },
+   "sd": "경남",
+   "sg": "의령군",
+   "addr": "경상남도 의령군 가례면 개승리 200번지",
+   "area_m2": null,
+   "cost_won": 12692743000,
+   "design_fee_won": 622600000,
+   "purp": null,
+   "arch_act": "증축",
+   "order_inst": "경상남도",
+   "inst_type": "국가기관",
+   "phase": "계획",
+   "current_stage": "설계공모(나라장터 용역공고)",
+   "status": "활성",
+   "confirmed": false,
+   "notice_day": "2026-07-28",
+   "last_movement": "2026-07-28",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01654358&bidPbancOrd=000",
+   "src_note": "나라장터 용역공고 첨부 원문(설계지침서(경남소방인재개발원 생활관 증축).hwpx) — 규모·공사비는 공고 원문값. design_fee_won은 **설계용역비**이지 공사비가 아니다",
+   "pbanc_no": "R26BK01654358",
+   "unty_no": "R26BM00899918",
+   "_g2b": true,
+   "gate": "관찰",
+   "gate_basis": "절차 진입 전 — 「용역」",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-28",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
+  },
+  {
+   "title": "부림면 신반지구 농촌공간정비사업(부림문화복합공간조성)",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "C",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.320555,
+     35.462391
+    ]
+   },
+   "sd": "경남",
+   "sg": "의령군",
+   "addr": "의령군 부림면 신반리 101-1번지(구.신성제지)",
+   "area_m2": null,
+   "cost_won": 5462800000,
+   "design_fee_won": 245274000,
+   "purp": "제1종 근린생활시설(주민공동이용시설)",
+   "arch_act": "신축",
+   "order_inst": "경상남도 의령군",
+   "inst_type": "국가기관",
+   "phase": "계획",
+   "current_stage": "설계공모(나라장터 용역공고)",
+   "status": "활성",
+   "confirmed": false,
+   "notice_day": "2026-07-29",
+   "last_movement": "2026-07-29",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01655370&bidPbancOrd=000",
+   "src_note": "나라장터 용역공고 첨부 원문(공모지침서(부림면 신반지구 농촌공간정비사업 부림문화복합공간조성) 건축 설계공모).hwpx) — 규모·공사비는 공고 원문값. design_fee_won은 **설계용역비**이지 공사비가 아니다",
+   "pbanc_no": "R26BK01655370",
+   "unty_no": "R26BM00902370",
+   "_g2b": true,
+   "gate": "관찰",
+   "gate_basis": "절차 진입 전 — 「용역」",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-29",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
+  },
+  {
+   "title": "안동목재문화체험장 건축설계공모 용역",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "C",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.498379,
+     36.577701
+    ]
+   },
+   "sd": "경북",
+   "sg": "안동시",
+   "addr": "경북 안동시 풍천면 갈전리 1181번지 외 3필지(안동시 복합커뮤니티센터 내)",
+   "area_m2": 600,
+   "cost_won": 5108400000,
+   "design_fee_won": 334896000,
+   "purp": null,
+   "arch_act": null,
+   "order_inst": "경상북도 안동시",
+   "inst_type": "국가기관",
+   "phase": "계획",
+   "current_stage": "설계공모(나라장터 용역공고)",
+   "status": "활성",
+   "confirmed": false,
+   "notice_day": "2026-07-29",
+   "last_movement": "2026-07-29",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01657505&bidPbancOrd=000",
+   "src_note": "나라장터 용역공고 첨부 원문([공고문]안동목재문화체험장 건축설계공모.hwpx) — 규모·공사비는 공고 원문값. design_fee_won은 **설계용역비**이지 공사비가 아니다",
+   "pbanc_no": "R26BK01657505",
+   "unty_no": "R26BM00902522",
+   "_g2b": true,
    "master_ref": {
-    "id": "M-11500DA2010001",
-    "title": "마곡 도시개발구역"
-   }
+    "id": "M-47290DC2013001",
+    "title": "경북도청이전신도시 건설사업"
+   },
+   "gate": "관찰",
+   "gate_basis": "절차 진입 전 — 「용역」",
+   "lvl_basis": "연면적 600㎡ — 인프라:문화·관광·체육 C",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-29",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
+  },
+  {
+   "title": "이반성면 기초생활거점조성사업 건축설계 용역 제안공모",
+   "cat": "인프라",
+   "sub": "공공시설",
+   "lvl": "C",
+   "lvl_basis": "연면적 478㎡ — 인프라:공공시설 C",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.326682,
+     35.169732
+    ]
+   },
+   "sd": "경남",
+   "sg": "진주시",
+   "addr": "진주시 이반성면 용암리 284-3외(부지면적 1,844㎡ 중 사업대상 부지 1,844㎡)",
+   "area_m2": 478,
+   "cost_won": 2312000000,
+   "design_fee_won": 109150000,
+   "purp": "제1종 근린생활시설(주민공동이용시설)",
+   "arch_act": "신축",
+   "order_inst": "한국농어촌공사 경남지역본부 진주.산청지사",
+   "inst_type": "국가기관",
+   "phase": "계획",
+   "current_stage": "설계공모(나라장터 용역공고)",
+   "status": "활성",
+   "confirmed": false,
+   "notice_day": "2026-07-30",
+   "last_movement": "2026-07-30",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01659702&bidPbancOrd=000",
+   "src_note": "나라장터 용역공고 첨부 원문(공모지침서(이반성면).hwp) — 규모·공사비는 공고 원문값. design_fee_won은 **설계용역비**이지 공사비가 아니다",
+   "pbanc_no": "R26BK01659702",
+   "unty_no": "R26BM00904430",
+   "_g2b": true,
+   "gate": "관찰",
+   "gate_basis": "절차 진입 전 — 「용역」",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-07-30",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
+  },
+  {
+   "title": "「노은3동 사회복지관 건립」 설계공모",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "C",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.304468,
+     36.378124
+    ]
+   },
+   "sd": "대전",
+   "sg": "유성구",
+   "addr": "대전광역시 유성구 지족동 1048-1",
+   "area_m2": 2320,
+   "cost_won": null,
+   "design_fee_won": 566000000,
+   "purp": null,
+   "arch_act": "신축",
+   "order_inst": "대전광역시 유성구",
+   "inst_type": "국가기관",
+   "phase": "계획",
+   "current_stage": "설계공모(나라장터 용역공고)",
+   "status": "활성",
+   "confirmed": false,
+   "notice_day": "2026-08-03",
+   "last_movement": "2026-08-03",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01663742&bidPbancOrd=000",
+   "src_note": "나라장터 용역공고 첨부 원문(설계공모지침서(노은3동 사회복지관) (최종).pdf) — 규모·공사비는 공고 원문값. design_fee_won은 **설계용역비**이지 공사비가 아니다",
+   "pbanc_no": "R26BK01663742",
+   "unty_no": "R26BM00907593",
+   "_g2b": true,
+   "gate": "관찰",
+   "gate_basis": "절차 진입 전 — 「용역」",
+   "lvl_basis": "연면적 2,320㎡ — 인프라:문화·관광·체육 C",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
+  },
+  {
+   "title": "보은읍 농촌중심지활성화사업 세부설계용역(제안공모)",
+   "cat": "인프라",
+   "sub": "공공시설",
+   "lvl": "C",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.712041,
+     36.484144
+    ]
+   },
+   "sd": "충북",
+   "sg": "보은군",
+   "addr": "충청북도 보은군 보은읍 장신리 87-4번지 외 5필지",
+   "area_m2": 2521,
+   "cost_won": 11594000000,
+   "design_fee_won": 553439000,
+   "purp": "1종근린생활시설(마을공동이용시설)",
+   "arch_act": null,
+   "order_inst": "한국농어촌공사 충북지역본부",
+   "inst_type": "국가기관",
+   "phase": "계획",
+   "current_stage": "설계공모(나라장터 용역공고)",
+   "status": "활성",
+   "confirmed": false,
+   "notice_day": "2026-08-05",
+   "last_movement": "2026-08-05",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01666722&bidPbancOrd=000",
+   "src_note": "나라장터 용역공고 첨부 원문(4. 공모지침서(보은읍) _시행방침 완료_심사위원 작성 완료.hwp) — 규모·공사비는 공고 원문값. design_fee_won은 **설계용역비**이지 공사비가 아니다",
+   "pbanc_no": "R26BK01666722",
+   "unty_no": "R26BM00909990",
+   "_g2b": true,
+   "gate": "관찰",
+   "gate_basis": "절차 진입 전 — 「용역」",
+   "lvl_basis": "연면적 2,521㎡ — 인프라:공공시설 C",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-05",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
+  },
+  {
+   "title": "당진 정원문화지원센터 건립사업 2단계 설계공모 공고",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "C",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.586407,
+     36.904359
+    ]
+   },
+   "sd": "충남",
+   "sg": "당진시",
+   "addr": "충청남도 당진시 고대면 옥현리 1-1 일원(당진지방정원 부지 내)",
+   "area_m2": 1600,
+   "cost_won": 11440000000,
+   "design_fee_won": 544240000,
+   "purp": null,
+   "arch_act": "신축",
+   "order_inst": "충청남도 당진시",
+   "inst_type": "국가기관",
+   "phase": "계획",
+   "current_stage": "설계공모(나라장터 용역공고)",
+   "status": "활성",
+   "confirmed": false,
+   "notice_day": "2026-08-05",
+   "last_movement": "2026-08-05",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01667140&bidPbancOrd=000",
+   "src_note": "나라장터 용역공고 첨부 원문(정원문화지원센터 건립사업 건축설계공모_설계지침서.hwpx) — 규모·공사비는 공고 원문값. design_fee_won은 **설계용역비**이지 공사비가 아니다",
+   "pbanc_no": "R26BK01667140",
+   "unty_no": "R26BM00910587",
+   "_g2b": true,
+   "gate": "관찰",
+   "gate_basis": "절차 진입 전 — 「용역」",
+   "lvl_basis": "연면적 1,600㎡ — 인프라:문화·관광·체육 C",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-05",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
+  },
+  {
+   "title": "신풍동 행정복지센터 신축공사",
+   "cat": "인프라",
+   "sub": "공공시설",
+   "lvl": "C",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.70075,
+     35.972888
+    ]
+   },
+   "sd": "전북",
+   "sg": "군산시",
+   "addr": "군산시 문화동 919-2, 919-4, 919-6, 919-8번지(4개 필지)",
+   "area_m2": null,
+   "cost_won": 5500000000,
+   "design_fee_won": 251504000,
+   "purp": null,
+   "arch_act": "신축",
+   "order_inst": "전북특별자치도 군산시",
+   "inst_type": "국가기관",
+   "phase": "계획",
+   "current_stage": "설계공모(나라장터 용역공고)",
+   "status": "활성",
+   "confirmed": false,
+   "notice_day": "2026-08-05",
+   "last_movement": "2026-08-05",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01668116&bidPbancOrd=000",
+   "src_note": "나라장터 용역공고 첨부 원문(신풍동 행정복지센터 신축공사 설계용역 제안공모 지침서(최종).hwpx) — 규모·공사비는 공고 원문값. design_fee_won은 **설계용역비**이지 공사비가 아니다",
+   "pbanc_no": "R26BK01668116",
+   "unty_no": "R26BM00911040",
+   "_g2b": true,
+   "gate": "관찰",
+   "gate_basis": "절차 진입 전 — 「용역」",
+   "addr_verified": {
+    "road_addr": "전북특별자치도 군산시 대학로 215 (문화동)",
+    "jibun_addr": "전북특별자치도 군산시 문화동 919-2 신풍동주민센터",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "전북특별자치도 군산시 대학로 215 (문화동)",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-05",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
+  },
+  {
+   "title": "이기대공원 친환경목조전망대 조성사업 설계공모",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "C",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.123422,
+     35.104533
+    ]
+   },
+   "sd": "부산",
+   "sg": "남구",
+   "addr": "부산광역시 남구 용호동 산 196-11번지 일원",
+   "area_m2": null,
+   "cost_won": 8957298000,
+   "design_fee_won": 463337000,
+   "purp": "문화 및 집회시설구    조목구조 + 철근콘크리트구조(또는 철골철근콘크리",
+   "arch_act": "신축",
+   "order_inst": "부산광역시 건설본부",
+   "inst_type": "국가기관",
+   "phase": "계획",
+   "current_stage": "설계공모(나라장터 용역공고)",
+   "status": "활성",
+   "confirmed": false,
+   "notice_day": "2026-08-07",
+   "last_movement": "2026-08-07",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01665728&bidPbancOrd=000",
+   "src_note": "나라장터 용역공고 첨부 원문(건축설계공모 지침서(이기대공원 친환경목조전망대 조성사업).hwpx) — 규모·공사비는 공고 원문값. design_fee_won은 **설계용역비**이지 공사비가 아니다",
+   "pbanc_no": "R26BK01665728",
+   "unty_no": "R26BM00913710",
+   "_g2b": true,
+   "gate": "관찰",
+   "gate_basis": "절차 진입 전 — 「용역」",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-07",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
+  },
+  {
+   "title": "서하면사무소 청사 신축사업 일반설계공모",
+   "cat": "인프라",
+   "sub": "공공시설",
+   "lvl": "C",
+   "lvl_basis": "연면적 840㎡ — 인프라:공공시설 C",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.695402,
+     35.647586
+    ]
+   },
+   "sd": "경남",
+   "sg": "함양군",
+   "addr": "경남 함양군 서하면 송계리 1242-7번지 외 5필지",
+   "area_m2": 840,
+   "cost_won": 2477000000,
+   "design_fee_won": 138520000,
+   "purp": "제1종근린생활시설(공공청사)",
+   "arch_act": "신축",
+   "order_inst": "경상남도 함양군",
+   "inst_type": "국가기관",
+   "phase": "계획",
+   "current_stage": "설계공모(나라장터 용역공고)",
+   "status": "활성",
+   "confirmed": false,
+   "notice_day": "2026-08-07",
+   "last_movement": "2026-08-07",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "src_tier": "official_notice",
+   "src": "https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01670957&bidPbancOrd=000",
+   "src_note": "나라장터 용역공고 첨부 원문(3. 공고문(서하면사무소 청사 신축사업 실시설계용역 설계공모).hwpx) — 규모·공사비는 공고 원문값. design_fee_won은 **설계용역비**이지 공사비가 아니다",
+   "pbanc_no": "R26BK01670957",
+   "unty_no": "R26BM00914359",
+   "_g2b": true,
+   "gate": "관찰",
+   "gate_basis": "절차 진입 전 — 「용역」",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-07",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
   }
  ]
 }

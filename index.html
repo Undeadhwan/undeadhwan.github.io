@@ -1146,10 +1146,11 @@ function sdAggregates() {
   const m = new Map();
   (typeof allSignalsFlat === "function" ? allSignalsFlat() : SIGNALS).filter(visible).forEach(s => {
     const sd = sdOf(s); if (!sd) return;
-    let e = m.get(sd); if (!e) m.set(sd, e = { sd, n: 0, moved: 0, x: 0, y: 0, pts: 0 });
+    let e = m.get(sd); if (!e) m.set(sd, e = { sd, n: 0, _mv: new Set(), x: 0, y: 0, pts: 0 });
     e.n++;
-    // 움직임은 `basis="source"`만 — 관측일은 「우리가 처음 본 날」이지 「그날 움직였다」가 아니다
-    if (movBasis(s) === "source" && weeksAgo(s.last_movement) === 0) e.moved++;
+    // 움직임은 `basis="source"`만 — 관측일은 「우리가 처음 본 날」이지 「그날 움직였다」가 아니다.
+    // 노선 신호는 movKey로 노선당 1건(역 수만큼 불리지 않는다 — 흐름 뷰·탭 배지와 같은 키).
+    if (movBasis(s) === "source" && weeksAgo(s.last_movement) === 0) e._mv.add(movKey(s));
     const c = sigRepPoint(s);
     if (c) { e.x += c[0]; e.y += c[1]; e.pts++; }
   });
@@ -1159,7 +1160,7 @@ function sdAggregates() {
        ① 지도 독자는 도 이름표를 도 한가운데서 찾는다 ② 신호 무게중심은 서로 뭉쳐(경기 중심이
        서울 중심 옆으로 끌려온다) 겹침 회피가 알약을 실제 위치에서 멀리 밀어낸다 — 그건 지도가
        거짓말하는 것이다(§4.1). 경계가 없으면 신호 무게중심으로 폴백한다. */
-    .map(e => ({ sd: e.sd, n: e.n, moved: e.moved,
+    .map(e => ({ sd: e.sd, n: e.n, moved: e._mv.size,
                  lon: (cen[e.sd] || [e.x / e.pts])[0], lat: (cen[e.sd] || [0, e.y / e.pts])[1] }))
     .sort((a, b) => b.n - a.n);   // 큰 것부터 자리를 잡는다(충돌 시 작은 것이 밀리거나 빠짐)
 }
@@ -1791,6 +1792,9 @@ function buildRailSignals() {
     src_tier: f.properties.src_tier, st_status: f.properties.st_status, approx: f.properties.approx, note: f.properties.note,
     stage_checked: f.properties.stage_checked, stage_src: f.properties.stage_src,   // 단계는 수동 SSOT — 언제 확인했는지가 신뢰 근거(P2)
     pt_type: f.properties.pt_type, geo_prec: f.properties.geo_prec, geo_approx: !!f.properties.geo_approx, geo_basis: f.properties.geo_basis || null, milestones: f.properties.milestones,
+    // ☠ 생애주기 3종이 빠져 **철도가 흐름 뷰·움직임 집계·신선도(정체) 표기에서 통째로 없었다**
+    //   (2026-08-10 전수조사 D — 데이터엔 역 789건이 다 갖고 있는데 어댑터가 안 실었다. 어댑터 함정).
+    stage_history: f.properties.stage_history, last_movement: f.properties.last_movement, first_seen: f.properties.first_seen,
     geometry: { coordinates: f.geometry.coordinates }
   }));
 }
@@ -1870,6 +1874,7 @@ function buildRoadSignals() {
         signal: p.signal !== false, pt_role: p.pt_role,
         sources: p.src_url ? [p.src_url] : [],
         status: "활성", confirmed: !!p.confirmed, sd: null,   // 소재 시도=_sggs(buildSggIndex 좌표 귀속)
+        stage_history: p.stage_history, last_movement: p.last_movement, first_seen: p.first_seen,   // 생애주기 — 흐름·신선도(어댑터 함정)
         geometry: { coordinates: f.geometry.coordinates } });
       continue;
     }
@@ -1887,21 +1892,24 @@ function buildRoadSignals() {
     const step = roadKindOf(p) === "일반"
       ? Math.max(50, roadCorridorKm(p.lvl || "C") * 1000 / 2)   // 반경의 절반 — 반경을 바꿔도 안 뚫린다
       : SAMPLE_M;
-    // 근거 구간과 보간 구간을 **둘 다** 훑되 어느 쪽인지 표식을 남긴다 — 선이 연하게 그린 구간은
-    // 회랑도 연하게 그린다(P2: 이으면서 숨기지 않는다).
+    // 근거 구간과 보간 구간을 **둘 다** 훑되 어느 쪽인지 표식(weak=출처 사실)을 남긴다.
+    // ⚠ weak는 **출처 표식이지 표시 규칙이 아니다**(필드 하나에 두 뜻을 싣지 않는다 — 2026-08-10
+    //   실측: 표시 규칙을 여기 합쳤더니 전수조사 E가 solid·bridge를 못 갈라 63건 오탐).
+    //   연하게 그릴지는 렌더러가 `_has_solid`와 함께 정한다(본선 있으면 보간도 동일 농도 — 최종형).
     const pts = sample(dp.solid, step).map(c => ({ c, weak: false }))
       .concat(sample(dp.bridges, step).map(c => ({ c, weak: true })));
     if (!pts.length) continue;
     // 대표점 = **선의 길이 중점**(lineMid) — 노선 전체를 대표한다. 종전엔 시작점이라 구석에 붙었다.
     const anchor = lineMid(dp.solid.length ? dp.solid : dp.bridges) || pts[0].c;
     // 표시명 = 공식 사업명 우선(OSM 이름은 선형 매칭용일 뿐 — 공식 SSOT 사상 2026-07-17)
-    ROAD_SIG.push({ _road: true, title: p.official_name || `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "C",
+    ROAD_SIG.push({ _road: true, _has_solid: !!dp.solid.length, title: p.official_name || `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "C",
       lvl_basis: p.lvl_basis, gate: p.gate, gate_basis: p.gate_basis,   // 등급 근거·게이트 — 카드가 읽는다(어댑터 함정 7호)
       template_type: "도로", current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
       status: "활성", confirmed: !!p.confirmed, sd: null, road_kind: roadKindOf(p), src_tier: p.src_tier,   // 소재 시도=_sggs(다중 귀속)
       owner: p.owner, osm_name: p.name, line: p.name, geom_src: p.geom_src, geom_status: p.geom_status || null, milestones: p.milestones,   // line=노선 하이라이트 키
       official_type: p.official_type, official_name: p.official_name, access: p.access, access_note: p.access_note, ic_note: p.ic_note,
       stage_checked: p.stage_checked, stage_src: p.stage_src,   // 단계는 수동 SSOT — 확인 시점을 화면에 남긴다
+      stage_history: p.stage_history, last_movement: p.last_movement, first_seen: p.first_seen,   // 생애주기 — 흐름·신선도(어댑터 함정)
       sources: p.src_url ? [p.src_url] : [],
       // ⚠ 선형 출처는 데이터의 geom_src를 그대로 쓴다 — 종전엔 "선형=OSM(ODbL)"을 **하드코딩**해
       //   실제로는 공식 경유지 연결인데 화면이 OSM이라 거짓말했다(2026-07-23 사용자 제보로 발견, P2 위반).
@@ -2131,6 +2139,16 @@ function movBasis(s) {
   if (!h || !h.length || !s.last_movement) return null;
   const e = h.filter(x => x.date === s.last_movement).pop() || h[h.length - 1];
   return e.basis === "observed" ? "observed" : "source";
+}
+/* 움직임 dedupe 키 (2026-08-10) — 철도·도로는 **역·IC 단위 신호**라 노선 하나의 단계 변경이
+   역 수만큼 불어난다(서해선 연장 1건 = 역 4개). 움직임의 주체는 **사업(노선)**이므로
+   노선|일자를 한 건으로 센다. 세 집계(시도 알약·흐름 뷰·탭 배지)가 같은 키를 쓴다 —
+   한쪽에만 걸면 두 화면이 다른 숫자를 말한다. */
+const movKey = s => s.line ? `${s.line}|${s.last_movement || ""}` : s;
+function dedupeMov(arr) {
+  const seen = new Set(), out = [];
+  for (const s of arr) { const k = movKey(s); if (seen.has(k)) continue; seen.add(k); out.push(s); }
+  return out;
 }
 const OBS_TIP = "소스에 단계 변경일이 없어 **우리가 그 단계임을 확인한 날**로 표기합니다(관측 사실). 그날 움직였다는 뜻이 아닙니다.";
 function freshness(s) {
@@ -3577,8 +3595,9 @@ function renderFlow() {
   const host = document.getElementById("flowv");
   if (!host) return;
   const rows = flowRows();
-  const moved = rows.filter(s => movBasis(s) === "source");
-  const seen = rows.filter(s => movBasis(s) !== "source");
+  // 노선 신호는 movKey로 노선당 1건 — 시도 알약·탭 배지와 같은 키(두 화면이 다른 숫자를 말하면 안 된다)
+  const moved = dedupeMov(rows.filter(s => movBasis(s) === "source"));
+  const seen = dedupeMov(rows.filter(s => movBasis(s) !== "source"));
   const daysAgo = d => { const t = new Date(String(d).length === 7 ? d + "-01" : d); return Math.floor((TODAY - t) / 864e5); };
   const bucket = s => { const d = daysAgo(s.last_movement);
     for (const g of FLOW_GROUPS) if (d <= g.maxD) return g.k;
@@ -3621,8 +3640,8 @@ function initTabbar() {
 function updateTabbar() {
   const el = document.getElementById("tb-mv");
   if (!el) return;
-  const n = allSignalsFlat().filter(visible)
-    .filter(s => movBasis(s) === "source" && weeksAgo(s.last_movement) === 0).length;
+  const n = dedupeMov(allSignalsFlat().filter(visible)
+    .filter(s => movBasis(s) === "source" && weeksAgo(s.last_movement) === 0)).length;
   el.textContent = n ? n : "";
   el.style.display = n ? "" : "none";
 }
@@ -4144,11 +4163,13 @@ function initLeaflet() {
         return;
       }
       // 일반도로: 샘플점별 진한 원 겹침=얼룩 → 옅은 무테 원들로 회랑 밴드 근사
-      // 보간 구간은 선이 연하니 회랑도 연하게 — **카카오와 같은 규칙**(한쪽에만 걸면 폴백이 예외가 된다)
+      // weak(=전 구간 근사만 true, 2026-08-10)는 생산자(ROAD_SIG 빌더) 한 곳이 정한다 — **카카오와 같은 규칙**
       roadLinePoints(s).forEach(p => {
         circles.push(L.circle([p.coord[1], p.coord[0]], {
           radius: getRadius(s), stroke: false, fillColor: col,
-          fillOpacity: p.weak ? 0.035 : 0.07, interactive: false }).addTo(map));
+          // 본선(solid) 있는 노선의 보간 회랑 = 본선과 동일 농도(2026-08-10 최종형 — 선과 같은 규칙).
+          // 전 구간 근사(_has_solid 없음)만 연하게. weak는 출처 사실이고 농도는 여기서 정한다.
+          fillOpacity: (p.weak && !s._has_solid) ? 0.035 : 0.07, interactive: false }).addTo(map));
       });
       return;
     }
@@ -4175,8 +4196,8 @@ function initLeaflet() {
       if (f.geometry.type === "Point") continue;
       if (p.geom_omitted || p.geom_point_only) continue;   // 숨긴 선형·위치만 확보는 하이라이트에서도 안 그린다
       if (p.name !== lineName && p.full !== lineName && p.official_name !== lineName) continue;
-      // 카카오 하이라이트와 **같은 규칙** — 근거 있는 구간(geom_solid)만 굵게, 보간(geom_bridges)은 연한 점선.
-      // (한쪽 엔진에만 걸면 폴백에서 조용히 예외가 된다 — 이 저장소의 반복 사고 형태.)
+      // 카카오 하이라이트와 **같은 규칙** — 본선(geom_solid) 있는 노선의 보간은 본선과 완전 동일,
+      // 전 구간 근사만 연하게(2026-08-10 최종형). (한쪽 엔진에만 걸면 폴백에서 조용히 예외가 된다.)
       const ll = drawnParts(p, f.geometry).solid.map(seg => seg.map(([x, y]) => [y, x]));   // 정의는 drawnParts 하나
       // 흰 글로우 케이싱 + 본선 굵게 — 색은 분류색 유지(표식 문법 v1.7), 미확정 선형은 점선 유지(§7)
       routeHl.push(L.polyline(ll, { pane: "sig", color: "#fff", weight: 11, opacity: .85, interactive: false }).addTo(map));
@@ -4273,6 +4294,7 @@ function roadLineToSignal(p, geom) {
     access: p.access, access_note: p.access_note, ic_note: p.ic_note,
     owner: p.owner, src_tier: p.src_tier, geom_src: p.geom_src, geom_status: p.geom_status || null,
     milestones: p.milestones, stage_checked: p.stage_checked, stage_src: p.stage_src,
+    stage_history: p.stage_history, last_movement: p.last_movement, first_seen: p.first_seen,   // 생애주기 — 흐름·신선도(어댑터 함정)
     sources: p.src_url ? [p.src_url] : [],
     stage_note: `${p.linekind || "도로"} · ${p.status}${p.geom_src ? " · " + p.geom_src : ""}`,
     geometry: { coordinates: cen }, geo_approx: !!(p.approx || p.geom_partial),
@@ -4539,7 +4561,7 @@ function initKakao() {
       //   고시 세목 6)인데 전부 흐렸다. **소스가 바뀌었는데 그 소스를 전제로 만든 규칙이 남아 있었다.**
       const subdued = isRoad && /OpenStreetMap/.test(String(p.geom_src || ""));
       const segs = f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates];
-      const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + (isRoad ? "🛣" : "🚈") + " " + (p.full || p.name) + '</div><div class="apt-pop-sub">' + (p.linekind || "") + ' · <span style="color:' + col + '">' + p.status + '</span>' + (p.gate === "계획안" ? ' · <b style="color:#b3651e">계획(안) — 승인 전</b>' : "") + (p.approx ? " (근사 선형 — 공식 경유지 연결, 실선형 아님)" : dashed ? " (미확정 — 점선)" : "") + '</div>' + (p.gate === "계획안" ? '<div class="apt-pop-sub" style="color:#b3651e">노선·정거장 위치는 변경될 수 있습니다</div>' : "") + (p.geom_partial ? '<div class="apt-pop-sub" style="color:#b3651e">⚠ ' + (p.geom_cover_note || "선형 일부 구간만 확보") + '</div>' : "") + (p.geom_bridged_km ? '<div class="apt-pop-sub" style="color:#7a8699">┈ 이 중 ' + p.geom_bridged_km + 'km는 <b>보간</b>(연한 선) — 정점 사이를 이은 구간이라 형상 근거 없음</div>' : "") + '<div class="apt-pop-cats"><span style="color:' + col + '">● 단계 ' + (p.phase || (p.confirmed ? "착공" : "계획")) + '</span>' + (p.note ? " · " + p.note : "") + (p.geom_src ? " · " + p.geom_src : p.src_name ? " · 출처: " + p.src_name : "") + '</div></div>';
+      const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + (isRoad ? "🛣" : "🚈") + " " + (p.full || p.name) + '</div><div class="apt-pop-sub">' + (p.linekind || "") + ' · <span style="color:' + col + '">' + p.status + '</span>' + (p.gate === "계획안" ? ' · <b style="color:#b3651e">계획(안) — 승인 전</b>' : "") + (p.approx ? " (근사 선형 — 공식 경유지 연결, 실선형 아님)" : dashed ? " (미확정 — 점선)" : "") + '</div>' + (p.gate === "계획안" ? '<div class="apt-pop-sub" style="color:#b3651e">노선·정거장 위치는 변경될 수 있습니다</div>' : "") + (p.geom_partial ? '<div class="apt-pop-sub" style="color:#b3651e">⚠ ' + (p.geom_cover_note || "선형 일부 구간만 확보") + '</div>' : "") + (p.geom_bridged_km ? '<div class="apt-pop-sub" style="color:#7a8699">┈ 이 중 ' + p.geom_bridged_km + 'km는 <b>보간</b>(' + ((p.geom_solid && p.geom_solid.length) ? "본선과 동일 표시" : "연한 선") + ') — 정점 사이를 이은 구간이라 형상 근거 없음</div>' : "") + '<div class="apt-pop-cats"><span style="color:' + col + '">● 단계 ' + (p.phase || (p.confirmed ? "착공" : "계획")) + '</span>' + (p.note ? " · " + p.note : "") + (p.geom_src ? " · " + p.geom_src : p.src_name ? " · 출처: " + p.src_name : "") + '</div></div>';
       const clickHandler = () => { _ovClickTs = Date.now(); hideTip();
         // 도로 선 클릭 — **키로 찾는다**. 종전엔 `title.startsWith(p.name)`였는데 2026-07-17에 표시명을
         // 공식 사업명으로 바꾸면서(계양강화고속도로 → "계양~강화 고속도로") 접두가 깨져 **8개 고속도로가
@@ -4865,7 +4887,7 @@ function initKakao() {
   const addRadius = s => { const col = colorOf(s);
     if (s._road && s.access_points) { if (s.road_kind === "전용") { (s.ic_points || []).forEach(ap => circles.push(new K.Circle({ map, center: LL(ap.coordinates[0], ap.coordinates[1]), radius: getRadius(s), strokeWeight: 1.5, strokeColor: col, strokeOpacity: .85, fillColor: col, fillOpacity: .14, zIndex: 5 }))); return; }
       // 회랑 = **그려진 선의 버퍼**. 보간 구간(선이 연한 점선인 자리)은 회랑도 연하게 — 선과 강약을 맞춘다.
-      roadLinePoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 0, strokeOpacity: 0, fillColor: col, fillOpacity: p.weak ? .035 : .07, zIndex: 5 }))); return; }
+      roadLinePoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 0, strokeOpacity: 0, fillColor: col, fillOpacity: (p.weak && !s._has_solid) ? .035 : .07, zIndex: 5 }))); return; }   // 본선 있으면 보간 회랑도 동일 농도(Leaflet판과 같은 규칙, 2026-08-10)
     signalPoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 1.5, strokeColor: col, strokeOpacity: .85, fillColor: col, fillOpacity: .14, zIndex: 5 }))); };
   const showRadius = s => { clearRadius(); addRadius(s); }; const showRadiusMany = list => { clearRadius(); list.forEach(addRadius); };
   let routeHl = []; const clearRoute = () => { routeHl.forEach(o => o.setMap(null)); routeHl = [];
@@ -5178,7 +5200,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260810c");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260810d");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -5344,7 +5366,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810c"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810d"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5370,7 +5392,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260810c");
+  const CB = "?b=" + (window.BUILD || "20260810d");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
