@@ -520,14 +520,16 @@
   /* ══ 하단 탭바(독) — 모바일 전용. 데스크톱은 헤더 칩이 같은 일을 한다(두 벌을 만들지 않는다) ══ */
   /* 문법(DESIGN §1): 무채색 뼈대 · 상태는 채움(굵기)으로. `env(safe-area-inset-bottom)` —
      푸터를 숨겨 탭바가 최하단이 됐으므로 아이폰 홈 바를 침범하면 안 된다. */
+  /* 여백은 호갱노노 하단 내비 기준(2026-08-10 사용자 "너무 바닥에 붙었어. 호갱노노 참고해") —
+     아이콘·라벨이 상하로 숨 쉬고, 홈 바 위로 넉넉히 뜬다. */
   #tabbar { display:none; position:fixed; left:0; right:0; z-index:1300;
-            background:rgba(255,255,255,.94); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+            background:rgba(255,255,255,.96); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
             border-top:1px solid var(--line);
-            padding:6px 8px calc(6px + env(safe-area-inset-bottom, 0px)); }
-  #tabbar .tb { flex:1 1 0; min-width:0; display:flex; flex-direction:column; align-items:center; gap:3px;
-                background:none; border:0; padding:4px 2px; font-size:10.5px; letter-spacing:-.1px;
+            padding:10px 10px calc(12px + env(safe-area-inset-bottom, 0px)); }
+  #tabbar .tb { flex:1 1 0; min-width:0; display:flex; flex-direction:column; align-items:center; gap:5px;
+                background:none; border:0; padding:2px; font-size:11px; letter-spacing:-.1px;
                 color:var(--ink3); font-family:inherit; cursor:pointer; position:relative; }
-  #tabbar .tb svg { width:21px; height:21px; fill:none; stroke:currentColor; stroke-width:1.7;
+  #tabbar .tb svg { width:23px; height:23px; fill:none; stroke:currentColor; stroke-width:1.7;
                     stroke-linecap:round; stroke-linejoin:round; }
   #tabbar .tb.on { color:var(--ink); font-weight:600; }
   #tabbar .tb.on svg { stroke-width:2.1; }
@@ -3943,9 +3945,13 @@ function initLeaflet() {
       // 색 = 분류색 단일(주거개발). 폴리곤은 조연(흐린 경계 문맥) — 호재 원이 주인공이라 대폭 감쇄(사용자 확정 2026-07-16)
       const col = tracked ? CAT_COLOR["주거개발"] : "#aeb4c0";
       const latlngs = f.geometry.coordinates.map(r => r.map(([x, y]) => [y, x]));
+      /* ⚠ **보이지 않으면 잡히지도 않아야 한다** (2026-08-10 사용자 "호재 원도 없는데 뭐가 뜬다 —
+         화면에 표시 안 되면 존재감이 없어야 해"). 종전 미매칭(단계 미상) 구역은 회색 stroke .3 ·
+         fill .03이라 밝은 베이스맵에서 **사실상 안 보였는데** hover·클릭은 전부 받았다 — 유령이다.
+         고시 경계는 사실이므로 지우는 대신 **보이게** 올린다(경계가 읽히는 최소선). */
       const poly = L.polygon(latlngs, { pane: "jbpoly", color: col,
-        weight: tracked ? 1.1 : 0.8, opacity: tracked ? .45 : .3,
-        fillColor: col, fillOpacity: tracked ? .06 : .03 }).addTo(map);
+        weight: tracked ? 1.1 : 1.1, opacity: tracked ? .45 : .5, dashArray: tracked ? null : "4 3",
+        fillColor: col, fillOpacity: tracked ? .06 : .05 }).addTo(map);
       poly.bindTooltip(`<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">${p.name || "정비구역"}</div>`
         + `<div class="apt-pop-sub">정비구역 · ${p.jtype}${p.area ? " · " + (p.area / 1e4).toFixed(1) + "만㎡" : ""}</div>`
         + `<div class="apt-pop-cats">${tracked
@@ -4176,10 +4182,11 @@ function initLeaflet() {
          클릭하는 순간 한강 터널 보간이 계획 점선처럼 읽혔다(2026-08-09 사용자 제보 김포~파주).
          같은 규칙이 한쪽 층에만 걸린 그 형태다. */
       if (p.geom_bridges && p.geom_bridges.length) {
-        // 보간도 굵기·케이싱은 실선과 같다 — 투명도만 낮게(2026-08-09 "한강 구간만 왜 두께가 얇냐")
+        // 본선 있는 노선의 보간 = 본선과 동일(2026-08-10 사용자 확정 "색상도 같아야") · 전 구간 근사만 연하게
+        const hasSolid = !!(p.geom_solid && p.geom_solid.length);
         const bll = p.geom_bridges.map(seg => seg.map(([x, y]) => [y, x]));
-        routeHl.push(L.polyline(bll, { pane: "sig", color: "#fff", weight: 11, opacity: .45, interactive: false }).addTo(map));
-        routeHl.push(L.polyline(bll, { pane: "sig", color: col, weight: 5.5, opacity: .45,
+        routeHl.push(L.polyline(bll, { pane: "sig", color: "#fff", weight: 11, opacity: hasSolid ? .85 : .45, interactive: false }).addTo(map));
+        routeHl.push(L.polyline(bll, { pane: "sig", color: col, weight: 5.5, opacity: hasSolid ? .95 : .45,
           dashArray: (!["착공", "준공"].some(k => (p.phase || "").startsWith(k))) ? "10 8" : null,
           lineCap: "round", interactive: false }).addTo(map));
       }
@@ -4576,15 +4583,20 @@ function initKakao() {
          터널 보간이 점선으로 나와 계획 단계처럼 읽혔다. 시각 채널을 가른다:
          **dash = 단계**(실선=착공↑ · 점선=계획, 전 화면 공통 문법 그대로) / **투명도 = 형상 확실성**
          (보간은 연하게만). 한 채널에 두 사실을 싣지 않는다(§필드 하나가 두 뜻). */
-      /* ⚠ 보간은 **굵기도 실선과 같다** (2026-08-09 사용자 "한강 구간만 왜 두께가 얇냐").
-         채널 분리 규칙의 완결형: dash=단계 · **투명도만** 확실성. 굵기까지 줄이면 세 번째
-         채널이 생겨 또 다른 뜻(덜 중요함?)으로 읽힌다 — 한 채널에 한 사실. */
+      /* ★ 보간 표기 최종형 (2026-08-10 사용자 확정 "같은 구간이면 한강이던 뭐던 색상도 같아야").
+         · **본선(solid)이 있는 노선의 빈틈 보간** = 본선과 **완전히 동일하게** 그린다(색·굵기·투명도).
+           같은 노선의 한 구간이 다르게 보이면 사용자는 노선이 둘로 읽는다 — 보간이라는 사실은
+           지우지 않는다: 클릭 팝업·카드의 「이 중 Nkm는 보간」 문구가 말한다(P2는 텍스트 채널로).
+         · **전 구간이 보간**(2점 앵커·성긴 근사, solid 없음) = 종전대로 연하게 — 이건 빈틈 잇기가
+           아니라 선 전체가 근사라, 진하게 그리면 실형상 행세다(파주 앵커선 문법 — 사용자 "됐고"). */
+      const hasSolid = !!(p.geom_solid && p.geom_solid.length);
       (p.geom_bridges || []).forEach(seg => {
         const bp = seg.map(([x, y]) => LL(x, y));
         objs.push(new K.Polyline({ path: bp, strokeColor: "#ffffff", strokeWeight: dashed ? 6 : 5.6,
-          strokeOpacity: .5, strokeStyle: "solid", zIndex: 2 }));
+          strokeOpacity: hasSolid ? (subdued ? .5 : .85) : .5, strokeStyle: "solid", zIndex: 2 }));
         objs.push(new K.Polyline({ path: bp, strokeColor: col, strokeWeight: dashed ? 3.6 : 3,
-          strokeOpacity: .38, strokeStyle: dashed ? "shortdot" : "solid", zIndex: 3 }));
+          strokeOpacity: hasSolid ? (subdued ? .5 : isRoad ? .8 : .92) : .38,
+          strokeStyle: dashed ? "shortdot" : "solid", zIndex: 3 }));
       });
       segs.forEach(seg => {
         const path = seg.map(([x, y]) => LL(x, y));
@@ -4732,7 +4744,8 @@ function initKakao() {
       if (!f._kjb) {
         const tracked = !!p.phase; const col = tracked ? CAT_COLOR["주거개발"] : "#aeb4c0";
         const path = f.geometry.coordinates.map(r => r.map(([x, y]) => LL(x, y)));
-        const poly = new K.Polygon({ path, strokeColor: col, strokeWeight: tracked ? 1.1 : 0.8, strokeOpacity: tracked ? .45 : .3, fillColor: col, fillOpacity: tracked ? .06 : .03, zIndex: 2 });
+        // ⚠ 미매칭 구역이 안 보이는데 클릭되는 유령 — Leaflet판과 같은 교정(2026-08-10). 점선 경계로 「단계 미상」 문법도 겸한다.
+        const poly = new K.Polygon({ path, strokeColor: col, strokeWeight: 1.1, strokeOpacity: tracked ? .45 : .5, strokeStyle: tracked ? "solid" : "shortdash", fillColor: col, fillOpacity: tracked ? .06 : .05, zIndex: 2 });
         const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + (p.name || "정비구역") + '</div><div class="apt-pop-sub">정비구역 · ' + p.jtype + (p.area ? " · " + (p.area / 1e4).toFixed(1) + "만㎡" : "") + '</div><div class="apt-pop-cats">' + (tracked ? '<span style="color:' + col + '">● ' + (p.stage || "추진 중") + '</span>' + (p.psrc ? '<span style="color:#8a90a0"> · ' + p.psrc + ' 기준</span>' : "") : '<span style="color:#8a90a0">단계 미상 · 고시 경계</span>') + (p.date ? " · 고시 " + p.date : "") + '</div></div>';
         K.event.addListener(poly, "mouseover", mev => showTip(html, evToClient(mev))); K.event.addListener(poly, "mousemove", mev => showTip(html, evToClient(mev))); K.event.addListener(poly, "mouseout", hideTip);
         K.event.addListener(poly, "click", () => { _ovClickTs = Date.now(); hideTip(); const ring = f.geometry.coordinates[0]; let sx = 0, sy = 0; ring.forEach(([x, y]) => { sx += x; sy += y; }); showSignal(jeongbiPolyToSignal(p, [sx / ring.length, sy / ring.length]), false); });
@@ -4863,10 +4876,11 @@ function initKakao() {
       const hlSolid = p.geom_solid ? p.geom_solid : segs;
       hlSolid.forEach(seg => { const ll = seg.map(([x, y]) => { const q = LL(x, y); bounds.extend(q); return q; }); routeHl.push(new K.Polyline({ map, path: ll, strokeColor: "#fff", strokeWeight: 11, strokeOpacity: .85, zIndex: 21 })); routeHl.push(new K.Polyline({ map, path: ll, strokeColor: col, strokeWeight: 5.5, strokeOpacity: .95, strokeStyle: dashed ? "shortdash" : "solid", zIndex: 22 })); });
       // ⚠ 보간의 dash 하드코딩 금지 — dash=단계·투명도=확실성(위 Leaflet판 주석과 같은 사고, 2026-08-09)
-      // 보간도 굵기·케이싱은 실선과 같다 — 투명도만 낮게(2026-08-09 "한강 구간만 왜 두께가 얇냐")
+      // 본선 있는 노선의 보간 = 본선과 동일(2026-08-10 사용자 확정 "색상도 같아야") · 전 구간 근사만 연하게
+      { const hasSolid = !!(p.geom_solid && p.geom_solid.length);
       (p.geom_bridges || []).forEach(seg => { const ll = seg.map(([x, y]) => { const q = LL(x, y); bounds.extend(q); return q; });
-        routeHl.push(new K.Polyline({ map, path: ll, strokeColor: "#fff", strokeWeight: 11, strokeOpacity: .45, zIndex: 20 }));
-        routeHl.push(new K.Polyline({ map, path: ll, strokeColor: col, strokeWeight: 5.5, strokeOpacity: .45, strokeStyle: dashed ? "shortdot" : "solid", zIndex: 21 })); }); }
+        routeHl.push(new K.Polyline({ map, path: ll, strokeColor: "#fff", strokeWeight: 11, strokeOpacity: hasSolid ? .85 : .45, zIndex: 20 }));
+        routeHl.push(new K.Polyline({ map, path: ll, strokeColor: col, strokeWeight: 5.5, strokeOpacity: hasSolid ? .95 : .45, strokeStyle: dashed ? "shortdot" : "solid", zIndex: 21 })); }); } }
     for (const f of RAIL.concat(ROADF)) { const p = f.properties; if (p.kind !== "station" || p.signal === false) continue; if (p.line !== lineName && p.line_official !== lineName) continue; const [x, y] = f.geometry.coordinates;
       const elx = document.createElement("div"); elx.style.cssText = "width:18px;height:18px;border-radius:50%;border:3.5px solid #fff;box-shadow:0 0 0 1.5px " + col + ";pointer-events:none"; routeHl.push(new K.CustomOverlay({ map, position: LL(x, y), content: elx, zIndex: 23, yAnchor: .5, xAnchor: .5 }));
       // 역명 라벨 — 상세(하이라이트) 중엔 줌과 무관하게 소속역 이름을 단다(2026-08-04 아실 벤치마크).
@@ -5155,7 +5169,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260810a");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260810b");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -5321,7 +5335,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810a"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810b"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5347,7 +5361,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260810a");
+  const CB = "?b=" + (window.BUILD || "20260810b");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
