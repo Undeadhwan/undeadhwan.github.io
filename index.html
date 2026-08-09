@@ -339,6 +339,23 @@
   .summary { border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:12.5px; margin-bottom:12px; background:#fafafa; }
   .card { border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:10px; cursor:pointer; }
   .card:hover { border-color:#b0b0b6; }
+  /* ══ 카드 문법 (2026-08-09 개편) — 다섯 줄이 각각 한 질문에 답한다. 데스크톱·모바일 공용이다
+     (`cardHtml` 하나를 좌측 패널과 목록이 같이 쓴다 — 한쪽만 바꾸면 두 화면이 갈린다). ══ */
+  .card .chead { display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:5px; }
+  .card .cph { font-weight:700; font-size:var(--fs-s); }         /* ● 단계 — 색=분류(지도와 같은 문법) */
+  .card .ccat { font-size:var(--fs-s); color:var(--ink2); }
+  .card .cmove { font-size:var(--fs-s); color:var(--ink2); margin-top:2px; }
+  .card .cmove .cwhat { color:var(--ink); }                       /* 무엇이 움직였나 — 소스 원문 단계 */
+  /* 마일스톤 트랙: 점=국면, 선=지나온 길. 진척률(%)·게이지가 아니다(§7) */
+  .card .mtrk { display:flex; align-items:center; gap:0; margin:8px 0 2px; }
+  .card .mtrk .d { width:9px; height:9px; border-radius:50%; background:var(--line2); flex:none; }
+  .card .mtrk .d.done { background:var(--ink); }
+  .card .mtrk .d.cur { background:#fff; border:2.5px solid var(--ink); width:11px; height:11px; }
+  .card .mtrk .ln { height:2px; background:var(--line2); flex:1 1 0; min-width:12px; }
+  .card .mtrk .ln.done { background:var(--ink); }
+  .card .mtrk .lb { margin-left:10px; font-size:var(--fs-s); color:var(--ink3); white-space:nowrap; }
+  .card .cbadges { display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; }
+  .card .cfoot { font-size:var(--fs-s); color:var(--ink3); margin-top:5px; }
   .card .tags { font-size:11px; color:var(--muted); margin-bottom:4px; }
   .gbasis { color:var(--ink2); font-weight:600; }   /* 등급 근거 수치 = 사실 표기라 무채색(분류색 아님) */
   .gbasis.undet { color:#a08a5a; font-weight:600; font-style:italic; }
@@ -489,6 +506,35 @@
   .group-h { font-size:12px; color:var(--muted); margin:16px 0 6px; font-weight:600; }
   footer { position:fixed; left:0; right:0; bottom:0; background:rgba(255,255,255,.95); border-top:1px solid var(--line);
            font-size:12.5px; color:var(--muted); padding:7px 16px; z-index:1000; }
+  /* ══ 흐름 뷰 — 시간축. 날짜 그룹(오늘/이번 주/이번 달/그 이전)으로 카드를 묶는다.
+     ⚠ 「움직임」은 `basis="source"`(소스 원문 날짜)만이다. 관측일(`observed`)은 「우리가 처음 본 날」이라
+       **별도 그룹**으로 분리해 이름부터 다르게 부른다 — 뭉치면 "이번 주 움직임 2,588건"이 재발한다. ══ */
+  #flowv { flex:1; min-width:0; order:1; overflow-y:auto; padding:16px 20px 80px; background:var(--bg); }
+  #flowv .fwrap { max-width:920px; margin:0 auto; }
+  #flowv .fgh { display:flex; align-items:baseline; gap:8px; margin:18px 0 8px; }
+  #flowv .fgh:first-child { margin-top:4px; }
+  #flowv .fgh b { font-size:15.5px; }
+  #flowv .fgh .n { font-size:var(--fs-s); color:var(--ink3); font-variant-numeric:tabular-nums; }
+  #flowv .fgh .why { font-size:var(--fs-s); color:var(--ink3); }
+  #flowv .fempty { font-size:var(--fs-s); color:var(--ink3); padding:6px 0 2px; }
+  /* ══ 하단 탭바(독) — 모바일 전용. 데스크톱은 헤더 칩이 같은 일을 한다(두 벌을 만들지 않는다) ══ */
+  #tabbar { display:none; position:fixed; left:0; right:0; z-index:1300; background:var(--bg);
+            border-top:1px solid var(--line); padding:4px 4px 2px; }
+  #tabbar .tb { flex:1 1 0; min-width:0; display:flex; flex-direction:column; align-items:center; gap:1px;
+                background:none; border:0; padding:6px 2px 5px; font-size:11.5px; color:var(--ink3);
+                font-family:inherit; cursor:pointer; position:relative; }
+  #tabbar .tb i { font-style:normal; font-size:17px; line-height:1.1; filter:grayscale(1); opacity:.55; }
+  #tabbar .tb.on { color:var(--ink); font-weight:700; }
+  #tabbar .tb.on i { filter:none; opacity:1; }
+  /* 흐름 탭의 배지 = 이번 주 문서상 움직임. 0이면 안 붙인다(없는 걸 강조하지 않는다) */
+  #tabbar .tbn { position:absolute; top:2px; left:50%; margin-left:6px; background:var(--c-traffic); color:#fff;
+                 font-size:10.5px; font-weight:700; border-radius:999px; padding:0 5px; line-height:15px; }
+  @media (max-width: 768px) {
+    #tabbar { display:flex; }
+    /* 헤더의 뷰 전환 칩은 탭바로 내려갔다 — 같은 것을 두 곳에 두면 헤더만 낭비된다(지도 높이가 준다) */
+    #f-mode { display:none !important; }
+    #flowv { padding:12px 12px 80px; }
+  }
   /* ── 모바일: 지도 위 + 패널 아래 세로 배치, 필터는 가로 스크롤 ── */
   @media (max-width: 768px) {
     header { padding:8px 10px; gap:8px; }
@@ -545,6 +591,18 @@
     #panel .closex { font-size:20px; padding:6px 10px; }   /* 터치 과녁 확대 */
     #gantt { height:auto; padding:14px 10px 90px; }
     #raw { height:auto; padding:12px 10px 90px; }
+    /* ★ 가로 드래그로 화면이 통째로 밀리던 것 (2026-08-09 사용자 제보 — 목록 카드가 왼쪽으로
+       잘려 나갔다). 원인은 목록 머리줄이다: 정렬 셀렉트 + 이름 검색(`min-width:150px`)이
+       375px을 넘겨 `#listv`가 **가로 스크롤 컨테이너**가 됐고, 터치 드래그가 그걸 밀었다.
+       ⚠ `overflow-x:hidden`만 걸면 잘린 채 못 보게 된다 — **줄이 접히게** 만드는 게 먼저다.
+       (같은 사고를 2026-08-03에 `.regionbar select`에서 한 번 밟았다: 자식 셀렉트의 min-width가
+        컨테이너를 밀어 body가 401px로 늘어났다.) */
+    #listv { padding-left:12px; padding-right:12px; overflow-x:hidden; }
+    #listv .lvhead { flex-wrap:wrap; gap:8px; }
+    #listv .lvctl { width:100%; flex-wrap:wrap; }
+    #listv .lvsort { flex:1 1 60%; min-width:0; }
+    #listv .lvsort select { flex:1 1 0; min-width:0; }
+    #listv input { min-width:0; flex:1 1 100%; }   /* 데스크톱 규칙과 **같은 선택자**로 눌러야 이긴다 */
   }
   /* 폴리곤 클릭 시 브라우저 기본 포커스 외곽선(bounding box 검은 네모) 제거 */
   .leaflet-interactive:focus, .leaflet-container path:focus, .leaflet-interactive:focus-visible { outline: none !important; }
@@ -714,6 +772,8 @@
        #f-view는 운영 모드에서만 보이므로, 여기 있으면 공개 화면에 목록이 존재하지 않게 된다. -->
   <div class="chips" id="f-mode">
     <span class="chip on" id="v-map">지도</span>
+    <!-- 흐름 = **시간축**. 우리만 가진 축이라 지도·목록과 나란히 둔다(운영 도구 아님 — 공개 화면에 남는다) -->
+    <span class="chip" id="v-flow" title="문서상 움직인 신호를 최근순으로 — 오늘 · 이번 주 · 이번 달">흐름</span>
     <span class="chip" id="v-list" title="지도와 같은 표시 조건으로, 최근 움직인 신호부터 목록으로 봅니다">목록</span>
     <!-- 모바일 전용 — 조회조건 도크를 시트로 연다. 데스크톱에선 도크가 항상 보이므로 CSS로 숨김. -->
     <span class="chip mo-only" id="v-filter" onclick="toggleDock()">☰ 조회조건</span>
@@ -739,6 +799,9 @@
   <div id="msum" onclick="goList()" title="탭하면 같은 조건으로 목록을 봅니다"></div>
   <!-- 모바일 축 칩 — 분류 4축 상시 노출(색점 + 이름 + 건수). 세부는 ☰ 조회조건 시트에 남는다. -->
   <div id="maxis"></div>
+  <!-- 흐름 모드 — 목록과 **같은 #wrap 안**에 둔다. 밖에 두면 지도가 숨어도 #wrap이 높이를 그대로
+       차지해 화면 위쪽에 빈 칸이 남는다(2026-08-09 실측 530px). 표시 조건도 도크를 공유한다. -->
+  <div id="flowv" style="display:none;"></div>
   <!-- 목록 모드: 지도와 **같은 도크(표시 조건)** 안에 산다. 필터를 두 벌 만들지 않는다(2026-07-30). -->
   <div id="listv">
     <div class="lvhead">
@@ -814,6 +877,13 @@
      마크업·CSS·전용 함수(DUR/ganttRow/buildGantt/applyYearFilter)를 함께 걷어냈다.
      ⚠ 마크업만 지우면 buildGantt가 getElementById("ghead")를 가드 없이 참조해 JS가 죽는다 —
      부품이 사라지면 그 부품을 쓰던 코드도 같이 없앤다(간결한 프로세스 원칙). -->
+<!-- 모바일 하단 탭바(독) — 프로토타입의 하단 독. 데스크톱은 헤더 칩이 같은 일을 하므로 CSS로 숨긴다. -->
+<nav id="tabbar">
+  <button class="tb on" data-view="map"><i>🗺</i>지도</button>
+  <button class="tb" data-view="flow"><i>🕒</i>흐름<span class="tbn" id="tb-mv"></span></button>
+  <button class="tb" data-view="list"><i>☰</i>목록</button>
+  <button class="tb" data-view="filter"><i>⚙</i>조회조건</button>
+</nav>
 <footer>투자 권유 아님 · 모든 신호는 미확정 — 사실(단계·날짜·거리)만 표시하며 매수/매도 판단은 다루지 않습니다.</footer>
 
 <script>
@@ -1269,7 +1339,7 @@ function chipGo(i) { const x = window._chipSigs?.[i]; if (!x) return; if (x.geom
 function routeHasGeom(lineName) {
   if (!lineName) return false;
   return RAIL.concat(ROADF).some(x => { const p = x.properties || {};
-    return x.geometry && x.geometry.type !== "Point" && !p.geom_omitted
+    return x.geometry && x.geometry.type !== "Point" && !p.geom_omitted && !p.geom_point_only
       && (p.name === lineName || p.full === lineName || p.official_name === lineName); });
 }
 function lineBar(s) {
@@ -1910,7 +1980,10 @@ const filter = {
   //  2026-08-05 사용자: "도로, 전철 뱃지 때문에 제대로 맵을 볼 수가 없네. 토글로 껐다 켰다 하자".
   //  기본은 켜짐(종전 동작 유지) — 옛 저장값에 이 키가 없으면 켠 것으로 본다.
   lines: new Set(JSON.parse(localStorage.getItem("hojae_lines") || '["철도선","도로선","노선명"]')),
+  // 지역 조회축 — **상단 지역바가 세팅한다**(2026-08-09 배선 복구). 종전엔 이 키를 채우는 곳이
+  // 아무 데도 없어(세터였던 `#f-region` 셀렉트가 지역바로 교체되며 사라짐) 늘 「전 지역」이었다.
   region: "",   // "" = 전체, "서울 강서구" 형태
+  dong: "",     // "" = 그 시군구 전체, 아니면 읍면동 이름
   year: null    // null = 전체, 아니면 그 해까지 완료 범위 도달분만
 };
 /* 좌측 도크 대분류 펼침 상태 — 화면이 높으면 기본 펼침(큰 모니터는 클릭 수 그대로),
@@ -1941,7 +2014,10 @@ function mapFit(lls, padPx) {   // lls = [[lat,lon],...] 또는 경계객체({_s
     lls = [[sw.lat, sw.lng], [ne.lat, ne.lng]];
   }
   if (!lls.length) return;
-  if (window._map.fitBounds) window._map.fitBounds(L.latLngBounds(lls).pad(0.12));
+  /* ⚠ 애니메이션을 끈다 — 애니메이션 fit은 **탭이 숨겨져 있으면 끝나지 않고**, 끝나지 않으면
+     "이동했다"가 아니라 조용한 무동작이 된다(2026-08-09 실측: 같은 호출이 animate:false에서만
+     좌표가 바뀌었다). 지역 점프는 먼 거리라 애니메이션의 이득도 없다. */
+  if (window._map.fitBounds) window._map.fitBounds(L.latLngBounds(lls).pad(0.12), { animate: false });
   else { const b = new kakao.maps.LatLngBounds(); lls.forEach(([la, lo]) => b.extend(new kakao.maps.LatLng(la, lo)));
          window._map.setBounds(b, padPx || 30); }
 }
@@ -2007,8 +2083,36 @@ function catVisible(s) {
 const visible = s => catVisible(s)
   && filter.phase.has(phaseOf(s))                // 4단계 백본 조회축(전체해제는 단계를 비우지 않음 → 유지)
   && filter.lvl.has(levelOf(s))                  // 등급 조회축(A/B/C/미정)
-  && (!filter.region || `${s.sd} ${s.sg}` === filter.region)
+  && regionVisible(s)                            // 지역 조회축(시도 › 시군구 › 읍면동) — 아래 참조
   && !isStaleFinished(s);   // 끝난 신호(종료 후 1년 초과)는 지도·목록·집계 전부에서 숨김(사용자 2026-07-21)
+/* 지역 조회축 (2026-08-09 재배선 — 사용자 "구 선택하면 좌표 이동도 안 되고 목록도 그대로").
+   ★ 종전엔 `filter.region`을 세팅하는 코드가 **아무 데도 없었다**: 그걸 채우던 `#f-region`
+     셀렉트가 상단 지역바로 교체되면서 사라졌는데, 세터(`fillRegionSelect`)만 남고 배선이 끊겼다.
+     그래서 구를 골라도 목록은 늘 「전 지역 5,163건」이었다(조용한 무동작).
+   ⚠ 읍면동은 `s.dong` 문자열만으로 거르면 **동 값이 없는 신호**(역·IC·노선 704건)가 통째로
+     사라진다. 그건 "이 동에 없다"가 아니라 "우리가 동을 안 적었다"이다(P2) — 좌표가 그 동
+     폴리곤 안이면 남긴다. */
+function regionVisible(s) {
+  if (filter.region && `${s.sd} ${s.sg}` !== filter.region) return false;
+  if (!filter.dong) return true;
+  if (s.dong) return s.dong === filter.dong;
+  const pt = sigRepPoint(s);
+  return pt ? dongRingsOf(filter.region, filter.dong).some(r => pointInRing(pt[0], pt[1], r)) : false;
+}
+function dongRingsOf(region, dong) {
+  const key = `${region}|${dong}`;
+  const c = (window._dongRingC = window._dongRingC || {});
+  if (c[key]) return c[key];
+  const [sd, ...sg] = String(region || "").split(" ");
+  const out = [];
+  for (const f of (DONG_GEO?.features || [])) {
+    const p = f.properties;
+    if (p.EMD_KOR_NM !== dong) continue;
+    if (region && ((p.sido || "서울") !== sd || p.sgg !== sg.join(" "))) continue;
+    ringsOf(f).forEach(r => out.push(r));
+  }
+  return (c[key] = out);
+}
 /* 연도 기준선(전역): 목록을 숨기지 않고 각 카드의 미니 진행바에 기준선·시점상태 표시 */
 let YEAR_SEL = null;
 function weeksAgo(d) {
@@ -2323,23 +2427,64 @@ function initRegionBar() {
   document.getElementById("r-sgg").onchange = function () { selectSgg(this.value); };
   document.getElementById("r-dong").onchange = function () { selectDong(this.value); };
 }
+/* ★ 지역바 = **조회조건**이다 (2026-08-09 재설계 — 사용자 "구 선택하면 좌표 이동도 안 되고,
+   아래서 시트가 올라오는데 목록이랑 중첩되고 데이터도 없다. 조회조건에서 고른 지역의 호재
+   목록이 보이면 되고 올라오는 건 없애도 되지 않냐").
+   종전 동작이 셋 다 어긋나 있었다:
+     ① `filter.region`을 세팅하는 곳이 없어 목록·집계가 늘 「전 지역」이었다(조용한 무동작)
+     ② 지도 이동이 `window._sggBounds`에 의존했는데 그건 **Leaflet 렌더러만** 만든다 —
+        라이브(카카오)에선 항상 undefined라 지도가 안 움직였다(§규칙이 한쪽에만 걸린다)
+     ③ 드롭다운이 상세 시트(`showSgg`)를 열어 목록 위를 덮었다 — 조회조건과 상세는 다른 층이다
+   이제 드롭다운은 **조회 범위만 바꾼다**: 필터 세팅 → 지도 이동 → 전 화면 재렌더. 시트는 안 연다.
+   (지도에서 동·시군구를 **직접 눌렀을 때**는 종전대로 상세 시트가 열린다 — 그건 "이걸 보겠다"는
+    다른 동작이다.) */
+function applyRegion(sd, sg, dong) {
+  nav.sd = sd || null; nav.sg = sg || null; nav.dong = dong || null;
+  filter.region = sd && sg ? `${sd} ${sg}` : "";
+  filter.dong = dong || "";
+  closePanel();                 // 조회 범위 변경은 상세를 닫는다(두 층이 겹치지 않게)
+  renderAll();                  // 목록·도크 건수·요약 바·축 칩·지도 핀이 한 번에 따라온다
+}
 function selectSido(sd) {
-  nav.sd = sd || null; nav.sg = null; nav.dong = null;
+  applyRegion(sd, null, null);
   if (sd) loadBdongFor(sd);   // 그 시도 법정동 경계 지연 로드(전국 분할) — 도착 시 syncRegionBar가 읍면동 채움
   fillRegion("r-sgg", sd ? sggListOf(sd) : [], "시군구 선택");
   fillRegion("r-dong", [], "읍면동 선택");
-  closePanel();
   if (sd && window._map && SIDO_CENTER[sd]) mapGo(SIDO_CENTER[sd][0], SIDO_CENTER[sd][1], sd === "서울" ? 11 : 10);
 }
 function selectSgg(sg) {
-  nav.sg = sg || null; nav.dong = null;
+  applyRegion(nav.sd, sg, null);
   fillRegion("r-dong", sg ? dongsOfSgg(nav.sd, sg) : [], "읍면동 선택");   // 경계 있는 시도(서울·경기·인천)면 읍면동 채움
-  if (sg) showSgg(`${nav.sd} ${sg}`); else closePanel();
+  if (sg) regionGo(`${nav.sd} ${sg}`);
+  else if (nav.sd && SIDO_CENTER[nav.sd]) mapGo(SIDO_CENTER[nav.sd][0], SIDO_CENTER[nav.sd][1], nav.sd === "서울" ? 11 : 10);
 }
 function selectDong(dong) {
-  nav.dong = dong || null;
-  if (dong) { const f = DONG_GEO.features.find(x => (x.properties.sido || "서울") === nav.sd && x.properties.sgg === nav.sg && x.properties.EMD_KOR_NM === dong); if (f) showDong(f); }
-  else if (nav.sg) showSgg(`${nav.sd} ${nav.sg}`);
+  applyRegion(nav.sd, nav.sg, dong);
+  if (dong) {
+    const f = (DONG_GEO?.features || []).find(x => (x.properties.sido || "서울") === nav.sd && x.properties.sgg === nav.sg && x.properties.EMD_KOR_NM === dong);
+    const rings = f ? ringsOf(f) : dongRingsOf(filter.region, dong);
+    if (rings.length) { mapFit(rings.flat().map(([x, y]) => [y, x]), 30); mapApi?.highlightRings?.(rings); }
+  } else if (nav.sg) regionGo(`${nav.sd} ${nav.sg}`);
+}
+/* 시군구로 지도 이동 — **렌더러와 무관한 공용 경로**. 경계 링에서 코너 4점을 뽑아 mapFit에 준다.
+   (종전 `window._sggBounds`는 Leaflet 전용이라 카카오에서 아무 일도 안 했다.) */
+function sggRingsShared(disp) {
+  const c = (window._sggRingC = window._sggRingC || {});
+  if (c[disp]) return c[disp];
+  const [sd, ...rest] = String(disp || "").split(" ");
+  const sg = rest.join(" ");
+  const out = [];
+  for (const f of (SGG_GEO?.features || [])) {
+    if (f.properties.sido !== sd || sggDisplayName(f.properties.name) !== sg) continue;
+    ringsOf(f).forEach(r => out.push(r));
+  }
+  return (c[disp] = out);
+}
+function regionGo(disp) {
+  const rings = sggRingsShared(disp);
+  if (!rings.length) return;
+  mapFit(rings.flat().map(([x, y]) => [y, x]), 30);
+  mapApi?.highlightRings?.(rings);
 }
 /* 지도/배지 클릭으로 진입 시 드롭다운 값 동기화 */
 function syncRegionBar() {
@@ -2582,10 +2727,30 @@ function miniBarHtml(s) {
   }
   const cur = YEAR_SEL ? `<div class="mcur" style="left:${mpct(YEAR_SEL)}%"></div>` : "";
   const asOf = YEAR_SEL ? ` · <b>'${String(YEAR_SEL).slice(2)} 시점: ${asOfLabel(s, YEAR_SEL)}</b>` : "";
+  /* ★ **완료 시점을 모르면 완료 시점 축을 그리지 않는다** (2026-08-09 사용자 "진척도 바 부분이
+     프로토타입이 훨씬 깔끔해"). 종전엔 모든 카드가 `'24 —— 완료 시점 미상 —— '34`를 달고 있었다 —
+     축이 있는데 눈금에 걸릴 사실이 없으니 **근거 없는 정밀함**의 시각판이다(§7 진척률 금지와 같은 결).
+     목표 시점(t)이 있거나 시점 슬라이더가 켜졌을 때만 이 축이 말할 것이 생긴다.
+     진행 상태 자체는 위의 **마일스톤 트랙**(mtrackHtml)이 말한다. */
+  if (!t && !YEAR_SEL) return "";
   return `<div class="mbar">
     <div class="mtrack">${segs}${fin}<div class="mnow" style="left:${mpct(G_NOW)}%"></div>${cur}</div>
     <div class="mmeta"><span>'24</span><span>${t ? t.label : "완료 시점 미상"}${asOf}</span><span>'34</span></div>
   </div>`;
+}
+/* 마일스톤 트랙 — 계획·인가·착공·준공 4점. **진척률(%)·게이지가 아니라 점과 선**이다(§7).
+   도달=채움 · 현재=속 빈 링 · 미래=회색. 실선/점선 문법(§1-7)은 여기선 안 쓴다 — 도달 여부는
+   사실이고, 미래 칸은 애초에 회색으로 "아직 아님"을 말하므로 채널을 겹칠 이유가 없다. */
+function mtrackHtml(s) {
+  const i = PHASE_IDX[phaseOf(s)] ?? 0;
+  const dots = PHASES.map((p, k) => {
+    const cls = k < i ? "done" : k === i ? "cur" : "";
+    return (k ? `<i class="ln ${k <= i ? "done" : ""}"></i>` : "") + `<i class="d ${cls}" title="${phaseLabel(p)}"></i>`;
+  }).join("");
+  /* ⚠ 구분자는 `·`가 아니라 `›`다. 표시라벨이 「확정·인가」·「준공·개통」처럼 자체에 `·`를 갖고 있어
+     `·`로 이으면 「계획·확정·인가·착공·준공·개통」이 되어 **어디가 칸 경계인지 못 읽는다**
+     (2026-08-09 화면에서 실제로 그렇게 나왔다). `›`는 진행 방향까지 말해 준다. */
+  return `<div class="mtrk">${dots}<span class="lb">${PHASES.map(phaseLabel).join(" › ")}</span></div>`;
 }
 /* 카드 생성 (클릭 + hover 지도 연동) */
 function makeCard(s, extra = "", onClick) {
@@ -2611,16 +2776,34 @@ function cardHtml(s, extra = "") {
   const km = (getRadius(s) / 1000).toFixed(1).replace(".0", "");
   const dropped = s.status === "종결";
   const detail = s.current_stage && s.current_stage !== ph ? ` — ${s.current_stage}` : "";
+  /* ── 카드 문법 (2026-08-09 개편 — 사용자 "프로토타입 버전이 훨씬 깔끔해, 특히 진척도 바").
+     다섯 줄이 각각 **하나의 질문**에 답한다(HANDOFF §2). 종전엔 첫 줄에 분류·중분류·등급·
+     등급근거·영향반경·배지 6종이 한꺼번에 들어가 모바일에서 **세 줄로 접혔고**, 그 아래 연도축은
+     대부분 「완료 시점 미상」만 말했다. 정보를 지운 게 아니라 **자리를 옮겼다**:
+       · 등급 근거(장문) → 등급 알약의 tooltip (사실은 남고 줄만 짧아진다)
+       · 영향 반경·근거·확인일 → 맨 아래 근거 줄
+       · 진행 상태 → **마일스톤 트랙**(점·선). 연도축은 목표 시점이 있을 때만.
+     ⚠ 정직성 배지(초안·미확정 / 무산·종결 / 위치 미확정 / 시설명 미확보 / 진출입 미확정)는
+       **한 개도 빼지 않는다** — P5는 화면이 좁다고 양보할 수 있는 게 아니다. */
+  const gb = String(gradeBasisHtml(s)).replace(/<[^>]+>/g, "").replace(/\s*·\s*$/, "").trim();
+  const mv = freshness(s);
+  const what = s.current_stage && s.current_stage !== ph ? s.current_stage : "";
+  const badges = [
+    s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>',
+    dropped ? '<span class="badge-drop">무산·종결</span>' : "",
+    noCoord ? '<span class="badge-near">위치 미확정 — 지도 미표시</span>' : "",
+    s.name_status === "미확보" ? '<span class="badge-near" title="허가 원본에 고유 명칭이 없어 동·지번으로 표시합니다. 건축물대장은 준공 후에 생성되므로 인가·착공 단계엔 공식 명칭이 없을 수 있습니다. 사업의 존재는 허가·착공 일자가 근거이며, 이름을 임의로 지어내지 않습니다.">시설명 미확보</span>' : "",
+    icMissing ? '<span class="badge-near" title="이 도로는 진출입 지점(IC·진입로)에서만 타고 내립니다. 공식 IC 위치가 아직 확정·공개되지 않아 영향권을 산정하지 않습니다(근거 없는 범위를 만들지 않음).">진출입 지점 미확정 — 영향권 미산정</span>' : "",
+  ].filter(Boolean).join(" ");
+  const foot = [gb, `영향 ${km}km`, stageCheckedHtml(s)].filter(x => x && String(x).trim()).join(" · ");
   return `
-    <div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}${subLabel(s)}</span>
-      · ${levelPill(s)} · ${gradeBasisHtml(s)}영향 ${km}km
-      ${s.confirmed ? "" : '<span class="badge-draft">초안·미확정</span>'}
-      ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}
-      ${noCoord ? '<span class="badge-near">위치 미확정 — 지도 미표시</span>' : ""}
-      ${s.name_status === "미확보" ? '<span class="badge-near" title="허가 원본에 고유 명칭이 없어 동·지번으로 표시합니다. 건축물대장은 준공 후에 생성되므로 인가·착공 단계엔 공식 명칭이 없을 수 있습니다. 사업의 존재는 허가·착공 일자가 근거이며, 이름을 임의로 지어내지 않습니다.">시설명 미확보</span>' : ""}
-      ${icMissing ? '<span class="badge-near" title="이 도로는 진출입 지점(IC·진입로)에서만 타고 내립니다. 공식 IC 위치가 아직 확정·공개되지 않아 영향권을 산정하지 않습니다(근거 없는 범위를 만들지 않음).">진출입 지점 미확정 — 영향권 미산정</span>' : ""}${srcBadge(s)} ${extra}</div>
+    <div class="chead">${levelPill(s)}<span class="cph" style="color:${colorOf(s)}">● ${phaseLabel(ph)}</span>
+      <span class="ccat">${catOf(s)}${subLabel(s)}</span>${srcBadge(s)}${extra}</div>
     <div class="title">${sigTitle(s)}</div>
-    <div class="stage">단계: <b>${phaseLabel(ph)}</b> <span class="pmini">(${pIdx + 1}/${PHASES.length})</span>${detail}${stageTail(s)}</div>
+    <div class="cmove">${mv || '<span class="pmini">단계 변경 기록 없음</span>'}${what ? ` · <span class="cwhat">${what}</span>` : ""}</div>
+    ${mtrackHtml(s)}
+    ${badges ? `<div class="cbadges">${badges}</div>` : ""}
+    <div class="cfoot">${foot}</div>
     ${miniBarHtml(s)}`;
 }
 function renderHome() {
@@ -2874,13 +3057,15 @@ function renderDetail(s) {
 /* ══════════ 시군구 피드 (지도에서 구/시 클릭) ══════════ */
 function showSgg(disp) {
   view = { mode: "sgg", sgg: disp };
-  const dp = disp.split(" "); nav.sd = dp[0]; nav.sg = dp.slice(1).join(" "); nav.dong = null; syncRegionBar();
+  const dp = disp.split(" "); nav.sd = dp[0]; nav.sg = dp.slice(1).join(" "); nav.dong = null;
+  // 지도에서 고른 지역도 **조회 범위**다 — 드롭다운만 바뀌고 목록·집계는 전 지역이면 두 화면이 갈린다.
+  filter.region = `${nav.sd} ${nav.sg}`; filter.dong = ""; syncRegionBar();
   ANIMATE = true;
   renderPanel(); mapApi?.clearRadius(); mapApi?.clearRoute?.(); mapApi?.clearAptMarker?.();
   mapApi?.refreshPins?.();
-  mapApi?.highlightRings?.((window._sggRings || {})[disp]);   // 선택 시군구 경계 강조
-  const bd = window._sggBounds?.[disp];
-  if (bd && window._map) mapFit(bd, 30);   // 공용 헬퍼(2026-07-29)
+  // 경계 강조·이동은 **렌더러 무관 공용 경로**로. `window._sggBounds`는 Leaflet만 만들어
+  // 라이브(카카오)에선 늘 undefined였다 — 시군구를 눌러도 지도가 안 움직인 원인(2026-08-09).
+  regionGo(disp);
   ANIMATE = false;
 }
 function pointInSgg(pt, disp) {
@@ -2946,7 +3131,8 @@ function goHome() {
 function showDong(f) {
   aptFocus = null;   // 아파트 포커스 해제
   view = { mode: "dong", dong: f };
-  nav.sd = f.properties.sido || "서울"; nav.sg = f.properties.sgg; nav.dong = f.properties.EMD_KOR_NM; syncRegionBar();
+  nav.sd = f.properties.sido || "서울"; nav.sg = f.properties.sgg; nav.dong = f.properties.EMD_KOR_NM;
+  filter.region = `${nav.sd} ${nav.sg}`; filter.dong = nav.dong; syncRegionBar();
   ANIMATE = true;
   renderPanel();
   mapApi?.clearRadius(); mapApi?.clearRoute?.(); mapApi?.clearAptMarker?.();
@@ -3278,7 +3464,7 @@ function renderDock() {
     ? `<span class="s${filter.lvl.has("미정") ? "" : " off"}" data-tog="lvl" data-k="미정"><i class="dash" style="width:7px;height:7px"></i>미판정</span>`
     : `<span class="s${filter.lvl.has(g) ? "" : " off"}" data-tog="lvl" data-k="${g}"><i style="width:${SZ[g]}px;height:${SZ[g]}px"></i>${g}</span>`;
   // 초기화 = 전체선택·해제 2버튼의 대체. 기본 상태와 다를 때만 보인다(평소엔 화면에 없음).
-  const dirty = !(ALL_SUBS.every(k => filter.sub.has(k)) && PHASES.every(k => filter.phase.has(k))
+  const dirty = !!filter.region || !(ALL_SUBS.every(k => filter.sub.has(k)) && PHASES.every(k => filter.phase.has(k))
     && GRADES_DISP.every(k => filter.lvl.has(k)) && filter.lines.has("철도선") && filter.lines.has("도로선"));
   dock.innerHTML = `
     <div class="dk-h">
@@ -3340,6 +3526,10 @@ function initDock() {
 /* 표시 조건 초기화 — 도크의 '초기화'와 **같은 동작 하나**를 여기서 정의해 두 곳이 갈리지 않게 한다.
    패널의 "조건을 풀면 N건" 안내에서도 부른다(2026-07-30). */
 function resetFilters() {
+  // 지역도 함께 푼다 — 지역이 조회축이 된 이상(2026-08-09), 좁힌 뒤 **돌아올 길**이 화면에 있어야 한다.
+  filter.region = ""; filter.dong = "";
+  nav.sd = nav.sg = nav.dong = null;
+  try { syncRegionBar(); } catch (e) {}
   CAT_KEYS.forEach(k => filter.cat.add(k));
   ALL_SUBS.forEach(k => filter.sub.add(k));
   ["철도선", "도로선", "노선명"].forEach(k => filter.lines.add(k));   // 표시 옵션 초기화 = 전부 켜짐
@@ -3358,20 +3548,106 @@ function updateSummary() {
   if (!el) return;
   const act = (typeof allSignalsFlat === "function" ? allSignalsFlat() : SIGNALS).filter(visible);
   const moved = act.filter(s => movBasis(s) === "source" && weeksAgo(s.last_movement) === 0).length;
-  // 하단 고지 푸터(position:fixed·z1000)가 이 바를 덮는다 — 푸터 **실측 높이**만큼 띄운다.
-  // 상수로 박으면 문구가 한 줄/두 줄로 바뀔 때 어긋난다(모바일에서 실제로 2줄이 된다).
-  const ft = document.querySelector("footer");
-  if (ft && ft.offsetHeight) el.style.bottom = (ft.offsetHeight + 10) + "px";
+  layoutBottom();   // 푸터·탭바 실측 높이만큼 부유 요소를 띄운다(아래 참조)
   const where = filter.region ? filter.region.split(" ").slice(-1)[0] : "전체";
   el.innerHTML = `<span>${where}</span><b>신호 ${act.length.toLocaleString()}</b><span class="dv">│</span>`
     + `<span>이번 주 움직임 <span class="mv${moved ? "" : " zero"}">${moved}</span></span>`
     + `<span class="ar">▸ 목록</span>`;
 }
+/* 하단 고정 요소들의 쌓임 — **실측 높이로 계산한다**(상수 금지).
+   푸터(고지)는 항상 맨 아래, 그 위에 탭바(모바일), 그 위에 요약 바.
+   문구가 2줄이 되거나 탭바가 없는 데스크톱에서도 어긋나지 않으려면 매번 재야 한다
+   (2026-08-09: 탭바가 생기면서 요약 바가 탭바에 가리는 사고를 여기서 막는다). */
+function layoutBottom() {
+  const ft = document.querySelector("footer");
+  const tb = document.getElementById("tabbar");
+  const fh = ft && ft.offsetHeight ? ft.offsetHeight : 0;
+  const th = tb && getComputedStyle(tb).display !== "none" ? tb.offsetHeight : 0;
+  if (tb) tb.style.bottom = fh + "px";
+  const ms = document.getElementById("msum");
+  if (ms) ms.style.bottom = (fh + th + 10) + "px";
+  // 목록·흐름은 흐름 문서라 **아래 여백**으로 피한다(부유 요소가 마지막 카드를 덮지 않게)
+  const pad = fh + th + 16;
+  ["listv", "flowv", "undet"].forEach(id => { const e = document.getElementById(id); if (e) e.style.paddingBottom = pad + "px"; });
+}
+addEventListener("resize", layoutBottom);
 function goList() {
   const b = document.getElementById("v-list");
   if (b) b.click();
 }
-function renderAll() { renderChips(); renderDock(); renderAxis(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); if (VIEW_MODE === "list") renderList(); updateSummary(); }
+/* ══════════ 흐름 — 시간축 (2026-08-09, HANDOFF ④) ══════════
+   호갱노노의 '이야기' 자리에 우리가 놓는 것. 지도가 "무엇이 어디에"를 말한다면 흐름은
+   **"무엇이 새로운가"**를 말한다 — level이 아니라 delta를 다루는 매체의 본진이다.
+   ⚠ 그룹은 두 종류다. 「움직임」은 소스 원문 날짜(basis=source)로 그 날짜에 실제로 절차가
+     움직인 것이고, 「확인」은 우리가 그 단계임을 처음 본 날(observed)이다. **이름부터 다르게**
+     부르고 그룹도 나눈다 — 뭉치면 "이번 주 움직임 2,588건"(실제 3건)이 재발한다. */
+/* ⚠ 경계는 **일수**로 잰다. 처음엔 `weeksAgo`(주 단위 반올림)로 갈랐는데, 3일 전 신호의
+   weeksAgo가 0이라 「오늘」 칸에 들어갔다 — 화면이 사실과 다르게 말하는 상태(2026-08-09 자체 실측). */
+const FLOW_GROUPS = [
+  { k: "오늘",     maxD: 0 },
+  { k: "이번 주",  maxD: 7 },
+  { k: "이번 달",  maxD: 31 },
+  { k: "3개월 내", maxD: 92 },
+];
+function flowRows() {
+  return allSignalsFlat().filter(visible)
+    .filter(s => s.last_movement && weeksAgo(s.last_movement) !== null)
+    .sort((a, b) => String(b.last_movement).localeCompare(String(a.last_movement)));
+}
+function renderFlow() {
+  const host = document.getElementById("flowv");
+  if (!host) return;
+  const rows = flowRows();
+  const moved = rows.filter(s => movBasis(s) === "source");
+  const seen = rows.filter(s => movBasis(s) !== "source");
+  const daysAgo = d => { const t = new Date(String(d).length === 7 ? d + "-01" : d); return Math.floor((TODAY - t) / 864e5); };
+  const bucket = s => { const d = daysAgo(s.last_movement);
+    for (const g of FLOW_GROUPS) if (d <= g.maxD) return g.k;
+    return null; };
+  const groups = new Map(FLOW_GROUPS.map(g => [g.k, []]));
+  moved.forEach(s => { const b = bucket(s); if (b) groups.get(b).push(s); });
+  const recent3m = moved.filter(s => bucket(s)).length;
+  let html = `<div class="fwrap">
+    <div class="lvtitle" style="font-size:16px;font-weight:700">흐름 <span style="font-weight:400;font-size:12.5px;color:var(--ink3)">— ${filter.region || "전 지역"} · 지도와 같은 표시 조건</span></div>
+    <div class="lvcount" style="margin:6px 0 2px"><b>${recent3m.toLocaleString()}건</b>이 최근 3개월 안에 <b>문서상 움직였습니다</b>
+      <span class="why" style="color:var(--ink3)">— 고시·인가·착공 등 소스 원문에 날짜가 있는 것만 셉니다</span></div>`;
+  for (const g of FLOW_GROUPS) {
+    const arr = groups.get(g.k);
+    html += `<div class="fgh"><b>${g.k}</b><span class="n">${arr.length.toLocaleString()}건</span></div>`;
+    if (!arr.length) html += `<div class="fempty">움직인 신호 없음</div>`;
+    else html += `<div class="fg" data-g="${g.k}"></div>`;
+  }
+  html += `<div class="fgh"><b>이번 주 새로 확인</b><span class="n">${seen.filter(s => weeksAgo(s.last_movement) === 0).length.toLocaleString()}건</span>
+      <span class="why">— 소스에 변경일이 없어 <b>우리가 처음 본 날</b>로 적은 것입니다(그날 움직였다는 뜻이 아닙니다)</span></div>
+    <div class="fg" data-g="확인"></div></div>`;
+  host.innerHTML = html;
+  const put = (key, arr) => { const box = host.querySelector(`.fg[data-g="${key}"]`); if (!box) return;
+    arr.slice(0, 60).forEach(s => box.appendChild(makeCard(s, "", () => { setView("map"); showSignal(s, true); })));
+    if (arr.length > 60) box.insertAdjacentHTML("beforeend", `<div class="fempty">외 ${(arr.length - 60).toLocaleString()}건 — 목록에서 전부 보기</div>`); };
+  FLOW_GROUPS.forEach(g => put(g.k, groups.get(g.k)));
+  put("확인", seen.filter(s => weeksAgo(s.last_movement) === 0));
+}
+/* 하단 탭바 — 모바일에서 헤더 칩을 대신한다. `조회조건`은 뷰가 아니라 시트라 따로 처리한다. */
+function initTabbar() {
+  const bar = document.getElementById("tabbar");
+  if (!bar) return;
+  bar.addEventListener("click", e => {
+    const b = e.target.closest(".tb"); if (!b) return;
+    if (b.dataset.view === "filter") { toggleDock(); return; }   // 시트 — 뷰 전환이 아니다
+    setView(b.dataset.view);
+  });
+  updateTabbar();
+}
+/* 흐름 탭 배지 = 이번 주 **문서상** 움직임. 요약 바와 같은 계산을 쓴다(두 숫자가 갈리면 안 된다). */
+function updateTabbar() {
+  const el = document.getElementById("tb-mv");
+  if (!el) return;
+  const n = allSignalsFlat().filter(visible)
+    .filter(s => movBasis(s) === "source" && weeksAgo(s.last_movement) === 0).length;
+  el.textContent = n ? n : "";
+  el.style.display = n ? "" : "none";
+}
+function renderAll() { renderChips(); renderDock(); renderAxis(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); if (VIEW_MODE === "list") renderList(); if (VIEW_MODE === "flow") renderFlow(); updateSummary(); updateTabbar(); }
 
 /* ══════════ 지도: 카카오 → Leaflet 폴백 ══════════ */
 function bootMap() {
@@ -3912,7 +4188,7 @@ function initLeaflet() {
     for (const f of RAIL.concat(ROADF)) {
       const p = f.properties;
       if (f.geometry.type === "Point") continue;
-      if (p.geom_omitted) continue;   // 숨긴 선형은 하이라이트에서도 안 그린다(2026-07-29 — 지점 링만)
+      if (p.geom_omitted || p.geom_point_only) continue;   // 숨긴 선형·위치만 확보는 하이라이트에서도 안 그린다
       if (p.name !== lineName && p.full !== lineName && p.official_name !== lineName) continue;
       // 카카오 하이라이트와 **같은 규칙** — 근거 있는 구간(geom_solid)만 굵게, 보간(geom_bridges)은 연한 점선.
       // (한쪽 엔진에만 걸면 폴백에서 조용히 예외가 된다 — 이 저장소의 반복 사고 형태.)
@@ -4254,6 +4530,11 @@ function initKakao() {
       if (f.geometry.type !== "LineString" && f.geometry.type !== "MultiLineString") continue;
       const p = f.properties; const isRoad = p.mode === "road";
       if (p.geom_omitted) continue;   // 근거 없는 직선은 그리지 않는다(2026-07-23 정직 표준) — 도로는 IC점/대표점으로 표현
+      // ⚠ **위치만 확보(geom_point_only)도 선이 아니다** (2026-08-09 사용자 제보 — 파주 한 점에
+      //   국지도 4개의 노선명 배지가 쌓였다). 상류(road_centerline --locate)가 지역 대표점을
+      //   시작=끝으로 적은 LineString이라, 선은 길이 0이라 안 그려지는데 **배지만** 그 점에 생겼다.
+      //   이 신호는 ROAD_SIG 어댑터가 이미 대표 점 호재로 표현한다 — 선 층에서는 통째로 뺀다.
+      if (p.geom_point_only) continue;
       if (p.gate === "관찰") continue;   // 관찰 게이트 = 지도 기본 뷰 미표시(§0-1 — 절차 진입 전)
       const dashed = !["착공", "준공"].some(k => (p.phase || "").startsWith(k));   // 착공·준공=실선(범례 일치)
       // 흐리게 그릴 대상은 **OSM 선형**뿐이다(§2b는 "공식 IC가 있으면 믿을 수 없는 OSM 선을 죽인다"는 뜻).
@@ -4586,7 +4867,7 @@ function initKakao() {
     // 벡터층 zIndex 10: 일반 선(2~3)·영향원(5) 위, 하이라이트 선(21~22) 아래. 타일도 함께 가려진다.
     routeHl.push(new K.Rectangle({ map, bounds: new K.LatLngBounds(LL(123.5, 32.5), LL(132.5, 39.8)),
       strokeWeight: 0, fillColor: "#ffffff", fillOpacity: .55, zIndex: 10 }));
-    for (const f of RAIL.concat(ROADF)) { const p = f.properties; if (f.geometry.type === "Point") continue; if (p.geom_omitted) continue;   // 숨긴 선형은 하이라이트에서도 안 그린다(2026-07-29 — 지점 링만)
+    for (const f of RAIL.concat(ROADF)) { const p = f.properties; if (f.geometry.type === "Point") continue; if (p.geom_omitted || p.geom_point_only) continue;   // 숨긴 선형·위치만 확보는 하이라이트에서도 안 그린다
       if (p.name !== lineName && p.full !== lineName && p.official_name !== lineName) continue;
       const segs = f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates]; const dashed = (!["착공", "준공"].some(k => (p.phase || "").startsWith(k)));
       /* ⚠ **하이라이트도 근거 있는 구간과 없는 구간을 갈라 그린다** (2026-08-05 사용자
@@ -4632,7 +4913,7 @@ function setView(mode) {
   if (mode === "gantt" || mode === "raw") mode = "map";   // 폐기된 뷰(타임라인·수도권 원시) → 지도
   VIEW_MODE = mode;
   // 목록은 **지도와 같은 도크 안에 산다** — 표시 조건을 두 벌 만들지 않기 위해 wrap을 공유한다.
-  const inWrap = mode === "map" || mode === "list";
+  const inWrap = mode === "map" || mode === "list" || mode === "flow";
   document.getElementById("wrap").style.display = inWrap ? "flex" : "none";
   document.getElementById("map").style.display = mode === "map" ? "" : "none";
   // 요약 바는 **지도 위에 뜨는 부유 칩**이다 — 목록 위에 겹치면 목록을 가린다(상세 패널과 같은 이유).
@@ -4640,10 +4921,15 @@ function setView(mode) {
   // 축 칩도 같은 규칙 — 지도 위 부유 요소다. `""`로 되돌려야 미디어쿼리(모바일만 flex)가 되산다.
   const mx = document.getElementById("maxis"); if (mx) mx.style.display = mode === "map" ? "" : "none";
   document.getElementById("listv").style.display = mode === "list" ? "block" : "none";
+  const fv = document.getElementById("flowv");
+  if (fv) { fv.style.display = mode === "flow" ? "block" : "none"; if (mode === "flow") renderFlow(); }
   document.getElementById("undet").style.display = mode === "undet" ? "block" : "none";
   const g = document.getElementById("gantt"); if (g) g.style.display = "none";
-  for (const v of ["map", "list", "undet"])
-    document.getElementById("v-" + v).classList.toggle("on", mode === v);
+  for (const v of ["map", "flow", "list", "undet"])
+    document.getElementById("v-" + v)?.classList.toggle("on", mode === v);
+  // 하단 탭바와 헤더 칩은 **같은 상태**를 보여야 한다(두 곳에 있는 같은 스위치)
+  document.querySelectorAll("#tabbar .tb").forEach(b => b.classList.toggle("on", b.dataset.view === mode));
+  layoutBottom();
   // 상세 패널은 지도 위에 뜨는 부유 카드다 — 목록 위에 겹치면 목록을 가린다.
   const pn = document.getElementById("panel"); if (pn && mode !== "map") pn.style.display = "none";
   if (mode === "map") { renderPanel(); setTimeout(mapRelayout, 60); }   // 지도 복귀 = 타일 재계산 필수(카카오 relayout)
@@ -4713,7 +4999,7 @@ function renderList() {
       // 고시 소재지(ic_loc)로 폴백하고, 그것도 없을 때만 미상이라 말한다(P2).
       const loc = [s.sd, s.sg, s.dong].filter(Boolean).join(" ") || (s.ic_loc || "").split("·")[0].trim();
       const d = apt && sort === "dist" ? distToApt(s, apt) : null;
-      const extra = `<span class="lloc">· ${loc || "위치 미상"}${d !== null && isFinite(d) ? ` · ${d < 1000 ? Math.round(d) + "m" : (d / 1000).toFixed(1) + "km"}` : ""}</span>`;
+      const extra = `<span class="lloc">${loc || "위치 미상"}${d !== null && isFinite(d) ? ` · ${d < 1000 ? Math.round(d) + "m" : (d / 1000).toFixed(1) + "km"}` : ""}</span>`;
       // 목록에서 카드를 누르면 지도로 넘어가 그 신호를 연다(목록=발견, 지도=위치 확인).
       el.appendChild(makeCard(s, extra, () => { setView("map"); showSignal(s, true); }));
     });
@@ -4880,7 +5166,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260809p");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260809q");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -5005,7 +5291,9 @@ function initSearch() {
   initAxis();        // 모바일 축 칩 — 같은 이유로 부트에서 따로 한 번(클릭 위임도 여기서 건다)
   bootMap();
   document.getElementById("v-map").onclick = () => setView("map");
+  document.getElementById("v-flow").onclick = () => setView("flow");
   document.getElementById("v-list").onclick = () => setView("list");
+  initTabbar();
   document.getElementById("v-undet").onclick = () => setView("undet");
   initOpsMode();
   loadDeferred();   // 큰 파일(경기·인천 동경계·전국 아파트·정비 폴리곤)은 초기 렌더 뒤 백그라운드 로드
@@ -5044,7 +5332,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260809p"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260809q"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5070,7 +5358,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260809p");
+  const CB = "?b=" + (window.BUILD || "20260809q");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
