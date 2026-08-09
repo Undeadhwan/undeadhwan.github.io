@@ -3632,6 +3632,31 @@ function railToSignal(p, cen) {
     sources: p.src_url ? [p.src_url] : [], stage_note: `${p.linekind} · ${p.status}${p.note ? " · " + p.note : ""}`,
   };
 }
+/* 도로 선 → 카드용 신호. **철도의 `railToSignal`과 같은 자격의 폴백**이다 (2026-08-09 신설).
+   왜: 도로 선 클릭은 `ROAD_SIG` 조회에 의존해, 어댑터가 그 노선을 싣지 못하면 **선은 보이는데
+   클릭만 죽었다**(사용자 제보 "커서 갖다 대면 노선 선택이 안되네"). 철도엔 이 폴백이 처음부터
+   있었다 — 한쪽에만 있던 장치를 반대쪽에도 둔다(CLAUDE.md 「규칙은 양쪽에」).
+   ⚠ 어댑터 신호를 **대체하지 않는다** — 있으면 그걸 쓰고, 없을 때만 이 최소 카드를 만든다
+   (어댑터 쪽이 회랑·접근점·집계를 더 풍부하게 담는다). */
+function roadLineToSignal(p, geom) {
+  const flat = geom && geom.type === "MultiLineString" ? geom.coordinates.flat()
+             : (geom && geom.coordinates) || [];
+  const cen = flat.length ? flat[Math.floor(flat.length / 2)] : null;
+  return {
+    _road: true, _line: true, title: p.official_name || p.name, line: p.name,
+    cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "C", lvl_basis: p.lvl_basis,
+    gate: p.gate, gate_basis: p.gate_basis, template_type: "도로",
+    current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
+    status: "활성", confirmed: !!p.confirmed, sd: null,
+    road_kind: roadKindOf(p), official_type: p.official_type, official_name: p.official_name,
+    access: p.access, access_note: p.access_note, ic_note: p.ic_note,
+    owner: p.owner, src_tier: p.src_tier, geom_src: p.geom_src, geom_status: p.geom_status || null,
+    milestones: p.milestones, stage_checked: p.stage_checked, stage_src: p.stage_src,
+    sources: p.src_url ? [p.src_url] : [],
+    stage_note: `${p.linekind || "도로"} · ${p.status}${p.geom_src ? " · " + p.geom_src : ""}`,
+    geometry: { coordinates: cen }, geo_approx: !!(p.approx || p.geom_partial),
+  };
+}
 /* hex → rgba: Leaflet fillColor+fillOpacity를 카카오 CustomOverlay div의 CSS 배경으로 */
 function hexA(hex, a) {
   const h = (hex || "#12263f").replace("#", "");
@@ -3874,10 +3899,16 @@ function initKakao() {
         // 공식 사업명으로 바꾸면서(계양강화고속도로 → "계양~강화 고속도로") 접두가 깨져 **8개 고속도로가
         // 클릭해도 아무 반응이 없었다**(2026-07-31 사용자 "선형 선택이 안되네? IC랑 결합되어야 하는데").
         // 어댑터가 이미 `line: p.name`을 하이라이트 키로 싣고 있다 — 그 키를 그대로 쓰면 표시명이 바뀌어도 안 깨진다.
+        // ☠ **조회 실패 시 조용히 아무 일도 안 하던 자리**다 (2026-08-09 사용자 제보 "커서 갖다 대면
+        //   노선 선택이 안되네. 걔만 그래"). 철도 분기는 `railToSignal`로 **항상** 카드를 만드는데
+        //   도로만 조회에 의존해, 어댑터가 그 노선을 싣지 못하면(회랑 표본이 비는 등) 선은 보이는데
+        //   클릭만 죽는 사각지대가 됐다 — 규칙이 한쪽에만 걸린 그 형태다. 폴백은 `roadLineToSignal`.
+        // ⚠ 아래 블록은 **짧게 유지한다** — html_check [도로클릭] 카나리아가 400자 창에서 키 사용을
+        //   확인한다. 사연은 이 위에 적고 블록엔 코드만 둔다(게이트를 느슨하게 하지 않는다).
         if (isRoad) { const sig = ROAD_SIG.find(s => !s.pt_type && s.line === p.name)
                              || ROAD_SIG.find(s => s.title.startsWith(p.name))
                              || SIGNALS.find(s => s._road && s.road_ref && p.name.includes(s.road_ref));
-          if (sig) showSignal(sig, false); return; }
+          showSignal(sig || roadLineToSignal(p, f.geometry), false); return; }
         const flat = f.geometry.type === "MultiLineString" ? f.geometry.coordinates.flat() : f.geometry.coordinates; showSignal(railToSignal(p, flat[Math.floor(flat.length / 2)]), false); };
       const objs = [], hits = [];
       /* **근거 있는 구간과 없는 구간을 나눠 그린다** (2026-08-01 사용자 "팔아먹은 선형 다 있던거 복구해").
@@ -4475,7 +4506,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260809b");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260809c");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4637,7 +4668,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260809b"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260809c"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4663,7 +4694,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260809b");
+  const CB = "?b=" + (window.BUILD || "20260809c");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
