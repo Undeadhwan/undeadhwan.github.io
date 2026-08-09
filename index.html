@@ -395,6 +395,13 @@
   .subtrack { font-size:11px; color:var(--muted); margin:2px 0 8px; line-height:1.5; }
   .subtrack .subcur { color:var(--ink); background:#fff3cd; border-radius:3px; padding:0 3px; }
   .dong-badge { background:#fff; border:1.5px solid var(--navy); border-radius:12px; padding:1px 8px; font-size:11px; font-weight:600; white-space:nowrap; cursor:pointer; }
+  /* 시도 집계 알약 — 전국 줌에서만. 앞 숫자=재고(신호 수), 뒤 숫자=변화(이번 주 문서상 움직임).
+     변화만 색을 갖는다(우리는 delta 매체) — 0이면 아예 안 붙인다(없는 걸 강조하지 않는다). */
+  .sd-pill { background:rgba(255,255,255,.96); border:1.5px solid var(--navy); border-radius:999px;
+             padding:3px 10px; font-size:var(--fs-s); color:var(--ink); white-space:nowrap; cursor:pointer;
+             box-shadow:0 2px 8px rgba(25,35,60,.16); font-variant-numeric:tabular-nums; }
+  .sd-pill b { font-weight:700; margin-right:3px; }
+  .sd-pill .mv { color:var(--c-traffic); font-weight:700; margin-left:5px; }
   /* 겹친 호재(같은 지점 중첩) 개수 배지 — 클릭 시 목록 펼침(범례와 1:1). 중립 남색·흰 글자 */
   /* 겹침 배지 — 지도 위 요소는 밝게(2026-07-30). 종전 네이비 채움+짙은 그림자는 호재 원보다
      무거워 보여 조연이 주인공을 눌렀다(P4). 흰 알약 + 얇은 잉크 테두리로 무게를 낮춘다. */
@@ -522,10 +529,18 @@
        **글자가 통째로 잘려 읽을 수 없었다**(실측 스크린샷).
        지도 앱의 표준은 하단에서 올라오는 시트다 — 지도를 계속 보면서 상세를 읽고, 시트 안에서만
        스크롤한다. 닫기(✕)는 이미 모든 상세 헤더에 있다. */
+    /* 3단 시트 (2026-08-09) — peek 88px / half 46vh / full 82vh.
+       "지도를 안 잃고 목록을 훑는" 유일한 방법이다. 동·시군구·겹침을 누르면 시트에 **신호 목록**이
+       뜨는데, 종전엔 그게 72vh를 덮어 어느 동을 보는 중인지가 화면에서 사라졌다.
+       높이는 JS가 `translateY`로 준다 — `height`를 고정하면 짧은 상세가 빈 공간을 끌고 다닌다. */
     #panel { position:fixed; left:0; right:0; bottom:0; top:auto; width:auto;
-             max-height:72vh; overflow-y:auto; -webkit-overflow-scrolling:touch;
+             max-height:82vh; overflow-y:auto; -webkit-overflow-scrolling:touch;
              border:0; border-top:1px solid var(--line); border-radius:16px 16px 0 0;
-             box-shadow:0 -6px 24px rgba(25,35,60,.20); padding:14px 14px 28px; z-index:1200; }
+             box-shadow:0 -6px 24px rgba(25,35,60,.20); padding:14px 14px 28px; z-index:1200;
+             transition:transform .22s ease; }
+    #panel.nosnap { transition:none; }   /* 끄는 중·내용 교체 직후엔 애니메이션 없이 즉시 배치 */
+    /* 손잡이는 **끌 수 있음을 보이는 유일한 표식**이라 단계가 낮을수록 또렷하게 */
+    #panel[data-snap="peek"]::before, #panel[data-snap="half"]::before { background:#aeb6c4; }
     #panel .phead { position:sticky; top:-14px; background:#fff; padding:6px 0 8px; margin:-6px 0 0; z-index:2; }
     #panel .closex { font-size:20px; padding:6px 10px; }   /* 터치 과녁 확대 */
     #gantt { height:auto; padding:14px 10px 90px; }
@@ -641,8 +656,30 @@
   #msum .mv { color:var(--c-traffic); font-weight:700; font-variant-numeric:tabular-nums; }
   #msum .mv.zero { color:var(--ink3); }
   #msum .ar { margin-left:auto; color:var(--ink3); }
+  /* ══ 모바일 축 칩 (2026-08-09) — 분류 4축을 지도 위에 **상시** 노출 ══
+     종전 모바일은 무엇을 보고 있는지 알려면 ☰ 조회조건 → 시트(2탭)를 거쳐야 했다.
+     경쟁 3사(호갱노노·아실·네이버부동산)는 전부 필터를 상단에 상시 편다.
+     세부(중분류·단계·등급)는 시트에 그대로 남긴다 — 여기 있는 건 **대분류 4개뿐**이다.
+     ⚠ 헤더에 넣지 않고 지도 위에 띄운다 — 헤더는 이미 194px이고, 여기서 더 먹으면
+       "지도가 첫 화면"(DESIGN §3-b) 규칙이 다시 무너진다. #msum과 같은 부유 문법. */
+  #maxis { display:none; position:absolute; left:8px; right:8px; top:8px; z-index:1001;
+           gap:5px; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;
+           padding:1px; }
+  #maxis::-webkit-scrollbar { display:none; }
+  /* 폭 예산 — 375px(SE)에서는 4번째가 살짝 잘리고 390px(12~15) 이상에서 넷 다 들어간다.
+     잘리는 게 스크롤 가능하다는 신호라 그대로 둔다(라벨을 '주'로 줄이면 뜻을 잃는다). */
+  #maxis .ax { flex:0 0 auto; display:inline-flex; align-items:center; gap:5px;
+               background:var(--bg); border:1px solid var(--line2); border-radius:999px;
+               padding:6px 9px; font-size:var(--fs-s); font-weight:700; color:var(--ink);
+               box-shadow:0 2px 8px rgba(25,35,60,.14); cursor:pointer; white-space:nowrap; }
+  #maxis .ax i { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  #maxis .ax .n { font-weight:700; font-variant-numeric:tabular-nums; color:var(--ink2); }
+  /* 꺼짐 = 흐리게 + 점 비움. 사라지지 않는다 — 꺼진 축도 건수는 계속 보여야 되돌릴 수 있다(P5) */
+  #maxis .ax.off { color:var(--ink3); border-color:var(--line); background:rgba(255,255,255,.86); }
+  #maxis .ax.off i { background:none !important; border:1.3px solid currentColor; }
+  #maxis .ax.off .n { color:var(--ink3); }
   /* 모바일에서만 노출 — **기본 규칙 뒤**에 와야 display:none을 이긴다(캐스케이드 충돌 주의) */
-  @media (max-width: 768px) { #msum { display:flex; } }
+  @media (max-width: 768px) { #msum { display:flex; } #maxis { display:flex; } }
   @media (max-width: 768px) {
     #dock { position:fixed; left:0; right:0; bottom:0; top:auto; width:auto;
             max-height:82vh; border:0; border-radius:16px 16px 0 0; z-index:1100;
@@ -700,6 +737,8 @@
        ⚠ 관측일(basis=observed)은 「그날 움직였다」가 아니므로 이 숫자에 넣지 않는다
        (그걸 뭉쳐서 "이번 주 움직임 2,588건"이 됐던 사고 — §movBasis 주석). -->
   <div id="msum" onclick="goList()" title="탭하면 같은 조건으로 목록을 봅니다"></div>
+  <!-- 모바일 축 칩 — 분류 4축 상시 노출(색점 + 이름 + 건수). 세부는 ☰ 조회조건 시트에 남는다. -->
+  <div id="maxis"></div>
   <!-- 목록 모드: 지도와 **같은 도크(표시 조건)** 안에 산다. 필터를 두 벌 만들지 않는다(2026-07-30). -->
   <div id="listv">
     <div class="lvhead">
@@ -987,6 +1026,139 @@ const MAX_DOTS = 600;   // 표시 상한(도시 뷰) — 초과분은 낮은 등
    값의 근거: 전국 S가 **221건**이다(S221·A482·B787·C1398·미정320) — 전국·광역 뷰 상한 200은
      "사실상 S만 남는다"와 같은 뜻이 된다. 중간 줌은 그 사이를 완만히 잇는다. */
 const MAX_DOTS_LV = lv => lv >= 11 ? 200 : lv >= 10 ? 300 : lv >= 9 ? 450 : MAX_DOTS;
+/* ══ 전국 줌 = 시도 집계 알약 (2026-08-09) ═══════════════════════════════════════
+   전국 줌에서 사용자의 질문은 "어디에 무엇이"가 아니라 **"어디가 뜨거운가"**다. 점 200개는
+   그 질문에 답하지 않는다(전국 화면에서 서로 겹쳐 뭉갠다). 시도별 **신호 수 + 이번 주 움직임**을
+   얹어 답한다 — 뒤 숫자가 우리만 가진 축(delta)이다.
+   ⚠ 점을 **치우지 않는다**. 2026-08-05 사용자 확정("줌아웃시 호재원이 S부터·중심부터")이 그대로
+     유효하고, 절대 등급 컷 폐기(2026-07-27)도 유효하다. 알약은 점 위에 **얹는 층**이다.
+   ⚠ 집계는 뷰포트가 아니라 **조회조건(visible)** 기준 — 카카오·Leaflet 두 렌더러가 같은 숫자를
+     말해야 한다(이 저장소의 반복 사고: 규칙이 한쪽에만 걸린다). */
+const SD_PILL_LV = 12;                 // 카카오 level ≥ 12 = 전국 (Leaflet z ≤ 6)
+const SD_PILL_ZOOM = 18 - SD_PILL_LV;  // 두 렌더러가 **같은 경계**를 쓰도록 하나에서 도출한다
+/* 신호의 대표점 — 선형(도로·철도)은 **중간 정점**을 쓴다. 점 하나로 대표할 수 없는 노선이지만
+   집계·귀속에는 양 끝보다 중점이 덜 틀린다(지도에 그리는 선은 이것과 무관하다). */
+function sigRepPoint(s) {
+  const c = s.geometry && s.geometry.coordinates;
+  if (!c) return null;
+  if (typeof c[0] === "number") return c;
+  if (Array.isArray(c[0]) && typeof c[0][0] === "number") return c[Math.floor(c.length / 2)];
+  if (Array.isArray(c[0]) && Array.isArray(c[0][0])) { const l = c[Math.floor(c.length / 2)]; return l[Math.floor(l.length / 2)]; }
+  return null;
+}
+function sggBoxes() {
+  if (window._sggBox) return window._sggBox;
+  const arr = [];
+  (SGG_GEO?.features || []).forEach(f => {
+    let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+    ringsOf(f).forEach(r => r.forEach(([x, y]) => { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }));
+    if (x1 > x0) arr.push({ sd: f.properties.sido, f, x0, y0, x1, y1 });
+  });
+  return (window._sggBox = arr);
+}
+/* 시도 귀속 — 소스가 적어 준 `sd`가 우선, 없으면 **좌표로** 찾는다(시군구 경계 점포함).
+   ⚠ 결과를 `s.sd`에 되쓰지 않는다 — `sd`는 *소스가 말한 것*이고 이건 *우리가 좌표로 도출한 것*이다.
+     같은 필드에 두 뜻을 담으면 하류가 근거를 구분할 수 없다(§필드 하나가 두 뜻).
+   실측 2026-08-09: `sd`가 빈 신호가 1,174건(철도역 704·도로 377)이라 이게 없으면 시도 알약
+   합계가 하단 요약 바보다 23% 적게 나온다 — 두 화면이 다른 숫자를 말하는 상태가 된다. */
+function sdOf(s) {
+  if (s.sd) return s.sd;
+  if (s._sdRes !== undefined) return s._sdRes;
+  const pt = sigRepPoint(s);
+  let hit = null;
+  if (pt) for (const b of sggBoxes()) {
+    if (pt[0] < b.x0 || pt[0] > b.x1 || pt[1] < b.y0 || pt[1] > b.y1) continue;   // bbox 선컷
+    if (ringsOf(b.f).some(r => pointInRing(pt[0], pt[1], r))) { hit = b.sd; break; }
+  }
+  return (s._sdRes = hit);
+}
+function sdAggregates() {
+  const m = new Map();
+  (typeof allSignalsFlat === "function" ? allSignalsFlat() : SIGNALS).filter(visible).forEach(s => {
+    const sd = sdOf(s); if (!sd) return;
+    let e = m.get(sd); if (!e) m.set(sd, e = { sd, n: 0, moved: 0, x: 0, y: 0, pts: 0 });
+    e.n++;
+    // 움직임은 `basis="source"`만 — 관측일은 「우리가 처음 본 날」이지 「그날 움직였다」가 아니다
+    if (movBasis(s) === "source" && weeksAgo(s.last_movement) === 0) e.moved++;
+    const c = sigRepPoint(s);
+    if (c) { e.x += c[0]; e.y += c[1]; e.pts++; }
+  });
+  const cen = sdCentroids();
+  return [...m.values()].filter(e => e.pts)
+    /* 알약 자리는 **시도 경계의 중심**이다(신호 무게중심이 아니라). 두 가지 이유:
+       ① 지도 독자는 도 이름표를 도 한가운데서 찾는다 ② 신호 무게중심은 서로 뭉쳐(경기 중심이
+       서울 중심 옆으로 끌려온다) 겹침 회피가 알약을 실제 위치에서 멀리 밀어낸다 — 그건 지도가
+       거짓말하는 것이다(§4.1). 경계가 없으면 신호 무게중심으로 폴백한다. */
+    .map(e => ({ sd: e.sd, n: e.n, moved: e.moved,
+                 lon: (cen[e.sd] || [e.x / e.pts])[0], lat: (cen[e.sd] || [0, e.y / e.pts])[1] }))
+    .sort((a, b) => b.n - a.n);   // 큰 것부터 자리를 잡는다(충돌 시 작은 것이 밀리거나 빠짐)
+}
+function sdCentroids() {
+  if (window._sdCen) return window._sdCen;
+  const acc = {};
+  sggBoxes().forEach(b => {
+    const c = ringCentroid(ringsOf(b.f)[0]);
+    const e = acc[b.sd] || (acc[b.sd] = { x: 0, y: 0, n: 0 });
+    e.x += c[0]; e.y += c[1]; e.n++;
+  });
+  const out = {};
+  for (const sd in acc) out[sd] = [acc[sd].x / acc[sd].n, acc[sd].y / acc[sd].n];
+  return (window._sdCen = out);
+}
+function sdPillHtml(a) {
+  return `<b>${a.sd}</b> ${a.n.toLocaleString()}`
+    + (a.moved ? `<span class="mv">+${a.moved}</span>` : "");
+}
+/* 겹치면 **비켜 놓는다**(안 그리는 게 아니라). 동 라벨은 수백 개라 버리는 게 맞지만 시도는 17개뿐이고,
+   ⚠ 실측 2026-08-09: 버리는 규칙으로는 **경기 1,264건이 통째로 안 보였다** — 경기 신호의 중심이
+     서울 알약과 붙기 때문이다(경기가 서울을 감싼다). 두 번째로 큰 시도가 사라지는 건 결손이다.
+   위아래로 26px씩 밀어 자리를 찾고, 끝내 못 찾을 때만 뺀다. 반환값은 **화면 좌표**라 렌더러가
+   역투영해 앵커로 쓴다(두 렌더러가 같은 배치 규칙을 쓰게 하는 유일한 방법). */
+function sdPillPlace(list, projectLL, w = 92, h = 26) {
+  const placed = [], out = [], box = sdBBoxes();
+  const hits = (x, y) => placed.some(q => Math.abs(q.x - x) < w && Math.abs(q.y - y) < h);
+  for (const a of list) {
+    const p = projectLL([a.lon, a.lat]);
+    if (!p) continue;
+    /* ★ 비켜 놓되 **그 시도의 경계 안에서만** 비킨다. 화면 픽셀로 고정폭을 밀면 축척에 따라
+       라벨이 자기 시도 밖으로 나간다 — 실측 2026-08-09: 74px 가로 이동이 울산 알약을 동해로,
+       경북을 일본 쪽으로 보냈다. 지도가 거짓말하는 것이다(§4.1). 시도 bbox를 화면으로 투영해
+       그 안쪽만 후보로 삼고, 자리를 못 찾으면 미는 대신 **뺀다**(P5: 지어내지 않는다). */
+    const bb = box[a.sd];
+    let lim = null;
+    if (bb) {
+      const q1 = projectLL([bb[0], bb[1]]), q2 = projectLL([bb[2], bb[3]]);
+      /* 울타리는 시도 bbox를 **알약 반 크기만큼** 넓힌 것이다. 그대로 쓰면 인천·울산·세종처럼
+         화면상 bbox가 알약보다 작은 시도는 한 칸도 못 비켜 통째로 빠진다(실측: 인천 272건 소실).
+         반 칸까지는 라벨이 자기 시도에 붙어 있는 것으로 읽힌다 — 그 이상은 안 민다. */
+      if (q1 && q2) lim = { x0: Math.min(q1.x, q2.x) - w / 2, x1: Math.max(q1.x, q2.x) + w / 2,
+                            y0: Math.min(q1.y, q2.y) - h / 2, y1: Math.max(q1.y, q2.y) + h / 2 };
+    }
+    const inside = (x, y) => !lim || (x >= lim.x0 && x <= lim.x1 && y >= lim.y0 && y <= lim.y1);
+    let x = p.x, y = p.y, ok = !hits(x, y);
+    const OFF = [];   // 세로 먼저(읽는 방향을 덜 흔든다), 그 다음 가로
+    for (let k = 1; k <= 2; k++) OFF.push([0, h * k], [0, -h * k], [w * .6 * k, 0], [-w * .6 * k, 0],
+                                          [w * .6 * k, h * k], [-w * .6 * k, -h * k]);
+    for (const [dx, dy] of OFF) {
+      if (ok) break;
+      if (inside(p.x + dx, p.y + dy) && !hits(p.x + dx, p.y + dy)) { x = p.x + dx; y = p.y + dy; ok = true; }
+    }
+    if (!ok) continue;
+    placed.push({ x, y }); out.push({ a, x, y });
+  }
+  return out;
+}
+/* 시도 bbox(경도·위도) — 알약이 자기 시도를 벗어나지 않게 하는 울타리. */
+function sdBBoxes() {
+  if (window._sdBox) return window._sdBox;
+  const out = {};
+  sggBoxes().forEach(b => {
+    const e = out[b.sd];
+    out[b.sd] = e ? [Math.min(e[0], b.x0), Math.min(e[1], b.y0), Math.max(e[2], b.x1), Math.max(e[3], b.y1)]
+                  : [b.x0, b.y0, b.x1, b.y1];
+  });
+  return (window._sdBox = out);
+}
 const LVL_TXT = LVL_COLOR;
 const LVL_LETTER = { S: "S", A: "A", B: "B", C: "C", "미정": "?" };   // 배지 글자(미정=?)
 function lvlPill(l) { return `<span class="lvtag" style="${LVL_STYLE[l]}">${LEVEL_NAME[l]}</span>`; }
@@ -2877,10 +3049,89 @@ function _sheetDrag(el, onClose) {
     y0 = null;
   });
 }
+/* ══ 상세 시트 3단 스냅 (2026-08-09) ═══════════════════════════════════════════
+   peek 88px(제목만) / half 46vh / full 82vh. **지도를 안 잃고 목록을 훑기 위한** 장치다 —
+   동·시군구·겹침을 누르면 이 시트가 신호 **목록**이 되는데, 한 단계뿐이면 목록을 보는 동안
+   "어느 동을 보는 중인지"가 화면에서 사라진다(DESIGN §3-b 「지도가 항상 일부 보여야」).
+   ⚠ 높이를 CSS로 고정하지 않는다 — 짧은 상세가 빈 공간을 끌고 다닌다. 실제 높이(offsetHeight)에서
+     역산해 translateY로 민다. 그래서 **내용이 바뀔 때마다 다시 계산**해야 한다(renderPanel 훅). */
+const SNAP_ORDER = ["full", "half", "peek"];
+let panelSnap = "full", _snapView = null;
+function panelOffset(el, snap) {
+  const h = el.offsetHeight;
+  if (snap === "full") return 0;
+  if (snap === "half") return Math.max(0, h - Math.round(innerHeight * 0.46));
+  return Math.max(0, h - 88);
+}
+/* 목록형 화면(동·동신호·겹침·시군구)은 half로 연다 — 지도를 반쯤 남겨 훑는 게 목적.
+   상세 한 건(detail·apt)은 full — 읽는 화면이라 반쯤 열면 매번 끌어올려야 한다. */
+const defaultSnap = mode => ["dong", "dongsig", "cluster", "sgg"].includes(mode) ? "half" : "full";
+function applyPanelSnap(snap, animate = true) {
+  const el = document.getElementById("panel");
+  if (!el) return;
+  if (!isMobileView() || el.style.display === "none") {   // 데스크톱·닫힘 = 변형 없음(흐름 그대로)
+    el.style.transform = ""; el.removeAttribute("data-snap"); return;
+  }
+  panelSnap = snap;
+  el.classList.toggle("nosnap", !animate);
+  el.dataset.snap = snap;
+  el.style.transform = `translateY(${panelOffset(el, snap)}px)`;
+  /* ⚠ `transition:none`(nosnap)을 걸고 값을 바꾼 뒤 클래스를 **다음 태스크에서** 풀면, 브라우저가
+     두 변경을 한 프레임으로 합쳐 결국 **애니메이션으로 처리**한다. 실측(2026-08-09): 그 사이에
+     강제 리플로우가 없으면 transform이 영영 적용되지 않고 CSSTransition만 남아 있었다
+     (inline style은 translateY(292px)인데 computed는 항등행렬). 값을 읽어 리플로우를 강제한 뒤
+     같은 태스크에서 푼다 — 이러면 즉시 반영이 보장된다. */
+  if (!animate) { void el.offsetHeight; el.classList.remove("nosnap"); }
+}
+/* 내용 교체 후 호출 — 높이가 바뀌었으므로 오프셋을 다시 잰다. 한 박자 뒤에 재야
+   레이아웃이 끝난 뒤의 실제 높이를 얻는다(교체 직후엔 이전 높이가 나온다).
+   ⚠ `requestAnimationFrame`이 아니라 `setTimeout(0)`이다 — rAF는 **탭이 안 보이면 안 돈다**.
+     보이지 않는 동안 열린 시트가 스냅 없이 남는 상태를 만들지 않기 위해서다. */
+function resnapPanel(mode) {
+  // ⚠ 데스크톱에서 **일찍 반환하지 않는다** — 모바일 폭에서 넓히면 translateY가 그대로 남아
+  //   데스크톱 패널이 292px 아래로 밀린다(2026-08-09 실측). 지우는 것도 applyPanelSnap의 일이다.
+  setTimeout(() => applyPanelSnap(mode ? defaultSnap(mode) : panelSnap, false), 0);
+}
+function _panelSnapDrag(el) {
+  let y0 = null, base = 0, cur = 0, dy = 0;
+  el.addEventListener("touchstart", e => {
+    if (!isMobileView()) return;
+    const top = el.getBoundingClientRect().top;
+    if (e.touches[0].clientY - top > 28) return;   // 손잡이 밖 = 본문 스크롤(끌기 아님)
+    y0 = e.touches[0].clientY; base = cur = panelOffset(el, panelSnap); dy = 0;
+    el.classList.add("nosnap");
+  }, { passive: true });
+  el.addEventListener("touchmove", e => {
+    if (y0 === null) return;
+    dy = e.touches[0].clientY - y0;
+    const peek = panelOffset(el, "peek");
+    cur = Math.max(0, Math.min(base + dy, peek + 120));   // peek보다 120px 더 내리면 '닫기' 사정권
+    el.style.transform = `translateY(${cur}px)`;
+  }, { passive: true });
+  el.addEventListener("touchend", () => {
+    if (y0 === null) return;
+    y0 = null; el.classList.remove("nosnap");
+    if (Math.abs(dy) < 6) {   // 탭 = 단계 순환(full ↔ half). 끌기를 모르는 사용자를 위한 대체 조작
+      applyPanelSnap(panelSnap === "full" ? "half" : "full"); return;
+    }
+    const peek = panelOffset(el, "peek");
+    if (cur > peek + 60) { el.style.transform = ""; closePanel(); return; }
+    // 가장 가까운 단계로 붙인다
+    let best = SNAP_ORDER[0], bd = Infinity;
+    for (const sn of SNAP_ORDER) { const d = Math.abs(panelOffset(el, sn) - cur); if (d < bd) { bd = d; best = sn; } }
+    applyPanelSnap(best);
+  });
+}
 addEventListener("DOMContentLoaded", () => {
   const d = document.getElementById("dock"), p = document.getElementById("panel");
   if (d) _sheetDrag(d, () => toggleDock(false));
-  if (p) _sheetDrag(p, () => closePanel());
+  if (p) _panelSnapDrag(p);
+});
+/* 방향 전환·주소창 접힘으로 innerHeight가 바뀌면 half 오프셋이 어긋난다 — 다시 잰다.
+   ⚠ resnapPanel이 아니라 applyPanelSnap을 직접 부른다 — 모바일→데스크톱으로 넓어졌을 때
+     **남아 있는 translateY를 지우는 것도 여기서** 해야 한다(resnapPanel은 데스크톱에서 즉시 반환). */
+addEventListener("resize", () => {
+  if (document.getElementById("panel")?.style.display !== "none") applyPanelSnap(panelSnap, false);
 });
 let returnView = null;
 function showSignal(s, pan) {
@@ -2921,6 +3172,13 @@ function renderPanel() {
       setTimeout(mapRelayout, 60);   // 컨테이너 폭 변경 → 타일 재계산(지도 공용 헬퍼 — 카카오=relayout)
     }
   }
+  /* 3단 스냅 — 내용을 그린 **뒤** 높이를 다시 잰다(resnapPanel이 rAF로 미룬다).
+     ⚠ 기본 단계로 되돌리는 건 **화면이 바뀔 때만**이다. renderPanel은 필터를 하나 켤 때마다
+       renderAll에서 불리므로, 매번 기본으로 되돌리면 사용자가 full로 올려 읽던 시트가
+       칩 한 번 누를 때마다 half로 내려앉는다. `view` 객체는 show*()가 새로 만들므로
+       **객체 동일성**이 곧 "같은 화면인가"다. */
+  const _newView = view !== _snapView; _snapView = view;
+  try { resnapPanel(view.mode === "home" ? null : (_newView ? view.mode : undefined)); } catch (e) {}
   if (view.mode === "dong") return renderDong(view.dong);
   if (view.mode === "dongsig") return renderDongSig(view);
   if (view.mode === "cluster") return renderCluster(view);
@@ -2944,6 +3202,45 @@ function dockCounts() {
     const l = levelOf(s); if (l) lvl[l] = (lvl[l] || 0) + 1;
   });
   return { cat, sub, lvl, total: pool.filter(visible).length };
+}
+/* 대분류 토글 — 도크 헤더와 모바일 축 칩이 **같은 함수 하나**를 부른다.
+   두 벌로 두면 반드시 갈린다(이 저장소의 반복 사고 — 규칙이 한쪽에만 걸린다).
+   세부 축이 있는 대분류는 하위 중분류 **전체 선택/해제**가 곧 대분류 토글이다(catVisible의 게이트가
+   filter.sub이기 때문 — filter.cat만 건드리면 화면은 그대로인 '먹통 버튼'이 된다). */
+function toggleCat(k) {
+  const ids = (SUB_KEYS[k] || []).map(sk => subId(k, sk));
+  if (ids.length) {
+    const allOn = ids.every(id => filter.sub.has(id));
+    ids.forEach(id => allOn ? filter.sub.delete(id) : filter.sub.add(id));
+    allOn ? filter.cat.delete(k) : filter.cat.add(k);
+  } else {
+    filter.cat.has(k) ? filter.cat.delete(k) : filter.cat.add(k);
+  }
+}
+/* 모바일 축 칩 — 대분류 4개를 지도 위에 상시. 건수·켜짐 판정은 **도크와 같은 소스**(dockCounts)를
+   쓴다. 두 화면이 다른 숫자를 말하면 안 된다(§DESIGN 요약 바 규칙 1과 같은 이유). */
+function renderAxis() {
+  const host = document.getElementById("maxis");
+  if (!host) return;
+  const C = dockCounts();
+  host.innerHTML = CAT_KEYS.map(cat => {
+    const keys = SUB_KEYS[cat] || [];
+    const on = keys.length ? keys.some(sk => filter.sub.has(subId(cat, sk))) : filter.cat.has(cat);
+    const n = C.cat[cat] || 0;
+    return `<span class="ax${on ? "" : " off"}" data-ax="${cat}" title="${cat} 신호 ${n.toLocaleString()}건 — 탭하면 켜고 끕니다(세부는 ☰ 조회조건)">`
+      + `<i style="background:${CAT_COLOR[cat]}"></i>${cat}<span class="n">${n.toLocaleString()}</span></span>`;
+  }).join("");
+}
+function initAxis() {
+  const host = document.getElementById("maxis");
+  if (!host) return;
+  host.addEventListener("click", e => {
+    const t = e.target.closest("[data-ax]");
+    if (!t) return;
+    toggleCat(t.dataset.ax);
+    renderAll();
+  });
+  renderAxis();
 }
 function renderDock() {
   const dock = document.getElementById("dock");
@@ -3029,18 +3326,7 @@ function initDock() {
     if (!t) return;
     if (t.dataset.all) { resetFilters(); return; }   // 초기화 = 공용 함수 하나(패널 안내도 같은 것을 부른다)
     const axis = t.dataset.tog, k = t.dataset.k;
-    if (axis === "cat") {
-      // 대분류 헤더 = 하위 중분류 **전체 선택/해제** 버튼(세부 축 있는 경우). 없으면 대분류 자체 토글.
-      const ids = (SUB_KEYS[k] || []).map(sk => subId(k, sk));
-      if (ids.length) {
-        const allOn = ids.every(id => filter.sub.has(id));
-        ids.forEach(id => allOn ? filter.sub.delete(id) : filter.sub.add(id));
-        allOn ? filter.cat.delete(k) : filter.cat.add(k);
-      } else {
-        filter.cat.has(k) ? filter.cat.delete(k) : filter.cat.add(k);
-      }
-      renderAll(); return;
-    }
+    if (axis === "cat") { toggleCat(k); renderAll(); return; }
     const set = { sub: filter.sub, phase: filter.phase, lvl: filter.lvl, lines: filter.lines }[axis];
     if (!set) return;
     set.has(k) ? set.delete(k) : set.add(k);
@@ -3085,7 +3371,7 @@ function goList() {
   const b = document.getElementById("v-list");
   if (b) b.click();
 }
-function renderAll() { renderChips(); renderDock(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); if (VIEW_MODE === "list") renderList(); updateSummary(); }
+function renderAll() { renderChips(); renderDock(); renderAxis(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); if (VIEW_MODE === "list") renderList(); updateSummary(); }
 
 /* ══════════ 지도: 카카오 → Leaflet 폴백 ══════════ */
 function bootMap() {
@@ -3459,6 +3745,23 @@ function initLeaflet() {
       badges.push(b);
     }
   };
+  /* 전국 줌 시도 집계 알약 — **카카오판과 같은 규칙**(sdAggregates·SD_PILL 경계 공용).
+     한쪽 렌더러에만 넣으면 반대쪽이 조용히 예외가 된다(이 저장소의 반복 사고). */
+  let sdMarkers = [];
+  const renderSdPills = () => {
+    sdMarkers.forEach(m => map.removeLayer(m)); sdMarkers = [];
+    if (map.getZoom() > SD_PILL_ZOOM) return;
+    const bd = map.getBounds();
+    const keep = sdPillPlace(sdAggregates().filter(a => bd.contains([a.lat, a.lon])),
+                             ll => map.latLngToContainerPoint([ll[1], ll[0]]));
+    keep.forEach(({ a, x, y }) => {
+      const ll = map.containerPointToLatLng([x, y]);   // 비켜 놓은 화면 좌표를 다시 좌표계로
+      const m = L.marker(ll, { pane: "badge",
+        icon: L.divIcon({ className: "", html: `<div class="sd-pill" title="${a.sd} 신호 ${a.n.toLocaleString()}건 · 이번 주 문서상 움직임 ${a.moved}건">${sdPillHtml(a)}</div>`, iconSize: null }) }).addTo(map);
+      m.on("click", () => mapGo(a.lat, a.lon, 9));
+      sdMarkers.push(m);
+    });
+  };
   let _lfWarned = false;
   const _lfDegraded = () => {   // 폴백 제한 고지(1회) — 조용한 백지 대신 사실 표기(P5)
     if (_lfWarned) return; _lfWarned = true;
@@ -3478,6 +3781,7 @@ function initLeaflet() {
     // 건너뛰고 배너로 사실을 고지한다(P5). 완전 파리티 복원은 별도 작업(질문대장 백로그).
     if (typeof renderHojae === "function") renderHojae(); else _lfDegraded();
     renderDongLabels();                                   // z12+ 동 이름 라벨 — 호재 원과 겹치면 회피
+    renderSdPills();                                      // 전국 줌(z≤6) 시도 집계 알약 — 카카오판과 같은 규칙
     if (z >= APT_ICON_ZOOM) renderAptDots(); else clearAptDots();   // z14+ 아파트 집 아이콘
     if (typeof renderRail === "function") renderRail();
     if (z >= DONG_ZOOM) loadBdongVisible();   // 동 라벨이 필요한 줌부터 화면에 걸친 시도 경계 로드(전국 분할)
@@ -3918,6 +4222,26 @@ function initKakao() {
     lblShown.forEach(f => f._klbl && f._klbl.setMap(null));
     lblShown = next; };
 
+  /* 전국 줌 시도 집계 알약 — 규칙·숫자는 공용(sdAggregates), 배치만 렌더러별. */
+  let sdOvs = [];
+  const renderSdPills = () => {
+    sdOvs.forEach(o => o.setMap(null)); sdOvs = [];
+    if (map.getLevel() < SD_PILL_LV) return;
+    const b = map.getBounds();
+    const prj = map.getProjection && map.getProjection();
+    const keep = sdPillPlace(sdAggregates().filter(a => b.contain(LL(a.lon, a.lat))), ll => toPt(ll[0], ll[1]));
+    keep.forEach(({ a, x, y }) => {
+      // 비켜 놓은 화면 좌표를 다시 좌표계로 — 앵커가 화면 위치를 따라가야 겹침 회피가 유지된다
+      let pos = LL(a.lon, a.lat);
+      try { if (prj) pos = prj.coordsFromContainerPoint(new K.Point(x, y)); } catch (e) {}
+      const elx = document.createElement("div"); elx.className = "sd-pill"; elx.innerHTML = sdPillHtml(a);
+      elx.title = `${a.sd} 신호 ${a.n.toLocaleString()}건 · 이번 주 문서상 움직임 ${a.moved}건 — 누르면 이 시도로 이동합니다`;
+      elx.addEventListener("click", e => { e.stopPropagation(); mapGo(a.lat, a.lon, 9); });
+      const ov = new K.CustomOverlay({ position: pos, content: elx, zIndex: 12, yAnchor: .5, xAnchor: .5 });
+      ov.setMap(map); sdOvs.push(ov);
+    });
+  };
+
   /* 노선 선형: 뷰포트와 무관하므로 **1회 생성 후 setMap 토글만**(줌마다 149개·수천 정점 재생성이 버벅임 주범).
      클릭 판정: 카카오는 히트 영역이 선 굵기 그대로라 3px 선은 못 누른다 → 투명 굵은 히트선(14px)을 위에 깔고
      클릭·hover를 거기서 받는다. phase 미상(예타 등 고시 전) 노선은 "계획"으로 취급해 단계 필터에 반응(사용자 2026-07-21 — 5호선 김포연장이 필터에 안 죽던 원인). */
@@ -4205,7 +4529,7 @@ function initKakao() {
     div.querySelector(".hlt").addEventListener("click", () => { const off = div.classList.toggle("collapsed"); localStorage.setItem("hojae_legend_off", off ? "1" : "0"); div.querySelector(".car").textContent = off ? "▾" : "▴"; });
     mapEl.appendChild(div); }
 
-  const applyLOD = () => { renderDongPoly(); renderJeongbiPoly(); renderMasterArea(); renderHojae(); renderDongLabels(); renderAptDots(); renderRail(); loadBdong(); };
+  const applyLOD = () => { renderDongPoly(); renderJeongbiPoly(); renderMasterArea(); renderHojae(); renderDongLabels(); renderSdPills(); renderAptDots(); renderRail(); loadBdong(); };
   K.event.addListener(map, "idle", applyLOD);
   // 줌 애니메이션 프레임마다 카카오가 살아있는 벡터·DOM 오버레이 전부를 재투영한다 — 그게 "딱딱 끊김"의 원인.
   // 애니메이션 동안 우리 오버레이 **전부**를 잠깐 내리고 idle의 applyLOD가 복귀시킨다(네이버지도 방식 —
@@ -4313,6 +4637,8 @@ function setView(mode) {
   document.getElementById("map").style.display = mode === "map" ? "" : "none";
   // 요약 바는 **지도 위에 뜨는 부유 칩**이다 — 목록 위에 겹치면 목록을 가린다(상세 패널과 같은 이유).
   const ms = document.getElementById("msum"); if (ms) ms.style.display = mode === "map" ? "" : "none";
+  // 축 칩도 같은 규칙 — 지도 위 부유 요소다. `""`로 되돌려야 미디어쿼리(모바일만 flex)가 되산다.
+  const mx = document.getElementById("maxis"); if (mx) mx.style.display = mode === "map" ? "" : "none";
   document.getElementById("listv").style.display = mode === "list" ? "block" : "none";
   document.getElementById("undet").style.display = mode === "undet" ? "block" : "none";
   const g = document.getElementById("gantt"); if (g) g.style.display = "none";
@@ -4554,7 +4880,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260809o");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260809p");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -4676,6 +5002,7 @@ function initSearch() {
   initSearch();
   renderPanel();
   updateSummary();   // 하단 요약 바 — 부트는 renderAll()을 안 부르고 개별 렌더만 하므로 여기서 한 번
+  initAxis();        // 모바일 축 칩 — 같은 이유로 부트에서 따로 한 번(클릭 위임도 여기서 건다)
   bootMap();
   document.getElementById("v-map").onclick = () => setView("map");
   document.getElementById("v-list").onclick = () => setView("list");
@@ -4717,7 +5044,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260809o"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260809p"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -4743,7 +5070,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260809o");
+  const CB = "?b=" + (window.BUILD || "20260809p");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {

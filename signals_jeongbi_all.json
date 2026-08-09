@@ -9,8 +9,8 @@
    "sd": "서울",
    "sg": "강동구",
    "dong": "명일동",
-   "stage": "착공",
-   "phase": "착공",
+   "stage": "준공",
+   "phase": "준공·개통",
    "type": "가로주택정비",
    "hh": null,
    "drop": false,
@@ -19,7 +19,7 @@
    "addr": "서울 강동구 명일동 263-2",
    "geo_basis": "본번 대체(서울 강동구 명일동 263) — 부번 필지 조회 실패",
    "gate": "신호",
-   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "gate_basis": "절차 문서 확인 — 「준공」",
    "geometry": {
     "type": "Point",
     "coordinates": [
@@ -33,11 +33,29 @@
      "stage": "착공",
      "date": "2026-07-18",
      "basis": "observed"
+    },
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1043.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2025-08-01",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
   },
   {
    "n": "성내동 288-1번지 일원 가로주택정비사업 (가로주택정비)",
@@ -46,7 +64,7 @@
    "sd": "서울",
    "sg": "강동구",
    "dong": "성내동",
-   "stage": "조합설립인가",
+   "stage": "사업시행계획인가",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -66,7 +84,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9682.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-03-17",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "암사동 495번지 일대 가로주택정비사업 (가로주택정비)",
@@ -75,7 +106,7 @@
    "sd": "서울",
    "sg": "강동구",
    "dong": "암사동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -95,7 +126,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9586.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-07-12",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "동도연립 가로주택정비사업조합 (가로주택정비)",
@@ -104,8 +148,8 @@
    "sd": "서울",
    "sg": "강동구",
    "dong": "천호동",
-   "stage": "조합해산",
-   "phase": "계획",
+   "stage": "준공",
+   "phase": "준공·개통",
    "type": "가로주택정비",
    "hh": null,
    "drop": true,
@@ -114,17 +158,35 @@
    "addr": "서울 강동구 천호동 39-4",
    "geo_basis": null,
    "gate": "신호",
-   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "gate_basis": "절차 문서 확인 — 「준공」",
    "stage_history": [
     {
      "stage": "계획",
      "date": "2026-07-18",
      "basis": "observed"
+    },
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3332.5,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2017-11-22",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
   },
   {
    "n": "천호동 107-33일대 가로주택정비사업 (가로주택정비)",
@@ -153,7 +215,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7565.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-03-16",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "천호동110번지 일대 가로주택정비사업 (가로주택정비)",
@@ -182,7 +257,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 8001.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-07-06",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "천호동145-66 일원 가로주택정비사업조합 (가로주택정비)",
@@ -211,7 +299,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9527.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-08-19",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "천호동 221번지 일대 가로주택정비사업 (가로주택정비)",
@@ -240,7 +341,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 8422.1,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-07-05",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "천호동 225-16번지 일원 가로주택정비사업 (가로주택정비)",
@@ -269,7 +383,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9830.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-12-30",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "천호동 337-30번지 일대 가로주택정비사업 (가로주택정비)",
@@ -307,7 +434,7 @@
    "sd": "서울",
    "sg": "강북구",
    "dong": "미아동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": 0,
@@ -327,7 +454,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 6204.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-04-11",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "미아3구역 가로주택정비사업조합 (가로주택정비)",
@@ -336,7 +476,7 @@
    "sd": "서울",
    "sg": "강북구",
    "dong": "미아동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": 0,
@@ -356,7 +496,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9306.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-09-26",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "미아1구역 가로주택정비사업 조합 (가로주택정비)",
@@ -365,7 +518,7 @@
    "sd": "서울",
    "sg": "강북구",
    "dong": "미아동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": 0,
@@ -385,7 +538,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 5310.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-06-02",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "번동3-1구역 가로주택정비사업 조합 (가로주택정비)",
@@ -414,7 +580,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 6967.1,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-03-21",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "번동 5구역 가로주택 정비사업 조합 (가로주택정비)",
@@ -423,8 +602,8 @@
    "sd": "서울",
    "sg": "강북구",
    "dong": "번동",
-   "stage": "사업시행인가",
-   "phase": "인가",
+   "stage": "착공",
+   "phase": "착공",
    "type": "가로주택정비",
    "hh": null,
    "drop": false,
@@ -433,17 +612,35 @@
    "addr": "서울 강북구 번동 427-63",
    "geo_basis": null,
    "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "stage_history": [
     {
      "stage": "인가",
      "date": "2026-07-18",
      "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2026-08-09",
+     "basis": "observed"
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 10127.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-12-30",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "번동 4구역 가로주택 정비사업 조합 (가로주택정비)",
@@ -452,8 +649,8 @@
    "sd": "서울",
    "sg": "강북구",
    "dong": "번동",
-   "stage": "사업시행인가",
-   "phase": "인가",
+   "stage": "착공",
+   "phase": "착공",
    "type": "가로주택정비",
    "hh": null,
    "drop": false,
@@ -462,17 +659,35 @@
    "addr": "서울 강북구 번동 428-4",
    "geo_basis": null,
    "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "stage_history": [
     {
      "stage": "인가",
      "date": "2026-07-18",
      "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2026-08-09",
+     "basis": "observed"
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 10311.4,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-12-01",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "번동2구역 가로주택정비사업조합 (가로주택정비)",
@@ -481,8 +696,8 @@
    "sd": "서울",
    "sg": "강북구",
    "dong": "번동",
-   "stage": "사업시행인가",
-   "phase": "인가",
+   "stage": "착공",
+   "phase": "착공",
    "type": "가로주택정비",
    "hh": null,
    "drop": false,
@@ -491,17 +706,35 @@
    "addr": "서울 강북구 번동 429-97",
    "geo_basis": null,
    "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "stage_history": [
     {
      "stage": "인가",
      "date": "2026-07-18",
      "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2026-08-09",
+     "basis": "observed"
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7820.9,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-04-14",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "번동1구역 가로주택정비사업조합 (가로주택정비)",
@@ -510,8 +743,8 @@
    "sd": "서울",
    "sg": "강북구",
    "dong": "번동",
-   "stage": "사업시행인가",
-   "phase": "인가",
+   "stage": "착공",
+   "phase": "착공",
    "type": "가로주택정비",
    "hh": null,
    "drop": false,
@@ -520,17 +753,35 @@
    "addr": "서울 강북구 번동 429-114",
    "geo_basis": null,
    "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "stage_history": [
     {
      "stage": "인가",
      "date": "2026-07-18",
      "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2026-08-09",
+     "basis": "observed"
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 4517.7,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2019-09-20",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "번동 3구역 가로주택 정비사업 조합 (가로주택정비)",
@@ -539,8 +790,8 @@
    "sd": "서울",
    "sg": "강북구",
    "dong": "번동",
-   "stage": "사업시행인가",
-   "phase": "인가",
+   "stage": "착공",
+   "phase": "착공",
    "type": "가로주택정비",
    "hh": null,
    "drop": false,
@@ -549,17 +800,35 @@
    "addr": "서울 강북구 번동 430-27",
    "geo_basis": null,
    "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "stage_history": [
     {
      "stage": "인가",
      "date": "2026-07-18",
      "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2026-08-09",
+     "basis": "observed"
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7374.1,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-11-16",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "번동3-2구역 가로주택정비사업 (가로주택정비)",
@@ -588,7 +857,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7236.6,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-07-05",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "번동2-1구역 가로주택정비사업 조합 (가로주택정비)",
@@ -597,7 +879,7 @@
    "sd": "서울",
    "sg": "강북구",
    "dong": "번동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -617,7 +899,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9779.6,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-11-10",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "번동2-2구역 가로주택정비사업 (가로주택정비)",
@@ -626,7 +921,7 @@
    "sd": "서울",
    "sg": "강북구",
    "dong": "번동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -646,7 +941,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 10176.8,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-06-16",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "번동2-3구역 가로주택정비사업 (가로주택정비)",
@@ -655,7 +963,7 @@
    "sd": "서울",
    "sg": "강북구",
    "dong": "번동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -675,7 +983,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9510.2,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-03-28",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "등촌2동 모아타운 제1-1구역 가로주택정비사업조합 (가로주택정비)",
@@ -742,7 +1063,7 @@
    "sd": "서울",
    "sg": "강서구",
    "dong": "방화동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -762,7 +1083,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9817.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-04-12",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "방화동 286-1 한미아파트 가로주택정비사업조합 (가로주택정비)",
@@ -800,7 +1134,7 @@
    "sd": "서울",
    "sg": "강서구",
    "dong": "방화동",
-   "stage": "조합설립인가",
+   "stage": "사업시행계획인가",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -820,7 +1154,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1478.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-05-21",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "서울빌라 가로주택정비사업조합 (가로주택정비)",
@@ -829,7 +1176,7 @@
    "sd": "서울",
    "sg": "강서구",
    "dong": "방화동",
-   "stage": "사업시행인가",
+   "stage": "사업시행계획인가",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -839,7 +1186,20 @@
    "addr": "서울 강서구 방화동 584-1",
    "geo_basis": null,
    "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중"
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1478.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-05-21",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "방화동 598-146번지 일대 가로주택정비사업조합 (가로주택정비)",
@@ -848,7 +1208,7 @@
    "sd": "서울",
    "sg": "강서구",
    "dong": "방화동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -868,7 +1228,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7442.1,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-06-12",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "양지빌라 가로주택정비사업조합 (가로주택정비)",
@@ -897,7 +1270,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1824.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-04-29",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "화곡1동 354 일대 모아타운 A2-4구역 가로주택정비사업조합 (가로주택정비)",
@@ -984,7 +1370,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 8483.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-05-08",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "화곡1동 354 일대 모아타운 A2-2구역 가로주택정비사업조합 (가로주택정비)",
@@ -1042,7 +1441,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2338.3,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-06-30",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "신림동 655-78번지 일원 가로주택정비사업 (가로주택정비)",
@@ -1071,7 +1483,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 15010.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-02-22",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "관악난곡 A2 공공시행 가로주택정비사업 (가로주택정비)",
@@ -1109,8 +1534,8 @@
    "sd": "서울",
    "sg": "광진구",
    "dong": "구의동",
-   "stage": "사업시행인가",
-   "phase": "인가",
+   "stage": "착공",
+   "phase": "착공",
    "type": "가로주택정비",
    "hh": null,
    "drop": false,
@@ -1119,17 +1544,35 @@
    "addr": "서울 광진구 구의동 592-39",
    "geo_basis": null,
    "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "stage_history": [
     {
      "stage": "인가",
      "date": "2026-07-18",
      "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2026-08-09",
+     "basis": "observed"
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9877.8,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2019-10-02",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "자양1의4구역 가로주택정비사업 (가로주택정비)",
@@ -1158,7 +1601,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 8419.9,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-06-12",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "자양번영로3나길 일대 가로주택정비사업 (가로주택정비)",
@@ -1187,7 +1643,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2307.5,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-07-13",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "화양동 32-12번지 가로주택정비사업 (가로주택정비)",
@@ -1196,8 +1665,8 @@
    "sd": "서울",
    "sg": "광진구",
    "dong": "화양동",
-   "stage": "조합설립인가",
-   "phase": "인가",
+   "stage": "착공",
+   "phase": "착공",
    "type": "가로주택정비",
    "hh": null,
    "drop": false,
@@ -1206,17 +1675,35 @@
    "addr": "서울 광진구 화양동 32-12",
    "geo_basis": null,
    "gate": "신호",
-   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "stage_history": [
     {
      "stage": "인가",
      "date": "2026-07-18",
      "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2026-08-09",
+     "basis": "observed"
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1588.4,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-06-22",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "진주빌라 (가로주택정비)",
@@ -1225,7 +1712,7 @@
    "sd": "서울",
    "sg": "구로구",
    "dong": "개봉동",
-   "stage": "조합설립인가",
+   "stage": "사업시행계획인가",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -1245,7 +1732,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1576.9,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-08-25",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "고척1구역 가로주택정비사업(홍진은성우정연립) (가로주택정비)",
@@ -1274,7 +1774,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 10245.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-05-23",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "고척동241-11번지일대 가로주택정비사업 (가로주택정비)",
@@ -1303,7 +1816,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7990.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-10-20",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "고척6구역 가로주택정비사업 (가로주택정비)",
@@ -1332,7 +1858,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7965.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-03-28",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "고척동 241-337번지 일대 가로주택정비사업 (가로주택정비)",
@@ -1361,7 +1900,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7993.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-11-02",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "구로동 454번지 일원 가로주택정비사업 (가로주택정비)",
@@ -1428,8 +1980,8 @@
    "sd": "서울",
    "sg": "구로구",
    "dong": "구로동",
-   "stage": "조합해산",
-   "phase": "계획",
+   "stage": "준공",
+   "phase": "준공·개통",
    "type": "가로주택정비",
    "hh": null,
    "drop": true,
@@ -1438,7 +1990,7 @@
    "addr": "서울 구로구 구로동 685-280",
    "geo_basis": "본번 대체(서울 구로구 구로동 685) — 부번 필지 조회 실패",
    "gate": "신호",
-   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "gate_basis": "절차 문서 확인 — 「준공」",
    "geometry": {
     "type": "Point",
     "coordinates": [
@@ -1452,11 +2004,29 @@
      "stage": "계획",
      "date": "2026-07-18",
      "basis": "observed"
+    },
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3123.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2020-05-28",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
   },
   {
    "n": "궁동 한양빌라 가로주택정비사업조합 (가로주택정비)",
@@ -1465,7 +2035,7 @@
    "sd": "서울",
    "sg": "구로구",
    "dong": "궁동",
-   "stage": "사업시행인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -1485,7 +2055,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3021.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-03-06",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "시흥동 817번지 일대 가로주택정비사업 조합 (가로주택정비)",
@@ -1659,7 +2242,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2374.5,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-03-03",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "오성빌라 가로주택정비사업 조합 (가로주택정비)",
@@ -1697,7 +2293,7 @@
    "sd": "서울",
    "sg": "도봉구",
    "dong": "도봉동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -1717,7 +2313,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7474.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-10-01",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "방학성삼빌라가로주택정비사업 (가로주택정비)",
@@ -1726,7 +2335,7 @@
    "sd": "서울",
    "sg": "도봉구",
    "dong": "방학동",
-   "stage": "사업시행인가",
+   "stage": "사업시행계획인가",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -1746,7 +2355,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 4260.6,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-04-01",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "창동 501-13번지 일원 가로주택정비사업 (가로주택정비)",
@@ -1775,7 +2397,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 8103.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-12-31",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "창동 529-1번지 일원 가로주택정비사업조합 (가로주택정비)",
@@ -1804,7 +2439,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7160.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2025-09-04",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "신창연립가로주택정비사업 (가로주택정비)",
@@ -1833,7 +2481,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1694.5,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-11-29",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "창동 신건영빌리지 일대 가로주택정비사업조합 (가로주택정비)",
@@ -1862,7 +2523,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 6688.5,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2025-05-22",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "노량진역 은하맨션 일대 가로주택정비사업 조합 (가로주택정비)",
@@ -1900,7 +2574,7 @@
    "sd": "서울",
    "sg": "동작구",
    "dong": "사당동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -1920,7 +2594,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 5277.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-09-30",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "사당동 206대시 1번지 일원 가로주택정비사업 (가로주택정비)",
@@ -1929,7 +2616,7 @@
    "sd": "서울",
    "sg": "동작구",
    "dong": "사당동",
-   "stage": "조합설립인가",
+   "stage": "사업시행계획인가",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -1949,7 +2636,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7824.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-05-20",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "사당4동 주민센터 일원 가로주택정비사업 (가로주택정비)",
@@ -1987,7 +2687,7 @@
    "sd": "서울",
    "sg": "마포구",
    "dong": "망원동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -2007,7 +2707,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 8515.6,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-08-25",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "망원동 456번지 가로주택정비사업 (가로주택정비)",
@@ -2016,7 +2729,7 @@
    "sd": "서울",
    "sg": "마포구",
    "dong": "망원동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -2036,7 +2749,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9110.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-02-04",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "망원동 459번지 가로주택정비사업 (가로주택정비)",
@@ -2045,7 +2771,7 @@
    "sd": "서울",
    "sg": "마포구",
    "dong": "망원동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -2065,7 +2791,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3846.3,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-07-28",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "망원동 464-1번지 일원 가로주택정비사업 (가로주택정비)",
@@ -2094,7 +2833,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1885.9,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-07-21",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "성산동 165-72일원 가로주택정비사업 (가로주택정비)",
@@ -2103,7 +2855,7 @@
    "sd": "서울",
    "sg": "마포구",
    "dong": "성산동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -2123,7 +2875,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 18782.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-04-11",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "성산동200에서258번지일대 가로주택정비사업 (가로주택정비)",
@@ -2181,7 +2946,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 15588.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2025-09-04",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "이조빌라가로주택정비사업 (가로주택정비)",
@@ -2190,7 +2968,7 @@
    "sd": "서울",
    "sg": "마포구",
    "dong": "연남동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -2210,7 +2988,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 919.7,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-01-10",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "중동78번지일원 가로주택정비사업 (가로주택정비)",
@@ -2239,7 +3030,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 5220.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2025-06-05",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "창전동 46-1번지 일대 가로주택정비사업 (가로주택정비)",
@@ -2268,7 +3072,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7121.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-04-04",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "합정동 447일원 가로주택정비사업 (가로주택정비)",
@@ -2277,7 +3094,7 @@
    "sd": "서울",
    "sg": "마포구",
    "dong": "합정동",
-   "stage": "사업시행인가",
+   "stage": "사업시행계획인가",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -2297,7 +3114,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 5778.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2019-10-21",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "천연동 89-16번지 일대 소규모주택정비 관리지역(모아타운) 가로주택정비사업 (가로주택정비)",
@@ -2355,7 +3185,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 11665.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-11-10",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "홍은동277-200번지 일대 가로주택정비사업 (가로주택정비)",
@@ -2384,7 +3227,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1150.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-12-09",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "홍은동322-1일원 가로주택정비사업 (가로주택정비)",
@@ -2393,7 +3249,7 @@
    "sd": "서울",
    "sg": "서대문구",
    "dong": "홍은동",
-   "stage": "사업시행인가",
+   "stage": "사업시행계획인가",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -2413,7 +3269,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7448.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-11-23",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "홍은동 326-2일원 가로주택정비사업 (가로주택정비)",
@@ -2442,7 +3311,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 6543.2,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-06-02",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "홍은동355번지 일대 가로주택정비사업 (가로주택정비)",
@@ -2500,7 +3382,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 4989.6,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-11-04",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "방배대우가로주택정비사업 (가로주택정비)",
@@ -2529,7 +3424,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7150.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-09-21",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "방배동 도구머리공원 방배빌라 등 가로주택정비사업 (가로주택정비)",
@@ -2567,8 +3475,8 @@
    "sd": "서울",
    "sg": "서초구",
    "dong": "서초동",
-   "stage": "이전고시",
-   "phase": "계획",
+   "stage": "준공",
+   "phase": "준공·개통",
    "type": "가로주택정비",
    "hh": null,
    "drop": false,
@@ -2577,7 +3485,7 @@
    "addr": "서울 서초구 서초동 1611-1",
    "geo_basis": "본번 대체(서울 서초구 서초동 1611) — 부번 필지 조회 실패",
    "gate": "신호",
-   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "gate_basis": "절차 문서 확인 — 「준공」",
    "geometry": {
     "type": "Point",
     "coordinates": [
@@ -2591,11 +3499,29 @@
      "stage": "계획",
      "date": "2026-07-18",
      "basis": "observed"
+    },
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2303.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2021-01-12",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
   },
   {
    "n": "한신양재 가로주택정비사업조합 (가로주택정비)",
@@ -2604,7 +3530,7 @@
    "sd": "서울",
    "sg": "서초구",
    "dong": "양재동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -2624,7 +3550,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 4380.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2017-06-02",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "양재동 풍림, 현대빌라 가로주택정비사업조합 (가로주택정비)",
@@ -2682,7 +3621,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 8486.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-04-30",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "석관1의7구역 가로주택정비사업조합 (가로주택정비)",
@@ -2711,7 +3663,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9801.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-02-25",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "석관1의2구역 가로주택정비사업 (가로주택정비)",
@@ -2740,7 +3705,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 14156.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-05-13",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "석관1의8구역 가로주택정비사업조합 (가로주택정비)",
@@ -2769,7 +3747,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 23032.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-10-31",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "석관2의2구역 가로주택정비사업 (가로주택정비)",
@@ -2856,7 +3847,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3644.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-04-19",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "대광빌라 가로주택정비사업 (가로주택정비)",
@@ -2885,7 +3889,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 5263.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-08-24",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "장위11-3구역 가로주택정비사업 조합 (가로주택정비)",
@@ -2914,7 +3931,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 6328.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-01-22",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "장위11의4구역 가로주택정비사업조합 (가로주택정비)",
@@ -2943,7 +3973,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7189.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-08-24",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "가칭)장위11-8구역 가로주택정비사업 준비위원회 (가로주택정비)",
@@ -2981,7 +4024,7 @@
    "sd": "서울",
    "sg": "성북구",
    "dong": "장위동",
-   "stage": "조합설립인가",
+   "stage": "사업시행계획인가",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -3001,7 +4044,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 5474.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-12-23",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "장위11-2구역 가로주택정비사업 조합 (가로주택정비)",
@@ -3010,7 +4066,7 @@
    "sd": "서울",
    "sg": "성북구",
    "dong": "장위동",
-   "stage": "사업시행인가",
+   "stage": "사업시행계획인가",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -3030,7 +4086,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 6685.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2019-08-19",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "장위13의8구역 가로주택정비사업 (가로주택정비)",
@@ -3059,7 +4128,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 8367.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-07-14",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "장위13-4구역 가로주택정비사업 조합 (가로주택정비)",
@@ -3088,7 +4170,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9786.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-11-13",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "장위13-6 가로주택정비사업 조합 (가로주택정비)",
@@ -3117,7 +4212,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7976.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-05-11",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "장위13의9구역 가로주택정비사업 (가로주택정비)",
@@ -3146,7 +4254,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3805.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-09-02",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "정릉동 218의1 가로주택정비사업 조합 (가로주택정비)",
@@ -3155,7 +4276,7 @@
    "sd": "서울",
    "sg": "성북구",
    "dong": "정릉동",
-   "stage": "사업시행인가",
+   "stage": "사업시행계획인가",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -3175,7 +4296,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7717.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-01-22",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "정릉동 223-1번지 일대 가로주택정비사업 조합 (가로주택정비)",
@@ -3233,7 +4367,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7053.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-01-29",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "정릉동 385-1번지 일대 가로주택정비사업 조합 (가로주택정비)",
@@ -3242,7 +4389,7 @@
    "sd": "서울",
    "sg": "성북구",
    "dong": "정릉동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -3262,7 +4409,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 5118.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-08-24",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "정릉동 545-12번지 일대 가로주택정비사업 (가로주택정비)",
@@ -3271,7 +4431,7 @@
    "sd": "서울",
    "sg": "성북구",
    "dong": "정릉동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -3291,7 +4451,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3437.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-12-16",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "종암동 3-745일대 가로주택정비사업조합 (가로주택정비)",
@@ -3320,7 +4493,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2082.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-05-11",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "종암동 개운산마을 가로주택정비사업조합 (가로주택정비)",
@@ -3349,7 +4535,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 5097.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-04-15",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "종암동 112번지 일대 가로주택정비사업 (가로주택정비)",
@@ -3358,7 +4557,7 @@
    "sd": "서울",
    "sg": "성북구",
    "dong": "종암동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -3378,7 +4577,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 6232.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-12-29",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "종암동 125-1번지 일대 LH참여형 가로주택정비사업 조합 (가로주택정비)",
@@ -3407,7 +4619,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 11041.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-11-08",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "하월곡2구역 가로주택정비사업조합 (가로주택정비)",
@@ -3436,7 +4661,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 8433.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-07-20",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "가락현대6차아파트 가로주택정비사업 (가로주택정비)",
@@ -3445,7 +4683,7 @@
    "sd": "서울",
    "sg": "송파구",
    "dong": "가락동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -3465,7 +4703,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7549.6,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-12-05",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "오금동35-1번지일대 가로주택정비사업 (가로주택정비)",
@@ -3474,7 +4725,7 @@
    "sd": "서울",
    "sg": "송파구",
    "dong": "오금동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -3494,7 +4745,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3651.2,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-07-20",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "오금동143번지일원 가로주택정비사업 (가로주택정비)",
@@ -3503,7 +4767,7 @@
    "sd": "서울",
    "sg": "송파구",
    "dong": "오금동",
-   "stage": "관리처분인가",
+   "stage": "사업시행계획인가",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -3523,7 +4787,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2205.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2019-12-31",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "오금동147번지일원 가로주택정비사업 (가로주택정비)",
@@ -3532,7 +4809,7 @@
    "sd": "서울",
    "sg": "송파구",
    "dong": "오금동",
-   "stage": "관리처분인가",
+   "stage": "사업시행계획인가",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -3552,7 +4829,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2593.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2019-10-29",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "풍납강변현대아파트 가로주택정비사업 (가로주택정비)",
@@ -3581,7 +4871,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 5165.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2025-04-17",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "신월 가로주택정비사업 (가로주택정비)",
@@ -3668,7 +4971,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 11486.9,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2025-01-16",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "당산삼익 가로주택정비사업 (가로주택정비)",
@@ -3764,7 +5080,7 @@
    "sd": "서울",
    "sg": "영등포구",
    "dong": "신길동",
-   "stage": "관리처분인가",
+   "stage": "사업시행계획인가",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -3784,7 +5100,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1207.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-10-14",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "양평유성 가로주택정비사업 (가로주택정비)",
@@ -3793,7 +5122,7 @@
    "sd": "서울",
    "sg": "영등포구",
    "dong": "양평동6가",
-   "stage": "관리처분인가",
+   "stage": "사업시행계획인가",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -3813,7 +5142,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3139.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2019-10-24",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "영등포동2가 34-81 가로주택정비사업 (가로주택정비)",
@@ -3822,8 +5164,8 @@
    "sd": "서울",
    "sg": "영등포구",
    "dong": "영등포동2가",
-   "stage": "추진위원회승인",
-   "phase": "계획",
+   "stage": "준공",
+   "phase": "준공·개통",
    "type": "가로주택정비",
    "hh": null,
    "drop": false,
@@ -3832,17 +5174,35 @@
    "addr": "서울 영등포구 영등포동2가 34-81",
    "geo_basis": null,
    "gate": "신호",
-   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "gate_basis": "절차 문서 확인 — 「준공」",
    "stage_history": [
     {
      "stage": "계획",
      "date": "2026-07-18",
      "basis": "observed"
+    },
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3390.5,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2024-07-26",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
   },
   {
    "n": "영등포동2가 439일대 가로주택정비사업 (가로주택정비)",
@@ -3851,8 +5211,8 @@
    "sd": "서울",
    "sg": "영등포구",
    "dong": "영등포동2가",
-   "stage": "조합해산",
-   "phase": "계획",
+   "stage": "준공",
+   "phase": "준공·개통",
    "type": "가로주택정비",
    "hh": null,
    "drop": true,
@@ -3861,17 +5221,35 @@
    "addr": "서울 영등포구 영등포동2가 439",
    "geo_basis": null,
    "gate": "신호",
-   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "gate_basis": "절차 문서 확인 — 「준공」",
    "stage_history": [
     {
      "stage": "계획",
      "date": "2026-07-18",
      "basis": "observed"
+    },
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3390.5,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2024-07-26",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
   },
   {
    "n": "영등포동7가 64-3 가로주택정비사업 (가로주택정비)",
@@ -3929,7 +5307,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 11490.2,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-11-16",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "신창동 76-1번지 일대 가로주택정비사업조합 (가로주택정비)",
@@ -3958,7 +5349,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 6071.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2025-04-01",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "원효로4가 30-1 일원 가로주택정비사업 (가로주택정비)",
@@ -4016,7 +5420,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2202.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-03-21",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "갈현동 이화연립일원 가로주택정비사업 (가로주택정비)",
@@ -4025,7 +5442,7 @@
    "sd": "서울",
    "sg": "은평구",
    "dong": "갈현동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -4045,7 +5462,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 5378.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-01-28",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "대조동 A3구역 가로주택정비사업 (가로주택정비)",
@@ -4074,7 +5504,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 15770.5,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2025-06-24",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "대조동 A2구역 가로주택정비사업 (가로주택정비)",
@@ -4103,7 +5546,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 13315.1,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-07-31",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "숭인동 61번지 일대 가로주택정비사업 (가로주택정비)",
@@ -4132,7 +5588,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 17413.3,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-05-21",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "망우동 509의1 가로주택정비사업 (가로주택정비)",
@@ -4161,7 +5630,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7564.6,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-12-12",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "면목동 1-1번지 일원 가로주택정비사업 (가로주택정비)",
@@ -4190,7 +5672,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 13641.4,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2025-12-22",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "면목동 1-4번지 일원 가로주택정비사업 (가로주택정비)",
@@ -4219,7 +5714,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 11573.3,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-10-27",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "면목동 10-2번지 가로주택정비사업 조합 (가로주택정비)",
@@ -4277,7 +5785,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9515.2,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-09-26",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "면목역6의3구역 가로주택정비사업 (가로주택정비)",
@@ -4306,7 +5827,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 8007.7,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-12-23",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "면목역6구역 가로주택정비사업 (가로주택정비)",
@@ -4315,7 +5849,7 @@
    "sd": "서울",
    "sg": "중랑구",
    "dong": "면목동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -4335,7 +5869,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 14223.4,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-04-22",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "면목역4구역 가로주택정비사업 (가로주택정비)",
@@ -4344,7 +5891,7 @@
    "sd": "서울",
    "sg": "중랑구",
    "dong": "면목동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -4364,7 +5911,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 17130.4,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-03-22",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "면목역5구역 가로주택정비사업 (가로주택정비)",
@@ -4422,7 +5982,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9852.3,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-07-11",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "면목본동3구역 가로주택정비사업 (가로주택정비)",
@@ -4451,7 +6024,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9343.8,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-06-03",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "면목본동5구역 가로주택정비사업 (가로주택정비)",
@@ -4480,7 +6066,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9845.3,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-07-11",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "면목역 6의4구역 가로주택정비사업 (가로주택정비)",
@@ -4509,7 +6108,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 11167.3,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2025-10-30",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "면목역 6의 5구역 가로주택정비사업 (가로주택정비)",
@@ -4538,7 +6150,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 15649.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2025-10-30",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "면목역2의5구역 (가로주택정비)",
@@ -4567,7 +6192,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7699.2,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-02-01",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "면목역2의1구역 가로주택정비사업 (가로주택정비)",
@@ -4779,7 +6417,7 @@
    "sd": "서울",
    "sg": "중랑구",
    "dong": "면목동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -4799,7 +6437,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 16946.5,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-10-18",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "면목역1구역 가로주택정비사업 (가로주택정비)",
@@ -4808,7 +6459,7 @@
    "sd": "서울",
    "sg": "중랑구",
    "dong": "면목동",
-   "stage": "조합설립인가",
+   "stage": "건축심의",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -4828,7 +6479,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 14203.5,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-11-02",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "면목동 194번지일대 가로주택정비사업 (가로주택정비)",
@@ -4837,7 +6501,7 @@
    "sd": "서울",
    "sg": "중랑구",
    "dong": "면목동",
-   "stage": "관리처분인가",
+   "stage": "사업시행계획인가",
    "phase": "인가",
    "type": "가로주택정비",
    "hh": null,
@@ -4857,7 +6521,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7509.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-07-29",
+     "state": "done",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "상봉역4구역 가로주택정비사업조합 (가로주택정비)",
@@ -4886,7 +6563,20 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 17943.2,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-12-11",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황"
   },
   {
    "n": "원당아파트 가로주택정비사업조합 (가로주택정비)",
@@ -102787,6 +104477,3833 @@
    ],
    "first_seen": "2026-07-27",
    "last_movement": "2026-07-27",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "역삼목화연립 가로주택정비사업 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "강남구",
+   "dong": "역삼동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 강남구 역삼동 607-9",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '역삼동 607-9번지 외 4'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 762.9,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2025-03-12",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "현대타운 가로주택정비사업 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "강남구",
+   "dong": "대치동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 강남구 대치동 1019-3",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '대치동 1019-3번지 외 4'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1559.8,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2022-07-22",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "삼천리연립 가로주택정비사업 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "강동구",
+   "dong": "성내동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 강동구 성내동 443-1",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '성내동 443-1번지 외 2필지'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 4056.2,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2020-11-30",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "코끼리연립 가로주택정비사업 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "강동구",
+   "dong": "성내동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 강동구 성내동 123-6",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '성내동 123-6'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2617.6,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2020-11-30",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "벽산빌라 가로주택정비사업 (가로주택정비)",
+   "lat": 37.550237,
+   "lon": 127.157846,
+   "sd": "서울",
+   "sg": "강동구",
+   "dong": "상일동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강동구 상일동 152(동남로 858)",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 5224.1,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2022-05-27",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "유정빌라 가로주택정비사업 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "강동구",
+   "dong": "길동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 강동구 길동 375-2",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '길동 375-2 외 6필지'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1293.2,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2023-11-28",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "길동 동성빌라 가로주택정비사업 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "강동구",
+   "dong": "길동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 강동구 길동 364-1, 364-23~28",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '길동 364-1, 364-23~28'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 887.5,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2023-11-01",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "동원주택가로주택정비사업 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "강서구",
+   "dong": "내발산동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 강서구 내발산동 712-5",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '내발산동 712-5'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2302.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2022-12-30",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "경남주택 가로주택정비사업 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "강서구",
+   "dong": "내발산동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 강서구 내발산동 716-20",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '내발산동 716-20'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3745.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2023-09-14",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "덕수연립 가로주택정비사업 (가로주택정비)",
+   "lat": 37.547888,
+   "lon": 126.87726,
+   "sd": "서울",
+   "sg": "강서구",
+   "dong": "염창동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강서구 염창동 283 번지",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1764.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2025-11-25",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "등촌삼안1 가로주택정비사업 (가로주택정비)",
+   "lat": 37.55484,
+   "lon": 126.85876,
+   "sd": "서울",
+   "sg": "강서구",
+   "dong": "등촌동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강서구 등촌동 722",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2358.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2020-05-28",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "등촌삼안2 가로주택정비사업 (가로주택정비)",
+   "lat": 37.554957,
+   "lon": 126.858119,
+   "sd": "서울",
+   "sg": "강서구",
+   "dong": "등촌동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강서구 등촌동 723",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1924.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2020-05-28",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "발산미주 가로주택정비사업 (가로주택정비)",
+   "lat": 37.555046,
+   "lon": 126.839154,
+   "sd": "서울",
+   "sg": "강서구",
+   "dong": "내발산동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강서구 내발산동 762",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 649.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2020-04-14",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "관악효신연립 가로주택정비사업 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "관악구",
+   "dong": "봉천동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 관악구 봉천동 1535-10",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '봉천동 1535-10'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3153.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2022-05-16",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "대성주택 가로주택정비사업(더 헤리츠) (가로주택정비)",
+   "lat": 37.499023,
+   "lon": 126.856866,
+   "sd": "서울",
+   "sg": "구로구",
+   "dong": "고척동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 구로구 고척동 97",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1769.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2023-06-30",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "청호빌라 가로주택정비사업 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "도봉구",
+   "dong": "방학동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 도봉구 방학동 687-41",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '방학동 687-41'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1829.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2022-07-15",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "낙원,청광연립 가로주택정비사업 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "서초구",
+   "dong": "서초동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 서초구 서초동 1451-67",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '서초동 1451-67 외 9필지'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2847.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2022-08-19",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "한국상록연립 가로주택정비사업 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "서초구",
+   "dong": "방배동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 서초구 방배동 853-5",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '방배동 853-5 외 4필지'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2104.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2020-04-28",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "방이동 장안빌라 가로주택정비사업 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "송파구",
+   "dong": "방이동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 송파구 방이동 138-4번지 등 5필지",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '방이동 138-4번지 등 5필지'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1092.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2021-07-12",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "송파101번지 일대 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "송파구",
+   "dong": "송파동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 송파구 송파동 101-5번지 등 17필지",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '송파동 101-5번지 등 17필지'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 4253.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2023-12-19",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "방이동 삼익빌라 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "송파구",
+   "dong": "방이동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 송파구 방이동 152-26번지 등 6필지",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '방이동 152-26번지 등 6필지'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1391.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2022-12-23",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "방이동 금호빌라 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "송파구",
+   "dong": "방이동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 송파구 방이동 152-7번지 등 5필지",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '방이동 152-7번지 등 5필지'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1040.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2024-09-30",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "송파동 144번지 일대 가로주택정비사업 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "송파구",
+   "dong": "송파동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 송파구 송파동144-9 등 2필지",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '송파동144-9 등 2필지'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 779.6,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2023-04-27",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "풍납동, 성도연립 (가로주택정비)",
+   "lat": 37.528926,
+   "lon": 127.117401,
+   "sd": "서울",
+   "sg": "송파구",
+   "dong": "풍납동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 송파구 풍납동 406번지 등 7필지",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1215.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2024-12-26",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "송파동 호수빌라 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "송파구",
+   "dong": "송파동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 송파구 송파동 42-3 등 3필지",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '송파동 42-3 등 3필지'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2883.9,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2024-03-29",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "영풍빌라 가로주택정빗업 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "송파구",
+   "dong": "거여동",
+   "stage": "준공",
+   "phase": "준공·개통",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 송파구 거여동 136-49번지 등 2필지",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '거여동 136-49번지 등 2필지'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1154.0,
+   "milestones": [
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "date": "2026-03-19",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「준공」",
+   "stage_history": [
+    {
+     "stage": "준공·개통",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement_basis": "observed",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "n": "논현세광연립 가로주택정비사업 (가로주택정비)",
+   "lat": 37.511183,
+   "lon": 127.029628,
+   "sd": "서울",
+   "sg": "강남구",
+   "dong": "논현동",
+   "stage": "착공",
+   "phase": "착공",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강남구 논현동 150-4",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1921.5,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2016-12-14",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "영동,한양빌라 가로주택정비사업 (가로주택정비)",
+   "lat": 37.519613,
+   "lon": 127.046965,
+   "sd": "서울",
+   "sg": "강남구",
+   "dong": "청담동",
+   "stage": "착공",
+   "phase": "착공",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강남구 청담동 34",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2250.6,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2017-04-21",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "도곡동 547-1 일대 가로주택정비사업 (가로주택정비)",
+   "lat": 37.490649,
+   "lon": 127.037718,
+   "sd": "서울",
+   "sg": "강남구",
+   "dong": "도곡동",
+   "stage": "착공",
+   "phase": "착공",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강남구 도곡동 547-1",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3321.4,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-12-24",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "삼성동 98 일원 가로주택정비사업 (가로주택정비)",
+   "lat": 37.517772,
+   "lon": 127.063009,
+   "sd": "서울",
+   "sg": "강남구",
+   "dong": "삼성동",
+   "stage": "착공",
+   "phase": "착공",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강남구 삼성동 98번지",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 5848.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2019-12-09",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "비취타운 가로주택정비사업 (가로주택정비)",
+   "lat": 37.506761,
+   "lon": 127.06163,
+   "sd": "서울",
+   "sg": "강남구",
+   "dong": "대치동",
+   "stage": "사업시행계획인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강남구 대치동 951",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 4498.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-12-18",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "국도연립 가로주택정비사업 (가로주택정비)",
+   "lat": 37.547279,
+   "lon": 127.124659,
+   "sd": "서울",
+   "sg": "강동구",
+   "dong": "천호동",
+   "stage": "사업시행계획인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강동구 천호동 321-18",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2703.5,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2015-12-23",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "동성타운 가로주택정비사업 (가로주택정비)",
+   "lat": 37.539736,
+   "lon": 127.144436,
+   "sd": "서울",
+   "sg": "강동구",
+   "dong": "길동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강동구 길동 355-5",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2879.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2018-01-12",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "대명아파트 가로주택정비사업 (가로주택정비)",
+   "lat": 37.555283,
+   "lon": 127.135762,
+   "sd": "서울",
+   "sg": "강동구",
+   "dong": "암사동",
+   "stage": "착공",
+   "phase": "착공",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강동구 암사동 447-8",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3238.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2018-02-27",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "성내 유원연립 가로주택정비사업 (가로주택정비)",
+   "lat": 37.526295,
+   "lon": 127.126942,
+   "sd": "서울",
+   "sg": "강동구",
+   "dong": "성내동",
+   "stage": "건축심의",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강동구 성내동 465-10, 13, 15번지",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1867.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2019-12-06",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "명일동 336-16 외 4필지 다세대주택\r\n 가로주택정비사업 (가로주택정비)",
+   "lat": 37.548047,
+   "lon": 127.1443,
+   "sd": "서울",
+   "sg": "강동구",
+   "dong": "명일동",
+   "stage": "건축심의",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강동구 명일동 336-16, 336-23~26",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 737.8,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2019-12-24",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "공원빌라 가로주택정비사업 (가로주택정비)",
+   "lat": 37.531177,
+   "lon": 127.129356,
+   "sd": "서울",
+   "sg": "강동구",
+   "dong": "성내동",
+   "stage": "건축심의",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강동구 성내동 517-4",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2051.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-06-02",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "광신 장미 가로주택정비사업 (가로주택정비)",
+   "lat": 37.532169,
+   "lon": 127.123384,
+   "sd": "서울",
+   "sg": "강동구",
+   "dong": "성내동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강동구 성내동 120-85,86",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2864.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-11-07",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "둔촌2동 모아주택3구역 가로주택정비사업 (가로주택정비)",
+   "lat": 37.530855,
+   "lon": 127.141915,
+   "sd": "서울",
+   "sg": "강동구",
+   "dong": "둔촌동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강동구 둔촌동 77-41",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 14095.8,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2025-08-11",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "등촌654 가로주택정비사업 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "강서구",
+   "dong": "등촌동",
+   "stage": "착공",
+   "phase": "착공",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 강서구 등촌동 654-40",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '등촌동 654-40 외 16'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2744.6,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-03-24",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "우장범진 가로주택정비사업 (가로주택정비)",
+   "lat": 37.553677,
+   "lon": 126.841229,
+   "sd": "서울",
+   "sg": "강서구",
+   "dong": "내발산동",
+   "stage": "사업시행계획인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강서구 내발산동 672-9",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2317.2,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-04-30",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "화곡동 817,826번지 일대 가로주택정비사업 (가로주택정비)",
+   "lat": 37.536321,
+   "lon": 126.858411,
+   "sd": "서울",
+   "sg": "강서구",
+   "dong": "화곡동",
+   "stage": "건축심의",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 강서구 화곡동 817",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 5282.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-09-08",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "봉천동 649-189번지 가로주택정비사업 (가로주택정비)",
+   "lat": 37.489286,
+   "lon": 126.934901,
+   "sd": "서울",
+   "sg": "관악구",
+   "dong": "봉천동",
+   "stage": "사업시행계획인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 관악구 봉천동 649-189번지",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2892.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-05-09",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "자양 현대한창 가로주택정비사업 (가로주택정비)",
+   "lat": 37.53351,
+   "lon": 127.089224,
+   "sd": "서울",
+   "sg": "광진구",
+   "dong": "자양동",
+   "stage": "사업시행계획인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 광진구 자양동 694",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 4848.9,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-12-28",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.506929,
+   "lon": 126.848683,
+   "sd": "서울",
+   "sg": "구로구",
+   "dong": "고척동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 구로구 고척동 241-23번지 일대 가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 12472.1,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2025-03-27",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.444297,
+   "lon": 126.906611,
+   "sd": "서울",
+   "sg": "금천구",
+   "dong": "시흥동",
+   "stage": "건축심의",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 금천구 시흥동 1005번지 일대 가로주택정비사업(시흥중앙하이츠)",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 18883.1,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-01-20",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.442972,
+   "lon": 126.907443,
+   "sd": "서울",
+   "sg": "금천구",
+   "dong": "시흥동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 금천구 시흥동 1003번지 가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 8068.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-06-01",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.435042,
+   "lon": 126.906525,
+   "sd": "서울",
+   "sg": "금천구",
+   "dong": "시흥동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 금천구 시흥동 973·974번지 일대 가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 10743.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-11-20",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.447555,
+   "lon": 126.906345,
+   "sd": "서울",
+   "sg": "금천구",
+   "dong": "시흥동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 금천구 시흥동 933-11번지 일대 가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9242.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-10-08",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.460896,
+   "lon": 126.903893,
+   "sd": "서울",
+   "sg": "금천구",
+   "dong": "시흥동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 금천구 시흥동 859번지 일대 가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7328.4,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2025-05-19",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.460067,
+   "lon": 126.902103,
+   "sd": "서울",
+   "sg": "금천구",
+   "dong": "시흥동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 금천구 시흥동 864-1번지 일대 가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 17600.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-12-06",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.460029,
+   "lon": 126.903787,
+   "sd": "서울",
+   "sg": "금천구",
+   "dong": "시흥동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 금천구 시흥동 858번지 일대 가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 19469.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-05-08",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "인경서진빌라 가로주택정비사업 (가로주택정비)",
+   "lat": 37.553779,
+   "lon": 126.900036,
+   "sd": "서울",
+   "sg": "마포구",
+   "dong": "망원동",
+   "stage": "사업시행계획인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 마포구 망원동 460-1",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 787.7,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-02-13",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "공덕동 111-72번지 일대 가로주택정비사업 (가로주택정비)",
+   "lat": 37.546752,
+   "lon": 126.959379,
+   "sd": "서울",
+   "sg": "마포구",
+   "dong": "공덕동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 마포구 공덕동 111-72",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 14960.5,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-12-07",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "연남동 244-16번지 일원 LH참여형 가로주택정비사업 (가로주택정비)",
+   "lat": 37.565728,
+   "lon": 126.920424,
+   "sd": "서울",
+   "sg": "마포구",
+   "dong": "연남동",
+   "stage": "사업시행계획인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 마포구 연남동 244-16",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2794.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-04-01",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "성산동 145번지일대 가로주택정비사업 (가로주택정비)",
+   "lat": 37.56917,
+   "lon": 126.906801,
+   "sd": "서울",
+   "sg": "마포구",
+   "dong": "성산동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 마포구 성산동 145",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 5914.1,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2025-09-04",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "성산동 200-413번지 가로주택정비사업 (가로주택정비)",
+   "lat": 37.565351,
+   "lon": 126.905812,
+   "sd": "서울",
+   "sg": "마포구",
+   "dong": "성산동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 마포구 성산동 200-413",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 15064.7,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2025-09-04",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "성도.서광 가로주택정비사업 (가로주택정비)",
+   "lat": 37.559579,
+   "lon": 126.89789,
+   "sd": "서울",
+   "sg": "마포구",
+   "dong": "망원동",
+   "stage": "착공",
+   "phase": "착공",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 마포구 망원동 439-5",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3090.2,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-11-26",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "대진빌라 가로주택정비사업 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "서초구",
+   "dong": "방배동",
+   "stage": "착공",
+   "phase": "착공",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 서초구 방배동 911-3",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '방배동 911-3'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1597.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2016-05-09",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "서초동 1622 일대 가로주택정비사업 (가로주택정비)",
+   "lat": 37.487265,
+   "lon": 127.016352,
+   "sd": "서울",
+   "sg": "서초구",
+   "dong": "서초동",
+   "stage": "착공",
+   "phase": "착공",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 서초구 서초동 1622-4",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3586.2,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-06-18",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "서초교대타운 가로주택정비사업 (가로주택정비)",
+   "lat": 37.491778,
+   "lon": 127.01491,
+   "sd": "서울",
+   "sg": "서초구",
+   "dong": "서초동",
+   "stage": "건축심의",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 서초구 서초동 1660-9",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2434.3,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-11-12",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "방배동 977번지 일원 가로주택정비사업 (가로주택정비)",
+   "lat": 37.482232,
+   "lon": 126.991681,
+   "sd": "서울",
+   "sg": "서초구",
+   "dong": "방배동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 서초구 방배동 977-4",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7190.1,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-12-21",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "방배빌라 가로주택정비사업 (가로주택정비)",
+   "lat": 37.479535,
+   "lon": 126.990686,
+   "sd": "서울",
+   "sg": "서초구",
+   "dong": "방배동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 서초구 방배동 980-57",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 643.4,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-12-28",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "양재서건주택 LH참여형 가로주택정비사업 (가로주택정비)",
+   "lat": null,
+   "lon": null,
+   "sd": "서울",
+   "sg": "서초구",
+   "dong": "앙재동",
+   "stage": "사업시행계획인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "none",
+   "geo_approx": true,
+   "addr": "서울특별시 서초구 앙재동 16-8",
+   "geo_basis": "지오코딩 미매칭 — 서울시 가로주택정비사업 추진현황 대표지번 '앙재동 16-8번지 외 2필지'",
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1235.5,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-01-03",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "방배동 1434번지 일원 가로주택정비사업 (가로주택정비)",
+   "lat": 37.487093,
+   "lon": 126.984085,
+   "sd": "서울",
+   "sg": "서초구",
+   "dong": "방배동",
+   "stage": "건축심의",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 서초구 방배동 1434",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1931.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-09-20",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "방배삼호 12,13동 가로주택정비사업 (가로주택정비)",
+   "lat": 37.497437,
+   "lon": 126.986911,
+   "sd": "서울",
+   "sg": "서초구",
+   "dong": "방배동",
+   "stage": "착공",
+   "phase": "착공",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 서초구 방배동 757-3",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 4820.8,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-10-30",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "한신아파트 가로주택정비사업 (가로주택정비)",
+   "lat": 37.566612,
+   "lon": 127.033768,
+   "sd": "서울",
+   "sg": "성동구",
+   "dong": "홍익동",
+   "stage": "착공",
+   "phase": "착공",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 성동구 홍익동 119-1,2",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3410.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-08-24",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "왕십리역 가로주택정비사업 (가로주택정비)",
+   "lat": 37.564415,
+   "lon": 127.038395,
+   "sd": "서울",
+   "sg": "성동구",
+   "dong": "마장동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 성동구 마장동 816-21",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2418.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-12-29",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "마장동 466번지 일원 가로주택정비사업 (가로주택정비)",
+   "lat": 37.570796,
+   "lon": 127.03613,
+   "sd": "서울",
+   "sg": "성동구",
+   "dong": "마장동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 성동구 마장동 466",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 6054.6,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-06-14",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "마장동 460번지 일원 가로주택정비사업 (가로주택정비)",
+   "lat": 37.571241,
+   "lon": 127.035504,
+   "sd": "서울",
+   "sg": "성동구",
+   "dong": "마장동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 성동구 마장동 460",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 8850.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2025-02-17",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "마장동 457번지 일원 가로주택정비사업 (가로주택정비)",
+   "lat": 37.57004,
+   "lon": 127.034359,
+   "sd": "서울",
+   "sg": "성동구",
+   "dong": "마장동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 성동구 마장동 457",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 8832.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2025-10-02",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "장위15-1구역 (가로주택정비)",
+   "lat": 37.609295,
+   "lon": 127.0495,
+   "sd": "서울",
+   "sg": "성북구",
+   "dong": "장위동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 성북구 장위동 258-2",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9760.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2019-11-15",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "가락7차현대아파트 가로주택정비사업 (가로주택정비)",
+   "lat": 37.496899,
+   "lon": 127.133532,
+   "sd": "서울",
+   "sg": "송파구",
+   "dong": "가락동",
+   "stage": "사업시행계획인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 송파구 가락동 171-5",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2971.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2023-05-11",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "거여동 555번지 일원 가로주택정비사업 (가로주택정비)",
+   "lat": 37.493952,
+   "lon": 127.141619,
+   "sd": "서울",
+   "sg": "송파구",
+   "dong": "거여동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 송파구 거여동 555",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 4692.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-05-17",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "쌍용하이츠빌라 등 (가로주택정비)",
+   "lat": 37.499695,
+   "lon": 127.090035,
+   "sd": "서울",
+   "sg": "송파구",
+   "dong": "삼전동",
+   "stage": "사업시행계획인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 송파구 삼전동 53-8 등 2필지",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2094.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-10-22",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "석촌동224-4번지 일원 LH참여형 가로주택정비사업 (가로주택정비)",
+   "lat": 37.498135,
+   "lon": 127.099595,
+   "sd": "서울",
+   "sg": "송파구",
+   "dong": "석촌동",
+   "stage": "사업시행계획인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 송파구 석촌동 224-4번지 등 6필지",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1223.9,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-05-23",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.545945,
+   "lon": 126.88184,
+   "sd": "서울",
+   "sg": "양천구",
+   "dong": "서울목동",
+   "stage": "사업시행계획인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 양천구 서울목동2엘에이치참여형가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 3811.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2019-08-22",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.518959,
+   "lon": 126.837727,
+   "sd": "서울",
+   "sg": "양천구",
+   "dong": "신월동",
+   "stage": "건축심의",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 양천구 신월동995번지가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 5022.5,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-04-01",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.523832,
+   "lon": 126.838234,
+   "sd": "서울",
+   "sg": "양천구",
+   "dong": "신월동",
+   "stage": "사업시행계획인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 양천구 신월동 421-6번지 남도연립 가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 1220.1,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-05-02",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.52071,
+   "lon": 126.841366,
+   "sd": "서울",
+   "sg": "양천구",
+   "dong": "신월동",
+   "stage": "사업시행계획인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 양천구 신월동 530번지 미도연립 가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2412.2,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-11-04",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.52506,
+   "lon": 126.847738,
+   "sd": "서울",
+   "sg": "양천구",
+   "dong": "신월동",
+   "stage": "건축심의",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 양천구 신월동 477-3번지 일대 가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 5091.7,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-07-05",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.515691,
+   "lon": 126.837337,
+   "sd": "서울",
+   "sg": "양천구",
+   "dong": "신월동",
+   "stage": "건축심의",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 양천구 신월동 1006번지 일대 현대주택 가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2750.1,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-06-08",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.526014,
+   "lon": 126.84243,
+   "sd": "서울",
+   "sg": "양천구",
+   "dong": "신월동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 양천구 신월동 461-3번지 일원 가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2732.1,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2022-09-14",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.544921,
+   "lon": 126.862962,
+   "sd": "서울",
+   "sg": "양천구",
+   "dong": "목동",
+   "stage": "건축심의",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 양천구 목동657의1번지일원가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9578.0,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-10-22",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.590461,
+   "lon": 127.083018,
+   "sd": "서울",
+   "sg": "중랑구",
+   "dong": "면목동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 중랑구 면목동 136-3번지 일대 가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 5960.7,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-07-22",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.595644,
+   "lon": 127.071985,
+   "sd": "서울",
+   "sg": "중랑구",
+   "dong": "중화동",
+   "stage": "건축심의",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 중랑구 중화동 324번지 일원 가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 2579.3,
+   "moa_cand": false,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2020-10-13",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.601279,
+   "lon": 127.099598,
+   "sd": "서울",
+   "sg": "중랑구",
+   "dong": "신내동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 중랑구 신내동 493-13 일원 가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 9011.9,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-05-08",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.601181,
+   "lon": 127.09769,
+   "sd": "서울",
+   "sg": "중랑구",
+   "dong": "신내동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 중랑구 신내동 494-6 일원 가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 5743.7,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2024-01-23",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
+   "last_movement_basis": "observed"
+  },
+  {
+   "n": "조합 (가로주택정비)",
+   "lat": 37.587866,
+   "lon": 127.101188,
+   "sd": "서울",
+   "sg": "중랑구",
+   "dong": "면목동",
+   "stage": "조합설립인가",
+   "phase": "인가",
+   "type": "가로주택정비",
+   "hh": null,
+   "drop": false,
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "addr": "서울특별시 중랑구 면목동 10의2번지 일대 가로주택정비사업",
+   "geo_basis": null,
+   "stage_src": "서울시 가로주택정비사업 추진현황",
+   "src": "서울시 가로주택정비사업 추진현황",
+   "area_m2": 7984.0,
+   "moa_cand": true,
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "조합설립 등 인가",
+     "date": "2021-03-05",
+     "state": "current",
+     "src": "서울시 가로주택정비사업 추진현황"
+    }
+   ],
+   "ms_src": "서울시 가로주택정비사업 추진현황",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2026-08-09",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-09",
+   "last_movement": "2026-08-09",
    "last_movement_basis": "observed"
   }
  ]
