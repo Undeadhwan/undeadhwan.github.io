@@ -951,7 +951,7 @@ function phaseOf(s) {
 // S등급 신설(2026-07-22 — PLAN_S등급.md §0): S 반경은 사용자 확정 전까지 A와 동일(근거 없이 키우지 않음, P2)
 const CLASSES_DEFAULT = {
   "교통": {   // 세부: 철도(역세권)/도로(차량 이동)/환승·터미널(버스터미널·복합환승센터, §7b 운수 이관 2026-07-18)
-    "철도": { S: 3.0, A: 3.0, B: 1.5, C: 0.8 },
+    "철도": { S: 2.0, A: 1.0, B: 0.7 },   // 2026-08-10 사용자 확정 — S·A·B 3단계(C 폐지, 최저 B=트램·모노레일). 정본은 thresholds.json
     /* ☠ **키 이름이 어긋나 기준 설정이 통째로 무시되고 있었다** (2026-08-06 사용자 발견:
          *"여기 키로미터 변경하면 도로변접근 회랑에 바로 반영되는가?"* — 답은 **아니오**였다).
        도로 축은 위계 → 접근 방식으로 재정의되며 이름이 바뀌었는데(도로 → IC 진출입 ·
@@ -5288,7 +5288,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260810i");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260810j");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -5454,7 +5454,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810i"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810j"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5480,7 +5480,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260810i");
+  const CB = "?b=" + (window.BUILD || "20260810j");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {

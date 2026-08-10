@@ -182,6 +182,11 @@ function render() {
         // 수치 눈금이 없는 유형(철도·도로 = 위계 판정)은 '정성' 한 단어가 아니라 **그 등급의 실제
         // 판정 기준 문구**(등급설명 — 사용자가 정한 기준, 판정 코드 grade.rail_level와 1:1)를 보인다.
         }).join("") : `<span class="qualdesc" title="위계 판정 — 수치 눈금이 아니라 노선 종류·속도·직결 등 사실 축. 판정 규칙 SSOT: thresholds.교통_위계 · 코드 grade.py">${(s2.등급설명 || {})[lv] || "정성"}</span>`;
+        // ★ 눈금에 없는 등급은 셀을 비활성 표기로 (2026-08-10 — 철도가 S·A·B 3단계가 되며 C 폐지.
+        //   없는 키를 그대로 찍으면 value="undefined"가 입력칸에 들어간다)
+        if (s2.반경_km[lv] === undefined)
+          return `<td class="cell"><span class="lv ${lv}" style="opacity:.25">${lv}</span>
+            <span class="qualdesc" style="opacity:.5">해당 없음 — 이 유형은 ${Object.keys(s2.반경_km).join("·")} 눈금</span></td>`;
         return `<td class="cell"><span class="lv ${lv}">${lv}</span>${basis}
           <input class="rad" type="number" step="0.1" min="0" value="${s2.반경_km[lv]}"
                  data-r="${cat}" data-rs="${sub}" data-lv="${lv}" title="영향 반경"><i>km</i></td>`;
