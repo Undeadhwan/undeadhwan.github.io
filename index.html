@@ -376,6 +376,9 @@
   .stchip { font-size:11px; padding:2px 8px; border-radius:20px; border:1px solid #c7d2ea; background:#fff;
             color:#2545a8; cursor:pointer; white-space:nowrap; }
   .stchip:hover { background:#e9eefb; }
+  /* 도로 구조 지점(기존 IC·JC) — 호재 아님이라 흐리게(--muted=비활성 칩 토큰, DESIGN.md §보조 잉크) */
+  .stchip.jc { color:var(--muted); border-color:var(--line2); }
+  .stchip.jc:hover { background:var(--panel); }
   .stchip.on { background:var(--accent); color:#fff; border-color:var(--accent); font-weight:700; }
   .nextwatch { margin:2px 0 8px; font-size:12px; color:#444; background:#fffbea; border:1px solid #efe3ae;
                border-radius:8px; padding:5px 10px; display:inline-block; }
@@ -977,7 +980,8 @@ const CLASSES_DEFAULT = {
     // 데이터센터는 상주 인력이 수십 명 수준이라 통근·상권 유발이 지산보다도 낮다(2026-07-28 분리).
     // 그렇다고 0으로 두면 지도에서 사라지므로 한 단계 축소로 둔다 — 근거가 생기면 조정.
     "데이터센터": { S: 2.0, A: 2.0, B: 1.0, C: 0.5 },
-    "복합단지": { S: 4.0, A: 4.0, B: 2.0, C: 1.0 }   // §0-3 신설(2026-07-22) — 업무지구·산단·MICE·항만재개발 마스터급
+    "복합단지": { S: 4.0, A: 4.0, B: 2.0, C: 1.0 },   // §0-3 신설(2026-07-22) — 업무지구·산단·MICE·항만재개발 마스터급
+    "산업단지": { S: 4.0, A: 4.0, B: 2.0, C: 1.0 }   // KICOX 현황 delta + 큐레이션 산단(2026-08-10) — 복합단지 준용, 정본은 thresholds.json
   },
   "인프라": {   // §7b 유형별 세분(2026-07-18) — 유형마다 이용 행태가 달라 반경 분리(병원=차량권, 공원=도보권). 값은 가안·모달에서 조정
     "병원":       { S: 3.0, A: 3.0, B: 1.5, C: 1.0 },
@@ -1017,7 +1021,7 @@ const SUB_CAVEAT = {
    진출입)과 국도·국지도(연도 접근)는 성격이 다르므로 조회축을 가른다.
    ⚠ 매핑은 **강한 쪽만 열거**한다(roadSubOf) — 「국도」/「일반국도」처럼 같은 것이 두 이름으로
    있고 앞으로도 늘 수 있어서, 약한 쪽을 열거하면 반드시 낡는다. */
-const SUB_KEYS = { "교통": ["철도", "IC 진출입", "도로변 접근", "환승·터미널", "미상"], "일자리": ["오피스", "지식산업센터", "공장", "데이터센터", "복합단지", "미상"],
+const SUB_KEYS = { "교통": ["철도", "IC 진출입", "도로변 접근", "환승·터미널", "미상"], "일자리": ["오피스", "지식산업센터", "공장", "데이터센터", "복합단지", "산업단지", "미상"],
   "인프라": ["병원", "공원·녹지", "판매", "문화·관광·체육", "학교", "공공시설", "공항", "항만", "기타시설", "미상"],
   "주거개발": ["재개발", "재건축", "주거환경개선", "소규모정비", "리모델링", "재정비촉진지구", "지역주택조합", "택지·지구", "공공임대", "미상"] };
 /* 주거개발 중분류(2026-07-30 신설) — 축은 **법정 사업유형**이다.
@@ -1271,6 +1275,10 @@ const GEO_PREC = {
   feature_wide:{ t: "대형 지물 대표점(근사)", d: "교량·방파제·부두처럼 **선형·광역 시설**을 한 점으로 대표 (수백m~수km) — 실제 구조물 위치 아님" },
   dong:        { t: "동 대표점(근사)", d: "읍면동 중심점 (500m~2km) — 실제 위치 아님, 위치 미확정" },
   sgg:         { t: "시군구 대표점(근사)", d: "시군구 중심점 (2km+) — 실제 위치 아님" },
+  // 도로 노선 대표점 3종(road_centerline, 2026-08-09~10) — 전부 근사·구간 미확정
+  ic_single:   { t: "공식 IC 1점 기준(근사)", d: "그 노선의 유일하게 확보된 공식 IC 좌표로 노선을 대표 — 사업 구간 미확정" },
+  moct_mid:    { t: "도로 중심선 중앙점(근사)", d: "국토부 표준노드링크 도로 전체의 중앙점 — 사업 구간 미확정(수km 가능)" },
+  seg_anchor:  { t: "구간 양끝 대표점(근사)", d: "사업명이 말하는 구간(A~B) 양끝의 읍면동 대표점 연결 — 실제 경로 아님" },
   line:        { t: "선형", d: "노선 경로 — 점 좌표 개념이 없음(지점 정밀도는 각 정거장에 표기)" },
   unknown:     { t: "근거 미기록(근사)", d: "좌표 출처가 기록되지 않음 — 근사로 취급" },
   none:        { t: "좌표 없음", d: "위치 미확보 — 지도에 정식 핀으로 표시하지 않음" },
@@ -1282,7 +1290,8 @@ const GEO_PREC = {
    → 근사 등급이면 플래그가 없어도 후광. 생산 쪽 누락이 화면의 거짓말이 되지 않게 한 곳에서 막는다. */
 const ROUGH_PREC = new Set(["dong", "sgg", "zone_poi", "zone_wide", "unknown",
                             "parcel_base", "feature_wide", "landmark", "notice_cluster",
-                            "notice_map", "namu_map", "jigu", "zone", "none"]);
+                            "notice_map", "namu_map", "jigu", "zone", "none",
+                            "ic_single", "moct_mid", "seg_anchor"]);
 const isApprox = s => !!(s.geo_approx || s.approx) || ROUGH_PREC.has(s.geo_prec);
 function precNote(s) {
   const v = GEO_PREC[s.geo_prec];
@@ -1353,15 +1362,25 @@ function routeHasGeom(lineName) {
 function lineBar(s) {
   if (!s.line) return "";
   const pool = s._rail ? RAIL_SIG : s._road ? ROAD_SIG : [];
-  const stations = pool.filter(x => x.line === s.line && x.signal !== false && x.geometry
-    && (x.pt_type === "rail_station" || x.pt_type === "road_ic"));
+  /* 도로 지점 칩 = 철도 역 칩과 동일 동선(2026-08-10 사용자 확정 "고속도로 뱃지가 전철노선의 역같은 개념").
+     road_jc(기존 IC·분기점)도 칩으로 나열하되 흐리게 — 호재가 아니라 노선의 구조 사실(P1·P5,
+     §7 거리≠수혜). road_unverified(존재 근거 미확인)는 칩에서 제외 — 존재를 암시하지 않는다(전용 행 유지). */
+  /* 매칭은 정규화(공백·~ 제거) **정확일치**만 — 포함관계 매칭은 확장 구간 다건에 오귀속된다
+     (「경부고속도로 확장 A·B·C」 전부에 붙는 사고 — 이름이 같다 ≠ 같은 사업). */
+  const nrm = t => (t || "").replace(/[\s~]/g, "");
+  const keys = new Set([s.line, s.osm_name, s.official_name, s.title].filter(Boolean).map(nrm));
+  const stations = pool.filter(x => x.line && keys.has(nrm(x.line)) && x.geometry
+    && (s._rail ? x.pt_type === "rail_station" && x.signal !== false
+                : x.pt_type === "road_ic" || x.pt_type === "road_jc"));
   if (!stations.length) return "";
   window._chipSigs = stations;
   const chips = stations.map((x, i) =>
-    `<span class="stchip${x === s ? " on" : ""}" onclick="chipGo(${i})">${chipName(x.title)}</span>`).join("");
+    `<span class="stchip${x.pt_type === "road_jc" ? " jc" : ""}${x === s ? " on" : ""}" onclick="chipGo(${i})">${chipName(x.title)}</span>`).join("");
+  const nJc = stations.filter(x => x.pt_type === "road_jc").length;
   return `<div class="linebar"><div class="lb-h">${s._road ? "🛣" : "🚈"} <b>${s.line}</b>
     <span class="hmhint">${routeHasGeom(s.line) ? "노선 전체 하이라이트 중" : "선형 미확보 — 지점만 표시"} · 지점 ${stations.length}</span></div>
-    <div class="lb-chips">${chips}</div></div>`;
+    <div class="lb-chips">${chips}</div>${s._road && nJc
+      ? '<div class="hmhint" style="margin-top:4px">흐린 지점 = 기존 시설 또는 JC(분기점 — 차량 진출입 불가) · 호재로 세지 않는 구조 정보</div>' : ""}</div>`;
 }
 function srcBadge(s) {
   const v = SRC_TIER[s.src_tier];
@@ -3050,18 +3069,21 @@ function renderDetail(s) {
   const pIdx = PHASE_IDX[ph];
   const tr = trackOf(s);
   const dropped = s.status === "종결";
+  // 지점 칩 바(철도·도로 공통). 칩이 뜨면 같은 이름을 다시 나열하는 접근점·분기점 텍스트 행은 접는다
+  // — 같은 사실을 두 층이 말하면 반드시 어긋난다(간결 원칙). 칩이 없을 때만 텍스트 행이 폴백.
+  const lb = lineBar(s);
   p.innerHTML = `
     <div class="phead"><span></span><div class="closex" onclick="closePanel()">✕</div></div>
     <div class="detail">
       <div class="tags"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}${subLabel(s)}</span>
         · ${s.area_shape ? "" : levelPill(s) + " · "}${gradeBasisHtml(s)}${s.area_shape ? (s.area_m2 ? `지구 ${(s.area_m2 / 1e6).toFixed(1)}km²` : "") : `영향 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km`}
-        ${phaseSolid(s) ? "" : `<span class="badge-draft">착공 전 (${phaseOf(s)})</span>`}
+        ${phaseSolid(s) || dropped ? "" : `<span class="badge-draft">착공 전 (${phaseOf(s)})</span>`}
         ${s.gate === "계획안" ? '<span class="badge-draft">계획(안) — 승인 전</span>' : ""}
         ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}</div>
       <h2>${sigTitle(s)}</h2>
       ${s.gate === "계획안" ? `<div class="kv" style="color:#b3651e"><b>계획(안)</b> 승인 전 법정계획(안) 단계 — 노선·정거장 위치는 변경될 수 있습니다${s.gate_basis ? ` · ${s.gate_basis}` : ""}</div>` : ""}
       ${freshness(s)}
-      ${lineBar(s)}
+      ${lb}
       ${msTrack(s)}
       ${nextWatch(s)}
       ${s.addr ? `<div class="kv"><b>대지위치</b> ${s.addr} <span class="copyaddr" onclick="copyAddr(this,'${s.addr.replace(/'/g, "\\'")}')" title="주소 복사">📋</span></div>` : ""}
@@ -3083,10 +3105,10 @@ function renderDetail(s) {
             ? `진출입 IC ${s.ic_points.length}개소 반경 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km (전용도로 — 선 자체는 영향권 미산정)`
             : `<b>진출입 지점 미확정 — 영향권 미산정</b> · ${s.ic_note || (s.phase === "계획" || s.phase === "인가" ? "미착공 사업이라 IC 위치가 공식 확정 전입니다." : "공식 IC 명단 확인 중입니다.")}`}${s.access_note ? ` · ${s.access_note}` : ""}</div>`
         : `<div class="kv"><b>영향권</b> 노선 양측 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km 회랑 (선 전체 기준)${s.access_note ? ` · ${s.access_note}` : ""}</div>`) : ""}
-      ${(s.access_points || []).filter(a => a.name).concat(s.ic_points || []).length ? `<div class="kv"><b>접근점</b> ${
+      ${!lb && (s.access_points || []).filter(a => a.name).concat(s.ic_points || []).length ? `<div class="kv"><b>접근점</b> ${
         (s.access_points || []).filter(a => a.name).concat(s.ic_points || []).map(a =>
         `${a.name}${a.coordinates ? "" : " (좌표 미확보)"}`).join(" · ")}</div>` : ""}
-      ${(s.jc_points || []).length ? `<div class="kv"><b>분기점(JC)</b> ${s.jc_points.map(j => j.name).join(" · ")}
+      ${!lb && (s.jc_points || []).length ? `<div class="kv"><b>분기점(JC)</b> ${s.jc_points.map(j => j.name).join(" · ")}
         <span class="hmhint">— 차량 진출입 불가, 호재 아님(구조 정보)</span></div>` : ""}
       ${(s.unverified_points || []).length ? `<div class="kv"><b>근거 미확인</b> ${s.unverified_points.map(u => u.name).join(" · ")}
         <span class="hmhint">— 공식 원문에서 이름을 못 찾았습니다. 지우지 않고 표시하되 호재로 세지 않습니다</span></div>` : ""}
@@ -4671,6 +4693,11 @@ function initKakao() {
       //   이 신호는 ROAD_SIG 어댑터가 이미 대표 점 호재로 표현한다 — 선 층에서는 통째로 뺀다.
       if (p.geom_point_only) continue;
       if (p.gate === "관찰") continue;   // 관찰 게이트 = 지도 기본 뷰 미표시(§0-1 — 절차 진입 전)
+      /* 무산 노선(drop)은 기본 선 레이어에서 그리지 않는다 (2026-08-10 사용자 곁 관찰 —
+         인덕원동탄선 지선이 「단계 계획」 점선으로 떠 무산 사실이 배지에 안 실렸다).
+         끝난 신호 1년 규칙(_staleFin: 종결+날짜 미상=숨김)과 같은 판정 — 대장·데이터에는
+         drop 사실이 그대로 남고(P5), 역 카드도 「무산·종결」로 남는다. 지우는 게 아니라 안 그린다. */
+      if (p.drop) continue;
       const dashed = !["착공", "준공"].some(k => (p.phase || "").startsWith(k));   // 착공·준공=실선(범례 일치)
       // 흐리게 그릴 대상은 **OSM 선형**뿐이다(§2b는 "공식 IC가 있으면 믿을 수 없는 OSM 선을 죽인다"는 뜻).
       // ⚠ 2026-08-01 사용자 "광명서울 선형 안보이는뎨": 조건이 `has_official_ic`라서, OSM을 전면
@@ -5328,13 +5355,13 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260810o");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260810p");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
   applyThresholds(await gj("thresholds.json").catch(() => null));
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
-  const [dong, sgg, main, macro, rawData, autoData, regions, jeongbiData, railData, roadData, dartData, archData, parkData, hospData, retailData, schoolData, dpsData, shData, masterData, jobsData, megaData, eumData, advData] = await Promise.all([
+  const [dong, sgg, main, macro, rawData, autoData, regions, jeongbiData, railData, roadData, dartData, archData, parkData, hospData, retailData, schoolData, dpsData, shData, masterData, jobsData, indparkData, megaData, eumData, advData] = await Promise.all([
     gj("bdong/서울.geojson"),      // 초기 = 서울 467동(§3.1 법정동). 나머지 15시도는 뷰포트·선택 시 지연 로드(bdong/index.json)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
@@ -5355,6 +5382,7 @@ function initSearch() {
     gj("sh_signals.json").catch(() => ({ signals: [] })),             // SH 공급계획(공급 전 신축만, 2026-07-30)
     gj("master_signals.json").catch(() => ({ signals: [] })),         // S급 지구 마스터(택지정보 대장, 2026-07-22)
     gj("jobs_signals.json").catch(() => ({ signals: [] })),           // 대형 일자리 S(용산·잠실·북항 등, 2026-07-22)
+    gj("indpark_signals.json").catch(() => ({ signals: [] })),        // 산업단지 delta(KICOX 현황통계 — 미개발·조성중만, 2026-08-10)
     gj("mega_signals.json").catch(() => ({ signals: [] })),           // 관보 고시 원문 파싱 — 대장에 아직 없는 신규 지구(2026-07-22)
     gj("eum_signals.json").catch(() => ({ signals: [] })),            // 토지이음 지자체 도시계획 고시(2026-07-22)
     gj("adverse_facilities.json").catch(() => ({ features: [] }))     // 역효과(UQ158 환경기초) — 지도 미표시, 아파트 카드 병기 전용(②안, 2026-07-30)
@@ -5396,7 +5424,12 @@ function initSearch() {
   // 대형 일자리 S(용산·잠실·북항 등) — official_jobs.json 공식지식. S 점 호재(원)로 표시.
   JOBS_SIG = ((jobsData && jobsData.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden).map(s => Object.assign({
     _jobs: true, confirmed: false
-  }, s, { status: s.status_override || "활성" }));   // status_override=정체 고정(새만금공항 계쟁 등, P5)
+  }, s, { status: s.status_override || "활성" }))    // status_override=정체 고정(새만금공항 계쟁 등, P5)
+  // 산업단지 delta(KICOX 현황통계, 2026-08-10) — 같은 표준 스키마라 JOBS_SIG에 합류(어댑터 함정을
+  // 늘리지 않는다: allSignalsFlat·집계·필터가 이미 JOBS_SIG를 순회한다). 계보는 _indpark로 구분.
+  .concat(((indparkData && indparkData.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden).map(s => Object.assign({
+    _jobs: true, _indpark: true, confirmed: false, status: "활성"
+  }, s)));
   // 관보 고시 원문 신호(2026-07-22) — 택지정보 대장에 **아직 없는** 신규 지구(서리풀1·2·구리토평2·
   // 오산세교3·제주화북2·인천로봇랜드 등). 좌표는 고시 붙임의 편입필지 평균(geo_prec=jigu).
   // 등급은 없다 — 지정 고시에 사업비·세대수가 없어 미정이 정직하다(딱지 미등급 규칙과 동일).
@@ -5494,7 +5527,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810o"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810p"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5520,7 +5553,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260810o");
+  const CB = "?b=" + (window.BUILD || "20260810p");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
