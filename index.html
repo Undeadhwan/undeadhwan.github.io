@@ -2612,11 +2612,11 @@ function buildSggIndex() {
   if (!ensureRailSgg()) return false;
   SGG_SIG = {};
   const add = (disp, s) => { if (disp) (SGG_SIG[disp] || (SGG_SIG[disp] = [])).push(s); };
-  SIGNALS.filter(s => !s._road).forEach(s => add(`${s.sd} ${s.sg}`, s));   // 도로 병합 확정 신호는 아래 노선 귀속으로
-  JEONGBI_SIG.forEach(s => add(`${s.sd} ${s.sg}`, s));
-  RAIL_SIG.forEach(s => add(s._sgg, s));
-  DART_SIG.forEach(s => add(`${s.sd} ${s.sg}`, s));   // DART 일자리 후보
-  ARCH_SIG.forEach(s => add(`${s.sd} ${s.sg}`, s));   // 건축인허가 인프라·일자리 후보
+  // ★ 컬렉션 정본은 allSignalsFlat 하나다 (2026-08-10 — 동 패널과 같은 날 같은 수리).
+  //   종전 수동 5종 목록이라 MASTER·JOBS·MEGA·EUM·UPIS·DPS·SH **7개 컬렉션이 시군구 집계**
+  //   (배지 수·구 패널·아파트 지역 귀속)에서 통째로 빠져 있었다 — 컬렉션이 늘 때마다 이 목록만
+  //   낡는 어댑터 함정. 철도는 _sgg(좌표 귀속), 도로(_road)는 아래 _sggs 다중 귀속 루프가 담당.
+  allSignalsFlat().filter(s => !s._road).forEach(s => add(s._sgg || `${s.sd} ${s.sg}`, s));
   // 도로: 노선이 여러 시군구를 지나므로 샘플점이 걸치는 모든 시군구에 1회씩 귀속
   // (귀속은 선형 사실 기준 roadLinePoints — 전용도로도 "지나는 지역" 목록엔 뜨되, 반경 집계는 signalPoints=IC만)
   const roadAll = ROAD_SIG.concat(SIGNALS.filter(s => s._road));
@@ -3135,15 +3135,47 @@ function showSgg(disp) {
 function pointInSgg(pt, disp) {
   return (window._sggRings?.[disp] || []).some(r => pointInRing(pt[0], pt[1], r));
 }
+/* 신호 ↔ 시군구 관계 — dongRelation과 같은 문법(같은 두 층: 소재/반경권), 폴리곤만 시군구 링.
+   (2026-08-10 구·군 확장 — 사용자 승인. 경계 bbox는 disp별 1회 계산 캐시) */
+function sggRelation(sig, disp) {
+  const rings = window._sggRings && window._sggRings[disp];
+  if (!rings || !rings.length) return null;
+  const pts = signalPoints(sig);
+  if (!pts.length) return null;
+  const R = getRadius(sig);
+  const c = (window._sggBB = window._sggBB || {});
+  if (!c[disp]) {
+    let x0 = 999, y0 = 999, x1 = -999, y1 = -999;
+    rings.forEach(r => r.forEach(v => { if (v[0] < x0) x0 = v[0]; if (v[0] > x1) x1 = v[0];
+                                        if (v[1] < y0) y0 = v[1]; if (v[1] > y1) y1 = v[1]; }));
+    c[disp] = [x0, y0, x1, y1];
+  }
+  const bb = c[disp];
+  const dLat = R / 110540, dLng = R / (111320 * Math.cos((bb[1] + bb[3]) / 2 * Math.PI / 180));
+  if (!pts.some(p => p.coord[0] >= bb[0] - dLng && p.coord[0] <= bb[2] + dLng
+                  && p.coord[1] >= bb[1] - dLat && p.coord[1] <= bb[3] + dLat)) return null;
+  if (pts.some(p => rings.some(r => pointInRing(p.coord[0], p.coord[1], r)))) return "소재";
+  return pts.some(p => rings.some(r => r.some(v => meters(p.coord, v) <= R))) ? "반경권" : null;
+}
 function renderSggFeed(disp) {
   const p = document.getElementById("panel");
-  const sggSigs = signalsInSgg(disp);   // 확정+정비+철도 (수도권 전역)
+  ensureSggRings();
+  // ★ 동 패널과 같은 두 층 (2026-08-10 구·군 확장 — 사용자 승인): 소재(경계 안)+반경권(영향권이
+  //   경계에 닿는 인접 신호). 종전엔 SGG_SIG 귀속(소재)만이라 경계 코앞 역·IC의 실질 영향이 빠졌고,
+  //   컬렉션도 인덱스 수동 목록에 묶여 7개가 누락돼 있었다(같은 날 buildSggIndex도 일원화).
+  const rel = [];
+  allSignalsFlat().filter(visibleNoRegion).filter(s => !s._jb && s.signal !== false)
+    .map(s => ({ s, r: sggRelation(s, disp) }))
+    .filter(x => x.r).forEach(x => rel.push(x));
+  JEONGBI_SIG.filter(visibleNoRegion).filter(s => `${s.sd} ${s.sg}` === disp)
+    .forEach(s => rel.push({ s, r: "소재" }));
+  const host = rel.filter(x => x.r === "소재"), near = rel.filter(x => x.r === "반경권");
   const cands = (AUTO || []).filter(a => `${a.sd} ${a.sg}` === disp);
   const LIST_CAP = 80;
   p.innerHTML = `
     <div class="phead"><div class="pt">${disp}</div><div class="closex" onclick="closePanel()">✕</div></div>
-    <div class="ps">이 시군구 영향권 호재 — 확정·정비·철도 통합${sggSigs.length > LIST_CAP ? ` · 상위 ${LIST_CAP}건 표시` : ""}</div>
-    ${hojaeMatrixHtml(sggSigs)}
+    <div class="ps">소재 ${host.length} · 반경권 ${near.length} · 이 시군구에 영향 주는 호재${rel.length > LIST_CAP ? ` · 상위 ${LIST_CAP}건 표시` : ""}</div>
+    ${hojaeMatrixHtml(rel)}
     ${yearChipsHtml()}
     <div id="list"></div>
     ${cands.length ? `<div class="group-h">후보 신호 (자동 생성 — 5억+·DART, 중복 통합, 단계는 추정)</div><div id="candlist"></div>
@@ -3154,7 +3186,8 @@ function renderSggFeed(disp) {
     list.innerHTML = "";
     /* "없다"와 "걸러졌다"를 구분한다(2026-07-30 사용자 제보 — 인천 미추홀구에 37건이 있는데
        표시 조건을 대부분 꺼둔 상태라 '호재 없음'만 떴다. 화면이 사실과 다르게 읽힌다). */
-    if (!sggSigs.length) {
+    if (!rel.length) {
+      if (!SGG_SIG) buildSggIndex();
       const total = ((SGG_SIG && SGG_SIG[disp]) || []).length;
       list.innerHTML = total
         ? `<div class="pickhint">표시 조건에 맞는 호재 없음 — 조건을 풀면 <b>${total}건</b>
@@ -3162,9 +3195,10 @@ function renderSggFeed(disp) {
         : `<div class="pickhint">이 시군구 영향권 호재 없음</div>`;
       return;
     }
-    const arr = panelArrange(sggSigs.slice());
+    const arr = panelArrange([...host, ...near]);
     if (!arr.length) { list.innerHTML = `<div class="pickhint">${LEVEL_NAME[panelGrade] || panelGrade}급 호재 없음</div>`; return; }
-    arr.slice(0, LIST_CAP).forEach(s => list.appendChild(makeCard(s)));
+    arr.slice(0, LIST_CAP).forEach(({ s, r }) => list.appendChild(
+      makeCard(s, r === "소재" ? '<span class="badge-host">이 시군구 소재</span>' : '<span class="badge-near">반경권</span>')));
     animateCards(list);
   };
   panelListRender();
@@ -5254,7 +5288,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260810h");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260810i");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -5420,7 +5454,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810h"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810i"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5446,7 +5480,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260810h");
+  const CB = "?b=" + (window.BUILD || "20260810i");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
