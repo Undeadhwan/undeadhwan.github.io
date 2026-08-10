@@ -15,7 +15,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 강동구 명일동 263-2",
    "geo_basis": "본번 대체(서울 강동구 명일동 263) — 부번 필지 조회 실패",
    "stage_src": "서울시 가로주택정비사업 추진현황",
@@ -1992,7 +1992,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 구로구 구로동 685-280",
    "geo_basis": "본번 대체(서울 구로구 구로동 685) — 부번 필지 조회 실패",
    "stage_src": "서울시 가로주택정비사업 추진현황",
@@ -3492,7 +3492,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 서초구 서초동 1611-1",
    "geo_basis": "본번 대체(서울 서초구 서초동 1611) — 부번 필지 조회 실패",
    "stage_src": "서울시 가로주택정비사업 추진현황",
@@ -9632,7 +9632,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 마포구 현석동 1-31",
    "geo_basis": "본번 대체(서울 마포구 현석동 1) — 부번 필지 조회 실패",
    "stage_history": [
@@ -13922,7 +13922,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 용산구 동자동 36-17",
    "geo_basis": "본번 대체(서울 용산구 동자동 36) — 부번 필지 조회 실패",
    "stage_history": [
@@ -14269,7 +14269,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 용산구 한강로2가 210-1",
    "geo_basis": "본번 대체(서울 용산구 한강로2가 210) — 부번 필지 조회 실패",
    "stage_history": [
@@ -14463,7 +14463,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 용산구 한강로3가 63-70",
    "geo_basis": "본번 대체(서울 용산구 한강로3가 63) — 부번 필지 조회 실패",
    "stage_history": [
@@ -18087,10 +18087,10 @@
    "type": "재개발(주택정비형)",
    "hh": null,
    "drop": true,
-   "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_prec": "zone",
+   "geo_approx": true,
    "addr": "서울 노원구 상계동 85-33",
-   "geo_basis": "본번 대체(서울 노원구 상계동 85) — 부번 필지 조회 실패",
+   "geo_basis": "정비구역 폴리곤 내부 확인: 상계동 154-3일대 주택정비형 재개발정비구역",
    "stage_history": [
     {
      "stage": "계획",
@@ -18131,7 +18131,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 노원구 상계동 95-3",
    "geo_basis": "본번 대체(서울 노원구 상계동 95) — 부번 필지 조회 실패",
    "stage_history": [
@@ -18982,7 +18982,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 동대문구 용두동 80-1",
    "geo_basis": "본번 대체(서울 동대문구 용두동 80) — 부번 필지 조회 실패",
    "stage_history": [
@@ -19688,7 +19688,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 동대문구 회기동 62-34",
    "geo_basis": "본번 대체(서울 동대문구 회기동 62) — 부번 필지 조회 실패",
    "stage_history": [
@@ -19864,10 +19864,10 @@
    "type": "재개발(주택정비형)",
    "hh": null,
    "drop": false,
-   "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_prec": "zone",
+   "geo_approx": true,
    "addr": "서울 동작구 노량진동 122-37",
-   "geo_basis": "본번 대체(서울 동작구 노량진동 122) — 부번 필지 조회 실패",
+   "geo_basis": "정비구역 폴리곤 내부 확인: 가로주택정비사업",
    "stage_history": [
     {
      "stage": "계획",
@@ -23396,7 +23396,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 성동구 금호동4가 56-1",
    "geo_basis": "본번 대체(서울 성동구 금호동4가 56) — 부번 필지 조회 실패",
    "stage_history": [
@@ -23538,7 +23538,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 성동구 상왕십리동 12-37",
    "geo_basis": "본번 대체(서울 성동구 상왕십리동 12) — 부번 필지 조회 실패",
    "stage_history": [
@@ -24100,7 +24100,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 성동구 하왕십리동 339-67",
    "geo_basis": "본번 대체(서울 성동구 하왕십리동 339) — 부번 필지 조회 실패",
    "stage_history": [
@@ -24355,7 +24355,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 성북구 돈암동 13-7",
    "geo_basis": "본번 대체(서울 성북구 돈암동 13) — 부번 필지 조회 실패",
    "stage_history": [
@@ -24481,7 +24481,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 성북구 돈암동 535-54",
    "geo_basis": "본번 대체(서울 성북구 돈암동 535) — 부번 필지 조회 실패",
    "stage_history": [
@@ -24697,7 +24697,7 @@
    "hh": 199,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 성북구 보문동1가 60-28",
    "geo_basis": "본번 대체(서울 성북구 보문동1가 60) — 부번 필지 조회 실패",
    "hh_src": "OA-22856",
@@ -25118,7 +25118,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 성북구 석관동 58-56",
    "geo_basis": "본번 대체(서울 성북구 석관동 58) — 부번 필지 조회 실패",
    "stage_history": [
@@ -25220,7 +25220,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 성북구 석관동 338-540",
    "geo_basis": "본번 대체(서울 성북구 석관동 338) — 부번 필지 조회 실패",
    "stage_history": [
@@ -25360,7 +25360,7 @@
    "hh": 427,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 성북구 안암동3가 132-17",
    "geo_basis": "본번 대체(서울 성북구 안암동3가 132) — 부번 필지 조회 실패",
    "hh_src": "OA-22856",
@@ -25631,10 +25631,10 @@
    "type": "재개발(주택정비형)",
    "hh": null,
    "drop": true,
-   "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_prec": "zone",
+   "geo_approx": true,
    "addr": "서울 성북구 장위동 173-114",
-   "geo_basis": "본번 대체(서울 성북구 장위동 173) — 부번 필지 조회 실패",
+   "geo_basis": "정비구역 폴리곤 내부 확인: 장위9구역",
    "stage_history": [
     {
      "stage": "계획",
@@ -25674,10 +25674,10 @@
    "type": "재개발(주택정비형)",
    "hh": null,
    "drop": true,
-   "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_prec": "zone",
+   "geo_approx": true,
    "addr": "서울 성북구 장위동 189-3",
-   "geo_basis": "본번 대체(서울 성북구 장위동 189) — 부번 필지 조회 실패",
+   "geo_basis": "정비구역 폴리곤 내부 확인: 장위8구역",
    "stage_history": [
     {
      "stage": "계획",
@@ -27283,7 +27283,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 양천구 신월동 159-192",
    "geo_basis": "본번 대체(서울 양천구 신월동 159) — 부번 필지 조회 실패",
    "stage_history": [
@@ -27360,7 +27360,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 양천구 신월동 603-3",
    "geo_basis": "본번 대체(서울 양천구 신월동 603) — 부번 필지 조회 실패",
    "stage_history": [
@@ -27942,7 +27942,7 @@
    "hh": 2500,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 영등포구 도림동 26-21",
    "geo_basis": "본번 대체(서울 영등포구 도림동 26) — 부번 필지 조회 실패",
    "milestones": [
@@ -28009,7 +28009,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 영등포구 도림동 162-94",
    "geo_basis": "본번 대체(서울 영등포구 도림동 162) — 부번 필지 조회 실패",
    "stage_history": [
@@ -28127,7 +28127,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 영등포구 신길동 145-40",
    "geo_basis": "본번 대체(서울 영등포구 신길동 145) — 부번 필지 조회 실패",
    "stage_history": [
@@ -28313,7 +28313,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 영등포구 신길동 240-16",
    "geo_basis": "본번 대체(서울 영등포구 신길동 240) — 부번 필지 조회 실패",
    "stage_history": [
@@ -28412,7 +28412,7 @@
    "hh": 1483,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 영등포구 신길동 329-94",
    "geo_basis": "본번 대체(서울 영등포구 신길동 329) — 부번 필지 조회 실패",
    "milestones": [
@@ -28487,7 +28487,7 @@
    "hh": 1483,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 영등포구 신길동 337-246",
    "geo_basis": "본번 대체(서울 영등포구 신길동 337) — 부번 필지 조회 실패",
    "milestones": [
@@ -28562,7 +28562,7 @@
    "hh": 1483,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 영등포구 신길동 347-50",
    "geo_basis": "본번 대체(서울 영등포구 신길동 347) — 부번 필지 조회 실패",
    "milestones": [
@@ -29239,7 +29239,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 용산구 효창동 3-250",
    "geo_basis": "본번 대체(서울 용산구 효창동 3) — 부번 필지 조회 실패",
    "stage_history": [
@@ -29282,7 +29282,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 용산구 효창동 13-2",
    "geo_basis": "본번 대체(서울 용산구 효창동 13) — 부번 필지 조회 실패",
    "stage_history": [
@@ -29924,7 +29924,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 은평구 수색동 330-1",
    "geo_basis": "본번 대체(서울 은평구 수색동 330) — 부번 필지 조회 실패",
    "stage_history": [
@@ -30871,10 +30871,10 @@
    "type": "재개발(주택정비형)",
    "hh": null,
    "drop": true,
-   "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_prec": "zone",
+   "geo_approx": true,
    "addr": "서울 중구 만리동2가 176-1",
-   "geo_basis": "본번 대체(서울 중구 만리동2가 176) — 부번 필지 조회 실패",
+   "geo_basis": "정비구역 폴리곤 내부 확인: 만리제2주택재개발사업",
    "stage_history": [
     {
      "stage": "계획",
@@ -33535,10 +33535,10 @@
    "type": "재건축",
    "hh": null,
    "drop": true,
-   "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_prec": "zone",
+   "geo_approx": true,
    "addr": "서울 강남구 역삼동 711-1",
-   "geo_basis": "본번 대체(서울 강남구 역삼동 711) — 부번 필지 조회 실패",
+   "geo_basis": "정비구역 폴리곤 내부 확인: 청담도곡아파트지구 역삼주구",
    "stage_history": [
     {
      "stage": "계획",
@@ -34319,10 +34319,10 @@
    "type": "재건축",
    "hh": null,
    "drop": false,
-   "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_prec": "zone",
+   "geo_approx": true,
    "addr": "서울 강동구 둔촌동 85-2",
-   "geo_basis": "본번 대체(서울 강동구 둔촌동 85) — 부번 필지 조회 실패",
+   "geo_basis": "정비구역 폴리곤 내부 확인: 둔촌동84지구 소규모재개발사업",
    "stage_history": [
     {
      "stage": "계획",
@@ -34393,7 +34393,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 강동구 둔촌동 513-1",
    "geo_basis": "본번 대체(서울 강동구 둔촌동 513) — 부번 필지 조회 실패",
    "stage_history": [
@@ -34723,7 +34723,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 강동구 명일동 309-1",
    "geo_basis": "본번 대체(서울 강동구 명일동 309) — 부번 필지 조회 실패",
    "stage_history": [
@@ -35317,10 +35317,10 @@
    "type": "재건축",
    "hh": null,
    "drop": true,
-   "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_prec": "zone",
+   "geo_approx": true,
    "addr": "서울 강동구 천호동 437-5",
-   "geo_basis": "본번 대체(서울 강동구 천호동 437) — 부번 필지 조회 실패",
+   "geo_basis": "정비구역 폴리곤 내부 확인: 천호3구역",
    "stage_history": [
     {
      "stage": "계획",
@@ -35361,7 +35361,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 강북구 미아동 3-111",
    "geo_basis": "본번 대체(서울 강북구 미아동 3) — 부번 필지 조회 실패",
    "stage_history": [
@@ -35560,7 +35560,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 강북구 수유동 170-2",
    "geo_basis": "본번 대체(서울 강북구 수유동 170) — 부번 필지 조회 실패",
    "stage_history": [
@@ -35636,7 +35636,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 강북구 수유동 472-81",
    "geo_basis": "본번 대체(서울 강북구 수유동 472) — 부번 필지 조회 실패",
    "stage_history": [
@@ -35811,7 +35811,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 강서구 내발산동 716-20",
    "geo_basis": "본번 대체(서울 강서구 내발산동 716) — 부번 필지 조회 실패",
    "stage_history": [
@@ -36127,10 +36127,10 @@
    "type": "재건축",
    "hh": null,
    "drop": false,
-   "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_prec": "zone",
+   "geo_approx": true,
    "addr": "서울 강서구 마곡동 725-1",
-   "geo_basis": "본번 대체(서울 강서구 마곡동 725) — 부번 필지 조회 실패",
+   "geo_basis": "정비구역 폴리곤 내부 확인: 긴등마을 재정비촉진구역",
    "stage_history": [
     {
      "stage": "준공·개통",
@@ -36433,7 +36433,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 강서구 염창동 242-4",
    "geo_basis": "본번 대체(서울 강서구 염창동 242) — 부번 필지 조회 실패",
    "stage_history": [
@@ -36476,7 +36476,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 강서구 염창동 244-18",
    "geo_basis": "본번 대체(서울 강서구 염창동 244) — 부번 필지 조회 실패",
    "stage_history": [
@@ -36554,7 +36554,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 강서구 화곡동 812-26",
    "geo_basis": "본번 대체(서울 강서구 화곡동 812) — 부번 필지 조회 실패",
    "stage_history": [
@@ -37170,7 +37170,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 광진구 자양동 658-14",
    "geo_basis": "본번 대체(서울 광진구 자양동 658) — 부번 필지 조회 실패",
    "stage_history": [
@@ -37368,7 +37368,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 광진구 화양동 499-18",
    "geo_basis": "본번 대체(서울 광진구 화양동 499) — 부번 필지 조회 실패",
    "stage_history": [
@@ -37411,7 +37411,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 구로구 개봉동 68-64",
    "geo_basis": "본번 대체(서울 구로구 개봉동 68) — 부번 필지 조회 실패",
    "stage_history": [
@@ -37483,7 +37483,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 구로구 개봉동 335-16",
    "geo_basis": "본번 대체(서울 구로구 개봉동 335) — 부번 필지 조회 실패",
    "stage_history": [
@@ -38160,7 +38160,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 금천구 독산동 966-1",
    "geo_basis": "본번 대체(서울 금천구 독산동 966) — 부번 필지 조회 실패",
    "stage_history": [
@@ -38931,7 +38931,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 노원구 월계동 633-31",
    "geo_basis": "본번 대체(서울 노원구 월계동 633) — 부번 필지 조회 실패",
    "stage_history": [
@@ -39366,7 +39366,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 동대문구 장안동 435-2",
    "geo_basis": "본번 대체(서울 동대문구 장안동 435) — 부번 필지 조회 실패",
    "stage_history": [
@@ -39409,7 +39409,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 동대문구 장안동 435-4",
    "geo_basis": "본번 대체(서울 동대문구 장안동 435) — 부번 필지 조회 실패",
    "stage_history": [
@@ -39670,7 +39670,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 동작구 사당동 41-17",
    "geo_basis": "본번 대체(서울 동작구 사당동 41) — 부번 필지 조회 실패",
    "stage_history": [
@@ -39713,7 +39713,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 동작구 사당동 167-19",
    "geo_basis": "본번 대체(서울 동작구 사당동 167) — 부번 필지 조회 실패",
    "stage_history": [
@@ -39756,7 +39756,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 동작구 사당동 181-360",
    "geo_basis": "본번 대체(서울 동작구 사당동 181) — 부번 필지 조회 실패",
    "stage_history": [
@@ -40055,7 +40055,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 마포구 망원동 438-46",
    "geo_basis": "본번 대체(서울 마포구 망원동 438) — 부번 필지 조회 실패",
    "stage_history": [
@@ -40098,7 +40098,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 마포구 망원동 458-16",
    "geo_basis": "본번 대체(서울 마포구 망원동 458) — 부번 필지 조회 실패",
    "stage_history": [
@@ -40209,7 +40209,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 마포구 신수동 93-102",
    "geo_basis": "본번 대체(서울 마포구 신수동 93) — 부번 필지 조회 실패",
    "stage_history": [
@@ -40252,7 +40252,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 마포구 신수동 225-7",
    "geo_basis": "본번 대체(서울 마포구 신수동 225) — 부번 필지 조회 실패",
    "stage_history": [
@@ -40329,7 +40329,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 마포구 창전동 27-19",
    "geo_basis": "본번 대체(서울 마포구 창전동 27) — 부번 필지 조회 실패",
    "stage_history": [
@@ -40582,10 +40582,10 @@
    "type": "재건축",
    "hh": null,
    "drop": true,
-   "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_prec": "zone",
+   "geo_approx": true,
    "addr": "서울 서대문구 홍은동 13-25",
-   "geo_basis": "본번 대체(서울 서대문구 홍은동 13) — 부번 필지 조회 실패",
+   "geo_basis": "정비구역 폴리곤 내부 확인: 홍은4구역주택재개발사업",
    "stage_history": [
     {
      "stage": "계획",
@@ -40625,10 +40625,10 @@
    "type": "재건축",
    "hh": null,
    "drop": false,
-   "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_prec": "zone",
+   "geo_approx": true,
    "addr": "서울 서대문구 홍은동 104-4",
-   "geo_basis": "본번 대체(서울 서대문구 홍은동 104) — 부번 필지 조회 실패",
+   "geo_basis": "정비구역 폴리곤 내부 확인: 홍은제1 주택재건축 정비사업",
    "stage_history": [
     {
      "stage": "계획",
@@ -40698,7 +40698,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 서대문구 홍은동 338-5",
    "geo_basis": "본번 대체(서울 서대문구 홍은동 338) — 부번 필지 조회 실패",
    "stage_history": [
@@ -40736,7 +40736,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 서대문구 홍제동 57-5",
    "geo_basis": "본번 대체(서울 서대문구 홍제동 57) — 부번 필지 조회 실패",
    "stage_history": [
@@ -41742,7 +41742,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 서초구 방배동 593-98",
    "geo_basis": "본번 대체(서울 서초구 방배동 593) — 부번 필지 조회 실패",
    "stage_history": [
@@ -42334,7 +42334,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 서초구 방배동 992-1",
    "geo_basis": "본번 대체(서울 서초구 방배동 992) — 부번 필지 조회 실패",
    "stage_history": [
@@ -42585,7 +42585,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 서초구 방배동 1028-1",
    "geo_basis": "본번 대체(서울 서초구 방배동 1028) — 부번 필지 조회 실패",
    "stage_history": [
@@ -42800,7 +42800,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 서초구 서초동 1332-1",
    "geo_basis": "본번 대체(서울 서초구 서초동 1332) — 부번 필지 조회 실패",
    "stage_history": [
@@ -43310,7 +43310,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 서초구 잠원동 52-2",
    "geo_basis": "본번 대체(서울 서초구 잠원동 52) — 부번 필지 조회 실패",
    "stage_history": [
@@ -43855,7 +43855,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 서초구 잠원동 64-8",
    "geo_basis": "본번 대체(서울 서초구 잠원동 64) — 부번 필지 조회 실패",
    "stage_history": [
@@ -44228,7 +44228,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 서초구 잠원동 74-1",
    "geo_basis": "본번 대체(서울 서초구 잠원동 74) — 부번 필지 조회 실패",
    "stage_history": [
@@ -44271,7 +44271,7 @@
    "hh": null,
    "drop": true,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 서초구 잠원동 74-2",
    "geo_basis": "본번 대체(서울 서초구 잠원동 74) — 부번 필지 조회 실패",
    "stage_history": [
@@ -47387,7 +47387,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 양천구 신월동 410-12",
    "geo_basis": "본번 대체(서울 양천구 신월동 410) — 부번 필지 조회 실패",
    "stage_history": [
@@ -47430,7 +47430,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 양천구 신월동 432-6",
    "geo_basis": "본번 대체(서울 양천구 신월동 432) — 부번 필지 조회 실패",
    "stage_history": [
@@ -51366,7 +51366,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "서울 중랑구 묵동 81-17",
    "geo_basis": "본번 대체(서울 중랑구 묵동 81) — 부번 필지 조회 실패",
    "stage_history": [
@@ -53333,7 +53333,7 @@
    "hh": 834,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 고양시 토당동 251-12",
    "geo_basis": "본번 대체(경기 고양시 토당동 251) — 부번 필지 조회 실패",
    "milestones": [
@@ -53445,7 +53445,7 @@
    "hh": 340,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 고양시 관산동 178-52",
    "geo_basis": "본번 대체(경기 고양시 관산동 178) — 부번 필지 조회 실패",
    "milestones": [
@@ -55739,7 +55739,7 @@
    "hh": 577,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 광명시 광명동 776-49",
    "geo_basis": "본번 대체(경기 광명시 광명동 776) — 부번 필지 조회 실패",
    "milestones": [
@@ -58327,7 +58327,7 @@
    "hh": 1008,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 남양주시 지금동 129-65",
    "geo_basis": "본번 대체(경기 남양주시 지금동 129) — 부번 필지 조회 실패",
    "milestones": [
@@ -58583,7 +58583,7 @@
    "hh": 1108,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 남양주시 평내동 103-2",
    "geo_basis": "본번 대체(경기 남양주시 평내동 103) — 부번 필지 조회 실패",
    "stage_history": [
@@ -60329,7 +60329,7 @@
    "hh": 3724,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 부천시 계수동 1-6",
    "geo_basis": "본번 대체(경기 부천시 계수동 1) — 부번 필지 조회 실패",
    "milestones": [
@@ -60527,7 +60527,7 @@
    "hh": 921,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 부천시 괴안동 203-2",
    "geo_basis": "본번 대체(경기 부천시 괴안동 203) — 부번 필지 조회 실패",
    "milestones": [
@@ -60938,7 +60938,7 @@
    "hh": 371,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 부천시 송내동 463-3",
    "geo_basis": "본번 대체(경기 부천시 송내동 463) — 부번 필지 조회 실패",
    "milestones": [
@@ -61136,7 +61136,7 @@
    "hh": 226,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 부천시 소사본동 157-1",
    "geo_basis": "본번 대체(경기 부천시 소사본동 157) — 부번 필지 조회 실패",
    "milestones": [
@@ -63825,7 +63825,7 @@
    "hh": 751,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 성남시 중앙동 3748-1",
    "geo_basis": "본번 대체(경기 성남시 중앙동 3748) — 부번 필지 조회 실패",
    "milestones": [
@@ -69865,7 +69865,7 @@
    "hh": 469,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 안산시 초지동 603-1",
    "geo_basis": "본번 대체(경기 안산시 초지동 603) — 부번 필지 조회 실패",
    "milestones": [
@@ -71945,7 +71945,7 @@
    "hh": 133,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 안산시 건건동 894-14",
    "geo_basis": "본번 대체(경기 안산시 건건동 894) — 부번 필지 조회 실패",
    "milestones": [
@@ -76839,7 +76839,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 용인시 고매동 385-4",
    "geo_basis": "본번 대체(경기 용인시 고매동 385) — 부번 필지 조회 실패",
    "stage_history": [
@@ -77272,7 +77272,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 용인시 마평동 612-4",
    "geo_basis": "본번 대체(경기 용인시 마평동 612) — 부번 필지 조회 실패",
    "stage_history": [
@@ -80117,7 +80117,7 @@
    "hh": 536,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 의왕시 오전동 324-4",
    "geo_basis": "본번 대체(경기 의왕시 오전동 324) — 부번 필지 조회 실패",
    "milestones": [
@@ -81145,7 +81145,7 @@
    "hh": 926,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 의정부시 의정부동 394-11",
    "geo_basis": "본번 대체(경기 의정부시 의정부동 394) — 부번 필지 조회 실패",
    "milestones": [
@@ -81262,7 +81262,7 @@
    "hh": 466,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 의정부시 가능동 581-1",
    "geo_basis": "본번 대체(경기 의정부시 가능동 581) — 부번 필지 조회 실패",
    "milestones": [
@@ -81488,7 +81488,7 @@
    "hh": 420,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 의정부시 가능동 224-24",
    "geo_basis": "본번 대체(경기 의정부시 가능동 224) — 부번 필지 조회 실패",
    "milestones": [
@@ -85160,7 +85160,7 @@
    "hh": 980,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "경기 하남시 덕풍동 285-31",
    "geo_basis": "본번 대체(경기 하남시 덕풍동 285) — 부번 필지 조회 실패",
    "milestones": [
@@ -90509,7 +90509,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "울산 중구 복산동 460-72",
    "geo_basis": "본번 대체(울산 중구 복산동 460) — 부번 필지 조회 실패",
    "milestones": [
@@ -91200,7 +91200,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "대구 중구 서성로1가 52-2",
    "geo_basis": "본번 대체(대구 중구 서성로1가 52) — 부번 필지 조회 실패",
    "stage_history": [
@@ -93187,7 +93187,7 @@
    "hh": 1106,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "대현2동 417-1",
    "geo_basis": "본번 대체(대현2동 417) — 부번 필지 조회 실패",
    "stage_history": [
@@ -95606,7 +95606,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "부산 영도구 봉래동4가 69-1",
    "geo_basis": "본번 대체(부산 영도구 봉래동4가 69) — 부번 필지 조회 실패",
    "stage_history": [
@@ -97546,7 +97546,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "부산 수영구 남천동 148-17",
    "geo_basis": "본번 대체(부산 수영구 남천동 148) — 부번 필지 조회 실패",
    "stage_history": [
@@ -98690,7 +98690,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "부산 북구 덕천동 357-12",
    "geo_basis": "본번 대체(부산 북구 덕천동 357) — 부번 필지 조회 실패",
    "stage_history": [
@@ -101399,7 +101399,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "부산 동래구 안락동 152-10",
    "geo_basis": "본번 대체(부산 동래구 안락동 152) — 부번 필지 조회 실패",
    "stage_history": [
@@ -101471,7 +101471,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "부산 부산진구 양정동 73-7",
    "geo_basis": "본번 대체(부산 부산진구 양정동 73) — 부번 필지 조회 실패",
    "stage_history": [
@@ -102515,7 +102515,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "부산 부산진구 연지동 250-76",
    "geo_basis": "본번 대체(부산 부산진구 연지동 250) — 부번 필지 조회 실패",
    "stage_history": [
@@ -102844,7 +102844,7 @@
    "hh": null,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "부산 동래구 온천동 100-13",
    "geo_basis": "본번 대체(부산 동래구 온천동 100) — 부번 필지 조회 실패",
    "stage_history": [
@@ -109118,7 +109118,7 @@
    "hh": 1213,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "대전 동구 성남동 1-54",
    "geo_basis": "본번 대체(대전 동구 성남동 1) — 부번 필지 조회 실패",
    "src": "국토부_전국도시정비통합",
@@ -109741,7 +109741,7 @@
    "hh": 909,
    "drop": false,
    "geo_prec": "parcel_base",
-   "geo_approx": false,
+   "geo_approx": true,
    "addr": "대전 중구 대흥동 260-9",
    "geo_basis": "본번 대체(대전 중구 대흥동 260) — 부번 필지 조회 실패",
    "src": "국토부_전국도시정비통합",

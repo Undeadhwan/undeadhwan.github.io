@@ -2101,11 +2101,15 @@ function catVisible(s) {
   const key = subKeyOf(s);
   return keys.includes(key) ? filter.sub.has(subId(cat, key)) : filter.cat.has(cat);
 }
-const visible = s => catVisible(s)
+/* ★ 지역축 없는 가시성 (2026-08-10) — 동 패널은 관계(소재/반경권)를 dongRelation이 판정하므로
+   지역 조회축이 **먼저** 자르면 인접 동 소재 신호가 반경권에 못 들어와 반경권이 구조적으로 0이 된다
+   (사용자 "정작 선택하면 보이는 것도 없고"의 세 번째 원인). 동 패널은 이걸 쓴다. */
+const visibleNoRegion = s => catVisible(s)
   && filter.phase.has(phaseOf(s))                // 4단계 백본 조회축(전체해제는 단계를 비우지 않음 → 유지)
   && filter.lvl.has(levelOf(s))                  // 등급 조회축(A/B/C/미정)
-  && regionVisible(s)                            // 지역 조회축(시도 › 시군구 › 읍면동) — 아래 참조
   && !isStaleFinished(s);   // 끝난 신호(종료 후 1년 초과)는 지도·목록·집계 전부에서 숨김(사용자 2026-07-21)
+const visible = s => visibleNoRegion(s)
+  && regionVisible(s);                           // 지역 조회축(시도 › 시군구 › 읍면동) — 아래 참조
 /* 지역 조회축 (2026-08-09 재배선 — 사용자 "구 선택하면 좌표 이동도 안 되고 목록도 그대로").
    ★ 종전엔 `filter.region`을 세팅하는 코드가 **아무 데도 없었다**: 그걸 채우던 `#f-region`
      셀렉트가 상단 지역바로 교체되면서 사라졌는데, 세터(`fillRegionSelect`)만 남고 배선이 끊겼다.
@@ -2114,11 +2118,24 @@ const visible = s => catVisible(s)
      사라진다. 그건 "이 동에 없다"가 아니라 "우리가 동을 안 적었다"이다(P2) — 좌표가 그 동
      폴리곤 안이면 남긴다. */
 function regionVisible(s) {
-  if (filter.region && `${s.sd} ${s.sg}` !== filter.region) return false;
+  if (filter.region) {
+    // ★ 다중 귀속 신호(도로 노선 — sd:null)는 **_sggs(좌표 귀속)**로 판정한다 (2026-08-10).
+    //   종전엔 `${s.sd} ${s.sg}` 문자열 비교뿐이라 "null null"이 되어 교통 노선이 지역 조회에서
+    //   **전멸**했다 — 신정동에 관통 착공 도로(국회대로)가 0건으로 나온 두 번째 원인.
+    //   철도는 _sgg(단일 귀속). _sggs는 지연 계산이라 필요 시 인덱스를 한 번 만든다.
+    if ((s._road || s._rail) && s._sggs === undefined && s._sgg === undefined
+        && typeof SGG_SIG !== "undefined" && !SGG_SIG && typeof buildSggIndex === "function") buildSggIndex();
+    const disp = s._sggs || (s._sgg ? [s._sgg] : [`${s.sd} ${s.sg}`]);
+    if (!disp.includes(filter.region)) return false;
+  }
   if (!filter.dong) return true;
   if (s.dong) return s.dong === filter.dong;
-  const pt = sigRepPoint(s);
-  return pt ? dongRingsOf(filter.region, filter.dong).some(r => pointInRing(pt[0], pt[1], r)) : false;
+  // 선형(노선)은 대표점 하나가 아니라 **선 전체가 동을 지나는지**로 본다 — 대표점(길이 중점)이
+  // 옆 동에 있어도 회랑이 이 동을 관통하면 "이 동을 지나는" 것이 사실이다(P2).
+  const rings = dongRingsOf(filter.region, filter.dong);
+  const pts = (s._road || s._rail) && typeof roadLinePoints === "function"
+    ? roadLinePoints(s).map(p => p.coord) : [sigRepPoint(s)].filter(Boolean);
+  return pts.some(pt => pt && rings.some(r => pointInRing(pt[0], pt[1], r)));
 }
 function dongRingsOf(region, dong) {
   const key = `${region}|${dong}`;
@@ -2561,8 +2578,21 @@ function adverseNearPoint(coord) {
 }
 /* ══════════ 시군구 단위 분류 신호 (확정+정비+철도) — 수도권 전역 카운팅 ══════════ */
 let SGG_SIG = null;
+/* 시군구 링 보장 — **렌더러 무관 일원화** (2026-08-10). 종전엔 Leaflet 경로만 rings+bounds를 만들고
+   카카오 경로는 rings만 지연 생성(bounds 없음)이라, ensureRailSgg의 「둘 다 필수」 관문이 카카오에서
+   **항상 false** → 좌표 귀속 인덱스(SGG_SIG·_sggs)가 카카오 화면에서 영영 안 만들어졌다.
+   bounds는 bbox 프리필터(있으면 빠름)일 뿐 정확성 요건이 아니다 — 검사부가 이미 null-안전. */
+function ensureSggRings() {
+  if (window._sggRings) return true;
+  if (!SGG_GEO || !SGG_GEO.features) return false;
+  const m = {};
+  SGG_GEO.features.forEach(f => { const disp = f.properties.sido + " " + sggDisplayName(f.properties.name);
+    ringsOf(f).forEach(r => (m[disp] = m[disp] || []).push(r)); });
+  window._sggRings = m; return true;
+}
 function ensureRailSgg() {
-  if (!window._sggRings || !window._sggBounds) return false;
+  if (!ensureSggRings()) return false;
+  window._sggBounds = window._sggBounds || {};   // 프리필터 사전(비어 있어도 동작)
   if (RAIL_SIG.length && RAIL_SIG[0]._sgg === undefined) {
     const entries = Object.entries(window._sggRings);
     RAIL_SIG.forEach(s => {
@@ -2979,16 +3009,19 @@ function closeCompare() { document.getElementById("cmpModal").style.display = "n
 function renderDong(feature) {
   const p = document.getElementById("panel");
   const name = dongName(feature);
-  const rel = SIGNALS.filter(visible)
+  // ★ 컬렉션 정본은 allSignalsFlat 하나다 (2026-08-10 사용자 "정작 선택하면 보이는 것도 없고").
+  //   종전엔 여기 수동 목록(SIGNALS·정비·DART·ARCH·도로 5개)이라 **철도 등 8개 컬렉션이 동 집계에서
+  //   통째로 빠졌다** — 신정동에 강북횡단선·신안산선이 0건으로 나온 이유. 어댑터 함정과 같은 형태:
+  //   컬렉션이 늘 때마다 이 수동 목록만 낡는다(superseded_by 4곳 누락과 동일 클래스).
+  //   JC(signal:false)는 집계 제외 — 일반 차량 진출입 불가(§7 거리≠수혜, 도로 어댑터 주석과 동일).
+  const rel = [];
+  allSignalsFlat().filter(visibleNoRegion).filter(s => !s._jb && s.signal !== false)
     .map(s => ({ s, r: dongRelation(s, feature) }))
-    .filter(x => x.r);
+    .filter(x => x.r).forEach(x => rel.push(x));
   // 정비(어댑트)는 법정동명 매칭으로 '소재' 포함 — 카운트·목록 일관
-  JEONGBI_SIG.filter(visible)
+  JEONGBI_SIG.filter(visibleNoRegion)
     .filter(s => s.sg === feature.properties.sgg && s.dong === feature.properties.EMD_KOR_NM)
     .forEach(s => rel.push({ s, r: "소재" }));
-  DART_SIG.filter(visible).map(s => ({ s, r: dongRelation(s, feature) })).filter(x => x.r).forEach(x => rel.push(x));   // DART 일자리(반경 기준)
-  ARCH_SIG.filter(visible).map(s => ({ s, r: dongRelation(s, feature) })).filter(x => x.r).forEach(x => rel.push(x));   // 건축인허가 인프라·일자리(반경 기준)
-  ROAD_SIG.filter(visible).map(s => ({ s, r: dongRelation(s, feature) })).filter(x => x.r).forEach(x => rel.push(x));   // 도로 노선·IC(다점 반경 기준)
   const host = rel.filter(x => x.r === "소재"), near = rel.filter(x => x.r === "반경권");
   p.innerHTML = `
     <div class="phead"><div class="pt">${name}</div><div class="closex" onclick="closePanel()">✕</div></div>
@@ -5221,7 +5254,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260810g");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260810h");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -5387,7 +5420,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810g"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810h"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5413,7 +5446,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260810g");
+  const CB = "?b=" + (window.BUILD || "20260810h");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
