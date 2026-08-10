@@ -480,6 +480,13 @@
   .apt-pop-cmp { margin-top:9px; text-align:center; font-size:12px; font-weight:700; border:1.5px solid #1a1a1a; border-radius:8px; padding:5px 0; cursor:pointer; color:#1a1a1a; background:#fff; }
   .apt-pop-cmp:hover { background:#f3f4f6; }
   .apt-pop-cmp.in { background:#1a1a1a; color:#fff; }
+  /* 상세보기+비교담기 2버튼 행 (2026-08-10 사용자 제보) — 팝업이 마커를 덮어 마커 클릭(상세보기)이
+     사실상 불가했고, 모바일은 탭이 mouseenter로 팝업을 먼저 띄워 상세보기 경로가 아예 없었다.
+     상세보기를 팝업 안의 **명시 버튼**(주 동작=채움)으로 두면 가림·탭 순서와 무관해진다. */
+  .apt-pop-btns { display:flex; gap:6px; margin-top:9px; }
+  .apt-pop-btns .apt-pop-cmp { margin-top:0; flex:1; }
+  .apt-pop-view { flex:1; text-align:center; font-size:12px; font-weight:700; border:1.5px solid #1a1a1a; border-radius:8px; padding:5px 0; cursor:pointer; color:#fff; background:#1a1a1a; }
+  .apt-pop-view:hover { opacity:.85; }
   .copyaddr { cursor:pointer; font-size:11px; padding:1px 4px; border-radius:5px; background:#eef1fb; margin-left:3px; user-select:none; }
   .copyaddr:hover { background:#dde3f7; }
   .factsheet { border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin:8px 0; background:#fbfcfe; }
@@ -923,7 +930,7 @@ const phaseLabel = p => PHASE_LABEL[p] || p;
    파이썬 쪽 같은 규칙은 phase_map.py(thresholds.json 단계_백본을 읽는다) — 규칙 SSOT는 그 파일이다. */
 const PHASE_KEYWORDS = [
   ["인가", /(예타|예비\s*타당성|민자적격성|중투심사|중앙투자심사)[^가-힣]{0,6}(통과|면제)/],
-  ["준공·개통", /준공|개통(?!\s*(목표|예정|전망))|입주|완공|사용승인|공급·모집|분양/],
+  ["준공·개통", /준공|개통(?!\s*(목표|예정|전망))|입주|완공|사용승인|공급·모집|분양|이전고시|청산|해산/],
   ["착공", /착공(?!\s*(목표|예정|미정))|이주|철거|시운전/],
   ["계획", /망계획|철도망|도시철도망|계획\s*반영|사전\s*타당성|절차\s*(전|미착수)|설계공모|예산반영|취득|공시/],
   ["인가", /인가|승인|지정|가결|고시|허가|입찰|설계|관리처분|조합설립|결정고시|미집행/],
@@ -3862,7 +3869,8 @@ function initLeaflet() {
         const inCmp = compareSet.some(x => x.n === a.n && x.dong === a.dong);
         const pop = `<div class="apt-pop"><div class="apt-pop-nm">${a.n}</div><div class="apt-pop-sub">${sub}</div>`
           + `<div class="apt-pop-cnt">반경 내 호재 <b>${near().length}</b>건</div>`
-          + `<div class="apt-pop-cmp${inCmp ? " in" : ""}">${inCmp ? "✓ 비교함" : "＋ 비교담기"}</div></div>`;
+          + `<div class="apt-pop-btns"><div class="apt-pop-view">상세보기</div>`
+          + `<div class="apt-pop-cmp${inCmp ? " in" : ""}">${inCmp ? "✓ 비교함" : "＋ 비교담기"}</div></div></div>`;
         const me = m.getElement(); const halfW = me ? Math.round(me.offsetWidth / 2) : 0;
         const pu = L.popup({ className: "apt-pop-wrap", closeButton: false, autoPan: false, offset: [halfW, -6] })
           .setLatLng([a.lat, a.lon]).setContent(pop).openOn(map);
@@ -3871,6 +3879,11 @@ function initLeaflet() {
           L.DomEvent.stop(e); toggleCompare(a);
           const on = compareSet.some(x => x.n === a.n && x.dong === a.dong);
           btn.classList.toggle("in", on); btn.textContent = on ? "✓ 비교함" : "＋ 비교담기";
+        });
+        const vbtn = el && el.querySelector(".apt-pop-view");
+        if (vbtn) L.DomEvent.on(vbtn, "click", e => {
+          L.DomEvent.stop(e); if (map._popup === pu) map.closePopup(pu);
+          treeState.selKey = `apt|${a.n}|${a.dong}`; buildTree(); showApt(a);
         });
         let overPopup = false;
         if (el) {
@@ -4793,9 +4806,11 @@ function initKakao() {
   const closeAptPop = () => { if (aptPop) { aptPop.remove(); aptPop = null; } };
   const openAptPop = (a, sub, pt) => { closeAptPop(); const near = signalsNearPoint([a.lon, a.lat], true); const inCmp = compareSet.some(x => x.n === a.n && x.dong === a.dong);   // all=true — 단지 사실은 조회조건 무관(Leaflet판 주석 참조)
     aptPop = document.createElement("div"); aptPop.style.cssText = "position:absolute;z-index:50;transform:translate(-50%,-100%);pointer-events:auto"; aptPop.style.left = pt.x + "px"; aptPop.style.top = (pt.y - 3) + "px";
-    aptPop.innerHTML = '<div class="apt-pop"><div class="apt-pop-nm">' + a.n + '</div><div class="apt-pop-sub">' + sub + '</div><div class="apt-pop-cnt">반경 내 호재 <b>' + near.length + '</b>건</div><div class="apt-pop-cmp' + (inCmp ? " in" : "") + '">' + (inCmp ? "✓ 비교함" : "＋ 비교담기") + '</div></div>';
+    aptPop.innerHTML = '<div class="apt-pop"><div class="apt-pop-nm">' + a.n + '</div><div class="apt-pop-sub">' + sub + '</div><div class="apt-pop-cnt">반경 내 호재 <b>' + near.length + '</b>건</div><div class="apt-pop-btns"><div class="apt-pop-view">상세보기</div><div class="apt-pop-cmp' + (inCmp ? " in" : "") + '">' + (inCmp ? "✓ 비교함" : "＋ 비교담기") + '</div></div></div>';
     mapEl.appendChild(aptPop); const btn = aptPop.querySelector(".apt-pop-cmp");
     if (btn) btn.addEventListener("click", e => { e.stopPropagation(); toggleCompare(a); const on = compareSet.some(x => x.n === a.n && x.dong === a.dong); btn.classList.toggle("in", on); btn.textContent = on ? "✓ 비교함" : "＋ 비교담기"; });
+    const vbtn = aptPop.querySelector(".apt-pop-view");
+    if (vbtn) vbtn.addEventListener("click", e => { e.stopPropagation(); closeAptPop(); treeState.selKey = "apt|" + a.n + "|" + a.dong; buildTree(); showApt(a); });
     aptPop.addEventListener("mouseenter", () => { if (aptPopTimer) clearTimeout(aptPopTimer); }); aptPop.addEventListener("mouseleave", () => closeAptPop()); };
   // 아파트 점: 단지 객체에 1회 캐시(_kdot) — setMap 토글 + 선택 상태만 className 갱신
   let aptShown = new Set();
@@ -5200,7 +5215,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260810d");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260810e");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -5366,7 +5381,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810d"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810e"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5392,7 +5407,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260810d");
+  const CB = "?b=" + (window.BUILD || "20260810e");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
