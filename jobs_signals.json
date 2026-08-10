@@ -1692,6 +1692,426 @@
    "first_seen": "2026-08-08",
    "last_movement": "2026-08-08",
    "last_movement_basis": "observed"
+  },
+  {
+   "id": "J-seobu-truck-logis",
+   "title": "서부트럭터미널 도시첨단물류단지",
+   "cat": "일자리",
+   "sub": "물류단지",
+   "lvl": "S",
+   "lvl_basis": "사업비 19,000억 — 일자리 S",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「착공」",
+   "amount_eok": 19000,
+   "area_m2": 104245,
+   "amount_kind": "일자리:복합단지",
+   "area_kind": "부지",
+   "phase": "계획",
+   "current_stage": "기공식 개최('25.11.4) · 행정절차(인허가) 진행 중 — 실제 착공 '26 하반기·준공 '30 하반기 목표",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "국토부 시범단지 선정",
+     "date": "2016-06",
+     "state": "done",
+     "src": "국토부 보도자료"
+    },
+    {
+     "phase": "계획",
+     "stage": "도시첨단물류단지 지구 지정",
+     "date": "2023-08",
+     "state": "done",
+     "src": "제4차 물류시설개발 종합계획('23.12)"
+    },
+    {
+     "phase": "계획",
+     "stage": "기공식 개최(행정절차 진행 중 — 상징 행사)",
+     "date": "2025-11-04",
+     "state": "done",
+     "src": "서울시 보도자료"
+    },
+    {
+     "phase": "인가",
+     "stage": "물류단지계획 승인·인허가",
+     "state": "current",
+     "src": "서울시 보도자료('25.11) — 행정절차 진행"
+    },
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "state": "future",
+     "eta": "2026"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "state": "future",
+     "eta": "2030"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "서울",
+   "sg": "양천구",
+   "loc": "양천구 신정동 1315 일대(서부트럭터미널 부지)",
+   "last_movement": "2025-11-04",
+   "src_tier": "official_report",
+   "src_name": "서울시 보도자료 — 서부트럭터미널 도시첨단물류단지(연면적 79.1만㎡·지하7~지상25층·총 1조9천억·주택 997세대)",
+   "sources": [
+    "https://opengov.seoul.go.kr/press/34679063"
+   ],
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "geo_basis": "UPIS 도시첨단물류단지 구역 폴리곤 중심(116,386㎡ — upis_zone_cache) — 신정동 1315 일대",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.83966,
+     37.50954
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2016-06",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
+  },
+  {
+   "id": "J-yangjae-logis",
+   "title": "양재 도시첨단물류단지",
+   "cat": "일자리",
+   "sub": "물류단지",
+   "lvl": "C",
+   "lvl_basis": "부지면적 86,002㎡ — 일자리:부지 C",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "area_m2": 86002,
+   "amount_kind": "일자리:복합단지",
+   "area_kind": "부지",
+   "phase": "인가",
+   "current_stage": "물류단지계획 승인 고시('24.2.29 서울시) · 변경 승인('25.8) · 건축심의('25.10 신청) — 착공목표 '26 상반기·준공 '29",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "국토부 시범단지 선정",
+     "date": "2016-06",
+     "state": "done",
+     "src": "국토부 보도자료"
+    },
+    {
+     "phase": "인가",
+     "stage": "물류단지계획(안) 승인 고시",
+     "date": "2024-02-29",
+     "state": "done",
+     "src": "서울시 보도자료"
+    },
+    {
+     "phase": "인가",
+     "stage": "계획 변경 승인·건축심의",
+     "date": "2025",
+     "state": "current",
+     "src": "서울시·서초구"
+    },
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "state": "future",
+     "eta": "2026"
+    },
+    {
+     "phase": "준공",
+     "stage": "준공",
+     "state": "future",
+     "eta": "2029"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "서울",
+   "sg": "서초구",
+   "loc": "서초구 양재동 225 일대(옛 한국화물터미널)",
+   "last_movement": "2025",
+   "src_tier": "official_report",
+   "src_name": "서울시 보도자료 — 양재 도시첨단물류단지 계획 승인(부지 86,002.5㎡·지하8~지상58층·공공기여 5,607억)",
+   "sources": [
+    "https://opengov.seoul.go.kr/press/30449238"
+   ],
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "geo_basis": "양재동 225 지번 지오코딩(사업 부지 본체)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.042467,
+     37.481896
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2016-06",
+     "basis": "source"
+    },
+    {
+     "stage": "인가",
+     "date": "2024-02-29",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
+  },
+  {
+   "id": "J-geumcheon-siheung-logis",
+   "title": "시흥유통상가 도시첨단물류단지",
+   "cat": "일자리",
+   "sub": "물류단지",
+   "lvl": "C",
+   "lvl_basis": "부지면적 156,071㎡ — 일자리:부지 C",
+   "gate": "신호",
+   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "area_m2": 156071,
+   "amount_kind": "일자리:복합단지",
+   "area_kind": "부지",
+   "phase": "계획",
+   "current_stage": "개발사업조합 설립인가('25.9.30 금천구) — 물류단지 지정 신청·서울시 통합심의 예정",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "국토부 시범단지 선정",
+     "date": "2016-06",
+     "state": "done",
+     "src": "국토부 보도자료"
+    },
+    {
+     "phase": "계획",
+     "stage": "개발사업조합 설립인가",
+     "date": "2025-09-30",
+     "state": "current",
+     "src": "금천구"
+    },
+    {
+     "phase": "인가",
+     "stage": "물류단지 지정·계획 승인",
+     "state": "future"
+    },
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "state": "future"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "서울",
+   "sg": "금천구",
+   "loc": "금천구 시흥동 984 일대(시흥산업용재유통센터)",
+   "last_movement": "2025-09-30",
+   "src_tier": "official_report",
+   "src_name": "금천구 — 금천 도시첨단물류단지 개발사업조합 설립인가('25.9.30)",
+   "sources": [
+    "https://www.geumcheon.go.kr/portal/contents.do?key=899"
+   ],
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "geo_basis": "시흥동 984 지번 지오코딩(유통상가 본체)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.901659,
+     37.442911
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2016-06",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
+  },
+  {
+   "id": "J-daegu-dalseo-logis",
+   "title": "대구화물터미널 도시첨단물류단지(시범)",
+   "cat": "일자리",
+   "sub": "물류단지",
+   "lvl": "C",
+   "lvl_basis": "부지면적 70,022㎡ — 일자리:부지 C",
+   "gate": "신호",
+   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "area_m2": 70022,
+   "amount_kind": "일자리:복합단지",
+   "area_kind": "부지",
+   "phase": "계획",
+   "current_stage": "시범단지 선정('16.6) — 이후 공식 진척 미확인(정체)",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "국토부 시범단지 선정",
+     "date": "2016-06",
+     "state": "current",
+     "src": "국토부 보도자료"
+    },
+    {
+     "phase": "인가",
+     "stage": "물류단지 지정·계획 승인",
+     "state": "future"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "대구",
+   "sg": "달서구",
+   "loc": "달서구 월성동 875-1(대구물류터미널)",
+   "last_movement": "2016-06",
+   "src_tier": "official_report",
+   "src_name": "국토부 시범단지 선정('16.6) · 제4차 물류시설개발 종합계획('23.12 — 70,022㎡)",
+   "sources": [
+    "https://korea.kr/briefing/pressReleaseView.do?newsId=156139355"
+   ],
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "geo_basis": "월성동 875-1 지번 지오코딩(터미널 본체 — 카카오맵 등재 주소)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.519927,
+     35.835085
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2016-06",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
+  },
+  {
+   "id": "J-gwangju-bukgu-logis",
+   "title": "광주화물터미널 도시첨단물류단지(시범)",
+   "cat": "일자리",
+   "sub": "물류단지",
+   "lvl": "C",
+   "lvl_basis": "부지면적 35,326㎡ — 일자리:부지 C",
+   "gate": "신호",
+   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "area_m2": 35326,
+   "amount_kind": "일자리:복합단지",
+   "area_kind": "부지",
+   "phase": "계획",
+   "current_stage": "시범단지 선정('16.6) — 이후 공식 진척 미확인(정체)",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "국토부 시범단지 선정",
+     "date": "2016-06",
+     "state": "current",
+     "src": "국토부 보도자료"
+    },
+    {
+     "phase": "인가",
+     "stage": "물류단지 지정·계획 승인",
+     "state": "future"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "전남광주",
+   "sg": "북구",
+   "loc": "북구 각화동 380(광주화물터미널)",
+   "last_movement": "2016-06",
+   "src_tier": "official_report",
+   "src_name": "국토부 시범단지 선정('16.6) · 제4차 물류시설개발 종합계획('23.12 — 35,326㎡)",
+   "sources": [
+    "https://korea.kr/briefing/pressReleaseView.do?newsId=156139355"
+   ],
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "geo_basis": "각화동 380 지번 지오코딩(터미널 본체 — 카카오맵 등재 주소). 종전 VWorld POI 후보는 0.1km 이격이라 기각",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.933569,
+     35.186278
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2016-06",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
+  },
+  {
+   "id": "J-cheongju-logis",
+   "title": "청주화물터미널 도시첨단물류단지(시범)",
+   "cat": "일자리",
+   "sub": "물류단지",
+   "lvl": "C",
+   "lvl_basis": "부지면적 56,224㎡ — 일자리:부지 C",
+   "gate": "신호",
+   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "area_m2": 56224,
+   "amount_kind": "일자리:복합단지",
+   "area_kind": "부지",
+   "phase": "계획",
+   "current_stage": "시범단지 선정('16.6) — 이후 공식 진척 미확인(정체)",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "국토부 시범단지 선정",
+     "date": "2016-06",
+     "state": "current",
+     "src": "국토부 보도자료"
+    },
+    {
+     "phase": "인가",
+     "stage": "물류단지 지정·계획 승인",
+     "state": "future"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "충북",
+   "sg": "청주시 흥덕구",
+   "loc": "흥덕구 지동동 476(청주화물터미널)",
+   "last_movement": "2016-06",
+   "src_tier": "official_report",
+   "src_name": "국토부 시범단지 선정('16.6) · 제4차 물류시설개발 종합계획('23.12 — 56,224㎡)",
+   "sources": [
+    "https://korea.kr/briefing/pressReleaseView.do?newsId=156139355"
+   ],
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "geo_basis": "지동동 476 지번 지오코딩(터미널 본체 — 카카오맵 등재 주소)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.419949,
+     36.64407
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2016-06",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-10",
+   "last_movement_basis": "source"
   }
  ]
 }
