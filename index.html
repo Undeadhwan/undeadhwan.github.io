@@ -3745,7 +3745,8 @@ function loadLeaflet() {
   document.head.appendChild(s);
 }
 function initLeaflet() {
-  const map = L.map("map", { zoomControl: false }).setView([37.556, 126.95], 10);   // 수도권 전역 · 줌 슬라이더 제거(2026-07-23)
+  const map = L.map("map", { zoomControl: false, maxBounds: [[32.6, 123.8], [39.6, 132.6]],
+    maxBoundsViscosity: 1.0, minZoom: 6 }).setView([37.556, 126.95], 10);   // 수도권 전역 · 줌 슬라이더 제거(2026-07-23) · 한반도 밖 이탈 방지(2026-08-10 — 카카오판 클램프와 쌍)
   window._map = map;   // 디버그·검증용
   // 컨테이너 크기 변동 대응 (초기 0크기·모바일 회전 등)
   setTimeout(() => map.invalidateSize(), 300);
@@ -4440,6 +4441,18 @@ function initKakao() {
   const LL = (lng, lat) => new K.LatLng(lat, lng);   // [lng,lat] → LatLng
   const el = document.getElementById("map"); el.style.position = "relative";
   const map = new K.Map(el, { center: new K.LatLng(37.556, 126.95), level: 8 });
+  // ★ 한반도 밖 이탈 방지 (2026-08-10 사용자 — "처리속도에 영향 주면 하지 말고" → **중심 클램프만**:
+  //   이벤트당 비교 4번·렌더 비용 0. 드래그 관성이 끝나는 지점만 되돌리므로 팬 프레임엔 개입 없음).
+  //   범위는 백령도~독도·제주~접경 여유 포함. 줌아웃 상한(레벨 13)으로 대양 뷰도 차단.
+  map.setMaxLevel(13);
+  const _KB = { s: 32.6, n: 39.6, w: 123.8, e: 132.6 };
+  let _kbBusy = false;
+  K.event.addListener(map, "center_changed", () => {
+    if (_kbBusy) return;
+    const c = map.getCenter(), la = Math.min(_KB.n, Math.max(_KB.s, c.getLat())),
+          ln = Math.min(_KB.e, Math.max(_KB.w, c.getLng()));
+    if (la !== c.getLat() || ln !== c.getLng()) { _kbBusy = true; map.setCenter(new K.LatLng(la, ln)); _kbBusy = false; }
+  });
   window._map = map; window._kmap = map; map.setMaxLevel(13);
   // 줌 슬라이더 제거(2026-07-23 사용자 요청) — 스크롤·핀치 줌으로 대체
   const DONG_LV = 6, APT_LV = 4, APT_ICON_LV = 5;   // 집 아이콘만 lv5부터(2026-07-29) — 라벨·등급 LOD(APT_LV)는 불변
@@ -4625,8 +4638,27 @@ function initKakao() {
      클릭 판정: 카카오는 히트 영역이 선 굵기 그대로라 3px 선은 못 누른다 → 투명 굵은 히트선(14px)을 위에 깔고
      클릭·hover를 거기서 받는다. phase 미상(예타 등 고시 전) 노선은 "계획"으로 취급해 단계 필터에 반응(사용자 2026-07-21 — 5호선 김포연장이 필터에 안 죽던 원인). */
   let railLabels = [], lineBadges = [], railLineObjs = null, _railCacheN = -1, routeIsoName = null;
+  /* 선형 간축(표시 전용 · Douglas-Peucker) — 줌아웃 밴드에서 그릴 정점을 줄인다(2026-08-10 승인).
+     톨러런스는 m 단위: 80m는 lv7에서 2~4px — 형상 훼손 없이 SVG 재도장 비용만 준다. */
+  const simplifyLine = (seg, tolM) => {
+    if (seg.length <= 2) return seg;
+    const ky = 111320, kx = 111320 * Math.cos(seg[0][1] * Math.PI / 180);
+    const d2 = (p, a, b) => {
+      const ax = (p[0] - a[0]) * kx, ay = (p[1] - a[1]) * ky, bx = (b[0] - a[0]) * kx, by = (b[1] - a[1]) * ky;
+      const L = bx * bx + by * by, t = L ? Math.max(0, Math.min(1, (ax * bx + ay * by) / L)) : 0;
+      const dx = ax - bx * t, dy = ay - by * t; return dx * dx + dy * dy;
+    };
+    const keep = new Uint8Array(seg.length); keep[0] = keep[seg.length - 1] = 1;
+    const st = [[0, seg.length - 1]], t2 = tolM * tolM;
+    while (st.length) {
+      const [i, j] = st.pop(); let mx = -1, mi = -1;
+      for (let k = i + 1; k < j; k++) { const d = d2(seg[k], seg[i], seg[j]); if (d > mx) { mx = d; mi = k; } }
+      if (mx > t2) { keep[mi] = 1; st.push([i, mi], [mi, j]); }
+    }
+    return seg.filter((_, i) => keep[i]);
+  };
   const buildRailLines = () => {
-    if (railLineObjs) railLineObjs.forEach(o => o.objs.forEach(l => l.setMap(null)));
+    if (railLineObjs) railLineObjs.forEach(o => { o.objs.forEach(l => l.setMap(null)); (o.objsLo || []).forEach(l => l.setMap(null)); });
     railLineObjs = [];
     const col = CAT_COLOR["교통"];
     for (const f of RAIL.concat(ROADF)) {
@@ -4671,21 +4703,34 @@ function initKakao() {
          `geom_solid`가 빈 배열이면 그 노선은 **전 구간이 연한 점선** — 있다는 사실과 모른다는 사실을
          동시에 보여준다(P2·P5). 선을 그릴 점이 2개 미만일 때만 여전히 미표시. */
       const solid = drawnParts(p, f.geometry).solid;   // 정의는 drawnParts 하나 — 회랑도 같은 것을 쓴다
-      solid.forEach(seg => {
-        const path = seg.map(([x, y]) => LL(x, y));
-        // 흰 케이싱 + 색 본선(2026-07-30) — 지하철 노선도의 표준 문법. 종전엔 색 선 하나가
-        // 주황 도로망 위에 그대로 얹혀 배경과 섞였다. 케이싱이 배경을 끊어 주므로 본선을
-        // 더 얇게 해도 오히려 또렷하다. 점선은 촘촘한 dot로 바꿔 톱니를 없앤다.
-        // ⚠ **점선은 실선보다 굵어야 같은 굵기로 보인다** (2026-08-01 사용자 "계획 점선 두께가
-        //   너무 얇아서 잘 안보여"). 종전엔 점선 본선이 2.4로 실선 3보다 **얇았다** — dot는
-        //   잉크가 절반 이하라 같은 굵기여도 훨씬 흐린데, 거기서 20%를 더 깎고 있었다.
-        //   보이는 굵기 ≈ 실굵기 × 잉크비율이므로 점선 쪽을 올린다(3.6). 케이싱도 함께(6.0).
-        //   dot 문법 자체는 유지 — shortdash로 바꾸면 작은 곡선에서 톱니가 돌아온다(2026-07-30).
-        objs.push(new K.Polyline({ path, strokeColor: "#ffffff", strokeWeight: dashed ? 6 : 5.6,
-          strokeOpacity: subdued ? .5 : .85, strokeStyle: "solid", zIndex: 2 }));
-        objs.push(new K.Polyline({ path, strokeColor: col, strokeWeight: dashed ? 3.6 : 3,
-          strokeOpacity: subdued ? .5 : isRoad ? .8 : .92, strokeStyle: dashed ? "shortdot" : "solid", zIndex: 3 }));
-      });
+      // 흰 케이싱 + 색 본선(2026-07-30) — 지하철 노선도의 표준 문법. 종전엔 색 선 하나가
+      // 주황 도로망 위에 그대로 얹혀 배경과 섞였다. 케이싱이 배경을 끊어 주므로 본선을
+      // 더 얇게 해도 오히려 또렷하다. 점선은 촘촘한 dot로 바꿔 톱니를 없앤다.
+      // ⚠ **점선은 실선보다 굵어야 같은 굵기로 보인다** (2026-08-01 사용자 "계획 점선 두께가
+      //   너무 얇아서 잘 안보여"). 종전엔 점선 본선이 2.4로 실선 3보다 **얇았다** — dot는
+      //   잉크가 절반 이하라 같은 굵기여도 훨씬 흐린데, 거기서 20%를 더 깎고 있었다.
+      //   보이는 굵기 ≈ 실굵기 × 잉크비율이므로 점선 쪽을 올린다(3.6). 케이싱도 함께(6.0).
+      //   dot 문법 자체는 유지 — shortdash로 바꾸면 작은 곡선에서 톱니가 돌아온다(2026-07-30).
+      // ★ 팬·줌 부드러움 (2026-08-10 사용자 승인): 같은 스타일로 **간축본(objsLo)**을 함께 만든다.
+      //   지도 위 SVG 정점 ~36k가 팬 매 프레임 재도장되는 것이 버벅임의 실체 — 줌아웃 밴드(lv7+)
+      //   에서는 80m 톨러런스 간축본으로 스위치한다(lv7에서 80m ≈ 화면 2~4px — 형상 훼손 없음).
+      //   데이터는 그대로다(표시 전용) — 정직성 채널(색·투명도·dash)은 두 벌이 동일해야 하므로
+      //   생성을 한 함수(_mkSeg)로 묶는다(스타일 사본이 갈라지는 쌍 사고 방지).
+      const objsLo = [];
+      const hasSolid = !!(p.geom_solid && p.geom_solid.length);
+      const _mkSeg = (seg, isBridge) => {
+        const so = isBridge ? (hasSolid ? (subdued ? .5 : .85) : .5) : (subdued ? .5 : .85);
+        const mo = isBridge ? (hasSolid ? (subdued ? .5 : isRoad ? .8 : .92) : .38)
+                            : (subdued ? .5 : isRoad ? .8 : .92);
+        for (const [sg, arr] of [[seg, objs], [simplifyLine(seg, 80), objsLo]]) {
+          const path = sg.map(([x, y]) => LL(x, y));
+          arr.push(new K.Polyline({ path, strokeColor: "#ffffff", strokeWeight: dashed ? 6 : 5.6,
+            strokeOpacity: so, strokeStyle: "solid", zIndex: 2 }));
+          arr.push(new K.Polyline({ path, strokeColor: col, strokeWeight: dashed ? 3.6 : 3,
+            strokeOpacity: mo, strokeStyle: dashed ? "shortdot" : "solid", zIndex: 3 }));
+        }
+      };
+      solid.forEach(seg => _mkSeg(seg, false));
       /* **보간 구간은 다르게 그린다** (2026-08-01 사용자 "말이 되냐 중간에 끊기는게?").
          정점이 촘촘한 선의 드문 빈틈은 **추측이 아니라 보간**이다 — 양쪽 다 실제 회랑 위의 점이고
          그 사이로 경로가 지난다는 건 안다. 그래서 끊지 않고 잇되, 그 구간만 **연하게** 그려
@@ -4702,15 +4747,7 @@ function initKakao() {
            지우지 않는다: 클릭 팝업·카드의 「이 중 Nkm는 보간」 문구가 말한다(P2는 텍스트 채널로).
          · **전 구간이 보간**(2점 앵커·성긴 근사, solid 없음) = 종전대로 연하게 — 이건 빈틈 잇기가
            아니라 선 전체가 근사라, 진하게 그리면 실형상 행세다(파주 앵커선 문법 — 사용자 "됐고"). */
-      const hasSolid = !!(p.geom_solid && p.geom_solid.length);
-      (p.geom_bridges || []).forEach(seg => {
-        const bp = seg.map(([x, y]) => LL(x, y));
-        objs.push(new K.Polyline({ path: bp, strokeColor: "#ffffff", strokeWeight: dashed ? 6 : 5.6,
-          strokeOpacity: hasSolid ? (subdued ? .5 : .85) : .5, strokeStyle: "solid", zIndex: 2 }));
-        objs.push(new K.Polyline({ path: bp, strokeColor: col, strokeWeight: dashed ? 3.6 : 3,
-          strokeOpacity: hasSolid ? (subdued ? .5 : isRoad ? .8 : .92) : .38,
-          strokeStyle: dashed ? "shortdot" : "solid", zIndex: 3 }));
-      });
+      (p.geom_bridges || []).forEach(seg => _mkSeg(seg, true));   // 스타일은 _mkSeg 한 곳(간축본 동시 생성)
       segs.forEach(seg => {
         const path = seg.map(([x, y]) => LL(x, y));
         // 히트선 정점 다이어트(1/3) — 단 **꺾임 정점은 보존**한다. 종전 무조건 i%3은
@@ -4739,7 +4776,7 @@ function initKakao() {
       // 목표년도 = 마일스톤 eta(소스가 준 목표만, 없으면 미표기 P2)
       const _bflat = segs.flat();
       const _beta = (((p.milestones || []).filter(m => m.eta).pop() || {}).eta || "").slice(2, 4);
-      railLineObjs.push({ objs, hits, isRoad, ph: p.phase || "계획",
+      railLineObjs.push({ objs, objsLo, hits, isRoad, ph: p.phase || "계획",
         nms: [p.name, p.full, p.official_name].filter(Boolean),   // 노선 격리(상세 하이라이트) 매칭 키
         ck: clickHandler, bnm: p.name, beta: _beta, mid: _bflat[0],
         lvl: p.lvl || (isRoad ? "C" : railLevelOf(p.full || p.name, p.linekind)) });   // 등급 LOD용(어댑터와 같은 폴백)
@@ -4769,7 +4806,10 @@ function initKakao() {
         // 노선 상세 격리(2026-08-04 아실 벤치마크) — 상세를 열면 그 노선만 남긴다.
         // 여기(가시성 단일 결정점)에 넣어야 지도 이동·재렌더에도 격리가 유지된다.
         && (!routeIsoName || (o.nms || []).includes(routeIsoName));
-      o.objs.forEach(l => l.setMap(show ? map : null));
+      // ★ 줌아웃 밴드(lv7+)는 간축본으로 스위치 (2026-08-10 승인 — 팬 프레임당 SVG 정점 ~36k→~6k)
+      const _lo = _bLv >= 7;
+      o.objs.forEach(l => l.setMap(!_lo && show ? map : null));
+      (o.objsLo || []).forEach(l => l.setMap(_lo && show ? map : null));
       o.hits.forEach(l => l.setMap(show ? map : null));
       // 노선명 배지(2026-08-04 사용자 확정: 광역 줌 lv5~11 한정·노선당 1개(중점)·색=분류 유지·
       // 단계=우리 백본 + 목표년도는 소스가 준 것만 「목표 'NN」로). 확대(lv≤4)하면 역명 라벨과 교대.
@@ -4935,7 +4975,7 @@ function initKakao() {
   // 저가치만 내려선 부족하다는 사용자 확인 2026-07-21). 선택 상태(핀·반경·노선 하이라이트)만 유지.
   K.event.addListener(map, "zoom_start", () => {
     hideTip();
-    if (railLineObjs) railLineObjs.forEach(o => { o.objs.forEach(l => l.setMap(null)); o.hits.forEach(l => l.setMap(null)); });
+    if (railLineObjs) railLineObjs.forEach(o => { o.objs.forEach(l => l.setMap(null)); (o.objsLo || []).forEach(l => l.setMap(null)); o.hits.forEach(l => l.setMap(null)); });
     hjShown.forEach(s => s._kmk && s._kmk.setMap(null));
     for (const f of DONG_GEO.features) if (f._kpolys) f._kpolys.forEach(pg => pg.setMap(null));
     shownJb.forEach(o => o.setMap(null));
@@ -5288,7 +5328,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260810j");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260810k");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -5454,7 +5494,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810j"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810k"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5480,7 +5520,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260810j");
+  const CB = "?b=" + (window.BUILD || "20260810k");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
