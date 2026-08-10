@@ -1954,7 +1954,10 @@ function buildJeongbiSignals() {
     // 세대수 기준: A≥5천/B 1500~5천/C 500~1500. 500 미만·미확보 = 미정(미판정, 최소기준 미달/데이터없음)
     // ⚠ 원문 사업구분(`type`)을 어댑터가 반드시 실어야 중분류 축이 화면에 온다 —
     //    어댑터는 필드를 골라 복사하므로, 안 실으면 전부 '미상'으로 떨어진다(어댑터 함정 4회 경험).
-    _jb: true, _jbtype: c.type || "", src_tier: "official_report", milestones: c.milestones || [], title: c.n, cat: "주거개발", lvl: hhLevel(c.hh), lvl_basis: hhBasis(c.hh),   // 세대수 눈금 = thresholds.json(SSOT) · 사유는 카드에 표기
+    // ★ 제목에 법정동을 접두한다 (2026-08-10 사용자 "정비명만 보고 무슨 정비사업인지 구분이 안 된다").
+    //   소스 사업명이 「주공4단지 (재건축)」처럼 지역 없는 통칭인 경우가 많다 — 동(사실 필드)을
+    //   앞에 붙이면 카드·목록·검색 전부에서 구분된다. 이름을 지어내는 게 아니라 위치 사실의 표기다(P2).
+    _jb: true, _jbtype: c.type || "", src_tier: "official_report", milestones: c.milestones || [], title: (c.dong && !(c.n || "").includes(c.dong) ? c.dong + " " + c.n : c.n), cat: "주거개발", lvl: hhLevel(c.hh), lvl_basis: hhBasis(c.hh),   // 세대수 눈금 = thresholds.json(SSOT) · 사유는 카드에 표기
     template_type: "정비사업", current_stage: c.stage, phase: c.phase, status: c.drop ? "종결" : "활성", confirmed: false,
     sd: c.sd, sg: c.sg, dong: c.dong, hh: c.hh, last_movement: c.last_movement || null, stage_history: c.stage_history || undefined, target_completion: null,   // 실일자(경기 마일스톤 소급 등) → 신선도·정체 표시
     // ⚠ 완료일 미상 표식 — 안 실으면 isStaleFinished가 stage_history의 **관측일**을 완료일로 읽어
@@ -1962,7 +1965,10 @@ function buildJeongbiSignals() {
     //   생산측(lifecycle)은 2026-07-31에 고쳤는데 어댑터가 그 필드를 떨어뜨려 화면은 그대로였다).
     fin_date_unknown: c.fin_date_unknown, fin_note: c.fin_note, done_apt: c.done_apt,
     geo_prec: c.geo_prec, geo_approx: !!c.geo_approx || c.geo_prec === "dong",   // 동 대표점 등 근사를 후광·카드에 정직 표기(§4.1 — 국토부 통합은 주소 컬럼이 없어 동 폴백이 많다: 대구 비산동 6건 한 점 사례)
-    sources: [c.sd === "서울" ? "https://cleanup.seoul.go.kr" : c.sd === "경기" ? "https://gg.go.kr" : "https://www.data.go.kr"],
+    // 경기 근거는 도청 홈이 아니라 **경기데이터드림 데이터셋 카탈로그**로 (2026-08-10 사용자
+    // "근거 링크 가보면 어떻게 정비정보를 보는지 알 수 없다"). 검색 폼이 CSRF POST라 결과
+    // 딥링크는 불가 — 카탈로그에서 「일반 정비 사업 추진 현황」 검색 → Sheet에서 사업장명 조회.
+    sources: [c.sd === "서울" ? "https://cleanup.seoul.go.kr" : c.sd === "경기" ? "https://data.gg.go.kr/portal/data/dataset/searchDatasetPage.do" : "https://www.data.go.kr"],
     geometry: { coordinates: [c.lon, c.lat] }
   }));
 }
@@ -3069,7 +3075,7 @@ function renderDetail(s) {
         return `<a href="${u}" target="_blank"${nq ? ' title="이 링크는 검색 조건을 직접 넣어야 해당 건이 보입니다 — 딥링크가 제공되지 않습니다"' : ""}>${lbl}</a>`;
       }).join(" · ") || "원문 링크 없음"}</span>${
         s.src_tier === "osm" ? ' · <b>진행단계·명칭은 공식 확인 전</b>(선형만 OSM 참고)' : ""}${
-        /hub\.go\.kr|eais\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 원본 수치는 위 팩트시트 그대로. 건축HUB는 <b>딥링크가 없어</b> 링크에서 <b>대지위치를 직접 입력</b>해야 이 건이 보입니다 — 위 <b>대지위치 📋</b>로 복사해 붙여 넣으세요</div>' : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 개별 딥링크가 없어 포털 연결 — 위 사업장명으로 조회</div>' : ""}</div>
+        /hub\.go\.kr|eais\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 원본 수치는 위 팩트시트 그대로. 건축HUB는 <b>딥링크가 없어</b> 링크에서 <b>대지위치를 직접 입력</b>해야 이 건이 보입니다 — 위 <b>대지위치 📋</b>로 복사해 붙여 넣으세요</div>' : /data\.gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 개별 딥링크가 없어 <b>경기데이터드림 카탈로그</b> 연결 — 「<b>일반 정비 사업 추진 현황</b>」 검색 → Sheet 보기에서 위 사업장명으로 조회</div>' : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 개별 딥링크가 없어 포털 연결 — 위 사업장명으로 조회</div>' : ""}</div>
       ${s.master_ref ? `<div class="kv"><b>소속 지구</b> ${s.master_ref.title} <span class="hmhint">— 지구 마스터에 속한 개별 사업(경계 기반 병합)</span></div>` : ""}
       ${s.ext_basis ? `<div class="kv"><b>증축 규모</b> ${s.ext_basis}</div>` : ""}
       ${s.nm_basis ? `<div class="kv"><b>건물명 근거</b> ${s.nm_basis}</div>` : ""}
@@ -5215,7 +5221,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260810e");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260810f");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -5381,7 +5387,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810e"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810f"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5407,7 +5413,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260810e");
+  const CB = "?b=" + (window.BUILD || "20260810f");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
