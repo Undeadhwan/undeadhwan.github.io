@@ -150,7 +150,8 @@
   .hj-box.apt { padding:3px 7px 4px; }
   .hj-box.apt.sel { border-color:#d6156d; box-shadow:0 0 0 2px rgba(214,21,109,.32), 0 2px 8px rgba(30,45,90,.25); }
   .dong-lbl { font-size:11.5px; font-weight:700; color:#3a4358; text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff;
-    white-space:nowrap; cursor:pointer; transform:translate(-50%,-50%); }
+    white-space:nowrap; cursor:pointer; transform:translate(-50%,-50%);
+    user-select:none; -webkit-user-select:none; }   /* 지도 드래그가 라벨 텍스트를 선택해 파랗게 뒤덮던 것(2026-08-11 사용자 제보) */
   .dong-lbl:hover { color:var(--accent); text-decoration:underline; }
   .apt-house-s { font-size:16px; line-height:1; cursor:pointer; transform:translate(-50%,-50%);
     filter:drop-shadow(0 1px 2px rgba(0,0,0,.35)); }   /* 컬러 이모지 그대로(선명) — 호재 원과 형태로 구분 */
@@ -379,7 +380,9 @@
   /* 도로 구조 지점(기존 IC·JC) — 호재 아님이라 흐리게(--muted=비활성 칩 토큰, DESIGN.md §보조 잉크) */
   .stchip.jc { color:var(--muted); border-color:var(--line2); }
   .stchip.jc:hover { background:var(--panel); }
-  .stchip.on { background:var(--accent); color:#fff; border-color:var(--accent); font-weight:700; }
+  /* 선택(.on)은 hover보다 세야 한다 — .jc:hover(3클래스)가 .on(2클래스) 배경을 이겨
+     흐림+선택 칩에 커서를 대면 흰 배경+흰 글씨가 됐다(2026-08-10 사용자 제보 "하얗게 보이네"). */
+  .stchip.on, .stchip.on:hover { background:var(--accent); color:#fff; border-color:var(--accent); font-weight:700; }
   .nextwatch { margin:2px 0 8px; font-size:12px; color:#444; background:#fffbea; border:1px solid #efe3ae;
                border-radius:8px; padding:5px 10px; display:inline-block; }
   .msrow.future .msdot { border-color:#c4c9d4; }
@@ -981,7 +984,8 @@ const CLASSES_DEFAULT = {
     // 그렇다고 0으로 두면 지도에서 사라지므로 한 단계 축소로 둔다 — 근거가 생기면 조정.
     "데이터센터": { S: 2.0, A: 2.0, B: 1.0, C: 0.5 },
     "복합단지": { S: 4.0, A: 4.0, B: 2.0, C: 1.0 },   // §0-3 신설(2026-07-22) — 업무지구·산단·MICE·항만재개발 마스터급
-    "산업단지": { S: 4.0, A: 4.0, B: 2.0, C: 1.0 }   // KICOX 현황 delta + 큐레이션 산단(2026-08-10) — 복합단지 준용, 정본은 thresholds.json
+    "산업단지": { S: 4.0, A: 4.0, B: 2.0, C: 1.0 },   // KICOX 현황 delta + 큐레이션 산단(2026-08-10) — 복합단지 준용, 정본은 thresholds.json
+    "물류단지": { S: 3.0, A: 3.0, B: 1.5, C: 0.8 }   // NLIC delta + 도시첨단 시범 6곳(2026-08-10) — 통근 유발이 산단보다 낮아 공장 준용
   },
   "인프라": {   // §7b 유형별 세분(2026-07-18) — 유형마다 이용 행태가 달라 반경 분리(병원=차량권, 공원=도보권). 값은 가안·모달에서 조정
     "병원":       { S: 3.0, A: 3.0, B: 1.5, C: 1.0 },
@@ -1021,7 +1025,7 @@ const SUB_CAVEAT = {
    진출입)과 국도·국지도(연도 접근)는 성격이 다르므로 조회축을 가른다.
    ⚠ 매핑은 **강한 쪽만 열거**한다(roadSubOf) — 「국도」/「일반국도」처럼 같은 것이 두 이름으로
    있고 앞으로도 늘 수 있어서, 약한 쪽을 열거하면 반드시 낡는다. */
-const SUB_KEYS = { "교통": ["철도", "IC 진출입", "도로변 접근", "환승·터미널", "미상"], "일자리": ["오피스", "지식산업센터", "공장", "데이터센터", "복합단지", "산업단지", "미상"],
+const SUB_KEYS = { "교통": ["철도", "IC 진출입", "도로변 접근", "환승·터미널", "미상"], "일자리": ["오피스", "지식산업센터", "공장", "데이터센터", "복합단지", "산업단지", "물류단지", "미상"],
   "인프라": ["병원", "공원·녹지", "판매", "문화·관광·체육", "학교", "공공시설", "공항", "항만", "기타시설", "미상"],
   "주거개발": ["재개발", "재건축", "주거환경개선", "소규모정비", "리모델링", "재정비촉진지구", "지역주택조합", "택지·지구", "공공임대", "미상"] };
 /* 주거개발 중분류(2026-07-30 신설) — 축은 **법정 사업유형**이다.
@@ -1359,6 +1363,33 @@ function routeHasGeom(lineName) {
     return x.geometry && x.geometry.type !== "Point" && !p.geom_omitted && !p.geom_point_only
       && (p.name === lineName || p.full === lineName || p.official_name === lineName); });
 }
+/* 노선 기하 → 「좌표를 주면 노선 위 호장 위치(m)를 돌려주는 함수」. lineBar 칩 정렬용. */
+function _linePosFn(keys, nrm) {
+  const f = ROADF.concat(RAIL).find(x => { const p = x.properties || {};
+    return x.geometry && x.geometry.type !== "Point"
+      && [p.name, p.full, p.official_name].some(n => n && keys.has(nrm(n))); });
+  if (!f) return null;
+  const segs = f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates];
+  const kx = 88900, ky = 111000;   // 경도·위도 → m (국내 위도대 근사)
+  let acc = 0; const chain = [];
+  for (const seg of segs) for (let i = 0; i < seg.length - 1; i++) {
+    const a = seg[i], b = seg[i + 1];
+    const len = Math.hypot((b[0] - a[0]) * kx, (b[1] - a[1]) * ky);
+    chain.push({ a, b, acc, len }); acc += len;
+  }
+  if (!chain.length) return null;
+  return c => {
+    let best = Infinity, pos = 0;
+    for (const e of chain) {
+      const ax = (c[0] - e.a[0]) * kx, ay = (c[1] - e.a[1]) * ky;
+      const bx = (e.b[0] - e.a[0]) * kx, by = (e.b[1] - e.a[1]) * ky;
+      const L = bx * bx + by * by, t = L ? Math.max(0, Math.min(1, (ax * bx + ay * by) / L)) : 0;
+      const d = Math.hypot(ax - bx * t, ay - by * t);
+      if (d < best) { best = d; pos = e.acc + Math.sqrt(L) * t; }
+    }
+    return pos;
+  };
+}
 function lineBar(s) {
   if (!s.line) return "";
   const pool = s._rail ? RAIL_SIG : s._road ? ROAD_SIG : [];
@@ -1369,10 +1400,19 @@ function lineBar(s) {
      (「경부고속도로 확장 A·B·C」 전부에 붙는 사고 — 이름이 같다 ≠ 같은 사업). */
   const nrm = t => (t || "").replace(/[\s~]/g, "");
   const keys = new Set([s.line, s.osm_name, s.official_name, s.title].filter(Boolean).map(nrm));
-  const stations = pool.filter(x => x.line && keys.has(nrm(x.line)) && x.geometry
+  let stations = pool.filter(x => x.line && keys.has(nrm(x.line)) && x.geometry
     && (s._rail ? x.pt_type === "rail_station" && x.signal !== false
                 : x.pt_type === "road_ic" || x.pt_type === "road_jc"));
   if (!stations.length) return "";
+  /* 도로 칩은 **노선 기하 위 호장(弧長) 위치**로 정렬한다(2026-08-10 사용자 "IC 순서가 뒤죽박죽").
+     데이터(ic_names) 순서는 노선 순이라는 보장이 없다 — 선이 SSOT이므로 순서도 선에서 도출한다.
+     철도는 적용하지 않는다: 조서 순서가 이미 노선 순이고, 갈래(지선) 역을 본선에 투영하면
+     맞는 순서가 오히려 섞인다(같은 규칙을 양쪽에 걸지 않는 이유를 적어 둔다). */
+  if (s._road && stations.length > 1) {
+    const posOf = _linePosFn(keys, nrm);
+    if (posOf) stations = stations.slice()
+      .sort((a, b) => posOf(a.geometry.coordinates) - posOf(b.geometry.coordinates));
+  }
   window._chipSigs = stations;
   const chips = stations.map((x, i) =>
     `<span class="stchip${x.pt_type === "road_jc" ? " jc" : ""}${x === s ? " on" : ""}" onclick="chipGo(${i})">${chipName(x.title)}</span>`).join("");
@@ -4151,6 +4191,60 @@ function initLeaflet() {
       sdMarkers.push(m);
     });
   };
+  /* ── 폴백 파리티 복원(2026-08-11 사용자 제보 "필터 바꾸면 호재원이 싹 사라진다") ──
+     카카오 이관(07-21) 때 Leaflet판 호재 원·노선이 유실돼, SDK가 막힌 사용자는 **빈 지도**를
+     봤다(배너만 남음). 최소 파리티: 원(색=분류·크기=등급·점선=단계·클릭=카드)·노선(점선=계획).
+     스타일 계산은 공용 함수(colorOf·getRadius·phaseSolid·visible)를 그대로 쓴다 — 사본 금지. */
+  const renderHojae = () => {
+    hjDots.forEach(m => map.removeLayer(m)); hjDots = [];
+    if (map.getZoom() < 10) return;   // 줌아웃은 시도 알약·시군구 뱃지 층이 담당(카카오 LOD와 동일 사상)
+    const bd = map.getBounds();
+    const act = allSignalsFlat().filter(visible)
+      .filter(s => s.geometry && s.geometry.coordinates && !s.area_shape && s.signal !== false);
+    let n = 0;
+    for (const sg of act) {
+      if (n > 500) break;                        // 폴백 성능 가드(정식 화면은 카카오)
+      const pts = (sg._road ? signalPoints(sg).slice(0, 1) : signalPoints(sg))
+        .map(p => p && p.coord).filter(Boolean);   // signalPoints는 {coord,…} 객체를 준다
+      for (const c of pts) {
+        if (!bd.contains([c[1], c[0]])) continue;
+        n++;
+        const col = sg.status === "종결" ? "#9aa3b2" : colorOf(sg);
+        const solid = phaseSolid(sg);
+        const rKm = getRadius(sg) / 1000;
+        const r = Math.max(6, Math.min(16, 5 + rKm * 1.4));   // 카카오판과 같은 눈금
+        const m = L.circleMarker([c[1], c[0]], { pane: "sig", radius: r, color: col, weight: 1.6,
+          dashArray: solid ? null : "4 3", fillColor: col, fillOpacity: solid ? .26 : .16 });
+        m.on("click", () => showSignal(sg, false));
+        m.addTo(map); hjDots.push(m);
+      }
+    }
+  };
+  let _railObjs = [];
+  const renderRail = () => {
+    _railObjs.forEach(l => map.removeLayer(l)); _railObjs = [];
+    const railOn = filter.lines.has("철도선"), roadOn = filter.lines.has("도로선");
+    const col = CAT_COLOR["교통"];
+    for (const f of RAIL.concat(ROADF)) {
+      const p = f.properties;
+      if (f.geometry.type !== "LineString" && f.geometry.type !== "MultiLineString") continue;
+      if (p.geom_omitted || p.geom_point_only || p.gate === "관찰" || p.drop) continue;   // 카카오판과 같은 필터
+      const isRoad = p.mode === "road";
+      if (isRoad ? !roadOn : !railOn) continue;
+      const dashed = !["착공", "준공"].some(k => (p.phase || "").startsWith(k));
+      const segs = f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates];
+      for (const seg of segs) {
+        const ll = seg.map(([x, y]) => [y, x]);
+        const pl = L.polyline(ll, { pane: "rail", color: col, weight: 2.6, opacity: .85,
+          dashArray: dashed ? "7 5" : null });
+        pl.on("click", () => { const sig = isRoad
+          ? (ROAD_SIG.find(s => !s.pt_type && s.line === p.name) || roadLineToSignal(p, f.geometry))
+          : ((RAIL_SIG.find(s => s._line && s.line === p.name)) || railToSignal(p, seg[Math.floor(seg.length / 2)]));
+          if (sig) showSignal(sig, false); });
+        pl.addTo(map); _railObjs.push(pl);
+      }
+    }
+  };
   let _lfWarned = false;
   const _lfDegraded = () => {   // 폴백 제한 고지(1회) — 조용한 백지 대신 사실 표기(P5)
     if (_lfWarned) return; _lfWarned = true;
@@ -5355,13 +5449,13 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260810p");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260811a");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
   applyThresholds(await gj("thresholds.json").catch(() => null));
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
-  const [dong, sgg, main, macro, rawData, autoData, regions, jeongbiData, railData, roadData, dartData, archData, parkData, hospData, retailData, schoolData, dpsData, shData, masterData, jobsData, indparkData, megaData, eumData, advData] = await Promise.all([
+  const [dong, sgg, main, macro, rawData, autoData, regions, jeongbiData, railData, roadData, dartData, archData, parkData, hospData, retailData, schoolData, dpsData, shData, masterData, jobsData, indparkData, logiparkData, megaData, eumData, advData] = await Promise.all([
     gj("bdong/서울.geojson"),      // 초기 = 서울 467동(§3.1 법정동). 나머지 15시도는 뷰포트·선택 시 지연 로드(bdong/index.json)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
@@ -5383,6 +5477,7 @@ function initSearch() {
     gj("master_signals.json").catch(() => ({ signals: [] })),         // S급 지구 마스터(택지정보 대장, 2026-07-22)
     gj("jobs_signals.json").catch(() => ({ signals: [] })),           // 대형 일자리 S(용산·잠실·북항 등, 2026-07-22)
     gj("indpark_signals.json").catch(() => ({ signals: [] })),        // 산업단지 delta(KICOX 현황통계 — 미개발·조성중만, 2026-08-10)
+    gj("logipark_signals.json").catch(() => ({ signals: [] })),       // 물류단지 delta(NLIC 현황 — 검증통과·건설중만, 2026-08-10)
     gj("mega_signals.json").catch(() => ({ signals: [] })),           // 관보 고시 원문 파싱 — 대장에 아직 없는 신규 지구(2026-07-22)
     gj("eum_signals.json").catch(() => ({ signals: [] })),            // 토지이음 지자체 도시계획 고시(2026-07-22)
     gj("adverse_facilities.json").catch(() => ({ features: [] }))     // 역효과(UQ158 환경기초) — 지도 미표시, 아파트 카드 병기 전용(②안, 2026-07-30)
@@ -5429,6 +5524,10 @@ function initSearch() {
   // 늘리지 않는다: allSignalsFlat·집계·필터가 이미 JOBS_SIG를 순회한다). 계보는 _indpark로 구분.
   .concat(((indparkData && indparkData.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden).map(s => Object.assign({
     _jobs: true, _indpark: true, confirmed: false, status: "활성"
+  }, s)))
+  // 물류단지 delta(NLIC 현황, 2026-08-10) — 같은 합류 문법. 계보는 _logipark.
+  .concat(((logiparkData && logiparkData.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden).map(s => Object.assign({
+    _jobs: true, _logipark: true, confirmed: false, status: "활성"
   }, s)));
   // 관보 고시 원문 신호(2026-07-22) — 택지정보 대장에 **아직 없는** 신규 지구(서리풀1·2·구리토평2·
   // 오산세교3·제주화북2·인천로봇랜드 등). 좌표는 고시 붙임의 편입필지 평균(geo_prec=jigu).
@@ -5527,7 +5626,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260810p"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811a"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5553,7 +5652,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260810p");
+  const CB = "?b=" + (window.BUILD || "20260811a");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {

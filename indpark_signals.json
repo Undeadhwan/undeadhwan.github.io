@@ -1,6 +1,6 @@
 {
  "_note": "산업단지 현황 delta 신호 — KICOX 전국산업단지현황통계(kicox_*.csv 스냅샷). indpark_fetch.py 생성(백지 재현). 미개발=인가·조성중=착공, 완료는 내지 않는다. 제외 사유는 skipped에 남긴다(P5).",
- "generated": "2026-08-10",
+ "generated": "2026-08-11",
  "asof": "2025-12-31",
  "signals": [
   {
@@ -39,8 +39,6 @@
      37.148921
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -78,27 +76,25 @@
     "https://www.data.go.kr/data/15085874/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 구미시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 147060 「구미하이테크밸리」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.352283,
-     36.208761
+     128.42208249,
+     36.19334677
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -127,27 +123,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 하동군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248180 「갈사만조선」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.762074,
-     35.133184
+     127.8008847,
+     34.94048749
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -186,8 +180,6 @@
      34.454869
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -225,27 +217,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "광주 북구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 229090 「광주연구개발특구첨단3」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.930725,
-     35.183654
+     126.82232745,
+     35.2362071
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -274,18 +264,16 @@
     "https://www.data.go.kr/data/15085874/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "세종 세종 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 136010 「세종스마트」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.273602,
-     36.568024
+     127.25878651,
+     36.56197409
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -323,27 +311,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "강원 삼척시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 242320 「삼척종합발전」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.107246,
-     37.256567
+     129.33883308,
+     37.1856272
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -372,27 +358,25 @@
     "https://www.data.go.kr/data/15085874/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 구미시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 147024 「구미(확장)」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.352283,
-     36.208761
+     128.4283197,
+     36.15247137
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -421,14 +405,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "zone_poi",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "POI 정확일치 「대산그린컴플렉스일반산업단지」(시군 경계 가드 3.0km)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244830 「대산그린컴플렉스」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.401073,
-     36.982093
+     126.40162121,
+     36.98247509
     ]
    },
    "stage_history": [
@@ -468,18 +452,16 @@
     "https://www.data.go.kr/data/15085874/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 충주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 143040 「충주바이오헬스」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.895819,
-     37.007493
+     127.84076523,
+     36.98550496
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -517,27 +499,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 경주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247850 「혁신원자력」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.247687,
-     35.858512
+     129.48444723,
+     35.76317108
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -566,25 +546,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "전남 해남군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 246170 「화원조선」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.496973,
-     34.527066
+     126.33080292,
+     34.7337823
     ]
    },
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -624,7 +604,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -673,7 +653,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 11건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 8건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -711,27 +691,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 아산시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244710 「인주(3공구)」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.978311,
-     36.792927
+     126.88869732,
+     36.87820204
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -760,27 +738,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "부산 강서구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 226330 「부산연구개발」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.897859,
-     35.120549
+     128.96100641,
+     35.20466469
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -809,27 +785,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 경주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247720 「양남」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.247687,
-     35.858512
+     129.42077907,
+     35.68337618
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -869,7 +843,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -907,18 +881,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 충주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243960 「충주드림파크」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.895819,
-     37.007493
+     127.83913732,
+     37.02613114
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -967,7 +939,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 11건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 8건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -1005,27 +977,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 천안시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244930 「천안수신」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.216668,
-     36.793635
+     127.26582071,
+     36.71607131
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 10건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -1054,25 +1024,30 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 고성군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248B90 「고성양촌·용정」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.310774,
-     35.009687
+     128.48379925,
+     35.03253035
     ]
    },
    "stage_history": [
     {
+     "stage": "계획",
+     "date": "2026-05-07",
+     "basis": "source"
+    },
+    {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-07-22",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -1101,27 +1076,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 영천시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 447300 「고경」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.925666,
-     36.004508
+     129.02914873,
+     36.00452945
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -1150,27 +1123,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 음성군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243A70 「음성삼성테크노밸리」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.624707,
-     36.991389
+     127.47642986,
+     37.01752388
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -1199,14 +1170,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "zone_poi",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "POI 정확일치 「진천메가폴리스산업단지」(시군 경계 가드 3.0km)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243A40 「진천메가폴리스」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.459411,
-     36.779053
+     127.46132857,
+     36.77792339
     ]
    },
    "stage_history": [
@@ -1246,27 +1217,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 창녕군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248AR0 「영남」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.505448,
-     35.524466
+     128.44635195,
+     35.60178179
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -1295,27 +1264,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 하동군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248160 「대송」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.762074,
-     35.133184
+     127.83443397,
+     34.96575671
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -1344,27 +1311,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 통영시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 148010 「안정」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.340013,
-     34.794201
+     128.42024131,
+     34.95664379
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -1403,8 +1368,6 @@
      36.040247
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -1489,25 +1452,25 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 남양주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 341170 「남양주왕숙」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.232605,
-     37.644184
+     127.16150782,
+     37.6461115
     ]
    },
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -1536,18 +1499,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "대구 북구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 227160 「금호워터폴리스」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.570738,
-     35.928718
+     128.62338378,
+     35.9205529
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "계획",
@@ -1556,12 +1517,12 @@
     },
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
    "first_seen": "2026-07-22",
-   "last_movement": "2026-08-10",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -1590,25 +1551,25 @@
     "https://www.data.go.kr/data/15085874/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 영주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 147070 「영주첨단베어링」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.586088,
-     36.877662
+     128.61558685,
+     36.78223985
     ]
    },
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -1637,18 +1598,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 진천군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243A30 「진천스마트」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.43789,
-     36.878011
+     127.45310075,
+     36.83220089
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -1686,27 +1645,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 청주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243710 「청주에어로」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.464001,
-     36.650667
+     127.50302436,
+     36.72979139
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 11건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -1745,8 +1702,6 @@
      36.661455
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -1784,18 +1739,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 청주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243AD0 「청주클래식」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.464001,
-     36.650667
+     127.47032526,
+     36.68257905
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 11건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -1833,27 +1786,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 김포시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241AB0 「한강시네폴리스」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.661823,
-     37.680279
+     126.73464246,
+     37.63072513
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -1893,7 +1844,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 11건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 8건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -1931,27 +1882,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 통영시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248490 「덕포」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.340013,
-     34.794201
+     128.43092397,
+     34.92411317
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -1980,27 +1929,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 청주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243930 「청주하이테크밸리」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.464001,
-     36.650667
+     127.36506655,
+     36.59417441
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 11건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -2029,27 +1976,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 진천군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243AE0 「진천혁신」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.43789,
-     36.878011
+     127.53080673,
+     36.88929911
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -2089,7 +2034,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 11건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 8건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -2127,27 +2072,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 양주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241BK0 「은남」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.015717,
-     37.803627
+     127.00014669,
+     37.85517505
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -2176,14 +2119,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 시흥시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 341080 「광명시흥」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.789268,
-     37.389792
+     126.86363203,
+     37.40455185
     ]
    },
    "stage_history": [
@@ -2194,12 +2137,12 @@
     },
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
    "first_seen": "2026-07-22",
-   "last_movement": "2026-08-10",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -2239,7 +2182,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 10건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -2288,7 +2231,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 11건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 8건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -2326,14 +2269,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "zone_poi",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "POI 정확일치 「선장그린컴플렉스일반산업단지」(시군 경계 가드 3.0km)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244910 「선장그린컴플렉스」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.871897,
-     36.802768
+     126.87173978,
+     36.8023335
     ]
    },
    "stage_history": [
@@ -2373,14 +2316,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "광주 남구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 229080 「광주에너지밸리」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.851168,
-     35.097668
+     126.82666209,
+     35.08118284
     ]
    },
    "stage_history": [
@@ -2420,27 +2363,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 천안시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244750 「천안테크노파크」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.216668,
-     36.793635
+     127.17178573,
+     36.89060921
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 10건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -2479,8 +2420,6 @@
      35.788404
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -2518,27 +2457,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 서산시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244550 「서산남부」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.489432,
-     36.804692
+     126.47325864,
+     36.7375249
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -2567,27 +2504,30 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 천안시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244700 「천안북부BIT」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.216668,
-     36.793635
+     127.11972878,
+     36.94594777
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 10건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
+     "stage": "계획",
+     "date": "2026-04-13",
+     "basis": "source"
+    },
+    {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-07-22",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -2616,27 +2556,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 포항시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247690 「그린」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.287717,
-     36.082363
+     129.33817876,
+     35.97214112
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -2665,27 +2603,25 @@
     "https://www.data.go.kr/data/15085874/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 논산시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 144070 「논산국방」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.159603,
-     36.197348
+     127.11383208,
+     36.14511045
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -2714,14 +2650,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "대전 서구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 230080 「평촌」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.34261,
-     36.275646
+     127.32235596,
+     36.24213273
     ]
    },
    "stage_history": [
@@ -2761,18 +2697,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 김해시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248920 「김해사이언스파크」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.86024,
-     35.272378
+     128.80984428,
+     35.28606046
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -2810,27 +2744,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "세종 세종 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 236150 「세종스마트그린」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.273602,
-     36.568024
+     127.1993978,
+     36.68947396
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -2859,14 +2791,14 @@
     "https://www.data.go.kr/data/15085874/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "제주 제주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 149010 「제주첨단」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.568196,
-     33.420597
+     126.57283343,
+     33.4501573
     ]
    },
    "stage_history": [
@@ -2906,27 +2838,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "세종 세종 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 236170 「세종복합」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.273602,
-     36.568024
+     127.20105028,
+     36.66707688
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -2955,18 +2885,16 @@
     "https://www.data.go.kr/data/15085874/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 사천시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 148082 「경남항공(사천)」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.034942,
-     35.037155
+     128.04728596,
+     35.03177802
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -3015,7 +2943,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -3053,25 +2981,25 @@
     "https://www.data.go.kr/data/15085874/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 진주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 148081 「경남항공(진주)」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.131107,
-     35.197614
+     128.0932947,
+     35.1250591
     ]
    },
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -3110,8 +3038,6 @@
      35.278001
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -3149,27 +3075,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 진천군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243980 「진천테크노폴리스」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.43789,
-     36.878011
+     127.45417141,
+     36.93848051
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -3209,7 +3133,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 11건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 8건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -3247,27 +3171,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 서산시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244900 「대산3(확장)」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.489432,
-     36.804692
+     126.38396097,
+     36.98522966
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -3296,25 +3218,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 증평군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243AA0 「증평3」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.607046,
-     36.774452
+     127.60809555,
+     36.84137221
     ]
    },
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -3353,8 +3275,6 @@
      37.524905
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -3392,27 +3312,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 안성시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241CF0 「안성테크노밸리」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.312887,
-     37.017916
+     127.21595433,
+     37.06318476
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 9건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -3441,27 +3359,30 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 화성시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241CK0 「H-테크노밸리」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.912751,
-     37.148921
+     126.92433614,
+     37.07226111
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    },
+    {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-07-22",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -3537,27 +3458,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 예산군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244800 「예당2」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.779582,
-     36.661455
+     126.72611598,
+     36.75705665
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -3596,8 +3515,6 @@
      37.017916
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 9건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -3635,14 +3552,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 창원시 마산회원구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248B20 「평성」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.551782,
-     35.224123
+     128.53443129,
+     35.26098008
     ]
    },
    "stage_history": [
@@ -3682,25 +3599,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "전남 진도군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 446500 「군내」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.203489,
-     34.430168
+     126.28604978,
+     34.57287516
     ]
    },
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -3729,27 +3646,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 아산시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244650 「탕정테크노」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.978311,
-     36.792927
+     127.03857507,
+     36.8318842
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -3778,27 +3693,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 서산시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244790 「현대대죽2」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.489432,
-     36.804692
+     126.3918045,
+     37.01375206
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -3827,27 +3740,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 사천시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248420 「흥사」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.034942,
-     35.037155
+     128.01016355,
+     35.1047678
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -3876,27 +3787,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 고령군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247750 「월성」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.322469,
-     35.72856
+     128.41429674,
+     35.8282195
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -3936,7 +3845,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -3974,25 +3883,30 @@
     "https://www.data.go.kr/data/15085874/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "전북 전주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 145060 「전주탄소소재」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.11506,
-     35.811963
+     127.08918202,
+     35.86893339
     ]
    },
    "stage_history": [
     {
+     "stage": "계획",
+     "date": "2026-07-22",
+     "basis": "observed"
+    },
+    {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-07-22",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -4021,27 +3935,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 음성군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243A00 「음성테크노폴리스」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.624707,
-     36.991389
+     127.55325006,
+     36.93986414
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -4070,18 +3982,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 천안시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244850 「천안신사」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.216668,
-     36.793635
+     127.24726949,
+     36.74725181
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 10건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -4119,27 +4029,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 경주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247790 「건천4」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.247687,
-     35.858512
+     129.1027877,
+     35.87744989
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -4168,27 +4076,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 통영시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248520 「법송동원」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.340013,
-     34.794201
+     128.37117931,
+     34.89950665
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -4217,27 +4123,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "세종 세종 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 236140 「세종벤처밸리」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.273602,
-     36.568024
+     127.26805132,
+     36.64272305
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -4266,27 +4170,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "강원 원주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 242230 「부론」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.984921,
-     37.314609
+     127.77993141,
+     37.25148979
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -4362,27 +4264,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 음성군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243210 「상우」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.624707,
-     36.991389
+     127.6562706,
+     37.12778098
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -4411,14 +4311,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "zone_poi",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "POI 정확일치 「케이밸리아산일반산업단지」(시군 경계 가드 3.0km)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244860 「케이밸리아산」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.099741,
-     36.835022
+     127.10082611,
+     36.83528118
     ]
    },
    "stage_history": [
@@ -4458,27 +4358,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 경산시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247900 「경산상림재활산업」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.828918,
-     35.843791
+     128.83318574,
+     35.90561061
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -4507,14 +4405,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "울산 동구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 231280 「자동차」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.425947,
-     35.521987
+     129.41212893,
+     35.53260995
     ]
    },
    "stage_history": [
@@ -4594,14 +4492,14 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 광명시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 341080 「광명시흥」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.865321,
-     37.440596
+     126.86363203,
+     37.40455185
     ]
    },
    "stage_history": [
@@ -4641,18 +4539,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 아산시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244870 「아산신창」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.978311,
-     36.792927
+     126.92393453,
+     36.80312897
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -4690,14 +4586,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "zone_poi",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "POI 정확일치 「강릉옥계일반산업단지」(시군 경계 가드 3.0km)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 242310 「강릉옥계」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.043649,
-     37.620908
+     129.04367068,
+     37.62084204
     ]
    },
    "stage_history": [
@@ -4737,25 +4633,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 부여군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244810 「부여」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.875176,
-     36.224252
+     126.78087604,
+     36.23315926
     ]
    },
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -4784,27 +4680,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 평택시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241CL0 「평택첨단복합」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.974735,
-     37.021873
+     127.05418132,
+     37.01618943
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -4833,27 +4727,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 영천시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247860 「대창」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.925666,
-     36.004508
+     128.88359078,
+     35.87047162
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -4882,27 +4774,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 양산시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248660 「덕계경동스마트밸리」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.048462,
-     35.398078
+     129.15679239,
+     35.36581951
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -4931,27 +4821,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "울산 울주군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 231250 「울산도하」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.170045,
-     35.522467
+     129.32672839,
+     35.47016817
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -4980,18 +4868,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "울산 울주군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 231260 「울산KTX역세권」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.170045,
-     35.522467
+     129.13025507,
+     35.54844328
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -5029,27 +4915,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 아산시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244760 「음봉」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.978311,
-     36.792927
+     127.06474056,
+     36.83592498
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -5078,14 +4962,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "zone_poi",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "POI 정확일치 「청주에어로폴리스2지구산업단지」(시군 경계 가드 3.0km)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243710 「청주에어로」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.502278,
-     36.729789
+     127.50302436,
+     36.72979139
     ]
    },
    "stage_history": [
@@ -5136,7 +5020,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -5174,27 +5058,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "전남 여수시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 246310 「묘도녹색」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.521112,
-     34.454869
+     127.69571099,
+     34.88238272
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -5233,8 +5115,6 @@
      35.383522
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -5283,7 +5163,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -5321,27 +5201,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 천안시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244840 「천안에코밸리」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.216668,
-     36.793635
+     127.38206122,
+     36.76419187
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 10건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -5370,27 +5248,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 천안시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244770 「풍세2」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.216668,
-     36.793635
+     127.10014089,
+     36.7369272
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 10건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -5419,14 +5295,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "zone_poi",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "POI 정확일치 「동부산E-PARK 일반산업단지」(시군 경계 가드 3.0km)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 226170 「동부산E-PARK」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.264638,
-     35.364425
+     129.26465974,
+     35.36450013
     ]
    },
    "stage_history": [
@@ -5513,27 +5389,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "전북 김제시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 445540 「백구」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.890733,
-     35.788404
+     126.96028194,
+     35.89334757
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -5573,7 +5447,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 10건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -5660,27 +5534,25 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 천안시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 344030 「천안직산」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.216668,
-     36.793635
+     127.13991644,
+     36.87170733
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 10건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -5720,7 +5592,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -5758,27 +5630,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 공주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244820 「송선」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.085468,
-     36.475298
+     127.16515832,
+     36.49236643
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -5807,14 +5677,14 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "울산 중구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 331010 「울산장현」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.308743,
-     35.570018
+     129.34474874,
+     35.59283025
     ]
    },
    "stage_history": [
@@ -5854,25 +5724,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "강원 철원군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 242300 「플라즈마」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.361861,
-     38.215126
+     127.45766633,
+     38.25757822
     ]
    },
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -5901,14 +5771,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "zone_poi",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "POI 정확일치 「사천서부일반산업단지」(시군 경계 가드 3.0km)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248B70 「사천서부」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.95443,
-     35.049532
+     127.9537583,
+     35.04972578
     ]
    },
    "stage_history": [
@@ -5948,18 +5818,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 양산시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248980 「토정」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.048462,
-     35.398078
+     129.01909981,
+     35.36900824
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -5997,18 +5865,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 포천시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241BV0 「에코그린」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.270354,
-     37.966297
+     127.24191985,
+     37.96990735
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -6093,25 +5959,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 거창군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248B80 「거창첨단」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.887297,
-     35.711942
+     127.91741527,
+     35.65318549
     ]
    },
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -6140,27 +6006,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 천안시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244730 「성거」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.216668,
-     36.793635
+     127.20828578,
+     36.89272528
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 10건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -6236,18 +6100,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 김해시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248AK0 「이지(Eco-Zone)」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.86024,
-     35.272378
+     128.8381262,
+     35.22495274
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -6285,18 +6147,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 파주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241890 「법원1」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.83983,
-     37.844019
+     126.87684182,
+     37.8382361
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -6345,7 +6205,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 11건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 8건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -6383,25 +6243,25 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "제주 서귀포시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 350010 「하원테크노캠퍼스」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.554255,
-     33.335369
+     126.46130373,
+     33.28793739
     ]
    },
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -6430,14 +6290,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "zone_poi",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "POI 정확일치 「동현산업단지」(시군 경계 가드 3.0km)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244720 「동현」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.172949,
-     36.478397
+     127.17640906,
+     36.47575122
     ]
    },
    "stage_history": [
@@ -6477,18 +6337,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 사천시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248AZ0 「용당(항공MRO)」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.034942,
-     35.037155
+     128.07159384,
+     35.07990302
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -6526,27 +6384,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 진천군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243A10 「문백」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.43789,
-     36.878011
+     127.44331728,
+     36.78928901
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -6575,18 +6431,16 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "인천 서구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 328040 「로봇랜드」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.63288,
-     37.524905
+     126.6075053,
+     37.52475752
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -6595,12 +6449,12 @@
     },
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
    "first_seen": "2026-07-22",
-   "last_movement": "2026-08-10",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -6629,27 +6483,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 김해시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 448060 「병동」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.86024,
-     35.272378
+     128.79385991,
+     35.28304254
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -6678,27 +6530,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 함안군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248AC0 「화천」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.434946,
-     35.278001
+     128.51143728,
+     35.35882861
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -6727,14 +6577,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 청도군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247940 「청도자연」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.789105,
-     35.703123
+     128.79718632,
+     35.70468143
     ]
    },
    "stage_history": [
@@ -6774,27 +6624,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 의령군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248840 「대의」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.260624,
-     35.383522
+     128.10583459,
+     35.36203091
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -6834,7 +6682,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -6883,7 +6731,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 11건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 8건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -6921,27 +6769,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 영천시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247880 「영천금호」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.925666,
-     36.004508
+     128.87840954,
+     35.9164225
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -6970,27 +6816,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 김천시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247930 「김천자동차튜닝」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.08884,
-     36.040247
+     128.14682878,
+     36.17343601
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -7019,27 +6863,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 평택시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241C20 「서탄」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.974735,
-     37.021873
+     127.03805973,
+     37.12783899
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -7068,18 +6910,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 안산시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241CM0 「안산신길」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.739402,
-     37.287434
+     126.75087775,
+     37.32589032
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -7164,18 +7004,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 충주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243A80 「충주법현」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.895819,
-     37.007493
+     127.84103292,
+     37.01587741
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -7213,27 +7051,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 충주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243990 「충주비즈코어시티」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.895819,
-     37.007493
+     127.81005061,
+     36.99653473
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -7262,27 +7098,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 용인시 처인구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241CI0 「제2용인테크노밸리」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.271562,
-     37.219911
+     127.20873934,
+     37.18235547
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -7311,27 +7145,35 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 용인시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 341160 「용인플랫폼」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.226435,
-     37.226533
+     127.09875248,
+     37.2918772
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
+     "stage": "계획",
+     "date": "2021-01-05",
+     "basis": "source"
+    },
+    {
+     "stage": "인가",
+     "date": "2024-12-24",
+     "basis": "source"
+    },
+    {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-07-22",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -7407,27 +7249,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 고령군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247820 「송곡」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.322469,
-     35.72856
+     128.3996531,
+     35.79735135
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -7456,27 +7296,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 김해시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 448650 「하계」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.86024,
-     35.272378
+     128.72866845,
+     35.28044075
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -7516,7 +7354,7 @@
     ]
    },
    "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
+   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -7554,25 +7392,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 밀양시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248AI0 「용전3」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.798261,
-     35.489023
+     128.83604113,
+     35.43191994
     ]
    },
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -7695,18 +7533,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 사천시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248AD0 「대진」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.034942,
-     35.037155
+     127.99883619,
+     35.04567542
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -7744,14 +7580,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "인천 계양구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 228140 「계양」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.741224,
-     37.555662
+     126.75613068,
+     37.53981466
     ]
    },
    "stage_history": [
@@ -7791,27 +7627,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 경주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247810 「대곡2」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.247687,
-     35.858512
+     129.12750621,
+     35.85585409
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -7840,27 +7674,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 창원시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248A70 「안골」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.597234,
-     35.219707
+     128.79346759,
+     35.08972049
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -7889,14 +7721,14 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "인천 남동구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 328020 「남동」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.728501,
-     37.427182
+     126.71395878,
+     37.41754584
     ]
    },
    "stage_history": [
@@ -7946,8 +7778,6 @@
      37.007493
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -7995,8 +7825,6 @@
      35.858512
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -8034,18 +7862,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 공주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244680 「쌍신」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.085468,
-     36.475298
+     127.12831418,
+     36.49224705
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -8132,14 +7958,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "zone_poi",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "POI 정확일치 「의성바이오밸리일반산업단지」(시군 경계 가드 3.0km)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247890 「의성바이오밸리」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.677877,
-     36.356218
+     128.67659577,
+     36.35598044
     ]
    },
    "stage_history": [
@@ -8179,18 +8005,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 고령군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247740 「열뫼」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.322469,
-     35.72856
+     128.32831407,
+     35.70981788
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -8228,18 +8052,16 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 양주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 341110 「경기양주테크노밸리」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.015717,
-     37.803627
+     127.05015013,
+     37.77536402
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -8277,27 +8099,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 영동군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243A60 「황간」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.822451,
-     36.162295
+     127.89846268,
+     36.21695202
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -8373,27 +8193,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 충주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243470 「충주특화기술」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.895819,
-     37.007493
+     127.81980556,
+     37.07686792
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -8422,25 +8240,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "강원 태백시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 242390 「철암고터실」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.987383,
-     37.199937
+     129.04180315,
+     37.13138768
     ]
    },
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -8516,27 +8334,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 함안군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 448690 「칠원용산」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.434946,
-     35.278001
+     128.50581997,
+     35.3081219
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -8565,27 +8381,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 김포시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241CA0 「학운7」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.661823,
-     37.680279
+     126.59324306,
+     37.59690824
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -8614,25 +8428,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 봉화군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247590 「석포」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.913668,
-     36.920879
+     129.05686532,
+     37.03951581
     ]
    },
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -8661,25 +8475,25 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "대구 동구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 327020 「율하」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.685749,
-     35.933696
+     128.68362943,
+     35.86375269
     ]
    },
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -8708,27 +8522,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 안성시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241CO0 「안성축산식품복합」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.312887,
-     37.017916
+     127.20009145,
+     37.07367451
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 9건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -8757,18 +8569,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "울산 울주군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 231140 「작동」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.170045,
-     35.522467
+     129.18120451,
+     35.47980897
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -8806,27 +8616,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 거제시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248A60 「덕곡」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.609923,
-     34.867419
+     128.60654748,
+     34.96347916
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -8865,8 +8673,6 @@
      36.162295
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -8904,27 +8710,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 경산시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247870 「경산화장품」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.828918,
-     35.843791
+     128.79060475,
+     35.78974397
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -8953,27 +8757,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 의령군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248870 「정곡백곡」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.260624,
-     35.383522
+     128.3570392,
+     35.34948117
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -9059,8 +8861,6 @@
      36.568024
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -9098,27 +8898,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "강원 삼척시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 242400 「삼척수소특화」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.107246,
-     37.256567
+     129.23524982,
+     37.33805079
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -9147,14 +8945,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "zone_poi",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "POI 정확일치 「제내5일반산업단지」(시군 경계 가드 3.0km)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247680 「제내5」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.277006,
-     35.710919
+     129.27700719,
+     35.7109193
     ]
    },
    "stage_history": [
@@ -9194,18 +8992,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 음성군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243800 「성안」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.624707,
-     36.991389
+     127.5837799,
+     36.95824016
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -9243,27 +9039,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 함안군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248AW0 「부목2」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.434946,
-     35.278001
+     128.45892863,
+     35.36000308
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -9292,27 +9086,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 충주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243880 「산척」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.895819,
-     37.007493
+     127.97790381,
+     37.07967473
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -9341,27 +9133,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 안성시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241BY0 「마산2」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.312887,
-     37.017916
+     127.23170326,
+     36.97026974
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 9건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -9390,14 +9180,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "zone_poi",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "POI 정확일치 「대산충의일반산업단지」(시군 경계 가드 3.0km)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244880 「대산충의」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.405982,
-     36.989889
+     126.40600715,
+     36.989885
     ]
    },
    "stage_history": [
@@ -9437,14 +9227,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "zone_poi",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "POI 정확일치 「나전2일반산업단지」(시군 경계 가드 3.0km)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248710 「나전2」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.881485,
-     35.291535
+     128.88148765,
+     35.29153539
     ]
    },
    "stage_history": [
@@ -9484,27 +9274,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "부산 강서구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 226320 「부산명서」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.897859,
-     35.120549
+     128.82771617,
+     35.14049708
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -9543,8 +9331,6 @@
      37.803627
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -9582,14 +9368,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "zone_poi",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "POI 정확일치 「나아일반산업단지」(시군 경계 가드 3.0km)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247660 「나아」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.46011,
-     35.700943
+     129.46003537,
+     35.70087732
     ]
    },
    "stage_history": [
@@ -9629,27 +9415,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 파주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241AQ0 「파주스튜디오시티」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.83983,
-     37.844019
+     126.77413433,
+     37.83597357
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -9678,18 +9462,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 화성시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241BO0 「동방」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.912751,
-     37.148921
+     126.85726506,
+     37.13138762
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -9727,27 +9509,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 김포시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241CJ0 「학운3-1」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.661823,
-     37.680279
+     126.61002864,
+     37.60727154
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -9776,27 +9556,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 예산군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244970 「내포농생명그린바이오(1공구)」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.779582,
-     36.661455
+     126.7128349,
+     36.69815364
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -9825,27 +9603,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "울산 울주군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 231270 「대대」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.170045,
-     35.522467
+     129.20130446,
+     35.43906231
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -9874,27 +9650,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 안성시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241BP0 「가유」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.312887,
-     37.017916
+     127.25664709,
+     37.09450529
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 9건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -9923,27 +9697,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 포항시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247420 「신흥」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.287717,
-     36.082363
+     129.3623116,
+     36.15272492
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -9972,14 +9744,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "zone_poi",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "POI 정확일치 「외동3일반산업단지」(시군 경계 가드 3.0km)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247840 「외동3」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.30517,
-     35.718008
+     129.30517617,
+     35.71800729
     ]
    },
    "stage_history": [
@@ -10019,18 +9791,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 거제시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248A20 「오비2」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.609923,
-     34.867419
+     128.61152806,
+     34.91602846
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -10068,27 +9838,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "부산 강서구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 226310 「강서해성」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.897859,
-     35.120549
+     128.821143,
+     35.13718874
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -10117,18 +9885,16 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 양주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 341050 「회천」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.015717,
-     37.803627
+     127.04804011,
+     37.80358221
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -10166,27 +9932,25 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충북 음성군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 343020 「충북진천·음성」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.624707,
-     36.991389
+     127.55379545,
+     36.90938933
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -10215,27 +9979,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 사천시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248790 「대동」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.034942,
-     35.037155
+     128.08666209,
+     35.11653911
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -10264,25 +10026,25 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 고양시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 341100 「고양일산」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.833597,
-     37.658802
+     126.72792061,
+     37.66059004
     ]
    },
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -10321,8 +10083,6 @@
      37.314609
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -10360,27 +10120,25 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 용인시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 341140 「용인기흥미래」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.226435,
-     37.226533
+     127.09204321,
+     37.21881276
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -10409,27 +10167,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 포천시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241BX0 「진목」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.270354,
-     37.966297
+     127.21880497,
+     37.81300113
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -10458,27 +10214,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 안성시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241BD0 「강문」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.312887,
-     37.017916
+     127.14690838,
+     37.03398457
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 9건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -10507,25 +10261,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "전남 무안군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 246350 「운남」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.399539,
-     34.957017
+     126.33160522,
+     34.91826187
     ]
    },
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -10564,8 +10318,6 @@
      36.197348
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -10603,27 +10355,25 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 안산시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 341090 「한양대에리카캠퍼스혁신파크」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.739402,
-     37.287434
+     126.83115307,
+     37.29341932
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -10699,27 +10449,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 안성시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241BR0 「동문」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.312887,
-     37.017916
+     127.13357725,
+     37.06207066
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 9건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -10748,27 +10496,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 함안군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248AY0 「군북유현」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.434946,
-     35.278001
+     128.34355662,
+     35.30802498
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -10797,14 +10543,14 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "대전 유성구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 330020 「대전장대」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.336113,
-     36.379172
+     127.33431279,
+     36.36675591
     ]
    },
    "stage_history": [
@@ -10844,27 +10590,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 창녕군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248B00 「대성하이스코」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.505448,
-     35.524466
+     128.44116018,
+     35.62948981
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -10893,18 +10637,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 안성시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241B30 「볼빅」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.312887,
-     37.017916
+     127.32478302,
+     37.06222244
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 9건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -10952,8 +10694,6 @@
      37.219911
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -10991,14 +10731,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "zone_poi",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "POI 정확일치 「나전산업단지」(시군 경계 가드 3.0km)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248600 「나전」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.876844,
-     35.306434
+     128.88751151,
+     35.29412215
     ]
    },
    "stage_history": [
@@ -11038,27 +10778,25 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 용인시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 341070 「용인일양히포」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.226435,
-     37.226533
+     127.09982761,
+     37.25721004
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -11087,14 +10825,14 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "강원 춘천시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 342050 「강원대캠퍼스혁신파크」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.770582,
-     37.885022
+     127.74553872,
+     37.86513211
     ]
    },
    "stage_history": [
@@ -11134,27 +10872,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 여주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241CU0 「가남신해3」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.586753,
-     37.286911
+     127.53878249,
+     37.2238972
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -11183,27 +10919,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 김해시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248AG0 「본산」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.86024,
-     35.272378
+     128.74506485,
+     35.32315794
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -11242,8 +10976,6 @@
      37.286911
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -11281,27 +11013,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 여주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241CT0 「가남신해2」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.586753,
-     37.286911
+     127.53745103,
+     37.2209872
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -11330,27 +11060,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "울산 울주군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 231240 「머거본」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.170045,
-     35.522467
+     129.08545128,
+     35.50356962
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 5건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -11379,27 +11107,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 용인시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241C60 「제일」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.226435,
-     37.226533
+     127.30206402,
+     37.23392893
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -11428,27 +11154,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 여주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241CS0 「가남신해1」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.586753,
-     37.286911
+     127.5360505,
+     37.22367487
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -11477,18 +11201,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 용인시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241BI0 「용인SG패션밸리」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.226435,
-     37.226533
+     127.23414854,
+     37.22924058
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -11526,14 +11248,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "부산 사하구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 226140 「산양」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.9699,
-     35.077199
+     128.95920723,
+     35.06883089
     ]
    },
    "stage_history": [
@@ -11573,27 +11295,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 여주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241CW0 「가남신해5」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.586753,
-     37.286911
+     127.54774007,
+     37.21883729
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -11622,27 +11342,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 용인시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241CG0 「백암」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.226435,
-     37.226533
+     127.36612756,
+     37.15661649
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -11671,14 +11389,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 이천시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241CH0 「이천유산」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.485924,
-     37.200082
+     127.42717521,
+     37.24296247
     ]
    },
    "stage_history": [
@@ -11718,27 +11436,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 여주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241CV0 「가남신해4」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.586753,
-     37.286911
+     127.54423863,
+     37.22228925
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -11767,27 +11483,25 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "충남 예산군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244452 「예당(2공구)」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.779582,
-     36.661455
+     126.70325279,
+     36.75119579
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 4건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -11816,14 +11530,14 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "zone_poi",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "POI 정확일치 「대월2일반산업단지」(시군 경계 가드 3.0km)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241CN0 「대월2」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.499849,
-     37.212321
+     127.49983476,
+     37.21233245
     ]
    },
    "stage_history": [
@@ -11863,14 +11577,14 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "부산 북구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 326050 「금곡」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.026451,
-     35.230829
+     129.01266958,
+     35.25433417
     ]
    },
    "stage_history": [
@@ -11910,25 +11624,25 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "강원 홍천군 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 342060 「홍천」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.064635,
-     37.745793
+     127.86496499,
+     37.701835
     ]
    },
    "stage_history": [
     {
      "stage": "인가",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -12004,18 +11718,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 안성시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241C00 「북좌」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.312887,
-     37.017916
+     127.32706866,
+     37.0400788
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 9건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -12053,18 +11765,16 @@
     "https://www.data.go.kr/data/15085886/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 김해시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248910 「덕암2」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.86024,
-     35.272378
+     128.81252579,
+     35.25981657
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 6건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -12102,27 +11812,25 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경북 김천시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 347010 「경북김천혁신도시」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.08884,
-     36.040247
+     128.18124287,
+     36.12980801
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
-     "date": "2026-08-10",
+     "date": "2026-08-11",
      "basis": "observed"
     }
    ],
-   "first_seen": "2026-08-10",
-   "last_movement": "2026-08-10",
+   "first_seen": "2026-08-11",
+   "last_movement": "2026-08-11",
    "last_movement_basis": "observed"
   },
   {
@@ -12151,18 +11859,16 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "광주 북구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 329020 「전남대캠퍼스혁신파크」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.930725,
-     35.183654
+     126.90823587,
+     35.17373226
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -12200,18 +11906,16 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경남 창원시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 348020 「해양신도시」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.597234,
-     35.219707
+     128.57057531,
+     35.189716
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -12249,14 +11953,14 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "대전 대덕구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 330010 「한남대캠퍼스혁신파크」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.449045,
-     36.397834
+     127.41987029,
+     36.35315956
     ]
    },
    "stage_history": [
@@ -12296,18 +12000,16 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "대구 북구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 327030 「경북대캠퍼스혁신파크」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.570738,
-     35.928718
+     128.6048965,
+     35.88860901
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -12345,18 +12047,16 @@
     "https://www.data.go.kr/data/15085880/fileData.do"
    ],
    "confirmed": false,
-   "geo_prec": "sgg",
+   "geo_prec": "jigu",
    "geo_approx": true,
-   "geo_basis": "경기 용인시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 341150 「용인한림제약」, 시군 경계 가드)",
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.226435,
-     37.226533
+     127.2100192,
+     37.26896746
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 7건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
