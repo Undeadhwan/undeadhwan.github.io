@@ -2190,6 +2190,146 @@
    ],
    "first_seen": "2026-08-10",
    "last_movement_basis": "source"
+  },
+  {
+   "id": "J-heuksan-airport",
+   "title": "흑산공항",
+   "cat": "인프라",
+   "sub": "공항",
+   "lvl": "A",
+   "lvl_basis": "사업비 1,835억 — 인프라 A",
+   "gate": "신호",
+   "gate_basis": "단계 인가 — 법정 절차 진행 중",
+   "amount_eok": 1835,
+   "area_m2": 683448,
+   "amount_kind": "인프라",
+   "area_kind": "부지",
+   "phase": "인가",
+   "current_stage": "「흑산공항개발 기본계획」 고시('15.12) 후 미착공 — 소형기 기준 상향(50→80인승)에 따른 시설 확장으로 총사업비 재산정, 기재부 타당성 재조사 진행 중('26.8 미완료)",
+   "status_override": "정체",
+   "milestones": [
+    {
+     "phase": "인가",
+     "stage": "흑산공항개발 기본계획 고시",
+     "date": "2015-12-18",
+     "state": "current",
+     "src": "관보 국토교통부고시 제2015-960호"
+    },
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "state": "future"
+    },
+    {
+     "phase": "준공",
+     "stage": "개항",
+     "state": "future"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "전남광주",
+   "sg": "신안군",
+   "loc": "신안군 흑산면 예리 일원(활주로 1,200m·여객 5대 계류장)",
+   "last_movement": "2015-12-18",
+   "src_tier": "official_notice",
+   "src_name": "관보 제18662호 국토교통부고시 제2015-960호 「흑산공항개발 기본계획」",
+   "sources": [
+    "https://www.molit.go.kr/USR/I0204/m_45/dtl.jsp?gubun=4&psize=10&lcmspage=1&idx=13987"
+   ],
+   "geo_prec": "parcel",
+   "geo_approx": false,
+   "geo_basis": "지구 위치 대체('신안군 흑산면 예리 일원(활주로 1,200m·여객 5대 계류장)') — 대지위치에 지번 없음",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     125.462993,
+     34.688456
+    ]
+   },
+   "position_confidence": "지구 위치 대체('신안군 흑산면 예리 일원(활주로 1,200m·여객 5대 계류장)') — 대지위치에 지번 없음",
+   "stage_history": [
+    {
+     "stage": "인가",
+     "date": "2015-12-18",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-11",
+   "last_movement_basis": "source"
+  },
+  {
+   "id": "J-seosan-airport",
+   "title": "서산공항",
+   "cat": "인프라",
+   "sub": "공항",
+   "lvl": "B",
+   "lvl_basis": "사업비 484억 — 인프라 B",
+   "gate": "신호",
+   "gate_basis": "절차 문서 확인 — 「기본계획」",
+   "amount_eok": 484,
+   "amount_kind": "인프라",
+   "area_kind": "부지",
+   "phase": "계획",
+   "current_stage": "기본계획 수립 용역 중 — 전략환경영향평가 협의 완료('25.4)·관계기관 협의('25.10~11), 기본계획 고시 '26 상반기 목표(2026-08 현재 미고시)",
+   "milestones": [
+    {
+     "phase": "계획",
+     "stage": "예타 재기획 후 B/C 1.11 확보",
+     "date": "2023-11",
+     "state": "done",
+     "src": "기재부·국토부"
+    },
+    {
+     "phase": "계획",
+     "stage": "기본계획 수립 용역·전략환경영향평가 협의 완료",
+     "date": "2025-04",
+     "state": "current",
+     "src": "서산시 2026 주요업무계획"
+    },
+    {
+     "phase": "인가",
+     "stage": "기본계획 고시",
+     "state": "future",
+     "eta": "2026"
+    },
+    {
+     "phase": "준공",
+     "stage": "완공·개항",
+     "state": "future",
+     "eta": "2029"
+    }
+   ],
+   "template_type": "기업이전",
+   "sd": "충남",
+   "sg": "서산시",
+   "loc": "서산시 해미면·고북면 일원(공군 20비행단 활용 민항)",
+   "last_movement": "2025-04",
+   "src_tier": "official_report",
+   "src_name": "서산시 「2026 주요업무계획」(2025-12-19) — 서산공항 건설(484억 전액 국비)",
+   "sources": [
+    "https://www.seosan.go.kr/DATA/bbs/106/202512290910008444DL0LN.pdf"
+   ],
+   "geo_prec": "dong",
+   "geo_approx": true,
+   "geo_basis": "해미면 대표점(근사 — 공식 자료가 면 단위로만 표기)",
+   "confirmed": false,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.554251,
+     36.750642
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2023-11",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-11",
+   "last_movement_basis": "source"
   }
  ]
 }

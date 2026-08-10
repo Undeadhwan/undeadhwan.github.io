@@ -2490,7 +2490,7 @@ function fillRegionSelect() {
   const sel = document.getElementById("f-region");
   const regions = [...new Set(SIGNALS.map(s => `${s.sd} ${s.sg}`))].sort((a, b) => a.localeCompare(b, "ko"));
   regions.forEach(r => sel.appendChild(new Option(r, r)));
-  sel.onchange = () => { filter.region = sel.value; renderAll(); };
+  sel.onchange = () => { filter.region = sel.value; filter._autoRegion = false; renderAll(); };   // 명시 선택 — 뷰 자동 지역축과 구분
 }
 
 /* ══════════ 좌측 4레벨 선택 (아실식 브레드크럼 + 격자): 시도>시군구>동>단지 ══════════ */
@@ -2549,6 +2549,9 @@ function applyRegion(sd, sg, dong) {
   nav.sd = sd || null; nav.sg = sg || null; nav.dong = dong || null;
   filter.region = sd && sg ? `${sd} ${sg}` : "";
   filter.dong = dong || "";
+  // ⚠ **사용자가 직접 고른 지역**이다 — 뷰가 자동으로 건 것(_autoRegion)과 구분한다.
+  //   이 표식을 안 끄면 바로 아래 closePanel()→goHome()이 방금 고른 지역을 지운다(2026-08-11).
+  filter._autoRegion = false;
   closePanel();                 // 조회 범위 변경은 상세를 닫는다(두 층이 겹치지 않게)
   renderAll();                  // 목록·도크 건수·요약 바·축 칩·지도 핀이 한 번에 따라온다
 }
@@ -3185,7 +3188,7 @@ function showSgg(disp) {
   view = { mode: "sgg", sgg: disp };
   const dp = disp.split(" "); nav.sd = dp[0]; nav.sg = dp.slice(1).join(" "); nav.dong = null;
   // 지도에서 고른 지역도 **조회 범위**다 — 드롭다운만 바뀌고 목록·집계는 전 지역이면 두 화면이 갈린다.
-  filter.region = `${nav.sd} ${nav.sg}`; filter.dong = ""; syncRegionBar();
+  filter.region = `${nav.sd} ${nav.sg}`; filter.dong = ""; filter._autoRegion = true; syncRegionBar();   // 뷰가 건 지역축 — closePanel/goHome이 되돌린다
   ANIMATE = true;
   renderPanel(); mapApi?.clearRadius(); mapApi?.clearRoute?.(); mapApi?.clearAptMarker?.();
   mapApi?.refreshPins?.();
@@ -3279,6 +3282,18 @@ function renderSggFeed(disp) {
 /* ══════════ 뷰 전환 ══════════ */
 function goHome() {
   view = { mode: "home" }; treeState.selKey = null;
+  /* ☠ **패널을 닫아도 지도가 안 돌아오던 것** (2026-08-11 사용자 제보 "동에 대해 상세보기 한후
+     지도의 공백 클릭해서 복귀해도 호재원이 안떠"). `showDong`·`showSgg`가 지역축 필터
+     (`filter.region`·`filter.dong`)를 **걸어 두고** 여기서 아무도 풀지 않았다 — 패널만 사라지고
+     지도는 그 동 하나로 좁혀진 채 남아 **텅 빈 화면**이 된다(좌측 카운트는 5,230 그대로라
+     "필터가 걸려 있다"는 사실이 화면 어디에도 안 보인다 — 화면이 사실을 말하지 않는 형태).
+     ⚠ 사용자가 **상단 드롭다운으로 직접 고른 지역**은 풀면 안 된다(그건 의도한 조회축이다).
+     그래서 뷰 진입이 자동으로 건 것만 `_autoRegion` 표식으로 구분해 되돌린다. */
+  if (filter._autoRegion) {
+    filter.region = ""; filter.dong = ""; filter._autoRegion = false;
+    nav.sd = nav.sg = nav.dong = null;
+    try { syncRegionBar(); } catch (e) {}
+  }
   if (typeof buildTree === "function" && DONG_GEO) buildTree();
   renderPanel();
   mapApi?.refreshPins?.();   // 선택 해제 → 호재 핀 사라짐(카운트 박스만)
@@ -3292,7 +3307,7 @@ function showDong(f) {
   aptFocus = null;   // 아파트 포커스 해제
   view = { mode: "dong", dong: f };
   nav.sd = f.properties.sido || "서울"; nav.sg = f.properties.sgg; nav.dong = f.properties.EMD_KOR_NM;
-  filter.region = `${nav.sd} ${nav.sg}`; filter.dong = nav.dong; syncRegionBar();
+  filter.region = `${nav.sd} ${nav.sg}`; filter.dong = nav.dong; filter._autoRegion = true; syncRegionBar();   // 뷰가 건 지역축 — closePanel/goHome이 되돌린다
   ANIMATE = true;
   renderPanel();
   mapApi?.clearRadius(); mapApi?.clearRoute?.(); mapApi?.clearAptMarker?.();
@@ -5449,13 +5464,13 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260811b");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260811c");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
   applyThresholds(await gj("thresholds.json").catch(() => null));
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
-  const [dong, sgg, main, macro, rawData, autoData, regions, jeongbiData, railData, roadData, dartData, archData, parkData, hospData, retailData, schoolData, dpsData, shData, masterData, jobsData, indparkData, logiparkData, megaData, eumData, advData] = await Promise.all([
+  const [dong, sgg, main, macro, rawData, autoData, regions, jeongbiData, railData, roadData, dartData, archData, parkData, hospData, retailData, schoolData, dpsData, shData, masterData, jobsData, indparkData, logiparkData, sfzData, megaData, eumData, advData] = await Promise.all([
     gj("bdong/서울.geojson"),      // 초기 = 서울 467동(§3.1 법정동). 나머지 15시도는 뷰포트·선택 시 지연 로드(bdong/index.json)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
@@ -5478,6 +5493,7 @@ function initSearch() {
     gj("jobs_signals.json").catch(() => ({ signals: [] })),           // 대형 일자리 S(용산·잠실·북항 등, 2026-07-22)
     gj("indpark_signals.json").catch(() => ({ signals: [] })),        // 산업단지 delta(KICOX 현황통계 — 미개발·조성중만, 2026-08-10)
     gj("logipark_signals.json").catch(() => ({ signals: [] })),       // 물류단지 delta(NLIC 현황 — 검증통과·건설중만, 2026-08-10)
+    gj("sfz_signals.json").catch(() => ({ signals: [] })),            // 특구 지정 고시(도심융합 — 관보 원문, 2026-08-11)
     gj("mega_signals.json").catch(() => ({ signals: [] })),           // 관보 고시 원문 파싱 — 대장에 아직 없는 신규 지구(2026-07-22)
     gj("eum_signals.json").catch(() => ({ signals: [] })),            // 토지이음 지자체 도시계획 고시(2026-07-22)
     gj("adverse_facilities.json").catch(() => ({ features: [] }))     // 역효과(UQ158 환경기초) — 지도 미표시, 아파트 카드 병기 전용(②안, 2026-07-30)
@@ -5528,6 +5544,10 @@ function initSearch() {
   // 물류단지 delta(NLIC 현황, 2026-08-10) — 같은 합류 문법. 계보는 _logipark.
   .concat(((logiparkData && logiparkData.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden).map(s => Object.assign({
     _jobs: true, _logipark: true, confirmed: false, status: "활성"
+  }, s)))
+  // 특구 지정 고시(도심융합, 2026-08-11) — 같은 합류 문법. 계보는 _sfz.
+  .concat(((sfzData && sfzData.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden).map(s => Object.assign({
+    _jobs: true, _sfz: true, confirmed: false, status: "활성"
   }, s)));
   // 관보 고시 원문 신호(2026-07-22) — 택지정보 대장에 **아직 없는** 신규 지구(서리풀1·2·구리토평2·
   // 오산세교3·제주화북2·인천로봇랜드 등). 좌표는 고시 붙임의 편입필지 평균(geo_prec=jigu).
@@ -5626,7 +5646,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811b"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811c"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5652,7 +5672,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260811b");
+  const CB = "?b=" + (window.BUILD || "20260811c");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
