@@ -2914,6 +2914,13 @@ function _deriveTarget(s) {
     // finEnd = 그 해 자체다. **±범위를 지어내지 않는다** — 원문이 준 것은 연도 하나뿐이다.
     return { y, finEnd: y, type: "target", label: `'${String(y).slice(2)} ${pick.stage || "완료 목표"}` };
   }
+  // ③ **이미 완료된 신호** — 날짜는 몰라도 「완료됐다」는 것은 안다(phase가 사실을 말한다).
+  //    실측 2026-08-11: 이 부류가 **351건**이고, 전부 「완료 시점 산출 불가」로 흐려지고 있었다
+  //    (제3연륙교 개통·신도평화대교 개통 등). 완료된 것을 「미도달」로 그리는 건 P5 위반이다.
+  // ☠ 그렇다고 **관측일을 준공일로 읽지 않는다** — 이 저장소가 이미 밟은 함정이다
+  //    (`fin_date_unknown`을 안 실어 stage_history의 관측일이 완료일로 읽히는 바람에 10년 전
+  //     끝난 조합이 '최근 준공'으로 영영 살아남았다). 모르는 날짜는 **만들지 않고 밝힌다**.
+  if (phaseOf(s) === "준공·개통") return { y: null, finEnd: null, type: "done", dateless: true, label: "완료 (시점 미상)" };
   return null;
 }
 function targetOf(s) {   // 렌더마다 수천 건을 훑으므로 신호 객체에 캐시(어댑터는 1회 생성)
@@ -2933,7 +2940,9 @@ function asOfLabel(s, yr) {
   const { t } = sigTimeline(s);
   if (!t) return "완료 시점 산출 불가";
   // ★ 완료가 **사실**이면 「추정」이라 부르지 않는다(P2 — 사실은 표시, 추정은 구분).
-  if (t.type === "done") return yr >= Math.floor(t.y) ? "완료 (사실)" : "완료 전";
+  //   시점을 모르면 시간축에 놓지 못하므로 기준연도와 무관하게 그렇게 말한다(지어내지 않는다).
+  if (t.type === "done") return t.dateless ? "완료 (시점 미상)"
+    : (yr >= Math.floor(t.y) ? "완료 (사실)" : "완료 전");
   if (yr >= t.finEnd) return "완료 범위 도달 (추정)";
   if (yr >= Math.floor(t.y)) return "완료 경계 (±범위 내)";
   return "진행 중 (추정)";
@@ -2946,7 +2955,9 @@ function miniBarHtml(s) {
   const doneEnd = Math.min(G_NOW, M1);
   let segs = `<div class="mseg done" style="left:${mpct(startY)}%;width:${Math.max(1, mpct(doneEnd) - mpct(startY))}%"></div>`;
   let fin = "";
-  if (t) {
+  // ⚠ 시점을 모르는 완료(`dateless`)는 **눈금에 찍지 않는다** — 아무 자리에나 놓으면 그 자리가
+  //   사실처럼 읽힌다(§7 「근거 없는 정밀함」). 완료라는 사실은 아래 meta 문구가 말한다.
+  if (t && isFinite(t.y)) {
     if (t.y > G_NOW) segs += `<div class="mseg est" style="left:${mpct(G_NOW)}%;width:${Math.max(1, mpct(t.y) - mpct(G_NOW))}%"></div>`;
     // 문법은 둘뿐이다: **사실=◆(confirmed)** · **미확정 목표=◇(range)**. 새 색·새 클래스를 만들지
     // 않는다(DESIGN.md) — `done`은 사실이므로 confirmed 쪽, `target`은 원문 목표라 range 쪽이다.
@@ -2954,7 +2965,11 @@ function miniBarHtml(s) {
     fin = `<span class="mfin ${fixed ? "confirmed" : "range"}" style="left:${mpct(t.y)}%">${fixed ? "◆" : "◇"}</span>`;
   }
   const cur = YEAR_SEL ? `<div class="mcur" style="left:${mpct(YEAR_SEL)}%"></div>` : "";
-  const asOf = YEAR_SEL ? ` · <b>'${String(YEAR_SEL).slice(2)} 시점: ${asOfLabel(s, YEAR_SEL)}</b>` : "";
+  // ⚠ 라벨과 기준연도 판정이 **같은 말**이면 한 번만 적는다(「완료 (시점 미상) · '33 시점: 완료
+  //   (시점 미상)」처럼 같은 문구가 두 번 나오면 읽는 사람이 두 사실인 줄 안다).
+  const _as = YEAR_SEL ? asOfLabel(s, YEAR_SEL) : "";
+  const asOf = (YEAR_SEL && !(t && t.label === _as))
+    ? ` · <b>'${String(YEAR_SEL).slice(2)} 시점: ${_as}</b>` : "";
   /* ★ **완료 시점을 모르면 완료 시점 축을 그리지 않는다** (2026-08-09 사용자 "진척도 바 부분이
      프로토타입이 훨씬 깔끔해"). 종전엔 모든 카드가 `'24 —— 완료 시점 미상 —— '34`를 달고 있었다 —
      축이 있는데 눈금에 걸릴 사실이 없으니 **근거 없는 정밀함**의 시각판이다(§7 진척률 금지와 같은 결).
@@ -2986,7 +3001,10 @@ function makeCard(s, extra = "", onClick) {
   el.className = "card";
   // 기준연도까지 완료범위 미도달 신호는 흐림 (숨기지 않음 — 간트의 dim과 동일)
   const t = targetOf(s);   // ⚠ `s.target_completion`을 직접 읽지 말 것 — 어댑터가 전부 null이다(§targetOf)
-  if (YEAR_SEL && (!t || t.finEnd > YEAR_SEL) && s.status !== "종결") el.classList.add("dimyr");
+  // 흐리지 **않을** 조건: 완료 시점을 알고 그 시점이 기준연도까지 왔거나, **이미 완료(시점 미상)**다.
+  // ⚠ 흐림은 「아직 아니다」라는 주장이다 — 완료된 것에 걸면 화면이 거짓말을 한다(P5).
+  const reached = t && (t.dateless || t.finEnd <= YEAR_SEL);
+  if (YEAR_SEL && !reached && s.status !== "종결") el.classList.add("dimyr");
   el.innerHTML = cardHtml(s, extra);
   el.onclick = onClick || (() => showSignal(s, true));
   el.onmouseenter = () => { el.classList.add("hl"); mapApi?.emphasizePin?.(s); };
@@ -5730,7 +5748,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260811n");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260811o");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -5914,7 +5932,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811n"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811o"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5940,7 +5958,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260811n");
+  const CB = "?b=" + (window.BUILD || "20260811o");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
