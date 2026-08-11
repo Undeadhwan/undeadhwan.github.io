@@ -841,8 +841,11 @@
   <div class="rmpanel">
     <div class="rmhead"><b>아파트 비교 — 호재 신호 기준</b>
       <!-- 나열 순서는 사실의 배열일 뿐이다(점수·순위 아님, §7·P3). 데이터가 받쳐주는 두 축만 둔다:
-           등급(규모 분류)과 거리(측정값). '완료 임박순'은 target_completion 보유가 전 신호 중 1건뿐이라
-           만들지 않았다 — 축을 늘리기 전에 수율부터 센다. -->
+           등급(규모 분류)과 거리(측정값).
+           ⚠ '완료 임박순'을 안 만든 근거였던 「target_completion 보유 1건」은 **낡았다**(2026-08-11):
+              그건 어댑터가 null을 박아 둔 결과였고, `targetOf`가 마일스톤에서 도출하자 772건이 됐다.
+              그래도 축은 아직 안 늘린다 — 21%면 나머지 79%가 목록 끝에 뭉치고, 그 정렬은 사실보다
+              **결손 분포**를 보여 준다. 수율이 더 오르면 그때 다시 본다(수율부터 센다). -->
       <label class="cmpsort">정렬
         <select id="cmp-sort" onchange="renderCompareBody()">
           <option value="level">등급순</option>
@@ -1806,7 +1809,9 @@ function buildDartSignals() {   // DART 전자공시 = 법정 공시 → officia
     current_stage: s.current_stage || "공시", phase: s.phase || "계획", status: "활성", confirmed: false,
     sd: s.sd, sg: s.sg, dong: s.dong || null, amount_eok: s.amount_eok,
     last_movement: s.rcept_dt && s.rcept_dt.length === 8 ? `${s.rcept_dt.slice(0,4)}-${s.rcept_dt.slice(4,6)}-${s.rcept_dt.slice(6,8)}` : null,
-    target_completion: null, sources: s.src ? [s.src] : [],
+    // ☠ 여기 있던 `target_completion: null`을 지웠다(2026-08-11) — **값을 안 싣는 게 아니라
+    //    「모른다」를 박아 넣고 있었다.** 완료 시점은 `targetOf(s)`가 마일스톤에서 도출한다.
+    sources: s.src ? [s.src] : [],
     geometry: { coordinates: s.geometry.coordinates }
   }));
 }
@@ -1830,7 +1835,9 @@ function buildArchSignals() {
     group_n: s.group_n || null, group_area_m2: s.group_area_m2 || null, group_members: s.group_members || null,
     geo_prec: s.geo_prec || null, geo_approx: !!s.geo_approx, geo_basis: s.geo_basis || null,   // 좌표 정밀도(§4.1)
     last_movement: s.rcept_dt && s.rcept_dt.length === 8 ? `${s.rcept_dt.slice(0,4)}-${s.rcept_dt.slice(4,6)}-${s.rcept_dt.slice(6,8)}` : null,
-    target_completion: null, sources: s.src ? [s.src] : [],
+    // ☠ 여기 있던 `target_completion: null`을 지웠다(2026-08-11) — **값을 안 싣는 게 아니라
+    //    「모른다」를 박아 넣고 있었다.** 완료 시점은 `targetOf(s)`가 마일스톤에서 도출한다.
+    sources: s.src ? [s.src] : [],
     geometry: { coordinates: s.geometry.coordinates }
   }));
 }
@@ -2036,7 +2043,8 @@ function buildJeongbiSignals() {
     //   앞에 붙이면 카드·목록·검색 전부에서 구분된다. 이름을 지어내는 게 아니라 위치 사실의 표기다(P2).
     _jb: true, _jbtype: c.type || "", src_tier: "official_report", milestones: c.milestones || [], title: (c.dong && !(c.n || "").includes(c.dong) ? c.dong + " " + c.n : c.n), cat: "주거개발", lvl: hhLevel(c.hh), lvl_basis: hhBasis(c.hh),   // 세대수 눈금 = thresholds.json(SSOT) · 사유는 카드에 표기
     template_type: "정비사업", current_stage: c.stage, phase: c.phase, status: c.drop ? "종결" : "활성", confirmed: false,
-    sd: c.sd, sg: c.sg, dong: c.dong, hh: c.hh, last_movement: c.last_movement || null, stage_history: c.stage_history || undefined, target_completion: null,   // 실일자(경기 마일스톤 소급 등) → 신선도·정체 표시
+    sd: c.sd, sg: c.sg, dong: c.dong, hh: c.hh, last_movement: c.last_movement || null, stage_history: c.stage_history || undefined,   // 실일자(경기 마일스톤 소급 등) → 신선도·정체 표시
+    // ☠ 여기 있던 `target_completion: null`을 지웠다(2026-08-11) — 완료 시점은 `targetOf(s)`가 도출한다(§targetOf).
     // ⚠ 완료일 미상 표식 — 안 실으면 isStaleFinished가 stage_history의 **관측일**을 완료일로 읽어
     //   10년 전 끝난 조합이 '최근 준공'으로 영영 살아남는다(긴등마을 실측, 어댑터 함정 5회째.
     //   생산측(lifecycle)은 2026-07-31에 고쳤는데 어댑터가 그 필드를 떨어뜨려 화면은 그대로였다).
@@ -2864,18 +2872,68 @@ function wireYearChips(p) {
     if (refreshJeongbiPoly) refreshJeongbiPoly();
   };
 }
+/* ★★ 완료 시점 SSOT — `targetOf(s)` (2026-08-11 신설. 사용자 제보: *"'33 시점 기준으로 조정했으니
+     005정거장은 33년 개통목표이므로 활성화 표시되어야 하는거아냐? 시점 조정에 따른 호재 목록들의
+     상태 변화가 없어"*).
+
+   ☠ **시점 슬라이더가 전 신호에 대해 아무 일도 하지 않고 있었다.** 원인은 `target_completion`을
+     **어댑터가 전부 `null`로 박아 둔 것**이다(`buildArchSignals`·`buildDartSignals`·
+     `buildJeongbiSignals` … 세 곳에 리터럴 `target_completion: null`). 실측 2026-08-11:
+     전 신호 **3,637건 중 값이 있는 것 1건**. 그래서 카드는 죄다 「완료 시점 산출 불가」였고
+     슬라이더를 어디로 끌든 흐림 상태가 같았다 — **화면이 "모른다"고 말하는데 데이터는 알고 있었다.**
+
+   ★ 사실은 이미 데이터에 있다 — 지어내지 않는다(P2):
+     ① **완료 사실** = 준공 마일스톤의 실제 `date`(건축HUB 사용승인 등 199건) 또는
+        `completion_verified.date`. 이건 **추정이 아니라 사실**이라 라벨도 그렇게 말한다.
+     ② **목표 연도** = 마일스톤 `eta` — 원문이 적은 개통·준공 목표(철도 446·마스터 58·물류 31…).
+        「1단계 '30·2단계 '33」처럼 여럿이면 **준공 단계의 가장 늦은 것**이 그 사업의 완료 시점이다.
+     도출 가능 **772건**(21%) — 1건에서 늘어난 것이지 없던 사실을 만든 게 아니다.
+
+   ★ **어댑터에 필드를 새로 싣지 않는다.** 어댑터가 필드를 떨어뜨리는 사고는 이 저장소가 세 번
+     밟았다(HANDOFF 「프런트 어댑터 함정」). 13개 풀에 한 줄씩 붙이면 네 번째가 된다 —
+     그래서 **읽는 쪽 한 곳에서 도출**한다. 새 신호 풀이 생겨도 자동으로 걸린다.
+   ⚠ 명시값(`s.target_completion`)이 있으면 그게 이긴다 — 상류 교정을 하류가 덮지 않는다. */
+const _tcYm = d => { const p = String(d).split("-"); return `'${p[0].slice(2)}${p[1] ? "." + (+p[1]) : ""}`; };
+function _deriveTarget(s) {
+  if (s.target_completion) return s.target_completion;
+  const ms = s.milestones || [];
+  // ① 완료 **사실** — 준공 단계에 실제 날짜가 박힌 것. phase 표기가 「준공」·「준공·개통」 둘 다라 앞부분으로 본다.
+  const fin = ms.filter(m => (m.phase || "").indexOf("준공") === 0 && m.date)
+    .sort((a, b) => String(b.date).localeCompare(String(a.date)))[0];
+  const dt = (fin && fin.date) || (s.completion_verified || {}).date;
+  if (dt && isFinite(yearDec(dt))) {
+    const y = yearDec(dt);
+    return { y, finEnd: y, type: "done", label: `${_tcYm(dt)} ${(fin && fin.stage) || "준공"}` };
+  }
+  // ② 목표 연도 — **원문에 적힌 것만**. 준공 단계 것이 우선이고, 그중 가장 늦은 해가 완료 시점이다.
+  const et = ms.filter(m => /^\d{4}$/.test(String(m.eta || "")));
+  const fins = et.filter(m => (m.phase || "").indexOf("준공") === 0);
+  const pick = (fins.length ? fins : et).sort((a, b) => (+b.eta) - (+a.eta))[0];
+  if (pick) {
+    const y = +pick.eta;
+    // finEnd = 그 해 자체다. **±범위를 지어내지 않는다** — 원문이 준 것은 연도 하나뿐이다.
+    return { y, finEnd: y, type: "target", label: `'${String(y).slice(2)} ${pick.stage || "완료 목표"}` };
+  }
+  return null;
+}
+function targetOf(s) {   // 렌더마다 수천 건을 훑으므로 신호 객체에 캐시(어댑터는 1회 생성)
+  if (s._tc === undefined) s._tc = _deriveTarget(s);
+  return s._tc;
+}
 /* 신호의 시간 골격: 시작(이력 최솟값)~오늘~목표 */
 function sigTimeline(s) {
   const hs = (s.stage_history || []).map(h => yearDec(h.date)).filter(isFinite);
   const lm = s.last_movement ? yearDec(s.last_movement) : null;
   const startY = Math.min(...(hs.length ? hs : [lm ?? G_NOW]), lm ?? G_NOW);
-  return { startY, t: s.target_completion || null };
+  return { startY, t: targetOf(s) };
 }
 function asOfLabel(s, yr) {
   if (!yr) return "";
   if (s.status === "종결") return "종결(무산)";
   const { t } = sigTimeline(s);
   if (!t) return "완료 시점 산출 불가";
+  // ★ 완료가 **사실**이면 「추정」이라 부르지 않는다(P2 — 사실은 표시, 추정은 구분).
+  if (t.type === "done") return yr >= Math.floor(t.y) ? "완료 (사실)" : "완료 전";
   if (yr >= t.finEnd) return "완료 범위 도달 (추정)";
   if (yr >= Math.floor(t.y)) return "완료 경계 (±범위 내)";
   return "진행 중 (추정)";
@@ -2890,7 +2948,10 @@ function miniBarHtml(s) {
   let fin = "";
   if (t) {
     if (t.y > G_NOW) segs += `<div class="mseg est" style="left:${mpct(G_NOW)}%;width:${Math.max(1, mpct(t.y) - mpct(G_NOW))}%"></div>`;
-    fin = `<span class="mfin ${t.type || "range"}" style="left:${mpct(t.y)}%">${t.type === "confirmed" ? "◆" : "◇"}</span>`;
+    // 문법은 둘뿐이다: **사실=◆(confirmed)** · **미확정 목표=◇(range)**. 새 색·새 클래스를 만들지
+    // 않는다(DESIGN.md) — `done`은 사실이므로 confirmed 쪽, `target`은 원문 목표라 range 쪽이다.
+    const fixed = (t.type === "confirmed" || t.type === "done");
+    fin = `<span class="mfin ${fixed ? "confirmed" : "range"}" style="left:${mpct(t.y)}%">${fixed ? "◆" : "◇"}</span>`;
   }
   const cur = YEAR_SEL ? `<div class="mcur" style="left:${mpct(YEAR_SEL)}%"></div>` : "";
   const asOf = YEAR_SEL ? ` · <b>'${String(YEAR_SEL).slice(2)} 시점: ${asOfLabel(s, YEAR_SEL)}</b>` : "";
@@ -2924,7 +2985,7 @@ function makeCard(s, extra = "", onClick) {
   const el = document.createElement("div");
   el.className = "card";
   // 기준연도까지 완료범위 미도달 신호는 흐림 (숨기지 않음 — 간트의 dim과 동일)
-  const t = s.target_completion;
+  const t = targetOf(s);   // ⚠ `s.target_completion`을 직접 읽지 말 것 — 어댑터가 전부 null이다(§targetOf)
   if (YEAR_SEL && (!t || t.finEnd > YEAR_SEL) && s.status !== "종결") el.classList.add("dimyr");
   el.innerHTML = cardHtml(s, extra);
   el.onclick = onClick || (() => showSignal(s, true));
@@ -5669,7 +5730,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260811m");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260811n");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -5853,7 +5914,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811m"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811n"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5879,7 +5940,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260811m");
+  const CB = "?b=" + (window.BUILD || "20260811n");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
