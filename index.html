@@ -2748,9 +2748,18 @@ function showApt(a) {
   // 지도 이동은 공용 헬퍼만(mapGo/mapFit) — Leaflet 전용 API 직접 호출로 카카오에서 크래시하던
   // 클래스의 원천 해결(2026-07-29 전수 감사 A, html_check 게이트가 지킨다).
   if (window._map) {
+    /* ★ **아파트를 화면 중앙에 둔다** (2026-08-11 사용자 *"아파트 상세보기 하면 해당 아파트가
+       화면 중앙(좌우, 상하 모두)에 위치해야 하는데 그렇지 않은 경우들이 있어"*).
+       ☠ 종전엔 `mapFit(호재들 + 아파트)` — 즉 **바운딩박스 중심**에 맞췄다. 호재가 사방에 고르면
+         우연히 가운데 오지만, **한쪽에 몰리면 아파트가 가장자리로 밀린다**(실측: 검단1차피오레는
+         호재가 1.8km 떨어진 1건뿐이라 중심이 아파트와 그 호재의 중간에 잡혔다).
+       처방: 중심은 **아파트로 고정**하고 줌만 고른다 — 아파트를 중심으로 한 **대칭 상자**를
+       맞추면 중심이 아파트임이 기하학적으로 보장되고, 그 단지 호재도 함께 들어온다. */
     const fpts = [...(aptFocus || [])].map(s => s.geometry && s.geometry.coordinates).filter(Boolean);
-    if (fpts.length) mapFit(fpts.concat([[a.lon, a.lat]]).map(c => [c[1], c[0]]), 40);
-    else mapGo(a.lat, a.lon, 15);
+    const maxM = fpts.reduce((m, c) => Math.max(m, meters([a.lon, a.lat], c)), 0);
+    const R = Math.max(maxM, 400) * 1.15;   // 최소 400m — 호재가 없는 단지도 적당한 줌으로
+    const dLat = R / 110540, dLon = R / (111320 * Math.cos(a.lat * Math.PI / 180));
+    mapFit([[a.lat - dLat, a.lon - dLon], [a.lat + dLat, a.lon + dLon]], 40);
     mapApi?.showAptAnchor?.(a);
   }
   mapApi?.radarPulse?.(a.lon, a.lat);   // 단지 중심 레이더 파동
@@ -5274,7 +5283,49 @@ function initKakao() {
   try { new ResizeObserver(() => { try { map.relayout(); applyLOD(); } catch (e) {} }).observe(el); } catch (e) {}
   // 지도 빈 곳 클릭 = 홈 복귀. 단 선·폴리곤 클릭 직후의 이중 발화는 무시(상세가 열리자마자 닫히는 문제)
   K.event.addListener(map, "click", () => { if (Date.now() - _ovClickTs < 400) return; hideTip(); goHome(); });
-  window._dbg = { applyLOD, renderHojae, renderDongLabels, map,
+  /* ★★ **진입 × 이탈 상태 원복 자체검사** (2026-08-11 사용자 승인 — 하루에 같은 형태의 버그가 2건).
+     사고 클래스: 「뷰에 진입하며 건 상태축을 이탈할 때 안 푼다」. 지역축(`filter.region`)과
+     포커스축(`aptFocus`)이 각각 한 번씩 터졌고, **둘 다 QA·html_check는 초록**이었다
+     (데이터와 문법만 보므로). 그래서 교훈을 문서가 아니라 **한 줄로 재실행 가능한 검사**로 남긴다.
+     쓰는 법: 콘솔에서 `_dbg.selfTest()` → 축이 안 돌아온 경로만 목록으로 나온다.
+     ⚠ **동기로만 돈다** — 상태축은 순수 JS라 지도 애니메이션을 기다릴 필요가 없고, 기다리면
+       숨은 창에서 타이머가 늘어져 검사 자체가 안 끝난다(2026-08-11 실측).
+     새 뷰·새 상태축을 만들면 AXES와 CASES에 한 줄씩 추가한다. */
+  const selfTest = () => {
+    const AXES = () => ({ view: view.mode, region: filter.region || "", dong: filter.dong || "",
+      auto: !!filter._autoRegion, aptFocus: aptFocus ? aptFocus.size : null,
+      routeIso: (typeof routeIsoName !== "undefined") ? (routeIsoName || "") : "n/a",
+      VIEW_MODE: (typeof VIEW_MODE !== "undefined") ? VIEW_MODE : "?" });
+    const sig = SIGNALS.find(s => s.geometry && s.geometry.coordinates);
+    const apt = (typeof APTS !== "undefined" && APTS.length) ? APTS.find(x => x.lat && x.lon) : null;
+    const dong = (DONG_GEO && DONG_GEO.features || []).find(f => f.properties && f.properties.EMD_KOR_NM);
+    const CASES = [
+      ["신호상세→closePanel", () => sig && showSignal(sig, true), () => closePanel()],
+      ["신호상세→goHome", () => sig && showSignal(sig, true), () => goHome()],
+      ["아파트→closePanel", () => apt && showApt(apt), () => closePanel()],
+      ["아파트→goHome", () => apt && showApt(apt), () => goHome()],
+      ["동→closePanel", () => dong && showDong(dong), () => closePanel()],
+      ["동→goHome", () => dong && showDong(dong), () => goHome()],
+      ["클러스터→closePanel", () => showCluster(SIGNALS.slice(0, 3)), () => closePanel()],
+      ["아파트→신호→닫기2회", () => { apt && showApt(apt); sig && showSignal(sig, true); }, () => { closePanel(); closePanel(); }],
+      ["목록뷰 왕복", () => setView("list"), () => setView("map")],
+      ["흐름뷰 왕복", () => setView("flow"), () => setView("map")],
+      ["조회조건 시트 왕복", () => toggleDock(true), () => toggleDock(false)],
+    ];
+    goHome(); const base = AXES(); const bad = {};
+    for (const [n, e, x] of CASES) {
+      goHome();
+      try { e(); x(); } catch (err) { bad[n] = "예외: " + err.message; continue; }
+      const a = AXES(), diff = {};
+      for (const k in base) if (String(a[k]) !== String(base[k])) diff[k] = base[k] + " → " + a[k];
+      if (Object.keys(diff).length) bad[n] = diff;
+    }
+    goHome(); applyLOD();
+    const n = Object.keys(bad).length;
+    console.log(n ? `❌ 상태 원복 실패 ${n}/${CASES.length}` : `✅ 상태 원복 ${CASES.length}/${CASES.length} 통과`, bad);
+    return { 통과: CASES.length - n, 전체: CASES.length, 실패: bad };
+  };
+  window._dbg = { applyLOD, renderHojae, renderDongLabels, map, selfTest,
     // 층별 소요(ms) — 반복 n회 중앙값. 팬·줌이 굼뜰 때 **어느 층인지 먼저 재고** 고칠 것.
     lodProfile: (n = 7) => Object.fromEntries(_LOD.map(([nm, f]) => {
       const a = []; for (let i = 0; i < n; i++) { const t = performance.now(); f(); a.push(performance.now() - t); }
@@ -5618,7 +5669,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260811k");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260811l");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -5802,7 +5853,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811k"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811l"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5828,7 +5879,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260811k");
+  const CB = "?b=" + (window.BUILD || "20260811l");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
