@@ -3835,11 +3835,25 @@ addEventListener("resize", () => {
   if (document.getElementById("panel")?.style.display !== "none") applyPanelSnap(panelSnap, false);
 });
 let returnView = null;
+/* 카드·칩에서 신호를 고르면 **그 신호 자리로 간다** — 지도에 핀이 그려져 있든 아니든.
+   ☠ 2026-08-12 사용자 제보(*"흐름에서 호재를 선택하면 좌표가 호재가 아닌 이상하게 가버린다"* ·
+     *"목록에서 선택해도 마찬가지"*): 이동이 `s._pan`에 의존했는데 그건 **핀이 그려질 때만**
+     신호에 붙는다(`renderHojae`가 뷰포트 안만 그린다). 목록·흐름은 지도를 **숨긴** 화면이고
+     보던 위치가 멀면 그 신호의 핀이 없으므로 **아무 일도 일어나지 않는다** — 패널엔 강서구
+     호재가 열렸는데 지도는 이전에 보던 남해 앞바다에 그대로 있는 상태가 그래서 나온다.
+   ⇒ 신호 **자신의 좌표**로 간다. 검색 경로(`srchGoSignal`)가 이미 그렇게 하고 있었으므로
+     규칙을 하나로 모으는 것이다(같은 동작을 두 벌로 두면 한쪽만 조용히 어긋난다). */
+function sigGoTo(s) {
+  const pts = signalPoints(s);
+  const arr = pts.length ? pts : (s._road ? roadLinePoints(s) : []);
+  if (arr.length && window._map) return mapGo(arr[0].coord[1], arr[0].coord[0], 14);
+  if (s._pan) s._pan();      // 좌표를 만들지 못하는 신호(폴리곤 딱지 등)는 종전 경로로
+}
 function showSignal(s, pan) {
   if (view.mode !== "detail") returnView = view;   // 신호 클릭 직전 뷰(동/구/단지) 기억
   view = { mode: "detail", signal: s }; renderPanel();
   mapApi?.refreshPins?.();
-  if (pan && s._pan) s._pan();
+  if (pan) sigGoTo(s);
   if (s.area_shape) mapApi?.clearRadius?.();   // 지구 딱지 = 영역(폴리곤)이 곧 범위 — 영향 반경 원 안 그림
   else if (s._line) mapApi?.clearRadius?.();   // 노선 자체 클릭 = 선 하이라이트만 — 중점 영향원은 거짓 표시(2026-08-04)
   else mapApi?.showRadius(s);   // 영향 반경 원 표시 (§3.3.1 기준표)
@@ -5875,18 +5889,38 @@ let RAW = null;
 /* ══════════ 상단 통합 검색 (동·시군구·아파트·호재) — 지역 파라미터 없음, 로드된 전 데이터 대상 ══════════ */
 const SRCH_TAG = { dong: { t: "동", c: "#4460e0" }, sgg: { t: "지역", c: "#2c3fb5" }, apt: { t: "아파트", c: "#d6156d" } };
 const srchNorm = s => (s || "").toLowerCase().replace(/\s+/g, "");
+/* ★ 낱말이 떨어져 있어도 찾는다 (2026-08-12 사용자 *"'CJ가양'이라고 검색하면 가양동 CJ공장부지가
+     뜨게"*). 종전엔 공백만 지우고 **한 덩어리 부분일치**라, 이름 안에서 낱말 순서가 다르면
+     영영 안 걸렸다 — 「가양동 CJ공장부지」는 'CJ가양'을 담고 있지 않다.
+   ⇒ 질의를 조각으로 나눠 **전부 포함(AND)**을 본다. 조각은 공백뿐 아니라 **문자 갈래가 바뀌는
+     자리**(한글↔영문↔숫자)에서도 나눈다 — 'CJ가양'엔 공백이 없기 때문이다.
+   ⚠ OR가 아니라 AND다. OR면 'CJ'만 맞아도 걸려 결과가 잡음으로 덮인다. */
+const srchParts = q => (q || "").toLowerCase().replace(/[·,\/]+/g, " ").split(/\s+/)
+  .flatMap(t => t.match(/[a-z]+|\d+|[가-힣]+|[^\sa-z\d가-힣]+/g) || []).filter(Boolean);
+const srchHit = (name, parts) => { const n = srchNorm(name); return parts.every(p => n.includes(p)); };
 function srchHi(name, qRaw) {
-  const i = name.toLowerCase().indexOf(qRaw.toLowerCase());
-  if (i < 0) return name;   // 공백 무시 매칭 등으로 원문에 없으면 강조 생략
-  return name.slice(0, i) + `<b style="color:var(--accent)">` + name.slice(i, i + qRaw.length) + "</b>" + name.slice(i + qRaw.length);
+  /* 강조도 **조각 단위**로 한다 — 질의 전체를 한 덩어리로 찾으면, 낱말이 떨어져 매칭된 결과에선
+     강조가 통째로 사라진다(매칭 규칙만 고치고 표시를 안 고치면 한쪽이 조용히 어긋난다). */
+  const parts = [...new Set(srchParts(qRaw))].sort((a, b) => b.length - a.length);
+  if (!parts.length) return name;
+  const low = name.toLowerCase();
+  let out = "", i = 0;
+  while (i < name.length) {
+    const hit = parts.find(p => low.startsWith(p, i));
+    if (hit) { out += `<b style="color:var(--accent)">` + name.slice(i, i + hit.length) + "</b>"; i += hit.length; }
+    else { out += name[i] === "<" ? "&lt;" : name[i]; i++; }
+  }
+  return out;
 }
 function srchResults(qRaw) {
   const q = srchNorm(qRaw);
-  if (!q) return [];
+  const parts = srchParts(qRaw);
+  if (!q || !parts.length) return [];
   const out = [];
-  const rank = name => srchNorm(name).startsWith(q) ? 0 : 1;   // 접두 일치 우선
+  // 접두 일치 우선 → 붙어 있는 부분일치 → 조각이 흩어진 것. **덩어리로 맞는 쪽이 언제나 위**다.
+  const rank = name => { const n = srchNorm(name); return n.startsWith(q) ? 0 : n.includes(q) ? 1 : 2; };
   // 동 (법정동 경계 보유 지역)
-  (DONG_GEO?.features || []).filter(f => srchNorm(f.properties.EMD_KOR_NM).includes(q))
+  (DONG_GEO?.features || []).filter(f => srchHit(f.properties.EMD_KOR_NM, parts))
     .sort((a, b) => rank(a.properties.EMD_KOR_NM) - rank(b.properties.EMD_KOR_NM)
       || a.properties.EMD_KOR_NM.localeCompare(b.properties.EMD_KOR_NM, "ko"))
     .slice(0, 5)
@@ -5894,17 +5928,17 @@ function srchResults(qRaw) {
       sub: `${f.properties.sido || "서울"} ${f.properties.sgg}`, run: () => showDong(f) }));
   // 시군구 (전국 251)
   [...new Set((SGG_GEO?.features || []).map(f => `${f.properties.sido} ${sggDisplayName(f.properties.name)}`))]
-    .filter(d => srchNorm(d).includes(q)).sort((a, b) => rank(a) - rank(b)).slice(0, 3)
+    .filter(d => srchHit(d, parts)).sort((a, b) => rank(a) - rank(b)).slice(0, 3)
     .forEach(d => out.push({ kind: "sgg", name: d, sub: "시군구", run: () => showSgg(d) }));
   // 아파트 (전국, 큰 단지 우선)
-  APTS.filter(a => srchNorm(a.n).includes(q))
+  APTS.filter(a => srchHit(a.n, parts))
     .sort((a, b) => rank(a.n) - rank(b.n) || (b.hh || 0) - (a.hh || 0)).slice(0, 6)
     .forEach(a => out.push({ kind: "apt", name: a.n,
       sub: `${a.sd || ""} ${a.sg || ""} ${a.dong || ""}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : ""}`.trim(),
       run: () => showApt(a) }));
   // 호재 신호 (확정+정비+철도+도로+DART+건축 — 필터 무관 전체 검색, 등급순)
   const LVO = { A: 0, B: 1, C: 2, "미정": 3 };
-  allSignalsFlat().filter(s => s.title && srchNorm(s.title).includes(q))
+  allSignalsFlat().filter(s => s.title && srchHit(s.title, parts))
     .sort((a, b) => rank(a.title) - rank(b.title) || LVO[levelOf(a)] - LVO[levelOf(b)]).slice(0, 8)
     .forEach(s => out.push({ kind: "sig", name: s.title, color: colorOf(s),
       sub: `${catOf(s)} · ${LEVEL_NAME[levelOf(s)]}${s.sg ? " · " + `${s.sd || ""} ${s.sg}`.trim() : ""}`,
@@ -5969,7 +6003,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260812b");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260812c");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -6153,7 +6187,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812b"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812c"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -6179,7 +6213,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260812b");
+  const CB = "?b=" + (window.BUILD || "20260812c");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
