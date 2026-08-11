@@ -60,6 +60,20 @@
      라이브 기본값은 항상 꺼짐 — "정식 오픈 전에 지우기"를 사람이 기억하지 않게 한다. ── */
   #f-view { display:none; }
   body.ops #f-view { display:flex; }
+  /* 공개 사용자 조작(아파트 표시 세대수) — 운영 그룹과 **다른 상자**다(§header 주석).
+     장식 이모지는 쓰지 않는다(DESIGN.md §4) — 무엇을 고르는지는 글자가 말한다. */
+  #f-user select { font-size:13px; font-weight:600; padding:6px 9px; border:1px solid var(--line);
+                   border-radius:9px; background:#fff; color:var(--ink); cursor:pointer; }
+  #f-user select:focus { outline:none; border-color:var(--accent); }
+  /* ⚠ 모바일에선 **자기 줄을 차지한다**(지역 3칸이 이미 한 줄을 다 쓴다) — 실측 공개 헤더 98→137px.
+     「지도가 첫 화면」(§3-b) 때문에 그 39px가 그냥 비용이라, 글자·여백을 줄여 폭을 최소로 만든다.
+     ⚠ 없애지는 않는다 — 없애면 다시 **사용자가 못 만지는 기능**이 된다(그게 애초의 결함이었다).
+     ★ 더 나은 자리는 조회조건 시트(도크)다 — 다만 도크는 매 렌더 innerHTML을 새로 쓰고
+       아파트 렌더러가 카카오·Leaflet 두 벌이라, 옮기려면 그 두 벌부터 합쳐야 한다(별도 작업). */
+  @media (max-width: 768px) {
+    #f-user { margin-top:-2px; }
+    #f-user select { font-size:12.5px; padding:5px 8px; }
+  }
   .opswitch { display:none; align-items:center; gap:6px; margin-left:auto; font-size:var(--fs-s); color:var(--ink3);
               white-space:nowrap; user-select:none; cursor:pointer; }
   body.ops-avail .opswitch { display:flex; }
@@ -866,8 +880,17 @@
     <select id="r-dong" disabled><option value="">읍면동 선택</option></select>
   </div>
   <div class="chips" id="f-dd"></div>
-  <!-- 뷰 전환(지도 | 목록)은 **사용자 기능**이라 운영 도구 그룹(#f-view)에 두지 않는다.
-       #f-view는 운영 모드에서만 보이므로, 여기 있으면 공개 화면에 목록이 존재하지 않게 된다. -->
+  <!-- ☠ **사용자 기능이 운영 그룹 안에 있어 공개 화면에서 사라져 있었다** (2026-08-11 실측).
+       아래 `#f-view`는 운영 모드에서만 보이는데 그 안에 **아파트 표시 세대수**가 들어 있었다 —
+       지도에 아파트를 몇 세대부터 보일지는 명백한 사용자 조작이다. 같은 실수를 뷰 전환에서는
+       이미 경계하고 있었다(바로 아래 주석) — **규칙이 한쪽에만 걸린 그 형태**다.
+       자리는 **조회 조건 옆**이다(무엇을 보나) — 뷰 전환(어떻게 보나)과 섞지 않는다. -->
+  <div class="chips" id="f-user">
+    <select id="apt-hh" title="지도에 표시할 아파트 최소 세대수 (아파트는 확대 시 집 아이콘)"></select>
+  </div>
+  <!-- 뷰 전환(지도 | 흐름 | 목록)은 **사용자 기능**이라 운영 도구 그룹(#f-view)에 두지 않는다.
+       #f-view는 운영 모드에서만 보이므로, 여기 있으면 공개 화면에 목록이 존재하지 않게 된다.
+       헤더의 **맨 오른쪽**에 둔다 — 조회 조건(무엇을 보나)을 다 고른 뒤 고르는 축이다. -->
   <div class="chips" id="f-mode">
     <!-- 세 칸이 답하는 질문이 서로 달라야 한다(2026-08-11 사용자 "흐름이랑 목록이랑 차이가 뭔지
          좀 애매해") — title에 그 질문을 그대로 적는다. 자세한 구분은 각 뷰 머리에도 쓴다. -->
@@ -880,7 +903,6 @@
          조회조건 진입은 하단 탭바가 담당한다(2026-08-10 탭바 도입 때 옮겨졌다). -->
   </div>
   <div class="chips" id="f-view">
-    <select id="apt-hh" title="아파트 표시 세대수 필터 (아파트는 z14+ 집 아이콘)" style="font-size:12px;padding:4px 6px;border:1px solid var(--line);border-radius:8px;background:#fff"></select>
     <span class="chip" id="v-undet" title="등급 기준(면적·금액·세대수 등)에 매칭 안 돼 등급 미판정인 호재 목록">❓ 미판정 목록</span>
     <span class="chip" id="v-settings" onclick="window.open('settings.html','_blank')" title="등급 눈금(면적·금액·세대수)과 영향 반경을 thresholds.json에 직접 설정 — 운영자 전용">⚙ 기준 설정</span>
     <span class="chip" onclick="window.open('rail_reference.html','_blank')" title="신규 철도 노선·역사 좌표 대장 (영향권 기준)">🚈 노선·역 대장</span>
@@ -4401,7 +4423,8 @@ function initLeaflet() {
   {
     const sel = document.getElementById("apt-hh");
     if (sel && !sel.options.length) {
-      APT_HH_STEPS.forEach(([v, lb]) => sel.appendChild(new Option("🏠 " + lb, v)));
+      // 장식 이모지 금지(DESIGN.md §4) — 「무엇의」 세대수인지는 **글자**가 말한다
+      APT_HH_STEPS.forEach(([v, lb]) => sel.appendChild(new Option(v === "all" ? "아파트 전체" : "아파트 " + lb, v)));
       sel.value = APT_HH_MIN ? String(APT_HH_MIN) : "all";
       sel.onchange = () => { APT_HH_MIN = sel.value === "all" ? 0 : +sel.value;
         localStorage.setItem("hojae_apt_hh", APT_HH_MIN); renderAptDots(); };
@@ -5513,7 +5536,7 @@ function initKakao() {
     aptShown = next; };
   let aptHhMin = +(localStorage.getItem("hojae_apt_hh") || 500);
   { const sel = document.getElementById("apt-hh");
-    if (sel) { if (!sel.options.length) { [["all", "전체"], ["300", "300세대+"], ["500", "500세대+"], ["1000", "1,000세대+"], ["3000", "3,000세대+"]].forEach(([v, lb]) => sel.appendChild(new Option("🏠 " + lb, v))); }
+    if (sel) { if (!sel.options.length) { [["all", "전체"], ["300", "300세대+"], ["500", "500세대+"], ["1000", "1,000세대+"], ["3000", "3,000세대+"]].forEach(([v, lb]) => sel.appendChild(new Option(v === "all" ? "아파트 전체" : "아파트 " + lb, v))); }
       sel.value = aptHhMin ? String(aptHhMin) : "all"; sel.onchange = () => { aptHhMin = sel.value === "all" ? 0 : +sel.value; localStorage.setItem("hojae_apt_hh", aptHhMin); renderAptDots(); }; } }
 
   // 시도경계 지연로딩(카카오 bounds)
@@ -5946,7 +5969,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260811r");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260811s");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -6130,7 +6153,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811r"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811s"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -6156,7 +6179,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260811r");
+  const CB = "?b=" + (window.BUILD || "20260811s");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
