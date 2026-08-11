@@ -3329,6 +3329,16 @@ function goHome() {
     nav.sd = nav.sg = nav.dong = null;
     try { syncRegionBar(); } catch (e) {}
   }
+  /* ☠☠ **같은 사고의 두 번째 축** (2026-08-11 사용자 제보 "아파트 상세보기 했다가 팝업 닫고 나면
+     지도에 호재원이 원복되어야 하는데 계속 안보여"). 바로 위 지역축을 고칠 때 **`aptFocus`를
+     빠뜨렸다** — 한 함수 안에서, 같은 날, 축 하나만 고친 것이다(규칙이 한쪽에만 걸린다).
+     `renderHojae`는 `aptFocus`가 있으면 **그 단지 호재만** 그린다. 그런데 지도 빈 곳 클릭은
+     `goHome()`을 직접 부르므로(`closePanel`을 안 거친다) 포커스가 남아, 화면을 넓혀도 그 단지
+     호재 몇 개만 남고 그마저 화면 밖이면 **호재원이 통째로 사라진다**. 좌측 카운트는 5,213
+     그대로라 화면은 왜 비었는지 말하지 않는다 — 같은 「화면이 사실을 말하지 않는」 형태.
+     ★ 포커스축은 지역축과 달리 **사용자가 조회조건으로 고르는 축이 아니다**(단지 클릭으로만
+       걸린다) → `_autoRegion` 같은 표식 없이 홈 복귀 시 항상 푼다. */
+  aptFocus = null;
   if (typeof buildTree === "function" && DONG_GEO) buildTree();
   renderPanel();
   mapApi?.refreshPins?.();   // 선택 해제 → 호재 핀 사라짐(카운트 박스만)
@@ -3814,8 +3824,17 @@ function renderFlow() {
     if (!arr.length) html += `<div class="fempty">움직인 신호 없음</div>`;
     else html += `<div class="fg" data-g="${g.k}"></div>`;
   }
-  html += `<div class="fgh"><b>이번 주 새로 확인</b><span class="n">${seen.filter(s => inWeek(s.last_movement)).length.toLocaleString()}건</span>
-      <span class="why">— 소스에 변경일이 없어 <b>우리가 처음 본 날</b>로 적은 것입니다(그날 움직였다는 뜻이 아닙니다)</span></div>
+  /* ★ 「새로 확인」도 **두 가지를 한 이름으로 부르고 있었다** (2026-08-11 — 시계를 고치자 1→673으로
+     드러났다). 실측 분해: 481건은 이번 주에 **처음 발견**한 신호(first_seen도 이번 주)이고,
+     192건은 **이미 알던 신호의 단계를 새로 관측**한 것이다. 둘은 다른 사실이라 숫자를 나눈다 —
+     뭉치면 "이번 주 움직임 2,588건" 사고의 같은 형태다(§movBasis). */
+  const seenWk = seen.filter(s => inWeek(s.last_movement));
+  const seenNew = seenWk.filter(s => s.first_seen && inWeek(s.first_seen));
+  const seenRe = seenWk.length - seenNew.length;
+  html += `<div class="fgh"><b>이번 주 새로 확인</b><span class="n">${seenWk.length.toLocaleString()}건</span>
+      <span class="why">— 소스에 변경일이 없어 <b>우리가 처음 본 날</b>로 적은 것입니다(그날 움직였다는 뜻이 아닙니다).
+      이 중 <b>${seenNew.length.toLocaleString()}건</b>은 이번 주에 <b>처음 발견</b>한 신호,
+      <b>${seenRe.toLocaleString()}건</b>은 이미 알던 신호의 <b>단계를 새로 관측</b>한 것입니다</span></div>
     <div class="fg" data-g="확인"></div></div>`;
   host.innerHTML = html;
   const put = (key, arr) => { const box = host.querySelector(`.fg[data-g="${key}"]`); if (!box) return;
@@ -5599,7 +5618,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260811j");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260811k");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -5783,7 +5802,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811j"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811k"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5809,7 +5828,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260811j");
+  const CB = "?b=" + (window.BUILD || "20260811k");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
