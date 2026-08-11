@@ -4869,8 +4869,14 @@ function initKakao() {
                             : (subdued ? .5 : isRoad ? .8 : .92);
         for (const [sg, arr] of [[seg, objs], [simplifyLine(seg, 80), objsLo]]) {
           const path = sg.map(([x, y]) => LL(x, y));
-          arr.push(new K.Polyline({ path, strokeColor: "#ffffff", strokeWeight: dashed ? 6 : 5.6,
-            strokeOpacity: so, strokeStyle: "solid", zIndex: 2 }));
+          // ★ 케이싱은 **표식을 달아 둔다**(2026-08-11) — 광역 줌(lv10+)에서만 접기 위해서다.
+          //   흰 케이싱은 촘촘한 기본지도 위에서 선을 끊어 주는 장치인데(2026-07-30), 전국 뷰에서는
+          //   배경이 성글어 역할이 거의 없으면서 **폴리라인 수를 정확히 2배**로 만든다.
+          //   노선이 사라지는 게 아니라 후광만 접는 것이라 「줌아웃엔 선만」 규칙과 충돌하지 않는다.
+          const _cas = new K.Polyline({ path, strokeColor: "#ffffff", strokeWeight: dashed ? 6 : 5.6,
+            strokeOpacity: so, strokeStyle: "solid", zIndex: 2 });
+          _cas._casing = true;
+          arr.push(_cas);
           arr.push(new K.Polyline({ path, strokeColor: col, strokeWeight: dashed ? 3.6 : 3,
             strokeOpacity: mo, strokeStyle: dashed ? "shortdot" : "solid", zIndex: 3 }));
         }
@@ -4921,7 +4927,19 @@ function initKakao() {
       // 목표년도 = 마일스톤 eta(소스가 준 목표만, 없으면 미표기 P2)
       const _bflat = segs.flat();
       const _beta = (((p.milestones || []).filter(m => m.eta).pop() || {}).eta || "").slice(2, 4);
-      railLineObjs.push({ objs, objsLo, hits, isRoad, ph: p.phase || "계획",
+      /* ★ 뷰포트 컬링용 bbox (2026-08-11 사용자 제보 "줌업·줌아웃·화면이동 다 느려").
+         점(호재 원·동 라벨·아파트 점)은 진작부터 bounds로 걸러 그렸는데 **선만 전국 전량이 항상
+         지도에 붙어 있었다** — 규칙이 한쪽에만 걸린 그 형태다(§규칙이 한쪽에만 걸린다).
+         실측(lv8 서울 뷰): 노선 361개 중 뷰포트에 걸리는 건 33개인데 폴리라인 5,330개가 전부
+         붙어 있었고, 카카오는 그 SVG path 5,330개를 **팬·줌 매 프레임 재투영**한다.
+         bbox가 겹치는 노선만 붙인다 — 표시 규칙·데이터·문법은 불변이고 화면 밖만 뺀다. */
+      const _bb = [Infinity, Infinity, -Infinity, -Infinity];
+      for (const arr of [_bflat, solid.flat(), (p.geom_bridges || []).flat()])
+        for (const c of arr) {
+          if (c[0] < _bb[0]) _bb[0] = c[0];  if (c[1] < _bb[1]) _bb[1] = c[1];
+          if (c[0] > _bb[2]) _bb[2] = c[0];  if (c[1] > _bb[3]) _bb[3] = c[1];
+        }
+      railLineObjs.push({ objs, objsLo, hits, isRoad, ph: p.phase || "계획", bb: isFinite(_bb[0]) ? _bb : null,
         nms: [p.name, p.full, p.official_name].filter(Boolean),   // 노선 격리(상세 하이라이트) 매칭 키
         ck: clickHandler, bnm: p.name, beta: _beta, mid: _bflat[0],
         lvl: p.lvl || (isRoad ? "C" : railLevelOf(p.full || p.name, p.linekind)) });   // 등급 LOD용(어댑터와 같은 폴백)
@@ -4937,6 +4955,16 @@ function initKakao() {
     const phaseFiltering = filter.phase.size < PHASES.length;
     const lodSet = new Set(lodGrades(map.getLevel()));   // 선도 핀과 같은 등급 LOD(줌아웃=S만, 2026-07-22)
     const _bLv = map.getLevel(), _bB = (_bLv >= 5 && _bLv <= 11) ? map.getBounds() : null;   // 노선명 배지 줌 구간
+    /* ★ 뷰포트 컬링 (2026-08-11 사용자 제보 — 팬·줌 버벅임). 화면 밖 노선은 지도에 붙이지 않는다.
+       여유 = 1뷰포트: 카카오는 드래그가 **끝난 뒤** idle을 쏘므로, 여유가 없으면 팬 도중 들어오는
+       노선이 손을 뗄 때까지 비어 보인다(여유를 둬도 절감은 90%대 그대로 — 실측 주석은 bb 생성부).
+       ⚠ bbox를 **모르면 그린다**(fail-open) — 숨기는 건 화면 밖이라고 **아는** 경우뿐이다. */
+    const _vb = map.getBounds(), _vsw = _vb.getSouthWest(), _vne = _vb.getNorthEast();
+    const _vpX = (_vne.getLng() - _vsw.getLng()) * 0.5, _vpY = (_vne.getLat() - _vsw.getLat()) * 0.5;
+    const _vW = _vsw.getLng() - _vpX, _vS = _vsw.getLat() - _vpY, _vE = _vne.getLng() + _vpX, _vN = _vne.getLat() + _vpY;
+    const _inView = bb => !bb || !(bb[0] > _vE || bb[2] < _vW || bb[1] > _vN || bb[3] < _vS);
+    // ★ 광역 줌(lv10+)에서는 흰 케이싱을 접는다 — 폴리라인 수가 정확히 반으로 준다(생성부 주석 참조).
+    const _noCasing = _bLv >= 10;
     const badgeCands = [];   // 배지는 서로를 봐야 겹침이 풀린다 — 모아 두고 뒤에서 한꺼번에 배치
     for (const o of railLineObjs) {
       // 선형은 **노선 선형 토글(filter.lines)만**으로 표시한다(2026-07-23 분리). 점 호재(역 원)와 독립 —
@@ -4947,14 +4975,15 @@ function initKakao() {
          methodology §지도 LOD의 명문 규칙은 정반대다: "줌아웃엔 **선만**". 등급은 굵기·zIndex에만 쓴다.
          (2026-07-30 사용자 제보 "서남선은 역사는 있는데 노선이 안보여 … 자꾸 기준이 바뀌면 곤란해") */
       const show = (o.isRoad ? filter.lines.has("도로선") : filter.lines.has("철도선"))
+        && _inView(o.bb)                                  // ★ 뷰포트 컬링(2026-08-11) — 화면 밖은 안 붙인다
         && (!phaseFiltering || filter.phase.has(o.ph))
         // 노선 상세 격리(2026-08-04 아실 벤치마크) — 상세를 열면 그 노선만 남긴다.
         // 여기(가시성 단일 결정점)에 넣어야 지도 이동·재렌더에도 격리가 유지된다.
         && (!routeIsoName || (o.nms || []).includes(routeIsoName));
       // ★ 줌아웃 밴드(lv7+)는 간축본으로 스위치 (2026-08-10 승인 — 팬 프레임당 SVG 정점 ~36k→~6k)
       const _lo = _bLv >= 7;
-      o.objs.forEach(l => l.setMap(!_lo && show ? map : null));
-      (o.objsLo || []).forEach(l => l.setMap(_lo && show ? map : null));
+      o.objs.forEach(l => l.setMap(!_lo && show && !(l._casing && _noCasing) ? map : null));
+      (o.objsLo || []).forEach(l => l.setMap(_lo && show && !(l._casing && _noCasing) ? map : null));
       o.hits.forEach(l => l.setMap(show ? map : null));
       // 노선명 배지(2026-08-04 사용자 확정: 광역 줌 lv5~11 한정·노선당 1개(중점)·색=분류 유지·
       // 단계=우리 백본 + 목표년도는 소스가 준 것만 「목표 'NN」로). 확대(lv≤4)하면 역명 라벨과 교대.
@@ -5473,7 +5502,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260811h");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260811i");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -5657,7 +5686,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811h"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811i"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5683,7 +5712,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260811h");
+  const CB = "?b=" + (window.BUILD || "20260811i");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
