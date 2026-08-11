@@ -902,7 +902,16 @@
 <script>
 /* ══════════ 상수 (기획서 §3.2, §4.1 v1.2) ══════════ */
 const KAKAO_JS_KEY = "33bf168e1a0f3295c36b53c1add1b69e";
-const TODAY = new Date("2026-07-13");
+/* ☠ **손으로 적은 날짜는 반드시 낡는다** (2026-08-11 사용자 제보 "흐름 325건 오늘26건 독에는 28건.
+   다 제각각이야"의 뿌리). 여기 `new Date("2026-07-13")`이 박혀 있었고 실제 날짜는 8-11이었다 —
+   **29일 어긋난 자**로 「오늘」·「이번 주」·「정체 N개월」을 전부 재고 있었다. 그래서 흐름의
+   「오늘 26건」은 실제로 **오늘 0건 + 미래 날짜 26건**이었다(d<=0 버킷에 음수가 들어갔다).
+   CLAUDE.md의 「이 문서에 수치를 복사하지 않는다」와 같은 사고 — 화면 코드에도 똑같이 적용된다.
+   ⚠ **로컬 달력 날짜를 UTC 자정으로** 만든다: 신호 날짜는 `new Date("YYYY-MM-DD")`(UTC 자정)로
+     파싱되므로, 여기서 로컬 자정을 쓰면 KST에서 9시간이 어긋나 오늘이 「-1일」이 된다. */
+const TODAY = (() => { const t = new Date();
+  const p = n => String(n).padStart(2, "0");
+  return new Date(`${t.getFullYear()}-${p(t.getMonth() + 1)}-${p(t.getDate())}`); })();
 /* 공통 4단계 백본 — 전 호재 기본. 유형별 세부단계는 각자 이 4국면 중 하나에 매핑(라벨·의미는 유형별 유연). */
 const PHASES = ["계획", "인가", "착공", "준공·개통"];
 const PHASE_IDX = Object.fromEntries(PHASES.map((p, i) => [p, i]));
@@ -1165,7 +1174,7 @@ function sdAggregates() {
     e.n++;
     // 움직임은 `basis="source"`만 — 관측일은 「우리가 처음 본 날」이지 「그날 움직였다」가 아니다.
     // 노선 신호는 movKey로 노선당 1건(역 수만큼 불리지 않는다 — 흐름 뷰·탭 배지와 같은 키).
-    if (movBasis(s) === "source" && weeksAgo(s.last_movement) === 0) e._mv.add(movKey(s));
+    if (movBasis(s) === "source" && inWeek(s.last_movement)) e._mv.add(movKey(s));
     const c = sigRepPoint(s);
     if (c) { e.x += c[0]; e.y += c[1]; e.pts++; }
   });
@@ -2226,6 +2235,18 @@ function weeksAgo(d) {
   const t = new Date(d.length === 7 ? d + "-01" : d);
   return Math.max(0, Math.round((TODAY - t) / (7 * 864e5)));
 }
+/* ★ 「오늘」·「이번 주」의 **자 하나** (2026-08-11 사용자 제보 *"흐름 325건 오늘26건 독에는 28건.
+   다 제각각이야"*). 세 숫자가 갈린 이유는 **자가 둘**이었기 때문이다:
+     · 흐름 뷰 그룹 = `daysAgo`(일수) — 2026-08-09에 이미 일수로 고쳤다
+     · 탭 배지·시도 알약·목록 헤더 = `weeksAgo(x)===0` — **주 단위 반올림**이라 ≤3.5일이 「0주」다
+   그래서 배지(28)는 오늘(26)보다 크고, 「이번 주」라 적힌 곳은 실제로 3.5일만 셌다.
+   ⚠ `weeksAgo`는 **경과 표시**(정체 N개월)에만 남긴다 — 경계 판정에는 아래 둘만 쓴다.
+   (2026-08-09 「경계는 일수로 잰다」 결정이 흐름 뷰에만 걸리고 나머지는 조용한 예외였다.) */
+const daysAgoOf = d => { if (!d) return null;
+  const t = new Date(String(d).length === 7 ? d + "-01" : d);
+  return Math.floor((TODAY - t) / 864e5); };
+const isToday = d => daysAgoOf(d) === 0;
+const inWeek = d => { const n = daysAgoOf(d); return n !== null && n >= 0 && n <= 7; };
 /* last_movement의 **날짜 출처**(2026-07-30). lifecycle.py가 이미 구분해 뒀다:
      basis="source"  = 소스 원문의 날짜(허가일·고시일·개통일) → 실제로 그날 움직인 것 = 사실
      basis="observed"= 우리가 그 단계임을 처음 본 날 → "그날 움직였다"는 뜻이 **아니다**
@@ -2257,9 +2278,14 @@ function freshness(s) {
     return `<span class="fresh done">✓ 준공 후 ${months >= 12 ? Math.floor(months / 12) + "년" : Math.max(1, Math.floor(months)) + "개월"} 경과</span>`;
   // 정체: observed도 '관측 이래 단계 변화 없음'이라 정체 근거는 되지만, 근거의 종류는 밝힌다.
   if (months >= 6) return `<span class="fresh stall"${obs ? ` title="${OBS_TIP}"` : ""}>정체 ${Math.floor(months)}개월${obs ? "(관측 이래)" : ""} ⚠</span>`;
+  /* ★ 최근 구간은 **일수로 말한다** (2026-08-11). 종전엔 `w===0`이면 무조건 「이번 주」라
+     적어서, 흐름 뷰의 **「오늘」 그룹에 든 카드가 「이번 주 움직임」**이라고 말했다 — 그룹 제목과
+     카드가 서로 다른 자를 쓴 것이다(사용자 제보 "다 제각각이야"). 자는 daysAgoOf 하나로 통일. */
+  const dd = daysAgoOf(s.last_movement);
+  const when = dd === 0 ? "오늘" : dd === 1 ? "어제" : dd <= 7 ? dd + "일 전" : w + "주 전";
   return obs
-    ? `<span class="fresh obs" title="${OBS_TIP}">▸ ${w === 0 ? "이번 주" : w + "주 전"} 확인</span>`
-    : `<span class="fresh">▸ ${w === 0 ? "이번 주" : w + "주 전"} 움직임</span>`;
+    ? `<span class="fresh obs" title="${OBS_TIP}">▸ ${when} 확인</span>`
+    : `<span class="fresh">▸ ${when} 움직임</span>`;
 }
 function meters(p1, p2) {
   const x = (p2[0] - p1[0]) * 111320 * Math.cos((p1[1] + p2[1]) / 2 * Math.PI / 180);
@@ -2942,7 +2968,7 @@ function renderHome() {
   panelListRender = null;
   const p = document.getElementById("panel");
   const shown = SIGNALS.filter(visible).sort((a, b) => (b.last_movement || "").localeCompare(a.last_movement || ""));
-  const recent = shown.filter(s => weeksAgo(s.last_movement) === 0);
+  const recent = shown.filter(s => inWeek(s.last_movement));
   p.innerHTML = `
     <div class="pt">호재 신호 ${shown.length}건 <span style="font-weight:400;font-size:11px;color:var(--muted)">${filter.region || "전 지역"}</span></div>
     <div class="pickhint">🔎 상단에서 <b>시도 › 시군구 › 읍면동</b>을 고르거나, 지도에서 <b>동 박스</b>·<b>아파트</b>를 누르면<br>해당 지역 호재가 여기(좌측)와 지도에 나타납니다.<br>
@@ -3765,23 +3791,30 @@ function renderFlow() {
   const moved = dedupeMov(rows.filter(s => movBasis(s) === "source"));
   const seen = dedupeMov(rows.filter(s => movBasis(s) !== "source"));
   const daysAgo = d => { const t = new Date(String(d).length === 7 ? d + "-01" : d); return Math.floor((TODAY - t) / 864e5); };
+  /* ⚠ **미래 날짜는 「움직였다」가 아니다** (2026-08-11). `d <= g.maxD`는 음수도 통과시켜서
+     아직 오지 않은 날짜(착공 예정 '26.12 등)가 통째로 「오늘」 칸에 들어가 있었다 —
+     화면이 "오늘 26건 움직였다"고 말하는데 실제로 오늘 움직인 건 0건이었다(P2·P5 정면 위반).
+     세지 않되 **지우지도 않는다** — 아래에서 건수를 밝힌다(없어진 것은 소리를 내지 않는다). */
   const bucket = s => { const d = daysAgo(s.last_movement);
+    if (d < 0) return null;
     for (const g of FLOW_GROUPS) if (d <= g.maxD) return g.k;
     return null; };
   const groups = new Map(FLOW_GROUPS.map(g => [g.k, []]));
   moved.forEach(s => { const b = bucket(s); if (b) groups.get(b).push(s); });
   const recent3m = moved.filter(s => bucket(s)).length;
+  const future = moved.filter(s => daysAgo(s.last_movement) < 0);
   let html = `<div class="fwrap">
     <div class="lvtitle" style="font-size:16px;font-weight:700">흐름 <span style="font-weight:400;font-size:12.5px;color:var(--ink3)">— ${filter.region || "전 지역"} · 지도와 같은 표시 조건</span></div>
     <div class="lvcount" style="margin:6px 0 2px"><b>${recent3m.toLocaleString()}건</b>이 최근 3개월 안에 <b>문서상 움직였습니다</b>
-      <span class="why" style="color:var(--ink3)">— 고시·인가·착공 등 소스 원문에 날짜가 있는 것만 셉니다</span></div>`;
+      <span class="why" style="color:var(--ink3)">— 고시·인가·착공 등 소스 원문에 날짜가 있는 것만 셉니다</span></div>`
+    + (future.length ? `<div class="fempty" style="margin:2px 0 6px">※ ${future.length.toLocaleString()}건은 소스의 날짜가 <b>아직 오지 않은 날</b>(착공 예정일 등)이라 움직임으로 세지 않았습니다</div>` : "");
   for (const g of FLOW_GROUPS) {
     const arr = groups.get(g.k);
     html += `<div class="fgh"><b>${g.k}</b><span class="n">${arr.length.toLocaleString()}건</span></div>`;
     if (!arr.length) html += `<div class="fempty">움직인 신호 없음</div>`;
     else html += `<div class="fg" data-g="${g.k}"></div>`;
   }
-  html += `<div class="fgh"><b>이번 주 새로 확인</b><span class="n">${seen.filter(s => weeksAgo(s.last_movement) === 0).length.toLocaleString()}건</span>
+  html += `<div class="fgh"><b>이번 주 새로 확인</b><span class="n">${seen.filter(s => inWeek(s.last_movement)).length.toLocaleString()}건</span>
       <span class="why">— 소스에 변경일이 없어 <b>우리가 처음 본 날</b>로 적은 것입니다(그날 움직였다는 뜻이 아닙니다)</span></div>
     <div class="fg" data-g="확인"></div></div>`;
   host.innerHTML = html;
@@ -3789,7 +3822,7 @@ function renderFlow() {
     arr.slice(0, 60).forEach(s => box.appendChild(makeCard(s, "", () => { setView("map"); showSignal(s, true); })));
     if (arr.length > 60) box.insertAdjacentHTML("beforeend", `<div class="fempty">외 ${(arr.length - 60).toLocaleString()}건 — 목록에서 전부 보기</div>`); };
   FLOW_GROUPS.forEach(g => put(g.k, groups.get(g.k)));
-  put("확인", seen.filter(s => weeksAgo(s.last_movement) === 0));
+  put("확인", seen.filter(s => inWeek(s.last_movement)));
 }
 /* 하단 탭바 — 모바일에서 헤더 칩을 대신한다. `조회조건`은 뷰가 아니라 시트라 따로 처리한다. */
 function initTabbar() {
@@ -3802,13 +3835,16 @@ function initTabbar() {
   });
   updateTabbar();
 }
-/* 흐름 탭 배지 = 이번 주 **문서상** 움직임. 요약 바와 같은 계산을 쓴다(두 숫자가 갈리면 안 된다). */
+/* 흐름 탭 배지 = **오늘** 문서상 움직임 — 흐름 뷰의 첫 그룹(「오늘」)과 **같은 모집단·같은 자**를
+   쓴다(`flowRows` + source + isToday). 종전엔 배지만 `weeksAgo===0`(≤3.5일)이라 **화면 어디에도
+   없는 숫자**를 말했다(2026-08-11 사용자 제보 — 흐름 325 · 오늘 26 · 배지 28).
+   뜻도 적어 둔다: 숫자만 있는 배지는 무엇의 개수인지 물을 수밖에 없다(P2 — 사실은 표시). */
 function updateTabbar() {
   const el = document.getElementById("tb-mv");
   if (!el) return;
-  const n = dedupeMov(allSignalsFlat().filter(visible)
-    .filter(s => movBasis(s) === "source" && weeksAgo(s.last_movement) === 0)).length;
+  const n = dedupeMov(flowRows().filter(s => movBasis(s) === "source" && isToday(s.last_movement))).length;
   el.textContent = n ? n : "";
+  el.title = n ? `오늘 문서상 움직인 신호 ${n}건 — 흐름 탭의 「오늘」과 같은 수` : "";
   el.style.display = n ? "" : "none";
 }
 function renderAll() { renderChips(); renderDock(); renderAxis(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); if (VIEW_MODE === "list") renderList(); if (VIEW_MODE === "flow") renderFlow(); updateTabbar(); layoutBottom(); }
@@ -4639,10 +4675,19 @@ function initKakao() {
       alpha: s.status === "종결" ? .45 : unk ? .75 : .92, fillOp: unk ? .10 : solid ? .26 : .16 }; };
   const hjHtml = s => { const t = hjStyle(s);
     return '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + sigTitle(s) + '</div><div class="apt-pop-sub"><span style="color:' + t.col + ';font-weight:700">● ' + catOf(s) + '</span>' + subLabel(s) + ' · ' + lvlPill(t.lvl) + ' ' + gradeBasisHtml(s).replace(/ · $/, "") + '</div><div class="apt-pop-cats"><span>단계 ' + phaseOf(s) + (s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : "") + '</span></div></div>'; };
-  const renderHojae = () => {
-    const lv = map.getLevel(); const b = map.getBounds();
-    const _cen = map.getCenter(), _ccx = _cen.getLng(), _ccy = _cen.getLat();   // 화면 중심 — 상한 컬링을 중심거리순으로(2026-07-23)
-    const prelim = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, UPIS_SIG, DPS_SIG, SH_SIG)
+  /* ★ 뷰와 무관한 부분은 **데이터가 바뀔 때만** 다시 만든다 (2026-08-11 팬·줌 성능).
+     종전엔 idle(=팬·줌이 멎을 때마다)마다 13개 신호 배열을 concat해 **5,700개짜리 배열을 새로
+     만들고** 그 위에 필터를 여러 벌 더 얹었다 — 결과는 매번 같은데 매번 다시 만들었다.
+     여기 남기는 필터는 전부 **신호 자체의 성질**(선형 도로인가·면형인가·좌표가 있나)이라 뷰가
+     바뀌어도 답이 안 변한다. 뷰에 따라 달라지는 필터(visible·줌·바운즈)는 renderHojae에 그대로 둔다.
+     ⚠ 무효화는 **길이 조합**으로 한다(지연 로드 대응 — railLineObjs의 `_railCacheN`과 같은 방식). */
+  let _hjBase = null, _hjBaseKey = "";
+  const hjBase = () => {
+    const arrs = [SIGNALS, MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, UPIS_SIG, DPS_SIG, SH_SIG];
+    const key = arrs.map(a => (a || []).length).join(",");
+    if (_hjBase && key === _hjBaseKey) return _hjBase;
+    _hjBaseKey = key;
+    _hjBase = SIGNALS.concat(MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, DART_SIG, ARCH_SIG, RAIL_SIG, ROAD_SIG, UPIS_SIG, DPS_SIG, SH_SIG)
       /* ★ **연도 회랑 도로에도 호재원을 준다** (2026-08-06 사용자 *"호재원 자체가 호재를 의미하는데
          도로변접근의 경우만 호재원이 없어서 아쉬워"*).
          ☠ 종전엔 선형 도로 신호를 **전부** 뺐다. 전용도로는 IC 점이 각자 호재원을 갖고 있어서
@@ -4658,6 +4703,19 @@ function initKakao() {
          마커 자체가 없었다(정직한 결손은 소리를 내지 않는다). */
       .filter(s => !(s._road && s.access_points && s.road_kind === "전용" && (s.ic_points || []).length))
       .filter(s => !s.area_shape).filter(s => s.signal !== false)
+      .filter(s => s.geometry && s.geometry.coordinates);
+    return _hjBase;
+  };
+
+  const renderHojae = () => {
+    const lv = map.getLevel(); const b = map.getBounds();
+    /* 바운즈는 **숫자로** 잰다 (2026-08-11 팬·줌 성능). `b.contain(LL(x,y))`는 신호마다 LatLng
+       객체를 하나씩 만들어 SDK로 넘긴다 — 팬·줌이 멎을 때마다 5,700개다. 한반도 뷰에는 경도
+       wrap이 없으므로 사각형 비교와 **결과가 정확히 같다**(표시 규칙 불변). */
+    const _sw = b.getSouthWest(), _ne = b.getNorthEast();
+    const _bw = _sw.getLng(), _bs = _sw.getLat(), _be = _ne.getLng(), _bn = _ne.getLat();
+    const _cen = map.getCenter(), _ccx = _cen.getLng(), _ccy = _cen.getLat();   // 화면 중심 — 상한 컬링을 중심거리순으로(2026-07-23)
+    const prelim = hjBase()
       .filter(s => aptFocus ? (aptFocus.has(s) && !isStaleFinished(s)) : visible(s))   // 아파트 포커스=그 단지 호재만(필터 무관, 2026-07-29)
       // 망형(전철·도로): 광역 뷰(lv≥9=4km)엔 선만, **도시 뷰(lv≤8=2km)부터 역·IC**.
       // 2026-07-22엔 lv≤7이었는데 실측 결과 **기준이 뒤집혀 있었다**(2026-07-23 사용자 제보):
@@ -4674,8 +4732,7 @@ function initKakao() {
         if (s.pt_type === "road_ic") return !filter.lines.has("도로선");
         return true;
       })
-      .filter(s => s.geometry && s.geometry.coordinates)
-      .filter(s => { const c = s.geometry.coordinates; return b.contain(LL(c[0], c[1])); });
+      .filter(s => { const c = s.geometry.coordinates; return c[0] >= _bw && c[0] <= _be && c[1] >= _bs && c[1] <= _bn; });
     // 표시 규칙(2026-07-27 사용자 확정): 뷰포트 내 후보를 **등급 우선 → 중심 가까운 순**으로 정렬해
     // 상한(MAX_DOTS)까지 표시. 줌별 등급 컷(lodGrades)은 호재 원에서 폐기 — 드래그마다 등급이
     // 들쑥날쑥했고 지방에선 B·C가 통째로 사라졌다. 상한 초과 시 낮은 등급·먼 것부터 탈락.
@@ -4982,9 +5039,19 @@ function initKakao() {
         && (!routeIsoName || (o.nms || []).includes(routeIsoName));
       // ★ 줌아웃 밴드(lv7+)는 간축본으로 스위치 (2026-08-10 승인 — 팬 프레임당 SVG 정점 ~36k→~6k)
       const _lo = _bLv >= 7;
-      o.objs.forEach(l => l.setMap(!_lo && show && !(l._casing && _noCasing) ? map : null));
-      (o.objsLo || []).forEach(l => l.setMap(_lo && show && !(l._casing && _noCasing) ? map : null));
-      o.hits.forEach(l => l.setMap(show ? map : null));
+      /* ★ **바뀐 노선만 건드린다** (2026-08-11 팬·줌 성능 2단).
+         컬링으로 «붙는 수»는 줄었지만 «만지는 수»는 그대로였다 — 렌더마다 폴리라인 **10,292개**
+         전부에 setMap()을 부르고 있었고, 대부분은 「이미 그 상태」라 아무 일도 안 하는 호출이었다.
+         노선의 표시 상태를 한 문자열로 요약해 두고, 같으면 통째로 건너뛴다.
+         ⚠ zoom_start가 오버레이를 직접 내리므로 **거기서 `_sig`를 지운다** — 안 지우면
+           「이미 켜져 있음」으로 착각해 줌 뒤에 선이 안 돌아온다(상태 캐시의 전형적 사고). */
+      const _sig = show ? (_lo ? "lo" : "hi") + (_noCasing ? "-nc" : "") : "off";
+      if (o._sig !== _sig) {
+        o._sig = _sig;
+        o.objs.forEach(l => l.setMap(!_lo && show && !(l._casing && _noCasing) ? map : null));
+        (o.objsLo || []).forEach(l => l.setMap(_lo && show && !(l._casing && _noCasing) ? map : null));
+        o.hits.forEach(l => l.setMap(show ? map : null));
+      }
       // 노선명 배지(2026-08-04 사용자 확정: 광역 줌 lv5~11 한정·노선당 1개(중점)·색=분류 유지·
       // 단계=우리 백본 + 목표년도는 소스가 준 것만 「목표 'NN」로). 확대(lv≤4)하면 역명 라벨과 교대.
       if (show && filter.lines.has("노선명") && o.mid && _bLv >= 5 && _bLv <= 11 && _bB && _bB.contain(LL(o.mid[0], o.mid[1]))) {
@@ -5009,23 +5076,40 @@ function initKakao() {
       cands.sort((a, b) => a.rank - b.rank || a.y - b.y);
       // 좌표를 못 구하는 환경(투영 API 부재)에서는 **종전대로 전부 그린다** — 검증 못 하는 것을 지우지 않는다.
       const laid = cands.every(c => c._noPt) ? cands : placeBadges(cands);
+      /* ★ **배지는 재사용한다** (2026-08-11 팬·줌 성능 3단 — 마지막 큰 덩어리였다).
+         종전엔 렌더마다 배지 **90개를 전부 파괴하고 다시 만들었다**(div 생성 + innerHTML +
+         리스너 2개 + CustomOverlay 생성). 실측: renderRail 혼자 applyLOD의 **150ms 중 대부분**.
+         객체를 노선(`o._badge`)에 매달아 두고 **위치·문구가 바뀔 때만** 손댄다 — 신호 마커가
+         `s._kmk`를 재사용하는 것과 같은 방식이다.
+         ⚠ 재사용하므로 클릭 핸들러가 **생성 시점의 `o`를 붙들면 안 된다** — 엘리먼트에 `_o`를
+           달고 핸들러는 그걸 읽는다(클러스터 배지의 `_el._g`와 같은 패턴). */
       for (const c of laid) {
         if (!c.shown) continue;
         const o = c.o;
-        const be = document.createElement("div"); be.className = "line-badge";
-        be.innerHTML = "<b></b><small></small>";
-        be.firstChild.textContent = o.bnm;
-        be.lastChild.textContent = o.ph + (o.beta ? " · 목표 '" + o.beta : "");
+        let be, _ov = o._badge;
+        if (_ov) { be = _ov._el; }
+        else {
+          be = document.createElement("div"); be.className = "line-badge";
+          be.innerHTML = "<b></b><small></small>";
         // ⚠ 실마우스 클릭은 mousedown이 지도 패닝·텍스트 선택으로 새면 click이 안 만들어진다
         //   (2026-08-04 사용자 "클릭하면 프롬프트가 깜빡여. 선택이 안되" — 프로그램 click()은 정상,
         //    실클릭만 불능이었다). mousedown 차단 + CustomOverlay clickable:true(지도 전파 차단)가 처방.
-        be.addEventListener("mousedown", ev => { ev.preventDefault(); ev.stopPropagation(); });
-        be.addEventListener("click", ev => { ev.stopPropagation(); o.ck && o.ck(); });
-        // zIndex 20 = 다른 오버레이(라벨 7·+N 11)보다 앞, 하이라이트(21+)보다는 뒤("맨 앞으로")
-        // yAnchor 1.55 = 기점 **위로 띄운다**(아실 방식) — 기점에 겹쳐 두면 역명 라벨(.rail-name,
-        // 오른쪽 오프셋)과 서로 가린다(2026-08-04 사용자 "노선 뱃지를 가려. 옆으로 옮겨야 할듯").
-        if (c.dy) be.style.transform = `translateY(${-c.dy}px)`;   // 겹쳐서 위로 민 만큼(placeBadges)
-        lineBadges.push(new K.CustomOverlay({ map, position: LL(o.mid[0], o.mid[1]), content: be, zIndex: 20, yAnchor: 1.55, xAnchor: .5, clickable: true }));
+          be.addEventListener("mousedown", ev => { ev.preventDefault(); ev.stopPropagation(); });
+          be.addEventListener("click", ev => { ev.stopPropagation(); const t = be._o; t && t.ck && t.ck(); });
+          // zIndex 20 = 다른 오버레이(라벨 7·+N 11)보다 앞, 하이라이트(21+)보다는 뒤("맨 앞으로")
+          // yAnchor 1.55 = 기점 **위로 띄운다**(아실 방식) — 기점에 겹쳐 두면 역명 라벨(.rail-name,
+          // 오른쪽 오프셋)과 서로 가린다(2026-08-04 사용자 "노선 뱃지를 가려. 옆으로 옮겨야 할듯").
+          _ov = new K.CustomOverlay({ position: LL(o.mid[0], o.mid[1]), content: be, zIndex: 20, yAnchor: 1.55, xAnchor: .5, clickable: true });
+          _ov._el = be; o._badge = _ov;
+        }
+        be._o = o;   // 핸들러가 읽는 대상(재사용 시 갱신)
+        const _t1 = o.bnm, _t2 = o.ph + (o.beta ? " · 목표 '" + o.beta : "");
+        if (be.firstChild.textContent !== _t1) be.firstChild.textContent = _t1;
+        if (be.lastChild.textContent !== _t2) be.lastChild.textContent = _t2;
+        const _tf = c.dy ? `translateY(${-c.dy}px)` : "";   // 겹쳐서 위로 민 만큼(placeBadges)
+        if (be.style.transform !== _tf) be.style.transform = _tf;
+        _ov.setMap(map);
+        lineBadges.push(_ov);
       }
     }
     // 역명 라벨(z<=APT_LV, 뷰포트 의존 — 매번 재계산)
@@ -5142,14 +5226,22 @@ function initKakao() {
     div.querySelector(".hlt").addEventListener("click", () => { const off = div.classList.toggle("collapsed"); localStorage.setItem("hojae_legend_off", off ? "1" : "0"); div.querySelector(".car").textContent = off ? "▾" : "▴"; });
     mapEl.appendChild(div); }
 
-  const applyLOD = () => { hideTip(); renderDongPoly(); renderJeongbiPoly(); renderMasterArea(); renderHojae(); renderDongLabels(); renderSdPills(); renderAptDots(); renderRail(); loadBdong(); };   // hideTip 먼저 — 줌이 바뀌며 걷힌 폴리곤의 툴팁이 잔류하면 유령이 된다(2026-08-10)
+  /* hideTip 먼저 — 줌이 바뀌며 걷힌 폴리곤의 툴팁이 잔류하면 유령이 된다(2026-08-10).
+     ★ 순서·구성은 종전과 **완전히 동일**하다. 목록으로 편 이유는 하나 — `_dbg.lodProfile()`이
+       층별 소요를 잴 수 있게 하기 위해서다(2026-08-11). 팬·줌 비용을 눈으로 못 재면 어느 층이
+       비싼지 추측하게 되고, 그러면 엉뚱한 데를 고친다(실측: 컬링 뒤에도 applyLOD가 300ms대였다). */
+  const _LOD = [["dongPoly", () => renderDongPoly()], ["jeongbiPoly", () => renderJeongbiPoly()],
+                ["masterArea", () => renderMasterArea()], ["hojae", () => renderHojae()],
+                ["dongLabels", () => renderDongLabels()], ["sdPills", () => renderSdPills()],
+                ["aptDots", () => renderAptDots()], ["rail", () => renderRail()], ["bdong", () => loadBdong()]];
+  const applyLOD = () => { hideTip(); for (let i = 0; i < _LOD.length; i++) _LOD[i][1](); };
   K.event.addListener(map, "idle", applyLOD);
   // 줌 애니메이션 프레임마다 카카오가 살아있는 벡터·DOM 오버레이 전부를 재투영한다 — 그게 "딱딱 끊김"의 원인.
   // 애니메이션 동안 우리 오버레이 **전부**를 잠깐 내리고 idle의 applyLOD가 복귀시킨다(네이버지도 방식 —
   // 저가치만 내려선 부족하다는 사용자 확인 2026-07-21). 선택 상태(핀·반경·노선 하이라이트)만 유지.
   K.event.addListener(map, "zoom_start", () => {
     hideTip();
-    if (railLineObjs) railLineObjs.forEach(o => { o.objs.forEach(l => l.setMap(null)); (o.objsLo || []).forEach(l => l.setMap(null)); o.hits.forEach(l => l.setMap(null)); });
+    if (railLineObjs) railLineObjs.forEach(o => { o._sig = ""; o.objs.forEach(l => l.setMap(null)); (o.objsLo || []).forEach(l => l.setMap(null)); o.hits.forEach(l => l.setMap(null)); });   // `_sig` 초기화 필수 — 안 지우면 줌 뒤 선이 안 돌아온다(renderRail 주석)
     hjShown.forEach(s => s._kmk && s._kmk.setMap(null));
     for (const f of DONG_GEO.features) if (f._kpolys) f._kpolys.forEach(pg => pg.setMap(null));
     shownJb.forEach(o => o.setMap(null));
@@ -5163,7 +5255,12 @@ function initKakao() {
   try { new ResizeObserver(() => { try { map.relayout(); applyLOD(); } catch (e) {} }).observe(el); } catch (e) {}
   // 지도 빈 곳 클릭 = 홈 복귀. 단 선·폴리곤 클릭 직후의 이중 발화는 무시(상세가 열리자마자 닫히는 문제)
   K.event.addListener(map, "click", () => { if (Date.now() - _ovClickTs < 400) return; hideTip(); goHome(); });
-  window._dbg = { applyLOD, renderHojae, renderDongLabels, map, get hjDots() { return [...hjShown].map(s => s._kmk); }, get railLayers() { return railLineObjs ? railLineObjs.flatMap(o => o.objs) : []; }, get railLineObjs() { return railLineObjs; }, get dongLabels() { return [...lblShown].map(f => f._klbl); }, get jbPolys() { return shownJb; }, get aptDots() { return [...aptShown].map(a => a._kdot); } };
+  window._dbg = { applyLOD, renderHojae, renderDongLabels, map,
+    // 층별 소요(ms) — 반복 n회 중앙값. 팬·줌이 굼뜰 때 **어느 층인지 먼저 재고** 고칠 것.
+    lodProfile: (n = 7) => Object.fromEntries(_LOD.map(([nm, f]) => {
+      const a = []; for (let i = 0; i < n; i++) { const t = performance.now(); f(); a.push(performance.now() - t); }
+      a.sort((x, y) => x - y); return [nm, +a[n >> 1].toFixed(2)];
+    })), get hjDots() { return [...hjShown].map(s => s._kmk); }, get railLayers() { return railLineObjs ? railLineObjs.flatMap(o => o.objs) : []; }, get railLineObjs() { return railLineObjs; }, get dongLabels() { return [...lblShown].map(f => f._klbl); }, get jbPolys() { return shownJb; }, get aptDots() { return [...aptShown].map(a => a._kdot); } };
   refreshJeongbiPoly = renderJeongbiPoly;
 
   let lines = [], pins = [], circles = [];
@@ -5318,7 +5415,7 @@ function renderList() {
     : ((a, b) => rec(b).localeCompare(rec(a))));
   const byCat = {}; rows.forEach(s => { const c = catOf(s); byCat[c] = (byCat[c] || 0) + 1; });
   // 이번 주 집계도 출처를 가른다 — 섞으면 "이번 주 2,588건 움직임"이라는 거짓 headline이 된다(P2).
-  const wk = rows.filter(s => weeksAgo(s.last_movement) === 0);
+  const wk = rows.filter(s => inWeek(s.last_movement));
   const wkMov = wk.filter(s => movBasis(s) !== "observed").length, wkObs = wk.length - wkMov;
   document.getElementById("l-count").innerHTML =
     `<b>${rows.length.toLocaleString()}건</b> — ${filter.region || "전 지역"} · 지도와 같은 표시 조건`
@@ -5502,7 +5599,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260811i");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260811j");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -5686,7 +5783,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811i"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811j"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5712,7 +5809,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260811i");
+  const CB = "?b=" + (window.BUILD || "20260811j");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
