@@ -1314,7 +1314,16 @@ function msTrack(s) {
   // 표준 양식 v2 (2026-07-17): 4단계 백본 목록과 이력 타임라인을 **하나로 통합**.
   // 완료·현재·정체 = 개별 행(날짜=사실), 미도래·목표 = **한 행으로 압축**("인가 → 착공 → 개통 '33 목표") — 중복 제거.
   const ms = s.milestones || [];
-  if (!ms.length) return `<div class="msnone">일정 정보 없음 — 소스가 단계별 시점을 제공하지 않습니다(추정하지 않음)</div>`;
+  /* ☠ **「소스가 안 준다」와 「우리가 안 담았다」는 다른 사실이다** (2026-08-11 사용자 제보
+     "서서울문화센터 준공시점이 31년으로 정해졌는데 우리는 미정으로 표시되고 있어").
+     종전 문구는 마일스톤이 비면 무조건 **소스 탓**으로 단정했는데, 확정층(signals.json)은
+     7건 전부 마일스톤이 0이다 — 수동 승격 층이라 아직 안 적은 것이지 소스가 없는 게 아니다.
+     화면이 사실이 아닌 말을 하고 있었다(§화면이 사실을 말하는가). 층을 구분해 말한다. */
+  if (!ms.length) {
+    return s._confirmedLayer
+      ? `<div class="msnone">일정 미기재 — 확정층에 단계별 시점을 아직 적지 않았습니다(소스에 있으면 채웁니다)</div>`
+      : `<div class="msnone">일정 정보 없음 — 소스가 단계별 시점을 제공하지 않습니다(추정하지 않음)</div>`;
+  }
   const out = []; let fut = [];
   const flush = () => {
     if (!fut.length) return;
@@ -5464,7 +5473,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260811e");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260811f");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -5577,7 +5586,9 @@ function initSearch() {
   SIGNALS = main.signals.map(s => {
     const w = weeksAgo(s.last_movement);
     const derived = s.status_override || (w !== null && w / 4.345 >= 6 ? "정체" : "활성");
-    return { ...s, status: derived };
+    // `_confirmedLayer` = **확정층(signals.json) 출신**이라는 계보 표시. `confirmed` 필드는
+    // 「사업 확정 여부」라 뜻이 다르다(실측: 확정층 7건이 전부 confirmed=false) — 겸용 금지.
+    return { ...s, status: derived, _confirmedLayer: true };
   });
   MACRO = macro.signals;
   // 확정 신호 ↔ OSM 도로 병합(승격): signals.json에 road_ref 명시 시, 매칭 노선의 선형·샘플점·IC를 확정 신호가 승계하고
@@ -5646,7 +5657,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811e"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260811f"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -5672,7 +5683,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260811e");
+  const CB = "?b=" + (window.BUILD || "20260811f");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
