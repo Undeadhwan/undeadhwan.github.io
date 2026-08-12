@@ -420,18 +420,31 @@
      ⚠ 라벨은 네 칸을 균등 분배해 각 점 아래에 오게 한다(문자열 하나를 오른쪽에 두던 것과 다르다). */
   .card .mtrk { display:flex; flex-direction:column; gap:4px; margin:8px 0 2px; }
   .card .mtrk .row { display:flex; align-items:center; gap:0; }
-  .card .mtrk .lbs { display:flex; }
-  .card .mtrk .lbs span { flex:1 1 0; font-size:11.5px; color:var(--ink3); text-align:center; }
-  .card .mtrk .lbs span:first-child { text-align:left; }
-  .card .mtrk .lbs span:last-child { text-align:right; }
-  .card .mtrk .lbs span.on { color:var(--ink); font-weight:600; }
+  /* ☠ **라벨이 자기 점 아래가 아니었다** (2026-08-12 사용자 "확정, 착공 텍스트 위치 좀 제 위치에").
+     4등분 flex는 칸 **중앙**(12.5·37.5·62.5·87.5%)에 글자를 놓는데 점은 **경계**(0·33·67·100%)에
+     있다 — 칸 이름이 옆 점 밑으로 밀려 짝이 어긋났다. 점과 같은 좌표에 절대 배치한다. */
+  .card .mtrk .lbs { position:relative; height:26px; }
+  .card .mtrk .lbs span { position:absolute; top:0; font-size:11.5px; color:var(--ink3);
+                          text-align:center; transform:translateX(-50%); white-space:nowrap; }
+  .card .mtrk .lbs span:first-child { transform:none; text-align:left; }
+  .card .mtrk .lbs span:last-child { transform:translateX(-100%); text-align:right; }
+  .card .mtrk .lbs span.on { color:var(--phc, var(--ink)); font-weight:700; }
   .card .mtrk .lbs em { display:block; font-style:normal; font-size:11px; font-variant-numeric:tabular-nums; }
   .card .mtrk .lbs em.fact { color:var(--ink2); }      /* 지난 일자 = 사실 */
   .card .mtrk .lbs em.eta { color:var(--ink3); }        /* 목표 = 추정 — 흐리게(P2) */
+  .card .mtrk .lbs span.on em { color:var(--phc, var(--ink)); font-weight:600; }
+  /* 원문 링크 — 그 단계의 근거 문서로 바로 간다(있는 것만) */
+  .card .mtrk .lbs a { color:inherit; text-decoration:underline; text-underline-offset:2px; }
+  .card .cfoot .csrc { color:var(--accent); text-decoration:none; }
+  .card .cfoot .csrc:hover { text-decoration:underline; }
   .card .mtrk-old { display:flex; align-items:center; gap:0; margin:8px 0 2px; }
   .card .mtrk .d { width:9px; height:9px; border-radius:50%; background:var(--line2); flex:none; }
   .card .mtrk .d.done { background:var(--ink); }
-  .card .mtrk .d.cur { background:#fff; border:2.5px solid var(--ink); width:11px; height:11px; }
+  /* ★ **지금 어디인지가 한눈에** (2026-08-12 사용자 "현재 단계 표식이랑 시기를 좀 더 강조. 직관적이지가
+     않네"). 종전 현재 칸은 **흰 속·검은 테두리**라 지난 칸(검은 점)보다 오히려 약해 보였다.
+     분류색으로 채우고 후광을 준다 — 색은 카드 머리의 `● 착공`과 **같은 언어**다(새 색 추가 아님). */
+  .card .mtrk .d.cur { background:var(--phc, var(--ink)); border:2px solid #fff; width:13px; height:13px;
+                       box-shadow:0 0 0 2.5px var(--phc, var(--ink)); }
   .card .mtrk .ln { height:2px; background:var(--line2); flex:1 1 0; min-width:12px; }
   .card .mtrk .ln.done { background:var(--ink); }
   .card .mtrk .lb { margin-left:10px; font-size:var(--fs-s); color:var(--ink3); white-space:nowrap; }
@@ -3363,22 +3376,39 @@ function mtrackHtml(s) {
     return (k ? `<i class="ln ${k <= i ? "done" : ""}"></i>` : "") + `<i class="d ${cls}" title="${phaseLabel(p)}"></i>`;
   }).join("");
   const ms = s.milestones || [];
-  const at = p => {
-    // 그 칸의 **실제 일자** — 소스가 준 날짜만. 관측일(state:target/future)은 사실이 아니라 제외한다.
-    const hit = ms.filter(m => (m.phase === p || (p === "준공·개통" && (m.phase || "").indexOf("준공") === 0))
-                               && m.date && m.state !== "target" && m.state !== "future")
-      .sort((a, b) => String(a.date).localeCompare(String(b.date)))[0];
-    if (hit) return { txt: _tcYm(hit.date), on: true };
+  const _today = new Date(TODAY).toISOString().slice(0, 10);
+  const at = (p, isCur) => {
+    /* ☠ **한 칸에 사건이 여럿일 때 무엇을 보여줄 것인가** (2026-08-12 사용자 "서남선 계획이 '20.11이
+       아닐 텐데" → 전수조사 328건). 종전엔 무조건 **가장 이른 것**이라, 마곡나루역(서남선)이
+       6년 전 전신(목동선)의 2차 망 고시 '20.11을 달고 있었다 — 같은 칸에 '26.6 사건이 둘이나
+       더 있는데도. 칸마다 묻는 것이 다르다:
+         · **지난 단계** = 「언제 그 단계가 됐나」 → **최초**(도달일)
+         · **현재 단계** = 「지금 어디까지 왔나」 → **최신**
+       ⚠ **아직 오지 않은 날짜는 사실이 아니다**(P2). 소스가 `state:"done"`으로 보내도(고양은평선
+         「착공 2026-12 done」 9건 실측) 오늘 이후면 **목표**로 적는다 — 날짜를 지우지도, 사실이라
+         우기지도 않는다. */
+    const d = ms.filter(m => (m.phase === p || (p === "준공·개통" && (m.phase || "").indexOf("준공") === 0))
+                             && m.date && m.state !== "target" && m.state !== "future")
+      .map(m => String(m.date)).sort();
+    const past = d.filter(x => x <= _today);
+    const hit = past.length ? (isCur ? past[past.length - 1] : past[0]) : null;
+    // 그 날짜를 만든 마일스톤의 **원문 링크**(있으면) — 「무엇이 근거인가」로 바로 갈 수 있게 한다
+    const src = hit && ms.find(m => String(m.date) === hit && m.url);
+    if (hit) return { txt: _tcYm(hit), on: true, url: src && src.url };
+    if (d.length) return { txt: `${_tcYm(d[0])} 예정`, on: false };   // 소스가 준 날짜인데 아직 안 왔다
     const eta = ms.filter(m => (m.phase === p || (p === "준공·개통" && (m.phase || "").indexOf("준공") === 0))
                                && /^\d{4}$/.test(String(m.eta || "")))[0];
     return eta ? { txt: `'${String(eta.eta).slice(2)} 목표`, on: false } : null;
   };
   const lbs = PHASES.map((p, k) => {
-    const d = at(p);
-    return `<span class="${k === i ? "on" : ""}">${phaseLabel(p)}${
-      d ? `<em class="${d.on ? "fact" : "eta"}">${d.txt}</em>` : ""}</span>`;
+    const d = at(p, k === i);
+    const dt = d ? (d.url
+      ? `<a href="${d.url}" target="_blank" rel="noopener" title="이 단계의 근거 원문" onclick="event.stopPropagation()">${d.txt}</a>`
+      : d.txt) : "";
+    return `<span class="${k === i ? "on" : ""}" style="left:${k / (PHASES.length - 1) * 100}%">${phaseLabel(p)}${
+      d ? `<em class="${d.on ? "fact" : "eta"}">${dt}</em>` : ""}</span>`;
   }).join("");
-  return `<div class="mtrk"><div class="row">${dots}</div><div class="lbs">${lbs}</div></div>`;
+  return `<div class="mtrk" style="--phc:${colorOf(s)}"><div class="row">${dots}</div><div class="lbs">${lbs}</div></div>`;
 }
 /* 카드 생성 (클릭 + hover 지도 연동) */
 function makeCard(s, extra = "", onClick, lead = "") {
@@ -3431,7 +3461,14 @@ function cardHtml(s, extra = "", lead = "") {
     s.name_status === "미확보" ? '<span class="badge-near" title="허가 원본에 고유 명칭이 없어 동·지번으로 표시합니다. 건축물대장은 준공 후에 생성되므로 인가·착공 단계엔 공식 명칭이 없을 수 있습니다. 사업의 존재는 허가·착공 일자가 근거이며, 이름을 임의로 지어내지 않습니다.">시설명 미확보</span>' : "",
     icMissing ? '<span class="badge-near" title="이 도로는 진출입 지점(IC·진입로)에서만 타고 내립니다. 공식 IC 위치가 아직 확정·공개되지 않아 영향권을 산정하지 않습니다(근거 없는 범위를 만들지 않음).">진출입 지점 미확정 — 영향권 미산정</span>' : "",
   ].filter(Boolean).join(" ");
-  const foot = [gb, `영향 ${km}km`, stageCheckedHtml(s)].filter(x => x && String(x).trim()).join(" · ");
+  /* ★ **근거 링크가 카드에 없었다** (2026-08-12 사용자 "관련 고시 내용 사이트 링크 등도 같이 넣어줘").
+     실측: 신호 5,213건 중 **4,184건(80%)**이 `sources`를 갖고 있는데 상세 패널을 열어야만 보였다.
+     카드에서 바로 원문으로 갈 수 있게 한 칸 붙인다(카드 클릭과 겹치지 않게 전파를 멈춘다). */
+  const _srcs = (s.sources || []).filter(Boolean);
+  const srcLink = _srcs.length
+    ? _srcs.slice(0, 2).map((u, i) => `<a class="csrc" href="${u}" target="_blank" rel="noopener" onclick="event.stopPropagation()">원문${_srcs.length > 1 ? i + 1 : ""}</a>`).join(" ")
+    : "";
+  const foot = [gb, `영향 ${km}km`, stageCheckedHtml(s), srcLink].filter(x => x && String(x).trim()).join(" · ");
   return `
     <div class="chead">${lead}${levelPill(s)}<span class="cph" style="color:${colorOf(s)}">● ${phaseLabel(ph)}</span>
       <span class="ccat">${catOf(s)}${subLabel(s)}</span>${srcBadge(s)}${extra}</div>
@@ -6299,7 +6336,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260812l");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260812m");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -6483,7 +6520,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812l"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812m"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -6509,7 +6546,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260812l");
+  const CB = "?b=" + (window.BUILD || "20260812m");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
