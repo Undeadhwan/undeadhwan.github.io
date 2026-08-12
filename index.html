@@ -1497,10 +1497,15 @@ function lvlPill(l) { return `<span class="lvtag" style="${LVL_STYLE[l]}">${LEVE
    둘 다 「공식」으로 시작하고 툴팁도 「공식 문서 근거」/「공식 발표 근거」라 **같은 말처럼 읽혔다**.
    실제 차이는 하나다 — **문서가 남았나, 기관이 말했나.** 그걸 독자의 말로 적는다. */
 const SRC_TIER = {
+  /* ⚠ 툴팁은 **우리가 확보한 근거**만 말한다 — 사업의 법적 상태를 말하면 거짓이 된다(2026-08-12 사용자 확정).
+     종전 「기관 발표」 툴팁은 *"법적 확정은 아니라 노선·시기·규모가 바뀔 수 있습니다"*라고 **사업에 대해**
+     말했다. 그래서 근거가 보도자료뿐인 **착공 노선**(신안산선 등)을 정직하게 「기관 발표」로 내리는 순간
+     화면이 **반대 방향의 거짓**을 말하게 됐다 — 그 사업은 이미 인가·착공을 지났다.
+     사업의 법적 단계는 **단계 트랙**(계획→확정→착공→완공)이 이미 말한다. 배지는 근거만 말한다. */
   official_notice: { cls: "notice", t: "고시 문서",
-    tip: "관보·시보에 실린 법적 문서(도로구역 결정·실시계획 인가·지형도면 고시 등) — 구역·노선·시행자가 공표돼 되돌리려면 다시 고시해야 합니다" },
+    tip: "우리가 확보한 근거가 관보·시보의 법적 문서입니다(도로구역 결정·실시계획 인가·지형도면 고시·기본계획 고시 등) — 구역·노선·시행자가 공표된 문서라 되돌리려면 다시 고시해야 합니다" },
   official_report: { cls: "report", t: "기관 발표",
-    tip: "정부·지자체가 발표한 것(보도자료·계획 발표·예산 편성) — 사실이지만 법적 확정은 아니라 노선·시기·규모가 바뀔 수 있습니다" },
+    tip: "우리가 확보한 근거가 정부·지자체의 발표입니다(보도자료·계획 발표·예산 편성, 법정 공시·공공 API) — 고시 원문은 아직 못 찾았다는 뜻이며, 사업의 법적 단계는 위 단계 트랙을 보세요" },
   osm: { cls: "osm", t: "비공식(OSM)", tip: "OpenStreetMap 유래 — 선형(그림) 참고용. 진행단계·명칭의 공식 근거 아님" },
   unverified: { cls: "unver", t: "공식 근거 미확보",
     tip: "언론 보도 등으로만 확인된 사업 — 공식 고시·발표 문서를 아직 찾지 못했습니다(사업이 없다는 뜻은 아닙니다)" },
@@ -6357,7 +6362,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260812p");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260812q");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -6541,7 +6546,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812p"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812q"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -6567,7 +6572,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260812p");
+  const CB = "?b=" + (window.BUILD || "20260812q");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
