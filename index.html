@@ -2141,6 +2141,10 @@ function buildRailSignals() {
     status: f.properties.drop ? "종결" : "활성",   // 무산 노선(인동선 지선 등) = 종결 표식(P5 — 숨기지 않고 표시)
     confirmed: f.properties.confirmed, sd: null,   // 소재 시도·시군구는 ensureRailSgg가 좌표로 산출(전국)
     src_tier: f.properties.src_tier, st_status: f.properties.st_status, approx: f.properties.approx, note: f.properties.note,
+    // ☠ 근거 **링크**가 빠져 역 카드가 「근거: … 원문 링크 없음」이었다(2026-08-13 화면 실측 — 월곶역).
+    //   배지가 「공식 근거 미확보(언론 보도 등으로만 확인)」라고 말하면서 그 기사를 안 주면 독자가
+    //   확인할 방법이 없다 — **배지와 링크는 한 쌍**이다. 노선·IC 어댑터는 이미 이 줄을 갖고 있었다.
+    sources: f.properties.src_url ? [f.properties.src_url] : [],
     stage_checked: f.properties.stage_checked, stage_src: f.properties.stage_src,   // 단계는 수동 SSOT — 언제 확인했는지가 신뢰 근거(P2)
     pt_type: f.properties.pt_type, geo_prec: f.properties.geo_prec, geo_approx: !!f.properties.geo_approx, geo_basis: f.properties.geo_basis || null, milestones: f.properties.milestones,
     // ☠ 생애주기 3종이 빠져 **철도가 흐름 뷰·움직임 집계·신선도(정체) 표기에서 통째로 없었다**
@@ -6353,7 +6357,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260812o");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260812p");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -6537,7 +6541,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812o"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812p"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -6563,7 +6567,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260812o");
+  const CB = "?b=" + (window.BUILD || "20260812p");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
