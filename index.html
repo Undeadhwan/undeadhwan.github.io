@@ -582,9 +582,8 @@
   .apt-pop-cats .tot { color:var(--ink); font-weight:800; width:100%; margin-bottom:1px; }
   .apt-pop-cats.none { color:var(--muted); font-weight:400; }
   .apt-pop-cnt { font-size:12px; color:var(--muted); margin-top:6px; } .apt-pop-cnt b { color:var(--ink); }
-  /* ══ 유형 바 — 「17건」만으로는 교통이 많은 단지인지 알 수 없다(2026-08-12) ══
-     미리보기는 「들어가 볼지」만 정하는 자리다 — 유형 분해 한 줄로 그것만 답하고,
-     등급 구성·개별 호재는 상세가 말한다(중복 금지). */
+  /* 유형 바 — 「N건」만으로는 어떤 성격의 단지인지 알 수 없다(2026-08-12). 미리보기는 「들어가 볼지」만
+     정하는 자리라 유형 분해 한 줄로 그것만 답하고, 등급 구성·개별 호재는 상세가 말한다(중복 금지). */
   .apt-pop-bar { display:flex; height:6px; border-radius:3px; overflow:hidden; margin-top:7px; }
   .apt-pop-bar i { display:block; height:100%; }
   .apt-pop-leg { font-size:11px; color:var(--ink2); margin-top:4px; }
@@ -595,8 +594,7 @@
      사실상 불가했고, 모바일은 탭이 mouseenter로 팝업을 먼저 띄워 상세보기 경로가 아예 없었다.
      상세보기를 팝업 안의 **명시 버튼**(주 동작=채움)으로 두면 가림·탭 순서와 무관해진다. */
   .apt-pop-btns { display:flex; gap:6px; margin-top:9px; }
-  /* 주 동작(상세보기)을 넣게 — 같은 크기 알약 둘이 카드 절반을 먹었다(2026-08-12).
-     버튼 문구에 건수를 넣어 무엇이 열리는지 예고한다. */
+  /* 주 동작(상세보기)을 넓게 — 같은 크기 알약 둘이 카드 절반을 먹었다(2026-08-12) */
   .apt-pop-btns .apt-pop-view { flex:1.9; }
   .apt-pop-btns .apt-pop-cmp { margin-top:0; flex:1; }
   .apt-pop-view { flex:1; text-align:center; font-size:12px; font-weight:700; border:1.5px solid #1a1a1a; border-radius:8px; padding:5px 0; cursor:pointer; color:#fff; background:#1a1a1a; }
@@ -2048,30 +2046,21 @@ function catLevelCounts(sigs) {
 }
 /* 지도 배지용: 분류별 건수 미니 스트립(흰 배경 — 분류색 글자 가독) */
 const CAT_SHORT = { "교통": "교", "일자리": "일", "인프라": "인", "주거개발": "주", "기타": "기" };
-/* 유형 비율 바 — 미리보기 팝업 전용(2026-08-12). 「N건」이라는 숫자만으로는 어떤 성격의 단지인지
-   알 수 없으므로, 비율 한 줄을 더해 그것만 즉시 읽히게 한다. 등급 구성은 상세가 말한다(중복 금지).
-   ⚠ 색은 분류색 그대로 — 새 hex를 만들지 않는다(DESIGN.md §4). */
+/* 유형 비율 바 — 미리보기 팝업 전용(2026-08-12). 색은 분류색 그대로, 새 hex 없음(DESIGN.md §4). */
 function catBarHtml(sigs) {
-  /* ☠ 2026-08-12 실측: `levelCounts`는 **등급별**(S/A/B/C/미정) 버킷을 돌려주고 분류는 그 안
-     `cats`에 중착돼 있다. 종전 구현이 `m["교통"].total`을 바로 읽어 **부를 때마다 TypeError**로
-     팝업이 통째로 깨졌다(문법 검사는 통과 — 실행해 봐야 드러나는 자리다).
-     ⇒ 등급 버킷을 훑어 분류 합계를 만든다. 집계를 두 벌로 만들지 않고 있는 것을 다시 쓴다. */
+  /* ☠ 2026-08-12 **두 번째 재발**: `levelCounts`는 **등급별**(S/A/B/C/미정) 버킷을 돌려주고 분류는
+     그 안 `cats`에 중첩돼 있다. `m["교통"].total`을 바로 읽으면 undefined.total → **부를 때마다
+     TypeError**로 팝업이 통째로 안 열린다(문법 검사는 통과 — 실행해야 드러난다).
+     ⚠ 같은 모양의 코드(`m[c].total`)가 이 파일 안에 또 있었는데 **호출부가 없는 죽은 함수**였다
+       (`catMiniHtml` — 2026-08-12 제거). 죽은 코드는 옆에서 관용구를 베껴 쓰게 만든다. */
   const m = levelCounts(sigs), tot = m._total;
   if (!tot) return "";
   const byCat = {};
-  for (const l of GRADES_DISP) {
-    if (!m[l]) continue;
-    for (const c in m[l].cats) byCat[c] = (byCat[c] || 0) + m[l].cats[c];
-  }
+  for (const l of GRADES_DISP) { if (!m[l]) continue; for (const c in m[l].cats) byCat[c] = (byCat[c] || 0) + m[l].cats[c]; }
   const has = CAT_KEYS.filter(c => byCat[c]);
   if (!has.length) return "";
   const bar = has.map(c => `<i style="width:${(byCat[c] / tot * 100).toFixed(1)}%;background:${CAT_COLOR[c]}"></i>`).join("");
-  const leg = has.map(c => `${c} ${byCat[c]}`).join(" · ");
-  return `<div class="apt-pop-bar">${bar}</div><div class="apt-pop-leg">${leg}</div>`;
-}
-function catMiniHtml(m) {
-  const inner = CAT_KEYS.filter(c => m[c].total)
-    .map(c => `<span style="color:${CAT_COLOR[c]}">${CAT_SHORT[c]}${m[c].total}</span>`).join("");  return inner ? `<div class="catmini">${inner}</div>` : "";
+  return `<div class="apt-pop-bar">${bar}</div><div class="apt-pop-leg">${has.map(c => `${c} ${byCat[c]}`).join(" · ")}</div>`;
 }
 /* 좌측 패널용: 등급(A/B/C)별 그루핑 매트릭스 — 각 등급 안에 분류 구성(교/일/인/주) 소표기 */
 function hojaeMatrixHtml(sigs) {
@@ -3618,7 +3607,10 @@ function cmpColumn(a) {
   rows.filter(r => r.s.status !== "정체").forEach(r => {
     // 등급 이름은 **`LEVEL_NAME` 한 곳**에서만 온다(기준 일원화). 2026-08-12 개칭 때 여기만
     // 옛 이름이 남아 도크는 「등급 없음」, 집계 범례는 「미판정」으로 **한 화면에 두 이름**이 떴다.
-    if (!byDist && r.g !== g) { g = r.g; out += `<div class="gsep" style="--gc:${LVL_COLOR[g]}"><i></i>${LEVEL_NAME[g] || g}</div>`; }
+    /* 등급 구분선 제거(2026-08-12) — 바로 위 요약(hmatrix)이 등급별 건수를 이미 말하므로
+       같은 말을 두 번 하던 자리다. 요약은 **국소 필터**라 남긴다(panelGrade — 이 패널 안에서만
+       거르고 지도는 그대로. 도크 등급 칩은 전역이라 대체할 수 없다). 정렬은 등급순 그대로 —
+       구분선이 없어도 등급순으로 쌓이는 것은 요약이 말한다. */
     out += sig(r, false);
   });
   // 참고 = 정직성 표기(P5): 정체 신호와 역효과 시설. 숨기지 않고 구분해서 보여준다.
@@ -6492,7 +6484,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813a");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813b");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -6676,7 +6668,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813a"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813b"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -6702,7 +6694,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813a");
+  const CB = "?b=" + (window.BUILD || "20260813b");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
