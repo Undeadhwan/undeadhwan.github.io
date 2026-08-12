@@ -352,7 +352,15 @@
   .mfin { position:absolute; top:-7px; font-size:10px; font-weight:800; transform:translateX(-50%); }
   .mfin.confirmed { color:#c4392f; }
   .mfin.range { color:#9a4038; }
-  .mmeta { display:flex; justify-content:space-between; font-size:10.5px; color:var(--muted); margin-top:3px; }
+  /* ☠ **문구가 자기 시점이 아닌 자리에 떠 있었다** (2026-08-12 사용자 제보). `'26.4 사용승인 완료`가
+     가운데 정렬이라 축상 ~'29 자리에 놓였는데 실제 사건(◆)은 '26.2였다 — 시간축에서 **글자의
+     가로 위치는 곧 시점 주장**이다(§4.1 지도 정직성의 시간판). 마커와 같은 좌표에 붙인다. */
+  .mmeta { position:relative; height:13px; font-size:10.5px; color:var(--muted); margin-top:3px; }
+  .mmeta .e { position:absolute; top:0; }
+  .mmeta .e.l { left:0; } .mmeta .e.r { right:0; }
+  .mmeta .lb { position:absolute; top:0; transform:translateX(-50%); white-space:nowrap;
+               background:var(--bg); padding:0 3px; }
+  .mmeta .lb.free { position:static; display:block; text-align:center; transform:none; }
   .mmeta b { color:#5b3fd4; }
   .card.dimyr { opacity:.42; }
   .phead { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
@@ -417,6 +425,9 @@
   .card .mtrk .lbs span:first-child { text-align:left; }
   .card .mtrk .lbs span:last-child { text-align:right; }
   .card .mtrk .lbs span.on { color:var(--ink); font-weight:600; }
+  .card .mtrk .lbs em { display:block; font-style:normal; font-size:11px; font-variant-numeric:tabular-nums; }
+  .card .mtrk .lbs em.fact { color:var(--ink2); }      /* 지난 일자 = 사실 */
+  .card .mtrk .lbs em.eta { color:var(--ink3); }        /* 목표 = 추정 — 흐리게(P2) */
   .card .mtrk-old { display:flex; align-items:center; gap:0; margin:8px 0 2px; }
   .card .mtrk .d { width:9px; height:9px; border-radius:50%; background:var(--line2); flex:none; }
   .card .mtrk .d.done { background:var(--ink); }
@@ -633,7 +644,10 @@
   /* ★ 이 뷰에서는 **단계 바·어림 시각을 감춘다** (사용자 2026-08-12). 단계 변화는 왼쪽 태그와
      카드 머리의 `● 착공`이 이미 말하고, 날짜는 왼쪽 열이 정확히 말한다 — 바는 같은 말을 세 번째로
      반복하며 자리만 먹었다. 지도·목록·상세에서는 그대로 둔다(거기선 진행 위치가 첫 질문이다). */
-  #flowv .card .mtrk, #flowv .card .cmove { display:none; }
+  /* 트랙은 되살린다 — 날짜가 붙어 **이력 요약**이 됐으므로 단계 이름만 반복하던 때와 다르다.
+     어림 시각(「6주 전 움직임」)만 감춘다: 날짜 열이 그날을 정확히 말하므로 필요 없다. */
+  #flowv .card .cfresh { display:none; }
+  #flowv .card .cmove:empty { display:none; }
   /* 변동 태그가 현재 단계를 말한다 — `● 준공·개통` 칩은 같은 말이라 감춘다 */
   #flowv .card.haschg .cph { display:none; }
   @media (max-width: 768px) {
@@ -1126,11 +1140,11 @@ const STAGE_TRACKS = {
   "정비사업": [["구역지정","계획"],["정비계획","계획"],["조합설립","인가"],["사업시행인가","인가"],["관리처분","인가"],["이주","착공"],["철거","착공"],["착공","착공"],["준공","준공·개통"]]
 };
 /* 표시 라벨 — 저장값(계획/인가/착공/준공·개통) → 화면 문구. thresholds.json 단계_백본.표시라벨이 SSOT. */
-let PHASE_LABEL = { "계획": "계획", "인가": "확정·인가", "착공": "착공", "준공·개통": "준공·개통",
+let PHASE_LABEL = { "계획": "계획", "인가": "확정", "착공": "착공", "준공·개통": "준공",
   /* 마일스톤 phase는 전 소스가 관행상 "준공" 약칭을 쓴다(1,834건, 8개 파일). **저장값은 바꾸지
      않는다** — thresholds 단계_백본 `_저장값_주의`가 일괄 치환을 금한다(백본 밖 값이 섞이는 새
      사고를 만든다). 화면 통일은 여기서 한 줄로 한다(2026-08-03). */
-  "준공": "준공·개통" };
+  "준공": "준공" };
 const phaseLabel = p => PHASE_LABEL[p] || p;
 /* current_stage → 국면. 우선순위: 신호 명시 phase → 트랙 내 매칭 → 키워드 분류 → 계획(기본).
    유형별 세부단계 이름이 자유로워도 4국면 필터가 항상 성립하도록 하는 매핑층. */
@@ -3306,10 +3320,24 @@ function miniBarHtml(s) {
      축이 있는데 눈금에 걸릴 사실이 없으니 **근거 없는 정밀함**의 시각판이다(§7 진척률 금지와 같은 결).
      목표 시점(t)이 있거나 시점 슬라이더가 켜졌을 때만 이 축이 말할 것이 생긴다.
      진행 상태 자체는 위의 **마일스톤 트랙**(mtrackHtml)이 말한다. */
-  if (!t && !YEAR_SEL) return "";
+  /* ★ **미니바는 시점 슬라이더 전용이다** (2026-08-12). 평소엔 트랙이 진행을 말하므로 이 축은
+     같은 말을 두 번 하는 것이고, 8.7%에만 나타나 「있다 없다」가 임의로 보였다.
+     슬라이더를 켜면 질문이 「그 해에 어떤 상태였나」로 바뀌므로 **그 모드에서는 전 카드에** 그린다
+     — 모드 안에서 일관되면 임의로 보이지 않는다. */
+  if (!YEAR_SEL) return "";
+  /* ★ **이미 끝난 사업에는 남은 시간이 없다** (2026-08-12 사용자 "이거 너가 봐도 이상하지 않니?").
+     2026년 4월에 사용승인이 난 사업에 '24~'34 축을 그리면 **8년이 빈 채로** 남고, 미니바가 답해야 할
+     질문(「얼마나 남았나」)에 답할 것이 없다. 완료 사실은 카드 머리(`● 준공·개통`)와 변동 태그가
+     이미 말한다. ⚠ 시점 슬라이더를 켠 동안은 그린다 — 그때는 「그 해에 어떤 상태였나」를 묻는
+     것이라 완료된 사업도 답할 것이 있다(asOfLabel). */
+  // 문구는 **자기 시점 위**에 놓는다. 시점을 모르는 완료·미상은 놓을 자리가 없으므로 가운데 둔다.
+  const lp = (t && isFinite(t.y)) ? mpct(t.y) : null;
+  const lbl = `${targetLabel(t)}${asOf}`;
+  const lbHtml = lp === null ? `<span class="lb free">${lbl}</span>`
+    : `<span class="lb" style="left:${Math.max(9, Math.min(91, lp))}%">${lbl}</span>`;
   return `<div class="mbar">
     <div class="mtrack">${segs}${fin}<div class="mnow" style="left:${mpct(G_NOW)}%"></div>${cur}</div>
-    <div class="mmeta"><span>'24</span><span>${targetLabel(t)}${asOf}</span><span>'34</span></div>
+    <div class="mmeta"><span class="e l">'24</span>${lbHtml}<span class="e r">'34</span></div>
   </div>`;
 }
 /* 마일스톤 트랙 — 계획·인가·착공·준공 4점. **진척률(%)·게이지가 아니라 점과 선**이다(§7).
@@ -3317,14 +3345,33 @@ function miniBarHtml(s) {
    사실이고, 미래 칸은 애초에 회색으로 "아직 아님"을 말하므로 채널을 겹칠 이유가 없다. */
 function mtrackHtml(s) {
   const i = PHASE_IDX[phaseOf(s)] ?? 0;
+  /* ★★ **트랙이 진행 표현의 정본이다** (2026-08-12 사용자 확정: *"바가 있을거면 다 있고 없을거면
+     다 없어야겠지. 모든 호재들은 단계를 갖고 있으니깐"*).
+     실측이 그 말을 뒷받침했다 — 미니 10년 바는 전국 5,213건 중 **456건(8.7%)**에만 그려지는
+     예외 부품이었고, 다 그리려면 날짜를 모르는 4,757건에 **빈 10년 축**을 그려야 했다(§7 근거 없는
+     정밀함). 네이버식 연대기로 바꿔도 **28%**만 연대기가 된다. **100%인 것은 단계뿐**이다.
+     ⇒ 트랙은 언제나 그리고, **아는 날짜만** 칸 아래에 붙인다. 모르면 칸 이름만 — 그게 사실이다.
+     ⚠ 목표(eta)는 「'31 목표」로 적어 **사실(지난 날짜)과 구분**한다(P2). */
   const dots = PHASES.map((p, k) => {
     const cls = k < i ? "done" : k === i ? "cur" : "";
     return (k ? `<i class="ln ${k <= i ? "done" : ""}"></i>` : "") + `<i class="d ${cls}" title="${phaseLabel(p)}"></i>`;
   }).join("");
-  /* 라벨은 **각 점 아래**에 균등 배치한다(2026-08-12). 종전엔 오른쪽에 「계획 › 확정·인가 › …」을
-     한 문자열로 붙여, 어느 이름이 어느 점인지 눈으로 짝지어야 했다 — `›` 구분자도 그래서 필요했다.
-     칸 아래로 내리면 구분자 없이 위치가 곧 짝이다. 현재 칸은 굵게(색이 아니라 굵기 — DESIGN 3단). */
-  const lbs = PHASES.map((p, k) => `<span class="${k === i ? "on" : ""}">${phaseLabel(p)}</span>`).join("");
+  const ms = s.milestones || [];
+  const at = p => {
+    // 그 칸의 **실제 일자** — 소스가 준 날짜만. 관측일(state:target/future)은 사실이 아니라 제외한다.
+    const hit = ms.filter(m => (m.phase === p || (p === "준공·개통" && (m.phase || "").indexOf("준공") === 0))
+                               && m.date && m.state !== "target" && m.state !== "future")
+      .sort((a, b) => String(a.date).localeCompare(String(b.date)))[0];
+    if (hit) return { txt: _tcYm(hit.date), on: true };
+    const eta = ms.filter(m => (m.phase === p || (p === "준공·개통" && (m.phase || "").indexOf("준공") === 0))
+                               && /^\d{4}$/.test(String(m.eta || "")))[0];
+    return eta ? { txt: `'${String(eta.eta).slice(2)} 목표`, on: false } : null;
+  };
+  const lbs = PHASES.map((p, k) => {
+    const d = at(p);
+    return `<span class="${k === i ? "on" : ""}">${phaseLabel(p)}${
+      d ? `<em class="${d.on ? "fact" : "eta"}">${d.txt}</em>` : ""}</span>`;
+  }).join("");
   return `<div class="mtrk"><div class="row">${dots}</div><div class="lbs">${lbs}</div></div>`;
 }
 /* 카드 생성 (클릭 + hover 지도 연동) */
@@ -3383,7 +3430,7 @@ function cardHtml(s, extra = "", lead = "") {
     <div class="chead">${lead}${levelPill(s)}<span class="cph" style="color:${colorOf(s)}">● ${phaseLabel(ph)}</span>
       <span class="ccat">${catOf(s)}${subLabel(s)}</span>${srcBadge(s)}${extra}</div>
     <div class="title">${sigTitle(s)}</div>
-    <div class="cmove">${mv || '<span class="pmini">단계 변경 기록 없음</span>'}${what ? ` · <span class="cwhat">${what}</span>` : ""}</div>
+    <div class="cmove"><span class="cfresh">${mv || '<span class="pmini">단계 변경 기록 없음</span>'}</span>${what ? `<span class="cwhat"> · ${what}</span>` : ""}</div>
     ${fieldChangeHtml(s)}
     ${mtrackHtml(s)}
     ${badges ? `<div class="cbadges">${badges}</div>` : ""}
@@ -6246,7 +6293,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260812i");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260812j");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -6430,7 +6477,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812i"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812j"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -6456,7 +6503,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260812i");
+  const CB = "?b=" + (window.BUILD || "20260812j");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
