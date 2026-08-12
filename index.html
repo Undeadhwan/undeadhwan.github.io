@@ -588,6 +588,20 @@
   #flowv .fgh .n { font-size:var(--fs-s); color:var(--ink3); font-variant-numeric:tabular-nums; }
   #flowv .fgh .why { font-size:var(--fs-s); color:var(--ink3); }
   #flowv .fempty { font-size:var(--fs-s); color:var(--ink3); padding:6px 0 2px; }
+  /* 「우리가 처음 본 것」 접힘 머리 — 행 전체가 과녁이다(스위치·삼각형만 겨냥하게 두지 않는다) */
+  #flowv .fgh.sfold { cursor:pointer; border-radius:var(--r-s); margin-left:-6px; margin-right:-6px;
+                      padding:6px; flex-wrap:wrap; }
+  #flowv .fgh.sfold:hover { background:var(--panel); }
+  #flowv .fgh.sfold:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  /* ── 변동 태그: 이 카드가 **신규인가 변동인가**, 변동이면 무엇에서 무엇으로 (2026-08-12) ──
+     정직성 배지(초안·미확정 등)와 **다른 축**이라 색을 나눈다: 저 배지들은 '확실성', 이건 '변화'다.
+     역행(인가→계획)은 정체·재추진 신호라 정체 전용색(--stall)을 쓴다 — 경고(--warn)가 아니다. */
+  .mvtag { display:inline-flex; align-items:center; gap:3px; margin-left:6px; padding:1px 7px;
+           border-radius:999px; font-size:11.5px; font-weight:600; white-space:nowrap;
+           border:1px solid var(--line2); color:var(--ink2); background:#fff; }
+  .mvtag.chg { border-color:#bfd0f2; color:#1e40af; background:#f3f7ff; }
+  .mvtag.chg.back { border-color:#e6d3a3; color:var(--stall); background:#fdf8ec; }
+  .mvtag.new { border-color:#bfe3d0; color:var(--c-house); background:#f1faf5; }
   /* ══ 하단 탭바(독) — 모바일 전용. 데스크톱은 헤더 칩이 같은 일을 한다(두 벌을 만들지 않는다) ══ */
   /* 문법(DESIGN §1): 무채색 뼈대 · 상태는 채움(굵기)으로. `env(safe-area-inset-bottom)` —
      푸터를 숨겨 탭바가 최하단이 됐으므로 아이폰 홈 바를 침범하면 안 된다. */
@@ -723,8 +737,18 @@
      비교하며 보는 사용을 없애게 된다). 스크롤 컨테이너가 #dock 자신이라 sticky가 그대로 먹는다. */
   #dock .dk-h { display:flex; align-items:baseline; gap:8px; padding:13px 14px 10px;
     position:sticky; top:0; z-index:3; background:#fff; border-bottom:1px solid var(--line); }
-  #dock .dk-h b { font-size:16px; margin-right:auto; }
+  /* ☠ **긴 지역명이 헤더를 무너뜨렸다** (2026-08-12 사용자 제보 — 「전남광주통합특별시」).
+     종전엔 지역명·건수·버튼이 한 덩어리 텍스트라 폭이 모자라면 **아무 데서나** 줄이 바뀌었다:
+     제목이 「…호」/「재 221」로 갈리고 「전부 접기」가 「전부 접」/「기」, 「초기화」가 「초기」/「화」로
+     쪼개져 헤더가 3줄이 되고 그만큼 빈 자리가 생겼다.
+     ⇒ **줄지 않아야 할 것(건수·버튼)은 줄지 않게** 못 박고, 줄어도 되는 **지역명 하나만** 말줄임.
+       전체 이름은 상단 지역 드롭다운과 `title`에 그대로 있으므로 사라지는 사실은 없다(P2). */
+  #dock .dk-h b { font-size:16px; margin-right:auto; min-width:0; display:flex;
+    align-items:baseline; gap:5px; overflow:hidden; }
+  #dock .dk-h b .rg { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
+  #dock .dk-h b .fx { white-space:nowrap; flex:0 0 auto; }
   #dock .dk-h b .cnt { color:var(--ink2); font-weight:500; }
+  #dock .dk-h .dk-fold, #dock .dk-h .dk-rst { white-space:nowrap; flex:0 0 auto; }
   #dock .dk-h + .cat { border-top:0; }   /* sticky 헤더의 밑선과 겹쳐 2px가 되는 것을 막는다 */
   #dock .dk-rst { font-size:var(--fs-s); color:var(--c-traffic); background:none; border:0; cursor:pointer; padding:0; visibility:hidden; }
   #dock .dk-rst.show { visibility:visible; }
@@ -896,7 +920,7 @@
          좀 애매해") — title에 그 질문을 그대로 적는다. 자세한 구분은 각 뷰 머리에도 쓴다. -->
     <span class="chip on" id="v-map" title="어디에 있나 — 지도 위 위치와 영향권">지도</span>
     <!-- 흐름 = **시간축**. 우리만 가진 축이라 지도·목록과 나란히 둔다(운영 도구 아님 — 공개 화면에 남는다) -->
-    <span class="chip" id="v-flow" title="무엇이 바뀌었나 — 소스 원문에 날짜가 있는 움직임만, 오늘·이번 주·이번 달">흐름</span>
+    <span class="chip" id="v-flow" title="무엇이 바뀌었나 — 소스 원문에 날짜가 있는 움직임만(월별·최신순)">업데이트</span>
     <span class="chip" id="v-list" title="무엇이 있나 — 조회조건에 걸린 전체를 정렬·검색">목록</span>
     <!-- ⚠ 여기 있던 `☰ 조회조건`(.mo-only) 칩을 지웠다(2026-08-11) — **죽은 코드**였다.
          모바일에선 부모 `#f-mode`가 통째로 `display:none`이라 이 칩은 나타날 수가 없고,
@@ -1012,7 +1036,7 @@
      (2026-08-09 사용자 "독 이미지가 너무 촌스러워 좀 심플하고 쌔끈한걸로"). -->
 <nav id="tabbar">
   <button class="tb on" data-view="map"><svg viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>지도</button>
-  <button class="tb" data-view="flow"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>흐름<span class="tbn" id="tb-mv"></span></button>
+  <button class="tb" data-view="flow"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>업데이트<span class="tbn" id="tb-mv"></span></button>
   <button class="tb" data-view="list"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>목록</button>
   <button class="tb" data-view="filter"><svg viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/><circle cx="9" cy="8" r="2.4"/><circle cx="15" cy="16" r="2.4"/></svg>조회조건</button>
 </nav>
@@ -4003,7 +4027,8 @@ function renderDock() {
     && GRADES_DISP.every(k => filter.lvl.has(k)) && filter.lines.has("철도선") && filter.lines.has("도로선"));
   dock.innerHTML = `
     <div class="dk-h">
-      <b>${regionLabel() ? regionLabel() + " " : ""}호재 <span class="cnt">${C.total.toLocaleString()}</span></b>
+      <b>${regionLabel() ? `<span class="rg" title="${regionLabel()}">${regionLabel()}</span>` : ""}<span
+        class="fx">호재 <span class="cnt">${C.total.toLocaleString()}</span></span></b>
       ${dockOpen.size ? `<button class="dk-fold" data-fold="1" title="펼쳐 둔 대분류를 전부 접는다">전부 접기</button>` : ""}
       <button class="dk-rst${dirty ? " show" : ""}" data-all="on">초기화</button>
     </div>
@@ -4104,12 +4129,41 @@ addEventListener("resize", layoutBottom);
      부르고 그룹도 나눈다 — 뭉치면 "이번 주 움직임 2,588건"(실제 3건)이 재발한다. */
 /* ⚠ 경계는 **일수**로 잰다. 처음엔 `weeksAgo`(주 단위 반올림)로 갈랐는데, 3일 전 신호의
    weeksAgo가 0이라 「오늘」 칸에 들어갔다 — 화면이 사실과 다르게 말하는 상태(2026-08-09 자체 실측). */
-const FLOW_GROUPS = [
-  { k: "오늘",     maxD: 0 },
-  { k: "이번 주",  maxD: 7 },
-  { k: "이번 달",  maxD: 31 },
-  { k: "3개월 내", maxD: 92 },
-];
+/* ★★ 업데이트 뷰 — **무엇이 달라졌는지**를 말한다 (2026-08-12 사용자 개편 지시).
+   종전 문제 셋:
+     ① 고정 4버킷(오늘·이번 주·이번 달·3개월)이 **우리 데이터 밀도와 안 맞았다** — 실측:
+        문서상 움직임이 전국 기준 7일 6건·30일 27건·90일 240건이라 앞 두 칸은 거의 언제나 0이고,
+        그 「0건」 줄을 네 칸 다 그려서 화면이 지저분했다(사용자 "이번주는 0건인데 다 보여주면 중복").
+     ② **신규인지 변동인지 말하지 않았다.** 카드가 현재 단계만 보여 주니 「무엇이 바뀌었나」라는
+        이 뷰의 질문에 답을 못 했다.
+     ③ 「흐름」이라는 이름이 직관적이지 않았다 → **업데이트**(사용자 확정). 내부 키(`flow`)는
+        그대로 둔다 — 이름을 바꾸며 키까지 바꾸면 고아가 생긴다(이 저장소의 반복 사고).
+   ⇒ 월 그룹(빈 달은 애초에 생기지 않는다) · 최신순 · 카드마다 `이전 → 현재`. */
+let FLOW_SEEN_OPEN = false;   // 「우리가 처음 본 것」 접힘 상태 — 기본 닫힘(사용자 확정)
+function movDelta(s) {
+  /* 소스 원문에 **날짜가 있는** 이력만으로 판정한다 — `observed`(우리가 처음 본 날)를 섞으면
+     "사업이 움직였다"가 아닌 것을 움직임이라 부르게 된다(이 저장소가 이미 밟은 사고).
+     ⚠ 이력은 시간순으로 정렬돼 있지 않다(실측: 착공 2026-07-18 뒤에 준공 2025-08-01이 온다) —
+       **날짜로 정렬한 뒤** 마지막 둘을 본다. */
+  /* ⚠ **판정 규칙은 `movBasis`와 같아야 한다** (2026-08-12 실측으로 발각): 여기서 `basis==="source"`만
+     인정했더니 `basis`가 아예 없는 이력이 빠져, 요약이 「36건 = 변동 20 + 신규 14」처럼 **합이 안 맞았다**.
+     `movBasis`는 「observed가 아니면 source」로 본다 — 두 곳이 다른 자를 쓰면 화면이 스스로와 어긋난다. */
+  const h = (s.stage_history || []).filter(x => x && x.basis !== "observed" && x.date);
+  if (!h.length) return null;
+  const a = [...h].sort((x, y) => String(x.date).localeCompare(String(y.date)));
+  const cur = a[a.length - 1], prev = a.length >= 2 ? a[a.length - 2] : null;
+  return { kind: prev ? "변동" : "신규", from: prev && prev.stage, to: cur.stage, date: cur.date };
+}
+function movDeltaHtml(s) {
+  const d = movDelta(s);
+  if (!d) return "";
+  if (d.kind === "신규")
+    return `<span class="mvtag new" title="이 사업이 소스 원문에 처음 등장한 것입니다">신규</span>`;
+  const back = PHASE_IDX[d.to] < PHASE_IDX[d.from];   // 역행(인가→계획 등)은 정체·재추진 신호다(P5)
+  return `<span class="mvtag chg${back ? " back" : ""}" title="${back
+    ? "단계가 되돌아갔습니다 — 재검토·재추진 신호입니다" : "직전 단계에서 이렇게 바뀌었습니다"}">${
+    phaseLabel(d.from)} → <b>${phaseLabel(d.to)}</b></span>`;
+}
 function flowRows() {
   return allSignalsFlat().filter(visible)
     .filter(s => s.last_movement && weeksAgo(s.last_movement) !== null)
@@ -4123,48 +4177,61 @@ function renderFlow() {
   const moved = dedupeMov(rows.filter(s => movBasis(s) === "source"));
   const seen = dedupeMov(rows.filter(s => movBasis(s) !== "source"));
   const daysAgo = d => { const t = new Date(String(d).length === 7 ? d + "-01" : d); return Math.floor((TODAY - t) / 864e5); };
-  /* ⚠ **미래 날짜는 「움직였다」가 아니다** (2026-08-11). `d <= g.maxD`는 음수도 통과시켜서
-     아직 오지 않은 날짜(착공 예정 '26.12 등)가 통째로 「오늘」 칸에 들어가 있었다 —
-     화면이 "오늘 26건 움직였다"고 말하는데 실제로 오늘 움직인 건 0건이었다(P2·P5 정면 위반).
+  /* ⚠ **미래 날짜는 「움직였다」가 아니다** (2026-08-11). 아직 오지 않은 날짜(착공 예정 '26.12 등)를
+     세면 화면이 "오늘 26건 움직였다"고 말하는데 실제로 오늘 움직인 건 0건이 된다(P2·P5 정면 위반).
      세지 않되 **지우지도 않는다** — 아래에서 건수를 밝힌다(없어진 것은 소리를 내지 않는다). */
-  const bucket = s => { const d = daysAgo(s.last_movement);
-    if (d < 0) return null;
-    for (const g of FLOW_GROUPS) if (d <= g.maxD) return g.k;
-    return null; };
-  const groups = new Map(FLOW_GROUPS.map(g => [g.k, []]));
-  moved.forEach(s => { const b = bucket(s); if (b) groups.get(b).push(s); });
-  const recent3m = moved.filter(s => bucket(s)).length;
+  const past = moved.filter(s => daysAgo(s.last_movement) >= 0);
   const future = moved.filter(s => daysAgo(s.last_movement) < 0);
+  /* ★ 고정 버킷 대신 **월 그룹**이다 — 빈 달은 애초에 만들어지지 않으므로 「0건」 줄이 사라진다.
+     최신순(사용자 확정): 방금 무엇이 움직였는지가 이 뷰의 첫 질문이다. */
+  const mKey = d => String(d).slice(0, 7);
+  const mLabel = k => k === "old" ? "그 이전" : (([y, m]) => `${y}년 ${+m}월`)(k.split("-"));
+  /* ⚠ **월 그룹을 무한정 만들지 않는다.** 강서구 하나만 켜도 이력이 2021년까지 닿아 머리글이 27개가
+     됐다(대부분 1건짜리) — 「깔끔하게」와 정반대다. 최근 12개월은 월별로, 그보다 오래된 것은
+     **한 그룹**으로 모은다. 지우는 게 아니라 묶는 것이다(건수는 그대로 보인다). */
+  const OLD_M = 12;
+  const cut = (() => { const d = new Date(TODAY); d.setMonth(d.getMonth() - (OLD_M - 1));
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`; })();
+  const groups = new Map();
+  past.forEach(s => { const m = mKey(s.last_movement); const k = m >= cut ? m : "old";
+    if (!groups.has(k)) groups.set(k, []); groups.get(k).push(s); });
+  const keys = [...groups.keys()].filter(k => k !== "old").sort().reverse().concat(groups.has("old") ? ["old"] : []);
+  keys.forEach(k => groups.get(k).sort((a, b) => String(b.last_movement).localeCompare(String(a.last_movement))));
+  const nChg = past.filter(s => (movDelta(s) || {}).kind === "변동").length;
+  const nNew = past.filter(s => (movDelta(s) || {}).kind === "신규").length;
   let html = `<div class="fwrap">
-    <div class="lvtitle" style="font-size:16px;font-weight:700">흐름 <span style="font-weight:400;font-size:12.5px;color:var(--ink3)">— 무엇이 <b style="font-weight:600">바뀌었나</b> · ${regionLabel() || "전 지역"} · 지도와 같은 표시 조건</span></div>
-    <div class="lvcount" style="margin:6px 0 2px"><b>${recent3m.toLocaleString()}건</b>이 최근 3개월 안에 <b>문서상 움직였습니다</b>
-      <span class="why" style="color:var(--ink3)">— 고시·인가·착공 등 소스 원문에 날짜가 있는 것만 셉니다</span></div>`
+    <div class="lvtitle" style="font-size:16px;font-weight:700">업데이트 <span style="font-weight:400;font-size:12.5px;color:var(--ink3)">— 무엇이 <b style="font-weight:600">바뀌었나</b> · ${regionLabel() || "전 지역"} · 지도와 같은 표시 조건</span></div>
+    <div class="lvcount" style="margin:6px 0 2px"><b>${past.length.toLocaleString()}건</b>이 <b>문서상 움직였습니다</b>
+      ${nChg || nNew ? `<span class="why" style="color:var(--ink3)">— 단계 변동 <b>${nChg.toLocaleString()}</b> · 신규 <b>${nNew.toLocaleString()}</b></span>` : ""}
+      <span class="why" style="color:var(--ink3)">· 고시·인가·착공 등 소스 원문에 날짜가 있는 것만 셉니다</span></div>`
     + (future.length ? `<div class="fempty" style="margin:2px 0 6px">※ ${future.length.toLocaleString()}건은 소스의 날짜가 <b>아직 오지 않은 날</b>(착공 예정일 등)이라 움직임으로 세지 않았습니다</div>` : "");
-  for (const g of FLOW_GROUPS) {
-    const arr = groups.get(g.k);
-    html += `<div class="fgh"><b>${g.k}</b><span class="n">${arr.length.toLocaleString()}건</span></div>`;
-    if (!arr.length) html += `<div class="fempty">움직인 신호 없음</div>`;
-    else html += `<div class="fg" data-g="${g.k}"></div>`;
+  if (!keys.length) html += `<div class="fempty">문서상 움직인 신호가 없습니다 — 조회 조건을 넓혀 보세요</div>`;
+  for (const k of keys)
+    html += `<div class="fgh"><b>${mLabel(k)}</b><span class="n">${groups.get(k).length.toLocaleString()}건</span></div>
+      <div class="fg" data-g="${k}"></div>`;
+  /* ★ 「우리가 처음 본 것」은 **접어 둔다**(사용자 확정). 사업이 움직인 게 아니라 우리 수집이
+     처음 닿은 것이라 같은 목록에 섞으면 「무엇이 바뀌었나」가 묻힌다 — 그렇다고 지우면 새로
+     발굴한 호재를 볼 자리가 없어진다. 그래서 **닫아 두고 셈은 밝힌다**(P2·P5). */
+  const seenN = seen.filter(s => daysAgo(s.last_movement) >= 0);
+  if (seenN.length) {
+    const seenNew = seenN.filter(s => s.first_seen && inWeek(s.first_seen)).length;
+    html += `<div class="fgh sfold" id="seenFold" role="button" tabindex="0" aria-expanded="${FLOW_SEEN_OPEN}">
+        <b>${FLOW_SEEN_OPEN ? "▾" : "▸"} 우리가 처음 본 것</b><span class="n">${seenN.length.toLocaleString()}건</span>
+        <span class="why">— 소스에 변경일이 없어 <b>우리가 처음 본 날</b>로 적은 것입니다(그날 사업이 움직였다는 뜻이 아닙니다)${
+          seenNew ? ` · 이 중 <b>${seenNew.toLocaleString()}건</b>은 이번 주에 처음 발견` : ""}</span></div>
+      <div class="fg" data-g="확인" style="${FLOW_SEEN_OPEN ? "" : "display:none"}"></div>`;
   }
-  /* ★ 「새로 확인」도 **두 가지를 한 이름으로 부르고 있었다** (2026-08-11 — 시계를 고치자 1→673으로
-     드러났다). 실측 분해: 481건은 이번 주에 **처음 발견**한 신호(first_seen도 이번 주)이고,
-     192건은 **이미 알던 신호의 단계를 새로 관측**한 것이다. 둘은 다른 사실이라 숫자를 나눈다 —
-     뭉치면 "이번 주 움직임 2,588건" 사고의 같은 형태다(§movBasis). */
-  const seenWk = seen.filter(s => inWeek(s.last_movement));
-  const seenNew = seenWk.filter(s => s.first_seen && inWeek(s.first_seen));
-  const seenRe = seenWk.length - seenNew.length;
-  html += `<div class="fgh"><b>이번 주 새로 확인</b><span class="n">${seenWk.length.toLocaleString()}건</span>
-      <span class="why">— 소스에 변경일이 없어 <b>우리가 처음 본 날</b>로 적은 것입니다(그날 움직였다는 뜻이 아닙니다).
-      이 중 <b>${seenNew.length.toLocaleString()}건</b>은 이번 주에 <b>처음 발견</b>한 신호,
-      <b>${seenRe.toLocaleString()}건</b>은 이미 알던 신호의 <b>단계를 새로 관측</b>한 것입니다</span></div>
-    <div class="fg" data-g="확인"></div></div>`;
+  html += `</div>`;
   host.innerHTML = html;
   const put = (key, arr) => { const box = host.querySelector(`.fg[data-g="${key}"]`); if (!box) return;
-    arr.slice(0, 60).forEach(s => box.appendChild(makeCard(s, "", () => { setView("map"); showSignal(s, true); })));
+    arr.slice(0, 60).forEach(s => box.appendChild(makeCard(s, movDeltaHtml(s), () => { setView("map"); showSignal(s, true); })));
     if (arr.length > 60) box.insertAdjacentHTML("beforeend", `<div class="fempty">외 ${(arr.length - 60).toLocaleString()}건 — 목록에서 전부 보기</div>`); };
-  FLOW_GROUPS.forEach(g => put(g.k, groups.get(g.k)));
-  put("확인", seen.filter(s => inWeek(s.last_movement)));
+  keys.forEach(k => put(k, groups.get(k)));
+  if (seenN.length) put("확인", seenN);
+  const fold = host.querySelector("#seenFold");
+  if (fold) fold.onclick = () => { FLOW_SEEN_OPEN = !FLOW_SEEN_OPEN; renderFlow(); };
 }
+
 /* 하단 탭바 — 모바일에서 헤더 칩을 대신한다. `조회조건`은 뷰가 아니라 시트라 따로 처리한다. */
 function initTabbar() {
   const bar = document.getElementById("tabbar");
@@ -6003,7 +6070,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260812c");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260812d");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -6187,7 +6254,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812c"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812d"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -6213,7 +6280,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260812c");
+  const CB = "?b=" + (window.BUILD || "20260812d");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
