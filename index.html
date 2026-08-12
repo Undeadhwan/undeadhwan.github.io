@@ -1703,6 +1703,18 @@ function areaText(m2) {
   const v = Number(m2) || 0;
   return v >= 10000 ? `${(v / 10000).toFixed(1).replace(".0", "")}만㎡` : `${Math.round(v).toLocaleString()}㎡`;
 }
+/* 등급 근거를 **말로 옮기는 자리는 여기 하나다** (2026-08-12 — `targetLabel`과 같은 이유).
+   생산측(`build_road_v2.road_lvl`)은 **코드**만 남긴다: 어떤 눈금으로 매겼는가가 사실이고,
+   그걸 사람 말로 옮기는 건 화면의 일이다. 종전엔 한 갈래만 문장을 저장해 도로 카드 313장이
+   근거 자리에 「금액」·「유형폴백」이라는 **내부 용어**를 그대로 보여주고 있었다.
+   ⚠ 철도는 파이프라인(`grade.rail_level`)이 「위계 A (도시철도)」처럼 **사실을 담은 문구**를
+     스탬프한다 — 코드로 환원하면 어떤 위계인지가 사라지므로 **그대로 통과**시킨다. */
+const LVL_BASIS_TEXT = {
+  "금액": "사업비 눈금 적용",
+  "유형폴백": "도로 유형 기본값 — 원장에 사업비가 없어 금액 눈금 미적용",
+  "스냅숏폴백": "종전 등급 유지 — 원장에 사업비가 없어 금액 눈금 미적용",
+};
+const lvlBasisText = v => LVL_BASIS_TEXT[v] || v;
 function gradeBasisHtml(s) {
   const c = catOf(s);
   // 접힌 사업이면 **합계**가 그 사업의 규모다(개별 블록 값이 아니라).
@@ -1715,7 +1727,7 @@ function gradeBasisHtml(s) {
     return `<span class="gbasis undet">증축 — 증축분 미상(기존 규모 미확인, 등급 미판정)</span> · `;
   }
   // 교통(철도) = 위계 판정 근거(파이프라인 grade.rail_level이 lvl_basis로 스탬프 — S/A/B/C 이유를 그대로 표기, P2)
-  if (s.lvl_basis) return `<span class="gbasis">${s.lvl_basis}</span> · `;
+  if (s.lvl_basis) return `<span class="gbasis">${lvlBasisText(s.lvl_basis)}</span> · `;
   if (c === "일자리") {
     if (s.area_m2) return `<span class="gbasis">연면적 ${areaText(s.area_m2)}</span> · `;
     if (s.amount_eok) return `<span class="gbasis">투자 ${Number(s.amount_eok).toLocaleString()}억</span> · `;
@@ -6234,7 +6246,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260812h");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260812i");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -6418,7 +6430,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812h"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812i"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -6444,7 +6456,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260812h");
+  const CB = "?b=" + (window.BUILD || "20260812i");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
