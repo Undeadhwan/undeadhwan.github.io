@@ -1140,11 +1140,11 @@ const STAGE_TRACKS = {
   "정비사업": [["구역지정","계획"],["정비계획","계획"],["조합설립","인가"],["사업시행인가","인가"],["관리처분","인가"],["이주","착공"],["철거","착공"],["착공","착공"],["준공","준공·개통"]]
 };
 /* 표시 라벨 — 저장값(계획/인가/착공/준공·개통) → 화면 문구. thresholds.json 단계_백본.표시라벨이 SSOT. */
-let PHASE_LABEL = { "계획": "계획", "인가": "확정", "착공": "착공", "준공·개통": "준공",
+let PHASE_LABEL = { "계획": "계획", "인가": "확정", "착공": "착공", "준공·개통": "완공",
   /* 마일스톤 phase는 전 소스가 관행상 "준공" 약칭을 쓴다(1,834건, 8개 파일). **저장값은 바꾸지
      않는다** — thresholds 단계_백본 `_저장값_주의`가 일괄 치환을 금한다(백본 밖 값이 섞이는 새
      사고를 만든다). 화면 통일은 여기서 한 줄로 한다(2026-08-03). */
-  "준공": "준공" };
+  "준공": "완공" };
 const phaseLabel = p => PHASE_LABEL[p] || p;
 /* current_stage → 국면. 우선순위: 신호 명시 phase → 트랙 내 매칭 → 키워드 분류 → 계획(기본).
    유형별 세부단계 이름이 자유로워도 4국면 필터가 항상 성립하도록 하는 매핑층. */
@@ -1478,11 +1478,17 @@ function lvlPill(l) { return `<span class="lvtag" style="${LVL_STYLE[l]}">${LEVE
 
 /* 출처 등급 배지 (사용자 확정 사상 2026-07-17: "핵심은 호재를 정확히 발굴하고 단계·위치를 정확히 아는 것 — OSM은 가비지").
    근거의 공식성을 신호의 1급 속성으로 노출한다. OSM 유래는 선형(그림)만 참고이며 단계·명칭의 근거가 아님을 명시. */
+/* 출처 등급 배지 — ☠ 2026-08-12 사용자 *"공식발표가 있고 고시·기본계획이 있는데 차이가 뭐야?"*
+   둘 다 「공식」으로 시작하고 툴팁도 「공식 문서 근거」/「공식 발표 근거」라 **같은 말처럼 읽혔다**.
+   실제 차이는 하나다 — **문서가 남았나, 기관이 말했나.** 그걸 독자의 말로 적는다. */
 const SRC_TIER = {
-  official_notice: { cls: "notice", t: "고시·기본계획", tip: "국토부·지자체 고시/기본계획/예타 등 공식 문서 근거" },
-  official_report: { cls: "report", t: "공식 발표", tip: "정부·지자체 보도자료·공식 발표 근거" },
+  official_notice: { cls: "notice", t: "고시 문서",
+    tip: "관보·시보에 실린 법적 문서(도로구역 결정·실시계획 인가·지형도면 고시 등) — 구역·노선·시행자가 공표돼 되돌리려면 다시 고시해야 합니다" },
+  official_report: { cls: "report", t: "기관 발표",
+    tip: "정부·지자체가 발표한 것(보도자료·계획 발표·예산 편성) — 사실이지만 법적 확정은 아니라 노선·시기·규모가 바뀔 수 있습니다" },
   osm: { cls: "osm", t: "비공식(OSM)", tip: "OpenStreetMap 유래 — 선형(그림) 참고용. 진행단계·명칭의 공식 근거 아님" },
-  unverified: { cls: "unver", t: "출처 미상", tip: "근거 출처 미확인" },
+  unverified: { cls: "unver", t: "공식 근거 미확보",
+    tip: "언론 보도 등으로만 확인된 사업 — 공식 고시·발표 문서를 아직 찾지 못했습니다(사업이 없다는 뜻은 아닙니다)" },
 };
 
 /* 좌표 정밀도 표기 (DATA_STANDARD §3) — "좌표가 있다"와 "정확하다"는 다르다. 사용자가 신뢰도를 알아야 한다. */
@@ -6293,7 +6299,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260812k");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260812l");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -6477,7 +6483,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812k"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812l"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -6503,7 +6509,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260812k");
+  const CB = "?b=" + (window.BUILD || "20260812l");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
