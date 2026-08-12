@@ -562,8 +562,8 @@
     user-select:none; -webkit-user-select:none; }   /* 실클릭 시 텍스트 캐럿·선택 방지(2026-08-04 사용자 "프롬프트가 깜빡여") */
   .line-badge b { display:block; font-size:12px; color:var(--ink); font-weight:700; line-height:1.25; }
   .line-badge small { display:block; font-size:10px; color:var(--ink2); line-height:1.3; }
-  /* 부제가 빈 배지는 그 줄을 그리지 않는다 — 목표년도 보유가 414개 중 57개(14%)라
-     부제를 남기면 86%가 빈 칸을 달게 된다(2026-08-12). 단계는 지도 dash가 이미 말하고
+  /* 부제를 붙이지 않는 배지는 낮지 암는다 — 목표년도 보유가 414개 중 57개(14%)라
+     부제를 남기면 86%가 번 칸을 답는다(2026-08-12). 단계는 지도 dash가 이밍 말하고
      목표년도는 노선 상세·카드가 말한다 — 배지는 노선명 한 줄. */
   .line-badge small:empty { display:none; }
   /* 카카오 CustomOverlay 래퍼 div는 pe:auto가 기본이라 역명 라벨이 그 아래 호재원 마커의 호버를 가로챈다
@@ -598,12 +598,8 @@
   .fs-h { font-size:11px; font-weight:700; color:var(--muted); margin-bottom:7px; }
   .fs-grid { display:grid; grid-template-columns:auto 1fr auto 1fr; gap:4px 10px; font-size:12.5px; }
   .fs-grid span { color:var(--muted); } .fs-grid b { color:var(--ink); }
-  /* 레이더 파동 (크게) */
-  .radar { position:relative; width:0; height:0; pointer-events:none; }
-  .radar span { position:absolute; border:3px solid var(--accent); border-radius:50%; left:0; top:0; transform:translate(-50%,-50%);
-    width:0; height:0; opacity:.7; animation:radarPulse 2.2s ease-out forwards; box-shadow:0 0 12px rgba(46,92,230,.4); }
-  .radar span:nth-child(2){ animation-delay:.45s; } .radar span:nth-child(3){ animation-delay:.9s; }
-  @keyframes radarPulse { 0%{width:0;height:0;opacity:.7;} 100%{width:560px;height:560px;opacity:0;} }
+  /* 레이더 파동 폐기(2026-08-12) — .radar/@keyframes는 쓰는 자리가 없지만 CSS를 남기지 않는다.
+     죽은 클래스는 다음 사람에게 살아 있는 것으로 읽힌다. */
   .detail h2 { font-size:17px; margin:2px 0 8px; }
   .track { list-style:none; margin:10px 0; }
   .track li { display:flex; gap:8px; font-size:13px; padding:4px 0; align-items:baseline; }
@@ -1025,7 +1021,7 @@
     <span class="chip" onclick="window.open('methodology.html','_blank')" title="데이터 소스·추출·가공·매핑 방법 (운영 문서)">📄 데이터·방법론</span>
     <span class="chip" onclick="window.open('report.html','_blank')" title="주간 무인 수집 회전에서 바뀐 것 (자동 생성)">🗞 주간 변경</span>
   </div>
-  <label class="opswitch" id="opswitch" title="운영 도구(기준 설정·미판정·대장·주간 변경) 표시 — 로컬 또는 ?ops=1로 켠 브라우저에서만 보입니다">운영 모드<i></i></label>
+  <label class="opswitch" id="opswitch" title="운영 도구(기준 설정·등급 없음 목록·대장·주간 변경) 표시 — 로컬 또는 ?ops=1로 켠 브라우저에서만 보입니다">운영 모드<i></i></label>
 </header>
 <div id="wrap">
   <div id="dock-dim" onclick="toggleDock(false)"></div>
@@ -1252,7 +1248,7 @@ const GRADE_RANK = { S: 0, A: 1, B: 2, C: 3, "미정": 4 };   // 렌더 우선�
 /* 표시 어휘 통일(2026-07-30 사용자 "미상이랑 미정이랑 다른거야?") — 두 개념이 세 단어로 흩어져 있었다.
      · **등급**이 안 정해진 것 = 화면에서 항상 **"등급 없음"** (내부 키는 "미정" 유지 — 데이터 호환)
        ★ 2026-08-12 개칭: 「미판정」은 판정을 시도해 보류한 경우만 가리키는 것처럼 읽혔다. 실제로는
-         ①기준 미달 ②근거 자체가 없음을 함께 담으므로 둘을 포괄하는 이름으로 바꿨다. 이유는
+         ①기준 밀달 ②근거 자체가 없음을 함께 담으므로 둘을 포괄하는 이름으로 바꿨다. 이유는
          상세의 「등급 근거」(hhBasis·undetReason)가 밝힌다. 운영 화면도 같은 어휘를 쓴다.
      · **중분류(유형)**를 모르는 것 = 항상 **"유형 미상"**
    같은 카드에 '미정'과 '미상'이 나란히 뜨면 사용자는 둘이 다른 축인지 알 수 없다(기준 일원화 원칙). */
@@ -2065,7 +2061,7 @@ function hojaeMatrixHtml(sigs) {
       <span class="hmpills">${cats || '<span class="hmz">없음</span>'}</span>
       <span class="hmtot">${g.total || ""}</span></div>`;
   }).join("");
-  return `<div class="hmatrix"><div class="hmhead">호재 <b>${m._total}</b>건 · 등급별 (${m["S"].total ? "S국가급 / " : ""}A핵심 / B중대형 / C일반${m["미정"].total ? " / 미정=미판정" : ""}) <span class="hmhint">— 등급 클릭 시 그 급만</span></div>${rows}</div>`;
+  return `<div class="hmatrix"><div class="hmhead">호재 <b>${m._total}</b>건 · 등급별 (${m["S"].total ? "S국가급 / " : ""}A핵심 / B중대형 / C일반${m["미정"].total ? " / " + LEVEL_NAME["미정"] : ""}) <span class="hmhint">— 등급 클릭 시 그 급만</span></div>${rows}</div>`;
 }
 
 /* ══════════ 상태 ══════════ */
@@ -3591,7 +3587,8 @@ function cmpColumn(a) {
   };
   let out = "", g = null;
   rows.filter(r => r.s.status !== "정체").forEach(r => {
-    // 등급 이름은 도크 범례와 같은 어휘로(기준 일원화) — 도크가 "미판정"이면 여기도 미판정
+    // 등급 이름은 **`LEVEL_NAME` 한 곳**에서만 온다(기준 일원화). 2026-08-12 개칭 때 여기만
+    // 옛 이름이 남아 도크는 「등급 없음」, 집계 범례는 「미판정」으로 **한 화면에 두 이름**이 떴다.
     if (!byDist && r.g !== g) { g = r.g; out += `<div class="gsep" style="--gc:${LVL_COLOR[g]}"><i></i>${LEVEL_NAME[g] || g}</div>`; }
     out += sig(r, false);
   });
@@ -5198,20 +5195,14 @@ function initLeaflet() {
   const showAptAnchor = a => {
     if (aptMarker) map.removeLayer(aptMarker);
     aptMarker = L.marker([a.lat, a.lon], { pane: "sig",
-      icon: L.divIcon({ className: "", html: `<div class="dong-badge" style="border-color:var(--c-house);color:var(--c-house)">◎ ${a.n}</div>`, iconSize: null }) }).addTo(map);
+      icon: L.divIcon({ className: "", html: `<div class="dong-badge" style="border-color:var(--ink);color:var(--ink)">■ ${a.n}</div>`   /* 카카오 층과 같은 문법 — 아파트는 호재가 아니므로 유형 4색을 쓰지 않는다(2026-08-12) */, iconSize: null }) }).addTo(map);
     clearRadius(); clearHighlight();   // 앵커 마커만
   };
    // 선택 표시(분홍 아이콘)도 함께 푼다 — 상세를 닫으면 **아파트 선택 자체가 풀려야** 한다
   //   (2026-07-31 사용자). 종전엔 treeState.selKey만 비우고 아이콘은 다음 지도 이동 때까지 남았다.
   const clearAptMarker = () => { if (aptMarker) { map.removeLayer(aptMarker); aptMarker = null; } try { renderAptDots(); } catch (e) {} };
-  // 레이더 파동: 중심 좌표에서 확산 링 애니메이션 (선택 연출)
-  let radarM = null;
-  const radarPulse = (lng, lat) => {
-    if (radarM) map.removeLayer(radarM);
-    radarM = L.marker([lat, lng], { pane: "cand", interactive: false,
-      icon: L.divIcon({ className: "", html: `<div class="radar"><span></span><span></span><span></span></div>`, iconSize: [0, 0] }) }).addTo(map);
-    setTimeout(() => { if (radarM) { map.removeLayer(radarM); radarM = null; } }, 2600);
-  };
+  // 레이더 파동 폐기(2026-08-12) — 카카오판과 같은 결정. 세 층 중 한 층만 고치면 폴백 화면에서 부활한다.
+  const radarPulse = () => {};
   mapApi = { refreshPins, panTo: ll => map.panTo([ll[1], ll[0]]), showRadius, showRadiusMany, clearRadius, showAptAnchor,
              highlightRings, clearHighlight, clearAptMarker, emphasizePin, radarPulse, sggRings: () => window._sggRings,
              highlightRoute, clearRoute,
@@ -5522,7 +5513,7 @@ function initKakao() {
       } else if (s._kmkKey !== key) { s._kmk.setImage(hojaeMarkerImage(t.col, t.r, t.bw, t.solid, t.fillOp, t.alpha, isApprox(s), t.shape)); s._kmkKey = key; }
       // 노선 격리 중엔 호재 원을 **숨긴다**(2026-08-04 사용자 "호재별 원표시도 없애" — 흐림→제거.
       // 소속역은 하이라이트 링·역명 라벨이 대신 표기한다). 해제 시 clearRoute→renderHojae가 복원.
-      s._kmk.setOpacity(1);
+      s._kmk.setOpacity(dimOpacity(s));
       s._kmk.setMap(routeIsoName ? null : map); next.add(s); hjShown.delete(s); }
     hjShown.forEach(s => s._kmk && s._kmk.setMap(null));   // 이번에 빠진 개별 마커 끔
     hjShown = next;
@@ -5571,6 +5562,27 @@ function initKakao() {
      클릭 판정: 카카오는 히트 영역이 선 굵기 그대로라 3px 선은 못 누른다 → 투명 굵은 히트선(14px)을 위에 깔고
      클릭·hover를 거기서 받는다. phase 미상(예타 등 고시 전) 노선은 "계획"으로 취급해 단계 필터에 반응(사용자 2026-07-21 — 5호선 김포연장이 필터에 안 죽던 원인). */
   let railLabels = [], lineBadges = [], railLineObjs = null, _railCacheN = -1, routeIsoName = null;
+  /* ══ 아파트 선택 — 관련 없는 호재를 흐리기(2026-08-12) ══
+     종전에는 반복 물결(radarPulse)이 「여기를 눌렀다」만 말하고 사라지면서 그 대가로 지도를 가렸다.
+     선택의 목적은 **관련 호재를 구분해 보이는 것**이므로, 더 그리는 대신 관련 없는 것을 걷어낸다.
+     ☆ 판정은 **그 호재의 영향 반경이 이 단지를 포함하는지**다(getRadius=meter). 단지 쪽 고정 반경으로
+       자르지 않는다 — 영향권은 유형·등급마다 2km·3km로 달라 원 하나로는 표현할 수 없다(사용자 확정).
+     ☆ 상태는 **가시성 단일 결정점**에 둔다 — routeIsoName과 같은 자리. showSignal이 refreshPins()를
+       부르므로, 흐림을 렌더 밖에 얹으면 **클릭하는 순간 통째로 사라진다**(이 저장소가 밟은 형태).
+     ☆ 잦아든 마커도 클릭은 살린다(0.22는 보이는 최소선을 넘으니 「안 보이는데 잡히는 유령」이 아니다).
+       클릭해도 흐림은 해제하지 않는다 — 아파트 선택 맥락이 유지되어야 한다. 해제는 선택 해제 하나만. */
+  let dimAnchor = null;   // [lng,lat] · null이면 흐림 없음
+  const _hav = (a, b, c, d) => {   // 두 좌표 사이 거리(m)
+    const R = 6371000, p = Math.PI / 180;
+    return R * Math.hypot((c - a) * p * Math.cos((b + d) / 2 * p), (d - b) * p);
+  };
+  const dimOpacity = s => {
+    if (!dimAnchor) return 1;
+    try {
+      const [alng, alat] = dimAnchor;
+      return signalPoints(s).some(p => _hav(p.coord[0], p.coord[1], alng, alat) <= getRadius(s)) ? 1 : 0.22;
+    } catch (e) { return 1; }
+  };
   /* 선형 간축(표시 전용 · Douglas-Peucker) — 줌아웃 밴드에서 그릴 정점을 줄인다(2026-08-10 승인).
      톨러런스는 m 단위: 80m는 lv7에서 2~4px — 형상 훼손 없이 SVG 재도장 비용만 준다. */
   const simplifyLine = (seg, tolM) => {
@@ -6100,14 +6112,22 @@ function initKakao() {
     if (routeHl.length) { routeIsoName = lineName; try { renderRail(); } catch (e) {} try { renderHojae(); } catch (e) {} }
     if (fit && !bounds.isEmpty()) { try { map.setBounds(bounds); } catch (e) {} } };
   let aptMarker = null;
-  const showAptAnchor = a => { if (aptMarker) aptMarker.setMap(null); const elx = document.createElement("div"); elx.className = "dong-badge"; elx.style.cssText = "border-color:var(--c-house);color:var(--c-house)"; elx.textContent = "◎ " + a.n;
-    aptMarker = new K.CustomOverlay({ map, position: LL(a.lon, a.lat), content: elx, zIndex: 24, yAnchor: .5, xAnchor: .5 }); clearRadius(); };
+  const showAptAnchor = a => { if (aptMarker) aptMarker.setMap(null); const elx = document.createElement("div"); elx.className = "dong-badge"; elx.style.cssText = "border-color:var(--ink);color:var(--ink)"; elx.textContent = "■ " + a.n;
+    // 아파트는 호재가 아니므로 유형 4색을 쓰지 않는다 — 무채색 잉크 + 사각 코어로 호재 링과 형태를 가른다(2026-08-12).
+    aptMarker = new K.CustomOverlay({ map, position: LL(a.lon, a.lat), content: elx, zIndex: 24, yAnchor: .5, xAnchor: .5 }); clearRadius();
+    dimTo(a.lon, a.lat); };
    // 선택 표시(분홍 아이콘)도 함께 푼다 — 상세를 닫으면 **아파트 선택 자체가 풀려야** 한다
   //   (2026-07-31 사용자). 종전엔 treeState.selKey만 비우고 아이콘은 다음 지도 이동 때까지 남았다.
-  const clearAptMarker = () => { if (aptMarker) { aptMarker.setMap(null); aptMarker = null; } try { renderAptDots(); } catch (e) {} };
-  let radarM = null;
-  const radarPulse = (lng, lat) => { if (radarM) radarM.setMap(null); const elx = document.createElement("div"); elx.className = "radar"; elx.innerHTML = "<span></span><span></span><span></span>"; elx.style.pointerEvents = "none";
-    radarM = new K.CustomOverlay({ map, position: LL(lng, lat), content: elx, zIndex: 25, yAnchor: .5, xAnchor: .5 }); setTimeout(() => { if (radarM) { radarM.setMap(null); radarM = null; } }, 2600); };
+  const clearAptMarker = () => { if (aptMarker) { aptMarker.setMap(null); aptMarker = null; } dimTo(null); try { renderAptDots(); } catch (e) {} };
+  /* radarPulse 폐기(2026-08-12) — 반복 물결은 지도를 가리면서 「여기를 눌렀다」만 말했다.
+     지우지 않고 **빈 함수로** 둔다 — mapApi에 노출되어 있고 호출부가 둘이라 API 표면을
+     조용하게 바꾸지 않기 위해서다. 선택 표현은 dimTo()가 맡는다(관련 없는 것을 걷는 방향). */
+  const radarPulse = () => {};
+  /* 아파트 선택 → 흐림 진입·해제. 상태만 바꾸고 재렌더를 부른다 — 흐림 계산은
+     renderHojae의 dimOpacity가 매번 다시 하므로 지도 이동·재렌더에도 살아있다.
+     180ms 페이드는 setTimeout 3틱 — rAF는 탭이 안 보이면 안 돌아 잦은 상태가 남는다. */
+  const dimTo = (lng, lat) => { dimAnchor = (lng == null) ? null : [lng, lat]; try { renderHojae(); } catch (e) {}
+    try { renderRail(); } catch (e) {} };
   let hlPolys = []; const clearHighlight = () => { hlPolys.forEach(o => o.setMap(null)); hlPolys = []; };
   const highlightRings = ringsXY => { clearHighlight(); if (!ringsXY || !ringsXY.length) return; ringsXY.forEach(r => hlPolys.push(new K.Polygon({ map, path: r.map(([x, y]) => LL(x, y)), strokeWeight: 2.5, strokeColor: "#5b3fd4", strokeOpacity: .95, fillColor: "#5b3fd4", fillOpacity: .12, zIndex: 6 }))); };
   const sggRingsFn = () => { if (window._sggRings) return window._sggRings; const m = {}; SGG_GEO.features.forEach(f => { const disp = f.properties.sido + " " + sggDisplayName(f.properties.name); ringsOf(f).forEach(r => (m[disp] = m[disp] || []).push(r)); }); return (window._sggRings = m); };
