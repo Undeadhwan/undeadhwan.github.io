@@ -428,11 +428,11 @@
                           text-align:center; transform:translateX(-50%); white-space:nowrap; }
   .card .mtrk .lbs span:first-child { transform:none; text-align:left; }
   .card .mtrk .lbs span:last-child { transform:translateX(-100%); text-align:right; }
-  .card .mtrk .lbs span.on { color:var(--phc, var(--ink)); font-weight:700; }
+  .card .mtrk .lbs span.on { color:var(--phc, var(--accent)); font-weight:700; }
   .card .mtrk .lbs em { display:block; font-style:normal; font-size:11px; font-variant-numeric:tabular-nums; }
   .card .mtrk .lbs em.fact { color:var(--ink2); }      /* 지난 일자 = 사실 */
   .card .mtrk .lbs em.eta { color:var(--ink3); }        /* 목표 = 추정 — 흐리게(P2) */
-  .card .mtrk .lbs span.on em { color:var(--phc, var(--ink)); font-weight:600; }
+  .card .mtrk .lbs span.on em { color:var(--phc, var(--accent)); font-weight:600; }
   /* 원문 링크 — 그 단계의 근거 문서로 바로 간다(있는 것만) */
   .card .mtrk .lbs a { color:inherit; text-decoration:underline; text-underline-offset:2px; }
   .card .cfoot .csrc { color:var(--accent); text-decoration:none; }
@@ -443,8 +443,10 @@
   /* ★ **지금 어디인지가 한눈에** (2026-08-12 사용자 "현재 단계 표식이랑 시기를 좀 더 강조. 직관적이지가
      않네"). 종전 현재 칸은 **흰 속·검은 테두리**라 지난 칸(검은 점)보다 오히려 약해 보였다.
      분류색으로 채우고 후광을 준다 — 색은 카드 머리의 `● 착공`과 **같은 언어**다(새 색 추가 아님). */
-  .card .mtrk .d.cur { background:var(--phc, var(--ink)); border:2px solid #fff; width:13px; height:13px;
-                       box-shadow:0 0 0 2.5px var(--phc, var(--ink)); }
+  /* 현재 칸 = **파랑 하나로 통일** (2026-08-12 사용자 "색상은 파란색으로 통일해. 다를 필요 없어").
+     상태 표시(지금 어디인가)는 분류마다 다를 이유가 없다 — 분류색은 **분류 이름**이 쓴다. */
+  .card .mtrk .d.cur { background:var(--phc, var(--accent)); border:2px solid #fff; width:13px; height:13px;
+                       box-shadow:0 0 0 2.5px var(--phc, var(--accent)); }
   .card .mtrk .ln { height:2px; background:var(--line2); flex:1 1 0; min-width:12px; }
   .card .mtrk .ln.done { background:var(--ink); }
   .card .mtrk .lb { margin-left:10px; font-size:var(--fs-s); color:var(--ink3); white-space:nowrap; }
@@ -3408,7 +3410,7 @@ function mtrackHtml(s) {
     return `<span class="${k === i ? "on" : ""}" style="left:${k / (PHASES.length - 1) * 100}%">${phaseLabel(p)}${
       d ? `<em class="${d.on ? "fact" : "eta"}">${dt}</em>` : ""}</span>`;
   }).join("");
-  return `<div class="mtrk" style="--phc:${colorOf(s)}"><div class="row">${dots}</div><div class="lbs">${lbs}</div></div>`;
+  return `<div class="mtrk" style="--phc:var(--accent)"><div class="row">${dots}</div><div class="lbs">${lbs}</div></div>`;
 }
 /* 카드 생성 (클릭 + hover 지도 연동) */
 function makeCard(s, extra = "", onClick, lead = "") {
@@ -3471,7 +3473,7 @@ function cardHtml(s, extra = "", lead = "") {
   const foot = [gb, `영향 ${km}km`, stageCheckedHtml(s), srcLink].filter(x => x && String(x).trim()).join(" · ");
   return `
     <div class="chead">${lead}${levelPill(s)}<span class="cph" style="color:${colorOf(s)}">● ${phaseLabel(ph)}</span>
-      <span class="ccat">${catOf(s)}${subLabel(s)}</span>${srcBadge(s)}${extra}</div>
+      <span class="ccat" style="color:${colorOf(s)}">${catOf(s)}${subLabel(s)}</span>${srcBadge(s)}${extra}</div>
     <div class="title">${sigTitle(s)}</div>
     <div class="cmove"><span class="cfresh">${mv || '<span class="pmini">단계 변경 기록 없음</span>'}</span>${what ? `<span class="cwhat"> · ${what}</span>` : ""}</div>
     ${fieldChangeHtml(s)}
@@ -4135,12 +4137,27 @@ function dockCounts() {
   //   따로 하고 있어서, 도로 노선 다중 귀속(_sggs)·시도 축이 **집계에만 안 걸렸다** — 같은 질문에
   //   자가 둘이면 두 화면이 다른 숫자를 말한다(2026-08-11 통합). `filter.dong`은 여기선 안 본다:
   //   도크 집계는 「고른 지역의 재고」이고 동은 그 아래 층이라 목록·지도가 따로 좁힌다.
-  const pool = allSignalsFlat().filter(s => regionVisible(s, true) && !isStaleFinished(s));
+  /* ☠ **단계·등급을 바꿔도 분류별 건수가 안 움직였다** (2026-08-12 사용자 제보). 총계는 전 필터를
+     반영(2,754)하는데 분류별은 **지역만** 반영해 합이 5,213이었다 — 한 화면이 서로 다른 두 숫자를
+     말한 것이고, 이 저장소가 특히 경계하는 「합이 안 맞는다」 형태다.
+     ⇒ 각 축의 건수는 **자기 축만 빼고** 나머지 조건을 전부 적용한다(패싯 집계의 표준):
+       · 분류·중분류 건수 = 지역 + **단계 + 등급** (분류 자신은 제외 — 꺼도 0이 되면 안 된다.
+         0이 되면 다시 켰을 때 몇 건이 돌아오는지 알 수 없어 스위치가 먹통처럼 보인다)
+       · 등급 건수 = 지역 + 분류 + 단계 (등급 자신은 제외 — 같은 이유)
+     ⚠ 분류를 하나 끄면 분류별 합 > 총계가 된다. 그건 어긋남이 아니라 **꺼진 축이 몇 건인지
+       보여 주는 것**이다(합이 총계와 같아지는 건 전 분류가 켜졌을 때). */
+  const base = s => regionVisible(s, true) && !isStaleFinished(s);
+  const stageLvl = s => filter.phase.has(phaseOf(s)) && filter.lvl.has(levelOf(s));
+  const pool = allSignalsFlat().filter(base);
   const cat = {}, sub = {}, lvl = {};
   pool.forEach(s => {
-    const c = catOf(s); if (c) cat[c] = (cat[c] || 0) + 1;
-    const sb = SUB_KEYS[catOf(s)] ? subIdOf(s) : subOf(s); if (sb) sub[sb] = (sub[sb] || 0) + 1;
-    const l = levelOf(s); if (l) lvl[l] = (lvl[l] || 0) + 1;
+    if (stageLvl(s)) {
+      const c = catOf(s); if (c) cat[c] = (cat[c] || 0) + 1;
+      const sb = SUB_KEYS[catOf(s)] ? subIdOf(s) : subOf(s); if (sb) sub[sb] = (sub[sb] || 0) + 1;
+    }
+    if (catVisible(s) && filter.phase.has(phaseOf(s))) {
+      const l = levelOf(s); if (l) lvl[l] = (lvl[l] || 0) + 1;
+    }
   });
   return { cat, sub, lvl, total: pool.filter(visible).length };
 }
@@ -6336,7 +6353,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260812m");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260812n");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -6520,7 +6537,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812m"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812n"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -6546,7 +6563,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260812m");
+  const CB = "?b=" + (window.BUILD || "20260812n");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
