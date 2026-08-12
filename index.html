@@ -11,7 +11,7 @@
     --navy:#12263f; --stall:#b8860b; --accent:#2563eb;   /* 액센트(링크·활성) — 일자리 파랑과 같은 값을 공유한다 */
     /* ── DESIGN.md §2 캐노니컬 토큰 (SSOT — 새 색·크기 임의 추가 금지) ── */
     --ink2:#6b7280; --ink3:#9ca3af; --line2:#d1d5db; --panel:#fafafa;
-    --c-traffic:#c1121f; --c-job:#2563eb; --c-infra:#63308a; --c-house:#0e8a5c;
+    --c-traffic:#c1121f; --c-job:#1e3a8c; --c-infra:#a855c7; --c-house:#0e8a5c;   /* 명도 계단 0.45/0.50/0.55/0.62 — 근거는 DESIGN.md §2 */
     --warn:#b45309;
     /* 글자 크기 = 네이버 부동산 수준(2026-07-30 사용자 지시 "텍스트 크기가 좀 더 컸으면") */
     --r:10px; --r-s:7px; --fs:14.5px; --fs-s:12.5px;
@@ -562,6 +562,10 @@
     user-select:none; -webkit-user-select:none; }   /* 실클릭 시 텍스트 캐럿·선택 방지(2026-08-04 사용자 "프롬프트가 깜빡여") */
   .line-badge b { display:block; font-size:12px; color:var(--ink); font-weight:700; line-height:1.25; }
   .line-badge small { display:block; font-size:10px; color:var(--ink2); line-height:1.3; }
+  /* 부제가 빈 배지는 그 줄을 그리지 않는다 — 목표년도 보유가 414개 중 57개(14%)라
+     부제를 남기면 86%가 빈 칸을 달게 된다(2026-08-12). 단계는 지도 dash가 이미 말하고
+     목표년도는 노선 상세·카드가 말한다 — 배지는 노선명 한 줄. */
+  .line-badge small:empty { display:none; }
   /* 카카오 CustomOverlay 래퍼 div는 pe:auto가 기본이라 역명 라벨이 그 아래 호재원 마커의 호버를 가로챈다
      (가정역 실측: 중심/라벨 위 배지 안 뜸). 내부 .rail-name은 pe:none인데 래퍼는 아니므로 래퍼도 통과시킨다. */
   div:has(> .rail-name) { pointer-events:none; }
@@ -913,6 +917,13 @@
   #dock .seg .s:not(.off) { border-color:var(--ink); background:var(--ink); color:#fff; }
   #dock .seg .s i { border-radius:50%; background:currentColor; flex-shrink:0; display:inline-block; }
   #dock .seg .s i.dash { background:none; border:1.3px dashed currentColor; }
+  /* 등급 없음 = 마름모(2026-08-12) — 지도와 같은 문법. 점선 원으로 둔 동안은 계획 단계와 구분이 안 됐다.
+     원 = 등급이 있는 것 · 마름모 = 등급 축 밖. 후광(좌표 근사)은 원이니 둘이 섞이지 않는다. */
+  #dock .seg .s i.dia { width:7px; height:7px; border-radius:0; background:none;
+                        border:1.3px solid currentColor; transform:rotate(45deg); }
+  /* 선형 토글 라벨 앞 선 아이콘 — 토글이 범례를 겸하게 한다(지도: 실선=철도 · 점선=도로) */
+  #dock .optrow i.ln { width:20px; height:0; border-top:2.5px solid var(--c-traffic); flex-shrink:0; margin-right:8px; }
+  #dock .optrow i.ln.dashed { border-top-style:dashed; }
   #dock .dk-foot { padding:11px 14px 0; font-size:var(--fs-s); color:var(--ink3); line-height:1.6; }
   #dock .dk-foot a { color:var(--ink3); }
   /* 고지 문구 — 모바일에서 푸터를 숨기는 대신 여기로(항상 렌더되지만 데스크톱에선 푸터와 중복 표시라 숨김) */
@@ -1008,7 +1019,7 @@
          조회조건 진입은 하단 탭바가 담당한다(2026-08-10 탭바 도입 때 옮겨졌다). -->
   </div>
   <div class="chips" id="f-view">
-    <span class="chip" id="v-undet" title="등급 기준(면적·금액·세대수 등)에 매칭 안 돼 등급 미판정인 호재 목록">❓ 미판정 목록</span>
+    <span class="chip" id="v-undet" title="등급 기준(면적·금액·세대수 등)에 매칭 안 돼 등급이 없는 호재 목록">❓ 등급 없음 목록</span>
     <span class="chip" id="v-settings" onclick="window.open('settings.html','_blank')" title="등급 눈금(면적·금액·세대수)과 영향 반경을 thresholds.json에 직접 설정 — 운영자 전용">⚙ 기준 설정</span>
     <span class="chip" onclick="window.open('rail_reference.html','_blank')" title="신규 철도 노선·역사 좌표 대장 (영향권 기준)">🚈 노선·역 대장</span>
     <span class="chip" onclick="window.open('methodology.html','_blank')" title="데이터 소스·추출·가공·매핑 방법 (운영 문서)">📄 데이터·방법론</span>
@@ -1085,7 +1096,7 @@
      **id가 겹쳐** 있었다(getElementById가 헤더 것을 집어 조용히 어긋날 수 있는 상태). -->
 <div id="undet" style="display:none; height:calc(100vh - 87px); overflow-y:auto; padding:16px 20px 80px;">
   <div style="max-width:1080px; margin:0 auto;">
-    <div class="pt">등급 미판정 목록</div>
+    <div class="pt">등급 없음 목록</div>
     <div class="ps">우리가 정한 등급 기준(<b>일자리=연면적·투자액 / 주거개발=세대수 / 교통=노선종류</b>)에 필요한 데이터가 없어 <b>등급을 매기지 않은(미정)</b> 호재입니다. 임의 등급을 부여하지 않고 미정으로 두는 게 원칙(P2·P5). 아래를 보고 소스·기준을 보완하면 등급이 채워집니다.</div>
     <div class="rawctl">
       <select id="u-cat"><option value="">분류: 전체</option></select>
@@ -1239,10 +1250,13 @@ const LEVELS = ["S", "A", "B", "C"];
 const GRADES_DISP = ["S", "A", "B", "C", "미정"];   // 배지·매트릭스 표시용(미정 포함)
 const GRADE_RANK = { S: 0, A: 1, B: 2, C: 3, "미정": 4 };   // 렌더 우선순위 — 600 상한이 걸려도 S/A(교통 역 등)가 살아남게(2026-07-22)
 /* 표시 어휘 통일(2026-07-30 사용자 "미상이랑 미정이랑 다른거야?") — 두 개념이 세 단어로 흩어져 있었다.
-     · **등급**이 안 정해진 것 = 화면에서 항상 **"미판정"** (내부 키는 "미정" 유지 — 데이터 호환)
+     · **등급**이 안 정해진 것 = 화면에서 항상 **"등급 없음"** (내부 키는 "미정" 유지 — 데이터 호환)
+       ★ 2026-08-12 개칭: 「미판정」은 판정을 시도해 보류한 경우만 가리키는 것처럼 읽혔다. 실제로는
+         ①기준 미달 ②근거 자체가 없음을 함께 담으므로 둘을 포괄하는 이름으로 바꿨다. 이유는
+         상세의 「등급 근거」(hhBasis·undetReason)가 밝힌다. 운영 화면도 같은 어휘를 쓴다.
      · **중분류(유형)**를 모르는 것 = 항상 **"유형 미상"**
    같은 카드에 '미정'과 '미상'이 나란히 뜨면 사용자는 둘이 다른 축인지 알 수 없다(기준 일원화 원칙). */
-const LEVEL_NAME = { S: "S급", A: "A급", B: "B급", C: "C급", "미정": "미판정" };
+const LEVEL_NAME = { S: "S급", A: "A급", B: "B급", C: "C급", "미정": "등급 없음" };
 // ── 역효과 표기 (P5 "정직이 차별점 — 역효과도 표기") ────────────────────────────
 // ⚠ 종전엔 `side_effects` 필드를 화면이 렌더할 준비만 해 두고 **채우는 데가 아무 데도 없었다**
 //    (실측 2026-07-28: 전 신호 0건). 원칙이 화면에만 있고 데이터엔 없던 상태다.
@@ -1316,7 +1330,7 @@ const LEVEL_DESC = {
 // 분류색 재배치(2026-07-31 사용자 확정) — 의미 연관: 교통=주황(속도·활기·연결) · 일자리=파랑(전문성·신뢰)
 // · 인프라=보라(도시 기초·안정·세련) · 주거개발=초록(자연·가정·성장). 값은 DESIGN.md §2 토큰과 1:1.
 // 종전 배치(교통 파랑/인프라 초록/주거개발 자주)는 적록색약에서 인프라↔주거개발 색차 ΔE 2.6(=같은 색)이었다 → 현재 최소 33.4.
-const CAT_COLOR = { "교통": "#c1121f", "일자리": "#2563eb", "인프라": "#63308a", "주거개발": "#0e8a5c", "기타": "#6e6e73" };
+const CAT_COLOR = { "교통": "#c1121f", "일자리": "#1e3a8c", "인프라": "#a855c7", "주거개발": "#0e8a5c", "기타": "#6e6e73" };   // DESIGN.md §2와 1:1 (2026-08-12 명도 계단)
 /* 레벨 pill: 분류색 강도로 등급화 (A=진한 채움/B=중간 채움/C=연한). A급이 확 띔 */
 const CAT_TINT = { "교통": ["#fde6e2", "#9c0014"], "일자리": ["#eae9fe", "#0044ad"], "인프라": ["#f4e6fc", "#56247d"], "주거개발": ["#dbf0e4", "#015738"], "기타": ["#ececf0", "#55555a"] };
 const CAT_MID = { "교통": "#de6254", "일자리": "#7f8df9", "인프라": "#875ea3", "주거개발": "#67b18c", "기타": "#a2a7b5" };
@@ -1764,7 +1778,7 @@ function gradeBasisHtml(s) {
   if (s.arch_gb === "증축") {
     if (s.ext_delta_m2) return `<span class="gbasis">증축분 ${areaText(s.ext_delta_m2)}</span>`
       + `<span class="gbasis undet" style="margin-left:4px">전체 ${areaText(s.area_m2)}</span> · `;
-    return `<span class="gbasis undet">증축 — 증축분 미상(기존 규모 미확인, 등급 미판정)</span> · `;
+    return `<span class="gbasis undet">증축 — 증축분 미상(기존 규모 미확인, 등급 없음)</span> · `;
   }
   // 교통(철도) = 위계 판정 근거(파이프라인 grade.rail_level이 lvl_basis로 스탬프 — S/A/B/C 이유를 그대로 표기, P2)
   if (s.lvl_basis) return `<span class="gbasis">${lvlBasisText(s.lvl_basis)}</span> · `;
@@ -1819,9 +1833,9 @@ const hhLevel = hh => !hh ? "미정"
 /* 등급이 미판정인 **이유**를 말한다(2026-07-30 사용자 "세대수도 있는데 왜 미정이야?").
    같은 '미판정' 배지가 두 가지를 겸하고 있었다 — ① 세대수 자체가 없음 ② 세대수는 있는데 C 문턱 미달.
    ②를 설명 없이 미판정으로만 보여주면 화면이 버그처럼 읽힌다(P2 — 사실은 표시, 추정은 구분). */
-const hhBasis = hh => !hh ? "세대수 미상 — 소스에 세대수가 없어 등급 미판정"
+const hhBasis = hh => !hh ? "세대수 미상 — 소스에 세대수가 없어 등급 없음"
   : hh >= HH_GRADE.C ? `세대수 ${hh.toLocaleString()} — 주거개발 ${hhLevel(hh)}`
-  : `세대수 ${hh.toLocaleString()} — C 문턱(${HH_GRADE.C.toLocaleString()}세대) 미달로 등급 미판정`;
+  : `세대수 ${hh.toLocaleString()} — C 문턱(${HH_GRADE.C.toLocaleString()}세대) 미달로 등급 없음`;
 function applyThresholds(TH) {
   if (!TH) return false;
   try {
@@ -3570,7 +3584,7 @@ function cmpColumn(a) {
     // 거리순에서는 등급 구분선이 못 쓰이므로(등급이 뒤섞인다) 등급을 **행마다** 붙인다 —
     // 어느 축으로 보든 등급·거리·단계 세 사실이 다 보여야 한다.
     const gtag = byDist && r.g
-      ? `<span class="gmini" style="--gc:${LVL_COLOR[r.g]}">${r.g === "미정" ? "미판정" : r.g}</span>` : "";
+      ? `<span class="gmini" style="--gc:${LVL_COLOR[r.g]}">${r.g === "미정" ? LEVEL_NAME["미정"] : r.g}</span>` : "";
     return `<div class="csig${warn ? " warn" : ""}"><span class="d" style="background:${warn ? "var(--warn)" : CAT_COLOR[catOf(r.s)] || "#999"}"></span>
       <span class="ttl" title="${esc(r.s.title || "")}">${warn ? "⚠ " : ""}${esc(r.s.title || "")}</span>
       <span class="meta">${gtag}<span class="dst">${dist(r.d)}</span><span class="ph${dash ? " dash" : ""}">${phaseLabel(p)}</span></span></div>`;
@@ -3578,7 +3592,7 @@ function cmpColumn(a) {
   let out = "", g = null;
   rows.filter(r => r.s.status !== "정체").forEach(r => {
     // 등급 이름은 도크 범례와 같은 어휘로(기준 일원화) — 도크가 "미판정"이면 여기도 미판정
-    if (!byDist && r.g !== g) { g = r.g; out += `<div class="gsep" style="--gc:${LVL_COLOR[g]}"><i></i>${g === "미정" ? "미판정" : (LEVEL_NAME[g] || g)}</div>`; }
+    if (!byDist && r.g !== g) { g = r.g; out += `<div class="gsep" style="--gc:${LVL_COLOR[g]}"><i></i>${LEVEL_NAME[g] || g}</div>`; }
     out += sig(r, false);
   });
   // 참고 = 정직성 표기(P5): 정체 신호와 역효과 시설. 숨기지 않고 구분해서 보여준다.
@@ -3601,7 +3615,7 @@ function cmpColumn(a) {
       <div class="sum">반경 내 호재 <b>${n}건</b></div>
       <div class="gcount">${["S", "A", "B", "C", "미정"].map(g => {
         const c = rows.filter(r => r.s.status !== "정체" && r.g === g).length;
-        return c ? `<span class="gc" style="--gc:${LVL_COLOR[g]}">${g === "미정" ? "미판정" : g}<b>${c}</b></span>` : "";
+        return c ? `<span class="gc" style="--gc:${LVL_COLOR[g]}">${g === "미정" ? LEVEL_NAME["미정"] : g}<b>${c}</b></span>` : "";
       }).join("")}</div>
     </div>
     <div class="siglist">${out || `<div class="gsep">반경 내 호재 없음</div>`}</div>
@@ -4218,7 +4232,9 @@ function renderDock() {
      안 따라간다(필터가 아니라 옵션이니 당연한데, 같은 자리에 있으니 고장으로 보인다)
      ③ 교통을 끄면 스위치가 화면에서 사라진다.
      **필터(무엇을 보나)와 옵션(어떻게 보나)은 자리부터 갈라 둔다** — DESIGN.md §3 원칙의 배치판. */
-  const LINE_OPTS = [["철도선", "철도 선형"], ["도로선", "도로 선형"], ["노선명", "노선명 배지"]];
+  /* 라벨 앞 선 아이콘 = 지도 문법을 토글에 그대로 옮긴 것(2026-08-12). 실선=철도·점선=도로라
+     별도 범례가 필요 없어진다 — 토글이 범례를 겸한다. 세 번째 값이 없으면 아이콘을 안 붙인다. */
+  const LINE_OPTS = [["철도선", "철도 선형", ""], ["도로선", "도로 선형", " dashed"], ["노선명", "노선명 배지", null]];
   const catBlock = cat => {
     const col = CAT_COLOR[cat], keys = SUB_KEYS[cat] || [];
     const on = keys.length ? keys.some(sk => filter.sub.has(subId(cat, sk))) : filter.cat.has(cat);   // 대분류 헤더 = 하위 중 하나라도 켜지면 on
@@ -4240,11 +4256,12 @@ function renderDock() {
     </div>`;
   };
   const ph = (p, dash) => `<span class="s${filter.phase.has(p) ? "" : " off"}" data-tog="phase" data-k="${p}"><i class="${dash ? "dash" : ""}" style="width:8px;height:8px"></i>${phaseLabel(p)}</span>`;
-  const SZ = { S: 11, A: 9, B: 7, C: 5.5 };
+  // 등급 링 크기 — 인라인 표기 통일(2026-08-12). 종전 5.5px는 링으로 그리면 테두리가 원을 다 먹었다.
+  const SZ = { S: 15, A: 13, B: 11, C: 9 };
   // `wide` = 등급 격자에서 **한 줄을 통째로** 차지한다. 미판정은 규모 등급(S·A·B·C)과 다른 축이라
   // 같은 칸에 섞지 않는다(§seg 주석) — 줄이 갈리는 것이 사실에 맞는다.
   const gp = g => g === "미정"
-    ? `<span class="s wide${filter.lvl.has("미정") ? "" : " off"}" data-tog="lvl" data-k="미정"><i class="dash" style="width:7px;height:7px"></i>미판정</span>`
+    ? `<span class="s wide${filter.lvl.has("미정") ? "" : " off"}" data-tog="lvl" data-k="미정"><i class="dia"></i>${LEVEL_NAME["미정"]}</span>`
     : `<span class="s${filter.lvl.has(g) ? "" : " off"}" data-tog="lvl" data-k="${g}"><i style="width:${SZ[g]}px;height:${SZ[g]}px"></i>${g}</span>`;
   // 초기화 = 전체선택·해제 2버튼의 대체. 기본 상태와 다를 때만 보인다(평소엔 화면에 없음).
   const dirty = !!filter.region || !!filter.sd || !(ALL_SUBS.every(k => filter.sub.has(k)) && PHASES.every(k => filter.phase.has(k))
@@ -4259,8 +4276,8 @@ function renderDock() {
     ${CAT_KEYS.map(catBlock).join("")}
     <div class="axis">
       <div class="t">선형 표시 <small>지도 위 노선</small></div>
-      <div class="opts">${LINE_OPTS.map(([k, lb]) => `<div class="optrow${filter.lines.has(k) ? " on" : ""}" data-tog="lines" data-k="${k}">
-        <span>${lb}</span><i class="sw"></i></div>`).join("")}</div>
+      <div class="opts">${LINE_OPTS.map(([k, lb, ln]) => `<div class="optrow${filter.lines.has(k) ? " on" : ""}" data-tog="lines" data-k="${k}">
+        ${ln === null ? "" : `<i class="ln${ln}"></i>`}<span>${lb}</span><i class="sw"></i></div>`).join("")}</div>
     </div>
     <div class="axis">
       <div class="t">단계 <small>실선=착공 후 · 점선=계획</small></div>
@@ -4955,7 +4972,7 @@ function initLeaflet() {
         const rKm = getRadius(sg) / 1000;
         const r = Math.max(6, Math.min(16, 5 + rKm * 1.4));   // 카카오판과 같은 눈금
         const m = L.circleMarker([c[1], c[0]], { pane: "sig", radius: r, color: col, weight: 1.6,
-          dashArray: solid ? null : "4 3", fillColor: col, fillOpacity: solid ? .26 : .16 });
+          dashArray: solid ? null : "4 3", fillColor: col, fillOpacity: solid ? .14 : .08 });
         m.on("click", () => showSignal(sg, false));
         m.addTo(map); hjDots.push(m);
       }
@@ -5262,8 +5279,15 @@ function hexA(hex, a) {
      ④ **코어 도트** — 채움을 옅게 낮춘 대신 중심에 점을 찍는다. 겹치거나 작아도 "여기 하나 있다"가
         사라지지 않는다. 착공 후=채운 점 / 계획·인가=속 빈 점으로 P2 문법(실선/점선)을 한 번 더 반복. */
 const _hjImg = {};
-function hojaeMarkerImage(col, r, bw, solid, fillOp, alpha, halo) {
-  const key = col + "|" + r + "|" + bw + "|" + solid + "|" + fillOp + "|" + alpha + "|" + halo;
+function hojaeMarkerImage(col, r, bw, solid, fillOp, alpha, halo, shape) {
+  /* `shape`: "circle"(기본) · "diamond"(**등급 축 밖** = 미정). 2026-08-12 신설.
+     ☠ 종전엔 미정도 원이라 **계획 단계의 점선 원과 형태가 같았다** — 「등급을 모른다」와
+       「아직 계획이다」는 다른 축인데 한 모양이 둘을 말했다. 형태로 가르면 색 채널은 분류
+       전용으로 남는다(§4 「색만으로 상태 구분 금지」와 같은 방향).
+     ⚠ **캐시 키에 shape를 넣는다** — 안 넣으면 같은 색·크기의 원 이미지가 재사용돼 마름모가
+       영영 안 그려진다(이 저장소가 `_geom_full` 캐시로 이미 한 번 밟은 형태). */
+  shape = shape || "circle";
+  const key = col + "|" + r + "|" + bw + "|" + solid + "|" + fillOp + "|" + alpha + "|" + halo + "|" + shape;
   if (_hjImg[key]) return _hjImg[key];
   // 2026-07-31 문법 강화(사용자 "지도의 녹지·주황과 비슷해 인식성이 떨어진다"):
   //   케이싱을 두껍게(1.6→2.2) 하고 그 **바깥에 어두운 헤어라인**을 한 겹 두른다.
@@ -5272,16 +5296,27 @@ function hojaeMarkerImage(col, r, bw, solid, fillOp, alpha, halo) {
   //   반면 어두운 외곽선은 **배경이 무슨 색이든** 경계를 만든다 — 지도 마커의 표준 해법.
   const cw = 2.2, ro = r + bw / 2 + cw / 2, ri = ro + cw / 2 + 0.35;   // 케이싱·바깥 헤어라인 반지름
   const size = Math.ceil((halo ? r + 7 : ri + 1) * 2), c = size / 2;
+  const dia = shape === "diamond";
+  /* 마름모는 **같은 5겹 문법**을 유지하고 path만 바꾼다 — 케이싱·헤어라인은 배경 대비 장치라
+     형태가 바뀌어도 걷어내지 않는다(2026-07-31 ΔE 28 실측이 그대로 유효). */
+  const poly = (rr, fill, stroke, sw, extra) =>
+    '<polygon points="' + [[c, c - rr], [c + rr, c], [c, c + rr], [c - rr, c]].map(q => q.join(",")).join(" ") +
+    '" fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + sw + '" stroke-linejoin="round"' + (extra || "") + '/>';
+  const ring = (rr, fill, stroke, sw, extra) => dia ? poly(rr, fill, stroke, sw, extra)
+    : '<circle cx="' + c + '" cy="' + c + '" r="' + rr + '" fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + sw + '"' + (extra || "") + '/>';
   let inner = halo ? '<circle cx="' + c + '" cy="' + c + '" r="' + (r + 7) + '" fill="' + col + '" opacity="0.10"/>' : "";
-  inner += '<circle cx="' + c + '" cy="' + c + '" r="' + ri.toFixed(2) + '" fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="0.7"/>';
-  inner += '<circle cx="' + c + '" cy="' + c + '" r="' + ro.toFixed(2) + '" fill="none" stroke="#fff" stroke-width="' + cw + '" opacity="0.95"/>';
+  inner += ring(+ri.toFixed(2), "none", "rgba(0,0,0,0.22)", 0.7);
+  inner += ring(+ro.toFixed(2), "none", "#fff", cw, ' opacity="0.95"');
   let dash = "";
   if (!solid) {   // 둘레를 짝수 등분 → 크기가 달라도 결이 같다
-    const circ = 2 * Math.PI * r, n = Math.max(8, Math.round(circ / 4.6 / 2) * 2), seg = circ / n;
+    const circ = dia ? 4 * r * Math.SQRT2 : 2 * Math.PI * r;   // 마름모는 변 길이 합(√2·r × 4)
+    const n = Math.max(8, Math.round(circ / 4.6 / 2) * 2), seg = circ / n;
     dash = ' stroke-dasharray="' + (seg * 0.45).toFixed(2) + " " + (seg * 0.55).toFixed(2) + '" stroke-linecap="round"';
   }
-  inner += '<circle cx="' + c + '" cy="' + c + '" r="' + r + '" fill="' + hexA(col, fillOp) + '" stroke="' + col + '" stroke-width="' + bw + '"' + dash + '/>';
-  inner += solid
+  inner += ring(r, hexA(col, fillOp), col, bw, dash);
+  /* ★ 마름모에는 **코어 도트를 찍지 않는다** — 가운데를 채우면 「값이 있다」로 읽힌다.
+     형태 자체가 「등급 축 밖」을 말하므로 중심은 비워 둔다(P2 — 없는 것을 있는 것처럼 그리지 않는다). */
+  if (!dia) inner += solid
     ? '<circle cx="' + c + '" cy="' + c + '" r="' + Math.max(1.8, r * 0.30).toFixed(1) + '" fill="' + col + '"/>'
     : '<circle cx="' + c + '" cy="' + c + '" r="' + Math.max(1.6, r * 0.24).toFixed(1) + '" fill="#fff" stroke="' + col + '" stroke-width="1.2"/>';
   const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '"><g opacity="' + alpha + '">' + inner + '</g></svg>';
@@ -5314,7 +5349,7 @@ function initKakao() {
   // 줌 슬라이더 제거(2026-07-23 사용자 요청) — 스크롤·핀치 줌으로 대체
   const DONG_LV = 6, APT_LV = 4, APT_ICON_LV = 5;   // 집 아이콘만 lv5부터(2026-07-29) — 라벨·등급 LOD(APT_LV)는 불변
   const lodGrades = lv => lv <= APT_LV ? ["S", "A", "B", "C", "미정"] : lv <= 6 ? ["S", "A", "B", "C"] : lv <= 8 ? ["S", "A", "B"] : lv <= 9 ? ["S", "A"] : ["S"];   // 수도권-와이드(lv10+)=S만(GTX 부각, 2026-07-22 사용자 "GTX가 S로 보여야") · B·C는 lv6/8부터
-  const HJR = { S: 21, A: 16, B: 12, C: 9, "미정": 6 };   // 크기=등급(카카오 렌더러 로컬 — Leaflet HJ_R과 별개 스코프). 2026-07-22 상향(사용자) — Leaflet HJ_R과 동일값 유지
+  const HJR = { S: 21, A: 16, B: 12, C: 9, "미정": 8 };   // 미정 6→8 (2026-08-12): 6px 마름모는 대각선 8.5px이라 형태가 뭉갠다   // 크기=등급(카카오 렌더러 로컬 — Leaflet HJ_R과 별개 스코프). 2026-07-22 상향(사용자) — Leaflet HJ_R과 동일값 유지
   const mapEl = el;
   let tip = document.getElementById("_ktip");
   if (!tip) {
@@ -5348,12 +5383,32 @@ function initKakao() {
   let hjShown = new Set();
   let clusterOv = new Map();   // 겹친 호재 배지 캐시(동일좌표키 → CustomOverlay)
   const hjStyle = s => { const unk = basisUnknown(s);
-    const col = s.status === "종결" ? "#9aa3b2" : unk ? "#8a93a3" : colorOf(s); const lvl = levelOf(s); const solid = phaseSolid(s);
+    const lvl0 = levelOf(s);
+    /* ★ 2026-08-12 — **등급 축 밖(미정)은 형태로 말한다**(마름모). 종전엔 미정도 원이라 계획
+       단계의 점선 원과 구분이 안 됐고, 색까지 회색으로 덮어 **분류를 잃었다**(실측 1,822건 =
+       전체의 32% · 주거개발 1,666·일자리 94·인프라 57·교통 5).
+       색은 분류, 형태는 등급 축 — 한 채널이 두 사실을 말하지 않는다. 분류까지 미상일 때만
+       `--muted`를 쓴다(등급을 모르는 것과 분류를 모르는 것은 다른 축이다).
+       ⚠ `HJR["미정"]`은 여기서 **처음 쓰인다** — 종전엔 미정이 전부 `unk` 가지로 빠져
+         `HJR.C`로 그려졌고 그 값은 죽은 값이었다(6px 마름모는 대각선 8.5px이라 형태가 뭉갠다 → 8). */
+    const gradeless = lvl0 === "미정";
+    const catUnknown = !CAT_COLOR[catOf(s)] || catOf(s) === "기타";
+    const col = s.status === "종결" ? "#9aa3b2" : gradeless ? (catUnknown ? "#8e8e93" : colorOf(s))
+      : unk ? "#8a93a3" : colorOf(s);
+    const shape = gradeless ? "diamond" : "circle";
+    const lvl = lvl0; const solid = phaseSolid(s);
     // 두께·채움은 흰 케이싱 도입에 맞춰 낮췄다(2026-07-30) — 케이싱이 경계를 만들어 주므로
     // 굵은 테두리와 진한 채움이 없어도 또렷하고, 원이 겹칠 때 진흙색이 되지 않는다.
-    return { col, lvl, solid, unk, r: unk ? HJR.C : (HJR[lvl] || 5), bw: !unk && (lvl === "S" || lvl === "A") ? 2 : 1.6,
+    return { col, lvl, solid, unk, shape,
+      // 미정은 **자기 크기**(HJR["미정"])를 쓴다 — `unk`(근거 미보유)와 크기를 공유하던 종전
+      // 규칙은 두 축을 한 값으로 뭉갠 것이었다. 등급이 있는데 근거만 없는 건 실측 2건뿐이다.
+      r: gradeless ? HJR["미정"] : unk ? HJR.C : (HJR[lvl] || 5),
+      bw: !unk && (lvl === "S" || lvl === "A") ? 2 : 1.6,
       // 채움을 올린다(2026-07-31) — 연녹색 녹지 위에서 옅은 채움은 배경의 일부로 읽혔다.
-      alpha: s.status === "종결" ? .45 : unk ? .75 : .92, fillOp: unk ? .10 : solid ? .26 : .16 }; };
+      // 채움 하향(2026-08-12) — 케이싱·헤어라인·코어 도트가 경계를 만드니 채움이 진할 필요가 없다.
+      // 마커 사이로 지형이 보여야 5,213건을 전부 그려도 지도가 읽힌다. 미정(.05)을 가장 옅게 두는 이유:
+      // 나머지만 낮추면 등급 없는 것이 가장 진해져 시각 계단이 거꾸로 읽힌다.
+      alpha: s.status === "종결" ? .45 : unk ? .75 : .92, fillOp: unk ? .05 : solid ? .14 : .08 }; };
   const hjHtml = s => { const t = hjStyle(s);
     return '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + sigTitle(s) + '</div><div class="apt-pop-sub"><span style="color:' + t.col + ';font-weight:700">● ' + catOf(s) + '</span>' + subLabel(s) + ' · ' + lvlPill(t.lvl) + ' ' + gradeBasisHtml(s).replace(/ · $/, "") + '</div><div class="apt-pop-cats"><span>단계 ' + phaseOf(s) + (s.current_stage && s.current_stage !== phaseOf(s) ? " — " + s.current_stage : "") + '</span></div></div>'; };
   /* ★ 뷰와 무관한 부분은 **데이터가 바뀔 때만** 다시 만든다 (2026-08-11 팬·줌 성능).
@@ -5456,15 +5511,15 @@ function initKakao() {
       }
       const s = g[0];
       const t = hjStyle(s);
-      const key = t.col + "|" + t.r + "|" + t.bw + "|" + t.solid + "|" + t.fillOp + "|" + t.alpha + "|" + (isApprox(s) ? 1 : 0);
+      const key = t.col + "|" + t.r + "|" + t.bw + "|" + t.solid + "|" + t.fillOp + "|" + t.alpha + "|" + (isApprox(s) ? 1 : 0) + "|" + t.shape;
       if (!s._kmk) {
         const [x, y] = s.geometry.coordinates;
-        const mk = new K.Marker({ position: LL(x, y), image: hojaeMarkerImage(t.col, t.r, t.bw, t.solid, t.fillOp, t.alpha, isApprox(s)), zIndex: 10 });
+        const mk = new K.Marker({ position: LL(x, y), image: hojaeMarkerImage(t.col, t.r, t.bw, t.solid, t.fillOp, t.alpha, isApprox(s), t.shape), zIndex: 10 });
         K.event.addListener(mk, "mouseover", () => { const q = toPt(x, y); const rc = mapEl.getBoundingClientRect(); showTip(hjHtml(s), { clientX: rc.left + q.x, clientY: rc.top + q.y }); });
         K.event.addListener(mk, "mouseout", hideTip);
         K.event.addListener(mk, "click", () => { hideTip(); showSignal(s, false); });
         s._kmk = mk; s._kmkKey = key;
-      } else if (s._kmkKey !== key) { s._kmk.setImage(hojaeMarkerImage(t.col, t.r, t.bw, t.solid, t.fillOp, t.alpha, isApprox(s))); s._kmkKey = key; }
+      } else if (s._kmkKey !== key) { s._kmk.setImage(hojaeMarkerImage(t.col, t.r, t.bw, t.solid, t.fillOp, t.alpha, isApprox(s), t.shape)); s._kmkKey = key; }
       // 노선 격리 중엔 호재 원을 **숨긴다**(2026-08-04 사용자 "호재별 원표시도 없애" — 흐림→제거.
       // 소속역은 하이라이트 링·역명 라벨이 대신 표기한다). 해제 시 clearRoute→renderHojae가 복원.
       s._kmk.setOpacity(1);
@@ -5784,7 +5839,7 @@ function initKakao() {
           _ov._el = be; o._badge = _ov;
         }
         be._o = o;   // 핸들러가 읽는 대상(재사용 시 갱신)
-        const _t1 = o.bnm, _t2 = o.ph + (o.beta ? " · 목표 '" + o.beta : "");
+        const _t1 = o.bnm, _t2 = "";   // 부제 제거(2026-08-12) — 단계는 지도 dash·마커가, 목표년도는 노선 상세가 말한다
         if (be.firstChild.textContent !== _t1) be.firstChild.textContent = _t1;
         if (be.lastChild.textContent !== _t2) be.lastChild.textContent = _t2;
         const _tf = c.dy ? `translateY(${-c.dy}px)` : "";   // 겹쳐서 위로 민 만큼(placeBadges)
@@ -6182,8 +6237,8 @@ function renderList() {
   }
   document.getElementById("l-more").style.display = rows.length > listShown ? "inline-block" : "none";
 }
-/* ══════════ 등급 미판정(미정) 목록 ══════════ */
-// 모든 신호 통합 후 등급 미판정(levelOf==="미정")만 — 결측 사유 표기. 사용자가 보고 소스·기준 보완.
+/* ══════════ 등급 없음(미정) 목록 ══════════ */
+// 모든 신호 통합 후 등급 없음(levelOf==="미정")만 — 결측 사유 표기. 사용자가 보고 소스·기준 보완.
 function allSignalsFlat() {
   return [].concat(SIGNALS, MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, RAIL_SIG, ROAD_SIG, DART_SIG, ARCH_SIG, UPIS_SIG, DPS_SIG, SH_SIG).filter(s => s && s.geometry);
 }
@@ -6227,16 +6282,16 @@ function renderUndet(more) {
   const byCat = {}; rows.forEach(s => byCat[catOf(s)] = (byCat[catOf(s)] || 0) + 1);
   const total = allSignalsFlat().length, undet = allSignalsFlat().filter(s => !isGraded(s)).length;
   document.getElementById("u-count").innerHTML =
-    `<b>${rows.length.toLocaleString()}건</b> 미판정 (전체 신호 ${total.toLocaleString()}건 중 미판정 ${undet.toLocaleString()}건) — `
+    `<b>${rows.length.toLocaleString()}건</b> 등급 없음 (전체 신호 ${total.toLocaleString()}건 중 등급 없음 ${undet.toLocaleString()}건) — `
     + CAT_KEYS.filter(c => byCat[c]).map(c => `<span style="color:${CAT_COLOR[c]};font-weight:700">${c} ${byCat[c]}</span>`).join(" · ");
   document.getElementById("u-list").innerHTML = rows.slice(0, window._undetShown).map(s => {
     const loc = [s.sd, s.sg, s.dong].filter(Boolean).join(" ");
     const src = (s.sources || [])[0];
     return `<div class="rrow">
       <div class="rt"><span style="color:${CAT_COLOR[catOf(s)]};font-weight:700">● ${catOf(s)}</span> · ${s.title || "(제목 없음)"}</div>
-      <div class="rm">${loc || "위치 미상"} · <b style="color:#a08a5a">미판정 사유: ${undetReason(s)}</b>${src ? ` · <a href="${src}" target="_blank">원문</a>` : ""}</div>
+      <div class="rm">${loc || "위치 미상"} · <b style="color:#a08a5a">등급 없음 사유: ${undetReason(s)}</b>${src ? ` · <a href="${src}" target="_blank">원문</a>` : ""}</div>
     </div>`;
-  }).join("") || `<div class="pickhint" style="padding:20px">해당 조건의 미판정 호재 없음</div>`;
+  }).join("") || `<div class="pickhint" style="padding:20px">해당 조건의 등급 없는 호재 없음</div>`;
   document.getElementById("u-more").style.display = rows.length > window._undetShown ? "inline-block" : "none";
 }
 
@@ -6362,7 +6417,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260812q");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260812r");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -6546,7 +6601,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812q"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812r"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -6572,7 +6627,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260812q");
+  const CB = "?b=" + (window.BUILD || "20260812r");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
