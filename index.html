@@ -6078,7 +6078,30 @@ function initKakao() {
       // 회랑 = **그려진 선의 버퍼**. 보간 구간(선이 연한 점선인 자리)은 회랑도 연하게 — 선과 강약을 맞춘다.
       roadLinePoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 0, strokeOpacity: 0, fillColor: col, fillOpacity: (p.weak && !s._has_solid) ? .035 : .07, zIndex: 5 }))); return; }   // 본선 있으면 보간 회랑도 동일 농도(Leaflet판과 같은 규칙, 2026-08-10)
     signalPoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 1.5, strokeColor: col, strokeOpacity: .85, fillColor: col, fillOpacity: .14, zIndex: 5 }))); };
-  const showRadius = s => { clearRadius(); addRadius(s); }; const showRadiusMany = list => { clearRadius(); list.forEach(addRadius); };
+  const showRadius = s => { clearRadius(); clearScale(); addRadius(s); };
+  const showRadiusMany = list => { clearRadius(); list.forEach(addRadius); };
+  /* ══ 거리 눈금(1·2·3km) — 필터가 아니라 **자**다(2026-08-12) ══
+     이 원으로 관련 판정을 하지 않는다 — 관련 여부는 dimOpacity가 호재별 영향
+     반경으로 정하고(유형·등급마다 2km·3km), 이 원은 「얼마나 먼가」만 재는 눈금이다.
+     ☆ 영향 반경과 **문법을 가른다**: 눈금 = 무색 1px 실선·채움 없음 · 영향 반경 = 유형색 옆은 채움.
+       같은 굵기·색이면 사용자가 둘을 한 가지로 읽는다(DESIGN.md §1-7의 공간편).
+     ☆ 호재 상세가 열린 동안은 걷는다 — 그 상황의 질문은 「이것이 어떻게 닿는가」다. */
+  let scaleObjs = [];
+  const clearScale = () => { scaleObjs.forEach(o => o.setMap(null)); scaleObjs = []; };
+  const showScale = (lng, lat) => {
+    clearScale();
+    [1000, 2000, 3000].forEach(m => {
+      scaleObjs.push(new K.Circle({ map, center: LL(lng, lat), radius: m, strokeWeight: 1,
+        strokeColor: "#d1d5db", strokeOpacity: .9, strokeStyle: "solid", fillOpacity: 0, zIndex: 3 }));
+      const lb = document.createElement("div");
+      lb.style.cssText = "font:600 10px/1 ui-monospace,SFMono-Regular,monospace;color:var(--ink2);"
+        + "background:rgba(255,255,255,.92);padding:2px 5px;border-radius:3px;white-space:nowrap;pointer-events:none";
+      lb.textContent = (m / 1000) + "km";
+      // 라벨은 원 위쪽 테두리에 붙인다 — 거리를 숫자로 확정해 주지 않으면 원은 장식이 된다.
+      scaleObjs.push(new K.CustomOverlay({ map, position: LL(lng, lat + m / 111320),
+        content: lb, zIndex: 4, yAnchor: .5, xAnchor: .5 }));
+    });
+  };
   let routeHl = []; const clearRoute = () => { routeHl.forEach(o => o.setMap(null)); routeHl = [];
     if (routeIsoName) { routeIsoName = null; try { renderRail(); } catch (e) {} try { renderHojae(); } catch (e) {} } };   // 격리 해제 → 필터 기준 복원(선·호재원 흐림 포함)
   const highlightRoute = (lineName, fit) => { clearRoute(); if (!lineName) return; const col = CAT_COLOR["교통"]; let bounds = new K.LatLngBounds();
@@ -6126,7 +6149,9 @@ function initKakao() {
   /* 아파트 선택 → 흐림 진입·해제. 상태만 바꾸고 재렌더를 부른다 — 흐림 계산은
      renderHojae의 dimOpacity가 매번 다시 하므로 지도 이동·재렌더에도 살아있다.
      180ms 페이드는 setTimeout 3틱 — rAF는 탭이 안 보이면 안 돌아 잦은 상태가 남는다. */
-  const dimTo = (lng, lat) => { dimAnchor = (lng == null) ? null : [lng, lat]; try { renderHojae(); } catch (e) {}
+  const dimTo = (lng, lat) => { dimAnchor = (lng == null) ? null : [lng, lat];
+    if (lng == null) clearScale(); else showScale(lng, lat);
+    try { renderHojae(); } catch (e) {}
     try { renderRail(); } catch (e) {} };
   let hlPolys = []; const clearHighlight = () => { hlPolys.forEach(o => o.setMap(null)); hlPolys = []; };
   const highlightRings = ringsXY => { clearHighlight(); if (!ringsXY || !ringsXY.length) return; ringsXY.forEach(r => hlPolys.push(new K.Polygon({ map, path: r.map(([x, y]) => LL(x, y)), strokeWeight: 2.5, strokeColor: "#5b3fd4", strokeOpacity: .95, fillColor: "#5b3fd4", fillOpacity: .12, zIndex: 6 }))); };
@@ -6437,7 +6462,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260812r");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813a");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -6621,7 +6646,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812r"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813a"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -6647,7 +6672,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260812r");
+  const CB = "?b=" + (window.BUILD || "20260813a");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
