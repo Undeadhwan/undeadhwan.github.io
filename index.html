@@ -619,9 +619,8 @@
                         border-radius:var(--r-s); background:#fff; color:var(--ink); cursor:pointer; }
   /* 날짜 열 — 카드 왼쪽에 세운다. 어림수(「6주 전」) 대신 **그날**을 적는다. */
   #flowv .fitem { display:flex; gap:12px; align-items:flex-start; margin:0 0 10px; }
-  #flowv .fdate { flex:0 0 64px; text-align:right; padding-top:12px; }
-  #flowv .fdate b { display:block; font-size:14.5px; font-variant-numeric:tabular-nums; }
-  #flowv .fdate span { display:block; font-size:11.5px; color:var(--ink3); font-variant-numeric:tabular-nums; }
+  #flowv .fdate { flex:0 0 82px; text-align:right; padding-top:12px; }
+  #flowv .fdate b { display:block; font-size:13px; font-variant-numeric:tabular-nums; letter-spacing:-.2px; }
   #flowv .fdate .mvk { display:inline-block; margin-top:5px; font-style:normal; font-size:11px; font-weight:700;
                        border-radius:999px; padding:1px 7px; border:1px solid; }
   #flowv .fdate .mvk.chg { color:#1e40af; border-color:#bfd0f2; background:#f3f7ff; }
@@ -635,9 +634,11 @@
      카드 머리의 `● 착공`이 이미 말하고, 날짜는 왼쪽 열이 정확히 말한다 — 바는 같은 말을 세 번째로
      반복하며 자리만 먹었다. 지도·목록·상세에서는 그대로 둔다(거기선 진행 위치가 첫 질문이다). */
   #flowv .card .mtrk, #flowv .card .cmove { display:none; }
+  /* 변동 태그가 현재 단계를 말한다 — `● 준공·개통` 칩은 같은 말이라 감춘다 */
+  #flowv .card.haschg .cph { display:none; }
   @media (max-width: 768px) {
     #flowv .fitem { gap:8px; }
-    #flowv .fdate { flex-basis:52px; }
+    #flowv .fdate { flex-basis:76px; }
   }
   /* 「우리가 처음 본 것」 접힘 머리 — 행 전체가 과녁이다(스위치·삼각형만 겨냥하게 두지 않는다) */
   #flowv .fgh.sfold { cursor:pointer; border-radius:var(--r-s); margin-left:-6px; margin-right:-6px;
@@ -3202,7 +3203,7 @@ function _deriveTarget(s) {
   const dt = (fin && fin.date) || (s.completion_verified || {}).date;
   if (dt && isFinite(yearDec(dt))) {
     const y = yearDec(dt);
-    return { y, finEnd: y, type: "done", label: `${_tcYm(dt)} ${(fin && fin.stage) || "준공"}` };
+    return { y, finEnd: y, type: "done", date: dt, stage: (fin && fin.stage) || "준공" };
   }
   // ② 목표 연도 — **원문에 적힌 것만**. 준공 단계 것이 우선이고, 그중 가장 늦은 해가 완료 시점이다.
   const et = ms.filter(m => /^\d{4}$/.test(String(m.eta || "")));
@@ -3211,7 +3212,7 @@ function _deriveTarget(s) {
   if (pick) {
     const y = +pick.eta;
     // finEnd = 그 해 자체다. **±범위를 지어내지 않는다** — 원문이 준 것은 연도 하나뿐이다.
-    return { y, finEnd: y, type: "target", label: `'${String(y).slice(2)} ${pick.stage || "완료 목표"}` };
+    return { y, finEnd: y, type: "target", stage: pick.stage || "완료 목표" };
   }
   // ③ **이미 완료된 신호** — 날짜는 몰라도 「완료됐다」는 것은 안다(phase가 사실을 말한다).
   //    실측 2026-08-11: 이 부류가 **351건**이고, 전부 「완료 시점 산출 불가」로 흐려지고 있었다
@@ -3219,7 +3220,7 @@ function _deriveTarget(s) {
   // ☠ 그렇다고 **관측일을 준공일로 읽지 않는다** — 이 저장소가 이미 밟은 함정이다
   //    (`fin_date_unknown`을 안 실어 stage_history의 관측일이 완료일로 읽히는 바람에 10년 전
   //     끝난 조합이 '최근 준공'으로 영영 살아남았다). 모르는 날짜는 **만들지 않고 밝힌다**.
-  if (phaseOf(s) === "준공·개통") return { y: null, finEnd: null, type: "done", dateless: true, label: "완료 (시점 미상)" };
+  if (phaseOf(s) === "준공·개통") return { y: null, finEnd: null, type: "done", dateless: true };
   return null;
 }
 function targetOf(s) {   // 렌더마다 수천 건을 훑으므로 신호 객체에 캐시(어댑터는 1회 생성)
@@ -3236,6 +3237,21 @@ function sigTimeline(s) {
   const lm = isFinite(_lm) ? _lm : null;
   const startY = Math.min(...(hs.length ? hs : [lm ?? G_NOW]), lm ?? G_NOW);
   return { startY, t: targetOf(s) };
+}
+/* ★★ **완료 시점을 말로 옮기는 자리는 여기 하나다** (2026-08-12 사용자 지적: 「사실은 type,
+   문구는 label」로 **같은 사실을 두 곳에 저장**한 것이 SSOT 위반이다).
+   실제로 그래서 사고가 났다 — `type:"done"`(이미 지난 사실)인데 문구는 `'26.4 사용승인`이라
+   예정처럼 읽혔고, 고칠 때도 **문구만** 고쳤다. 판정과 표기가 따로 있으면 반드시 어긋난다.
+   ⇒ 파생층(`_deriveTarget`)은 **사실만** 만든다(type·y·date·stage). 말은 이 함수가 만든다.
+   ⚠ 예외 하나 — 상류(확정층 `target_completion`)가 **문구까지 직접 적어 준 경우**는 그게 이긴다.
+     그건 하류가 재구성할 수 없는 것을 담고 있다(「'30 1블록 준공 (지정 시 발표 목표)」).
+     상류 교정을 하류가 덮지 않는다는 이 저장소의 규칙과 같은 방향이다. */
+function targetLabel(t) {
+  if (!t) return "완료 시점 미상";
+  if (t.label) return t.label;
+  if (t.type === "done")
+    return t.dateless ? "완료 (시점 미상)" : `${_tcYm(t.date)} ${t.stage || "준공"} 완료`;
+  return `'${String(t.y).slice(2)} ${t.stage || "완료 목표"}`;
 }
 function asOfLabel(s, yr) {
   if (!yr) return "";
@@ -3271,7 +3287,7 @@ function miniBarHtml(s) {
   // ⚠ 라벨과 기준연도 판정이 **같은 말**이면 한 번만 적는다(「완료 (시점 미상) · '33 시점: 완료
   //   (시점 미상)」처럼 같은 문구가 두 번 나오면 읽는 사람이 두 사실인 줄 안다).
   const _as = YEAR_SEL ? asOfLabel(s, YEAR_SEL) : "";
-  const asOf = (YEAR_SEL && !(t && t.label === _as))
+  const asOf = (YEAR_SEL && targetLabel(t) !== _as)
     ? ` · <b>'${String(YEAR_SEL).slice(2)} 시점: ${_as}</b>` : "";
   /* ★ **완료 시점을 모르면 완료 시점 축을 그리지 않는다** (2026-08-09 사용자 "진척도 바 부분이
      프로토타입이 훨씬 깔끔해"). 종전엔 모든 카드가 `'24 —— 완료 시점 미상 —— '34`를 달고 있었다 —
@@ -3281,7 +3297,7 @@ function miniBarHtml(s) {
   if (!t && !YEAR_SEL) return "";
   return `<div class="mbar">
     <div class="mtrack">${segs}${fin}<div class="mnow" style="left:${mpct(G_NOW)}%"></div>${cur}</div>
-    <div class="mmeta"><span>'24</span><span>${t ? t.label : "완료 시점 미상"}${asOf}</span><span>'34</span></div>
+    <div class="mmeta"><span>'24</span><span>${targetLabel(t)}${asOf}</span><span>'34</span></div>
   </div>`;
 }
 /* 마일스톤 트랙 — 계획·인가·착공·준공 4점. **진척률(%)·게이지가 아니라 점과 선**이다(§7).
@@ -3300,7 +3316,7 @@ function mtrackHtml(s) {
   return `<div class="mtrk"><div class="row">${dots}</div><div class="lbs">${lbs}</div></div>`;
 }
 /* 카드 생성 (클릭 + hover 지도 연동) */
-function makeCard(s, extra = "", onClick) {
+function makeCard(s, extra = "", onClick, lead = "") {
   const el = document.createElement("div");
   el.className = "card";
   // 기준연도까지 완료범위 미도달 신호는 흐림 (숨기지 않음 — 간트의 dim과 동일)
@@ -3309,7 +3325,7 @@ function makeCard(s, extra = "", onClick) {
   // ⚠ 흐림은 「아직 아니다」라는 주장이다 — 완료된 것에 걸면 화면이 거짓말을 한다(P5).
   const reached = t && (t.dateless || t.finEnd <= YEAR_SEL);
   if (YEAR_SEL && !reached && s.status !== "종결") el.classList.add("dimyr");
-  el.innerHTML = cardHtml(s, extra);
+  el.innerHTML = cardHtml(s, extra, lead);
   el.onclick = onClick || (() => showSignal(s, true));
   el.onmouseenter = () => { el.classList.add("hl"); mapApi?.emphasizePin?.(s); };
   el.onmouseleave = () => { el.classList.remove("hl"); mapApi?.emphasizePin?.(null); };
@@ -3317,7 +3333,7 @@ function makeCard(s, extra = "", onClick) {
 }
 
 /* ══════════ 패널: 홈 ══════════ */
-function cardHtml(s, extra = "") {
+function cardHtml(s, extra = "", lead = "") {
   const ph = phaseOf(s);
   const pIdx = PHASE_IDX[ph];
   const roadLine = s._road && (s.access_points || []).length;   // 선형 보유 도로(지도에 선으로 표시됨)
@@ -3352,7 +3368,7 @@ function cardHtml(s, extra = "") {
   ].filter(Boolean).join(" ");
   const foot = [gb, `영향 ${km}km`, stageCheckedHtml(s)].filter(x => x && String(x).trim()).join(" · ");
   return `
-    <div class="chead">${levelPill(s)}<span class="cph" style="color:${colorOf(s)}">● ${phaseLabel(ph)}</span>
+    <div class="chead">${lead}${levelPill(s)}<span class="cph" style="color:${colorOf(s)}">● ${phaseLabel(ph)}</span>
       <span class="ccat">${catOf(s)}${subLabel(s)}</span>${srcBadge(s)}${extra}</div>
     <div class="title">${sigTitle(s)}</div>
     <div class="cmove">${mv || '<span class="pmini">단계 변경 기록 없음</span>'}${what ? ` · <span class="cwhat">${what}</span>` : ""}</div>
@@ -4256,8 +4272,10 @@ function movDelta(s) {
 function movDeltaHtml(s) {
   const d = movDelta(s);
   if (!d) return "";
-  if (d.kind === "신규")
-    return `<span class="mvtag new" title="이 사업이 소스 원문에 처음 등장한 것입니다">신규</span>`;
+  /* 「신규」는 **왼쪽 날짜 열이 이미 말한다** — 머리에 또 붙이면 한 카드에 같은 말이 두 번이다
+     (2026-08-12 사용자 "중복없이"). 변동만 머리로 보낸다: 그건 왼쪽 열이 담을 수 없는
+     **무엇에서 무엇으로**를 말하기 때문이다. */
+  if (d.kind === "신규") return "";
   const back = PHASE_IDX[d.to] < PHASE_IDX[d.from];   // 역행(인가→계획 등)은 정체·재추진 신호다(P5)
   return `<span class="mvtag chg${back ? " back" : ""}" title="${back
     ? "단계가 되돌아갔습니다 — 재검토·재추진 신호입니다" : "직전 단계에서 이렇게 바뀌었습니다"}">${
@@ -4300,7 +4318,8 @@ function renderFlow() {
   const seg = (k, lb, n) => `<button class="fseg${FLOW_KIND === k ? " on" : ""}" data-kind="${k}">${lb}<span class="n">${n.toLocaleString()}</span></button>`;
   const nFld = chgRows.length;
   let html = `<div class="fwrap">
-    <div class="lvtitle" style="font-size:16px;font-weight:700">업데이트 <span style="font-weight:400;font-size:12.5px;color:var(--ink3)">— 무엇이 <b style="font-weight:600">바뀌었나</b> · ${regionLabel() || "전 지역"} · 지도와 같은 표시 조건</span></div>
+    <!-- 부제·요약줄을 뺐다 (2026-08-12 사용자 "제거"): 지역은 좌측 헤더가, 건수는 아래
+         세그먼트가 이미 말한다 — 같은 말을 세 군데서 하면 정작 목록이 밀린다. -->
     <div class="fbar">
       <div class="fsegs">${seg("all", "전체", past.length + nFld)}${seg("chg", "단계 변동", nChg)}${seg("new", "신규", nNew)}${
         nFld ? seg("fld", "내용 변경", nFld) : ""}</div>
@@ -4308,8 +4327,7 @@ function renderFlow() {
         <select id="f-period">${FLOW_PERIODS.map(([m, lb]) => `<option value="${m}"${m === FLOW_MONTHS ? " selected" : ""}>${lb}</option>`).join("")}</select>
       </label>
     </div>
-    <div class="lvcount" style="margin:2px 0 2px"><b>${shown.length.toLocaleString()}건</b>이 <b>문서상 움직였습니다</b>
-      <span class="why" style="color:var(--ink3)">— 고시·인가·착공 등 소스 원문에 날짜가 있는 것만 셉니다</span></div>`
+    `
     + (future.length ? `<div class="fempty" style="margin:2px 0 6px">※ ${future.length.toLocaleString()}건은 소스의 날짜가 <b>아직 오지 않은 날</b>(착공 예정일 등)이라 움직임으로 세지 않았습니다</div>` : "");
   html += shown.length ? `<div class="fg" data-g="main"></div>`
     : `<div class="fempty">이 기간에 문서상 움직인 신호가 없습니다 — 기간을 넓혀 보세요</div>`;
@@ -4340,9 +4358,12 @@ function renderFlow() {
       const row = document.createElement("div"); row.className = "fitem";
       const kind = onlyFld ? { c: "fld", t: "내용" } : key === "확인" ? { c: "seen", t: "확인" } : d && d.kind === "변동"
         ? { c: "chg" + (PHASE_IDX[d.to] < PHASE_IDX[d.from] ? " back" : ""), t: "변동" } : { c: "new", t: "신규" };
-      row.innerHTML = `<div class="fdate"><b>${dt.slice(5).replace("-", ".") || "—"}</b><span>${dt.slice(0, 4)}</span>
+      row.innerHTML = `<div class="fdate"><b>${dt ? dt.replace(/-/g, ".") : "—"}</b>
         <i class="mvk ${kind.c}">${kind.t}</i></div><div class="fbody"></div>`;
-      row.querySelector(".fbody").appendChild(makeCard(s, movDeltaHtml(s), () => { setView("map"); showSignal(s, true); }));
+      const lead = movDeltaHtml(s);
+      const card = makeCard(s, "", () => { setView("map"); showSignal(s, true); }, lead);
+      if (lead) card.classList.add("haschg");   // 태그가 현재 단계를 말하므로 `● 단계` 칩은 감춘다
+      row.querySelector(".fbody").appendChild(card);
       box.appendChild(row);
     });
     if (arr.length > 80) box.insertAdjacentHTML("beforeend", `<div class="fempty">외 ${(arr.length - 80).toLocaleString()}건 — 목록에서 전부 보기</div>`); };
@@ -6213,7 +6234,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260812f");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260812g");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -6397,7 +6418,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812f"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260812g"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -6423,7 +6444,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260812f");
+  const CB = "?b=" + (window.BUILD || "20260812g");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
