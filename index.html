@@ -320,6 +320,19 @@
   .cmpcol .gsep i { width:4px; height:13px; border-radius:2px; background:var(--gc); flex-shrink:0; }
   .cmpcol .gsep::after { background:color-mix(in srgb, var(--gc) 30%, var(--line)); }
   .cmpcol .gcount { display:flex; flex-wrap:wrap; gap:4px; margin-top:7px; }
+  /* ══ 등급 요약 전치표 — 세로 나열은 같은 등급 줄이 가로로 만나지 않는다(2026-08-12) ══
+     막대는 **무채색 잉크 농도**로 S→C를 가른다. 등급색(LVL_COLOR)을 막대에 쓰지 않는 이유:
+     막대는 「몇 건」이라는 집계이고 색은 분류 축이다 — 한 채널에 두 사실을 담지 않는다(DESIGN §1-1). */
+  .cmpsum { display:grid; gap:0 10px; align-items:center; margin:0 0 14px;
+            border:1px solid var(--line); border-radius:var(--r); padding:10px 12px; background:var(--panel); }
+  .cmpsum .ch { font-size:var(--fs-s); font-weight:600; color:var(--ink2); padding-bottom:6px;
+                overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .cmpsum .rl { font-size:var(--fs-s); font-weight:700; color:var(--ink2); padding:5px 0; }
+  .cmpsum .cv { display:flex; align-items:center; gap:7px; padding:5px 0; }
+  .cmpsum .cv i { display:block; height:8px; border-radius:2px; min-width:0; }
+  .cmpsum .cv b { font-size:13px; font-weight:600; font-variant-numeric:tabular-nums; color:var(--ink); flex:none; }
+  /* 0건은 빈칸이 아니라 `0`으로 적는다 — 빈칸은 「모른다」로 읽히고 여기선 「없다」가 사실이다(P2) */
+  .cmpsum .cv b.z { color:var(--ink3); }
   .cmpcol .gcount .gc { display:inline-flex; align-items:center; gap:4px; font-size:11.5px; font-weight:700;
                         color:var(--gc); background:color-mix(in srgb, var(--gc) 12%, #fff);
                         border:1px solid color-mix(in srgb, var(--gc) 35%, #fff); border-radius:999px; padding:1px 8px; }
@@ -3639,6 +3652,29 @@ function cmpColumn(a) {
     <div class="siglist">${out || `<div class="gsep">반경 내 호재 없음</div>`}</div>
   </div>`;
 }
+/* ══ 등급 요약 전치표 — 단지별 세로 나열은 같은 등급 줄이 가로로 만나지 않는다(2026-08-12) ══
+   비교란 **같은 축을 나란히 두는 것**인데, 컬럼마다 항목 수가 달라(12건/4건/8건) S 행이 서로
+   다른 높이에 있었다. 등급을 **행**으로 세우면 눈을 옆으로만 옮겨 2 / 0 / 0을 읽는다.
+   ⚠ 0건도 빈칸이 아니라 `0`으로 적는다 — 빈칸은 「모른다」로 읽히고 여기선 「없다」가 사실이다.
+   ⚠ 막대는 **절대 건수** 하나만 나타내고 세 열이 **같은 눈금**을 쓴다(열마다 최대치로 정규화하면
+      건수가 적은 단지가 꽉 찬 막대를 갖게 되어 순위 암시가 된다 — §7·P3 위반).
+   ⚠ 등급 색(LVL_COLOR)을 막대에 쓰지 않는다 — 막대는 「몇 건」이라는 집계이고 색은 분류 축이다.
+      무채색 잉크 농도로 S→C를 구분한다. */
+function cmpSummaryHtml(cols) {
+  const grades = ["S", "A", "B", "C", "미정"];
+  const cnt = (rows, g) => rows.filter(r => r.s.status !== "정체" && r.g === g).length;
+  const shown = grades.filter(g => cols.some(c => cnt(c.rows, g)));
+  if (!shown.length) return "";
+  const max = Math.max(1, ...shown.map(g => Math.max(...cols.map(c => cnt(c.rows, g)))));
+  const ink = { S: "var(--ink)", A: "var(--ink)", B: "var(--ink2)", C: "var(--ink3)", "미정": "var(--line2)" };
+  const head = cols.map(c => `<div class="ch">${esc(c.a.n)}</div>`).join("");
+  const rows = shown.map(g => `<div class="rl">${g === "미정" ? LEVEL_NAME["미정"] : g}</div>`
+    + cols.map(c => { const v = cnt(c.rows, g);
+        return `<div class="cv"><i style="width:${(v / max * 100).toFixed(1)}%;background:${ink[g]}"></i>`
+          + `<b class="${v ? "" : "z"}">${v}</b></div>`; }).join("")).join("");
+  return `<div class="cmpsum" style="grid-template-columns:64px repeat(${cols.length},minmax(0,1fr))">`
+    + `<div class="rl"></div>${head}${rows}</div>`;
+}
 function openCompare() {
   if (compareSet.length < 2) return;
   // 지도 위 단지 말풍선(「✓ 비교함」)을 닫는다 — 모달을 열어도 뒤에 계속 떠 있었고, 모달을 닫은
@@ -3651,7 +3687,12 @@ function openCompare() {
 /* 정렬만 바꿔 다시 그린다(모달을 닫았다 열지 않는다) */
 function renderCompareBody() {
   if (compareSet.length < 2) return;
+  /* 요약 전치표를 컬럼 위에 얹는다 — rows 계산은 cmpColumn과 같은 함수를 쓴다(사본 금지).
+     컬럼 목록은 그대로 남긴다: 요약은 「몇 건인가」, 목록은 「무엇인가」로 답이 다르다. */
+  const cols = compareSet.map(a => ({ a,
+    rows: signalsNearPoint([a.lon, a.lat], true).map(({ s, dist: d }) => ({ s, d, g: levelOf(s) })) }));
   const body = `
+    ${cmpSummaryHtml(cols)}
     <div class="cmpg" style="grid-template-columns:repeat(${compareSet.length},minmax(236px,1fr))">
       ${compareSet.map(cmpColumn).join("")}
     </div>
@@ -6484,7 +6525,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813b");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813c");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -6668,7 +6709,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813b"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813c"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -6694,7 +6735,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813b");
+  const CB = "?b=" + (window.BUILD || "20260813c");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
