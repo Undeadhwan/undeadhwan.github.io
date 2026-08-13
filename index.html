@@ -585,9 +585,12 @@
   /* 겹침 클러스터 = **유형 도넛** (2026-08-13 시안 §01).
      종전 검정 「+2」 알약은 화면을 덮으면서 「무엇이 2개인지」를 말하지 않았다. 흰 원 + 총 개수 +
      유형 비율 원호로 바꾸면 합계가 보존되면서 클러스터 자체가 요약이 된다. */
-  .cl-badge { position:relative; width:28px; height:28px; border-radius:50%; background:#fff;
-    box-shadow:0 1px 4px rgba(0,0,0,.16); cursor:pointer; display:flex; align-items:center; justify-content:center;
-    font-size:11px; font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums; line-height:1; }
+  /* ⚠ 도넛도 **속을 비운다** (2026-08-13 사용자 제보 *"동그라미 숫자가 많아서 제대로 볼 수가 없음"*).
+     흰색으로 꽉 채우면 배지가 마커보다 무겁게 읽혀, 148개가 화면을 덮으면 지도가 사라진다 —
+     시안 §01의 「큰 원은 채우지 않는다」는 클러스터에도 그대로 적용된다. */
+  .cl-badge { position:relative; width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,.62);
+    box-shadow:0 1px 3px rgba(0,0,0,.10); cursor:pointer; display:flex; align-items:center; justify-content:center;
+    font-size:10.5px; font-weight:600; color:var(--ink2); font-variant-numeric:tabular-nums; line-height:1; }
   .cl-badge.cl-wide { width:34px; height:34px; font-size:11px; }
   .cl-badge svg { position:absolute; inset:0; pointer-events:none; }
   .cl-badge b { position:relative; z-index:1; font-weight:700; }
@@ -781,6 +784,50 @@
      푸터를 숨겨 탭바가 최하단이 됐으므로 아이폰 홈 바를 침범하면 안 된다. */
   /* 여백은 호갱노노 하단 내비 기준(2026-08-10 사용자 "너무 바닥에 붙었어. 호갱노노 참고해") —
      아이콘·라벨이 상하로 숨 쉬고, 홈 바 위로 넉넉히 뜬다. */
+  /* ══ 바텀시트 (시안 §10) — 지도를 항상 띄워 두고 목록·필터를 시트로 끌어올린다 ══
+     3단: peek(손잡이만) → half(절반) → full(전체). 전체에서는 필터가 상단 고정되고 목록만 스크롤. */
+  #msheet { display:none; position:fixed; left:0; right:0; bottom:0; z-index:1290;
+    background:#fff; border-top-left-radius:16px; border-top-right-radius:16px;
+    box-shadow:0 -6px 26px rgba(20,28,50,.18); transition:height .22s cubic-bezier(.2,.8,.2,1);
+    flex-direction:column; overflow:hidden; }
+  #msheet[data-det="peek"] { height:calc(62px + env(safe-area-inset-bottom)); }
+  #msheet[data-det="half"] { height:52vh; }
+  #msheet[data-det="full"] { height:calc(100vh - 96px); }
+  #msheet .ms-grip { flex:0 0 auto; padding:7px 14px 8px; cursor:grab; touch-action:none; }
+  #msheet .ms-bar { width:38px; height:4px; border-radius:2px; background:var(--line2); margin:0 auto 7px; }
+  #msheet .ms-head { display:flex; align-items:center; gap:8px; font-size:14px; }
+  #msheet .ms-head b { font-variant-numeric:tabular-nums; }
+  /* 접힌 상태에서도 **뭐가 걸려 있는지** 보인다 — 필터를 켜 둔 채 잊는 것을 막는다 */
+  #msheet .ms-f { font-size:11.5px; font-weight:700; padding:2px 8px; border-radius:999px;
+    background:var(--ink); color:#fff; }
+  #msheet .ms-body { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; }
+  #msheet .ms-filters { flex:0 0 auto; padding:2px 12px 10px; border-bottom:1px solid var(--line); }
+  #msheet .ms-list { flex:1 1 auto; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch;
+    padding:0 12px calc(18px + env(safe-area-inset-bottom)); }
+  #msheet[data-det="peek"] .ms-body { display:none; }
+  /* 필터는 **칩**이다 — 좁은 폭에서 체크박스 세로 목록은 시트 절반을 먹는다.
+     데스크톱(체크박스)과 부품이 갈리지만 폭 제약이 다르면 갈리는 게 맞다(사장님 확정 2026-08-13).
+     ⚠ 상태·핸들러는 도크와 **같다**(`data-tog`) — 갈리는 것은 모양뿐이다. */
+  #msheet .ms-row { display:flex; gap:6px; overflow-x:auto; padding:8px 0 2px; scrollbar-width:none; }
+  #msheet .ms-row::-webkit-scrollbar { display:none; }
+  #msheet .ms-row .lb { flex:0 0 auto; align-self:center; font-size:11px; font-weight:700; color:var(--ink3); padding-right:2px; }
+  #msheet .mc { flex:0 0 auto; display:inline-flex; align-items:center; gap:5px; min-height:34px;
+    padding:6px 11px; border:1px solid var(--line2); border-radius:999px; background:#fff;
+    font-size:12.5px; font-weight:600; color:var(--ink); white-space:nowrap; cursor:pointer; }
+  #msheet .mc i { width:9px; height:9px; border-radius:50%; flex:none; }
+  #msheet .mc i.dash { border-radius:50%; background:none; border:1.4px dashed currentColor; }
+  #msheet .mc i.dia { border-radius:2px; transform:rotate(45deg); background:none; border:1.6px solid currentColor; }
+  #msheet .mc .n { color:var(--ink2); font-variant-numeric:tabular-nums; }
+  #msheet .mc.off { color:var(--ink3); border-color:var(--line); }
+  #msheet .mc.off i { background:none !important; border:1.3px solid currentColor; }
+  /* 좁은 폭에서는 열을 줄인다 — 6열은 375px에서 잘려 오히려 못 읽는다.
+     소재지·확인일을 접고 호재명·유형·등급·단계만 남긴다(유형 색 바는 그대로라 지도 문법은 유지). */
+  #ms-list .ltab th:nth-child(5), #ms-list .ltab td:nth-child(5),
+  #ms-list .ltab th:nth-child(6), #ms-list .ltab td:nth-child(6) { display:none; }
+  #ms-list .ltab { border:0; border-radius:0; }
+  #ms-list .ltab th { top:0; }
+  #ms-list .ltab .lt-nm { min-width:0; }
+  @media (max-width: 768px) { #msheet { display:flex; } }
   #tabbar { display:none; position:fixed; left:0; right:0; z-index:1300;
             background:rgba(255,255,255,.96); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
             border-top:1px solid var(--line);
@@ -926,6 +973,8 @@
   #dock .dk-h + .cat { border-top:0; }   /* sticky 헤더의 밑선과 겹쳐 2px가 되는 것을 막는다 */
   #dock .dk-rst { font-size:var(--fs-s); color:var(--c-traffic); background:none; border:0; cursor:pointer; padding:0; visibility:hidden; }
   #dock .dk-rst.show { visibility:visible; }
+  /* 「필터 N개 적용 중」 (시안 §03) — 모바일 시트 배지와 같은 뜻·같은 문법 */
+  #dock .dk-nf { font-size:11px; font-weight:700; color:var(--ink2); white-space:nowrap; flex:0 0 auto; }
   #dock .dk-rst:hover { text-decoration:underline; }
   /* 「전부 접기」 — 액센트 링크는 초기화 **하나만** 유지한다(DESIGN.md). 이건 보조라 흐린 잉크. */
   #dock .dk-fold { font-size:var(--fs-s); color:var(--ink3); background:none; border:0; cursor:pointer; padding:0; }
@@ -1228,12 +1277,27 @@
 <!-- 모바일 하단 탭바(독) — 프로토타입의 하단 독. 데스크톱은 헤더 칩이 같은 일을 하므로 CSS로 숨긴다. -->
 <!-- 아이콘 = 인라인 스트로크 SVG(currentColor) — 이모지는 OS마다 모양이 다르고 톤이 안 맞는다
      (2026-08-09 사용자 "독 이미지가 너무 촌스러워 좀 심플하고 쌔끈한걸로"). -->
+<!-- ★ 모바일 탭 **4개 → 2개** (2026-08-13 시안 §10). 목록과 조회조건은 바텀시트가 담는다.
+     *"지도/업데이트/목록/조회조건을 오가면 맥락이 끊깁니다. 지도를 항상 띄워 두고 목록을 시트로
+     끌어올리는 구조로 바꾸면 탭은 지도·업데이트 2개로 줄어듭니다."*
+     ⚠ 시안은 조회조건을 「상단 칩으로 흡수」한다고 했지만 상단 칩은 지역·세대수만 담아
+       **등급·단계가 갈 곳이 없었다**(시안이 다루지 않은 구멍). 사장님 결정(2026-08-13):
+       **표현 필터를 시트 안에** 넣는다 — 「거른 결과를 바로 읽는다」는 데스크톱 구조와 같아진다. -->
 <nav id="tabbar">
   <button class="tb on" data-view="map"><svg viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>지도</button>
   <button class="tb" data-view="flow"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>업데이트<span class="tbn" id="tb-mv"></span></button>
-  <button class="tb" data-view="list"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>목록</button>
-  <button class="tb" data-view="filter"><svg viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/><circle cx="9" cy="8" r="2.4"/><circle cx="15" cy="16" r="2.4"/></svg>조회조건</button>
 </nav>
+<!-- 바텀시트 — 손잡이(peek) → 절반(half) → 전체(full). 모바일에서만 뜬다. -->
+<div id="msheet" data-det="peek">
+  <div class="ms-grip" id="ms-grip">
+    <div class="ms-bar"></div>
+    <div class="ms-head"><b id="ms-n">0건</b><span class="ms-f" id="ms-f" hidden>필터 0</span></div>
+  </div>
+  <div class="ms-body">
+    <div class="ms-filters" id="ms-filters"></div>
+    <div class="ms-list" id="ms-list"></div>
+  </div>
+</div>
 <footer>투자 권유 아님 · 모든 신호는 미확정 — 사실(단계·날짜·거리)만 표시하며 매수/매도 판단은 다루지 않습니다.</footer>
 
 <script>
@@ -3039,10 +3103,21 @@ function initRegionPop() {
   pop.onclick = e => {
     const it = e.target.closest(".ri"); if (!it) return;
     const col = it.dataset.col, v = it.dataset.v;
-    if (col === "sido") { selectSido(v); }
-    else if (col === "sgg") { selectSgg(v); }
-    else { selectDong(v); open(false); }
+    /* ★ **열을 먼저 다시 그리고 나서** 지역을 적용한다 (2026-08-13 사용자 제보 *"1레벨 선택되고
+       기다림, 2레벨 선택하고 기다림 이런식으로 느려"*). 종전엔 `selectSido`가 지도 이동·경계 지연
+       로드까지 끝낸 **뒤에** 다음 열이 그려져, 다음 단계를 고를 수 있기까지 그 시간을 다 기다렸다.
+       목록 자체는 동기 함수(`sggListOf`·`dongsOfSgg`)라 **먼저 그릴 수 있다** — 사람은 바로 다음
+       열을 누르고, 지도는 뒤에서 따라온다. */
+    if (col === "sido") nav.sd = v || null, nav.sg = null, nav.dong = null;
+    else if (col === "sgg") nav.sg = v || null, nav.dong = null;
     paintRegionPop(); syncRegionChip();
+    setTimeout(() => {
+      if (col === "sido") selectSido(v);
+      else if (col === "sgg") selectSgg(v);
+      else selectDong(v);
+      syncRegionChip();
+    }, 0);
+    if (col === "dong" && v) open(false);   // 읍면동까지 골랐으면 더 고를 게 없다 — 닫는다
   };
   syncRegionChip();
 }
@@ -3054,9 +3129,13 @@ function paintRegionPop() {
       ? items.map(x => `<div class="ri${x.v === cur ? " on" : ""}" data-col="${col}" data-v="${x.v}">${x.t}</div>`).join("")
       : `<div class="rempty">${empty}</div>`;
   };
-  put("rp-sido", SIDO_ORDER.map(sd => ({ v: sd, t: SIDO_LONG[sd] })), nav.sd, "sido", "—");
-  put("rp-sgg", nav.sd ? sggListOf(nav.sd).map(v => ({ v, t: v })) : [], nav.sg, "sgg", "시도를 먼저 고르세요");
-  put("rp-dong", (nav.sd && nav.sg) ? dongsOfSgg(nav.sd, nav.sg).map(v => ({ v, t: v })) : [], nav.dong, "dong",
+  /* ★ 각 열 맨 위에 **전체**(해제)를 둔다 (2026-08-13 사용자 제보 *"선택후 취소도 불가능해 ·
+     내가 원하는 레벨갯수 선택할 수 있게"*). 이게 있어야 ① 고른 것을 되돌릴 수 있고
+     ② **원하는 깊이에서 멈출 수 있다**(시군구까지만 볼지, 읍면동까지 볼지). */
+  const ALL = { v: "", t: "전체" };
+  put("rp-sido", [ALL].concat(SIDO_ORDER.map(sd => ({ v: sd, t: SIDO_LONG[sd] }))), nav.sd || "", "sido", "—");
+  put("rp-sgg", nav.sd ? [ALL].concat(sggListOf(nav.sd).map(v => ({ v, t: v }))) : [], nav.sg || "", "sgg", "시도를 먼저 고르세요");
+  put("rp-dong", (nav.sd && nav.sg) ? [ALL].concat(dongsOfSgg(nav.sd, nav.sg).map(v => ({ v, t: v }))) : [], nav.dong || "", "dong",
     nav.sg ? "이 시군구는 읍면동 경계 준비 중" : "시군구를 먼저 고르세요");
 }
 /* 칩 문구 = 현재 조회 범위. 지도 이동으로 지역이 바뀌어도 같은 함수가 부른다(한 곳에서만 적는다). */
@@ -4491,6 +4570,12 @@ function renderDock() {
     ? `<span class="s wide${filter.lvl.has("미정") ? "" : " off"}" data-tog="lvl" data-k="미정"><i class="dia"></i>${LEVEL_NAME["미정"]}</span>`
     : `<span class="s${filter.lvl.has(g) ? "" : " off"}" data-tog="lvl" data-k="${g}"><i style="width:${SZ[g]}px;height:${SZ[g]}px"></i>${g}</span>`;
   // 초기화 = 전체선택·해제 2버튼의 대체. 기본 상태와 다를 때만 보인다(평소엔 화면에 없음).
+  /* 「필터 N개 적용 중」 — 기본과 달라진 축의 수. 접힌 상태에서도 뭐가 걸려 있는지 보인다
+     (모바일 시트의 배지와 같은 문법 — 두 화면이 같은 뜻을 말한다). */
+  const nDirty = (CAT_KEYS.length - CAT_KEYS.filter(c => filter.cat.has(c)).length)
+    + (PHASES.length - PHASES.filter(p => filter.phase.has(p)).length)
+    + (["S", "A", "B", "C", "미정"].length - ["S", "A", "B", "C", "미정"].filter(l => filter.lvl.has(l)).length)
+    + (filter.region ? 1 : 0);
   const dirty = !!filter.region || !!filter.sd || !(ALL_SUBS.every(k => filter.sub.has(k)) && PHASES.every(k => filter.phase.has(k))
     && GRADES_DISP.every(k => filter.lvl.has(k)) && filter.lines.has("철도선") && filter.lines.has("도로선"));
   dock.innerHTML = `
@@ -4498,13 +4583,13 @@ function renderDock() {
       <b>${regionLabel() ? `<span class="rg" title="${regionLabel()}">${regionLabel()}</span>` : ""}<span
         class="fx">호재 <span class="cnt">${C.total.toLocaleString()}</span></span></b>
       ${dockOpen.size ? `<button class="dk-fold" data-fold="1" title="펼쳐 둔 대분류를 전부 접는다">전부 접기</button>` : ""}
+      ${dirty ? `<span class="dk-nf">필터 ${nDirty}개 적용 중</span>` : ""}
       <button class="dk-rst${dirty ? " show" : ""}" data-all="on">초기화</button>
     </div>
     ${CAT_KEYS.map(catBlock).join("")}
     <div class="axis">
-      <div class="t">선형 표시 <small>지도 위 노선</small></div>
-      <div class="opts">${LINE_OPTS.map(([k, lb, ln]) => `<div class="optrow${filter.lines.has(k) ? " on" : ""}" data-tog="lines" data-k="${k}">
-        ${ln === null ? "" : `<i class="ln${ln}"></i>`}<span>${lb}</span><i class="sw"></i></div>`).join("")}</div>
+      <div class="t">등급 <small>원 크기</small></div>
+      <div class="seg g4">${["S", "A", "B", "C", "미정"].map(gp).join("")}</div>
     </div>
     <div class="axis">
       <!-- ★ 범례는 마커 문법과 **쌍으로** 움직인다 (2026-08-13 시안 §02 전환).
@@ -4514,8 +4599,9 @@ function renderDock() {
       <div class="seg g2">${ph("계획", true)}${ph("인가", true)}${ph("착공", false)}${ph("준공·개통", false)}</div>
     </div>
     <div class="axis">
-      <div class="t">등급 <small>원 크기</small></div>
-      <div class="seg g4">${["S", "A", "B", "C", "미정"].map(gp).join("")}</div>
+      <div class="t">선형 표시 <small>지도 위 노선</small></div>
+      <div class="opts">${LINE_OPTS.map(([k, lb, ln]) => `<div class="optrow${filter.lines.has(k) ? " on" : ""}" data-tog="lines" data-k="${k}">
+        ${ln === null ? "" : `<i class="ln${ln}"></i>`}<span>${lb}</span><i class="sw"></i></div>`).join("")}</div>
     </div>
     <div class="dk-foot">흐릿한 후광 = 위치 근사 · 겹친 호재는 <b>+N</b>으로 묶임<br>
       <a href="methodology.html" target="_blank">데이터 · 방법론</a>
@@ -4524,7 +4610,13 @@ function renderDock() {
 function initDock() {
   const dock = document.getElementById("dock");
   if (!dock) return;
-  dock.addEventListener("click", e => {
+  /* ★ 필터 클릭 배선은 **하나다** — 도크(데스크톱)와 바텀시트(모바일)가 같은 핸들러를 쓴다
+     (2026-08-13 시안 §10). 시트에 사본을 만들면 두 화면의 필터가 조용히 갈린다. */
+  bindFilterClicks(dock);
+  renderDock();
+}
+function bindFilterClicks(host) {
+  host.addEventListener("click", e => {
     // 펼침(▶)은 토글과 별개 동작 — 대분류 행 클릭은 on/off 1클릭을 유지한다.
     const op = e.target.closest("[data-open]");
     if (op) {
@@ -4560,7 +4652,6 @@ function initDock() {
     if (axis === "lines") { localStorage.setItem("hojae_lines", JSON.stringify([...filter.lines])); window._dbg?.applyLOD?.(); }
     renderAll();
   });
-  renderDock();
 }
 /* 표시 조건 초기화 — 도크의 '초기화'와 **같은 동작 하나**를 여기서 정의해 두 곳이 갈리지 않게 한다.
    패널의 "조건을 풀면 N건" 안내에서도 부른다(2026-07-30). */
@@ -4774,7 +4865,7 @@ function updateTabbar() {
   el.title = n ? `오늘 문서상 움직인 신호 ${n}건 — 흐름 탭의 「오늘」과 같은 수` : "";
   el.style.display = n ? "" : "none";
 }
-function renderAll() { renderChips(); renderDock(); renderAxis(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); if (VIEW_MODE === "list") renderList(); if (VIEW_MODE === "flow") renderFlow(); updateTabbar(); layoutBottom(); }
+function renderAll() { renderChips(); renderDock(); renderAxis(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); if (VIEW_MODE === "list") renderList(); if (VIEW_MODE === "flow") renderFlow(); renderSheet(); updateTabbar(); layoutBottom(); }
 
 /* ══════════ 지도: 카카오 → Leaflet 폴백 ══════════ */
 function bootMap() {
@@ -5764,12 +5855,21 @@ function initKakao() {
       if (lv < 9 || lvl === "S" || lvl === "A") return r;
       return Math.max(lv >= 11 ? 5 : 6, r - (lv >= 11 ? 3 : 2));   // 지름 10~12px 하한
     };
-    // 겹침 배지 기준 이력: 30px 격자(남발) → 완전 동일 좌표만(2026-07-27 사용자 "정확히 똑같은
-    // 위치가 아니면 묶지 마라") → 14px(2026-08-04 "미세한 차이는 중첩 적용") → **5px**(같은 날
-    // 사용자 "14px로 하니깐 중첩이 너무 많이 되네. 5px정도로" — 사실상 맞닿은 것만 묶는다).
+    /* 겹침 격자 이력: 30px(남발) → 동일좌표만(2026-07-27) → 14px → **5px**(2026-08-04 사용자
+       "14px로 하니깐 중첩이 너무 많이 되네. 5px정도로").
+       ★★ 2026-08-13 **마커 크기에서 도출**로 바꾼다 (사용자 제보: *"확대시 동그라미 숫자가 많아서
+         제대로 볼 수가 없음 · 전체적으로 지도가 느려짐"*).
+       ☠ 원인은 5px 자체가 아니라 **전제가 바뀐 것**이다. 5px은 마커가 작고 표시 상한(200~600)이
+         있던 시절의 값인데, 같은 날 상한을 폐기(시안 §01 무손실)하고 마커 지름을 34px까지 키웠다.
+         **겹침 판정만 옛 값으로 남아** 시각적으로 완전히 겹친 마커들이 각각 배지로 남았다 —
+         화면이 숫자로 덮이고 오버레이 수가 그대로 성능이 됐다.
+       ⇒ 격자를 **마커 지름에 비례**시킨다. 시안 §01의 「겹치면 개수를 명시한 클러스터로 합쳐집니다」가
+         원래 이 뜻이다. 숨기는 게 아니라 **합치는 것**이라 무손실은 그대로다(합계는 도넛 안에 있다).
+       ⚠ 사용자가 정한 5px을 임의로 되돌린 게 아니라, **그 값이 전제하던 조건이 사라져** 다시 도출한
+         것이다. 마커를 키우거나 줄이면 이 값도 자동으로 따라온다. */
     const _dppx = (() => { try { const bb = map.getBounds();
       return (bb.getSouthWest() ? Math.abs(bb.getNorthEast().getLng() - bb.getSouthWest().getLng()) : .1) / (mapEl.clientWidth || 800); } catch (e) { return 1e-4; } })();
-    const _cell = _dppx * 5;
+    const _cell = _dppx * (HJR.S * 2.4);   // 지름(34) 기준 약 1.2배 — 서로 닿으면 묶는다
     const cellKey = (x, y) => Math.round(x / _cell) + "," + Math.round(y / _cell);
     const groups = new Map();
     for (const s of pool) { const c = s.geometry.coordinates; const gk = cellKey(c[0], c[1]);
@@ -6538,6 +6638,103 @@ function distToApt(s, a) {
   if (!pts.length) return Infinity;
   return Math.min(...pts.map(p => meters([a.lon, a.lat], p.coord)));
 }
+/* 목록 표 생성 — **데스크톱 목록 탭과 모바일 바텀시트가 같은 행을 쓴다** (2026-08-13 시안 §04·§10).
+   행 모양을 두 곳에 적으면 반드시 갈린다(이 저장소가 배지·색으로 이미 두 번 밟은 형태). */
+function listTable(rows, apt, sort) {
+    const tb = document.createElement("table"); tb.className = "ltab";
+    tb.innerHTML = '<thead><tr><th>호재명</th><th>유형</th><th class="c">등급</th><th class="c">단계</th><th>소재지</th><th class="c">확인일</th></tr></thead>';
+    const body = document.createElement("tbody"); tb.appendChild(body);
+    rows.forEach(s => {
+      // 점 신호(IC·역)는 sd/sg/dong이 비어 있다 — 좌표는 있는데 "위치 미상"이라 읽히면 거짓이 된다.
+      // 고시 소재지(ic_loc)로 폴백하고, 그것도 없을 때만 미상이라 말한다(P2).
+      const loc = [s.sd, s.sg, s.dong].filter(Boolean).join(" ") || (s.ic_loc || "").split("·")[0].trim();
+      const d = apt && sort === "dist" ? distToApt(s, apt) : null;
+      const t = ringOf(s), lv = t.lv;
+      const basis = gradeBasisHtml(s).replace(/\s*·\s*$/, "").trim();
+      const src = (s.src_name || s.src || "").toString().split("—")[0].trim();
+      const tr = document.createElement("tr");
+      tr.innerHTML =
+        `<td class="lt-nm"><i class="lt-bar" style="background:${t.col}"></i>`
+        + `<span class="lt-t">${sigTitle(s)}</span>`
+        + `<span class="lt-sub">${[basis, src].filter(Boolean).join(" · ") || "근거 미표기"}</span></td>`
+        + `<td class="lt-cat">${catOf(s)}${subLabel(s)}</td>`
+        + `<td class="c"><span class="lt-lv${lv === "미정" ? " nolv" : ""}" style="border-color:${t.col};border-width:${Math.max(1.5, t.bw * .7).toFixed(1)}px">${lv === "미정" ? "" : lv}</span></td>`
+        + `<td class="c lt-ph">${PHASE_LABEL[phaseOf(s)] || phaseOf(s)}</td>`
+        + `<td class="lt-loc">${loc || "위치 미상"}${d !== null && isFinite(d) ? ` · ${d < 1000 ? Math.round(d) + "m" : (d / 1000).toFixed(1) + "km"}` : ""}</td>`
+        + `<td class="c lt-d">${fmtDay(s.last_movement) || "—"}</td>`;
+      // 목록에서 행을 누르면 지도로 넘어가 그 신호를 연다(목록=발견, 지도=위치 확인).
+      tr.onclick = () => { setView("map"); showSignal(s, true); };
+      body.appendChild(tr);
+    });
+    return tb;
+}
+/* ══════════ 바텀시트 (2026-08-13 시안 §10 · 사장님 결정 「(가) 시트 안에 표현 필터」) ══════════
+   시트가 모바일에서 **사이드바 자리를 대신한다** — 필터를 만지면 바로 아래 목록이 바뀌므로
+   「필터 탭 ↔ 목록 탭」 왕복이 사라진다(그게 원래 문제였다).
+   ★ 필터 상태·핸들러는 도크와 **하나**다(`data-tog` + `bindFilterClicks`). 모양만 칩으로 갈린다. */
+let _msDet = "peek";
+function msSet(d) { _msDet = d; const el = document.getElementById("msheet"); if (el) el.dataset.det = d; }
+function initSheet() {
+  const sh = document.getElementById("msheet"); if (!sh || sh._init) return;
+  sh._init = true;
+  bindFilterClicks(sh);                       // 도크와 같은 배선 — 사본 없음
+  /* 시트는 **탭바 위**에 앉는다. 높이를 박으면 낡으므로 탭바에서 잰다(창 크기 변경도 따라온다).
+     ⚠ 이걸 안 하면 시트가 탭바에 통째로 가려 화면에서 사라진다(2026-08-13 실측 — z-index로는
+       해결되지 않는다. 겹치지 않게 자리를 비켜야 한다). */
+  const fitSheet = () => {
+    const tb = document.getElementById("tabbar");
+    const h = tb && getComputedStyle(tb).display !== "none" ? Math.round(tb.getBoundingClientRect().height) : 0;
+    sh.style.bottom = h + "px";
+  };
+  fitSheet(); window.addEventListener("resize", fitSheet);
+  const grip = document.getElementById("ms-grip");
+  const ORDER = ["peek", "half", "full"];
+  grip.addEventListener("click", () => msSet(ORDER[(ORDER.indexOf(_msDet) + 1) % ORDER.length]));
+  /* 드래그 — 세로로 끌면 가까운 단으로 붙는다. 터치·마우스를 한 경로(pointer)로 다룬다. */
+  let y0 = null;
+  grip.addEventListener("pointerdown", e => { y0 = e.clientY; grip.setPointerCapture(e.pointerId); });
+  grip.addEventListener("pointerup", e => {
+    if (y0 == null) return;
+    const dy = e.clientY - y0; y0 = null;
+    if (Math.abs(dy) < 24) return;            // 탭으로 본다 — click 핸들러가 처리
+    const i = ORDER.indexOf(_msDet);
+    msSet(ORDER[Math.max(0, Math.min(2, i + (dy < 0 ? 1 : -1)))]);
+  });
+}
+/* 시트 내용 — 건수·활성 필터 배지 · 유형/등급/단계 칩 · 목록. renderAll에서 부른다. */
+function renderSheet() {
+  const sh = document.getElementById("msheet"); if (!sh) return;
+  initSheet();
+  const C = dockCounts();
+  const rows = allSignalsFlat().filter(visible);
+  document.getElementById("ms-n").textContent = rows.length.toLocaleString() + "건";
+  /* 활성 필터 개수 = **기본과 달라진 축의 수**. 접힌 상태에서도 뭐가 걸려 있는지 보인다. */
+  const nf = (CAT_KEYS.length - CAT_KEYS.filter(c => filter.cat.has(c)).length)
+    + (PHASES.length - PHASES.filter(p => filter.phase.has(p)).length)
+    + (["S", "A", "B", "C", "미정"].length - ["S", "A", "B", "C", "미정"].filter(l => filter.lvl.has(l)).length)
+    + (filter.region ? 1 : 0);
+  const fb = document.getElementById("ms-f");
+  fb.hidden = !nf; fb.textContent = "필터 " + nf;
+  const chip = (axis, k, label, extra, on, n) =>
+    `<button class="mc${on ? "" : " off"}" data-tog="${axis}" data-k="${k}">${extra}${label}` +
+    (n != null ? `<span class="n">${n.toLocaleString()}</span>` : "") + "</button>";
+  const catRow = CAT_KEYS.map(c => chip("cat", c, c,
+    `<i style="background:${CAT_COLOR[c]}"></i>`, filter.cat.has(c), C.cat[c] || 0)).join("");
+  const lvRow = ["S", "A", "B", "C"].map(g => chip("lvl", g, g,
+    `<i style="width:${HJR[g]}px;height:${HJR[g]}px;border:1.6px solid currentColor;background:none"></i>`,
+    filter.lvl.has(g))).join("")
+    + chip("lvl", "미정", LEVEL_NAME["미정"], '<i class="dia"></i>', filter.lvl.has("미정"));
+  const phRow = PHASES.map(p => chip("phase", p, phaseLabel(p),
+    `<i class="${p === "계획" ? "dash" : ""}" style="${p === "계획" ? "" : "background:currentColor"}"></i>`,
+    filter.phase.has(p))).join("");
+  document.getElementById("ms-filters").innerHTML =
+    `<div class="ms-row">${catRow}</div>`
+    + `<div class="ms-row"><span class="lb">등급</span>${lvRow}</div>`
+    + `<div class="ms-row"><span class="lb">단계</span>${phRow}</div>`;
+  const box = document.getElementById("ms-list");
+  box.innerHTML = "";
+  box.appendChild(listTable(rows.slice(0, 120), null, "level"));
+}
 function renderList() {
   const sortSel = document.getElementById("l-sort");
   const apt = listAnchorApt();
@@ -6581,32 +6778,7 @@ function renderList() {
   if (!rows.length) {
     el.innerHTML = `<div class="pickhint" style="padding:24px">표시 조건에 맞는 호재 없음 — 왼쪽 조건을 풀면 나타납니다.</div>`;
   } else {
-    const tb = document.createElement("table"); tb.className = "ltab";
-    tb.innerHTML = '<thead><tr><th>호재명</th><th>유형</th><th class="c">등급</th><th class="c">단계</th><th>소재지</th><th class="c">확인일</th></tr></thead>';
-    const body = document.createElement("tbody"); tb.appendChild(body);
-    rows.slice(0, listShown).forEach(s => {
-      // 점 신호(IC·역)는 sd/sg/dong이 비어 있다 — 좌표는 있는데 "위치 미상"이라 읽히면 거짓이 된다.
-      // 고시 소재지(ic_loc)로 폴백하고, 그것도 없을 때만 미상이라 말한다(P2).
-      const loc = [s.sd, s.sg, s.dong].filter(Boolean).join(" ") || (s.ic_loc || "").split("·")[0].trim();
-      const d = apt && sort === "dist" ? distToApt(s, apt) : null;
-      const t = ringOf(s), lv = t.lv;
-      const basis = gradeBasisHtml(s).replace(/\s*·\s*$/, "").trim();
-      const src = (s.src_name || s.src || "").toString().split("—")[0].trim();
-      const tr = document.createElement("tr");
-      tr.innerHTML =
-        `<td class="lt-nm"><i class="lt-bar" style="background:${t.col}"></i>`
-        + `<span class="lt-t">${sigTitle(s)}</span>`
-        + `<span class="lt-sub">${[basis, src].filter(Boolean).join(" · ") || "근거 미표기"}</span></td>`
-        + `<td class="lt-cat">${catOf(s)}${subLabel(s)}</td>`
-        + `<td class="c"><span class="lt-lv${lv === "미정" ? " nolv" : ""}" style="border-color:${t.col};border-width:${Math.max(1.5, t.bw * .7).toFixed(1)}px">${lv === "미정" ? "" : lv}</span></td>`
-        + `<td class="c lt-ph">${PHASE_LABEL[phaseOf(s)] || phaseOf(s)}</td>`
-        + `<td class="lt-loc">${loc || "위치 미상"}${d !== null && isFinite(d) ? ` · ${d < 1000 ? Math.round(d) + "m" : (d / 1000).toFixed(1) + "km"}` : ""}</td>`
-        + `<td class="c lt-d">${fmtDay(s.last_movement) || "—"}</td>`;
-      // 목록에서 행을 누르면 지도로 넘어가 그 신호를 연다(목록=발견, 지도=위치 확인).
-      tr.onclick = () => { setView("map"); showSignal(s, true); };
-      body.appendChild(tr);
-    });
-    el.appendChild(tb);
+    el.appendChild(listTable(rows.slice(0, listShown), apt, sort));
   }
   /* 무한 스크롤 (시안 §04: 「페이지 버튼 없이 스크롤로 계속 이어붙입니다 — 총 건수는 이미 상단에」).
      ☠ 처음엔 IntersectionObserver로 짰다가 **두 번 조용히 실패**했다: ① root가 뷰포트 기본값이라
@@ -6813,7 +6985,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813l");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813m");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -6953,6 +7125,7 @@ function initSearch() {
   initSearch();
   renderPanel();
   initAxis();        // 모바일 축 칩 — 부트는 renderAll()을 안 부르므로 여기서 따로 한 번(클릭 위임 포함)
+  renderSheet();     // 바텀시트도 같은 이유로 여기서 한 번 — 이후는 renderAll이 갱신한다(시안 §10)
   layoutBottom();
   bootMap();
   document.getElementById("v-map").onclick = () => setView("map");
@@ -6997,7 +7170,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813l"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813m"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7023,7 +7196,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813l");
+  const CB = "?b=" + (window.BUILD || "20260813m");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
