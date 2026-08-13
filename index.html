@@ -30,6 +30,10 @@
        새 스크롤 영역을 만들 때마다 한 줄씩 빠뜨리는 구조라 전역으로 올린다(사본을 만들지 않는다). */
   * { scrollbar-width:none; -ms-overflow-style:none; }
   *::-webkit-scrollbar { width:0; height:0; display:none; }
+  /* 헤더 여백에서 **글자 선택 커서(I-beam)**가 떠 「커서가 보인다」로 읽혔다(2026-08-14 사장님).
+     검색창처럼 정말 글자를 넣는 곳은 자기 커서를 갖는다. */
+  header { cursor:default; }
+  header input, header select { cursor:auto; }
   body { font-family:'Gothic A1','Apple SD Gothic Neo',sans-serif; -webkit-font-smoothing:antialiased;
          color:var(--ink); background:var(--bg); }
   /* ★ 숫자·날짜는 **모노스페이스**다 (시안 §06 「숫자와 날짜는 모노스페이스로 데이터임을 표시」).
@@ -143,7 +147,10 @@
   body { display:flex; flex-direction:column; height:100vh; height:100dvh; overflow:hidden; }
   #wrap { display:flex; flex:1 1 auto; min-height:0; position:relative; }
   /* 상세 패널 = 지도를 **밀지 않고** 도크 옆에 떠 있는 카드(2026-07-23 사용자 요청). 도크(326)+12 여백 위치 */
-  #panel { position:absolute; left:338px; top:12px; width:392px; max-height:calc(100% - 24px); overflow-y:auto;
+  /* 폭 392 → **470**(2026-08-14 사장님 *"왼쪽으로 폭을 좀 늘려서 내용 줄바뀜을 줄여"*).
+     「연면적 5.9만m²」가 두 줄로 깨지고 `m²`만 아래로 떨어지던 자리다. 도크(272)+12 여백이라
+     왼쪽은 더 못 당긴다 — 오른쪽으로 늘리되 지도가 남는 폭은 그대로 확인했다. */
+  #panel { position:absolute; left:290px; top:12px; width:470px; max-height:calc(100% - 24px); overflow-y:auto;
     background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:0 8px 30px rgba(25,35,60,.16);
     padding:16px 16px 20px; z-index:500; order:0; }
   #map { flex:1; min-width:0; order:1; }
@@ -496,7 +503,15 @@
      착공 이후 = 비율(회색 트랙 = 전체). 「반경 내 호재」는 세 번째 막대를 만들지 않고 **큰 숫자**로
      적는다(총계는 비교 대상이 아니라 규모 표기다).
      막대는 **무채색 잉크 농도**로 S→C를 가른다 — 색 채널은 유형 전용(DESIGN §1-1). */
-  .cmpsum { align-items:center; background:#fff; border:1px solid var(--line); border-radius:var(--r) var(--r) 0 0; }
+  /* ☠ **행 구분선이 열마다 어긋났다** (2026-08-14 사장님 지적). `align-items:center`라 각 셀이
+     제 내용만큼만 높고, `border-bottom`이 **행 바닥이 아니라 셀 바닥**에 그려졌다 — 빈 라벨
+     셀은 높이가 거의 0이라 선이 중간에 떠 있었다.
+     ⇒ 셀을 **행 높이만큼 늘리고**(stretch) 수직 정렬은 셀 안에서 한다. 그러면 선이 한 줄로 잇는다.
+     ★ 라벨 열 오른쪽에 세로선 하나 — 시안도 라벨과 값 사이만 가른다(값 열끼리는 안 가른다). */
+  .cmpsum { align-items:stretch; background:#fff; border:1px solid var(--line); border-radius:var(--r) var(--r) 0 0; }
+  .cmpsum > .rl { display:flex; align-items:center; border-right:1px solid var(--line); }
+  .cmpsum > .ch, .cmpsum > .cv { display:flex; align-items:center; }
+  .cmpsum > .cv.stack, .cmpsum > .cv.two { flex-direction:column; align-items:stretch; justify-content:center; }
   .cmpsum > .rl, .cmpsum > .ch, .cmpsum > .cv { padding:11px 16px 11px 0; border-bottom:1px solid var(--line); }
   .cmpsum > .rl { padding-left:14px; font-family:'IBM Plex Mono',ui-monospace,monospace;
                   font-size:11px; letter-spacing:.06em; color:var(--ink3); }
@@ -752,11 +767,16 @@
      「다른 종류」임을 말한다. 이름은 **아래에** 붙는다(코어와 한 알약이면 점이 어디인지 흐려진다).
      ☆ 코어가 13×13이고 오버레이 앵커가 .5/.5이므로 **점이 코어 한가운데**에 온다 — 라벨은
        absolute라 이 정렬을 흔들지 않는다(종전 인라인 알약은 알약 전체의 중심이 점이었다). */
-  .apt-anchor { position:relative; width:13px; height:13px; pointer-events:none; }
-  .apt-anchor i { display:block; width:13px; height:13px; background:var(--ink); box-shadow:0 0 0 2px #fff; }
-  .apt-anchor span { position:absolute; top:18px; left:50%; transform:translateX(-50%);
-    background:rgba(255,255,255,.94); border:1.5px solid var(--ink); border-radius:4px;
-    padding:1px 7px; font-size:11px; font-weight:700; color:var(--ink); white-space:nowrap; }
+  /* ⚠ 2026-08-14 사장님 *"단지 선택시 테두리 선이 잘 안보여"* — 13px 검정 사각은 지도 위
+     아파트 아이콘·건물 색과 섞여 **어디를 눌렀는지 눈에 안 들어왔다**. 크기를 키우는 대신
+     **대비 겹**을 준다(마커가 이미 쓰는 5겹 문법과 같은 방향): 흰 케이싱 → 검정 코어 →
+     바깥 헤어라인 → 그 밖에 **흰 후광 링**. 지도가 어떤 색이든 경계가 선다. */
+  .apt-anchor { position:relative; width:15px; height:15px; pointer-events:none; }
+  .apt-anchor i { display:block; width:15px; height:15px; background:var(--ink);
+    box-shadow:0 0 0 3px #fff, 0 0 0 4.5px var(--ink), 0 0 0 7px rgba(255,255,255,.85), 0 1px 5px rgba(0,0,0,.35); }
+  .apt-anchor span { position:absolute; top:22px; left:50%; transform:translateX(-50%);
+    background:var(--ink); border:2px solid #fff; border-radius:5px; box-shadow:0 1px 5px rgba(0,0,0,.3);
+    padding:2px 8px; font-size:11.5px; font-weight:700; color:#fff; white-space:nowrap; }
   /* 시도 집계 알약 — 전국 줌에서만. 앞 숫자=재고(신호 수), 뒤 숫자=변화(이번 주 문서상 움직임).
      변화만 색을 갖는다(우리는 delta 매체) — 0이면 아예 안 붙인다(없는 걸 강조하지 않는다). */
   .sd-pill { background:rgba(255,255,255,.96); border:1.5px solid var(--navy); border-radius:999px;
@@ -832,7 +852,10 @@
   div:has(> .rail-name) { pointer-events:none; }
   /* 말풍선 꼬리 — 종전엔 꼬리가 없어 카드가 마커와 무관하게 **떠 있는 것처럼** 보였다
      (2026-07-31 사용자 "팝업 위치가 좀 떠있다"). 간격도 8px → 3px로 좁힌다. */
-  .apt-pop { position:relative; background:#fff; border-radius:12px; box-shadow:0 6px 22px rgba(0,0,0,.24); padding:11px 14px; min-width:180px; max-width:250px; }
+  /* ★ 시안 §07 실물 — 버튼이 **카드 하단에 꽉 찬다**(좌우 여백 없음). 그래서 패딩은 본문에만 준다. */
+  .apt-pop { position:relative; background:#fff; border-radius:12px; box-shadow:0 6px 22px rgba(0,0,0,.24);
+    min-width:210px; max-width:268px; overflow:hidden; }
+  .apt-pop .apt-pop-body { padding:12px 14px 13px; }
   .apt-pop::after { content:""; position:absolute; left:50%; bottom:-7px; transform:translateX(-50%);
     border-left:7px solid transparent; border-right:7px solid transparent; border-top:8px solid #fff;
     filter:drop-shadow(0 3px 2px rgba(0,0,0,.10)); }
@@ -842,24 +865,34 @@
   .apt-pop-cats span { font-weight:700; }
   .apt-pop-cats .tot { color:var(--ink); font-weight:800; width:100%; margin-bottom:1px; }
   .apt-pop-cats.none { color:var(--muted); font-weight:400; }
-  .apt-pop-cnt { font-size:12px; color:var(--muted); margin-top:6px; } .apt-pop-cnt b { color:var(--ink); }
+  /* ☠ 「반경 내 호재 12건」이라 **문장으로** 적었다 — 시안은 「12 건」 **큰 숫자 하나**다.
+     이 자리의 질문은 「들어가 볼까」 하나뿐이라 숫자가 곧 답이고, 앞말은 읽을 것을 늘릴 뿐이다.
+     ⚠ 무엇의 개수인지는 바로 아래 **유형 구성 막대**가 말한다(2026-08-14 사장님 지적). */
+  .apt-pop-cnt { display:flex; align-items:baseline; gap:5px; margin-top:11px;
+    border-top:1px solid var(--line); padding-top:11px; }
+  .apt-pop-cnt b { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:24px; font-weight:600;
+    letter-spacing:-.02em; color:var(--ink); line-height:1; }
+  .apt-pop-cnt span { font-size:12px; color:var(--ink2); }
   /* 유형 바 — 「N건」만으로는 어떤 성격의 단지인지 알 수 없다(2026-08-12). 미리보기는 「들어가 볼지」만
      정하는 자리라 유형 분해 한 줄로 그것만 답하고, 등급 구성·개별 호재는 상세가 말한다(중복 금지). */
-  .apt-pop-bar { display:flex; height:6px; border-radius:3px; overflow:hidden; margin-top:7px; }
+  .apt-pop-bar { display:flex; height:8px; border-radius:2px; overflow:hidden; margin-top:9px; }
   .apt-pop-bar i { display:block; height:100%; }
   .apt-pop-leg { font-size:11px; color:var(--ink2); margin-top:4px; }
-  .apt-pop-cmp { margin-top:9px; text-align:center; font-size:12px; font-weight:700; border:1.5px solid #1a1a1a; border-radius:8px; padding:5px 0; cursor:pointer; color:#1a1a1a; background:#fff; }
-  .apt-pop-cmp:hover { background:#f3f4f6; }
-  .apt-pop-cmp.in { background:#1a1a1a; color:#fff; }
+  .apt-pop-cmp { text-align:center; font-size:12.5px; font-weight:700; padding:12px 0; cursor:pointer;
+    color:var(--ink); background:#fff; border:0; }
+  .apt-pop-cmp:hover { background:var(--panel); }
+  .apt-pop-cmp.in { background:var(--ink); color:#fff; }
   /* 상세보기+비교담기 2버튼 행 (2026-08-10 사용자 제보) — 팝업이 마커를 덮어 마커 클릭(상세보기)이
      사실상 불가했고, 모바일은 탭이 mouseenter로 팝업을 먼저 띄워 상세보기 경로가 아예 없었다.
      상세보기를 팝업 안의 **명시 버튼**(주 동작=채움)으로 두면 가림·탭 순서와 무관해진다. */
-  .apt-pop-btns { display:flex; gap:6px; margin-top:9px; }
-  /* 주 동작(상세보기)을 넓게 — 같은 크기 알약 둘이 카드 절반을 먹었다(2026-08-12) */
+  /* 시안 실물: 두 버튼이 **카드 폭을 나눠 하단을 채운다**(알약 아님 · 여백 없음 · 경계선 하나).
+     주 동작(상세보기)이 넓고 검정, 보조(비교 담기)가 좁고 흰색 — 무게로 우선순위를 말한다. */
+  .apt-pop-btns { display:flex; border-top:1px solid var(--line); }
   .apt-pop-btns .apt-pop-view { flex:1.9; }
-  .apt-pop-btns .apt-pop-cmp { margin-top:0; flex:1; }
-  .apt-pop-view { flex:1; text-align:center; font-size:12px; font-weight:700; border:1.5px solid #1a1a1a; border-radius:8px; padding:5px 0; cursor:pointer; color:#fff; background:#1a1a1a; }
-  .apt-pop-view:hover { opacity:.85; }
+  .apt-pop-btns .apt-pop-cmp { flex:1; border-left:1px solid var(--line); }
+  .apt-pop-view { text-align:center; font-size:12.5px; font-weight:700; padding:12px 0; cursor:pointer;
+    color:#fff; background:var(--ink); border:0; }
+  .apt-pop-view:hover { opacity:.88; }
   .copyaddr { cursor:pointer; font-size:11px; padding:1px 4px; border-radius:5px; background:#eef1fb; margin-left:3px; user-select:none; }
   .copyaddr:hover { background:#dde3f7; }
   .factsheet { border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin:8px 0; background:#fbfcfe; }
@@ -870,8 +903,13 @@
      죽은 클래스는 다음 사람에게 살아 있는 것으로 읽힌다. */
   /* ★ 시안 실물: 카드 **맨 위에 유형색 4px 바**, 이름 왼쪽에 **큰 원형 마커**(36px) */
   #panel .detail { position:relative; }
-  .dbar { position:absolute; left:0; right:0; top:0; height:4px; }
-  .dhead { display:flex; align-items:center; gap:12px; margin:6px 0 4px; }
+  /* ☠ **바가 제목 글씨를 관통했다** (2026-08-14 사장님 지적). `position:absolute; top:0`이라
+     패널 스크롤·헤더 sticky와 무관하게 카드 맨 위에 붙었는데, 「선택한 호재」 줄이 sticky로
+     그 위를 덮으면서 바가 **제목 높이**로 내려앉았다. 흐름 안 블록으로 되돌린다 —
+     시안 실물도 바는 카드 최상단에 **자기 줄**을 갖는다. */
+  .dbar { display:block; height:4px; border-radius:2px; margin:2px 0 10px; }
+  .dhead { display:flex; align-items:center; gap:12px; margin:0 0 4px; }
+  .dhead h2 { font-size:19px; font-weight:800; line-height:1.28; letter-spacing:-.01em; word-break:keep-all; min-width:0; }
   .dmk { width:34px; height:34px; border-radius:50%; flex:none; box-shadow:0 1px 4px rgba(0,0,0,.22); }
   .detail h2 { font-size:19px; font-weight:800; letter-spacing:-.01em; margin:0; }
   /* 상세 슬롯 1·2 (시안 §06) — 이름 아래 「유형 · 세부 · 소재지」, 그 아래 칩 3개. */
@@ -959,6 +997,14 @@
   #flowv .fseg.on { background:var(--panel); box-shadow:inset 0 -2px 0 var(--ink); }
   #flowv .fseg.on, #flowv .fseg.on .n { color:var(--ink); }
   /* 「전체」는 요약 4칸과 성격이 다르다(집계가 아니라 해제) — 기간 줄 왼쪽에 작은 알약으로 둔다 */
+  #flowv .fcal { display:flex; align-items:center; gap:8px; padding:8px 10px; border:1px solid var(--line2);
+    border-radius:var(--r-s); background:#fff; box-shadow:0 6px 18px rgba(20,28,50,.12); }
+  #flowv .fcal[hidden] { display:none; }
+  #flowv .fcal label { display:inline-flex; align-items:center; gap:5px; font-size:12px; color:var(--ink2); }
+  #flowv .fcal input { font:inherit; font-size:12.5px; padding:5px 7px; border:1px solid var(--line2);
+    border-radius:6px; background:#fff; color:var(--ink); }
+  #flowv .fcal-go { font:700 12.5px/1 inherit; color:#fff; background:var(--ink); border:0;
+    border-radius:7px; padding:7px 12px; cursor:pointer; }
   #flowv .fall { margin-right:auto; font:600 var(--fs-s)/1 inherit; color:var(--ink2); background:#fff;
                  border:1px solid var(--line2); border-radius:999px; padding:7px 13px; cursor:pointer; }
   #flowv .fall.on { background:var(--ink); border-color:var(--ink); color:#fff; }
@@ -991,17 +1037,21 @@
     #flowv .fitem { grid-template-columns:4px 68px minmax(0,1fr) auto; }
     #flowv .fwhy, #flowv .fsrc { display:none; }
   }
-  #flowv .fdate .mvk { display:inline-block; margin-top:5px; font-style:normal; font-size:11px; font-weight:700;
-                       border-radius:999px; padding:1px 7px; border:1px solid; }
+  /* ☠ 선택자가 `.fdate .mvk`였는데 2026-08-14에 행을 4열 격자로 바꾸며 `.fdate` 래퍼를 없앴다 —
+     **규칙이 하나도 안 먹어** `<i>`의 기울임체만 남았다(사장님 *"단계 변경 뱃지 색상이 저게 뭐니"*).
+     부품을 옮기면 그 부품을 가리키던 선택자도 같이 옮긴다.
+     ★ 시안 실물: 변경 유형 배지는 **연회색 면 + 회색 글자**, **신규만 검정 채움 + 흰 글자**. */
+  #flowv .mvk { display:inline-flex; align-items:center; justify-content:center; font-style:normal;
+    font-size:11px; font-weight:700; border-radius:4px; padding:3px 8px; border:0;
+    background:var(--line); color:var(--ink2); white-space:nowrap; }
   /* ★ 2026-08-13 시안 §05 — 변경 유형 배지는 **무채색, 신규만 검정**(색 채널은 유형 전용).
      ☠ 같은 개념의 배지가 **두 벌**이었다(`.mvtag`·`.mvk`) — 한쪽만 고치면 화면에서 초록 배지가
        그대로 살아난다(실측: `.mvtag`만 고쳤더니 업데이트 탭은 초록 그대로였다). 규칙은 양쪽에 건다.
      ⚠ 역행(`.back`)만 정체색을 남긴다 — P5가 요구하는 사실이라 무채색에 섞으면 안 된다. */
-  #flowv .fdate .mvk.chg { color:var(--ink2); border-color:var(--line2); background:#fff; }
-  #flowv .fdate .mvk.chg.back { color:var(--stall); border-color:#e6d3a3; background:#fdf8ec; }
-  #flowv .fdate .mvk.new { color:#fff; border-color:var(--ink); background:var(--ink); }
-  #flowv .fdate .mvk.seen { color:var(--ink3); border-color:var(--line2); background:var(--panel); }
-  #flowv .fdate .mvk.fld { color:var(--ink2); border-color:var(--line2); background:#fff; }
+  #flowv .mvk.new { color:#fff; background:var(--ink); }
+  /* ⚠ 역행(`.back`)만 정체색을 남긴다 — P5가 요구하는 사실이라 무채색에 섞으면 안 된다 */
+  #flowv .mvk.chg.back { color:var(--stall); background:#fdf8ec; }
+  #flowv .mvk.seen { color:var(--ink3); background:var(--panel); }
   #flowv .fbody { flex:1 1 0; min-width:0; }
   #flowv .fbody .card { margin:0; }
   /* ★ 이 뷰에서는 **단계 바·어림 시각을 감춘다** (사용자 2026-08-12). 단계 변화는 왼쪽 태그와
@@ -1028,9 +1078,11 @@
   /* ── 변동 태그: 이 카드가 **신규인가 변동인가**, 변동이면 무엇에서 무엇으로 (2026-08-12) ──
      정직성 배지(초안·미확정 등)와 **다른 축**이라 색을 나눈다: 저 배지들은 '확실성', 이건 '변화'다.
      역행(인가→계획)은 정체·재추진 신호라 정체 전용색(--stall)을 쓴다 — 경고(--warn)가 아니다. */
-  .mvtag { display:inline-flex; align-items:center; gap:3px; margin-left:6px; padding:1px 7px;
-           border-radius:999px; font-size:11.5px; font-weight:600; white-space:nowrap;
-           border:1px solid var(--line2); color:var(--ink2); background:#fff; }
+  /* ★ 전 → 후는 **알약이 아니라 텍스트**다(시안 §05 실물). 종전엔 이 자리에 알약을 깔아
+     「신규」가 **검정 알약 + 유형색 글자**가 되어 흉했다(2026-08-14 사장님 지적).
+     배지(`.mvk`)가 이미 알약이라, 같은 줄에 알약이 둘이면 무엇이 분류인지 흐려진다. */
+  .mvtag { display:inline-flex; align-items:center; gap:3px; margin-left:6px;
+           font-size:12px; font-weight:600; white-space:nowrap; color:var(--ink2); }
   /* ★ 2026-08-13 시안 §05 — **배지는 무채색, 신규만 검정**.
        *"두 축을 나눠 씁니다 — 좌측 바는 유형 색, 배지는 무채색으로 변경 유형. 같은 정보를 두 번
        말하지 않으므로 「어떤 유형의 무엇이 바뀌었나」가 한눈에 읽힙니다."*
@@ -1039,9 +1091,9 @@
      ⚠ **역행만 예외로 색을 남긴다**(`.back`). 시안은 「하향·철회도 같은 문법」이라지만, 이 저장소의
        P5는 *정체 신호를 정체로 표시*하라고 요구한다 — 인가→계획 역행은 무채색에 섞이면 안 되는
        사실이다. 정체 전용색(--stall)이 그 자리의 SSOT다. */
-  .mvtag.chg { border-color:var(--line2); color:var(--ink2); background:#fff; }
-  .mvtag.chg.back { border-color:#e6d3a3; color:var(--stall); background:#fdf8ec; }
-  .mvtag.new { border-color:var(--ink); color:#fff; background:var(--ink); }
+  .mvtag.chg { color:var(--ink2); }
+  .mvtag.chg.back { color:var(--stall); }
+  .mvtag.new { color:var(--ink2); }
   /* ══ 하단 탭바(독) — 모바일 전용. 데스크톱은 헤더 칩이 같은 일을 한다(두 벌을 만들지 않는다) ══ */
   /* 문법(DESIGN §1): 무채색 뼈대 · 상태는 채움(굵기)으로. `env(safe-area-inset-bottom)` —
      푸터를 숨겨 탭바가 최하단이 됐으므로 아이폰 홈 바를 침범하면 안 된다. */
@@ -1262,10 +1314,11 @@
   /* ★ 시안 실물: 대분류는 **박스**다 — 둥근 사각 + 좌측 3px 유형색 바 + 유형색 아주 연한 배경.
      꺼진 분류는 흰 배경 + 흐린 글씨로 빠진다. 종전엔 그냥 한 줄이라 축이 안 읽혔다. */
   #dock .cat { margin:0 12px 7px; }
-  #dock .cat-h { display:flex; align-items:center; gap:9px; padding:10px 12px 10px 13px; cursor:pointer;
-    position:relative; border:1px solid var(--line); border-left:3px solid var(--cc, var(--line2));
-    border-radius:10px; background:var(--ccbg, #fff); }
-  #dock .cat.off .cat-h { border-left-color:var(--line2); background:#fff; color:var(--ink3); }
+  /* ★ 시안 실물 값: 테두리 = 유형색 35% · 배경 = 유형색 7% · radius 6 · padding 8/10.
+     좌측 3px 바가 아니라 **테두리 전체가 유형색**이다(연하게). */
+  #dock .cat-h { display:flex; align-items:center; gap:9px; padding:8px 10px; cursor:pointer;
+    position:relative; border:1px solid var(--ccb, var(--line)); border-radius:6px; background:var(--ccbg, #fff); }
+  #dock .cat.off .cat-h { border-color:var(--line); background:#fff; color:var(--ink3); }
   #dock .cat-h:hover { border-color:var(--line2); }
   /* 펼침 삼각형 — **글리프는 작게, 과녁은 크게** (2026-08-01 사용자 "너무 작아서 클릭이 어려워").
      종전 12×글자높이(≈9px)는 손가락은 물론 마우스로도 빗나간다. 글자 크기는 11px로만 올리고
@@ -1276,22 +1329,24 @@
      padding 12px가 먹혔다 — 2026-08-01에 "너무 작아서 클릭이 어려워"로 고친 값이 실제로는 한 번도
      적용된 적이 없다. **「고쳤다」와 「넓어졌다」가 갈린 자리**다.
      → border-box 기준으로 다시 적는다: width는 **과녁 전체**(28px), 글리프 자리는 28-12=16px로 그대로. */
-  #dock .cat-h .chev { color:var(--ink3); font-size:11px; width:28px; padding:10px 6px; margin:-10px -6px;
+  #dock .cat-h .chev { color:var(--ink2); font-size:9px; width:26px; padding:9px 9px; margin:-9px -9px;
     flex-shrink:0; text-align:center; border-radius:6px; }
   #dock .cat-h .chev:hover { color:var(--ink); background:var(--line); }
   /* 회전은 **글리프만** — 상자(과녁 28×30 + hover 배경)째 돌리면 세로 상자가 가로로 누워
      옆의 색 점을 5.8px 덮는다(2026-08-04 실측, 사용자 "접기 눌렀을 때 옆에 모양이 넘친다"). */
   #dock .cat-h .chev::before { content:"▶"; display:inline-block; transition:transform .15s; }
   #dock .cat.open .cat-h .chev::before { transform:rotate(90deg); }
-  #dock .cat-h .cd { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
-  #dock .cat-h .nm { font-weight:600; font-size:15.5px; }
-  #dock .cat-h .cn { margin-left:auto; font-size:var(--fs); color:var(--ink2); font-variant-numeric:tabular-nums; }
+  #dock .cat-h .cd { width:11px; height:11px; border-radius:50%; flex-shrink:0; }
+  #dock .cat-h .nm { font-weight:700; font-size:14px; flex:1; }
+  #dock .cat-h .cn { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:12px;
+    color:var(--ink2); font-variant-numeric:tabular-nums; }
   /* ★ `only`는 **항상 보인다** (2026-08-13 시안 §03 목업). hover에만 뜨면 있는 줄 모른다 —
      시안은 대분류 행마다 이 배지를 상시로 그려 두었다(터치 기기엔 hover도 없다). */
-  #dock .cat-h .solo { position:absolute; right:58px; font-size:10px; font-weight:600; letter-spacing:.04em;
-    color:var(--ink3); border:0; border-radius:999px; padding:2px 9px; background:var(--panel); cursor:pointer; }
-  #dock .cat-h .solo:hover { background:var(--line); color:var(--ink2); }
-  #dock .cat-h .solo:hover { color:var(--ink); border-color:var(--line2); }
+  /* ★ 시안 실물: **흰 배경 + 회색 테두리** 알약(10px·600·letter-spacing .04em·radius 9·padding 2/7).
+     종전엔 회색 면에 테두리가 없어 「눌리는 것」으로 안 읽혔고, absolute라 건수와 자리를 다퉜다. */
+  #dock .cat-h .solo { font-size:10px; font-weight:600; letter-spacing:.04em; color:var(--ink2);
+    border:1px solid var(--line2); border-radius:9px; padding:2px 7px; background:#fff; cursor:pointer; flex:none; }
+  #dock .cat-h .solo:hover { color:var(--ink); border-color:var(--ink3); }
   #dock .cat.off .cd { background:var(--line2) !important; }
   #dock .cat.off .nm, #dock .cat.off .cn { color:var(--ink3); }
   /* 중분류 = 필터(무엇을 보나) → 체크박스 */
@@ -1306,21 +1361,32 @@
   #dock .sub .n { margin-left:auto; color:var(--ink3); font-size:var(--fs-s); font-variant-numeric:tabular-nums; }
   #dock .sub.off { color:var(--ink3); }
   /* 표시 옵션(어떻게 보나: 노선 선형) = 스위치 — 체크박스와 문법부터 다르게 (DESIGN.md §3) */
-  #dock .opts { margin-top:6px; padding-top:5px; border-top:1px dashed var(--line); }
+  #dock .opts { margin-top:0; padding-top:16px; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:11px; }
   /* ⚠ **행 전체가 과녁인데 그렇게 안 보였다** (2026-08-11 사용자 "토글이 작아서 클릭이 좀 애매").
      실측 행 높이 **23px** — 손가락 최소치의 절반이고, hover 배경이 없어 「여기를 눌러도 된다」는
      신호도 없었다. 스위치만 키우면 다시 스위치를 겨냥하게 된다 → **행을 키우고 행을 밝힌다.**
      좌우 -6px 상쇄로 글자 정렬은 그대로 두고 과녁만 넓힌다(삼각형과 같은 수법). */
-  #dock .optrow { display:flex; align-items:center; justify-content:space-between; gap:8px;
-    padding:10px 6px; margin:0 -6px; border-radius:var(--r-s); cursor:pointer; font-size:var(--fs-s); color:var(--ink2); }
+  /* ★ 시안 실물: 라벨 13px ink2 · 토글 **34×19 · 켜짐 = 교통색**(선형은 교통 축이라 그 색이 곧 뜻이다) ·
+     노브 15px. 종전 검정 토글은 「잉크=켜짐」 규칙만 따르고 **무엇을 켜는지**를 말하지 않았다. */
+  #dock .optrow { display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:6px; margin:0 -6px; border-radius:var(--r-s); cursor:pointer; font-size:13px; color:var(--ink2); }
   #dock .optrow:hover { color:var(--ink); background:var(--panel); }
-  #dock .optrow .sw { width:36px; height:20px; border-radius:999px; background:var(--line2); position:relative; transition:.15s; flex-shrink:0; }
-  #dock .optrow .sw::after { content:""; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; transition:.15s; }
-  #dock .optrow.on .sw { background:var(--ink); }
-  #dock .optrow.on .sw::after { left:18px; }
+  #dock .optrow .sw { width:34px; height:19px; border-radius:10px; background:var(--line2); position:relative; transition:.15s; flex-shrink:0; }
+  #dock .optrow .sw::after { content:""; position:absolute; top:2px; left:2px; width:15px; height:15px; border-radius:50%; background:#fff; transition:.15s; }
+  #dock .optrow.on .sw { background:var(--c-traffic); }
+  #dock .optrow.on .sw::after { left:17px; }
   /* 정제 축(단계·등급) — 세그 칩: 켜짐=잉크 채움, 꺼짐=외곽선 */
   #dock .axis { border-top:1px solid var(--line); padding:11px 14px; }
-  #dock .axis .t { display:flex; gap:6px; align-items:baseline; font-size:13.5px; font-weight:600; color:var(--ink); margin-bottom:8px; }
+  /* ★ 시안 §03 실물 — 축 제목은 **mono 캡션**(11px · letter-spacing .08em · ink3)이고,
+     「전체 선택」은 테두리 없는 **액센트 텍스트**로 그 줄 **오른쪽 끝**에 선다.
+     종전엔 제목이 13.5px 굵은 검정이고 전체 선택이 회색 테두리 버튼이라 둘 다 무거웠다. */
+  #dock .axis .t { display:flex; align-items:center; justify-content:space-between; gap:6px;
+    font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11px; letter-spacing:.08em;
+    font-weight:500; color:var(--ink3); margin-bottom:7px; }
+  #dock .axis .t small { color:var(--ink3); }
+  #dock .dk-allcat { border:0; background:none; padding:0; cursor:pointer;
+    font:600 12px/1 'Gothic A1','Apple SD Gothic Neo',sans-serif; letter-spacing:0; color:var(--accent); }
+  #dock .dk-allcat:hover { text-decoration:underline; }
   #dock .axis .t small { color:var(--ink3); }
   /* ★ **우연한 wrap을 의미 있는 격자로** (2026-08-11 사용자 "단계랑 등급이 어설프게 2줄").
      도크 가용 폭은 **244px**인데 단계 칩 합폭이 307+간격, 등급이 254+간격이라 **구조적으로 한 줄에
@@ -1566,7 +1632,9 @@
         </select>
       </label>
       <span class="closex" onclick="closeCompare()">✕</span></div>
-    <div class="rmnote">단지를 <b>가격·등급으로 줄 세우지 않습니다</b>(P4/§7). 각 단지 반경 내 <b>호재 신호의 개수·분류·거리·단계</b>만 사실로 나열합니다. 열 순서는 <b>S·A 개수</b>라는 집계 사실일 뿐, 가중치 합산·추천·'수혜' 판단이 아닙니다. 해석은 사용자 몫.</div>
+    <!-- 문구는 시안 그대로 — 조문 번호(§7·P4)는 빼고 **무엇을 하지 않는지**만 말한다.
+         「열 순서는 집계일 뿐」은 각주가 이미 말하므로 여기서 되풀이하지 않는다(2026-08-14). -->
+    <div class="rmnote">단지를 <b>가격·등급으로 줄 세우지 않습니다</b>. 반경 내 <b>호재 신호의 개수·분류·거리·단계</b>만 사실로 나열합니다. 해석은 사용자 몫.</div>
     <div id="cmpBody" style="overflow-x:auto;"></div>
   </div>
 </div>
@@ -3472,8 +3540,18 @@ function initRegionPop() {
        안에서 처리한 클릭은 안에서 끝낸다. */
     e.stopPropagation();
     const go = e.target.closest("#rp-go");
-    if (go) {   // ★ 적용은 여기 한 번뿐 — 지도 이동·집계·목록이 이때만 움직인다
-      applyRegion(pend.sd, pend.sg, pend.dong);
+    if (go) {
+      /* ★ 적용은 여기 한 번뿐 — 지도 이동·경계·집계·목록이 이때만 움직인다.
+         ☠ 종전엔 `applyRegion`만 불렀다(2026-08-13). 그 함수는 **필터만** 세팅하고,
+           지도 이동·경계 하이라이트·경계 지연로드는 `selectSido/Sgg/Dong`이 한다 —
+           그래서 「조회」를 눌러도 화면이 그 지역으로 가지 않고 영역도 안 그려졌다.
+           가장 깊은 단계 하나만 부른다(셋 다 내부에서 applyRegion을 부르므로 중복 없음). */
+      nav.sd = pend.sd || null; nav.sg = pend.sg || null; nav.dong = pend.dong || null;
+      if (pend.sd) loadBdongFor(pend.sd);          // 읍면동 경계는 지연 로드 — 먼저 걸어 둔다
+      if (pend.dong) selectDong(pend.dong);
+      else if (pend.sg) selectSgg(pend.sg);
+      else if (pend.sd) selectSido(pend.sd);
+      else applyRegion(null, null, null);
       syncRegionChip(); open(false); return;
     }
     const it = e.target.closest(".ri"); if (!it) return;
@@ -3581,6 +3659,10 @@ function selectDong(dong) {
     const f = (DONG_GEO?.features || []).find(x => (x.properties.sido || "서울") === nav.sd && x.properties.sgg === nav.sg && x.properties.EMD_KOR_NM === dong);
     const rings = f ? ringsOf(f) : dongRingsOf(filter.region, dong);
     if (rings.length) { mapFit(rings.flat().map(([x, y]) => [y, x]), 30); mapApi?.highlightRings?.(rings); }
+    /* ⚠ 경계는 **지연 로드**라 방금 고른 시도의 파일이 아직 안 왔을 수 있다 — 그때 아무 데도
+       안 가면 「조회했는데 화면이 그대로」가 된다. 시군구로라도 옮기고, 경계가 도착하면
+       `syncRegionBar`가 다시 그린다(2026-08-14 사장님 제보). */
+    else if (nav.sg) regionGo(`${nav.sd} ${nav.sg}`);
   } else if (nav.sg) regionGo(`${nav.sd} ${nav.sg}`);
 }
 /* 시군구로 지도 이동 — **렌더러와 무관한 공용 경로**. 경계 링에서 코너 4점을 뽑아 mapFit에 준다.
@@ -3864,7 +3946,8 @@ function renderApt(a) {
          ⚠ 다만 요약이 갖고 있던 **국소 필터**(이 패널만 등급으로 좁히기)는 도크로 대체되지
            않는다(도크는 전역이라 지도까지 바뀐다 — §0-54a). 그래서 그 기능은 버리지 않고
            **등급 열 머리 클릭**으로 옮겼다. 기능은 남고 중복만 사라진다. -->
-    ${yearChipsHtml()}
+    <!-- 시점 슬라이더 제거(2026-08-14 사장님) — 시안 §07 목업에 없다. 단지 상세의 질문은
+         「무엇이 얼마나 가까운가」라 시점 축은 이 화면의 일이 아니다(업데이트 탭이 시간을 전담). -->
     <div id="list"></div>
     <div class="note" style="border-top:1px dashed var(--line);margin-top:8px;padding-top:8px;font-size:11px;color:var(--muted)">
       단지 정보=공동주택 관리정보 공공데이터(세대수 등 사실). 좌표=도로명주소 지오코딩(도로 수준 근사, 건물단위 아님). 거리는 사실이며 '수혜'는 표시하지 않음(P1)</div>`;
@@ -4328,6 +4411,11 @@ function cmpWarnHtml(title, d, tag) {
     + `<span><span class="nm" title="${esc(title)}">${esc(title)}</span><span class="sb">${tag}</span></span>`
     + `<span class="ds">${cmpDist(d)}</span></div>`;
 }
+/* 참고 밴드(정체·역효과)가 실제로 그려지는가 — 각주 셋째 줄은 **그 밴드가 있을 때만** 붙는다.
+   없는 것을 설명하면 화면이 없는 부품을 가리킨다(「+N으로 묶임」과 같은 사고). */
+function cmpHasRef(cols) {
+  return cols.some(c => c.rows.some(r => r.s.status === "정체") || adverseNearPoint([c.a.lon, c.a.lat]).length);
+}
 function cmpBandsHtml(cols) {
   const live = rows => rows.filter(r => r.s.status !== "정체");
   const total = cols.reduce((a, c) => a + live(c.rows).length, 0);
@@ -4453,8 +4541,8 @@ function renderCompareBody() {
   if (cmpSortMode() === "sa") cols.sort((x, y) => cmpSA(y.rows) - cmpSA(x.rows));
   const body = `<div id="cmpWrap" style="--nc:${cols.length}">
     ${cmpSummaryHtml(cols)}
-    <div class="cmpnote">· 반경 내 호재의 <b>개수·거리·단계 사실만</b> 나열합니다 — 가중치 합산·순위·추천·'수혜' 판단 없음(§7·P1·P3). 세대수는 단지 식별 표기일 뿐 비교 축이 아닙니다.<br>
-      · 거리는 단지 좌표(도로 수준 근사) 기준. 참고 = 정체 신호 · 역효과 시설(${ADVERSE_RKM}km 내 환경기초시설 결정·미완공) — 존재·거리 사실만, 영향 판단 아님(P5).</div>
+    <div class="cmpnote">개수·거리·단계 사실만 나열합니다 — 가중치 합산·순위·추천·'수혜' 판단 없음. 세대수는 단지 식별 표기일 뿐 비교 축이 아닙니다.<br>
+      거리는 단지 좌표(도로 수준 근사) 기준.${cmpHasRef(cols) ? `<br>참고 = 정체 신호 · 역효과 시설(${ADVERSE_RKM}km 내 환경기초시설 결정·미완공) — 존재·거리 사실만, 영향 판단 아님.` : ""}</div>
     ${cmpBandsHtml(cols)}
   </div>`;
   document.getElementById("cmpBody").innerHTML = body;
@@ -5093,8 +5181,9 @@ function renderDock() {
       if (!n) return "";
       return `<div class="sub${on ? "" : " off"}" data-tog="sub" data-k="${id}">
         <span class="tick"></span><span class="nm">${sk === "철도" ? "철도 · 역" : sk === "미상" ? "유형 미상" : sk}</span><span class="n">${n}</span></div>`; }).join("");
-    /* 유형색을 박스에 넘긴다 — 좌측 바(`--cc`)와 아주 연한 배경(`--ccbg`). 색은 CAT_COLOR 하나에서만 온다. */
-    return `<div class="cat${dockOpen.has(cat) ? " open" : ""}${on ? "" : " off"}" style="--cc:${col};--ccbg:${hexA(col, .055)}">
+    /* 유형색을 박스에 넘긴다 — 테두리(`--ccb` 35%)·배경(`--ccbg` 7%)·점(`--cc`).
+       시안 실물 값 그대로다. 색은 CAT_COLOR 하나에서만 온다(사본 금지). */
+    return `<div class="cat${dockOpen.has(cat) ? " open" : ""}${on ? "" : " off"}" style="--cc:${col};--ccb:${hexA(col, .35)};--ccbg:${hexA(col, .07)}">
       <div class="cat-h" data-tog="cat" data-k="${cat}">
         <span class="chev" data-open="${cat}" title="${dockOpen.has(cat) ? "접기" : "펼치기"}"></span>
         <i class="cd" style="background:${col}"></i><span class="nm">${cat}</span>
@@ -5156,7 +5245,8 @@ function renderDock() {
       <div class="seg g2">${PHASES.map(ph).join("")}</div>
     </div>
     <div class="axis">
-      <div class="t">선형 표시</div>
+      <!-- ★ 시안 실물엔 「선형 표시」 제목이 없다 — 아이콘(실선·점선)이 곧 이름이라 제목이 없어도
+           무엇인지 읽힌다. 구분은 위 경계선 하나로 충분하다. -->
       <div class="opts">${LINE_OPTS.map(([k, lb, ln]) => `<div class="optrow${filter.lines.has(k) ? " on" : ""}" data-tog="lines" data-k="${k}">
         ${ln === null ? "" : `<i class="ln${ln}"></i>`}<span>${lb}</span><i class="sw"></i></div>`).join("")}</div>
     </div>
@@ -5399,7 +5489,12 @@ function renderFlow() {
            다 펼쳐 두어 「어느 창으로 보고 있나」가 한눈에 읽히게 했다. -->
       <div class="fper">${FLOW_PERIODS.map(([m, lb]) =>
         `<button class="fpc${m === FLOW_MONTHS ? " on" : ""}" data-per="${m}">${lb}</button>`).join("")}
-        <button class="fpc${FLOW_CUSTOM ? " on" : ""}" data-per="custom">기간 지정 ▾</button></div>
+        <button class="fpc${FLOW_CUSTOM ? " on" : ""}" data-per="custom" id="fpc-custom">기간 지정 ▾</button>
+        <div class="fcal" id="f-cal" hidden>
+          <label>시작 <input type="date" id="f-cal-a" value="${FLOW_CUSTOM ? FLOW_CUSTOM[0] : ""}"></label>
+          <label>종료 <input type="date" id="f-cal-b" value="${FLOW_CUSTOM ? FLOW_CUSTOM[1] : ""}"></label>
+          <button class="fcal-go" id="f-cal-go">적용</button>
+        </div></div>
     </div>
     <!-- ★ 요약 4칸 = **큰 숫자**(갱신 시안 §05 실물). 이 칸이 곧 필터다 — 하나가 두 일을 한다.
          0건이어도 칸을 없애지 않는다: 없애면 「그런 변화는 애초에 안 센다」로 읽히고,
@@ -5478,19 +5573,34 @@ function renderFlow() {
   const fold = host.querySelector("#seenFold");
   if (fold) fold.onclick = () => { FLOW_SEEN_OPEN = !FLOW_SEEN_OPEN; renderFlow(); };
   host.querySelectorAll(".fseg, .fall").forEach(b => b.onclick = () => { FLOW_KIND = b.dataset.kind; renderFlow(); });
+  const _go = host.querySelector("#f-cal-go");
+  if (_go) _go.onclick = () => {
+    const a = document.getElementById("f-cal-a").value, z = document.getElementById("f-cal-b").value;
+    if (!a) { document.getElementById("f-cal-a").focus(); return; }
+    // 거꾸로 고르면 말없이 바로잡는다(빈 목록이 나오는 것보다 낫다)
+    FLOW_CUSTOM = (z && z < a) ? [z, a] : [a, z || ""];
+    renderFlow();
+  };
   host.querySelectorAll(".fpc").forEach(b => b.onclick = () => {
     /* 「기간 지정」 = 시작·끝을 **직접** 고른다(시안 §05). 고정 칸(이번 주~1년)이 답하지 못하는
        질문 — 「지난 분기에 뭐가 움직였나」 — 이 자리에서만 답할 수 있다.
        ⚠ 날짜만 받고 **셈은 같은 함수**가 한다(`inWin`) — 기간 계산을 두 벌로 만들지 않는다. */
     if (b.dataset.per === "custom") {
-      const a = prompt("시작일 (YYYY-MM-DD)", FLOW_CUSTOM ? FLOW_CUSTOM[0] : "");
-      if (a === null) return;
-      const z = prompt("종료일 (YYYY-MM-DD · 비우면 오늘)", FLOW_CUSTOM ? FLOW_CUSTOM[1] : "");
-      if (z === null) return;
-      const ok = t => /^\d{4}-\d{2}-\d{2}$/.test(t);
-      if (!ok(a.trim())) { alert("시작일을 YYYY-MM-DD로 적어 주세요."); return; }
-      FLOW_CUSTOM = [a.trim(), ok(z.trim()) ? z.trim() : ""];
-    } else { FLOW_CUSTOM = null; FLOW_MONTHS = +b.dataset.per; }
+      /* ★ **달력으로 고른다**(2026-08-14 사장님 *"달력으로 선택하게 해야지"*) — `prompt()`는
+         브라우저 기본 대화상자라 화면 문법 밖이고, 날짜 형식을 사람이 외워 적어야 했다.
+         기본값은 **지금 보고 있는 창**(3개월)을 그대로 채운다 — 열자마자 무엇을 바꾸는지 보인다. */
+      const cal = document.getElementById("f-cal");
+      if (!cal.hidden) { cal.hidden = true; return; }
+      const ia = document.getElementById("f-cal-a"), ib = document.getElementById("f-cal-b");
+      const iso = d => d.toISOString().slice(0, 10);
+      const today = new Date();
+      if (!ia.value) { const st = new Date(today); st.setMonth(st.getMonth() - 3); ia.value = iso(st); }
+      if (!ib.value) ib.value = iso(today);
+      ia.max = iso(today); ib.max = iso(today);
+      cal.hidden = false; ia.focus();
+      return;
+    }
+    FLOW_CUSTOM = null; FLOW_MONTHS = +b.dataset.per;
     renderFlow();
   });
 }
@@ -5734,11 +5844,11 @@ function initLeaflet() {
       // 위치 = 아이콘 바로 위 중앙. 호재 건수는 열 때만 계산.
       m.on("mouseover", () => {
         const inCmp = compareSet.some(x => x.n === a.n && x.dong === a.dong);
-        const pop = `<div class="apt-pop"><div class="apt-pop-nm">${a.n}</div><div class="apt-pop-sub">${sub}</div>`
-          + `<div class="apt-pop-cnt">반경 내 호재 <b>${near().length}</b>건</div>`
+        const pop = `<div class="apt-pop"><div class="apt-pop-body"><div class="apt-pop-nm">${a.n}</div><div class="apt-pop-sub">${sub}</div>`
+          + `<div class="apt-pop-cnt"><b>${near().length}</b><span>건</span></div>`
           + catBarHtml(near())
-          + `<div class="apt-pop-btns"><div class="apt-pop-view">${near().length}건 상세보기</div>`
-          + `<div class="apt-pop-cmp${inCmp ? " in" : ""}">${inCmp ? "✓ 비교함" : "＋ 비교담기"}</div></div></div>`;
+          + `</div><div class="apt-pop-btns"><div class="apt-pop-view">${near().length}건 상세보기</div>`
+          + `<div class="apt-pop-cmp${inCmp ? " in" : ""}">${inCmp ? "✓ 비교함" : "비교 담기"}</div></div></div>`;
         const me = m.getElement(); const halfW = me ? Math.round(me.offsetWidth / 2) : 0;
         const pu = L.popup({ className: "apt-pop-wrap", closeButton: false, autoPan: false, offset: [halfW, -6] })
           .setLatLng([a.lat, a.lon]).setContent(pop).openOn(map);
@@ -6177,7 +6287,7 @@ function initLeaflet() {
          ⚠ `iconSize:null`이면 divIcon의 좌상단이 점에 놓인다 — 코어가 점 위에 오도록 크기·앵커를
            명시한다(한쪽 렌더러만 어긋나면 폴백에서 조용한 예외가 된다). */
       icon: L.divIcon({ className: "", html: `<div class="apt-anchor"><i></i><span>${a.n}</span></div>`,
-        iconSize: [13, 13], iconAnchor: [6.5, 6.5] }) }).addTo(map);
+        iconSize: [15, 15], iconAnchor: [7.5, 7.5] }) }).addTo(map);
     clearRadius(); clearHighlight();   // 앵커 마커만
   };
    // 선택 표시(분홍 아이콘)도 함께 푼다 — 상세를 닫으면 **아파트 선택 자체가 풀려야** 한다
@@ -6487,7 +6597,14 @@ function initKakao() {
     const _bw = _sw.getLng(), _bs = _sw.getLat(), _be = _ne.getLng(), _bn = _ne.getLat();
     const _cen = map.getCenter(), _ccx = _cen.getLng(), _ccy = _cen.getLat();   // 화면 중심 — 상한 컬링을 중심거리순으로(2026-07-23)
     const prelim = hjBase()
-      .filter(s => aptFocus ? (aptFocus.has(s) && !isStaleFinished(s)) : visible(s))   // 아파트 포커스=그 단지 호재만(필터 무관, 2026-07-29)
+      /* ★ 단지를 골라도 **지도는 다 그린다** — 관련 여부는 `dimOpacity`가 명암으로 가른다
+         (2026-08-14 사장님 *"경계 밖엔 호재만 뚜렷이 보이고 나머지는 흐리고"* · 시안 §09 원안:
+         *"무언가를 더 그리는 대신 관련 없는 것을 걷어냅니다"* — 걷어낸다 ≠ 지운다).
+         ☠ 종전엔 `aptFocus`가 **그리는 집합 자체**를 잘라 단지 밖이 통째로 비었다. 그래서
+           「경계가 안 보인다」로 읽혔다 — 비교 대상이 없으니 눈금 원만 덩그러니 남는다.
+         ⚠ 관련 판정 기준은 그대로다(그 호재의 영향 반경이 이 단지를 포함하는가) — `aptFocus`와
+           `dimOpacity`가 같은 자를 쓴다. 다만 그 자가 **표시 여부**가 아니라 **명암**을 정한다. */
+      .filter(s => aptFocus ? (visible(s) || aptFocus.has(s)) && !isStaleFinished(s) : visible(s))
       // 망형(전철·도로): 광역 뷰(lv≥9=4km)엔 선만, **도시 뷰(lv≤8=2km)부터 역·IC**.
       // 2026-07-22엔 lv≤7이었는데 실측 결과 **기준이 뒤집혀 있었다**(2026-07-23 사용자 제보):
       // lv8에서 B급 정비구역 65개는 보이는데 **S급 GTX 역은 0개**였다 — 등급 LOD와 역·IC LOD가
@@ -7015,7 +7132,7 @@ function initKakao() {
   const closeAptPop = () => { if (aptPop) { aptPop.remove(); aptPop = null; } };
   const openAptPop = (a, sub, pt) => { closeAptPop(); const near = signalsNearPoint([a.lon, a.lat], true); const inCmp = compareSet.some(x => x.n === a.n && x.dong === a.dong);   // all=true — 단지 사실은 조회조건 무관(Leaflet판 주석 참조)
     aptPop = document.createElement("div"); aptPop.style.cssText = "position:absolute;z-index:50;transform:translate(-50%,-100%);pointer-events:auto"; aptPop.style.left = pt.x + "px"; aptPop.style.top = (pt.y - 3) + "px";
-    aptPop.innerHTML = '<div class="apt-pop"><div class="apt-pop-nm">' + a.n + '</div><div class="apt-pop-sub">' + sub + '</div><div class="apt-pop-cnt">반경 내 호재 <b>' + near.length + '</b>건</div>' + catBarHtml(near) + '<div class="apt-pop-btns"><div class="apt-pop-view">' + near.length + '건 상세보기</div><div class="apt-pop-cmp' + (inCmp ? " in" : "") + '">' + (inCmp ? "✓ 비교함" : "＋ 비교담기") + '</div></div></div>';
+    aptPop.innerHTML = '<div class="apt-pop"><div class="apt-pop-body"><div class="apt-pop-nm">' + a.n + '</div><div class="apt-pop-sub">' + sub + '</div><div class="apt-pop-cnt"><b>' + near.length + '</b><span>건</span></div>' + catBarHtml(near) + '</div><div class="apt-pop-btns"><div class="apt-pop-view">' + near.length + '건 상세보기</div><div class="apt-pop-cmp' + (inCmp ? " in" : "") + '">' + (inCmp ? "✓ 비교함" : "비교 담기") + '</div></div></div>';
     mapEl.appendChild(aptPop); const btn = aptPop.querySelector(".apt-pop-cmp");
     if (btn) btn.addEventListener("click", e => { e.stopPropagation(); toggleCompare(a); const on = compareSet.some(x => x.n === a.n && x.dong === a.dong); btn.classList.toggle("in", on); btn.textContent = on ? "✓ 비교함" : "＋ 비교담기"; });
     const vbtn = aptPop.querySelector(".apt-pop-view");
@@ -7181,15 +7298,18 @@ function initKakao() {
   const showScale = (lng, lat) => {
     clearScale();
     [1000, 2000, 3000].forEach(m => {
-      scaleObjs.push(new K.Circle({ map, center: LL(lng, lat), radius: m, strokeWeight: 1,
-        strokeColor: "#d1d5db", strokeOpacity: .9, strokeStyle: "solid", fillOpacity: 0, zIndex: 3 }));
+      /* ⚠ `#d1d5db`·1px은 카카오 베이스맵 위에서 **거의 안 보였다**(2026-08-14 사장님 *"경계가
+         안보여"*). 눈금은 장식이 아니라 자이므로 읽혀야 한다 — 잉크 계열로 올리고 굵기를 준다.
+         영향 반경 원(유형색·채움 있음)과는 여전히 문법이 갈린다(무채색·채움 없음). */
+      scaleObjs.push(new K.Circle({ map, center: LL(lng, lat), radius: m, strokeWeight: 1.4,
+        strokeColor: "#6f7178", strokeOpacity: .55, strokeStyle: "solid", fillOpacity: 0, zIndex: 8 }));
       const lb = document.createElement("div");
       lb.style.cssText = "font:600 10px/1 ui-monospace,SFMono-Regular,monospace;color:var(--ink2);"
         + "background:rgba(255,255,255,.92);padding:2px 5px;border-radius:3px;white-space:nowrap;pointer-events:none";
       lb.textContent = (m / 1000) + "km";
       // 라벨은 원 위쪽 테두리에 붙인다 — 거리를 숫자로 확정해 주지 않으면 원은 장식이 된다.
       scaleObjs.push(new K.CustomOverlay({ map, position: LL(lng, lat + m / 111320),
-        content: lb, zIndex: 4, yAnchor: .5, xAnchor: .5 }));
+        content: lb, zIndex: 9, yAnchor: .5, xAnchor: .5 }));
     });
   };
   let routeHl = []; const clearRoute = () => { routeHl.forEach(o => o.setMap(null)); routeHl = [];
@@ -7765,7 +7885,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813ag");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260814a");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -7950,7 +8070,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813ag"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260814a"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7976,7 +8096,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813ag");
+  const CB = "?b=" + (window.BUILD || "20260814a");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
