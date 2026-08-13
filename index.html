@@ -38,7 +38,7 @@
          color:var(--ink); background:var(--bg); }
   /* ★ 숫자·날짜는 **모노스페이스**다 (시안 §06 「숫자와 날짜는 모노스페이스로 데이터임을 표시」).
      시안은 이 폰트를 171곳에 쓴다 — 건수·연장·날짜·코드가 문장과 섞이지 않게 하는 장치다. */
-  .mono, .lt-d, .apttab .lt-d, .hj-count, .cl-badge, .cmpsum .cv b, .pcats b,
+  .mono, .lt-d, .rowtab .lt-d, .hj-count, .cl-badge, .cmpsum .cv b, .pcats b,
   .ltab .lt-lv, .dchip, .fseg .n, .lvtag { font-family:'IBM Plex Mono',ui-monospace,monospace; }
   header { display:flex; align-items:center; gap:14px; padding:10px 16px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
   header .logo { font-weight:800; font-size:17px; letter-spacing:-.3px; }
@@ -199,13 +199,13 @@
   .ltab .lt-lv { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px;
     border-radius:50%; border-style:solid; font-size:11px; font-weight:700; color:var(--ink); }
   /* 4점 트랙 (시안 §07) — 건당 60px 트랙 대신 6px 점 4개 */
-  .apttab .pdots { display:inline-flex; gap:3px; margin-bottom:3px; }
+  .rowtab .pdots { display:inline-flex; gap:3px; margin-bottom:3px; }
   /* ★ 시안 실물: 4점 트랙은 **채운 점**이다(빈 링이 아니다) — 미도래만 흐린 점. */
-  .apttab .pd { width:6px; height:6px; border-radius:50%; border:0; background:var(--line2); display:block; }
-  .apttab .pd.on { background:var(--ink); }
-  .apttab .ptrack { display:inline-flex; align-items:center; gap:8px; white-space:nowrap; }
-  .apttab .lt-ph { font-size:12px; line-height:1.3; }
-  .apttab .pdots { margin:0; }
+  .rowtab .pd { width:6px; height:6px; border-radius:50%; border:0; background:var(--line2); display:block; }
+  .rowtab .pd.on { background:var(--ink); }
+  .rowtab .ptrack { display:inline-flex; align-items:center; gap:8px; white-space:nowrap; }
+  .rowtab .lt-ph { font-size:12px; line-height:1.3; }
+  .rowtab .pdots { margin:0; }
   /* ☠ **거리 열이 패널 밖으로 나가 있었다** (2026-08-13 실물 대조 — 실측 표 426px ↔ 그릇 343px).
      이 화면이 묻는 것은 「이 단지에서 얼마나 먼가」인데, 그 답을 담은 열이 눈에 닿은 적이 없다.
      원인은 목록 탭용 `min-width:230px`(제목이 "가양 4…"로 잘리는 것을 막던 값)를 좁은 패널이
@@ -213,12 +213,32 @@
      ⇒ 패널에서는 제목이 **줄바꿈으로 양보**한다(잘리는 게 아니라 두 줄이 된다). */
   /* ⚠ `table-layout:fixed`만 걸면 네 열이 **똑같이** 나뉜다(실측 86px씩) — 이름이 등급 칸만큼
      좁아진다. 폭은 **내용이 요구하는 만큼**만 못 박고 남는 폭은 전부 이름에 준다. */
-  .apttab { table-layout:fixed; }
-  .apttab .lt-nm { min-width:0; word-break:keep-all; }
-  .apttab th, .apttab td { padding-left:7px; padding-right:7px; }
-  .apttab th:nth-child(1), .apttab td:nth-child(1) { width:48px; }
-  .apttab th:nth-child(3), .apttab td:nth-child(3) { width:82px; }
-  .apttab th:nth-child(4), .apttab td:nth-child(4) { width:52px; }
+  .rowtab { table-layout:fixed; }
+  .rowtab .lt-nm { min-width:0; word-break:keep-all; }
+  .rowtab th, .rowtab td { padding-left:7px; padding-right:7px; }
+  .rowtab th:nth-child(1), .rowtab td:nth-child(1) { width:48px; }
+  .rowtab th:nth-child(3), .rowtab td:nth-child(3) { width:82px; }
+  .rowtab th:nth-child(4), .rowtab td:nth-child(4) { width:52px; }
+  /* ══ 행 표는 **패널을 늘리지 않고 그 안에서 흐른다** (2026-08-14 사장님 · 시안 §07 각주) ══
+     *"아파트 단지목록에서 호재 다 펼치지 말고 시안대로 넘치면 더보기 또는 스크롤 내려서 볼 수
+     있게 하자"* — 시안 실물의 각주가 그 문법이다: 「아래로 6건 더 — 스크롤」.
+     ☠ 종전엔 16건을 전부 펼쳐 패널 내용이 1,249px이 됐다(실측 2026-08-14, 그릇 594px). 아래를
+       보려면 **단지명·건수·유형 칩이 화면 밖으로 밀려나** 「어느 단지의 목록인가」가 사라졌다.
+     ⇒ 머리(제목·칩)는 제자리, 표만 스크롤. 표 머리는 `.ltab th`가 이미 sticky라 박스 안에 남는다.
+     ⚠ 모바일은 이 문법을 쓰지 않는다 — 시트 자체가 스크롤이라 안에 또 스크롤을 두면 손가락이
+       어느 쪽을 미는지 알 수 없다(중첩 스크롤). 아래 모바일 블록에서 되돌린다. */
+  #panel.rowview { display:flex; flex-direction:column; }
+  #panel.rowview #list { flex:1 1 auto; }
+  .rowbox { display:flex; flex-direction:column; min-height:96px; background:#fff;
+    border:1px solid var(--line); border-radius:var(--r-s); overflow:hidden; }
+  .rowbox .rowscroll { flex:1 1 auto; min-height:0; overflow-y:auto; }
+  .rowbox .ltab { border:0; border-radius:0; }
+  /* 각주 = 「남은 게 몇 건인지」. 세지 않고 **재서** 적는다(mountRowTable) — 행 높이가 제목
+     줄바꿈에 따라 달라져 「6행 보임」 같은 상수는 반드시 어긋난다(P2). */
+  .rowfoot { flex:none; padding:9px 11px; font-size:11.5px; color:var(--ink3);
+    background:#fbfcfe; border-top:1px solid var(--line); }
+  /* 갈림길 각주 (시안 §10) — 이 목록이 무엇을 하는 자리인지 화면이 스스로 말한다 */
+  .rowhint { margin-top:8px; font-size:11.5px; color:var(--ink3); }
   /* 등급 셀 = 링 + 글자 (시안 §04 실물) */
   /* 목록 건수 (시안 §04 실물) */
   #listv .bignum { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:26px; font-weight:700;
@@ -1099,7 +1119,7 @@
      푸터를 숨겨 탭바가 최하단이 됐으므로 아이폰 홈 바를 침범하면 안 된다. */
   /* 여백은 호갱노노 하단 내비 기준(2026-08-10 사용자 "너무 바닥에 붙었어. 호갱노노 참고해") —
      아이콘·라벨이 상하로 숨 쉬고, 홈 바 위로 넉넉히 뜬다. */
-  /* ══ 바텀시트 (시안 §10) — 지도를 항상 띄워 두고 목록·필터를 시트로 끌어올린다 ══
+  /* ══ 바텀시트 (시안 §11) — 지도를 항상 띄워 두고 목록·필터를 시트로 끌어올린다 ══
      3단: peek(손잡이만) → half(절반) → full(전체). 전체에서는 필터가 상단 고정되고 목록만 스크롤. */
   #msheet { display:none; position:fixed; left:0; right:0; bottom:0; z-index:1290;
     background:#fff; border-top-left-radius:16px; border-top-right-radius:16px;
@@ -1123,7 +1143,7 @@
   /* 필터는 **칩**이다 — 좁은 폭에서 체크박스 세로 목록은 시트 절반을 먹는다.
      데스크톱(체크박스)과 부품이 갈리지만 폭 제약이 다르면 갈리는 게 맞다(사장님 확정 2026-08-13).
      ⚠ 상태·핸들러는 도크와 **같다**(`data-tog`) — 갈리는 것은 모양뿐이다. */
-  /* ★ 시트 목록 = **2줄 행**(시안 §10) — 4px 유형 바 + 이름 + 「유형 · 등급 · 단계」 + 거리.
+  /* ★ 시트 목록 = **2줄 행**(시안 §11) — 4px 유형 바 + 이름 + 「유형 · 등급 · 단계」 + 거리.
      6열 표를 그대로 넣으면 375px에서 뒤 열이 화면 밖으로 나가 가로 스크롤이 생긴다. */
   #msheet .ms-sort { margin-left:auto; font-size:12px; font-weight:600; color:var(--ink2);
     border:1px solid var(--line); border-radius:8px; padding:3px 6px; background:#fff; }
@@ -1235,6 +1255,10 @@
              box-shadow:0 -6px 24px rgba(25,35,60,.20); padding:14px 14px 28px; z-index:1200;
              transition:transform .22s ease; }
     #panel.nosnap { transition:none; }   /* 끄는 중·내용 교체 직후엔 애니메이션 없이 즉시 배치 */
+    /* 행 표 스크롤 박스는 데스크톱 문법이다 — 시트 안에 또 스크롤을 두지 않는다(중첩 스크롤).
+       모바일에서는 시트가 통째로 흐르고 목록은 그대로 이어진다(각주는 남아 「몇 건 더」를 말한다). */
+    #panel.rowview { display:block; }
+    .rowbox .rowscroll { overflow-y:visible; }
     /* 손잡이는 **끌 수 있음을 보이는 유일한 표식**이라 단계가 낮을수록 또렷하게 */
     #panel[data-snap="peek"]::before, #panel[data-snap="half"]::before { background:#aeb6c4; }
     #panel .phead { position:sticky; top:-14px; background:#fff; padding:6px 0 8px; margin:-6px 0 0; z-index:2; }
@@ -1676,7 +1700,7 @@
 <!-- 모바일 하단 탭바(독) — 프로토타입의 하단 독. 데스크톱은 헤더 칩이 같은 일을 하므로 CSS로 숨긴다. -->
 <!-- 아이콘 = 인라인 스트로크 SVG(currentColor) — 이모지는 OS마다 모양이 다르고 톤이 안 맞는다
      (2026-08-09 사용자 "독 이미지가 너무 촌스러워 좀 심플하고 쌔끈한걸로"). -->
-<!-- ★ 모바일 탭 **4개 → 2개** (2026-08-13 시안 §10). 목록과 조회조건은 바텀시트가 담는다.
+<!-- ★ 모바일 탭 **4개 → 2개** (2026-08-13 시안 §11). 목록과 조회조건은 바텀시트가 담는다.
      *"지도/업데이트/목록/조회조건을 오가면 맥락이 끊깁니다. 지도를 항상 띄워 두고 목록을 시트로
      끌어올리는 구조로 바꾸면 탭은 지도·업데이트 2개로 줄어듭니다."*
      ⚠ 시안은 조회조건을 「상단 칩으로 흡수」한다고 했지만 상단 칩은 지역·세대수만 담아
@@ -1690,7 +1714,7 @@
 <div id="msheet" data-det="peek">
   <div class="ms-grip" id="ms-grip">
     <div class="ms-bar"></div>
-    <!-- 시안 §10: 건수 왼쪽 · 정렬 오른쪽. 정렬 축은 목록 탭과 **같은 함수**(sortSignals)를 쓴다. -->
+    <!-- 시안 §11: 건수 왼쪽 · 정렬 오른쪽. 정렬 축은 목록 탭과 **같은 함수**(sortSignals)를 쓴다. -->
     <div class="ms-head"><b id="ms-n">0건</b><span class="ms-f" id="ms-f" hidden>필터 0</span>
       <select class="ms-sort" id="ms-sort" onchange="renderSheet()">
         <option value="level">등급순</option>
@@ -2669,11 +2693,17 @@ function catBarHtml(sigs) {
   return `<div class="apt-pop-bar">${bar}</div><div class="apt-pop-leg">${has.map(c => `${c} ${byCat[c]}`).join(" · ")}</div>`;
 }
 /* 좌측 패널용: 등급(A/B/C)별 그루핑 매트릭스 — 각 등급 안에 분류 구성(교/일/인/주) 소표기 */
-function hojaeMatrixHtml(sigs) {
+/* opt.dense — **없는 등급은 아예 그리지 않는다** (2026-08-14 시안 §10).
+   *"「B급 없음」은 비교표에서 세 단지를 나란히 볼 때만 의미가 있습니다(칸이 비면 「모른다」로
+   읽히므로). 한 지점 안에서는 없는 등급을 아예 그리지 않습니다 — 세로만 먹습니다."*
+   ⚠ 동·구 패널은 종전대로 빈 행을 남긴다 — 거기서는 「이 동에 A급이 없다」가 읽어야 할 사실이다. */
+function hojaeMatrixHtml(sigs, opt = {}) {
   panelGrade = null;   // 새 패널 렌더 = 등급 필터 초기화
   const m = levelCounts(sigs);
   if (!m._total) return `<div class="hmatrix"><div class="pickhint" style="padding:14px 8px">반경 내 호재 없음</div></div>`;
-  const shown = [...LEVELS.filter(l => l !== "S" || m["S"].total), ...(m["미정"].total ? ["미정"] : [])];   // S·미정은 있을 때만 행 노출
+  const shown = opt.dense
+    ? [...LEVELS, "미정"].filter(l => m[l] && m[l].total)
+    : [...LEVELS.filter(l => l !== "S" || m["S"].total), ...(m["미정"].total ? ["미정"] : [])];   // S·미정은 있을 때만 행 노출
   const rows = shown.map(l => {
     const g = m[l];
     const cats = CAT_KEYS.filter(c => g.cats[c])
@@ -3884,19 +3914,28 @@ function showApt(a) {
   mapApi?.refreshPins?.();   // 이 단지 반경 호재만 등장(애니메이션)
   ANIMATE = false;
 }
-/* 아파트 상세의 호재 목록 = **행 52px 표** (2026-08-13 시안 §07).
+/* 호재 목록 = **행 52px 표** (2026-08-13 시안 §07 · 2026-08-14 시안 §10).
    *"카드 하나가 세로 190px을 써서 12건을 보려면 다섯 번 스크롤해야 합니다. 한 줄에 한 건으로
    줄이고 타임라인을 4점 트랙으로 압축하면 12건이 한 화면에 들어옵니다."*
-   ★ 링·색·표 문법은 목록 탭과 **같은 부품**을 쓴다(`ringOf` · `.ltab`). 열 구성만 이 화면의
-     질문에 맞춘다 — 여기서 묻는 것은 「이 단지에서 얼마나 먼가」라 소재지·확인일 대신 거리다. */
-function aptSigTable(arr) {
-  const tb = document.createElement("table"); tb.className = "ltab apttab";
+   ★ 링·색·표 문법은 목록 탭과 **같은 부품**을 쓴다(`ringOf` · `.ltab`).
+   ★ **아파트 상세(§07)와 겹친 호재 모달(§10)이 같은 표를 쓴다** — 두 화면의 질문이 갈리는
+     곳은 마지막 열 하나뿐이다. 단지는 「이 단지에서 얼마나 먼가」(거리), 겹친 지점은 전부
+     같은 자리라 거리가 무의미하므로 「어디까지 미치나」(영향 반경).
+     ⚠ 표를 두 벌로 복제하지 않는다 — 열 하나 때문에 부품을 나누면 나머지 열이 조용히 갈린다. */
+function sigRowTable(arr, opt = {}) {
+  const tail = opt.tail === "impact" ? "impact" : "dist";
+  const tb = document.createElement("table"); tb.className = "ltab rowtab";
   /* 등급 열 머리 = **국소 필터**(시안 §07이 요약 칩 대신 지목한 자리). 누를 때마다 S→A→B→C→전체. */
   const NEXT = { "": "S", S: "A", A: "B", B: "C", C: "미정", "미정": "" };
   const cur = panelGrade || "";
   tb.innerHTML = '<thead><tr><th class="c gh" role="button" tabindex="0" title="누르면 그 등급만 — 다시 누르면 다음 등급, 마지막에 전체">'
     + (cur ? (cur === "미정" ? LEVEL_NAME["미정"] : cur + "만") : "등급") + ' ▾</th>'
-    + '<th>호재명 · 유형</th><th class="c">단계</th><th class="c">거리</th></tr></thead>';
+    + '<th>호재명 · 유형</th><th class="c">단계</th><th class="c">'
+    + (tail === "impact" ? "영향" : "거리") + '</th></tr></thead>';
+  /* 거리는 소수 첫째 자리를 남기고(1.0km — 측정값이라 자릿수가 정밀도를 말한다),
+     영향 반경은 기준표에서 온 **떨어진 값**이라 .0을 떼어 2km로 적는다(시안 §07·§10 실물). */
+  const km = m => m < 1000 ? Math.round(m) + "m"
+    : tail === "impact" ? (m / 1000).toFixed(1).replace(/\.0$/, "") + "km" : (m / 1000).toFixed(1) + "km";
   const body = document.createElement("tbody"); tb.appendChild(body);
   arr.forEach(({ s, dist }) => {
     const t = ringOf(s), lv = t.lv;
@@ -3912,13 +3951,39 @@ function aptSigTable(arr) {
       + `<span class="lt-sub">${catOf(s)}${subLabel(s)}${sub ? " · " + sub : ""}</span></td>`
       /* ★ 시안 실물: 트랙과 단계 글자가 **가로로 나란히** 놓인다(세로로 쌓지 않는다). */
       + `<td class="c lt-ph"><span class="ptrack"><span class="pdots">${dots}</span>${PHASE_LABEL[phaseOf(s)] || phaseOf(s)}</span></td>`
-      + `<td class="c lt-d">${dist < 1000 ? Math.round(dist) + "m" : (dist / 1000).toFixed(1) + "km"}</td>`;
+      + `<td class="c lt-d">${km(tail === "impact" ? getRadius(s) : dist)}</td>`;
     tr.onclick = () => showSignal(s, true);
     body.appendChild(tr);
   });
   const gh = tb.querySelector(".gh");
   if (gh) gh.onclick = () => setPanelGrade(NEXT[cur] || null);
   return tb;
+}
+/* 행 표를 **스크롤 박스에 담아** 그릇(#list)에 건다 — 아파트 상세와 겹친 호재 모달 공용.
+   ★ 「아래로 N건 더」는 **세지 않고 잰다**. 행 높이는 제목 줄바꿈에 따라 달라지므로 「N행까지
+     보인다」는 상수를 두면 반드시 어긋난다 — 화면 밖으로 나간 행을 실측해서 적는다(P2).
+   ⚠ 첫 측정은 레이아웃이 잡히기 전일 수 있어 한 틱 뒤에 한 번 더 잰다(패널을 방금 그렸다).
+     rAF가 아니라 setTimeout인 이유는 §모바일 시트와 같다 — 탭이 숨으면 rAF가 안 돈다. */
+function mountRowTable(host, arr, opt = {}) {
+  host.className = "rowbox";
+  host.innerHTML = "";
+  const box = document.createElement("div"); box.className = "rowscroll";
+  box.appendChild(sigRowTable(arr, opt));
+  const foot = document.createElement("div"); foot.className = "rowfoot";
+  host.appendChild(box); host.appendChild(foot);
+  /* ⚠ 다 내려간 뒤 각주를 **없애면 박스가 그만큼 커져** 스크롤이 튄다. 끝에서도 자리를 지키도록
+     `opt.end`를 받는다(대신 할 말이 없는 화면은 비우고 감춘다 — 빈 띠를 남기지 않는다). */
+  const sync = () => {
+    const bot = box.getBoundingClientRect().bottom;
+    let more = 0;
+    box.querySelectorAll("tbody tr").forEach(tr => { if (tr.getBoundingClientRect().top > bot - 6) more++; });
+    const txt = more ? `아래로 ${more}건 더 — 스크롤` : (opt.end || "");
+    foot.textContent = txt;
+    foot.style.display = txt ? "" : "none";
+  };
+  box.addEventListener("scroll", sync);
+  sync(); setTimeout(sync, 0);
+  return box;
 }
 function renderApt(a) {
   panelCat = null;   // 새 단지 = 유형 필터 초기화
@@ -3960,11 +4025,11 @@ function renderApt(a) {
   });
   const list = p.querySelector("#list");
   panelListRender = () => {
-    list.innerHTML = "";
+    list.className = ""; list.innerHTML = "";
     if (!near.length) { list.innerHTML = `<div class="pickhint">반경 내 호재 없음</div>`; return; }
     const arr = panelArrange(near);
     if (!arr.length) { list.innerHTML = `<div class="pickhint">${LEVEL_NAME[panelGrade] || panelGrade}급 호재 없음</div>`; return; }
-    list.appendChild(aptSigTable(arr));
+    mountRowTable(list, arr, { tail: "dist", end: "행을 누르면 그 호재의 상세가 열립니다" });
   };
   panelListRender();
 }
@@ -4863,31 +4928,47 @@ function renderDongSig(v) {
   };
   panelListRender();
 }
-/* 겹친 호재(같은 지점 중첩) 배지 클릭 → 그 지점 신호 묶음 패널(매트릭스+목록). renderDongSig와 같은 골격 재사용 */
+/* 겹친 호재(같은 지점 중첩) 배지 클릭 → 그 지점 신호 묶음 패널 */
 function showCluster(sigs) {
   view = { mode: "cluster", sigs };
   ANIMATE = true; renderPanel(); ANIMATE = false;
   mapApi?.clearRadius?.(); mapApi?.clearRoute?.(); mapApi?.clearAptMarker?.();
 }
+/* ══ 겹친 호재 모달 (2026-08-14 시안 §10) ══════════════════════════════════════
+   ⚠ 이날 시안에 §10이 **끼어들어** 모바일이 §10→§11로 밀렸다. 코드 안의 「시안 §10」 주석
+     16곳을 같이 옮겼다 — 번호는 시안이 정본이라, 안 옮기면 주석이 엉뚱한 절을 가리킨다.
+   *"지금은 2건을 보여주려고 4행 요약표를 세우고, 그 안에 「B급 없음」 빈 행과 「시점으로 보기」까지
+   붙어 있어 요약이 목록보다 큽니다. 여기서 답해야 할 질문은 「둘 중 어느 것을 열까」 하나입니다."*
+   ⇒ ① 요약(등급 매트릭스)과 시점 슬라이더는 **6건 이상일 때만** — 겹친 지점은 대개 2~3건이다.
+      ② 카드(190px)가 아니라 **행 표** — 단지 상세(§07)와 같은 부품(sigRowTable).
+      ③ 마지막 열은 거리가 아니라 **영향 반경**. 여기 모인 호재는 전부 같은 자리라 거리가
+        서로를 구분하지 못한다 — 이 화면에서 갈리는 사실은 「어디까지 미치나」다.
+      ④ 각주로 이 목록이 **갈림길**임을 밝힌다.
+   ⚠ 요약을 건너뛸 때 `panelGrade`를 손수 지운다 — 종전엔 `hojaeMatrixHtml`이 그 일을 겸했다.
+     요약이 없는 화면에서 지난 패널의 등급 필터가 살아 있으면 목록이 **말없이** 비어 보인다. */
+const CLUSTER_SUMMARY_MIN = 6;   // 요약을 세우는 최소 건수 (시안 §10 「요약은 6건부터」)
 function renderCluster(v) {
   const p = document.getElementById("panel");
   const list = (v.sigs || []).filter(visible);
   const f = list[0] || v.sigs[0] || {};
+  const many = list.length >= CLUSTER_SUMMARY_MIN;
+  if (!many) { panelGrade = null; panelCat = null; }
+  const where = [f.sd, f.sg, f.dong].filter(Boolean).join(" ");
   p.innerHTML = `
-    <div class="phead"><div class="pt">겹친 호재 ${list.length}건</div><div class="closex" onclick="closePanel()">✕</div></div>
-    <div class="ps">같은 지점에 모인 호재${f.sd ? ` — ${f.sd} ${f.sg || ""}` : ""} (지도상 한 배지로 묶임)</div>
-    ${hojaeMatrixHtml(list)}
-    ${yearChipsHtml()}
-    <div id="list"></div>`;
-  wireYearChips(p);
+    <div class="phead"><div class="pt">이 지점 <span class="mono">${list.length}</span>건</div><div class="closex" onclick="closePanel()">✕</div></div>
+    <div class="ps">${where || "같은 지점에 모인 호재"} · 지도상 한 배지로 묶임</div>
+    ${many ? hojaeMatrixHtml(list, { dense: true }) : ""}
+    ${many ? yearChipsHtml() : ""}
+    <div id="list"></div>
+    <div class="rowhint">행을 누르면 그 호재의 상세가 열립니다 — 이 목록은 갈림길일 뿐입니다</div>`;
+  if (many) wireYearChips(p);
   const el = p.querySelector("#list");
   panelListRender = () => {
-    el.innerHTML = "";
+    el.className = ""; el.innerHTML = "";
     if (!list.length) { el.innerHTML = `<div class="pickhint">표시 조건에 맞는 호재 없음</div>`; return; }
     const arr = panelArrange(list.slice());
     if (!arr.length) { el.innerHTML = `<div class="pickhint">${LEVEL_NAME[panelGrade] || panelGrade}급 호재 없음</div>`; return; }
-    arr.slice(0, 80).forEach(s => el.appendChild(makeCard(s)));
-    animateCards(el);
+    mountRowTable(el, arr.map(x => (x.s ? x : { s: x })), { tail: "impact" });
   };
   panelListRender();
 }
@@ -5070,6 +5151,10 @@ function renderPanel() {
        **객체 동일성**이 곧 "같은 화면인가"다. */
   const _newView = view !== _snapView; _snapView = view;
   try { resnapPanel(view.mode === "home" ? null : (_newView ? view.mode : undefined)); } catch (e) {}
+  /* 행 표 화면(단지 상세 §07 · 겹친 호재 §10)만 패널을 세로 flex로 만든다 — 그래야 표가
+     남는 높이를 받아 **그 안에서** 스크롤한다. 나머지 화면은 종전대로 패널이 통째로 흐른다.
+     ⚠ 켜는 곳과 끄는 곳을 갈라 두면 반드시 한쪽이 남는다 — **분기 직전 한 자리**에서 끈다. */
+  pn && pn.classList.toggle("rowview", view.mode === "apt" || view.mode === "cluster");
   if (view.mode === "dong") return renderDong(view.dong);
   if (view.mode === "dongsig") return renderDongSig(view);
   if (view.mode === "cluster") return renderCluster(view);
@@ -5264,7 +5349,7 @@ function initDock() {
   const dock = document.getElementById("dock");
   if (!dock) return;
   /* ★ 필터 클릭 배선은 **하나다** — 도크(데스크톱)와 바텀시트(모바일)가 같은 핸들러를 쓴다
-     (2026-08-13 시안 §10). 시트에 사본을 만들면 두 화면의 필터가 조용히 갈린다. */
+     (2026-08-13 시안 §11). 시트에 사본을 만들면 두 화면의 필터가 조용히 갈린다. */
   bindFilterClicks(dock);
   renderDock();
 }
@@ -6386,7 +6471,7 @@ function hojaeMarkerImage(col, r, bw, ph, fillOp, alpha, halo, shape) {
   //   거의 다 쓰므로, 4색을 아무리 잘 골라도 지도와의 색차는 ΔE 28쯤이 천장이다(실측).
   //   반면 어두운 외곽선은 **배경이 무슨 색이든** 경계를 만든다 — 지도 마커의 표준 해법.
   const cw = 2.2, ro = r + bw / 2 + cw / 2, ri = ro + cw / 2 + 0.35;   // 케이싱·바깥 헤어라인 반지름
-  /* ★ **클릭 영역은 크기와 무관하게 고정**이다 (시안 §02 40px · §10 터치 44px).
+  /* ★ **클릭 영역은 크기와 무관하게 고정**이다 (시안 §02 40px · §11 터치 44px).
      ☠ 종전엔 히트 영역 = 그려진 이미지라 C등급(지름 16)은 케이싱까지 쳐도 **27px**이었다 —
        손가락으로는 거의 못 누르고 마우스로도 조준이 필요했다. 등급이 낮다고 누르기 어려울
        이유는 없다(등급은 규모 분류이지 중요도가 아니다 — P3).
@@ -6483,6 +6568,46 @@ function initKakao() {
 
   // 오버레이(선·폴리곤) 클릭이 지도 click(goHome)과 이중 발화하면 상세가 열리자마자 닫힌다 — 타임스탬프 가드
   let _ovClickTs = 0;
+  /* ══ 배지 위에서도 지도가 끌린다 (2026-08-14 사장님) ═════════════════════════════════════
+     *"호재가 많은데 화면 드래그 하려고 하다 보면 자꾸 호재가 선택되어서 걸려서 드래그 하기가
+     어렵네. 빈 공간을 찾아야 하는데 불편해."*
+     ☠ 원인은 2026-08-04 처방의 반대편이었다 — 「실클릭이 안 먹는다」를 고치려고 `mousedown`을
+       통째로 막았다(preventDefault + stopPropagation). 클릭은 살았지만 **그 자리에서 시작한
+       드래그가 죽었다**. 실측(2026-08-14): 겹친 호재 배지·노선 라벨에서 시작한 드래그는 지도
+       이동량 0 — 배지가 촘촘한 화면에서는 지도를 끌 수 있는 자리가 사실상 사라진다.
+     ⚠ 왜 「막지 말자」로 못 돌아가는가: 이 오버레이는 `clickable:true`라 **카카오가 자체적으로**
+       지도 전파를 끊는다. 우리 핸들러를 지워도(실측) · 지도 컨테이너에 mousedown을 다시
+       쏴 줘도(실측) 지도는 움직이지 않았다. 그래서 이동은 **우리가 직접** 준다.
+     ⇒ 지도의 문법을 그대로 쓴다 — **움직였으면 이동, 안 움직였으면 클릭**.
+       ⚠ rAF로 묶지 않는다: rAF는 탭이 숨으면 안 도는데(§모바일 시트 주석과 같은 이유) 그 경우
+         마지막 이동이 통째로 유실된다. mousemove는 브라우저가 이미 프레임 단위로 합친다.
+       ⚠ 터치는 건드리지 않는다 — 이 사고는 마우스 경로(`mousedown`)에서만 났고, 터치 경로를
+         같이 바꾸면 핀치 줌까지 이 코드가 책임져야 한다. 이번 세션에서 검증한 범위만 고친다. */
+  const DRAG_SLOP = 4;   // px — 이 이하로 움직였으면 클릭(손떨림 허용치)
+  const dragThru = (el, onClick) => {
+    el.onmousedown = ev => {
+      if (ev.button) return;
+      ev.preventDefault(); ev.stopPropagation();   // 텍스트 선택 방지는 그대로 남긴다
+      const sx = ev.clientX, sy = ev.clientY;
+      let prj = null, p0 = null, moved = false;
+      try { prj = map.getProjection(); p0 = prj.containerPointFromCoords(map.getCenter()); } catch (e) { prj = null; }
+      const mv = e => {
+        const dx = e.clientX - sx, dy = e.clientY - sy;
+        if (!moved && Math.abs(dx) + Math.abs(dy) < DRAG_SLOP) return;
+        if (!moved) { moved = true; hideTip(); }   // 끌기 시작 = 말풍선은 물러난다
+        if (!prj) return;
+        try { map.setCenter(prj.coordsFromContainerPoint(new K.Point(p0.x - dx, p0.y - dy))); } catch (e) {}
+      };
+      const up = e => {
+        window.removeEventListener("mousemove", mv, true);
+        window.removeEventListener("mouseup", up, true);
+        if (!moved) { _ovClickTs = Date.now(); onClick(e); }   // 지도 click(goHome)과 이중 발화 방지
+      };
+      window.addEventListener("mousemove", mv, true);
+      window.addEventListener("mouseup", up, true);
+    };
+    el.onclick = ev => ev.stopPropagation();   // 클릭 발화는 위에서 한다(두 번 열리지 않게)
+  };
   // 동 경계: 폴리곤을 feature에 1회 캐시(_kpolys) — 줌/이동마다 파괴·재생성하지 않고 setMap 토글만(줌 버벅임 해소)
   const renderDongPoly = () => {
     const on = map.getLevel() <= DONG_LV; const b = on ? map.getBounds() : null;
@@ -6670,7 +6795,9 @@ function initKakao() {
         let ov = clusterOv.get(gk);
         if (!ov) {
           const el = document.createElement("div"); el.className = "cl-badge";
-          el.onclick = () => { hideTip(); showCluster(el._g); };
+          // 누르면 목록, 끌면 지도 이동 (dragThru — 2026-08-14). 종전의 mousedown 통째 차단은
+          // 클릭을 살리려다 이 자리에서 시작한 드래그를 죽였다.
+          dragThru(el, () => { hideTip(); showCluster(el._g); });
           /* 커서를 올리면 **한 줄로 「몇 건 · 어떤 유형인지」**만 (시안 §03 상호작용 1단계).
              도넛의 원호가 비율을 말하지만 숫자는 총계뿐이라, 「교통 3 · 일자리 2」를 읽으려면
              눌러서 목록을 열어야 했다. 클릭(2단계)은 그대로 상세 목록이다. */
@@ -6681,9 +6808,6 @@ function initKakao() {
             showTip('<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">이 지점 <b>'
               + g.length + '</b>건</div><div class="apt-pop-cats">' + parts + '</div></div>', ev); };
           el.onmouseleave = hideTip;
-          // clickable:true + mousedown 차단 — 실마우스 클릭이 지도 패닝·텍스트 선택으로 새는 것 방지
-          // (line-badge와 같은 사고 클래스, 2026-08-04)
-          el.onmousedown = ev => { ev.preventDefault(); ev.stopPropagation(); };
           ov = new K.CustomOverlay({ position: ll, content: el, zIndex: 11, yAnchor: .5, xAnchor: .5, clickable: true });
           ov._el = el; clusterOv.set(gk, ov);
         } else ov.setPosition(ll);   // 멤버 중심 갱신(팬/멤버 변화 반영)
@@ -6719,7 +6843,7 @@ function initKakao() {
        들어오면 이 줄이 거짓이 되므로 같이 고쳐야 한다. */
     /* ★ 「지도 이동 시 자동 조회」를 함께 적는다 (갱신 시안 §03 실물 — 사장님이 이 자리에 표시).
        별도 조회 버튼이 없다는 사실을 **화면이 스스로 말해야** 「왜 안 눌러도 바뀌지」가 안 생긴다. */
-    /* ★ **「이 화면 안」의 정본은 여기 하나다** (갱신 시안 §10 — 모바일 시트 머리가 같은 말을 한다).
+    /* ★ **「이 화면 안」의 정본은 여기 하나다** (갱신 시안 §11 — 모바일 시트 머리가 같은 말을 한다).
        지도가 방금 그린 pool을 그대로 넘긴다 — 시트가 뷰포트를 다시 계산하면 두 숫자가 갈린다. */
     window._viewPool = pool;
     if (typeof renderSheet === "function" && matchMedia("(max-width:768px)").matches) { try { renderSheet(); } catch (e) {} }
@@ -7048,9 +7172,9 @@ function initKakao() {
           be.innerHTML = "<b></b><small></small>";
         // ⚠ 실마우스 클릭은 mousedown이 지도 패닝·텍스트 선택으로 새면 click이 안 만들어진다
         //   (2026-08-04 사용자 "클릭하면 프롬프트가 깜빡여. 선택이 안되" — 프로그램 click()은 정상,
-        //    실클릭만 불능이었다). mousedown 차단 + CustomOverlay clickable:true(지도 전파 차단)가 처방.
-          be.addEventListener("mousedown", ev => { ev.preventDefault(); ev.stopPropagation(); });
-          be.addEventListener("click", ev => { ev.stopPropagation(); const t = be._o; t && t.ck && t.ck(); });
+        //    실클릭만 불능이었다). 그래서 mousedown을 잡아 두되, **끌면 지도를 대신 옮긴다**
+        //   (dragThru — 2026-08-14. 통째 차단은 이 라벨 위에서 시작한 드래그를 죽였다).
+          dragThru(be, () => { const t = be._o; t && t.ck && t.ck(); });
           // zIndex 20 = 다른 오버레이(라벨 7·+N 11)보다 앞, 하이라이트(21+)보다는 뒤("맨 앞으로")
           // yAnchor 1.55 = 기점 **위로 띄운다**(아실 방식) — 기점에 겹쳐 두면 역명 라벨(.rail-name,
           // 오른쪽 오프셋)과 서로 가린다(2026-08-04 사용자 "노선 뱃지를 가려. 옆으로 옮겨야 할듯").
@@ -7479,7 +7603,7 @@ function distToApt(s, a) {
   if (!pts.length) return Infinity;
   return Math.min(...pts.map(p => meters([a.lon, a.lat], p.coord)));
 }
-/* 목록 표 생성 — **데스크톱 목록 탭과 모바일 바텀시트가 같은 행을 쓴다** (2026-08-13 시안 §04·§10).
+/* 목록 표 생성 — **데스크톱 목록 탭과 모바일 바텀시트가 같은 행을 쓴다** (2026-08-13 시안 §04·§11).
    행 모양을 두 곳에 적으면 반드시 갈린다(이 저장소가 배지·색으로 이미 두 번 밟은 형태). */
 function listTable(rows, apt, sort) {
     const tb = document.createElement("table"); tb.className = "ltab";
@@ -7511,7 +7635,7 @@ function listTable(rows, apt, sort) {
     });
     return tb;
 }
-/* ══════════ 바텀시트 (2026-08-13 시안 §10 · 사장님 결정 「(가) 시트 안에 표현 필터」) ══════════
+/* ══════════ 바텀시트 (2026-08-13 시안 §11 · 사장님 결정 「(가) 시트 안에 표현 필터」) ══════════
    시트가 모바일에서 **사이드바 자리를 대신한다** — 필터를 만지면 바로 아래 목록이 바뀌므로
    「필터 탭 ↔ 목록 탭」 왕복이 사라진다(그게 원래 문제였다).
    ★ 필터 상태·핸들러는 도크와 **하나**다(`data-tog` + `bindFilterClicks`). 모양만 칩으로 갈린다. */
@@ -7534,7 +7658,7 @@ function initSheet() {
   const ORDER = ["peek", "half", "full"];
   /* ⚠ 손잡이 안에 **조작 부품**(정렬 셀렉트)이 앉아 있다 — 그대로 두면 셀렉트를 누를 때마다
      시트 단이 바뀌고, `setPointerCapture`가 셀렉트의 입력을 통째로 삼킨다. 손잡이 제스처는
-     손잡이 자신에만 걸리도록 부품을 빼 준다(시안 §10은 건수·정렬을 같은 줄에 둔다). */
+     손잡이 자신에만 걸리도록 부품을 빼 준다(시안 §11은 건수·정렬을 같은 줄에 둔다). */
   const onGrip = e => !e.target.closest(".ms-sort");
   grip.addEventListener("click", e => { if (onGrip(e)) msSet(ORDER[(ORDER.indexOf(_msDet) + 1) % ORDER.length]); });
   /* 드래그 — 세로로 끌면 가까운 단으로 붙는다. 터치·마우스를 한 경로(pointer)로 다룬다. */
@@ -7556,7 +7680,7 @@ function renderSheet() {
   const sh = document.getElementById("msheet"); if (!sh) return;
   initSheet();
   const sortEl = document.getElementById("ms-sort");
-  /* ★ 시트가 세는 것은 **이 화면 안**이다(갱신 시안 §10) — 지도 위에 떠 있는 시트가
+  /* ★ 시트가 세는 것은 **이 화면 안**이다(갱신 시안 §11) — 지도 위에 떠 있는 시트가
      지도에 없는 것까지 세면 「보이는 것」과 「적힌 수」가 갈린다. 뷰포트 pool은 지도가 만든다. */
   const vp = window._viewPool;
   const rows = sortSignals(vp && vp.length ? vp.filter(visible) : allSignalsFlat().filter(visible),
@@ -7572,7 +7696,7 @@ function renderSheet() {
   const chip = (axis, k, label, extra, on, n) =>
     `<button class="mc${on ? "" : " off"}" data-tog="${axis}" data-k="${k}">${extra}${label}` +
     (n != null ? `<span class="n">${n.toLocaleString()}</span>` : "") + "</button>";
-  /* ☠ 유형 칩이 **두 벌**이었다 — 지도 위 `#maxis`와 여기(2026-08-13 시안 §10 실물 대조에서 발견).
+  /* ☠ 유형 칩이 **두 벌**이었다 — 지도 위 `#maxis`와 여기(2026-08-13 시안 §11 실물 대조에서 발견).
      시트를 반쯤 올리면 같은 칩 줄이 한 화면에 두 번 보였다. 같은 개념의 부품이 둘이면 한쪽만
      고쳐져 조용히 갈린다(`.mvtag`·`.mvk` 사고와 같은 형태).
      ⇒ 유형은 **지도 위 한 줄**로 통일한다(2026-08-13 사장님 확정 — 시안이 지시한 배치이고
@@ -7587,7 +7711,7 @@ function renderSheet() {
   document.getElementById("ms-filters").innerHTML =
     `<div class="ms-row"><span class="lb">등급</span>${lvRow}</div>`
     + `<div class="ms-row"><span class="lb">단계</span>${phRow}</div>`;
-  /* ══ 목록 = **2줄 행**(시안 §10) ═══════════════════════════════════════════════
+  /* ══ 목록 = **2줄 행**(시안 §11) ═══════════════════════════════════════════════
      ☠ 종전엔 목록 탭의 6열 표(`listTable`)를 그대로 넣었다. 375px에서는 소재지·확인일이
        화면 밖으로 밀려 **가로 스크롤**이 생겼고, 정작 좁은 화면의 질문 세 가지
        (무엇이 · 어느 급이 · 어디까지 왔나)는 두 줄이면 다 들어간다.
@@ -7885,7 +8009,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260814a");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260814b");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8025,7 +8149,7 @@ function initSearch() {
   initSearch();
   renderPanel();
   initAxis();        // 모바일 축 칩 — 부트는 renderAll()을 안 부르므로 여기서 따로 한 번(클릭 위임 포함)
-  renderSheet();     // 바텀시트도 같은 이유로 여기서 한 번 — 이후는 renderAll이 갱신한다(시안 §10)
+  renderSheet();     // 바텀시트도 같은 이유로 여기서 한 번 — 이후는 renderAll이 갱신한다(시안 §11)
   layoutBottom();
   bootMap();
   document.getElementById("v-map").onclick = () => setView("map");
@@ -8070,7 +8194,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260814a"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260814b"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8096,7 +8220,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260814a");
+  const CB = "?b=" + (window.BUILD || "20260814b");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
