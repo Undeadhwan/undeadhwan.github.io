@@ -420,81 +420,90 @@
   /* ⚠ `.rmpanel`은 width:min(460px,92vw)로 **폭이 고정**돼 있다 — max-width만 키우면 아무 일도
      안 일어난다(2026-07-30: 4단지를 담았는데 1단지만 보였다). 비교 모달은 width를 직접 덮어쓴다. */
   #cmpModal .rmpanel { width:min(1240px,96vw); max-width:none; }   /* 4단지까지 제목이 읽히는 폭 */
-  .cmptable { width:100%; border-collapse:collapse; font-size:12.5px; }
-  .cmptable th, .cmptable td { border:1px solid var(--line); padding:9px 10px; text-align:center; vertical-align:middle; width:calc((100% - 120px)/4); }
-  .cmptable th.rowh, .cmptable td.rowh { width:120px; text-align:left; background:#fafbfc; font-weight:700; color:var(--muted); font-size:11.5px; white-space:nowrap; }
-  .cmptable thead th { background:#f4f6fa; font-weight:800; color:var(--ink); font-size:13px; }
-  .cmptable thead th small { display:block; font-weight:500; color:var(--muted); font-size:10.5px; margin-top:2px; }
-  .cmptable .catrow td { font-weight:700; }
-  .cmpnote { font-size:12.5px; color:var(--muted); margin-top:12px; line-height:1.6; }
-  /* 비교 v2 (2026-07-30) — hover 툴팁 폐지. 호재를 등급 구분선 아래 전부 펼쳐 커서 없이 스캔한다.
-     종전엔 개수 칸에 마우스를 올려야 "그게 무슨 호재인지"를 알 수 있었다(터치 기기에선 아예 불가). */
-  /* 컬럼이 좁으면 제목이 "가양 4…"로 잘려 아무 정보가 없다(2026-07-30 3단지 비교 실측).
-     제목은 컬럼 폭을 다 쓰는 **자기 줄**을 갖고, 거리·단계는 그 아래 메타 줄로 내린다.
-     컬럼 최소폭 236px 보장 — 4단지면 가로 스크롤(잘라서 못 읽는 것보다 낫다). */
   #cmpModal .bd { overflow-x:auto; }
-  /* ⚠ min-width:max-content 금지 — 1fr이 제목 길이만큼 벌어져 첫 컬럼이 화면을 다 먹고
-     나머지 단지가 스크롤 밖으로 밀린다(2026-07-30 4단지 비교에서 1개만 보임). 컬럼은 모달 폭을 나눈다. */
-  .cmpg { display:grid; gap:0 20px; }
+  /* ══ 비교 = 격자 **하나**를 요약표와 목록 밴드가 공유한다 (2026-08-13 시안 §08 실물 대조) ══
+     ☠ 종전 구조는 위가 전치표(등급=행), 아래가 **단지별 세로 컬럼**이라 같은 화면에서 축이 둘이었다.
+       컬럼은 항목 수가 달라(12/4/8) 높이가 어긋나고 「S 행」이 가로로 만나지 않는다 — 전치표를
+       만든 이유(2026-08-12)가 목록에는 적용되지 않은 채 남아 있던 자리다.
+     ⇒ 목록도 **등급 그룹 가로 밴드**로 세운다. 열 정의를 두 벌 적으면 한쪽만 바뀌어 축이 조용히
+       어긋나므로(이 저장소의 반복 사고), 트랙은 `--gt` 하나에서 도출하고 인라인은 단지 수만 받는다. */
+  #cmpWrap { --gt:150px repeat(var(--nc),minmax(0,1fr)); }
+  .cmpsum, .cmpband { display:grid; grid-template-columns:var(--gt); }
+  /* ══ 요약표 — 막대는 **두 종류뿐**이다(시안 §08): 등급 행 = 절대 건수(열마다 같은 눈금) ·
+     착공 이후 = 비율(회색 트랙 = 전체). 「반경 내 호재」는 세 번째 막대를 만들지 않고 **큰 숫자**로
+     적는다(총계는 비교 대상이 아니라 규모 표기다).
+     막대는 **무채색 잉크 농도**로 S→C를 가른다 — 색 채널은 유형 전용(DESIGN §1-1). */
+  .cmpsum { align-items:center; background:#fff; border:1px solid var(--line); border-radius:var(--r) var(--r) 0 0; }
+  .cmpsum > .rl, .cmpsum > .ch, .cmpsum > .cv { padding:11px 16px 11px 0; border-bottom:1px solid var(--line); }
+  .cmpsum > .rl { padding-left:14px; font-family:'IBM Plex Mono',ui-monospace,monospace;
+                  font-size:11px; letter-spacing:.06em; color:var(--ink3); }
+  .cmpsum > .rl.g { font-family:inherit; letter-spacing:0; color:var(--ink); }
+  .cmpsum .ch { font-size:15px; font-weight:800; color:var(--ink); line-height:1.3; }
+  .cmpsum .ch .m { display:block; font-size:12px; font-weight:500; color:var(--ink2); margin-top:3px; }
+  .cmpsum .cv { display:flex; align-items:center; gap:9px; }
+  .cmpsum .cv i { display:block; height:9px; border-radius:2px; min-width:0; }
+  .cmpsum .cv b { font-size:14px; font-weight:600; font-variant-numeric:tabular-nums; color:var(--ink); flex:none; }
+  /* 0건은 빈칸이 아니라 `0`으로 적는다 — 빈칸은 「모른다」로 읽히고 여기선 「없다」가 사실이다(P2) */
+  .cmpsum .cv b.z { color:var(--ink3); font-weight:500; }
+  .cmpsum .cv.big b { font-size:26px; letter-spacing:-.02em; }
+  .cmpsum .cv.big .u { font-size:12.5px; color:var(--ink2); }
+  .cmpsum .cv.ratio .trk { flex:1 1 auto; min-width:0; max-width:140px; height:9px; border-radius:2px; background:var(--line); }
+  .cmpsum .cv.ratio .trk i { height:9px; border-radius:2px; }
+  .cmpsum .cv.ratio b { font-size:13px; font-weight:500; color:var(--ink2); }
+  .cmpsum .cv.stack, .cmpsum .cv.two { flex-direction:column; align-items:stretch; gap:6px; }
+  /* 유형 구성 막대는 미리보기 팝업과 **같은 부품**(catBarHtml) — 크기만 이 표의 눈금에 맞춘다 */
+  .cmpsum .cv.stack .apt-pop-bar { height:9px; border-radius:2px; margin:0; }
+  .cmpsum .cv.stack .apt-pop-leg { margin:0; font-size:12px; }
+  .cmpsum .cv .nm { font-size:13px; font-weight:700; color:var(--ink); line-height:1.35; }
+  .cmpsum .cv .t { font-size:12px; color:var(--ink2); line-height:1.45; }
+  .cmpsum .cv .z { color:var(--ink3); font-size:12px; }
+  /* 각주 = 요약표와 목록 **사이**(시안 §08) — 표가 말한 것의 한계를 표 바로 밑에서 밝힌다 */
+  .cmpnote { font-size:12px; color:var(--ink2); line-height:1.6; padding:12px 14px;
+             background:var(--panel); border:1px solid var(--line); border-top:0; }
+  /* ── 전체 목록: 등급 그룹 가로 밴드 ── */
+  .cmplisthead { display:flex; align-items:center; justify-content:space-between; gap:10px;
+                 padding:12px 14px 6px; background:var(--panel); border:1px solid var(--line); border-top:0; }
+  .cmplisthead b { font-size:13px; }
+  .cmplisthead .n { font-family:'IBM Plex Mono',ui-monospace,monospace; color:var(--ink2); }
+  .cmplisthead .tg { font-size:12px; font-weight:600; color:var(--accent); cursor:pointer; }
+  .cmpbands { background:var(--panel); border:1px solid var(--line); border-top:0;
+              border-radius:0 0 var(--r) var(--r); overflow:hidden; }
+  .cmpband { align-items:start; padding:0 14px 14px; }
+  .cmpband > .rl { padding:12px 10px 0 0; font-family:'IBM Plex Mono',ui-monospace,monospace;
+                   font-size:11px; letter-spacing:.06em; color:var(--ink3); cursor:pointer; }
+  .cmpband > .rl:hover { color:var(--ink); }
+  .cmpband > .rl.on { color:var(--ink); font-weight:700; }
+  .cmpband > .cell { padding-right:16px; min-width:0; }
+  /* 첫 칸을 **고정폭**으로 둔다 — 링 지름이 등급마다 다르므로(HJR) auto면 이름 시작점이 행마다
+     어긋나 밴드가 계단처럼 보인다(시안도 44px 고정). */
+  .cmpitem { display:grid; grid-template-columns:42px 1fr 58px; align-items:center; gap:8px;
+             padding:8px 0; border-top:1px solid var(--line); }
+  .cmpitem .nm { font-size:12.5px; font-weight:600; line-height:1.35; word-break:keep-all;
+                 display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .cmpitem .sb { display:block; font-size:11px; font-weight:500; color:var(--ink3); margin-top:1px; }
+  .cmpitem .ds { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11.5px;
+                 text-align:right; color:var(--ink2); }
+  .cmpitem.warn .nm { color:var(--warn); }
+  /* 0건은 「해당 없음」으로 명시한다 — 빈칸이면 「아직 안 그렸다」로 읽힌다(P2) */
+  .cmpnone { padding:12px 0; border-top:1px solid var(--line); font-size:12px; color:var(--ink3); }
+  .cmpmore { padding:8px 0 0; border-top:1px solid var(--line); font-size:11.5px; color:var(--ink2); cursor:pointer; }
+  .cmpmore:hover { color:var(--ink); }
   /* ── 모바일 비교 (2026-08-04 사용자 제보 "비교 상세에서 텍스트가 넘침") ──────────────
-     `.cmpg`는 `minmax(236px,1fr)` 열을 단지 수만큼 만든다. 375px 화면에서 2단지면 두 열이
-     최소 472px을 요구해 **오른쪽 열이 통째로 잘렸다**(제목·거리·단계가 다 깨져 읽을 수 없음).
-     세로로 쌓으면 '나란히 비교'라는 목적 자체가 사라지므로, **한 열이 화면을 채우고 옆으로
-     넘기는** 방식으로 간다(모바일 비교의 표준). 스크롤 스냅으로 열 경계에 딱 멈춘다. */
+     열이 좁아지면 제목·거리·단계가 다 깨져 읽을 수 없다. 세로로 쌓으면 '나란히 비교'라는 목적
+     자체가 사라지므로, 격자 폭을 내용에 맞추고 `#cmpModal .bd`가 **가로로 스크롤**한다.
+     라벨 열은 좁히되 남긴다 — 스크롤 중에도 「무슨 행인지」가 보여야 한다. */
   @media (max-width: 768px) {
     #cmpModal .rmpanel { width:96vw; }
-    #cmpModal .bd { scroll-snap-type:x mandatory; overscroll-behavior-x:contain; }
-    .cmpg { grid-template-columns:none !important; grid-auto-flow:column;
-            grid-auto-columns:82vw; gap:0 14px; }
-    .cmpg > * { scroll-snap-align:start; min-width:0; }
+    /* 열은 **고정폭**으로 둔다 — `1fr`+max-content면 트랙이 가장 긴 사업명만큼 벌어져(실측 517px)
+       두 단지에 1,127px이 필요했다. 넘치는 것은 요약표·밴드 **둘뿐**이고 각주는 패널 폭에 남는다
+       (`#cmpWrap`을 통째로 넓히면 각주 문장이 화면 밖으로 나가 읽으려면 가로로 밀어야 했다). */
+    #cmpWrap { --gt:92px repeat(var(--nc),190px); }
+    .cmpsum, .cmpbands { min-width:max-content; }
+    .cmpsum > .rl, .cmpsum > .ch, .cmpsum > .cv { padding-right:10px; }
+    .cmpband > .cell { padding-right:10px; }
+    .cmpitem { grid-template-columns:34px 1fr 50px; gap:6px; }
     .cmpnote { font-size:11.5px; }
   }
-  .cmpcol .apth { padding:2px 0 9px; border-bottom:1px solid var(--line); }
-  .cmpcol .apth b { font-size:16px; }
-  .cmpcol .apth .m { color:var(--ink2); font-size:var(--fs-s); margin-top:3px; }
-  .cmpcol .apth .sum { font-size:var(--fs); margin-top:7px; }
-  .cmpcol .siglist { padding:6px 0 10px; }
-  /* 등급 구분선·집계 — 색은 **전 화면 공용 등급색(LVL_COLOR)** 그대로다(기준 일원화).
-     순위·점수가 아니라 '어느 급이 몇 건인가'라는 집계 사실의 시각 표기다(§7 P3 — 집계는 허용). */
-  .cmpcol .gsep { display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700;
-                  color:var(--gc); letter-spacing:.3px; margin:12px 0 5px; }
-  .cmpcol .gsep i { width:4px; height:13px; border-radius:2px; background:var(--gc); flex-shrink:0; }
-  .cmpcol .gsep::after { background:color-mix(in srgb, var(--gc) 30%, var(--line)); }
-  .cmpcol .gcount { display:flex; flex-wrap:wrap; gap:4px; margin-top:7px; }
-  /* ══ 등급 요약 전치표 — 세로 나열은 같은 등급 줄이 가로로 만나지 않는다(2026-08-12) ══
-     막대는 **무채색 잉크 농도**로 S→C를 가른다. 등급색(LVL_COLOR)을 막대에 쓰지 않는 이유:
-     막대는 「몇 건」이라는 집계이고 색은 분류 축이다 — 한 채널에 두 사실을 담지 않는다(DESIGN §1-1). */
-  .cmpsum { display:grid; gap:0 10px; align-items:center; margin:0 0 14px;
-            border:1px solid var(--line); border-radius:var(--r); padding:10px 12px; background:var(--panel); }
-  .cmpsum .ch { font-size:var(--fs-s); font-weight:600; color:var(--ink2); padding-bottom:6px;
-                overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .cmpsum .rl { font-size:var(--fs-s); font-weight:700; color:var(--ink2); padding:5px 0; }
-  .cmpsum .cv { display:flex; align-items:center; gap:7px; padding:5px 0; }
-  .cmpsum .cv i { display:block; height:8px; border-radius:2px; min-width:0; }
-  .cmpsum .cv b { font-size:13px; font-weight:600; font-variant-numeric:tabular-nums; color:var(--ink); flex:none; }
-  /* 0건은 빈칸이 아니라 `0`으로 적는다 — 빈칸은 「모른다」로 읽히고 여기선 「없다」가 사실이다(P2) */
-  .cmpsum .cv b.z { color:var(--ink3); }
-  /* 시안 §08 — 막대는 두 종류뿐. 등급 행 = 절대 건수(세 열 같은 눈금) · 착공 이후 = **비율**(회색 트랙 = 전체) */
-  .cmpsum .cv.ratio .trk { flex:1 1 auto; min-width:0; height:8px; border-radius:2px; background:var(--line); }
-  .cmpsum .cv.ratio .trk i { height:8px; border-radius:2px; }
-  .cmpsum .cv.txt { font-size:12px; color:var(--ink2); line-height:1.45; display:block; padding:6px 0; }
-  .cmpsum .cv.txt .z { color:var(--ink3); }
-  .cmpsum .cv.txt b { font-size:12px; }
-  .cmpcol .gcount .gc { display:inline-flex; align-items:center; gap:4px; font-size:11.5px; font-weight:700;
-                        color:var(--gc); background:color-mix(in srgb, var(--gc) 12%, #fff);
-                        border:1px solid color-mix(in srgb, var(--gc) 35%, #fff); border-radius:999px; padding:1px 8px; }
-  .cmpcol .gcount .gc b { font-size:12.5px; font-variant-numeric:tabular-nums; }
-  .cmpcol .gsep::after { content:""; flex:1; height:1px; background:var(--line); }
-  /* 한 줄에 제목+거리+단계를 나란히 두면 좁은 컬럼에서 제목이 먼저 잘린다("가양 4…").
-     제목은 자기 줄을 다 쓰고(두 줄까지), 거리·단계는 아래 메타 줄로. */
-  .cmpcol .csig { display:grid; grid-template-columns:8px 1fr; gap:0 8px; padding:5px 0; font-size:var(--fs); line-height:1.4; }
-  .cmpcol .csig .d { width:8px; height:8px; border-radius:50%; margin-top:5px; }
-  .cmpcol .csig .ttl { word-break:keep-all; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-  .cmpcol .csig .meta { grid-column:2; display:flex; align-items:center; gap:6px; margin-top:2px; }
-  .cmpcol .csig .dst { color:var(--ink2); font-size:var(--fs-s); font-variant-numeric:tabular-nums; }
-  .cmpcol .csig .ph { font-size:11.5px; color:var(--ink2); border:1px solid var(--line2); border-radius:5px; padding:0 5px; }
-  .cmpcol .csig .ph.dash { border-style:dashed; }
-  .cmpcol .csig.warn .ttl { color:var(--warn); }
   /* 연도 버튼 + 카드 미니 진행바 */
   .ybar { display:flex; align-items:center; gap:4px; flex-wrap:nowrap; overflow-x:auto;
           position:sticky; top:0; z-index:6; background:#fff; margin:0 -16px 12px; padding:8px 16px; border-bottom:1px solid var(--line); }
@@ -673,6 +682,16 @@
   .subtrack { font-size:11px; color:var(--muted); margin:2px 0 8px; line-height:1.5; }
   .subtrack .subcur { color:var(--ink); background:#fff3cd; border-radius:3px; padding:0 3px; }
   .dong-badge { background:#fff; border:1.5px solid var(--navy); border-radius:12px; padding:1px 8px; font-size:11px; font-weight:600; white-space:nowrap; cursor:pointer; }
+  /* ══ 선택한 아파트 = **각진 검정 코어 + 아래 이름 라벨** (2026-08-13 시안 §09 실물) ══
+     아파트는 호재가 아니므로 유형 4색도, 원형 링도 쓰지 않는다 — 형태(사각)와 무채색으로
+     「다른 종류」임을 말한다. 이름은 **아래에** 붙는다(코어와 한 알약이면 점이 어디인지 흐려진다).
+     ☆ 코어가 13×13이고 오버레이 앵커가 .5/.5이므로 **점이 코어 한가운데**에 온다 — 라벨은
+       absolute라 이 정렬을 흔들지 않는다(종전 인라인 알약은 알약 전체의 중심이 점이었다). */
+  .apt-anchor { position:relative; width:13px; height:13px; pointer-events:none; }
+  .apt-anchor i { display:block; width:13px; height:13px; background:var(--ink); box-shadow:0 0 0 2px #fff; }
+  .apt-anchor span { position:absolute; top:18px; left:50%; transform:translateX(-50%);
+    background:rgba(255,255,255,.94); border:1.5px solid var(--ink); border-radius:4px;
+    padding:1px 7px; font-size:11px; font-weight:700; color:var(--ink); white-space:nowrap; }
   /* 시도 집계 알약 — 전국 줌에서만. 앞 숫자=재고(신호 수), 뒤 숫자=변화(이번 주 문서상 움직임).
      변화만 색을 갖는다(우리는 delta 매체) — 0이면 아예 안 붙인다(없는 걸 강조하지 않는다). */
   .sd-pill { background:rgba(255,255,255,.96); border:1.5px solid var(--navy); border-radius:999px;
@@ -923,6 +942,22 @@
   /* 필터는 **칩**이다 — 좁은 폭에서 체크박스 세로 목록은 시트 절반을 먹는다.
      데스크톱(체크박스)과 부품이 갈리지만 폭 제약이 다르면 갈리는 게 맞다(사장님 확정 2026-08-13).
      ⚠ 상태·핸들러는 도크와 **같다**(`data-tog`) — 갈리는 것은 모양뿐이다. */
+  /* ★ 시트 목록 = **2줄 행**(시안 §10) — 4px 유형 바 + 이름 + 「유형 · 등급 · 단계」 + 거리.
+     6열 표를 그대로 넣으면 375px에서 뒤 열이 화면 밖으로 나가 가로 스크롤이 생긴다. */
+  #msheet .ms-sort { margin-left:auto; font-size:12px; font-weight:600; color:var(--ink2);
+    border:1px solid var(--line); border-radius:8px; padding:3px 6px; background:#fff; }
+  #msheet .ms-item { display:grid; grid-template-columns:4px 1fr auto; align-items:center; gap:11px;
+    padding:9px 0; border-top:1px solid var(--line); cursor:pointer; }
+  #msheet .ms-item:first-child { border-top:0; }
+  #msheet .ms-item .bar { width:4px; height:34px; border-radius:2px; }
+  #msheet .ms-item .nm { display:block; font-size:14px; font-weight:700; line-height:1.3; color:var(--ink); }
+  #msheet .ms-item .sb { display:block; font-size:12px; color:var(--ink2); margin-top:3px; }
+  #msheet .ms-item .ds { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:13px; color:var(--ink2); }
+  /* 적재량을 **말한다** — 「n건 표시 중 · 남은 m건」. 말없이 자르지 않는다(P2·P5) */
+  #msheet .ms-tail { padding:12px 0 18px; font-size:12px; color:var(--ink3); text-align:center; }
+  #msheet .ms-tail b { color:var(--ink2); font-variant-numeric:tabular-nums; }
+  #msheet .ms-more { display:block; margin:9px auto 0; min-height:38px; padding:0 18px; font-size:13px;
+    font-weight:700; color:var(--ink); background:#fff; border:1px solid var(--line2); border-radius:10px; }
   #msheet .ms-row { display:flex; gap:6px; overflow-x:auto; padding:8px 0 2px; scrollbar-width:none; }
   #msheet .ms-row::-webkit-scrollbar { display:none; }
   #msheet .ms-row .lb { flex:0 0 auto; align-self:center; font-size:11px; font-weight:700; color:var(--ink3); padding-right:2px; }
@@ -1424,7 +1459,13 @@
 <div id="msheet" data-det="peek">
   <div class="ms-grip" id="ms-grip">
     <div class="ms-bar"></div>
-    <div class="ms-head"><b id="ms-n">0건</b><span class="ms-f" id="ms-f" hidden>필터 0</span></div>
+    <!-- 시안 §10: 건수 왼쪽 · 정렬 오른쪽. 정렬 축은 목록 탭과 **같은 함수**(sortSignals)를 쓴다. -->
+    <div class="ms-head"><b id="ms-n">0건</b><span class="ms-f" id="ms-f" hidden>필터 0</span>
+      <select class="ms-sort" id="ms-sort" onchange="renderSheet()">
+        <option value="level">등급순</option>
+        <option value="recent">최근순</option>
+        <option value="phase">단계순</option>
+      </select></div>
   </div>
   <div class="ms-body">
     <div class="ms-filters" id="ms-filters"></div>
@@ -4025,67 +4066,92 @@ function cmpStats(a) {
            allNames: near.map(({ s, dist }) => `${(s.title || "").replace(/"/g, "'")} (${dist < 1000 ? Math.round(dist) + "m" : (dist / 1000).toFixed(1) + "km"})`) };
 }
 const esc = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-/* 비교 컬럼 1개 — 등급 구분선 아래 호재를 **전부 펼쳐** 나열한다(2026-07-30).
-   종전 표는 개수 칸에 커서를 올려야 구성 호재를 볼 수 있었고(터치 기기는 불가) 칸마다 hover가 필요했다.
-   컬럼은 등가 — 순위·점수·승자 없음(§4.5·P3). */
 function cmpSortMode() {
   const el = document.getElementById("cmp-sort");
   return el ? el.value : "level";
 }
-function cmpColumn(a) {
-  const dist = d => d < 1000 ? Math.round(d) + "m" : (d / 1000).toFixed(1) + "km";
-  const near = signalsNearPoint([a.lon, a.lat], true);   // 비교는 조회조건과 무관(2026-07-29 확정)
-  const GO = { S: 0, A: 1, B: 2, C: 3, "미정": 4 };
+/* ══ 목록 = **등급 그룹 가로 밴드** (2026-08-13 시안 §08 실물 대조) ═══════════════════
+   ☠ 종전엔 단지별 **세로 컬럼**을 나란히 놓았다. 항목 수가 달라(12/4/8) 열 높이가 어긋나고
+     「S 행」이 가로로 만나지 않는다 — 바로 위 전치표를 만든 이유(2026-08-12)가 정작 목록에는
+     적용되지 않은 채 남아 있었다. 같은 화면에서 축이 둘이면 눈이 두 번 배운다.
+   ⇒ 등급을 행으로 세우면 「S 행」에서 세 단지의 **실제 항목**이 나란히 놓인다.
+   ⚠ 순위·점수는 여전히 없다 — 밴드는 등급(분류)이고, 열 순서는 담은 순서다(§7·P3).
+   ⚠ 「N건 더」는 **접는 것이지 숨기는 것이 아니다** — 누르면 그 등급 전부가 펼쳐지고,
+     접힌 동안에도 몇 건이 남았는지 숫자로 말한다(P2·P5). 요약표의 건수는 항상 전수다. */
+const CMP_CELL_MAX = 4;        // 한 칸에 펼치는 항목 수(넘으면 「N건 더」)
+let cmpGrade = null;           // 목록 국소 필터 — 이 모달 안에서만, 지도·조회조건과 무관
+let cmpListOpen = true;        // 「전체 목록」 펼침
+const cmpExpand = new Set();   // 「N건 더」로 펼친 등급
+function cmpSetGrade(g) { cmpGrade = (cmpGrade === g) ? null : g; renderCompareBody(); }
+function cmpToggleList() { cmpListOpen = !cmpListOpen; renderCompareBody(); }
+function cmpMore(g) { cmpExpand.add(g); renderCompareBody(); }
+const cmpDist = d => d < 1000 ? Math.round(d) + "m" : (d / 1000).toFixed(1) + "km";
+/* 항목 한 줄 — 링·색·두께는 지도·목록과 **같은 부품**(`ringOf`·`.lvcell`)에서 온다.
+   링은 행 왼쪽에 따로 서고 등급 글자가 그 옆에 붙는다(시안 §04·§08 실물 — 링 안에 넣지 않는다). */
+function cmpItemHtml(r) {
+  const t = ringOf(r.s), lv = t.lv;
+  const sz = lv === "미정" ? 11 : Math.max(9, HJR[lv] || 9);
+  return `<div class="cmpitem"><span class="lvcell"><i class="lvring${lv === "미정" ? " dia" : ""}"`
+    + ` style="border-color:${t.col};border-width:${Math.max(1.5, t.bw * .7).toFixed(1)}px;width:${sz}px;height:${sz}px"></i>`
+    + `${lv === "미정" ? "" : lv}</span>`
+    + `<span><span class="nm" title="${esc(sigTitle(r.s))}">${esc(sigTitle(r.s))}</span>`
+    + `<span class="sb">${catOf(r.s)} · ${phaseLabel(phaseOf(r.s))}</span></span>`
+    + `<span class="ds">${cmpDist(r.d)}</span></div>`;
+}
+/* 참고 항목(정체 신호·역효과 시설) — 숨기지 않고 **구분해서** 보여준다(P5) */
+function cmpWarnHtml(title, d, tag) {
+  return `<div class="cmpitem warn"><span class="lvcell"><i class="lvring"`
+    + ` style="border-color:var(--warn);width:11px;height:11px"></i>⚠</span>`
+    + `<span><span class="nm" title="${esc(title)}">${esc(title)}</span><span class="sb">${tag}</span></span>`
+    + `<span class="ds">${cmpDist(d)}</span></div>`;
+}
+function cmpBandsHtml(cols) {
+  const live = rows => rows.filter(r => r.s.status !== "정체");
+  const total = cols.reduce((a, c) => a + live(c.rows).length, 0);
+  const head = `<div class="cmplisthead"><b>전체 목록 <span class="n">${total}</span>건</b>`
+    + `<span class="tg" onclick="cmpToggleList()">${cmpListOpen ? "접기 ▴" : "펼치기 ▾"}</span></div>`;
+  if (!cmpListOpen) return head;
   const byDist = cmpSortMode() === "dist";
-  const rows = near.map(({ s, dist: d }) => ({ s, d, g: levelOf(s) }))
-    .sort(byDist ? ((x, y) => x.d - y.d) : ((x, y) => GO[x.g] - GO[y.g] || x.d - y.d));
-  const sig = (r, warn) => {
-    const p = phaseOf(r.s), dash = p === "계획" || p === "인가";
-    // 거리순에서는 등급 구분선이 못 쓰이므로(등급이 뒤섞인다) 등급을 **행마다** 붙인다 —
-    // 어느 축으로 보든 등급·거리·단계 세 사실이 다 보여야 한다.
-    const gtag = byDist && r.g
-      ? `<span class="gmini" style="--gc:var(--ink2)">${r.g === "미정" ? LEVEL_NAME["미정"] : r.g}</span>` : "";
-    return `<div class="csig${warn ? " warn" : ""}"><span class="d" style="background:${warn ? "var(--warn)" : CAT_COLOR[catOf(r.s)] || "#999"}"></span>
-      <span class="ttl" title="${esc(r.s.title || "")}">${warn ? "⚠ " : ""}${esc(r.s.title || "")}</span>
-      <span class="meta">${gtag}<span class="dst">${dist(r.d)}</span><span class="ph${dash ? " dash" : ""}">${phaseLabel(p)}</span></span></div>`;
-  };
-  let out = "", g = null;
-  rows.filter(r => r.s.status !== "정체").forEach(r => {
-    // 등급 이름은 **`LEVEL_NAME` 한 곳**에서만 온다(기준 일원화). 2026-08-12 개칭 때 여기만
-    // 옛 이름이 남아 도크는 「등급 없음」, 집계 범례는 「미판정」으로 **한 화면에 두 이름**이 떴다.
-    /* 등급 구분선 제거(2026-08-12) — 바로 위 요약(hmatrix)이 등급별 건수를 이미 말하므로
-       같은 말을 두 번 하던 자리다. 요약은 **국소 필터**라 남긴다(panelGrade — 이 패널 안에서만
-       거르고 지도는 그대로. 도크 등급 칩은 전역이라 대체할 수 없다). 정렬은 등급순 그대로 —
-       구분선이 없어도 등급순으로 쌓이는 것은 요약이 말한다. */
-    out += sig(r, false);
+  /* 거리순에서는 등급 밴드가 성립하지 않는다(등급이 뒤섞인다) → 밴드 하나에 거리순으로 쌓는다.
+     등급은 행마다 링·글자로 이미 붙어 있으므로 어느 축으로 보든 세 사실이 다 보인다. */
+  const groups = byDist
+    ? [{ k: "", lab: "거리순", pick: rows => live(rows).slice().sort((x, y) => x.d - y.d) }]
+    : GRADES_DISP.filter(g => !cmpGrade || cmpGrade === g)
+        .map(g => ({ k: g, lab: g === "미정" ? LEVEL_NAME["미정"] : g + "등급",
+          pick: rows => live(rows).filter(r => r.g === g).sort((x, y) => x.d - y.d) }));
+  let out = "";
+  groups.forEach(gr => {
+    const per = cols.map(c => gr.pick(c.rows));
+    if (!per.some(a => a.length)) return;                       // 어느 단지에도 없는 등급은 밴드를 만들지 않는다
+    const open = !gr.k || cmpExpand.has(gr.k) || !!cmpGrade;
+    const rl = gr.k
+      ? `<div class="rl${cmpGrade === gr.k ? " on" : ""}" onclick="cmpSetGrade('${gr.k}')"`
+        + ` title="누르면 이 등급만 — 다시 누르면 전체">${gr.lab}</div>`
+      : `<div class="rl">${gr.lab}</div>`;
+    out += `<div class="cmpband">${rl}` + per.map(items => {
+      if (!items.length) return `<div class="cell"><div class="cmpnone">해당 없음</div></div>`;
+      const show = open ? items : items.slice(0, CMP_CELL_MAX);
+      const rest = items.length - show.length;
+      return `<div class="cell">${show.map(cmpItemHtml).join("")}`
+        + (rest ? `<div class="cmpmore" onclick="cmpMore('${gr.k}')">${gr.lab} ${rest}건 더</div>` : "")
+        + `</div>`;
+    }).join("") + `</div>`;
   });
-  // 참고 = 정직성 표기(P5): 정체 신호와 역효과 시설. 숨기지 않고 구분해서 보여준다.
-  const stalled = rows.filter(r => r.s.status === "정체");
-  const adv = adverseNearPoint([a.lon, a.lat]);
-  if (stalled.length || adv.length) {
-    out += `<div class="gsep">참고</div>`;
-    stalled.forEach(r => { out += sig(r, true); });
-    adv.forEach(x => { out += `<div class="csig warn"><span class="d" style="background:var(--warn)"></span>
-      <span class="ttl" title="${esc(x.f.title || "")}">⚠ ${esc(x.f.title || "")}</span>
-      <span class="meta"><span class="dst">${dist(x.dist)}</span><span class="ph">역효과</span></span></div>`; });
+  // 참고 밴드 = 정직성 표기(P5): 정체 신호와 역효과 시설. 등급 필터 중에는 접는다(그 등급만 보는 화면이므로).
+  if (!cmpGrade) {
+    const per = cols.map(c => {
+      const st = c.rows.filter(r => r.s.status === "정체").sort((x, y) => x.d - y.d);
+      const adv = adverseNearPoint([c.a.lon, c.a.lat]);
+      return st.map(r => cmpWarnHtml(sigTitle(r.s), r.d, "정체 · " + phaseLabel(phaseOf(r.s))))
+        .concat(adv.map(x => cmpWarnHtml(x.f.title || "", x.dist, "역효과 시설")));
+    });
+    if (per.some(a => a.length)) {
+      out += `<div class="cmpband"><div class="rl">참고</div>`
+        + per.map(a => `<div class="cell">${a.length ? a.join("") : `<div class="cmpnone">해당 없음</div>`}</div>`).join("")
+        + `</div>`;
+    }
   }
-  const n = rows.length - stalled.length;
-  return `<div class="cmpcol">
-    <div class="apth"><b>${esc(a.n)}</b>
-      <div class="m">${esc(a.dong || "")}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : ""}</div>
-      <!-- '최근접 N km' 요약은 제거했다(2026-07-31 사용자 "의미없다"). 가장 가까운 하나의 거리는
-           단지 전체를 대표하지 못한다 — 400m C급이 1.7km S급보다 앞서 보여 단지 간 우열처럼 읽힌다.
-           거리는 **신호별 사실**로만 각 행에 남긴다(§7·P3 순위 만들지 않음). -->
-      <div class="sum">반경 내 호재 <b>${n}건</b></div>
-      <div class="gcount">${["S", "A", "B", "C", "미정"].map(g => {
-        const c = rows.filter(r => r.s.status !== "정체" && r.g === g).length;
-        /* 등급 칩도 **무채색**이다 — 색 채널은 유형 전용(2026-08-13 시안 §07).
-           ☠ 이 화면에만 남아 있던 다섯 번째 사본이었다(lvlPill·gradeBadgeHtml·hmc·gmini에 이어). */
-        return c ? `<span class="gc" style="--gc:var(--ink2)">${g === "미정" ? LEVEL_NAME["미정"] : g}<b>${c}</b></span>` : "";
-      }).join("")}</div>
-    </div>
-    <div class="siglist">${out || `<div class="gsep">반경 내 호재 없음</div>`}</div>
-  </div>`;
+  return head + `<div class="cmpbands">${out || `<div class="cmpband"><div class="rl"></div><div class="cell"><div class="cmpnone">반경 내 호재 없음</div></div></div>`}</div>`;
 }
 /* ══ 등급 요약 전치표 — 단지별 세로 나열은 같은 등급 줄이 가로로 만나지 않는다(2026-08-12) ══
    비교란 **같은 축을 나란히 두는 것**인데, 컬럼마다 항목 수가 달라(12건/4건/8건) S 행이 서로
@@ -4096,45 +4162,54 @@ function cmpColumn(a) {
    ⚠ 등급 색(LVL_COLOR)을 막대에 쓰지 않는다 — 막대는 「몇 건」이라는 집계이고 색은 분류 축이다.
       무채색 잉크 농도로 S→C를 구분한다. */
 function cmpSummaryHtml(cols) {
-  const grades = ["S", "A", "B", "C", "미정"];
   const cnt = (rows, g) => rows.filter(r => r.s.status !== "정체" && r.g === g).length;
-  const shown = grades.filter(g => cols.some(c => cnt(c.rows, g)));
-  if (!shown.length) return "";
+  const shown = GRADES_DISP.filter(g => cols.some(c => cnt(c.rows, g)));
   const max = Math.max(1, ...shown.map(g => Math.max(...cols.map(c => cnt(c.rows, g)))));
   const ink = { S: "var(--ink)", A: "var(--ink)", B: "var(--ink2)", C: "var(--ink3)", "미정": "var(--line2)" };
-  const head = cols.map(c => `<div class="ch">${esc(c.a.n)}</div>`).join("");
-  const rows = shown.map(g => `<div class="rl">${g === "미정" ? LEVEL_NAME["미정"] : g}</div>`
-    + cols.map(c => { const v = cnt(c.rows, g);
-        return `<div class="cv"><i style="width:${(v / max * 100).toFixed(1)}%;background:${ink[g]}"></i>`
-          + `<b class="${v ? "" : "z"}">${v}</b></div>`; }).join("")).join("");
+  /* 머리 = 단지명 + 소재동·세대수. 세대수는 **식별 표기**이지 비교 축이 아니다(각주에 그대로 적는다). */
+  const head = cols.map(c => `<div class="ch">${esc(c.a.n)}`
+    + `<span class="m">${esc(c.a.dong || "")}${c.a.hh ? ` · <span class="mono">${c.a.hh.toLocaleString()}</span>세대` : ""}</span></div>`).join("");
+  /* 등급 라벨 = **링 + 글자**(시안 §08 실물 — 지도·목록과 같은 부품 `.lvcell`, 링 크기는 `HJR`).
+     ⚠ 미판정은 막대를 그리지 않는다 — 규모 등급(S~C)과 **다른 축**이라 같은 눈금에 얹으면
+       「가장 낮은 등급」으로 읽힌다(시안도 이 행만 숫자로 둔다). */
+  const rows = shown.map(g => {
+    const sz = g === "미정" ? 11 : Math.max(9, HJR[g] || 9);
+    const lab = `<div class="rl g"><span class="lvcell"><i class="lvring${g === "미정" ? " dia" : ""}"`
+      + ` style="border-color:var(--ink2);width:${sz}px;height:${sz}px"></i>`
+      + `${g === "미정" ? LEVEL_NAME["미정"] : g + "등급"}</span></div>`;
+    return lab + cols.map(c => { const v = cnt(c.rows, g);
+      return `<div class="cv">`
+        + (g === "미정" ? "" : `<i style="width:${(v / max * 100).toFixed(1)}%;background:${ink[g]}"></i>`)
+        + `<b class="${v ? "" : "z"}">${v}</b></div>`; }).join("");
+  }).join("");
   /* ★ 2026-08-13 시안 §08 — 등급 행 위·아래에 **나머지 축**을 같은 문법으로 붙인다.
      시안 표의 행 구성: 반경 내 호재 → 등급 5행 → 유형 구성 → 착공 이후 → 가장 가까운 S·A.
      ★ 막대는 **두 종류뿐**이다(시안): 등급 행 = 절대 건수(세 열이 같은 눈금) ·
        착공 이후 = 비율(회색 트랙 = 전체). 점 하나당 1건으로 세면 30건이 넘을 때 셀 수 없으므로
        길이로만 말하고 **정확한 값은 항상 옆에 적는다**(`6/12`).
+     ☠ 「반경 내 호재」에 세 번째 막대를 그리고 있었다(2026-08-13 실물 대조에서 발견) — 총계는
+       등급 막대와 **같은 눈금이 아닌데** 같은 모양이라 한 눈금처럼 읽혔다. 큰 숫자로 되돌린다.
      ⚠ 0은 빈칸이 아니라 **0으로 명시**한다 — 「모른다」와 「없다」는 다른 말이다(P2). */
   const live = rows0 => rows0.filter(r => r.s.status !== "정체");
   const tot = cols.map(c => live(c.rows).length);
-  const totMax = Math.max(1, ...tot);
   const totRow = `<div class="rl">반경 내 호재</div>`
-    + cols.map((c, i) => `<div class="cv"><i style="width:${(tot[i] / totMax * 100).toFixed(1)}%;background:var(--ink)"></i>`
-      + `<b class="${tot[i] ? "" : "z"}">${tot[i]}</b></div>`).join("");
+    + cols.map((c, i) => `<div class="cv big"><b class="${tot[i] ? "" : "z"}">${tot[i]}</b><span class="u">건</span></div>`).join("");
+  /* 유형 구성 = 누적 막대 + 무채색 범례. 막대는 미리보기 팝업과 **같은 부품**(catBarHtml) —
+     색 채널은 유형 전용이므로 글자까지 유형색으로 칠하지 않는다(시안 실물). */
   const catRow = `<div class="rl">유형 구성</div>`
-    + cols.map(c => { const m = {}; live(c.rows).forEach(r => { const k = catOf(r.s); m[k] = (m[k] || 0) + 1; });
-      const t = CAT_KEYS.filter(k => m[k]).map(k => `<span style="color:${CAT_COLOR[k]};font-weight:600">${k} ${m[k]}</span>`).join(" · ");
-      return `<div class="cv txt">${t || '<span class="z">해당 없음</span>'}</div>`; }).join("");
+    + cols.map(c => `<div class="cv stack">${catBarHtml(live(c.rows)) || '<span class="z">해당 없음</span>'}</div>`).join("");
   const started = cols.map(c => live(c.rows).filter(r => (PHASE_IDX[phaseOf(r.s)] ?? 0) >= 2).length);
   const phRow = `<div class="rl">착공 이후</div>`
-    + cols.map((c, i) => `<div class="cv ratio"><span class="trk"><i style="width:${tot[i] ? (started[i] / tot[i] * 100).toFixed(1) : 0}%;background:var(--ink2)"></i></span>`
+    + cols.map((c, i) => `<div class="cv ratio"><span class="trk"><i style="width:${tot[i] ? (started[i] / tot[i] * 100).toFixed(1) : 0}%;background:var(--ink)"></i></span>`
       + `<b class="${started[i] ? "" : "z"}">${started[i]}/${tot[i]}</b></div>`).join("");
+  // 이름과 근거를 **두 줄로** 가른다(시안 실물) — 한 줄이면 긴 사업명 뒤에 등급·단계가 묻힌다.
   const nearRow = `<div class="rl">가장 가까운 S·A</div>`
     + cols.map(c => { const hit = live(c.rows).filter(r => r.g === "S" || r.g === "A")
         .sort((a, b) => a.d - b.d)[0];
-      return `<div class="cv txt">${hit
-        ? `${esc(sigTitle(hit.s))} <b>${hit.g}</b> · ${phaseLabel(phaseOf(hit.s))} · ${hit.d < 1000 ? Math.round(hit.d) + "m" : (hit.d / 1000).toFixed(1) + "km"}`
+      return `<div class="cv two">${hit
+        ? `<span class="nm">${esc(sigTitle(hit.s))}</span><span class="t">${hit.g} · ${phaseLabel(phaseOf(hit.s))} · <span class="mono">${cmpDist(hit.d)}</span></span>`
         : '<span class="z">해당 없음</span>'}</div>`; }).join("");
-  return `<div class="cmpsum" style="grid-template-columns:64px repeat(${cols.length},minmax(0,1fr))">`
-    + `<div class="rl"></div>${head}${totRow}${rows}${catRow}${phRow}${nearRow}</div>`;
+  return `<div class="cmpsum"><div class="rl"></div>${head}${totRow}${rows}${catRow}${phRow}${nearRow}</div>`;
 }
 function openCompare() {
   if (compareSet.length < 2) return;
@@ -4142,23 +4217,24 @@ function openCompare() {
   // 뒤에도 남아 손으로 지도를 눌러야 사라졌다(2026-08-04 실기기 제보). 마우스는 딴 데 클릭하면
   // 닫히지만 터치에선 그 동작이 없다.
   mapApi?.hideTip?.(); mapApi?.closeAptPop?.();
+  // 목록 국소 상태는 **열 때마다 초기화**한다 — 지난번에 걸어 둔 등급 필터가 새 비교에 남으면
+  // 「이 단지엔 S가 없다」는 잘못된 인상을 준다(화면이 사실을 말하지 않는 자리).
+  cmpGrade = null; cmpListOpen = true; cmpExpand.clear();
   renderCompareBody();
   document.getElementById("cmpModal").style.display = "block";
 }
-/* 정렬만 바꿔 다시 그린다(모달을 닫았다 열지 않는다) */
+/* 정렬·펼침만 바꿔 다시 그린다(모달을 닫았다 열지 않는다).
+   요약표와 목록은 **같은 `cols`**를 본다 — 「몇 건인가」와 「무엇인가」가 어긋날 자리를 없앤다. */
 function renderCompareBody() {
   if (compareSet.length < 2) return;
-  /* 요약 전치표를 컬럼 위에 얹는다 — rows 계산은 cmpColumn과 같은 함수를 쓴다(사본 금지).
-     컬럼 목록은 그대로 남긴다: 요약은 「몇 건인가」, 목록은 「무엇인가」로 답이 다르다. */
   const cols = compareSet.map(a => ({ a,
     rows: signalsNearPoint([a.lon, a.lat], true).map(({ s, dist: d }) => ({ s, d, g: levelOf(s) })) }));
-  const body = `
+  const body = `<div id="cmpWrap" style="--nc:${cols.length}">
     ${cmpSummaryHtml(cols)}
-    <div class="cmpg" style="grid-template-columns:repeat(${compareSet.length},minmax(236px,1fr))">
-      ${compareSet.map(cmpColumn).join("")}
-    </div>
     <div class="cmpnote">· 반경 내 호재의 <b>개수·거리·단계 사실만</b> 나열합니다 — 가중치 합산·순위·추천·'수혜' 판단 없음(§7·P1·P3). 세대수는 단지 식별 표기일 뿐 비교 축이 아닙니다.<br>
-      · 거리는 단지 좌표(도로 수준 근사) 기준. 참고 = 정체 신호 · 역효과 시설(${ADVERSE_RKM}km 내 환경기초시설 결정·미완공) — 존재·거리 사실만, 영향 판단 아님(P5).</div>`;
+      · 거리는 단지 좌표(도로 수준 근사) 기준. 참고 = 정체 신호 · 역효과 시설(${ADVERSE_RKM}km 내 환경기초시설 결정·미완공) — 존재·거리 사실만, 영향 판단 아님(P5).</div>
+    ${cmpBandsHtml(cols)}
+  </div>`;
   document.getElementById("cmpBody").innerHTML = body;
 }
 function closeCompare() { document.getElementById("cmpModal").style.display = "none"; }
@@ -5781,7 +5857,11 @@ function initLeaflet() {
   const showAptAnchor = a => {
     if (aptMarker) map.removeLayer(aptMarker);
     aptMarker = L.marker([a.lat, a.lon], { pane: "sig",
-      icon: L.divIcon({ className: "", html: `<div class="dong-badge" style="border-color:var(--ink);color:var(--ink)">■ ${a.n}</div>`   /* 카카오 층과 같은 문법 — 아파트는 호재가 아니므로 유형 4색을 쓰지 않는다(2026-08-12) */, iconSize: null }) }).addTo(map);
+      /* 카카오 층과 **같은 부품**(.apt-anchor) — 각진 검정 코어 + 아래 이름 라벨(시안 §09).
+         ⚠ `iconSize:null`이면 divIcon의 좌상단이 점에 놓인다 — 코어가 점 위에 오도록 크기·앵커를
+           명시한다(한쪽 렌더러만 어긋나면 폴백에서 조용한 예외가 된다). */
+      icon: L.divIcon({ className: "", html: `<div class="apt-anchor"><i></i><span>${a.n}</span></div>`,
+        iconSize: [13, 13], iconAnchor: [6.5, 6.5] }) }).addTo(map);
     clearRadius(); clearHighlight();   // 앵커 마커만
   };
    // 선택 표시(분홍 아이콘)도 함께 푼다 — 상세를 닫으면 **아파트 선택 자체가 풀려야** 한다
@@ -6741,7 +6821,7 @@ function initKakao() {
       // 회랑 = **그려진 선의 버퍼**. 보간 구간(선이 연한 점선인 자리)은 회랑도 연하게 — 선과 강약을 맞춘다.
       roadLinePoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 0, strokeOpacity: 0, fillColor: col, fillOpacity: (p.weak && !s._has_solid) ? .035 : .07, zIndex: 5 }))); return; }   // 본선 있으면 보간 회랑도 동일 농도(Leaflet판과 같은 규칙, 2026-08-10)
     signalPoints(s).forEach(p => circles.push(new K.Circle({ map, center: LL(p.coord[0], p.coord[1]), radius: getRadius(s), strokeWeight: 1.5, strokeColor: col, strokeOpacity: .85, fillColor: col, fillOpacity: .14, zIndex: 5 }))); };
-  const showRadius = s => { clearRadius(); clearScale(); addRadius(s); };
+  const showRadius = s => { clearRadius(); clearScale(); clearLinks(); addRadius(s); };
   const showRadiusMany = list => { clearRadius(); list.forEach(addRadius); };
   /* ══ 거리 눈금(1·2·3km) — 필터가 아니라 **자**다(2026-08-12) ══
      이 원으로 관련 판정을 하지 않는다 — 관련 여부는 dimOpacity가 호재별 영향
@@ -6798,8 +6878,10 @@ function initKakao() {
     if (routeHl.length) { routeIsoName = lineName; try { renderRail(); } catch (e) {} try { renderHojae(); } catch (e) {} }
     if (fit && !bounds.isEmpty()) { try { map.setBounds(bounds); } catch (e) {} } };
   let aptMarker = null;
-  const showAptAnchor = a => { if (aptMarker) aptMarker.setMap(null); const elx = document.createElement("div"); elx.className = "dong-badge"; elx.style.cssText = "border-color:var(--ink);color:var(--ink)"; elx.textContent = "■ " + a.n;
-    // 아파트는 호재가 아니므로 유형 4색을 쓰지 않는다 — 무채색 잉크 + 사각 코어로 호재 링과 형태를 가른다(2026-08-12).
+  const showAptAnchor = a => { if (aptMarker) aptMarker.setMap(null);
+    // 아파트는 호재가 아니므로 유형 4색을 쓰지 않는다 — 무채색 사각 코어 + **아래** 이름 라벨(시안 §09).
+    const elx = document.createElement("div"); elx.className = "apt-anchor";
+    elx.innerHTML = '<i></i><span></span>'; elx.querySelector("span").textContent = a.n;
     aptMarker = new K.CustomOverlay({ map, position: LL(a.lon, a.lat), content: elx, zIndex: 24, yAnchor: .5, xAnchor: .5 }); clearRadius();
     dimTo(a.lon, a.lat); };
    // 선택 표시(분홍 아이콘)도 함께 푼다 — 상세를 닫으면 **아파트 선택 자체가 풀려야** 한다
@@ -6809,11 +6891,38 @@ function initKakao() {
      지우지 않고 **빈 함수로** 둔다 — mapApi에 노출되어 있고 호출부가 둘이라 API 표면을
      조용하게 바꾸지 않기 위해서다. 선택 표현은 dimTo()가 맡는다(관련 없는 것을 걷는 방향). */
   const radarPulse = () => {};
+  /* ══ 연결선 = **소속만 말하는 선** (2026-08-13 시안 §09) ══════════════════════════
+     ☆ 붉은 굵은 점선을 방사형으로 뻗지 않는다 — 15개가 겹치면 거미줄이 되어 지도를 덮는다.
+       선이 할 말은 「이 단지에 딸린 것」이라는 소속 하나뿐이므로 눈에 띌 필요가 없다(회색 1px 실선).
+     ☆ **5건을 넘으면 선을 끄고** 밝기 차이(dimOpacity)만 남긴다 — 선이 더 말해 주지 못하는 구간.
+     ☆ 대상은 `aptFocus`(= 그 단지 영향권에 든 신호 집합) 그대로다. 판정을 여기서 다시 하면
+       패널이 말한 「N건」과 지도의 선 개수가 조용히 갈린다(이 저장소의 반복 사고). */
+  const LINK_MAX = 5;
+  let linkObjs = [];
+  const clearLinks = () => { linkObjs.forEach(o => o.setMap(null)); linkObjs = []; };
+  const showLinks = (lng, lat) => {
+    clearLinks();
+    const rel = [...(aptFocus || [])];
+    if (!rel.length || rel.length > LINK_MAX) return;
+    rel.forEach(s => {
+      let best = null, bd = Infinity;
+      try { (signalPoints(s) || []).forEach(p => {
+        const d = _hav(p.coord[0], p.coord[1], lng, lat); if (d < bd) { bd = d; best = p.coord; } }); } catch (e) { return; }
+      if (!best) return;
+      /* 색은 **기존 토큰**에서만 온다(DESIGN.md §4 — 새 hex 금지). `--muted`를 반투명으로 깔면
+         눈금 원(#d1d5db)보다 한 단계 진하면서도 지도를 누르지 않는다. 눈금과 형태(원 ↔ 직선)가
+         이미 다르므로 색까지 갈라 세울 필요는 없다. */
+      linkObjs.push(new K.Polyline({ map, path: [LL(lng, lat), LL(best[0], best[1])], strokeWeight: 1,
+        strokeColor: "#6f7178", strokeOpacity: .55, strokeStyle: "solid", zIndex: 2 }));
+    });
+  };
   /* 아파트 선택 → 흐림 진입·해제. 상태만 바꾸고 재렌더를 부른다 — 흐림 계산은
      renderHojae의 dimOpacity가 매번 다시 하므로 지도 이동·재렌더에도 살아있다.
-     180ms 페이드는 setTimeout 3틱 — rAF는 탭이 안 보이면 안 돌아 잦은 상태가 남는다. */
+     ⚠ 「180ms 페이드는 setTimeout 3틱」이라 적혀 있었는데 **그런 코드는 없었다**(2026-08-13 정정).
+       흐림은 한 번에 바뀐다 — 반복 애니메이션이 아니므로 시안 §09가 막으려던 것(지도를 가리는
+       물결)은 이미 없다. 없는 구현을 주석이 말하면 다음 세션이 유령을 쫓는다(§0-55f). */
   const dimTo = (lng, lat) => { dimAnchor = (lng == null) ? null : [lng, lat];
-    if (lng == null) clearScale(); else showScale(lng, lat);
+    if (lng == null) { clearScale(); clearLinks(); } else { showScale(lng, lat); showLinks(lng, lat); }
     try { renderHojae(); } catch (e) {}
     try { renderRail(); } catch (e) {} };
   let hlPolys = []; const clearHighlight = () => { hlPolys.forEach(o => o.setMap(null)); hlPolys = []; };
@@ -6952,10 +7061,14 @@ function initSheet() {
   fitSheet(); window.addEventListener("resize", fitSheet);
   const grip = document.getElementById("ms-grip");
   const ORDER = ["peek", "half", "full"];
-  grip.addEventListener("click", () => msSet(ORDER[(ORDER.indexOf(_msDet) + 1) % ORDER.length]));
+  /* ⚠ 손잡이 안에 **조작 부품**(정렬 셀렉트)이 앉아 있다 — 그대로 두면 셀렉트를 누를 때마다
+     시트 단이 바뀌고, `setPointerCapture`가 셀렉트의 입력을 통째로 삼킨다. 손잡이 제스처는
+     손잡이 자신에만 걸리도록 부품을 빼 준다(시안 §10은 건수·정렬을 같은 줄에 둔다). */
+  const onGrip = e => !e.target.closest(".ms-sort");
+  grip.addEventListener("click", e => { if (onGrip(e)) msSet(ORDER[(ORDER.indexOf(_msDet) + 1) % ORDER.length]); });
   /* 드래그 — 세로로 끌면 가까운 단으로 붙는다. 터치·마우스를 한 경로(pointer)로 다룬다. */
   let y0 = null;
-  grip.addEventListener("pointerdown", e => { y0 = e.clientY; grip.setPointerCapture(e.pointerId); });
+  grip.addEventListener("pointerdown", e => { if (!onGrip(e)) return; y0 = e.clientY; grip.setPointerCapture(e.pointerId); });
   grip.addEventListener("pointerup", e => {
     if (y0 == null) return;
     const dy = e.clientY - y0; y0 = null;
@@ -6964,12 +7077,15 @@ function initSheet() {
     msSet(ORDER[Math.max(0, Math.min(2, i + (dy < 0 ? 1 : -1)))]);
   });
 }
-/* 시트 내용 — 건수·활성 필터 배지 · 유형/등급/단계 칩 · 목록. renderAll에서 부른다. */
+/* 시트 내용 — 건수·활성 필터 배지 · 등급/단계 칩 · 목록. renderAll에서 부른다.
+   (유형 칩은 지도 위 `#maxis` 한 곳 — 2026-08-13 사장님 확정) */
+const MS_PAGE = 60;      // 한 번에 더 얹는 건수
+let _msShown = MS_PAGE;
 function renderSheet() {
   const sh = document.getElementById("msheet"); if (!sh) return;
   initSheet();
-  const C = dockCounts();
-  const rows = allSignalsFlat().filter(visible);
+  const sortEl = document.getElementById("ms-sort");
+  const rows = sortSignals(allSignalsFlat().filter(visible), sortEl ? sortEl.value : "level", null);
   document.getElementById("ms-n").textContent = rows.length.toLocaleString() + "건";
   /* 활성 필터 개수 = **기본과 달라진 축의 수**. 접힌 상태에서도 뭐가 걸려 있는지 보인다. */
   const nf = (CAT_KEYS.length - CAT_KEYS.filter(c => filter.cat.has(c)).length)
@@ -6981,8 +7097,11 @@ function renderSheet() {
   const chip = (axis, k, label, extra, on, n) =>
     `<button class="mc${on ? "" : " off"}" data-tog="${axis}" data-k="${k}">${extra}${label}` +
     (n != null ? `<span class="n">${n.toLocaleString()}</span>` : "") + "</button>";
-  const catRow = CAT_KEYS.map(c => chip("cat", c, c,
-    `<i style="background:${CAT_COLOR[c]}"></i>`, filter.cat.has(c), C.cat[c] || 0)).join("");
+  /* ☠ 유형 칩이 **두 벌**이었다 — 지도 위 `#maxis`와 여기(2026-08-13 시안 §10 실물 대조에서 발견).
+     시트를 반쯤 올리면 같은 칩 줄이 한 화면에 두 번 보였다. 같은 개념의 부품이 둘이면 한쪽만
+     고쳐져 조용히 갈린다(`.mvtag`·`.mvk` 사고와 같은 형태).
+     ⇒ 유형은 **지도 위 한 줄**로 통일한다(2026-08-13 사장님 확정 — 시안이 지시한 배치이고
+       거기서 개수·색이 범례 역할까지 겸한다). 시트에는 지도 위에 자리가 없는 **등급·단계**만 남긴다. */
   const lvRow = ["S", "A", "B", "C"].map(g => chip("lvl", g, g,
     `<i style="width:${HJR[g]}px;height:${HJR[g]}px;border:1.6px solid currentColor;background:none"></i>`,
     filter.lvl.has(g))).join("")
@@ -6991,12 +7110,50 @@ function renderSheet() {
     `<i class="${p === "계획" ? "dash" : ""}" style="${p === "계획" ? "" : "background:currentColor"}"></i>`,
     filter.phase.has(p))).join("");
   document.getElementById("ms-filters").innerHTML =
-    `<div class="ms-row">${catRow}</div>`
-    + `<div class="ms-row"><span class="lb">등급</span>${lvRow}</div>`
+    `<div class="ms-row"><span class="lb">등급</span>${lvRow}</div>`
     + `<div class="ms-row"><span class="lb">단계</span>${phRow}</div>`;
+  /* ══ 목록 = **2줄 행**(시안 §10) ═══════════════════════════════════════════════
+     ☠ 종전엔 목록 탭의 6열 표(`listTable`)를 그대로 넣었다. 375px에서는 소재지·확인일이
+       화면 밖으로 밀려 **가로 스크롤**이 생겼고, 정작 좁은 화면의 질문 세 가지
+       (무엇이 · 어느 급이 · 어디까지 왔나)는 두 줄이면 다 들어간다.
+     ☠ 그리고 `slice(0, 120)`이 **말없이 잘라 냈다** — 머리에는 「5,212건」이라 적어 놓고
+       목록은 120건에서 끝났다(화면이 사실을 말하지 않는 자리 · 「no silent caps」).
+       ⇒ 목록 탭과 같은 문법으로 **적재량을 말하고** 더 보기를 둔다. */
+  const apt = listAnchorApt();
   const box = document.getElementById("ms-list");
-  box.innerHTML = "";
-  box.appendChild(listTable(rows.slice(0, 120), null, "level"));
+  const show = Math.min(rows.length, _msShown);
+  box.innerHTML = rows.slice(0, show).map((s, i) => {
+    const t = ringOf(s), lv = t.lv;
+    const d = apt ? distToApt(s, apt) : null;
+    return `<div class="ms-item" data-i="${i}"><i class="bar" style="background:${t.col}"></i>`
+      + `<span><span class="nm">${sigTitle(s)}</span>`
+      + `<span class="sb">${catOf(s)} · ${lv === "미정" ? LEVEL_NAME["미정"] : lv} · ${phaseLabel(phaseOf(s))}</span></span>`
+      + (d != null && isFinite(d) ? `<span class="ds">${d < 1000 ? Math.round(d) + "m" : (d / 1000).toFixed(1) + "km"}</span>` : "")
+      + `</div>`;
+  }).join("")
+    + (rows.length > show
+        ? `<div class="ms-tail"><b>${show.toLocaleString()}</b>건 표시 중 · 남은 ${(rows.length - show).toLocaleString()}건`
+          + `<button class="ms-more" id="ms-more">더 보기</button></div>`
+        : rows.length ? `<div class="ms-tail">${rows.length.toLocaleString()}건 전부 표시</div>` : "");
+  box.querySelectorAll(".ms-item").forEach(el =>
+    el.addEventListener("click", () => showSignal(rows[+el.dataset.i], true)));
+  const mb = document.getElementById("ms-more");
+  if (mb) mb.addEventListener("click", e => { e.stopPropagation(); _msShown += MS_PAGE; renderSheet(); });
+}
+/* ══ 정렬 규칙은 **한 곳**이다 — 목록 탭과 모바일 시트가 같은 함수를 부른다 ══
+   두 화면이 같은 축을 다르게 정렬하면 같은 데이터가 다른 순서로 보인다(사본이 갈라지는 형태).
+   · 문서상 움직임순: 원문 날짜를 가진 신호가 먼저, 관측일뿐인 신호는 **숨기지 않고** 뒤로
+     (숨기면 그건 필터다 — 필터는 도크 하나뿐이라는 원칙을 지킨다).
+   · 등급순의 미판정은 뒤로 — 등급 축 밖이라 S~C 사이에 끼울 자리가 없다. */
+function sortSignals(pool, sort, apt) {
+  const rec = s => s.last_movement || "";
+  const lvR = s => { const i = ["S", "A", "B", "C"].indexOf(levelOf(s)); return i < 0 ? 9 : i; };
+  return pool.slice().sort(
+    sort === "moved" ? ((a, b) => (movBasis(a) === "observed") - (movBasis(b) === "observed") || rec(b).localeCompare(rec(a)))
+    : sort === "level" ? ((a, b) => lvR(a) - lvR(b) || rec(b).localeCompare(rec(a)))
+    : sort === "phase" ? ((a, b) => PHASE_IDX[phaseOf(a)] - PHASE_IDX[phaseOf(b)] || rec(b).localeCompare(rec(a)))
+    : sort === "dist" ? ((a, b) => distToApt(a, apt) - distToApt(b, apt))
+    : ((a, b) => rec(b).localeCompare(rec(a))));
 }
 function renderList() {
   const sortSel = document.getElementById("l-sort");
@@ -7008,17 +7165,8 @@ function renderList() {
   if (!apt && sortSel.value === "dist") sortSel.value = "level";   // 기본과 같은 축으로 되돌린다(2026-08-11 기본이 등급순으로 바뀜)
   const q = document.getElementById("l-q").value.trim();
   const pool = allSignalsFlat().filter(visible).filter(s => !q || (sigTitle(s) || "").includes(q) || `${s.sd || ""} ${s.sg || ""} ${s.dong || ""}`.includes(q));
-  const rec = s => s.last_movement || "";
-  const lvR = s => { const i = ["S", "A", "B", "C"].indexOf(levelOf(s)); return i < 0 ? 9 : i; };   // 미판정은 뒤로
   const sort = sortSel.value;
-  const rows = pool.slice().sort(
-    // 문서상 움직임순: 원문 날짜를 가진 신호가 먼저, 관측일뿐인 신호는 **숨기지 않고** 뒤로
-    // (숨기면 그건 필터다 — 필터는 도크 하나뿐이라는 원칙을 지킨다).
-    sort === "moved" ? ((a, b) => (movBasis(a) === "observed") - (movBasis(b) === "observed") || rec(b).localeCompare(rec(a)))
-    : sort === "level" ? ((a, b) => lvR(a) - lvR(b) || rec(b).localeCompare(rec(a)))
-    : sort === "phase" ? ((a, b) => PHASE_IDX[phaseOf(a)] - PHASE_IDX[phaseOf(b)] || rec(b).localeCompare(rec(a)))
-    : sort === "dist" ? ((a, b) => distToApt(a, apt) - distToApt(b, apt))
-    : ((a, b) => rec(b).localeCompare(rec(a))));
+  const rows = sortSignals(pool, sort, apt);
   const byCat = {}; rows.forEach(s => { const c = catOf(s); byCat[c] = (byCat[c] || 0) + 1; });
   // 이번 주 집계도 출처를 가른다 — 섞으면 "이번 주 2,588건 움직임"이라는 거짓 headline이 된다(P2).
   const wk = rows.filter(s => inWeek(s.last_movement));
@@ -7250,7 +7398,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813w");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813y");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -7435,7 +7583,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813w"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813y"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7461,7 +7609,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813w");
+  const CB = "?b=" + (window.BUILD || "20260813y");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
