@@ -66,7 +66,9 @@
             border:1px solid var(--line); border-radius:999px; }
   #f-mode .chip { border:0; background:none; color:var(--ink2); font-size:13.5px; padding:6px 15px; border-radius:999px; }
   #f-mode .chip:hover { color:var(--ink); }
-  #f-mode .chip.on { background:var(--ink); color:#fff; font-weight:600; }
+  /* ★ 시안 실물 대조(2026-08-13): 선택된 칸은 **흰 배경 + 그림자**이고 트랙이 연회색이다.
+     종전 「검정 채움」은 대비가 너무 세서 헤더에서 버튼처럼 튀었다. */
+  #f-mode .chip.on { background:#fff; color:var(--ink); font-weight:700; box-shadow:0 1px 3px rgba(20,28,50,.16); }
   /* ── 운영 도구는 기본 숨김 (DESIGN.md §3 · 정식 오픈 화면엔 존재하지 않는다).
      노출 조건: 로컬(file:/localhost) 또는 ?ops=1로 한 번 켠 브라우저(localStorage).
      라이브 기본값은 항상 꺼짐 — "정식 오픈 전에 지우기"를 사람이 기억하지 않게 한다. ── */
@@ -1054,8 +1056,14 @@
   #dock .dk-fold:hover { color:var(--ink); text-decoration:underline; }
   /* 대분류 행 — 교통·일자리·인프라·주거개발 동일 문법 (선형/점형 구분 표시 없음) */
   #dock .cat { border-top:1px solid var(--line); }
-  #dock .cat-h { display:flex; align-items:center; gap:9px; padding:10px 14px; cursor:pointer; position:relative; }
-  #dock .cat-h:hover { background:var(--panel); }
+  /* ★ 시안 실물: 대분류는 **박스**다 — 둥근 사각 + 좌측 3px 유형색 바 + 유형색 아주 연한 배경.
+     꺼진 분류는 흰 배경 + 흐린 글씨로 빠진다. 종전엔 그냥 한 줄이라 축이 안 읽혔다. */
+  #dock .cat { margin:0 12px 7px; }
+  #dock .cat-h { display:flex; align-items:center; gap:9px; padding:10px 12px 10px 13px; cursor:pointer;
+    position:relative; border:1px solid var(--line); border-left:3px solid var(--cc, var(--line2));
+    border-radius:10px; background:var(--ccbg, #fff); }
+  #dock .cat.off .cat-h { border-left-color:var(--line2); background:#fff; color:var(--ink3); }
+  #dock .cat-h:hover { border-color:var(--line2); }
   /* 펼침 삼각형 — **글리프는 작게, 과녁은 크게** (2026-08-01 사용자 "너무 작아서 클릭이 어려워").
      종전 12×글자높이(≈9px)는 손가락은 물론 마우스로도 빗나간다. 글자 크기는 11px로만 올리고
      상하 여백(margin 상쇄 padding)으로 **28×30px 과녁**을 만든다 — 레이아웃은 그대로 두고
@@ -1078,7 +1086,8 @@
   /* ★ `only`는 **항상 보인다** (2026-08-13 시안 §03 목업). hover에만 뜨면 있는 줄 모른다 —
      시안은 대분류 행마다 이 배지를 상시로 그려 두었다(터치 기기엔 hover도 없다). */
   #dock .cat-h .solo { position:absolute; right:58px; font-size:10px; font-weight:600; letter-spacing:.04em;
-    color:var(--ink3); border:1px solid var(--line2); border-radius:9px; padding:1px 7px; background:#fff; cursor:pointer; }
+    color:var(--ink3); border:0; border-radius:999px; padding:2px 9px; background:var(--panel); cursor:pointer; }
+  #dock .cat-h .solo:hover { background:var(--line); color:var(--ink2); }
   #dock .cat-h .solo:hover { color:var(--ink); border-color:var(--line2); }
   #dock .cat.off .cd { background:var(--line2) !important; }
   #dock .cat.off .nm, #dock .cat.off .cn { color:var(--ink3); }
@@ -4718,7 +4727,8 @@ function renderDock() {
       if (!n) return "";
       return `<div class="sub${on ? "" : " off"}" data-tog="sub" data-k="${id}">
         <span class="tick"></span><span class="nm">${sk === "철도" ? "철도 · 역" : sk === "미상" ? "유형 미상" : sk}</span><span class="n">${n}</span></div>`; }).join("");
-    return `<div class="cat${dockOpen.has(cat) ? " open" : ""}${on ? "" : " off"}">
+    /* 유형색을 박스에 넘긴다 — 좌측 바(`--cc`)와 아주 연한 배경(`--ccbg`). 색은 CAT_COLOR 하나에서만 온다. */
+    return `<div class="cat${dockOpen.has(cat) ? " open" : ""}${on ? "" : " off"}" style="--cc:${col};--ccbg:${hexA(col, .055)}">
       <div class="cat-h" data-tog="cat" data-k="${cat}">
         <span class="chev" data-open="${cat}" title="${dockOpen.has(cat) ? "접기" : "펼치기"}"></span>
         <i class="cd" style="background:${col}"></i><span class="nm">${cat}</span>
@@ -7177,7 +7187,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813q");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813r");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -7362,7 +7372,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813q"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813r"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7388,7 +7398,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813q");
+  const CB = "?b=" + (window.BUILD || "20260813r");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
