@@ -225,11 +225,15 @@
   .rchip .cv { color:var(--ink3); font-size:11px; }
   .rchip:hover { border-color:var(--line2); }
   .rchip[aria-expanded="true"] { border-color:var(--accent); }
+  /* ★ 열 수는 **고정이 아니다** — 고른 깊이만큼 자란다(갱신 시안 §04 · `--rn`은 paintRegionPop이 정함).
+     빈 열을 회색으로 띄우지 않는다: 「로딩 중인가」로 읽히고, 세종처럼 시군구 단계가 없는 곳에선
+     영영 채워지지 않을 칸을 기다리게 만든다. */
   .rpop { position:absolute; top:calc(100% + 6px); left:0; z-index:1200; display:grid;
-    grid-template-columns:repeat(3, minmax(140px, 1fr)); gap:0; background:#fff;
+    grid-template-columns:repeat(var(--rn,1), minmax(140px, 1fr)); gap:0; background:#fff;
     border:1px solid var(--line); border-radius:10px; box-shadow:0 10px 30px rgba(20,28,50,.16); overflow:hidden; }
   .rpop[hidden] { display:none; }
   .rpop .rcol { border-right:1px solid var(--line); min-width:0; }
+  .rpop .rcol[hidden] { display:none; }
   .rpop .rcol:last-child { border-right:0; }
   .rpop .rch { font-size:11px; font-weight:700; color:var(--ink3); padding:8px 11px 6px; border-bottom:1px solid var(--line); background:#fbfcfe; }
   .rpop .rlist { max-height:296px; overflow-y:auto; padding:4px 0; }
@@ -354,7 +358,11 @@
   .hj-count { position:absolute; left:12px; bottom:12px; z-index:5; pointer-events:none;
     background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:6px;
     padding:6px 11px; box-shadow:0 1px 6px rgba(0,0,0,.10); white-space:nowrap;
-    font-size:12px; color:var(--ink2); font-variant-numeric:tabular-nums; }
+    font-size:12px; color:var(--ink2); font-variant-numeric:tabular-nums;
+    display:inline-flex; align-items:center; gap:9px; }
+  .hj-count b { color:var(--ink); font-weight:700; }
+  .hj-count .hjsep { width:1px; height:11px; background:var(--line2); display:block; }
+  .hj-count .hjauto { color:var(--ink3); }
   .hmatrix { border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin:2px 0 14px; background:#fbfcfe; }
   .hmhead { font-size:12px; color:var(--muted); margin-bottom:5px; }
   .hmhead b { color:var(--ink); font-size:15px; font-weight:800; }
@@ -397,6 +405,12 @@
   .mvtag .arw { font-style:normal; margin:0 6px; color:var(--ink3); }
   .mvtag .phcell b { display:inline-flex; align-items:center; gap:4px; font-weight:700; }
   /* 기간 칩 (시안 §05) */
+  /* ★ 시안 §05: 업데이트 행은 **전 → 후 아이콘 둘**로 말한다 — 4점 트랙은 그리지 않는다
+     (2026-08-13 사장님 확정 · 종전엔 트랙 전체를 그렸다).
+     ⚠ 트랙(`.mtrk`)은 여전히 **카드 문법의 정본**이다(DESIGN.md) — 다른 화면의 카드는 그대로
+       쓴다. 이 화면만 다른 이유: 여기서 묻는 것은 「무엇이 **바뀌었나**」라, 현재 위치를 다시
+       그리면 정작 변화가 묻힌다. 그래서 규칙을 뒤집는 게 아니라 **이 뷰에서만** 접는다. */
+  #flowv .card .mtrk, #flowv .card .mtrk-old { display:none; }
   #flowv .fper { display:flex; gap:6px; flex-wrap:wrap; }
   #flowv .fpc { font-size:12.5px; padding:5px 11px; border:1px solid var(--line2); border-radius:999px;
     background:#fff; color:var(--ink2); cursor:pointer; white-space:nowrap; }
@@ -744,10 +758,16 @@
   /* ⚠ 도넛도 **속을 비운다** (2026-08-13 사용자 제보 *"동그라미 숫자가 많아서 제대로 볼 수가 없음"*).
      흰색으로 꽉 채우면 배지가 마커보다 무겁게 읽혀, 148개가 화면을 덮으면 지도가 사라진다 —
      시안 §01의 「큰 원은 채우지 않는다」는 클러스터에도 그대로 적용된다. */
-  .cl-badge { position:relative; width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,.62);
+  /* ★ **크기는 개수가 아니라 안에 든 최고 등급을 따른다** (2026-08-13 갱신 시안 §01):
+     *"개수로 키우면 지도 전체가 지키는 「크기=등급」이 클러스터에서만 깨져, 큰 원이 중요한
+     호재인지 많은 호재인지 알 수 없게 됩니다."* 지름은 `HJR`(마커 반지름 ×2)에서 도출한다 —
+     여기 숫자를 적으면 마커 크기를 바꿀 때 클러스터만 낡는다. */
+  .cl-badge { position:relative; width:var(--clw,28px); height:var(--clw,28px); border-radius:50%;
+    background:rgba(255,255,255,.62);
     box-shadow:0 1px 3px rgba(0,0,0,.10); cursor:pointer; display:flex; align-items:center; justify-content:center;
     font-size:10.5px; font-weight:600; color:var(--ink2); font-variant-numeric:tabular-nums; line-height:1; }
-  .cl-badge.cl-wide { width:34px; height:34px; font-size:11px; }
+  /* 세 자리 수가 들어가면 글자가 원을 넘는다 — 등급이 정한 지름은 그대로 두고 **글자만** 줄인다 */
+  .cl-badge.cl-wide { font-size:9.5px; }
   .cl-badge svg { position:absolute; inset:0; pointer-events:none; }
   .cl-badge b { position:relative; z-index:1; font-weight:700; }
   .cl-badge:hover { box-shadow:0 2px 9px rgba(0,0,0,.30); }
@@ -870,6 +890,13 @@
      ② 고친 뒤엔 값 머리의 칩(`±1km`)·배지(`기관 발표`)가 라벨 위로 **겹쳤다**.
      ⇒ 내어쓰기는 바깥 블록에만 필요하므로 **안쪽 전부** 되돌린다(조각이 몇 개든 안전하다). */
   .kv * { text-indent:0; }
+  /* 반경 내 단지 — 이름 왼쪽 · 거리 오른쪽(시안 §03 실물). 라벨-값 내어쓰기 밖에 두는 블록이라 kvblock */
+  .kv.kvapt { padding-left:0; text-indent:0; }
+  .kv .aptnear { margin:5px 0 2px 92px; display:flex; flex-direction:column; gap:3px; }
+  .kv .aptnear .row { display:flex; align-items:baseline; justify-content:space-between; gap:10px; font-size:12.5px; }
+  .kv .aptnear .nm { color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .kv .aptnear .d { flex:none; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:12px; color:var(--ink2); }
+  .kv .aptnear .more { color:var(--ink3); font-size:12px; }
   .kv b { display:inline-block; min-width:86px; margin-right:6px;
           color:var(--ink3); font-weight:500; font-size:12px; }
   .kv.kvr b, .kv.kvblock b { margin-right:0; }
@@ -1468,14 +1495,17 @@
               그건 어댑터가 null을 박아 둔 결과였고, `targetOf`가 마일스톤에서 도출하자 772건이 됐다.
               그래도 축은 아직 안 늘린다 — 21%면 나머지 79%가 목록 끝에 뭉치고, 그 정렬은 사실보다
               **결손 분포**를 보여 준다. 수율이 더 오르면 그때 다시 본다(수율부터 센다). -->
+      <!-- ★ 시안 §08 실물 = 「S·A 많은 순 ▾」 — 이 컨트롤은 **열(단지) 순서**를 정한다
+           (2026-08-13 사장님 확정). 목록 안 순서는 등급 밴드 + 칸 안 거리순으로 고정이라
+           여기서 다시 정할 것이 없다 — 종전 「등급순/거리순」은 그 자리를 두고 다투던 축이었다. -->
       <label class="cmpsort">정렬
         <select id="cmp-sort" onchange="renderCompareBody()">
-          <option value="level">등급순</option>
-          <option value="dist">거리순</option>
+          <option value="sa">S·A 많은 순</option>
+          <option value="added">담은 순</option>
         </select>
       </label>
       <span class="closex" onclick="closeCompare()">✕</span></div>
-    <div class="rmnote">단지를 <b>가격·등급으로 줄 세우지 않습니다</b>(P4/§7). 각 단지 반경 내 <b>호재 신호의 개수·분류·거리·단계</b>만 사실로 나열합니다. 해석은 사용자 몫.</div>
+    <div class="rmnote">단지를 <b>가격·등급으로 줄 세우지 않습니다</b>(P4/§7). 각 단지 반경 내 <b>호재 신호의 개수·분류·거리·단계</b>만 사실로 나열합니다. 열 순서는 <b>S·A 개수</b>라는 집계 사실일 뿐, 가중치 합산·추천·'수혜' 판단이 아닙니다. 해석은 사용자 몫.</div>
     <div id="cmpBody" style="overflow-x:auto;"></div>
   </div>
 </div>
@@ -3368,12 +3398,18 @@ function initRegionPop() {
      같은 객체를 쓰면 「고르는 중」이 곧 「적용」이 되어 되돌릴 수가 없다. */
   const open = v => {
     pop.hidden = !v; chip.setAttribute("aria-expanded", v ? "true" : "false");
-    if (v) { pend = { sd: nav.sd || null, sg: nav.sg || null, dong: nav.dong || null }; paintRegionPop(); }
+    if (v) { pend = { sd: nav.sd || null, sg: nav.sg || null, dong: nav.dong || null }; paintRegionPop(); clampPop(); }
+    else pop.style.left = "";
   };
   chip.onclick = e => { e.stopPropagation(); open(pop.hidden); };
   document.addEventListener("click", e => { if (!pop.hidden && !pop.contains(e.target) && e.target !== chip) open(false); });
   document.addEventListener("keydown", e => { if (e.key === "Escape") open(false); });
   pop.onclick = e => {
+    /* ☠ **팝오버가 한 칸 누를 때마다 닫혔다** (2026-08-13 실측). 이 핸들러가 `paintRegionPop()`으로
+       열 내용을 다시 그리면 방금 누른 노드가 DOM에서 떨어지고, 이벤트가 계속 버블링해 document
+       핸들러에 닿을 때는 `pop.contains(e.target)`가 **false**가 된다 → 「바깥 클릭」으로 오판.
+       안에서 처리한 클릭은 안에서 끝낸다. */
+    e.stopPropagation();
     const go = e.target.closest("#rp-go");
     if (go) {   // ★ 적용은 여기 한 번뿐 — 지도 이동·집계·목록이 이때만 움직인다
       applyRegion(pend.sd, pend.sg, pend.dong);
@@ -3385,8 +3421,16 @@ function initRegionPop() {
     if (col === "sido") { pend.sd = v || null; pend.sg = null; pend.dong = null; }
     else if (col === "sgg") { pend.sg = v || null; pend.dong = null; }
     else pend.dong = v || null;
-    paintRegionPop();   // 목록은 동기 함수라 즉시 그린다(다음 열을 기다릴 이유가 없다)
+    paintRegionPop(); clampPop();   // 목록은 동기 함수라 즉시 그린다(다음 열을 기다릴 이유가 없다)
   };
+  /* 열이 늘면 팝오버가 화면 밖으로 나간다 — 3열이 되는 순간 「조회」가 오른쪽으로 밀려
+     **누를 수 없었다**(2026-08-13 실측 860px). 넘치면 오른쪽 끝에 맞춰 당긴다. */
+  function clampPop() {
+    pop.style.left = "";
+    const r = pop.getBoundingClientRect();
+    const over = r.right - (innerWidth - 8);
+    if (over > 0) pop.style.left = Math.max(8 - r.left, -over) + "px";
+  }
   syncRegionChip();
 }
 /* 세 열을 현재 `nav` 상태로 다시 그린다. 목록의 출처는 셀렉트 경로와 **같은 함수**다. */
@@ -3401,10 +3445,21 @@ function paintRegionPop() {
      내가 원하는 레벨갯수 선택할 수 있게"*). 이게 있어야 ① 고른 것을 되돌릴 수 있고
      ② **원하는 깊이에서 멈출 수 있다**(시군구까지만 볼지, 읍면동까지 볼지). */
   const ALL = { v: "", t: "전체" };
+  const sggs = pend.sd ? sggListOf(pend.sd) : [];
+  const dongs = (pend.sd && pend.sg) ? dongsOfSgg(pend.sd, pend.sg) : [];
   put("rp-sido", [ALL].concat(SIDO_ORDER.map(sd => ({ v: sd, t: SIDO_LONG[sd] }))), pend.sd || "", "sido", "—");
-  put("rp-sgg", pend.sd ? [ALL].concat(sggListOf(pend.sd).map(v => ({ v, t: v }))) : [], pend.sg || "", "sgg", "시도를 먼저 고르세요");
-  put("rp-dong", (pend.sd && pend.sg) ? [ALL].concat(dongsOfSgg(pend.sd, pend.sg).map(v => ({ v, t: v }))) : [], pend.dong || "", "dong",
-    pend.sg ? "이 시군구는 읍면동 경계 준비 중" : "시군구를 먼저 고르세요");
+  put("rp-sgg", sggs.length ? [ALL].concat(sggs.map(v => ({ v, t: v }))) : [], pend.sg || "", "sgg", "");
+  put("rp-dong", dongs.length ? [ALL].concat(dongs.map(v => ({ v, t: v }))) : [], pend.dong || "", "dong", "");
+  /* ★ **열은 선택한 깊이만큼 자란다** (2026-08-13 갱신 시안 §04): 시도만 1열 · 시군구까지 2열 ·
+     그 아래가 있으면 3열. 세종처럼 하위 단계가 없는 곳은 2열에서 끝나고 **빈 열을 만들지 않는다**
+     — *"없는 단계를 회색으로 띄우면 「로딩 중인가」로 읽힙니다"*(시안).
+     ⇒ 「시도를 먼저 고르세요」 같은 안내 문구도 없앤다. 열이 없으면 안내할 것도 없다. */
+  const pop = document.getElementById("r-pop");
+  if (pop) {
+    const cols = [!!sggs.length, !!dongs.length];   // 2·3열의 존재 여부
+    [...pop.querySelectorAll(".rcol")].forEach((c, i) => { if (i) c.hidden = !cols[i - 1]; });
+    pop.style.setProperty("--rn", 1 + cols.filter(Boolean).length);
+  }
   // 「무엇을 조회할지」를 누르기 전에 문장으로 확인시킨다 — 칩(적용된 범위)과 헷갈리지 않게 여기 둔다
   const sel = document.getElementById("rp-sel");
   if (sel) sel.textContent = [pend.sd && (SIDO_LONG[pend.sd] || pend.sd), pend.sg, pend.dong].filter(Boolean).join(" › ") || "전국";
@@ -3574,6 +3629,24 @@ function signalsNearPoint(coord, all = false) {
 function adverseNearPoint(coord) {
   return ADVERSE.map(f => ({ f, dist: meters(coord, f._coord) }))
     .filter(x => x.dist <= ADVERSE_RKM * 1000).sort((a, b) => a.dist - b.dist);
+}
+/* ★ 이 호재 반경 안의 **단지** (갱신 시안 §03 상세 카드 — 사장님이 이 자리에 표시).
+   ⚠ §7 「수혜 단지 표기 금지」와 경계가 맞닿는다 — 표에 적힌 대안이 *"접근점·거리 사실 표기"*다.
+     그래서 **이름과 거리만** 적는다: 「수혜」·「예상」·순위·추천 어휘를 쓰지 않고, 정렬은 거리(측정값)
+     하나뿐이다. 거리는 사실이고, 그 사실로 무엇을 판단할지는 사용자 몫이다(P1).
+   ⚠ 반경은 **그 호재의 영향 반경**을 그대로 쓴다(`getRadius`) — 여기서 1km 같은 상수를 새로
+     만들면 지도의 원과 카드의 목록이 다른 범위를 말하게 된다. */
+function aptsNearSignal(s, cap) {
+  const pts = signalPoints(s); if (!pts.length || !APTS.length) return null;
+  const R = getRadius(s);
+  const out = [];
+  for (const a of APTS) {
+    let d = Infinity;
+    for (const p of pts) { const t = meters([a.lon, a.lat], p.coord); if (t < d) d = t; }
+    if (d <= R) out.push({ a, d });
+  }
+  out.sort((x, y) => x.d - y.d);
+  return { n: out.length, km: (R / 1000).toFixed(1).replace(".0", ""), top: out.slice(0, cap || 3) };
 }
 /* ══════════ 시군구 단위 분류 신호 (확정+정비+철도) — 수도권 전역 카운팅 ══════════ */
 let SGG_SIG = null;
@@ -4147,9 +4220,17 @@ function cmpStats(a) {
            allNames: near.map(({ s, dist }) => `${(s.title || "").replace(/"/g, "'")} (${dist < 1000 ? Math.round(dist) + "m" : (dist / 1000).toFixed(1) + "km"})`) };
 }
 const esc = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+/* ★ 시안 §08 헤더의 정렬은 **열(단지) 순서**다 — 「S·A 많은 순」 (2026-08-13 사장님 확정).
+   ⚠ 이건 집계로 단지를 줄 세우는 것이라 §7 「동/단지 점수·등급」과 경계가 맞닿는다. 사장님이
+     시안대로 가기로 확정했으므로 넣되, **정렬은 사실의 배열일 뿐**임을 각주가 계속 말한다
+     (가중치 합산·추천·수혜 판단은 여전히 없다). 「담은 순」으로 되돌릴 수 있게 둔다. */
 function cmpSortMode() {
   const el = document.getElementById("cmp-sort");
-  return el ? el.value : "level";
+  return el ? el.value : "sa";
+}
+// S·A 개수 — 열 정렬의 유일한 근거(다른 축을 섞지 않는다)
+function cmpSA(rows) {
+  return rows.filter(r => r.s.status !== "정체" && (r.g === "S" || r.g === "A")).length;
 }
 /* ══ 목록 = **등급 그룹 가로 밴드** (2026-08-13 시안 §08 실물 대조) ═══════════════════
    ☠ 종전엔 단지별 **세로 컬럼**을 나란히 놓았다. 항목 수가 달라(12/4/8) 열 높이가 어긋나고
@@ -4192,14 +4273,11 @@ function cmpBandsHtml(cols) {
   const head = `<div class="cmplisthead"><b>전체 목록 <span class="n">${total}</span>건</b>`
     + `<span class="tg" onclick="cmpToggleList()">${cmpListOpen ? "접기 ▴" : "펼치기 ▾"}</span></div>`;
   if (!cmpListOpen) return head;
-  const byDist = cmpSortMode() === "dist";
-  /* 거리순에서는 등급 밴드가 성립하지 않는다(등급이 뒤섞인다) → 밴드 하나에 거리순으로 쌓는다.
-     등급은 행마다 링·글자로 이미 붙어 있으므로 어느 축으로 보든 세 사실이 다 보인다. */
-  const groups = byDist
-    ? [{ k: "", lab: "거리순", pick: rows => live(rows).slice().sort((x, y) => x.d - y.d) }]
-    : GRADES_DISP.filter(g => !cmpGrade || cmpGrade === g)
-        .map(g => ({ k: g, lab: g === "미정" ? LEVEL_NAME["미정"] : g + "등급",
-          pick: rows => live(rows).filter(r => r.g === g).sort((x, y) => x.d - y.d) }));
+  /* 목록은 **항상 등급 밴드**다(시안 §08) — 칸 안 순서만 거리순. 정렬 컨트롤은 이제 열 순서를
+     정하므로 밴드 구조와 다투지 않는다. */
+  const groups = GRADES_DISP.filter(g => !cmpGrade || cmpGrade === g)
+    .map(g => ({ k: g, lab: g === "미정" ? LEVEL_NAME["미정"] : g + "등급",
+      pick: rows => live(rows).filter(r => r.g === g).sort((x, y) => x.d - y.d) }));
   let out = "";
   groups.forEach(gr => {
     const per = cols.map(c => gr.pick(c.rows));
@@ -4310,6 +4388,8 @@ function renderCompareBody() {
   if (compareSet.length < 2) return;
   const cols = compareSet.map(a => ({ a,
     rows: signalsNearPoint([a.lon, a.lat], true).map(({ s, dist: d }) => ({ s, d, g: levelOf(s) })) }));
+  // ★ 열 순서 = 시안 §08 「S·A 많은 순」. 「담은 순」이면 손대지 않는다(담은 순서가 곧 사용자의 순서).
+  if (cmpSortMode() === "sa") cols.sort((x, y) => cmpSA(y.rows) - cmpSA(x.rows));
   const body = `<div id="cmpWrap" style="--nc:${cols.length}">
     ${cmpSummaryHtml(cols)}
     <div class="cmpnote">· 반경 내 호재의 <b>개수·거리·단계 사실만</b> 나열합니다 — 가중치 합산·순위·추천·'수혜' 판단 없음(§7·P1·P3). 세대수는 단지 식별 표기일 뿐 비교 축이 아닙니다.<br>
@@ -4431,6 +4511,13 @@ function renderDetail(s) {
       <div class="kv"><b>위치</b> ${precNote(s)}${
         s.st_status && s.st_status !== "확정" && s.st_status !== "기존" ? ` · <b>${s.st_status}</b>(명칭·위치 미확정)` : ""}${
         s.pt_type === "road_ic" ? " · 도로 IC(철도역 아님)" : ""}</div>
+      ${(() => {   // ★ 갱신 시안 §03 상세 카드 — 「반경 Nkm 내 단지 N」 + 이름·거리(§7: 거리 사실 표기)
+        const an = aptsNearSignal(s); if (!an || !an.n) return "";
+        return `<div class="kv kvapt"><b>반경 ${an.km}km 내 단지</b> <span class="mono">${an.n.toLocaleString()}</span>
+          <div class="aptnear">${an.top.map(x =>
+            `<span class="row"><span class="nm">${esc(x.a.n)}</span><span class="d">${x.d < 1000 ? Math.round(x.d) + "m" : (x.d / 1000).toFixed(1) + "km"}</span></span>`).join("")}
+            ${an.n > an.top.length ? `<span class="row more">외 ${(an.n - an.top.length).toLocaleString()}개 단지</span>` : ""}</div>
+          <span class="hmhint">거리 사실만 — 수혜 여부는 판단하지 않습니다(§7·P1)</span></div>`; })()}
       <div class="kv"><b>근거</b> ${srcBadge(s)} <span class="src">${(s.sources || []).map((u, i) => {
         // 링크 전수조사(2026-07-30, link_audit.py)에서 참조 1,216건(72%)이 **조회조건 없는 메인**으로
         // 드러났다 — 링크는 살아 있는데 그 신호를 찾을 수 없어 "정보가 무의미"하게 느껴진다(사용자 지적).
@@ -6174,9 +6261,15 @@ function initKakao() {
        프레임을 먹는다(2026-08-11 팬·줌 성능 작업과 같은 이유). */
   const clDonut = (el, g) => {
     const cnt = {}; for (const m of g) { const c = catOf(m); cnt[c] = (cnt[c] || 0) + 1; }
-    const key = g.length + "|" + Object.entries(cnt).map(([k, v]) => k + v).sort().join(",");
+    /* ★ 지름 = **안에 든 최고 등급**(갱신 시안 §01). 개수로 키우면 지도 전체가 지키는
+       「크기=등급」이 클러스터에서만 깨진다 — 큰 원이 중요한 호재인지 많은 호재인지 알 수 없다.
+       값은 `HJR`에서 도출한다(사본을 만들지 않는다). 케이싱만큼 살짝 키워 마커와 눈으로 같아진다. */
+    const top = GRADES_DISP.find(l => g.some(m => levelOf(m) === l)) || "C";
+    const D = Math.round((HJR[top] || 8) * 2 + 6);
+    const key = g.length + "|" + D + "|" + Object.entries(cnt).map(([k, v]) => k + v).sort().join(",");
     if (el._clKey === key) return;
     el._clKey = key;
+    el.style.setProperty("--clw", D + "px");
     const R = 11.4, W = 3.2, C = 2 * Math.PI * R, n = g.length;
     let off = 0, arcs = "";
     for (const [c, v] of Object.entries(cnt)) {
@@ -6373,7 +6466,10 @@ function initKakao() {
        세는 대상은 `pool`(조회조건 + 뷰포트를 통과한 것 전부) — 클러스터로 합쳐진 것도 **표시된
        것**이다(합계가 배지 안에 보존된다). 그래서 숨김은 정의상 0이고, 0이 아니게 되는 변경이
        들어오면 이 줄이 거짓이 되므로 같이 고쳐야 한다. */
-    _hjCountEl.textContent = pool.length.toLocaleString() + "건 전부 표시 중 · 숨김 0"; };
+    /* ★ 「지도 이동 시 자동 조회」를 함께 적는다 (갱신 시안 §03 실물 — 사장님이 이 자리에 표시).
+       별도 조회 버튼이 없다는 사실을 **화면이 스스로 말해야** 「왜 안 눌러도 바뀌지」가 안 생긴다. */
+    _hjCountEl.innerHTML = '<b>' + pool.length.toLocaleString() + '</b>건 전부 표시 중 · 숨김 0'
+      + '<i class="hjsep"></i><span class="hjauto">지도 이동 시 자동 조회</span>'; };
 
   // 동 라벨: feature에 1회 캐시(_klbl) — 충돌 계산만 매번, DOM 생성은 안 한다
   let lblShown = new Set();
@@ -7511,7 +7607,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813aa");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813ab");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -7696,7 +7792,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813aa"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813ab"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7722,7 +7818,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813aa");
+  const CB = "?b=" + (window.BUILD || "20260813ab");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
