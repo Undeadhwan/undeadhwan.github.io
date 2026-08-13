@@ -168,9 +168,12 @@
     border-radius:50%; border-style:solid; font-size:11px; font-weight:700; color:var(--ink); }
   /* 4점 트랙 (시안 §07) — 건당 60px 트랙 대신 6px 점 4개 */
   .apttab .pdots { display:inline-flex; gap:3px; margin-bottom:3px; }
-  .apttab .pd { width:6px; height:6px; border-radius:50%; border:1px solid var(--line2); background:#fff; display:block; }
-  .apttab .pd.on { background:var(--ink2); border-color:var(--ink2); }
-  .apttab .lt-ph { font-size:11.5px; line-height:1.3; }
+  /* ★ 시안 실물: 4점 트랙은 **채운 점**이다(빈 링이 아니다) — 미도래만 흐린 점. */
+  .apttab .pd { width:6px; height:6px; border-radius:50%; border:0; background:var(--line2); display:block; }
+  .apttab .pd.on { background:var(--ink); }
+  .apttab .ptrack { display:inline-flex; align-items:center; gap:8px; white-space:nowrap; }
+  .apttab .lt-ph { font-size:12px; line-height:1.3; }
+  .apttab .pdots { margin:0; }
   /* 등급 셀 = 링 + 글자 (시안 §04 실물) */
   /* 목록 건수 (시안 §04 실물) */
   #listv .bignum { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:26px; font-weight:700;
@@ -3569,7 +3572,8 @@ function aptSigTable(arr) {
       + `<td class="lt-nm"><i class="lt-bar" style="background:${t.col}"></i>`
       + `<span class="lt-t">${sigTitle(s)}</span>`
       + `<span class="lt-sub">${catOf(s)}${subLabel(s)}${sub ? " · " + sub : ""}</span></td>`
-      + `<td class="c lt-ph"><span class="pdots">${dots}</span><br>${PHASE_LABEL[phaseOf(s)] || phaseOf(s)}</td>`
+      /* ★ 시안 실물: 트랙과 단계 글자가 **가로로 나란히** 놓인다(세로로 쌓지 않는다). */
+      + `<td class="c lt-ph"><span class="ptrack"><span class="pdots">${dots}</span>${PHASE_LABEL[phaseOf(s)] || phaseOf(s)}</span></td>`
       + `<td class="c lt-d">${dist < 1000 ? Math.round(dist) + "m" : (dist / 1000).toFixed(1) + "km"}</td>`;
     tr.onclick = () => showSignal(s, true);
     body.appendChild(tr);
@@ -7246,7 +7250,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813v");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813w");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -7431,7 +7435,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813v"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813w"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7457,7 +7461,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813v");
+  const CB = "?b=" + (window.BUILD || "20260813w");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
