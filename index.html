@@ -3443,7 +3443,12 @@ function showApt(a) {
      질문에 맞춘다 — 여기서 묻는 것은 「이 단지에서 얼마나 먼가」라 소재지·확인일 대신 거리다. */
 function aptSigTable(arr) {
   const tb = document.createElement("table"); tb.className = "ltab apttab";
-  tb.innerHTML = '<thead><tr><th class="c">등급</th><th>호재명 · 유형</th><th class="c">단계</th><th class="c">거리</th></tr></thead>';
+  /* 등급 열 머리 = **국소 필터**(시안 §07이 요약 칩 대신 지목한 자리). 누를 때마다 S→A→B→C→전체. */
+  const NEXT = { "": "S", S: "A", A: "B", B: "C", C: "미정", "미정": "" };
+  const cur = panelGrade || "";
+  tb.innerHTML = '<thead><tr><th class="c gh" role="button" tabindex="0" title="누르면 그 등급만 — 다시 누르면 다음 등급, 마지막에 전체">'
+    + (cur ? (cur === "미정" ? LEVEL_NAME["미정"] : cur + "만") : "등급") + ' ▾</th>'
+    + '<th>호재명 · 유형</th><th class="c">단계</th><th class="c">거리</th></tr></thead>';
   const body = document.createElement("tbody"); tb.appendChild(body);
   arr.forEach(({ s, dist }) => {
     const t = ringOf(s), lv = t.lv;
@@ -3462,6 +3467,8 @@ function aptSigTable(arr) {
     tr.onclick = () => showSignal(s, true);
     body.appendChild(tr);
   });
+  const gh = tb.querySelector(".gh");
+  if (gh) gh.onclick = () => setPanelGrade(NEXT[cur] || null);
   return tb;
 }
 function renderApt(a) {
@@ -3479,7 +3486,12 @@ function renderApt(a) {
     <div class="ps">${a.sd} ${a.sg} ${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : ""} · 이 단지에 영향 주는 신호 ${near.length}건 (거리순, 반경 내)
       <span class="cmpAdd ${inCmp ? "in" : ""}" id="cmpAdd">${inCmp ? "✓ 비교함" : "＋ 비교담기"}</span></div>
     ${advHtml}
-    ${hojaeMatrixHtml(near)}
+    <!-- ★ 등급 요약 칩을 두지 않는다 (2026-08-13 시안 §07):
+         *"아래 표의 등급 열이 같은 정보를 이미 말하고, 등급별로 좁히고 싶으면 열 머리를 눌러
+         정렬하면 됩니다."* — 같은 사실을 두 층이 말하면 반드시 어긋난다.
+         ⚠ 다만 요약이 갖고 있던 **국소 필터**(이 패널만 등급으로 좁히기)는 도크로 대체되지
+           않는다(도크는 전역이라 지도까지 바뀐다 — §0-54a). 그래서 그 기능은 버리지 않고
+           **등급 열 머리 클릭**으로 옮겼다. 기능은 남고 중복만 사라진다. -->
     ${yearChipsHtml()}
     <div id="list"></div>
     <div class="note" style="border-top:1px dashed var(--line);margin-top:8px;padding-top:8px;font-size:11px;color:var(--muted)">
@@ -7082,7 +7094,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813n");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813o");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -7267,7 +7279,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813n"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813o"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7293,7 +7305,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813n");
+  const CB = "?b=" + (window.BUILD || "20260813o");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
