@@ -36,6 +36,8 @@
   header .region { font-size:13px; border:1px solid var(--line); border-radius:8px; padding:4px 10px; background:#fff; }
   /* ── 상단 통합 검색 (동·시군구·아파트·호재) ── */
   .srch { position:relative; flex-shrink:0; }
+  /* ★ 시안 실물: 검색은 **알약**이다(둥근 끝). 사각 라운드는 헤더의 다른 칩과 결이 달랐다. */
+  #srch-in { border-radius:999px !important; }
   .srch .srchicon { position:absolute; left:11px; top:50%; transform:translateY(-50%); font-size:12px; opacity:.55; pointer-events:none; }
   .srch input { width:280px; font-size:14.5px; padding:9px 12px 9px 32px; border:1.5px solid #e3e6ec; border-radius:999px;
                 background:#fff; outline:none; transition:border-color .12s, box-shadow .12s; }
@@ -1110,7 +1112,9 @@
   #dock .cat.open .subs { display:block; }
   #dock .sub { display:flex; align-items:center; gap:7px; padding:4px 0; cursor:pointer; font-size:var(--fs); }
   #dock .sub .tick { width:15px; height:15px; border:1.5px solid var(--line2); border-radius:4px; flex-shrink:0; position:relative; }
-  #dock .sub:not(.off) .tick { background:var(--ink); border-color:var(--ink); }
+  /* ★ 시안 실물: 중분류 체크박스는 **파란 채움**이다(시스템 액센트). 잉크 채움은 「선택된 행」이
+     아니라 「꺼진 축」처럼 무거워 보였다. 「유형 미상」만 점선 사각(값이 없는 축이라는 표시). */
+  #dock .sub:not(.off) .tick { background:var(--accent); border-color:var(--accent); }
   #dock .sub:not(.off) .tick::after { content:""; position:absolute; left:4.5px; top:2px; width:3px; height:6.5px; border:solid #fff; border-width:0 1.5px 1.5px 0; transform:rotate(45deg); }
   #dock .sub .n { margin-left:auto; color:var(--ink3); font-size:var(--fs-s); font-variant-numeric:tabular-nums; }
   #dock .sub.off { color:var(--ink3); }
@@ -1143,9 +1147,16 @@
        는다) 320px 기기에선 다시 제멋대로 접힌다 — 폭에 따라 규칙이 갈리면 반대쪽이 조용한 예외가
        되는 게 이 저장소의 반복 사고다. 두 화면이 같은 모양을 보이는 편이 낫다. */
   #dock .seg { display:flex; flex-wrap:wrap; gap:5px; }
-  #dock .seg.g2 { display:grid; grid-template-columns:1fr 1fr; gap:5px; }
-  #dock .seg.g4 { display:grid; grid-template-columns:repeat(4, 1fr); gap:5px; }
-  #dock .seg.g4 .s.wide { grid-column:1 / -1; }
+  /* ★ 시안 실물: 단계는 **알약**이고 폭에 따라 자연스럽게 접힌다(격자 아님). */
+  #dock .seg.g2 { display:flex; flex-wrap:wrap; gap:6px; }
+  #dock .seg.g2 .s { border-radius:999px; padding:6px 13px; }
+  /* ★ 시안 실물: 등급 버튼은 **링 위 · 글자 아래** 세로 배치이고 링 크기가 등급별로 다르다.
+     가로로 눕히면 링이 글자 옆 장식이 되는데, 시안에서 링은 **크기가 곧 등급**이라 주인공이다. */
+  /* 5칸 균등은 「등급 없음」 라벨이 잘린다 — 마지막 칸만 넓게(시안도 그 칸이 더 길다). */
+  #dock .seg.g4 { display:grid; grid-template-columns:repeat(4, 1fr) 1.5fr; gap:5px; }
+  #dock .seg.g4 .s { flex-direction:column; gap:3px; padding:8px 2px; font-size:11.5px; line-height:1.2; }
+  #dock .seg.g4 .s i { margin:0; }
+  #dock .seg.g4 .s.wide { grid-column:auto; }
   #dock .seg .s { display:inline-flex; align-items:center; justify-content:center; gap:5px; padding:6px 11px; border:1px solid var(--line2); border-radius:var(--r-s); font-size:var(--fs); background:#fff; color:var(--ink3); cursor:pointer; white-space:nowrap; }
   /* 격자 칸은 폭이 고정이라 긴 라벨(「준공·개통」)이 넘칠 수 있다 — 넘치면 자르지 말고 **줄인다**
      (자르면 이름이 거짓말이 된다). 좌우 여백을 먼저 양보한다. */
@@ -3255,7 +3266,8 @@ function paintRegionPop() {
 /* 칩 문구 = 현재 조회 범위. 지도 이동으로 지역이 바뀌어도 같은 함수가 부른다(한 곳에서만 적는다). */
 function syncRegionChip() {
   const t = document.getElementById("r-chip-t"); if (!t) return;
-  t.textContent = regionLabel() || "전국";
+  /* 시안 실물의 구분자는 공백이 아니라 **›**다 — 계층이 보인다. */
+  t.textContent = (regionLabel() || "전국").replace(/\s+/g, " › ");
 }
 /* ★ 지역바 = **조회조건**이다 (2026-08-09 재설계 — 사용자 "구 선택하면 좌표 이동도 안 되고,
    아래서 시트가 올라오는데 목록이랑 중첩되고 데이터도 없다. 조회조건에서 고른 지역의 호재
@@ -7202,7 +7214,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813s");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813t");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -7387,7 +7399,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813s"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813t"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7413,7 +7425,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813s");
+  const CB = "?b=" + (window.BUILD || "20260813t");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
