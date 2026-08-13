@@ -177,6 +177,9 @@
   .rpop .ri:hover { background:#f3f6ff; }
   .rpop .ri.on { background:#eef2ff; font-weight:700; color:var(--accent); }
   .rpop .rempty { padding:10px 11px; font-size:12px; color:var(--ink3); }
+  /* 세대수도 조회 범위다 — 지역 칩과 같은 모양으로 둔다(시안 §03 헤더: 「300 세대+ ▾」) */
+  #apt-hh { font-size:14.5px; font-weight:600; padding:8px 12px; border:1px solid #d9dee8; border-radius:9px;
+    background:#fff; color:#1a2233; cursor:pointer; }
   .regionbar select { font-size:14.5px; font-weight:600; padding:8px 11px; border:1px solid #d9dee8; border-radius:9px; background:#fff; color:#1a2233; cursor:pointer; min-width:94px; }
   .regionbar select:focus { outline:none; border-color:var(--accent); }
   .regionbar select:disabled { color:#aab; background:#f6f7f9; cursor:default; }
@@ -310,6 +313,32 @@
   .lvtag.z { color:var(--ink3); border-color:var(--line); }
   .lvtag.z i { border-color:var(--ink3); }
   /* 시점 슬라이더 접기 (시안 §07) — 기본은 전체, 필요할 때만 편다 */
+  /* 긴 표기 규칙은 접어 두되 항상 열 수 있게 (시안 §06 「한계는 눈에 보이게 · 긴 표기 규칙은 접어 둔다」) */
+  /* 패널 유형 칩 (시안 §07) */
+  .pcats { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:8px 0 6px; font-size:12.5px; color:var(--ink2); }
+  .pcats b { font-size:15px; color:var(--ink); font-variant-numeric:tabular-nums; }
+  .pcat { display:inline-flex; align-items:center; gap:5px; padding:3px 9px; border:1px solid var(--line2);
+    border-radius:999px; background:#fff; font-size:12px; color:var(--ink); cursor:pointer; }
+  .pcat i { width:8px; height:8px; border-radius:50%; }
+  .pcat.on { border-color:var(--ink); font-weight:700; }
+  /* 기간 칩 (시안 §05) */
+  #flowv .fper { display:flex; gap:6px; flex-wrap:wrap; }
+  #flowv .fpc { font-size:12.5px; padding:5px 11px; border:1px solid var(--line2); border-radius:999px;
+    background:#fff; color:var(--ink2); cursor:pointer; white-space:nowrap; }
+  #flowv .fpc.on { background:var(--ink); border-color:var(--ink); color:#fff; font-weight:700; }
+  /* 위치 정확도 3등급 배지 (시안 §06) — 마름모 + ±수치 */
+  .ptier { display:inline-block; font-size:11px; font-weight:700; color:var(--ink2);
+    border:1px solid var(--line2); border-radius:999px; padding:1px 7px; margin-right:5px; }
+  /* 원본 팩트시트는 접는다 (시안 §06 「원본은 접어서 보관」) */
+  details.factsheet > summary { cursor:pointer; list-style:none; user-select:none; }
+  details.factsheet > summary::-webkit-details-marker { display:none; }
+  details.factsheet > summary::after { content:" ▾"; color:var(--ink3); }
+  details.factsheet[open] > summary::after { content:" ▴"; }
+  .rulefold { margin-top:8px; border-top:1px dashed var(--line); padding-top:6px; }
+  .rulefold > summary { cursor:pointer; font-size:11.5px; color:var(--ink3); list-style:none; user-select:none; }
+  .rulefold > summary::-webkit-details-marker { display:none; }
+  .rulefold > summary::after { content:" ▾"; }
+  .rulefold[open] > summary::after { content:" ▴"; }
   .yfold { margin:6px 0 4px; }
   .yfold > summary { cursor:pointer; font-size:12px; color:var(--ink2); list-style:none; padding:4px 0; user-select:none; }
   .yfold > summary::-webkit-details-marker { display:none; }
@@ -1034,8 +1063,10 @@
   #dock .cat-h .cd { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
   #dock .cat-h .nm { font-weight:600; font-size:15.5px; }
   #dock .cat-h .cn { margin-left:auto; font-size:var(--fs); color:var(--ink2); font-variant-numeric:tabular-nums; }
-  #dock .cat-h .solo { position:absolute; right:58px; font-size:11.5px; color:var(--ink3); border:1px solid var(--line); border-radius:5px; padding:1px 6px; background:#fff; cursor:pointer; display:none; }
-  #dock .cat-h:hover .solo { display:block; }
+  /* ★ `only`는 **항상 보인다** (2026-08-13 시안 §03 목업). hover에만 뜨면 있는 줄 모른다 —
+     시안은 대분류 행마다 이 배지를 상시로 그려 두었다(터치 기기엔 hover도 없다). */
+  #dock .cat-h .solo { position:absolute; right:58px; font-size:10px; font-weight:600; letter-spacing:.04em;
+    color:var(--ink3); border:1px solid var(--line2); border-radius:9px; padding:1px 7px; background:#fff; cursor:pointer; }
   #dock .cat-h .solo:hover { color:var(--ink); border-color:var(--line2); }
   #dock .cat.off .cd { background:var(--line2) !important; }
   #dock .cat.off .nm, #dock .cat.off .cn { color:var(--ink3); }
@@ -1195,8 +1226,8 @@
          좀 애매해") — title에 그 질문을 그대로 적는다. 자세한 구분은 각 뷰 머리에도 쓴다. -->
     <span class="chip on" id="v-map" title="어디에 있나 — 지도 위 위치와 영향권">지도</span>
     <!-- 흐름 = **시간축**. 우리만 가진 축이라 지도·목록과 나란히 둔다(운영 도구 아님 — 공개 화면에 남는다) -->
-    <span class="chip" id="v-flow" title="무엇이 바뀌었나 — 소스 원문에 날짜가 있는 움직임만(월별·최신순)">업데이트</span>
     <span class="chip" id="v-list" title="무엇이 있나 — 조회조건에 걸린 전체를 정렬·검색">목록</span>
+    <span class="chip" id="v-flow" title="무엇이 바뀌었나 — 소스 원문에 날짜가 있는 움직임만(월별·최신순)">업데이트</span>
     <!-- ⚠ 여기 있던 `☰ 조회조건`(.mo-only) 칩을 지웠다(2026-08-11) — **죽은 코드**였다.
          모바일에선 부모 `#f-mode`가 통째로 `display:none`이라 이 칩은 나타날 수가 없고,
          조회조건 진입은 하단 탭바가 담당한다(2026-08-10 탭바 도입 때 옮겨졌다). -->
@@ -1230,7 +1261,7 @@
            뭔지 좀 애매해"). 애매했던 실제 이유는 **목록 기본 정렬이 최근순**이라 순서가 흐름과
            거의 같았던 것이다 — 이름만 다르고 하는 일이 겹쳐 보였다.
            목록 = **무엇이 있나(재고)** · 흐름 = **무엇이 바뀌었나(delta)**. 시간축은 흐름이 전담한다. -->
-      <div class="lvtitle">신호 목록 <span style="font-weight:400;font-size:12.5px;color:var(--ink3)">— 무엇이 <b style="font-weight:600">있나</b> · 조회조건에 걸린 전체</span></div>
+      <div class="lvtitle">신호 목록</div>
       <div class="lvctl">
         <label class="lvsort">정렬
           <select id="l-sort">
@@ -1782,10 +1813,18 @@ const ROUGH_PREC = new Set(["dong", "sgg", "zone_poi", "zone_wide", "unknown",
                             "notice_map", "namu_map", "jigu", "zone", "none",
                             "ic_single", "moct_mid", "seg_anchor"]);
 const isApprox = s => !!(s.geo_approx || s.approx) || ROUGH_PREC.has(s.geo_prec);
+/* ★ 위치 정확도 **3등급 고정** (2026-08-13 시안 §06):
+   *"「구역 중심(근사)」, 「지물 기준(근사)」, 「지번 기준」 같은 서술 대신 ±50m / ±200m / ±1km
+   세 등급으로 고정하고 마름모 아이콘을 붙입니다. 세 케이스가 같은 자리에서 같은 형식으로 읽힙니다."*
+   ⚠ 서술을 **버리지 않는다** — 등급은 「얼마나 틀릴 수 있나」를 한 형식으로 말하고, 그 아래 원래
+     서술이 「왜 그렇게 아는가」를 말한다. 시안이 없애라 한 것은 **형식의 들쭉날쭉함**이지 근거가 아니다. */
+const PREC_TIER = { exact: "±50m", parcel: "±50m", station_poi: "±200m", parcel_base: "±200m",
+  notice_map: "±200m", notice_cluster: "±200m", namu_map: "±200m" };
+function precTier(k) { return PREC_TIER[k] || "±1km"; }
 function precNote(s) {
   const v = GEO_PREC[s.geo_prec];
   // 필드명은 geo_approx다. 종전엔 s.approx를 보고 있어 등급표에 없는 값이 "확정 좌표"로 나왔다.
-  const head = v ? `<b>${v.t}</b> — ${v.d}` : (s.geo_approx || s.approx ? "근사 — 위치 미확정" : "등급 미상 — 근사로 취급");
+  const head = `<span class="ptier">◇ ${precTier(s.geo_prec)}</span> ` + (v ? `<b>${v.t}</b> — ${v.d}` : (s.geo_approx || s.approx ? "근사 — 위치 미확정" : "등급 미상 — 근사로 취급"));
   // ☠ **등급은 말하고 근거는 말하지 않았다** (2026-08-06). `geo_basis`는 어댑터 3곳이 나르기만 하고
   //   화면에서 **한 번도 그려진 적이 없다** — 「지번(~수십m)」이라 단정하면서 왜 그렇게 아는지는
   //   침묵하는 상태다(P2·P5). 등급 근거(lvl_basis)와 같은 사고를 좌표 쪽에서 반복한 것.
@@ -3472,6 +3511,7 @@ function aptSigTable(arr) {
   return tb;
 }
 function renderApt(a) {
+  panelCat = null;   // 새 단지 = 유형 필터 초기화
   const p = document.getElementById("panel");
   const near = signalsNearPoint([a.lon, a.lat], true);   // 단지 사실=필터 무관
   const inCmp = compareSet.some(x => x.n === a.n && x.dong === a.dong);
@@ -3483,8 +3523,12 @@ function renderApt(a) {
       <div class="advnote">폐기물·하수 등 환경기초시설 도시계획 결정(최근 고시 기준·미완공, 지도 미표시). 존재·거리 사실만 — 영향 판단 아님</div></div>` : "";
   p.innerHTML = `
     <div class="phead"><div class="pt">${a.n}</div><div class="closex" onclick="closePanel()">✕</div></div>
-    <div class="ps">${a.sd} ${a.sg} ${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : ""} · 이 단지에 영향 주는 신호 ${near.length}건 (거리순, 반경 내)
-      <span class="cmpAdd ${inCmp ? "in" : ""}" id="cmpAdd">${inCmp ? "✓ 비교함" : "＋ 비교담기"}</span></div>
+    <div class="ps">${a.sg} ${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + " 세대" : ""}
+      <span class="cmpAdd ${inCmp ? "in" : ""}" id="cmpAdd">${inCmp ? "✓ 비교함" : "비교 담기"}</span></div>
+    <!-- 유형 칩만 남겨 필터로 쓴다 (시안 §07 「등급 요약은 중복 · 유형 칩만 남겨 필터로」) -->
+    <div class="pcats">${(() => { const m = {}; near.forEach(x => { const c = catOf(x.s); m[c] = (m[c] || 0) + 1; });
+      return `<b>${near.length}</b>건 ` + CAT_KEYS.filter(c => m[c]).map(c =>
+        `<button class="pcat${panelCat === c ? " on" : ""}" data-pcat="${c}"><i style="background:${CAT_COLOR[c]}"></i>${c} ${m[c]}</button>`).join(""); })()}</div>
     ${advHtml}
     <!-- ★ 등급 요약 칩을 두지 않는다 (2026-08-13 시안 §07):
          *"아래 표의 등급 열이 같은 정보를 이미 말하고, 등급별로 좁히고 싶으면 열 머리를 눌러
@@ -3498,6 +3542,11 @@ function renderApt(a) {
       단지 정보=공동주택 관리정보 공공데이터(세대수 등 사실). 좌표=도로명주소 지오코딩(도로 수준 근사, 건물단위 아님). 거리는 사실이며 '수혜'는 표시하지 않음(P1)</div>`;
   wireYearChips(p);
   p.querySelector("#cmpAdd").onclick = () => toggleCompare(a);
+  p.querySelectorAll("[data-pcat]").forEach(b => b.onclick = () => {
+    panelCat = (panelCat === b.dataset.pcat) ? null : b.dataset.pcat;
+    p.querySelectorAll("[data-pcat]").forEach(x => x.classList.toggle("on", x.dataset.pcat === panelCat));
+    if (panelListRender) panelListRender();
+  });
   const list = p.querySelector("#list");
   panelListRender = () => {
     list.innerHTML = "";
@@ -3528,6 +3577,7 @@ function yearChipsHtml() {
   </div></details>`;
 }
 let panelListRender = null;   // 현재 뷰의 #list 재생성 함수 (슬라이더 드래그가 이것만 호출 → 슬라이더 유지)
+let panelCat = null;   // 패널 안 유형 필터(시안 §07) — 도크(전역)와 달리 이 패널만 좁힌다
 let panelGrade = null;   // 패널 카드 등급 필터(null=전체 / "A"·"B"·"C") — 상단 등급 매트릭스 클릭으로 토글
 // 카드 정렬·필터 공용: 등급(A>B>C) → 분류(교통>일자리>인프라>주거개발) 순, panelGrade 설정 시 그 급만
 function panelArrange(items) {
@@ -3535,6 +3585,7 @@ function panelArrange(items) {
   const cr = s => { const i = DISPLAY_CAT_KEYS.indexOf(catOf(s)); return i < 0 ? 99 : i; };
   return items
     .filter(x => !panelGrade || levelOf(x.s || x) === panelGrade)
+    .filter(x => !panelCat || catOf(x.s || x) === panelCat)
     .sort((a, b) => {
       const A = a.s || a, B = b.s || b;
       return gr(A) - gr(B) || cr(A) - cr(B)
@@ -4120,7 +4171,7 @@ function renderDetail(s) {
         <span class="note">— 블록별 허가가 따로 나와 지도엔 대표 1개로 접어 표시합니다(개별 사실은 아래 그대로).</span>
         <div class="fs-grid" style="margin-top:6px">${s.group_members.map(m =>
           `<span>${m.block || "-"}</span><b>${(m.area_m2 || 0).toLocaleString()}㎡${m.lvl ? ` · ${m.lvl}급` : ""}</b>`).join("")}</div></div>` : ""}
-      ${s._arch ? `<div class="factsheet"><div class="fs-h">허가 원본 사실 (건축HUB API 수신값 그대로)</div>
+      ${s._arch ? `<details class="factsheet"><summary class="fs-h">원본 팩트시트 — 허가 원본 사실 (건축HUB API 수신값 그대로)</summary>
         <div class="fs-grid">
           <span>건축구분</span><b>${s.arch_gb || "-"}</b>
           <span>주용도</span><b>${s.purp || "-"}</b>
@@ -4128,7 +4179,7 @@ function renderDetail(s) {
           <span>허가일</span><b>${fmtDay(s.arch_pms_day)}</b>
           <span>착공일</span><b>${fmtDay(s.real_stcns_day)}</b>
           <span>사용승인일</span><b>${fmtDay(s.use_apr_day)}</b>
-        </div></div>` : ""}
+        </div></details>` : ""}
       ${s._road && (s.access_points || []).length ? (s.road_kind === "전용"
         ? `<div class="kv"><b>영향권</b> ${(s.ic_points || []).length
             ? `진출입 IC ${s.ic_points.length}개소 반경 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km (전용도로 — 선 자체는 영향권 미산정)`
@@ -4165,7 +4216,7 @@ function renderDetail(s) {
       ${s.nm_basis ? `<div class="kv"><b>건물명 근거</b> ${s.nm_basis}</div>` : ""}
       ${s.name_status === "미확보" ? `<div class="kv"><b>시설명</b> <span class="hmhint">미확보 — 허가 원본에 고유 명칭이 없어 <b>동·지번으로 표시</b>합니다. 건축물대장은 <b>준공 후에 생성</b>되므로 인가·착공 단계에선 공식 명칭이 없을 수 있습니다. <b>사업의 존재</b>는 허가·착공 일자(위 팩트시트)가 근거이며, 이름을 임의로 지어내지 않습니다.</span></div>` : ""}
       ${[s.stage_note, s.status_note, s.note].filter(Boolean).length ? `<div class="kv"><b>비고</b> ${[s.stage_note, s.status_note, s.note].filter(Boolean).join(" · ")}</div>` : ""}
-      <div class="note">완료=날짜(사실) · 미래=목표/미정 · 진척률(%) 없음 · 영향 반경은 유형 기준표 가안 — <a href="methodology.html" target="_blank">기준 전문</a></div>
+      <details class="rulefold"><summary>표기 규칙 · 영향 반경 기준</summary><div class="note">완료=날짜(사실) · 미래=목표/미정 · 진척률(%) 없음 · 영향 반경은 유형 기준표 가안 — <a href="methodology.html" target="_blank">기준 전문</a></div></details>
     </div>`;
 }
 
@@ -4691,27 +4742,33 @@ function renderDock() {
     <div class="dk-h">
       <b>${regionLabel() ? `<span class="rg" title="${regionLabel()}">${regionLabel()}</span>` : ""}<span
         class="fx">호재 <span class="cnt">${C.total.toLocaleString()}</span></span></b>
-      ${dockOpen.size ? `<button class="dk-fold" data-fold="1" title="펼쳐 둔 대분류를 전부 접는다">전부 접기</button>` : ""}
-      ${dirty ? `<span class="dk-nf">필터 ${nDirty}개 적용 중</span>` : ""}
-      <button class="dk-rst${dirty ? " show" : ""}" data-all="on">초기화</button>
+      
+
+    </div>
+    <!-- ★ 시안 §03 목업 그대로 — 「유형」 제목 아래 「전체 선택」, 그 아래 대분류 아코디언 -->
+    <div class="axis axis-cat">
+      <div class="t">유형 <button class="dk-allcat" data-allcat="1" title="모든 유형·중분류를 켠다">전체 선택</button></div>
     </div>
     ${CAT_KEYS.map(catBlock).join("")}
     <div class="axis">
-      <div class="t">등급 <small>원 크기</small></div>
+      <div class="t">등급</div>
       <div class="seg g4">${["S", "A", "B", "C", "미정"].map(gp).join("")}</div>
     </div>
     <div class="axis">
       <!-- ★ 범례는 마커 문법과 **쌍으로** 움직인다 (2026-08-13 시안 §02 전환).
            종전 「실선=착공 후 · 점선=계획」은 단계를 두 값으로만 말하던 시절의 문구다 —
            이제 두께가 네 단계를 말하므로 그대로 두면 화면이 거짓을 말한다(PROCEDURE_화면품질). -->
-      <div class="t">단계 <small>두께 = 확정도 · 점선=계획</small></div>
+      <div class="t">단계</div>
       <div class="seg g2">${ph("계획", true)}${ph("인가", true)}${ph("착공", false)}${ph("준공·개통", false)}</div>
     </div>
     <div class="axis">
-      <div class="t">선형 표시 <small>지도 위 노선</small></div>
+      <div class="t">선형 표시</div>
       <div class="opts">${LINE_OPTS.map(([k, lb, ln]) => `<div class="optrow${filter.lines.has(k) ? " on" : ""}" data-tog="lines" data-k="${k}">
         ${ln === null ? "" : `<i class="ln${ln}"></i>`}<span>${lb}</span><i class="sw"></i></div>`).join("")}</div>
     </div>
+    <!-- ★ 「필터 N개 적용 중 · 초기화」는 사이드바 **맨 아래**다 (시안 §03 목업 위치).
+         상단에 두면 제목줄이 붐비고, 아래에 두면 필터를 다 훑은 끝에 「지금 몇 개 걸렸나」가 온다. -->
+    <div class="dk-foot">${dirty ? `<span class="dk-nf">필터 ${nDirty}개 적용 중</span> · ` : ""}<button class="dk-rst${dirty ? " show" : ""}" data-all="on">초기화</button></div>
     <div class="dk-foot">흐릿한 후광 = 위치 근사 · 겹친 호재는 <b>+N</b>으로 묶임<br>
       <a href="methodology.html" target="_blank">데이터 · 방법론</a>
       <div class="dk-legal">투자 권유 아님 · 모든 신호는 미확정 — 사실(단계·날짜·거리)만 표시하며 매수/매도 판단은 다루지 않습니다.</div></div>`;
@@ -4748,9 +4805,11 @@ function bindFilterClicks(host) {
         (SUB_KEYS[c] || []).forEach(sk => c === k ? filter.sub.add(subId(c, sk)) : filter.sub.delete(subId(c, sk))); });
       renderAll(); return;
     }
-    const t = e.target.closest("[data-tog],[data-all]");
+    const t = e.target.closest("[data-tog],[data-all],[data-allcat]");
     if (!t) return;
-    if (t.dataset.all) { resetFilters(); return; }   // 초기화 = 공용 함수 하나(패널 안내도 같은 것을 부른다)
+    if (t.dataset.all) { resetFilters(); return; }
+    /* 「전체 선택」 = 유형 축만 전부 켠다(등급·단계·지역은 건드리지 않는다 — 초기화와 다른 동작). */
+    if (t.dataset.allcat) { CAT_KEYS.forEach(c => filter.cat.add(c)); ALL_SUBS.forEach(k => filter.sub.add(k)); renderAll(); return; }   // 초기화 = 공용 함수 하나(패널 안내도 같은 것을 부른다)
     const axis = t.dataset.tog, k = t.dataset.k;
     if (axis === "cat") { toggleCat(k); renderAll(); return; }
     const set = { sub: filter.sub, phase: filter.phase, lvl: filter.lvl, lines: filter.lines }[axis];
@@ -4813,7 +4872,7 @@ addEventListener("resize", layoutBottom);
 let FLOW_SEEN_OPEN = false;   // 「우리가 처음 본 것」 접힘 상태 — 기본 닫힘(사용자 확정)
 let FLOW_KIND = "all";        // 전체 / 단계 변동(chg) / 신규(new)
 let FLOW_MONTHS = 3;          // 기간 — 기본 3개월(사용자 확정)
-const FLOW_PERIODS = [[3, "3개월"], [6, "6개월"], [12, "1년"], [24, "2년"]];
+const FLOW_PERIODS = [[0.25, "이번 주"], [1, "1개월"], [3, "3개월"], [12, "1년"], [24, "2년"]];   // 시안 §05
 /* 단계 밖의 변경(사업비·연장·이름·목표 시점…) — `lifecycle.diff_fields`가 원장에 적어 준다.
    ⚠ 이 날짜는 **관측일**이다: 우리가 그날 달라진 것을 봤다는 뜻이고, 소스가 언제 고쳤는지는 모른다.
      그래서 단계 변동과 **다른 이름**으로 부른다(「내용 변경」) — 뭉치면 P2 위반이다. */
@@ -4887,20 +4946,33 @@ function renderFlow() {
   const nNew = past.length - nChg;
   const fldSigs = chgRows.map(x => x.s).filter(s => !past.includes(s));
   const shown = FLOW_KIND === "all" ? past.concat(fldSigs)
+    : FLOW_KIND === "up" ? upRows.map(x => x.s)
+    : FLOW_KIND === "undet" ? undetRows.map(x => x.s)
     : FLOW_KIND === "fld" ? chgRows.map(x => x.s)
     : past.filter(s => (movDelta(s) || {}).kind === (FLOW_KIND === "chg" ? "변동" : "신규"));
   shown.sort((a, b) => String(b.last_movement).localeCompare(String(a.last_movement)));   // 최신순(사용자 확정)
   const seg = (k, lb, n) => `<button class="fseg${FLOW_KIND === k ? " on" : ""}" data-kind="${k}">${lb}<span class="n">${n.toLocaleString()}</span></button>`;
   const nFld = chgRows.length;
+  /* 등급 축 두 개 — `field_changes`의 등급 항목에서 도출한다.
+     ⚠ 값 변경 추적(WATCH)은 2026-08-12 도입이라 다음 주간 수집(첫 실행은 기준선)부터 쌓인다.
+       그때까지 0인 것은 결함이 아니라 **아직 관측 구간이 없는 것**이다 — 0으로 사실대로 적는다. */
+  const _lvlChg = x => (x.c || []).filter(c => /등급|lvl|level/i.test(String(c.label || c.field || "")));
+  const upRows = chgRows.filter(x => _lvlChg(x).some(c => String(c.from) !== String(c.to) && !/미정|없음/.test(String(c.to))));
+  const undetRows = chgRows.filter(x => _lvlChg(x).some(c => /미정|없음/.test(String(c.from)) && !/미정|없음/.test(String(c.to))));
+  const nUp = upRows.length, nUndet = undetRows.length;
   let html = `<div class="fwrap">
     <!-- 부제·요약줄을 뺐다 (2026-08-12 사용자 "제거"): 지역은 좌측 헤더가, 건수는 아래
          세그먼트가 이미 말한다 — 같은 말을 세 군데서 하면 정작 목록이 밀린다. -->
     <div class="fbar">
-      <div class="fsegs">${seg("all", "전체", past.length + nFld)}${seg("chg", "단계 변동", nChg)}${seg("new", "신규", nNew)}${
-        nFld ? seg("fld", "내용 변경", nFld) : ""}</div>
-      <label class="fper">기간
-        <select id="f-period">${FLOW_PERIODS.map(([m, lb]) => `<option value="${m}"${m === FLOW_MONTHS ? " selected" : ""}>${lb}</option>`).join("")}</select>
-      </label>
+      <!-- ★ 변경 유형을 **4개로 고정**한다 (시안 §05): 신규 · 단계 진행 · 등급 상향 · 미판정 해소.
+           *"상단 요약 숫자가 곧 필터"* — 0건이어도 칸을 없애지 않는다. 없애면 「그런 변화는 애초에
+           안 센다」로 읽히고, 0으로 두면 「이번 기간엔 없었다」는 사실이 된다(P2). -->
+      <div class="fsegs">${seg("all", "전체", past.length + nFld)}${seg("new", "신규", nNew)}${
+        seg("chg", "단계 진행", nChg)}${seg("up", "등급 상향", nUp)}${seg("undet", "미판정 해소", nUndet)}</div>
+      <!-- 기간 = **칩**(시안 §05). 셀렉트는 값이 하나 보이고 나머지는 숨는데, 시안은 선택지를
+           다 펼쳐 두어 「어느 창으로 보고 있나」가 한눈에 읽히게 했다. -->
+      <div class="fper">${FLOW_PERIODS.map(([m, lb]) =>
+        `<button class="fpc${m === FLOW_MONTHS ? " on" : ""}" data-per="${m}">${lb}</button>`).join("")}</div>
     </div>
     `
     + (future.length ? `<div class="fempty" style="margin:2px 0 6px">※ ${future.length.toLocaleString()}건은 소스의 날짜가 <b>아직 오지 않은 날</b>(착공 예정일 등)이라 움직임으로 세지 않았습니다</div>` : "");
@@ -4947,8 +5019,7 @@ function renderFlow() {
   const fold = host.querySelector("#seenFold");
   if (fold) fold.onclick = () => { FLOW_SEEN_OPEN = !FLOW_SEEN_OPEN; renderFlow(); };
   host.querySelectorAll(".fseg").forEach(b => b.onclick = () => { FLOW_KIND = b.dataset.kind; renderFlow(); });
-  const per = host.querySelector("#f-period");
-  if (per) per.onchange = () => { FLOW_MONTHS = +per.value; renderFlow(); };
+  host.querySelectorAll(".fpc").forEach(b => b.onclick = () => { FLOW_MONTHS = +b.dataset.per; renderFlow(); });
 }
 
 /* 하단 탭바 — 모바일에서 헤더 칩을 대신한다. `조회조건`은 뷰가 아니라 시트라 따로 처리한다. */
@@ -7094,7 +7165,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813o");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813p");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -7279,7 +7350,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813o"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813p"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7305,7 +7376,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813o");
+  const CB = "?b=" + (window.BUILD || "20260813p");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
