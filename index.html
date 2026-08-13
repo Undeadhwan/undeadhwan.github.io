@@ -926,21 +926,39 @@
   .card .cfchg .fchg b { font-weight:600; color:var(--ink2); margin-right:4px; }
   .card .cfchg .fchg i { font-style:normal; color:var(--ink3); margin:0 3px; }
   /* ── 업데이트 뷰: 조회 막대(종류·기간) + 건별 일자 열 (2026-08-12) ───────────────── */
-  #flowv .fbar { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:10px 0 6px; }
-  #flowv .fsegs { display:flex; border:1px solid var(--line2); border-radius:var(--r-s); overflow:hidden; }
-  #flowv .fseg { background:#fff; border:0; border-right:1px solid var(--line); padding:7px 12px;
-                 font:600 var(--fs-s)/1 inherit; color:var(--ink2); cursor:pointer; display:flex; gap:6px; align-items:center; }
+  /* ★ 기간은 **위 한 줄**, 요약 4칸은 **그 아래 큰 숫자**(2026-08-13 갱신 시안 §05 실물).
+     종전엔 둘이 한 줄에 섞여 요약 숫자가 칩 안 작은 글씨였다 — *"무엇이 바뀌었는지가 본론"*인
+     화면에서 본론이 가장 작았다. 숫자칸이 곧 필터라는 성질은 그대로 둔다(하나가 두 일을 한다). */
+  #flowv .fbar { display:flex; align-items:center; justify-content:flex-end; gap:12px; flex-wrap:wrap; margin:10px 0 8px; }
+  #flowv .fsegs { display:grid; grid-template-columns:repeat(4,1fr); border:1px solid var(--line);
+                  border-radius:var(--r-s); overflow:hidden; background:#fff; margin:0 0 14px; }
+  #flowv .fseg { background:#fff; border:0; border-right:1px solid var(--line); padding:13px 16px;
+                 font:600 var(--fs-s)/1.2 inherit; color:var(--ink3); cursor:pointer;
+                 display:flex; flex-direction:column; align-items:flex-start; gap:8px; text-align:left; }
   #flowv .fseg:last-child { border-right:0; }
-  #flowv .fseg .n { color:var(--ink3); font-weight:400; font-variant-numeric:tabular-nums; }
-  #flowv .fseg.on { background:var(--ink); color:#fff; }
-  #flowv .fseg.on .n { color:rgba(255,255,255,.75); }
+  #flowv .fseg .n { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:26px; font-weight:600;
+                    letter-spacing:-.02em; color:var(--ink); font-variant-numeric:tabular-nums; line-height:1; }
+  #flowv .fseg.on { background:var(--panel); box-shadow:inset 0 -2px 0 var(--ink); }
+  #flowv .fseg.on, #flowv .fseg.on .n { color:var(--ink); }
+  /* 「전체」는 요약 4칸과 성격이 다르다(집계가 아니라 해제) — 기간 줄 왼쪽에 작은 알약으로 둔다 */
+  #flowv .fall { margin-right:auto; font:600 var(--fs-s)/1 inherit; color:var(--ink2); background:#fff;
+                 border:1px solid var(--line2); border-radius:999px; padding:7px 13px; cursor:pointer; }
+  #flowv .fall.on { background:var(--ink); border-color:var(--ink); color:#fff; }
   #flowv .fper { font-size:var(--fs-s); color:var(--ink2); display:flex; align-items:center; gap:6px; }
   #flowv .fper select { font:600 var(--fs-s)/1 inherit; padding:7px 8px; border:1px solid var(--line2);
                         border-radius:var(--r-s); background:#fff; color:var(--ink); cursor:pointer; }
-  /* 날짜 열 — 카드 왼쪽에 세운다. 어림수(「6주 전」) 대신 **그날**을 적는다. */
-  #flowv .fitem { display:flex; gap:12px; align-items:flex-start; margin:0 0 10px; }
-  #flowv .fdate { flex:0 0 82px; text-align:right; padding-top:12px; }
-  #flowv .fdate b { display:block; font-size:13px; font-variant-numeric:tabular-nums; letter-spacing:-.2px; }
+  /* ★ 날짜는 **그룹 헤더**로 올린다 (갱신 시안 §05 실물 「2026-08-10 월요일」).
+     ☠ 종전엔 행마다 왼쪽 82px 열에 날짜를 적었다(2026-08-12) — 같은 날 행이 열 개면 같은 날짜가
+       열 번 반복되고, 그만큼 이름이 쓸 폭을 잃었다. 그룹으로 묶어도 **건별 날짜는 안 잃는다**
+       (같은 날 행이 그 헤더 아래 모인다). 변경 유형 배지만 행에 남는다. */
+  #flowv .fday { display:flex; align-items:baseline; gap:9px; margin:16px 0 7px; }
+  #flowv .fday:first-child { margin-top:2px; }
+  #flowv .fday b { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:12.5px;
+                   letter-spacing:.02em; color:var(--ink2); font-weight:600; }
+  #flowv .fday .wd { font-size:12px; color:var(--ink3); }
+  #flowv .fitem { display:flex; gap:10px; align-items:flex-start; margin:0 0 10px; }
+  #flowv .fdate { flex:0 0 62px; text-align:right; padding-top:12px; }
+  #flowv .fdate b { display:none; }   /* 날짜는 그룹 헤더가 말한다 — 행에는 변경 유형만 */
   #flowv .fdate .mvk { display:inline-block; margin-top:5px; font-style:normal; font-size:11px; font-weight:700;
                        border-radius:999px; padding:1px 7px; border:1px solid; }
   /* ★ 2026-08-13 시안 §05 — 변경 유형 배지는 **무채색, 신규만 검정**(색 채널은 유형 전용).
@@ -5213,7 +5231,14 @@ addEventListener("resize", layoutBottom);
 let FLOW_SEEN_OPEN = false;   // 「우리가 처음 본 것」 접힘 상태 — 기본 닫힘(사용자 확정)
 let FLOW_KIND = "all";        // 전체 / 단계 변동(chg) / 신규(new)
 let FLOW_MONTHS = 3;          // 기간 — 기본 3개월(사용자 확정)
-const FLOW_PERIODS = [[0.25, "이번 주"], [1, "1개월"], [3, "3개월"], [12, "1년"], [24, "2년"]];   // 시안 §05
+/* 「기간 지정」(갱신 시안 §05) — [시작, 끝] 문자열. 끝이 빈 문자열이면 오늘까지.
+   ⚠ 이 값이 있으면 `FLOW_MONTHS`는 무시된다 — 두 축이 동시에 창을 정하면 화면이 어느
+     기간을 보는지 말할 수 없다(같은 질문에 자가 둘). */
+let FLOW_CUSTOM = null;
+/* 시안 §05 실물의 기간 칸은 **이번 주·1개월·3개월·1년 + 기간 지정** 다섯이다.
+   2026-08-13: 우리가 더해 두었던 「2년」을 뺐다 — 그보다 긴 창은 「기간 지정」이 답한다
+   (고정 칸을 늘리는 대신 임의 구간을 열어 준 것이 시안의 선택이다). */
+const FLOW_PERIODS = [[0.25, "이번 주"], [1, "1개월"], [3, "3개월"], [12, "1년"]];
 /* 단계 밖의 변경(사업비·연장·이름·목표 시점…) — `lifecycle.diff_fields`가 원장에 적어 준다.
    ⚠ 이 날짜는 **관측일**이다: 우리가 그날 달라진 것을 봤다는 뜻이고, 소스가 언제 고쳤는지는 모른다.
      그래서 단계 변동과 **다른 이름**으로 부른다(「내용 변경」) — 뭉치면 P2 위반이다. */
@@ -5286,7 +5311,12 @@ function renderFlow() {
   /* ⚠ **미래 날짜는 「움직였다」가 아니다** — 아직 오지 않은 날짜(착공 예정 '26.12 등)를 세면
      화면이 "오늘 26건 움직였다"고 말하는데 실제로 오늘 움직인 건 0건이 된다(P2·P5).
      세지 않되 **지우지도 않는다** — 아래에서 건수를 밝힌다. */
-  const inWin = s => { const d = daysAgo(s.last_movement); return d >= 0 && d <= FLOW_MONTHS * 31; };
+  /* 창 판정은 **여기 하나**다 — 고정 칸이든 기간 지정이든 같은 함수가 답한다. */
+  const inWin = s => {
+    const t = String(s.last_movement || "").slice(0, 10);
+    if (FLOW_CUSTOM) return !!t && t >= FLOW_CUSTOM[0] && (!FLOW_CUSTOM[1] || t <= FLOW_CUSTOM[1]);
+    const d = daysAgo(s.last_movement); return d >= 0 && d <= FLOW_MONTHS * 31;
+  };
   /* ★ **단계가 안 움직여도 값이 바뀌면 업데이트다** (2026-08-12 사용자: "변경내용이 공사단계
      변화가 아닌 경우가 있을 수 있잖아"). 사업비·연장·목표 시점 변경은 `lifecycle`이 원장에
      적어 두고 신호에 `field_changes`로 실려 온다. 단계 변동과 **다른 칸**으로 센다 —
@@ -5306,6 +5336,7 @@ function renderFlow() {
     : FLOW_KIND === "fld" ? chgRows.map(x => x.s)
     : past.filter(s => (movDelta(s) || {}).kind === (FLOW_KIND === "chg" ? "변동" : "신규"));
   shown.sort((a, b) => String(b.last_movement).localeCompare(String(a.last_movement)));   // 최신순(사용자 확정)
+  // 라벨 위 · 큰 숫자 아래(시안 실물). 종전엔 한 줄에 라벨+작은 숫자였다.
   const seg = (k, lb, n) => `<button class="fseg${FLOW_KIND === k ? " on" : ""}" data-kind="${k}">${lb}<span class="n">${n.toLocaleString()}</span></button>`;
   const nFld = chgRows.length;
   /* 등급 축 두 개 — `field_changes`의 등급 항목에서 도출한다.
@@ -5322,13 +5353,18 @@ function renderFlow() {
       <!-- ★ 변경 유형을 **4개로 고정**한다 (시안 §05): 신규 · 단계 진행 · 등급 상향 · 미판정 해소.
            *"상단 요약 숫자가 곧 필터"* — 0건이어도 칸을 없애지 않는다. 없애면 「그런 변화는 애초에
            안 센다」로 읽히고, 0으로 두면 「이번 기간엔 없었다」는 사실이 된다(P2). -->
-      <div class="fsegs">${seg("all", "전체", past.length + nFld)}${seg("new", "신규", nNew)}${
-        seg("chg", "단계 진행", nChg)}${seg("up", "등급 상향", nUp)}${seg("undet", "미판정 해소", nUndet)}</div>
+      <button class="fall${FLOW_KIND === "all" ? " on" : ""}" data-kind="all">전체 <span class="n">${(past.length + nFld).toLocaleString()}</span></button>
       <!-- 기간 = **칩**(시안 §05). 셀렉트는 값이 하나 보이고 나머지는 숨는데, 시안은 선택지를
            다 펼쳐 두어 「어느 창으로 보고 있나」가 한눈에 읽히게 했다. -->
       <div class="fper">${FLOW_PERIODS.map(([m, lb]) =>
-        `<button class="fpc${m === FLOW_MONTHS ? " on" : ""}" data-per="${m}">${lb}</button>`).join("")}</div>
+        `<button class="fpc${m === FLOW_MONTHS ? " on" : ""}" data-per="${m}">${lb}</button>`).join("")}
+        <button class="fpc${FLOW_CUSTOM ? " on" : ""}" data-per="custom">기간 지정 ▾</button></div>
     </div>
+    <!-- ★ 요약 4칸 = **큰 숫자**(갱신 시안 §05 실물). 이 칸이 곧 필터다 — 하나가 두 일을 한다.
+         0건이어도 칸을 없애지 않는다: 없애면 「그런 변화는 애초에 안 센다」로 읽히고,
+         0으로 두면 「이번 기간엔 없었다」는 사실이 된다(P2). -->
+    <div class="fsegs">${seg("new", "신규", nNew)}${
+      seg("chg", "단계 진행", nChg)}${seg("up", "등급 상향", nUp)}${seg("undet", "미판정 해소", nUndet)}</div>
     `
     + (future.length ? `<div class="fempty" style="margin:2px 0 6px">※ ${future.length.toLocaleString()}건은 소스의 날짜가 <b>아직 오지 않은 날</b>(착공 예정일 등)이라 움직임으로 세지 않았습니다</div>` : "");
   html += shown.length ? `<div class="fg" data-g="main"></div>`
@@ -5348,15 +5384,26 @@ function renderFlow() {
   }
   html += `</div>`;
   host.innerHTML = html;
-  /* ★ **건별 일자를 왼쪽에 세운다** (2026-08-12 사용자 *"년월 대신 각 건별 일자를 표시"*).
-     월 머리글을 없애고 날짜를 카드마다 붙이면 ① 언제인지가 카드 단위로 정확하고
-     ② 「6주 전 움직임」 같은 **어림수가 필요 없어진다**(사용자 *"6주전 움직임 이런게 무슨 의미가 있지?"*). */
+  /* ★ **날짜는 그룹 헤더**(갱신 시안 §05 실물 「2026-08-10 월요일」).
+     ⚠ 2026-08-12에 「년월 머리글 → 건별 일자」로 옮겼던 자리를 되돌리는 것이지만, **어림수는
+       돌아오지 않는다** — 헤더가 적는 것은 「6주 전」이 아니라 그날 자체다. 같은 날 행이 열 개면
+       같은 날짜를 열 번 반복하던 것이 한 번이 되고, 그만큼 이름이 폭을 얻는다. */
+  const WD = ["일", "월", "화", "수", "목", "금", "토"];
+  const dayLabel = dt => {
+    if (!dt) return { d: "날짜 미상", w: "" };
+    const t = new Date(dt.slice(0, 10) + "T00:00:00");
+    return { d: dt.slice(0, 10), w: isNaN(t) ? "" : WD[t.getDay()] + "요일" };
+  };
   const put = (key, arr) => { const box = host.querySelector(`.fg[data-g="${key}"]`); if (!box) return;
+    let lastDay = null;
     arr.slice(0, 80).forEach(s => {
       const fc = fieldChangeList(s, FLOW_MONTHS * 31);
       const d = movDelta(s);
       const onlyFld = fc.length && (!s.last_movement || daysAgo(s.last_movement) > FLOW_MONTHS * 31);
       const dt = String(onlyFld ? fc[fc.length - 1].date : (s.last_movement || ""));
+      const dl = dayLabel(dt);
+      if (dl.d !== lastDay) { lastDay = dl.d;
+        box.insertAdjacentHTML("beforeend", `<div class="fday"><b>${dl.d}</b><span class="wd">${dl.w}</span></div>`); }
       const row = document.createElement("div"); row.className = "fitem";
       const kind = onlyFld ? { c: "fld", t: "내용" } : key === "확인" ? { c: "seen", t: "확인" } : d && d.kind === "변동"
         ? { c: "chg" + (PHASE_IDX[d.to] < PHASE_IDX[d.from] ? " back" : ""), t: "변동" } : { c: "new", t: "신규" };
@@ -5373,8 +5420,22 @@ function renderFlow() {
   if (seenN.length) put("확인", seenN);
   const fold = host.querySelector("#seenFold");
   if (fold) fold.onclick = () => { FLOW_SEEN_OPEN = !FLOW_SEEN_OPEN; renderFlow(); };
-  host.querySelectorAll(".fseg").forEach(b => b.onclick = () => { FLOW_KIND = b.dataset.kind; renderFlow(); });
-  host.querySelectorAll(".fpc").forEach(b => b.onclick = () => { FLOW_MONTHS = +b.dataset.per; renderFlow(); });
+  host.querySelectorAll(".fseg, .fall").forEach(b => b.onclick = () => { FLOW_KIND = b.dataset.kind; renderFlow(); });
+  host.querySelectorAll(".fpc").forEach(b => b.onclick = () => {
+    /* 「기간 지정」 = 시작·끝을 **직접** 고른다(시안 §05). 고정 칸(이번 주~1년)이 답하지 못하는
+       질문 — 「지난 분기에 뭐가 움직였나」 — 이 자리에서만 답할 수 있다.
+       ⚠ 날짜만 받고 **셈은 같은 함수**가 한다(`inWin`) — 기간 계산을 두 벌로 만들지 않는다. */
+    if (b.dataset.per === "custom") {
+      const a = prompt("시작일 (YYYY-MM-DD)", FLOW_CUSTOM ? FLOW_CUSTOM[0] : "");
+      if (a === null) return;
+      const z = prompt("종료일 (YYYY-MM-DD · 비우면 오늘)", FLOW_CUSTOM ? FLOW_CUSTOM[1] : "");
+      if (z === null) return;
+      const ok = t => /^\d{4}-\d{2}-\d{2}$/.test(t);
+      if (!ok(a.trim())) { alert("시작일을 YYYY-MM-DD로 적어 주세요."); return; }
+      FLOW_CUSTOM = [a.trim(), ok(z.trim()) ? z.trim() : ""];
+    } else { FLOW_CUSTOM = null; FLOW_MONTHS = +b.dataset.per; }
+    renderFlow();
+  });
 }
 
 /* 하단 탭바 — 모바일에서 헤더 칩을 대신한다. `조회조건`은 뷰가 아니라 시트라 따로 처리한다. */
@@ -7623,7 +7684,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813ac");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813ad");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -7808,7 +7869,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813ac"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813ad"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7834,7 +7895,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813ac");
+  const CB = "?b=" + (window.BUILD || "20260813ad");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
