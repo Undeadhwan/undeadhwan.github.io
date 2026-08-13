@@ -171,6 +171,21 @@
   .apttab .pd { width:6px; height:6px; border-radius:50%; border:1px solid var(--line2); background:#fff; display:block; }
   .apttab .pd.on { background:var(--ink2); border-color:var(--ink2); }
   .apttab .lt-ph { font-size:11.5px; line-height:1.3; }
+  /* 등급 셀 = 링 + 글자 (시안 §04 실물) */
+  /* 목록 건수 (시안 §04 실물) */
+  #listv .bignum { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:26px; font-weight:700;
+    letter-spacing:-.02em; color:var(--ink); }
+  #listv .bigunit { font-size:13px; color:var(--ink2); margin-left:3px; }
+  #listv .lvsub { font-size:12px; color:var(--ink3); margin-left:8px; }
+  .lvcell { display:inline-flex; align-items:center; gap:6px; font-weight:700; font-size:12.5px; }
+  .lvcell .lvring { border-style:solid; border-width:2px; border-radius:50%; flex:none; }
+  .lvcell .lvring.dia { border-radius:2px; transform:rotate(45deg); border-width:1.8px; }
+  /* 단계 셀 = 아이콘 + 글자 (지도 문법 재사용: 계획 점선 · 확정 실선 · 착공 굵은 · 완공 코어) */
+  .phcell { display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
+  .phcell i { width:11px; height:11px; border-radius:50%; flex:none; border:1.6px solid var(--ink2); }
+  .phcell i.ph0 { border-style:dashed; }
+  .phcell i.ph2 { border-width:3px; }
+  .phcell i.ph3 { border-width:3px; background:radial-gradient(circle, var(--ink2) 0 2.2px, transparent 2.4px); }
   .ltab .lt-lv.nolv { width:15px; height:15px; border-radius:2px; transform:rotate(45deg); }   /* 등급 없음 = 마름모(지도와 동일) */
   .regionbar { display:flex; gap:7px; align-items:center; flex-wrap:wrap; position:relative; }
   /* 조회 범위 칩 + 3열 동시 팝오버 (시안 §03·§04) — 드롭다운 3개가 먹던 가로폭을 칩 하나로 줄인다. */
@@ -6887,8 +6902,10 @@ function listTable(rows, apt, sort) {
         + `<span class="lt-t">${sigTitle(s)}</span>`
         + `<span class="lt-sub">${[basis, src].filter(Boolean).join(" · ") || "근거 미표기"}</span></td>`
         + `<td class="lt-cat">${catOf(s)}${subLabel(s)}</td>`
-        + `<td class="c"><span class="lt-lv${lv === "미정" ? " nolv" : ""}" style="border-color:${t.col};border-width:${Math.max(1.5, t.bw * .7).toFixed(1)}px">${lv === "미정" ? "" : lv}</span></td>`
-        + `<td class="c lt-ph">${PHASE_LABEL[phaseOf(s)] || phaseOf(s)}</td>`
+        /* ★ 시안 실물: 등급은 **링 옆에 글자**(링 안이 아니다) · 단계는 **아이콘 + 글자**로
+           지도 문법을 그대로 재사용한다 — 「행이 곧 마커」가 그 뜻이다. */
+        + `<td class="c"><span class="lvcell"><i class="lvring${lv === "미정" ? " dia" : ""}" style="border-color:${t.col};width:${lv === "미정" ? 11 : Math.max(9, HJR[lv] || 9)}px;height:${lv === "미정" ? 11 : Math.max(9, HJR[lv] || 9)}px"></i>${lv === "미정" ? LEVEL_NAME["미정"] : lv}</span></td>`
+        + `<td class="c lt-ph"><span class="phcell"><i class="ph${t.ph}"></i>${PHASE_LABEL[phaseOf(s)] || phaseOf(s)}</span></td>`
         + `<td class="lt-loc">${loc || "위치 미상"}${d !== null && isFinite(d) ? ` · ${d < 1000 ? Math.round(d) + "m" : (d / 1000).toFixed(1) + "km"}` : ""}</td>`
         + `<td class="c lt-d">${fmtDay(s.last_movement) || "—"}</td>`;
       // 목록에서 행을 누르면 지도로 넘어가 그 신호를 연다(목록=발견, 지도=위치 확인).
@@ -6990,7 +7007,9 @@ function renderList() {
   const wk = rows.filter(s => inWeek(s.last_movement));
   const wkMov = wk.filter(s => movBasis(s) !== "observed").length, wkObs = wk.length - wkMov;
   document.getElementById("l-count").innerHTML =
-    `<b>${rows.length.toLocaleString()}건</b> — ${regionLabel() || "전 지역"} · 지도와 같은 표시 조건`
+    /* ★ 시안 실물: 「**412** 건」 — 숫자만 크고 굵게(모노), 단위는 작게. 나머지 설명은 뒤로. */
+    `<span class="bignum">${rows.length.toLocaleString()}</span><span class="bigunit">건</span>`
+    + ` <span class="lvsub">${regionLabel() || "전 지역"} · 지도와 같은 표시 조건</span>`
     + (wkMov ? ` · <b>이번 주 움직임 ${wkMov.toLocaleString()}건</b>` : "")
     + (wkObs ? ` · <span title="${OBS_TIP}" style="border-bottom:1px dotted var(--line2);cursor:help">이번 주 신규 확인 ${wkObs.toLocaleString()}건</span>` : "")
     + (Object.keys(byCat).length ? " · " + CAT_KEYS.filter(c => byCat[c]).map(c => `<span style="color:${CAT_COLOR[c]};font-weight:600">${c} ${byCat[c]}</span>`).join(" · ") : "");
@@ -7214,7 +7233,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813t");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813u");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -7399,7 +7418,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813t"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813u"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7425,7 +7444,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813t");
+  const CB = "?b=" + (window.BUILD || "20260813u");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
