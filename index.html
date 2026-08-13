@@ -166,7 +166,8 @@
   #listv .lvchip i { width:8px; height:8px; border-radius:50%; background:var(--cc); flex:none; }
   #listv .lvchip.off { border-color:var(--line2); background:#fff; color:var(--ink3); }
   #listv .lvchip.off i { background:none; border:1.3px solid currentColor; }
-  #listv .lvcount { max-width:920px; margin:0 auto 10px; font-size:var(--fs-s); color:var(--ink2); font-variant-numeric:tabular-nums; }
+  #listv .lvhead2 { margin-top:2px; align-items:baseline; }
+  #listv .lvcount { margin:0; font-size:var(--fs-s); color:var(--ink2); font-variant-numeric:tabular-nums; }
   #listv .lvcount b { color:var(--ink); }
   #listv #l-list { max-width:920px; margin:0 auto; }
   #listv .lloc { color:var(--ink2); }
@@ -1521,6 +1522,11 @@
       <!-- ★ 시안 §04 목업 그대로 — 「표현 필터」 라벨 + 유형 칩(건수 품음)이 표 위 첫 줄이다.
            목업의 목록 탭에는 사이드바가 없고, 이 줄이 그 자리를 대신한다. -->
       <div class="lvfilter"><span class="lvflab">표현 필터</span><span class="lvchips" id="l-cats"></span></div>
+    </div>
+    <!-- ★ 목업 2행: 좌 **큰 건수** · 우 정렬(+이름 검색). 종전엔 정렬이 필터 줄에 붙고 건수는
+         아래 작은 글씨였다 — 목업은 건수를 이 화면의 머리기사로 세운다. -->
+    <div class="lvhead lvhead2">
+      <div class="lvcount" id="l-count"></div>
       <div class="lvctl">
         <label class="lvsort">정렬
           <select id="l-sort">
@@ -1535,7 +1541,6 @@
         <input id="l-q" type="search" placeholder="이름 검색">
       </div>
     </div>
-    <div class="lvcount" id="l-count"></div>
     <div id="l-list"></div>
     <div style="text-align:center; margin:16px 0;"><span class="chip" id="l-more" style="display:none">더 보기</span></div>
   </div>
@@ -7536,10 +7541,10 @@ function renderList() {
   document.getElementById("l-count").innerHTML =
     /* ★ 시안 실물: 「**412** 건」 — 숫자만 크고 굵게(모노), 단위는 작게. 나머지 설명은 뒤로. */
     `<span class="bignum">${rows.length.toLocaleString()}</span><span class="bigunit">건</span>`
-    + ` <span class="lvsub">${regionLabel() || "전 지역"} · 지도와 같은 표시 조건</span>`
-    + (wkMov ? ` · <b>이번 주 움직임 ${wkMov.toLocaleString()}건</b>` : "")
-    + (wkObs ? ` · <span title="${OBS_TIP}" style="border-bottom:1px dotted var(--line2);cursor:help">이번 주 신규 확인 ${wkObs.toLocaleString()}건</span>` : "")
-    + (Object.keys(byCat).length ? " · " + CAT_KEYS.filter(c => byCat[c]).map(c => `<span style="color:${CAT_COLOR[c]};font-weight:600">${c} ${byCat[c]}</span>`).join(" · ") : "");
+    /* ⚠ 뒤에 달려 있던 긴 설명은 **뺐다**(시안 목업엔 「N 건」뿐이다). 지운 게 아니라 자리가 있다:
+         유형별 건수 → 바로 위 표현 필터 칩 · 이번 주 움직임/신규 확인 → 업데이트 탭이 전담.
+         같은 말을 두 곳에서 하면 정작 표가 밀린다. */
+    + ` <span class="lvsub">${regionLabel() || "전 지역"}</span>`;
   /* ★★ **카드 → 고정 열 표** (2026-08-13 시안 §04).
      *"목록의 일은 「비교」입니다. 카드로 쌓으면 한 화면에 6건밖에 안 들어가고 값이 세로로 흩어져
      비교가 안 됩니다. 고정 열을 가진 표로 바꾸면 한 화면에 20건이 들어오고 등급·거리·확인일을
@@ -7760,7 +7765,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813af");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813ag");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -7945,7 +7950,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813af"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813ag"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7971,7 +7976,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813af");
+  const CB = "?b=" + (window.BUILD || "20260813ag");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
