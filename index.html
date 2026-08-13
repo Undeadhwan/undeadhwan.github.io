@@ -5,19 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>호재맵 (가칭) — 신호 추적</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink:#1c1c1e; --muted:#8e8e93; --line:#e5e5ea; --bg:#fff;
+    /* ★ 2026-08-13 시안 대조 — 회색을 **중성(뉴트럴)**으로 맞춘다.
+       종전 `#111827`·`#6b7280`·`#9ca3af`는 **푸른기 회색**이라 시안(oklch H=270, C=0.005~0.01의
+       거의 무채)보다 차갑고 밝았다. 「색감이 다르다」의 뿌리가 여기다.
+       시안 환산값: 제목 #151618 · 본문 #4b4d53 · 흐림 #6f7178 · 선 #dddee1 · 면 #edeef2 */
+    --ink:#151618; --muted:#6f7178; --line:#dddee1; --bg:#fff;
     --navy:#12263f; --stall:#b8860b; --accent:#2563eb;   /* 액센트(링크·활성) — 일자리 파랑과 같은 값을 공유한다 */
     /* ── DESIGN.md §2 캐노니컬 토큰 (SSOT — 새 색·크기 임의 추가 금지) ── */
-    --ink2:#6b7280; --ink3:#9ca3af; --line2:#d1d5db; --panel:#fafafa;
+    --ink2:#4b4d53; --ink3:#6f7178; --line2:#d6d7db; --panel:#edeef2;
     --c-traffic:#b9003d; --c-job:#2b4ea7; --c-infra:#b25ec5; --c-house:#38853e;   /* 명도 계단 0.45/0.50/0.55/0.62 — 근거는 DESIGN.md §2 */
     --warn:#b45309;
     /* 글자 크기 = 네이버 부동산 수준(2026-07-30 사용자 지시 "텍스트 크기가 좀 더 컸으면") */
     --r:10px; --r-s:7px; --fs:14.5px; --fs-s:12.5px;
   }
   * { margin:0; box-sizing:border-box; }
-  body { font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif; color:var(--ink); background:var(--bg); }
+  body { font-family:'Gothic A1','Apple SD Gothic Neo',sans-serif; -webkit-font-smoothing:antialiased;
+         color:var(--ink); background:var(--bg); }
+  /* ★ 숫자·날짜는 **모노스페이스**다 (시안 §06 「숫자와 날짜는 모노스페이스로 데이터임을 표시」).
+     시안은 이 폰트를 171곳에 쓴다 — 건수·연장·날짜·코드가 문장과 섞이지 않게 하는 장치다. */
+  .mono, .lt-d, .apttab .lt-d, .hj-count, .cl-badge, .cmpsum .cv b, .pcats b,
+  .ltab .lt-lv, .dchip, .fseg .n, .lvtag { font-family:'IBM Plex Mono',ui-monospace,monospace; }
   header { display:flex; align-items:center; gap:14px; padding:10px 16px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
   header .logo { font-weight:800; font-size:17px; letter-spacing:-.3px; }
   header .logo small { font-weight:400; color:var(--muted); font-size:11px; margin-left:4px; }
@@ -7165,7 +7177,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813p");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813q");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -7350,7 +7362,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813p"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813q"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7376,7 +7388,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813p");
+  const CB = "?b=" + (window.BUILD || "20260813q");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
