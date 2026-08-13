@@ -151,7 +151,27 @@
   .ltab .lt-lv { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px;
     border-radius:50%; border-style:solid; font-size:11px; font-weight:700; color:var(--ink); }
   .ltab .lt-lv.nolv { width:15px; height:15px; border-radius:2px; transform:rotate(45deg); }   /* 등급 없음 = 마름모(지도와 동일) */
-  .regionbar { display:flex; gap:7px; align-items:center; flex-wrap:wrap; }
+  .regionbar { display:flex; gap:7px; align-items:center; flex-wrap:wrap; position:relative; }
+  /* 조회 범위 칩 + 3열 동시 팝오버 (시안 §03·§04) — 드롭다운 3개가 먹던 가로폭을 칩 하나로 줄인다. */
+  .rchip { display:inline-flex; align-items:center; gap:7px; font-size:14.5px; font-weight:600;
+    padding:8px 12px; border:1px solid #d9dee8; border-radius:9px; background:#fff; color:#1a2233;
+    cursor:pointer; max-width:290px; }
+  .rchip .cv { color:var(--ink3); font-size:11px; }
+  .rchip:hover { border-color:var(--line2); }
+  .rchip[aria-expanded="true"] { border-color:var(--accent); }
+  .rpop { position:absolute; top:calc(100% + 6px); left:0; z-index:1200; display:grid;
+    grid-template-columns:repeat(3, minmax(140px, 1fr)); gap:0; background:#fff;
+    border:1px solid var(--line); border-radius:10px; box-shadow:0 10px 30px rgba(20,28,50,.16); overflow:hidden; }
+  .rpop[hidden] { display:none; }
+  .rpop .rcol { border-right:1px solid var(--line); min-width:0; }
+  .rpop .rcol:last-child { border-right:0; }
+  .rpop .rch { font-size:11px; font-weight:700; color:var(--ink3); padding:8px 11px 6px; border-bottom:1px solid var(--line); background:#fbfcfe; }
+  .rpop .rlist { max-height:296px; overflow-y:auto; padding:4px 0; }
+  .rpop .ri { padding:6px 11px; font-size:13px; color:var(--ink); cursor:pointer; white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis; }
+  .rpop .ri:hover { background:#f3f6ff; }
+  .rpop .ri.on { background:#eef2ff; font-weight:700; color:var(--accent); }
+  .rpop .rempty { padding:10px 11px; font-size:12px; color:var(--ink3); }
   .regionbar select { font-size:14.5px; font-weight:600; padding:8px 11px; border:1px solid #d9dee8; border-radius:9px; background:#fff; color:#1a2233; cursor:pointer; min-width:94px; }
   .regionbar select:focus { outline:none; border-color:var(--accent); }
   .regionbar select:disabled { color:#aab; background:#f6f7f9; cursor:default; }
@@ -1059,10 +1079,23 @@
     <input id="srch-in" type="search" placeholder="동 · 아파트 · 호재 검색" autocomplete="off">
     <div class="srchpanel" id="srch-panel"></div>
   </div>
+  <!-- ★ 조회 범위 = **칩 1개 + 3열 동시 팝오버** (2026-08-13 시안 §03·§04).
+       *"시도를 고르고 로딩을 기다렸다가 시군구를 고르고 다시 기다리는 흐름을 없앱니다. 세 열이
+       한 번에 열려 있어 원하는 깊이에서 바로 멈출 수 있고, 세로 공간도 먹지 않습니다."*
+       ⚠ 셀렉트 3개는 **지우지 않고 감춘다**. `syncRegionBar`·`fillRegion`·`enhanceSelects`가
+         이것들을 상태 저장소로 쓰고 있어, 없애면 그 배선이 조용히 끊긴다. 팝오버는 같은
+         `selectSido/selectSgg/selectDong`을 부르는 **표시 층**이다 — 로직을 복제하지 않는다. -->
   <div class="regionbar" id="regionbar">
-    <select id="r-sido"><option value="">시도 선택</option></select>
-    <select id="r-sgg" disabled><option value="">시군구 선택</option></select>
-    <select id="r-dong" disabled><option value="">읍면동 선택</option></select>
+    <button type="button" class="rchip" id="r-chip" aria-haspopup="true" aria-expanded="false">
+      <span id="r-chip-t">전국</span><span class="cv">▾</span></button>
+    <div class="rpop" id="r-pop" hidden>
+      <div class="rcol"><div class="rch">시도</div><div class="rlist" id="rp-sido"></div></div>
+      <div class="rcol"><div class="rch">시군구</div><div class="rlist" id="rp-sgg"></div></div>
+      <div class="rcol"><div class="rch">읍면동</div><div class="rlist" id="rp-dong"></div></div>
+    </div>
+    <select id="r-sido" hidden><option value="">시도 선택</option></select>
+    <select id="r-sgg" disabled hidden><option value="">시군구 선택</option></select>
+    <select id="r-dong" disabled hidden><option value="">읍면동 선택</option></select>
   </div>
   <div class="chips" id="f-dd"></div>
   <!-- ☠ **사용자 기능이 운영 그룹 안에 있어 공개 화면에서 사라져 있었다** (2026-08-11 실측).
@@ -2987,9 +3020,49 @@ function initRegionBar() {
   sido.innerHTML = '<option value="">시도 선택</option>';
   SIDO_ORDER.forEach(sd => sido.appendChild(new Option(SIDO_LONG[sd], sd)));
   sido.onchange = () => selectSido(sido.value);
-  enhanceSelects(["r-sido", "r-sgg", "r-dong"]);   // 데스크톱 커스텀 층(모바일은 CSS가 걷어 낸다)
   document.getElementById("r-sgg").onchange = function () { selectSgg(this.value); };
   document.getElementById("r-dong").onchange = function () { selectDong(this.value); };
+  initRegionPop();
+}
+/* ══════════ 조회 범위 팝오버 — 3열 **동시** (2026-08-13 시안 §04) ══════════
+   *"3단을 한 화면에 펼쳐 클릭 3번 → 1번."* 시도를 고르면 그 자리에서 시군구 열이 채워지고,
+   원하는 깊이에서 멈출 수 있다(시군구까지만, 또는 읍면동까지).
+   ★ 이 함수는 **표시 층**이다 — 지역을 실제로 바꾸는 것은 기존 `selectSido/selectSgg/selectDong`
+     하나뿐이다. 로직을 복제하면 셀렉트 경로와 팝오버 경로가 갈라져 서로 다른 지역을 말하게 된다. */
+function initRegionPop() {
+  const chip = document.getElementById("r-chip"), pop = document.getElementById("r-pop");
+  if (!chip || !pop) return;
+  const open = v => { pop.hidden = !v; chip.setAttribute("aria-expanded", v ? "true" : "false"); if (v) paintRegionPop(); };
+  chip.onclick = e => { e.stopPropagation(); open(pop.hidden); };
+  document.addEventListener("click", e => { if (!pop.hidden && !pop.contains(e.target) && e.target !== chip) open(false); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") open(false); });
+  pop.onclick = e => {
+    const it = e.target.closest(".ri"); if (!it) return;
+    const col = it.dataset.col, v = it.dataset.v;
+    if (col === "sido") { selectSido(v); }
+    else if (col === "sgg") { selectSgg(v); }
+    else { selectDong(v); open(false); }
+    paintRegionPop(); syncRegionChip();
+  };
+  syncRegionChip();
+}
+/* 세 열을 현재 `nav` 상태로 다시 그린다. 목록의 출처는 셀렉트 경로와 **같은 함수**다. */
+function paintRegionPop() {
+  const put = (id, items, cur, col, empty) => {
+    const box = document.getElementById(id); if (!box) return;
+    box.innerHTML = items.length
+      ? items.map(x => `<div class="ri${x.v === cur ? " on" : ""}" data-col="${col}" data-v="${x.v}">${x.t}</div>`).join("")
+      : `<div class="rempty">${empty}</div>`;
+  };
+  put("rp-sido", SIDO_ORDER.map(sd => ({ v: sd, t: SIDO_LONG[sd] })), nav.sd, "sido", "—");
+  put("rp-sgg", nav.sd ? sggListOf(nav.sd).map(v => ({ v, t: v })) : [], nav.sg, "sgg", "시도를 먼저 고르세요");
+  put("rp-dong", (nav.sd && nav.sg) ? dongsOfSgg(nav.sd, nav.sg).map(v => ({ v, t: v })) : [], nav.dong, "dong",
+    nav.sg ? "이 시군구는 읍면동 경계 준비 중" : "시군구를 먼저 고르세요");
+}
+/* 칩 문구 = 현재 조회 범위. 지도 이동으로 지역이 바뀌어도 같은 함수가 부른다(한 곳에서만 적는다). */
+function syncRegionChip() {
+  const t = document.getElementById("r-chip-t"); if (!t) return;
+  t.textContent = regionLabel() || "전국";
 }
 /* ★ 지역바 = **조회조건**이다 (2026-08-09 재설계 — 사용자 "구 선택하면 좌표 이동도 안 되고,
    아래서 시트가 올라오는데 목록이랑 중첩되고 데이터도 없다. 조회조건에서 고른 지역의 호재
@@ -6740,7 +6813,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813k");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813l");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -6924,7 +6997,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813k"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813l"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -6950,7 +7023,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813k");
+  const CB = "?b=" + (window.BUILD || "20260813l");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
