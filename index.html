@@ -150,6 +150,11 @@
   /* 등급 = 링(지도와 같은 축). 테두리 색 = 유형, 두께 = 단계 — 값은 hjStyle에서 온다. */
   .ltab .lt-lv { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px;
     border-radius:50%; border-style:solid; font-size:11px; font-weight:700; color:var(--ink); }
+  /* 4점 트랙 (시안 §07) — 건당 60px 트랙 대신 6px 점 4개 */
+  .apttab .pdots { display:inline-flex; gap:3px; margin-bottom:3px; }
+  .apttab .pd { width:6px; height:6px; border-radius:50%; border:1px solid var(--line2); background:#fff; display:block; }
+  .apttab .pd.on { background:var(--ink2); border-color:var(--ink2); }
+  .apttab .lt-ph { font-size:11.5px; line-height:1.3; }
   .ltab .lt-lv.nolv { width:15px; height:15px; border-radius:2px; transform:rotate(45deg); }   /* 등급 없음 = 마름모(지도와 동일) */
   .regionbar { display:flex; gap:7px; align-items:center; flex-wrap:wrap; position:relative; }
   /* 조회 범위 칩 + 3열 동시 팝오버 (시안 §03·§04) — 드롭다운 3개가 먹던 가로폭을 칩 하나로 줄인다. */
@@ -261,8 +266,13 @@
   .apt-dot svg { display:block; width:100%; height:100%; }
   .apt-dot path { fill:#273044; stroke:#fff; stroke-width:1.7; stroke-linejoin:round; }   /* 진회남색 — 무채(조연) 유지하되 또렷하게(2026-07-29 사용자 "눈에 잘 안 띔") */
   .apt-dot:hover path { fill:#0f1522; }
-  .apt-dot.sel { filter:drop-shadow(0 0 4px rgba(214,21,109,.55)); }
-  .apt-dot.sel path { fill:#d6156d; }
+  /* ★ 선택 마커는 **무채색 검정** (2026-08-13 시안 §09).
+     *"아파트는 호재가 아니므로 유형 4색을 쓰지 않습니다. 무채색 검정 + 사각 코어로 호재 링과
+     다른 종류임을 형태로 구분하고"* — 종전 `#d6156d`는 **A등급 색(LVL_COLOR.A)과 같은 값**이라
+     등급 색 체계와 정면으로 충돌했다(시안이 지적한 그 자리). 형태(집 아이콘)가 이미 각져 있어
+     호재 링과 구분되므로, 색 채널만 무채로 돌려준다. */
+  .apt-dot.sel { filter:drop-shadow(0 0 4px rgba(0,0,0,.42)); }
+  .apt-dot.sel path { fill:var(--ink); stroke-width:2.1; }
   .apt-dot.lf { transform:translate(-50%,-50%); }   /* Leaflet divIcon은 좌상단 앵커 — 중심 보정 */
   /* 상세 패널 등장 — 네이버부동산풍: 느긋한 감속 슬라이드(사용자 2026-07-21 "훅 들어와 어색 → 속도 낮추고 부드럽게").
      innerHTML 교체마다 새 .detail이라 자동 재생 */
@@ -288,7 +298,23 @@
   .hdot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
   .hmpills { display:flex; gap:5px; flex:1; flex-wrap:wrap; }
   .lvpill { font-size:11px; font-weight:800; padding:2px 8px; border-radius:20px; white-space:nowrap; }
-  .lvtag { font-size:11px; font-weight:800; padding:2px 8px; border-radius:6px; white-space:nowrap; display:inline-block; letter-spacing:.02em; vertical-align:1px; }
+  /* ★ 등급 = **무채색 링 칩** (2026-08-13 시안 §07).
+     *"금색 S급·핑크 A급·보라 B급 배지가 유형 색과 충돌합니다. 지도에서 쓰는 등급 링(크기)을
+     그대로 쓰면 색은 유형만 담당합니다."* 색 채널은 유형 전용으로 비우고, 등급은 **링 크기**로
+     말한다 — 지도 마커와 같은 축이라 새로 배울 것이 없다. 링 지름은 `HJR`에서 온다(사본 없음). */
+  .lvtag { font-size:11px; font-weight:700; padding:2px 8px 2px 5px; border-radius:999px; white-space:nowrap;
+    display:inline-flex; align-items:center; gap:5px; letter-spacing:.02em; vertical-align:1px;
+    background:#fff; border:1px solid var(--line2); color:var(--ink); }
+  .lvtag i { display:inline-block; border-radius:50%; border:1.6px solid var(--ink2); background:none; flex:none; }
+  .lvtag i.dia { border-radius:2px; transform:rotate(45deg); }
+  .lvtag.z { color:var(--ink3); border-color:var(--line); }
+  .lvtag.z i { border-color:var(--ink3); }
+  /* 시점 슬라이더 접기 (시안 §07) — 기본은 전체, 필요할 때만 편다 */
+  .yfold { margin:6px 0 4px; }
+  .yfold > summary { cursor:pointer; font-size:12px; color:var(--ink2); list-style:none; padding:4px 0; user-select:none; }
+  .yfold > summary::-webkit-details-marker { display:none; }
+  .yfold > summary::after { content:" ▾"; color:var(--ink3); }
+  .yfold[open] > summary::after { content:" ▴"; }
   .hmz { font-size:11px; color:var(--muted); }
   .hmtot { font-size:13px; color:var(--muted); font-weight:700; min-width:18px; text-align:right; }
   .cmplv { font-size:10.5px; font-weight:700; padding:1px 6px; border-radius:10px; white-space:nowrap; display:inline-block; margin:1px 1px; }
@@ -379,6 +405,12 @@
   .cmpsum .cv b { font-size:13px; font-weight:600; font-variant-numeric:tabular-nums; color:var(--ink); flex:none; }
   /* 0건은 빈칸이 아니라 `0`으로 적는다 — 빈칸은 「모른다」로 읽히고 여기선 「없다」가 사실이다(P2) */
   .cmpsum .cv b.z { color:var(--ink3); }
+  /* 시안 §08 — 막대는 두 종류뿐. 등급 행 = 절대 건수(세 열 같은 눈금) · 착공 이후 = **비율**(회색 트랙 = 전체) */
+  .cmpsum .cv.ratio .trk { flex:1 1 auto; min-width:0; height:8px; border-radius:2px; background:var(--line); }
+  .cmpsum .cv.ratio .trk i { height:8px; border-radius:2px; }
+  .cmpsum .cv.txt { font-size:12px; color:var(--ink2); line-height:1.45; display:block; padding:6px 0; }
+  .cmpsum .cv.txt .z { color:var(--ink3); }
+  .cmpsum .cv.txt b { font-size:12px; }
   .cmpcol .gcount .gc { display:inline-flex; align-items:center; gap:4px; font-size:11.5px; font-weight:700;
                         color:var(--gc); background:color-mix(in srgb, var(--gc) 12%, #fff);
                         border:1px solid color-mix(in srgb, var(--gc) 35%, #fff); border-radius:999px; padding:1px 8px; }
@@ -1684,7 +1716,12 @@ function sdBBoxes() {
 }
 const LVL_TXT = LVL_COLOR;
 const LVL_LETTER = { S: "S", A: "A", B: "B", C: "C", "미정": "?" };   // 배지 글자(미정=?)
-function lvlPill(l) { return `<span class="lvtag" style="${LVL_STYLE[l]}">${LEVEL_NAME[l]}</span>`; }
+function lvlPill(l) {
+  /* 등급 링 칩 — 크기가 등급을 말한다(지도와 같은 축). 색은 쓰지 않는다(시안 §07). */
+  const d = l === "미정" ? 9 : (HJR[l] || 9);
+  return `<span class="lvtag${l === "미정" ? " z" : ""}">`
+    + `<i class="${l === "미정" ? "dia" : ""}" style="width:${d}px;height:${d}px"></i>${LEVEL_NAME[l]}</span>`;
+}
 
 /* 출처 등급 배지 (사용자 확정 사상 2026-07-17: "핵심은 호재를 정확히 발굴하고 단계·위치를 정확히 아는 것 — OSM은 가비지").
    근거의 공식성을 신호의 1급 속성으로 노출한다. OSM 유래는 선형(그림)만 참고이며 단계·명칭의 근거가 아님을 명시. */
@@ -1998,7 +2035,8 @@ function levelCounts(sigs) {
 /* 지도 배지용: 등급별 건수. 등급=색 칩(letter), 건수=중립 검정(number) 분리 */
 function gradeBadgeHtml(m) {
   const inner = GRADES_DISP.filter(l => m[l] && m[l].total).map(l =>
-    `<span class="g"><b class="gl" style="${l === "미정" ? "background:#fff;color:#8a7a56;border:1.2px dashed #c3b091" : "background:" + LVL_COLOR[l] + ";color:#fff"}">${LVL_LETTER[l]}</b><span class="gn">${m[l].total}</span></span>`).join("");
+    /* 등급은 **무채색 링**이다 — 색 채널은 유형 전용(2026-08-13 시안 §07). 링 지름은 HJR에서 온다. */
+    `<span class="g"><b class="gl" style="background:#fff;color:var(--ink);border:1.6px solid var(--ink2);${l === "미정" ? "border-radius:2px;transform:rotate(45deg)" : ""}">${l === "미정" ? "" : LVL_LETTER[l]}</b><span class="gn">${m[l].total}</span></span>`).join("");
   return inner ? `<div class="grades">${inner}</div>` : "";
 }
 /* 사용자 오버라이드 로드 (localStorage) — 편집 시 저장, 즉시 반영. 교통은 {철도/도로:{A/B/C}} 중첩 */
@@ -2258,11 +2296,13 @@ function hojaeMatrixHtml(sigs) {
   const rows = shown.map(l => {
     const g = m[l];
     const cats = CAT_KEYS.filter(c => g.cats[c])
-      .map(c => `<span style="color:${CAT_COLOR[c]};font-weight:700">${CAT_SHORT[c]}${g.cats[c]}</span>`).join(" ");
+      /* ★ **축약을 풀어쓴다** (2026-08-13 시안 §07): *"「일2 / 교1 인3」은 해독이 필요합니다."*
+         한 글자로 줄여 봐야 폭은 몇 px 아끼고 뜻은 통째로 잃는다. */
+      .map(c => `<span style="color:${CAT_COLOR[c]};font-weight:600">${c} ${g.cats[c]}</span>`).join(" · ");
     // 급 있는 행만 클릭 가능(그 급만 필터). 재클릭=해제.
     const clickable = g.total ? `role="button" tabindex="0" onclick="setPanelGrade('${l}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setPanelGrade('${l}')}"` : "";
     return `<div class="hmrow ${g.total ? "" : "z"}" data-grade="${l}" ${clickable}>
-      <span class="hmc"><span class="lvtag" style="${LVL_STYLE[l]}">${LEVEL_NAME[l]}</span></span>
+      <span class="hmc">${lvlPill(l)}</span>
       <span class="hmpills">${cats || '<span class="hmz">없음</span>'}</span>
       <span class="hmtot">${g.total || ""}</span></div>`;
   }).join("");
@@ -3396,6 +3436,34 @@ function showApt(a) {
   mapApi?.refreshPins?.();   // 이 단지 반경 호재만 등장(애니메이션)
   ANIMATE = false;
 }
+/* 아파트 상세의 호재 목록 = **행 52px 표** (2026-08-13 시안 §07).
+   *"카드 하나가 세로 190px을 써서 12건을 보려면 다섯 번 스크롤해야 합니다. 한 줄에 한 건으로
+   줄이고 타임라인을 4점 트랙으로 압축하면 12건이 한 화면에 들어옵니다."*
+   ★ 링·색·표 문법은 목록 탭과 **같은 부품**을 쓴다(`ringOf` · `.ltab`). 열 구성만 이 화면의
+     질문에 맞춘다 — 여기서 묻는 것은 「이 단지에서 얼마나 먼가」라 소재지·확인일 대신 거리다. */
+function aptSigTable(arr) {
+  const tb = document.createElement("table"); tb.className = "ltab apttab";
+  tb.innerHTML = '<thead><tr><th class="c">등급</th><th>호재명 · 유형</th><th class="c">단계</th><th class="c">거리</th></tr></thead>';
+  const body = document.createElement("tbody"); tb.appendChild(body);
+  arr.forEach(({ s, dist }) => {
+    const t = ringOf(s), lv = t.lv;
+    const sub = gradeBasisHtml(s).replace(/\s*·\s*$/, "").trim();
+    /* 4점 트랙 — 몇 번째 단계까지 찼는지만. 날짜는 카드를 열면 나온다(시안 §07). */
+    const dots = PHASES.map((p, i) =>
+      `<i class="pd${i <= t.ph ? " on" : ""}"></i>`).join("");
+    const tr = document.createElement("tr");
+    tr.innerHTML =
+      `<td class="c"><span class="lt-lv${lv === "미정" ? " nolv" : ""}" style="border-color:${t.col};border-width:${Math.max(1.5, t.bw * .7).toFixed(1)}px">${lv === "미정" ? "" : lv}</span></td>`
+      + `<td class="lt-nm"><i class="lt-bar" style="background:${t.col}"></i>`
+      + `<span class="lt-t">${sigTitle(s)}</span>`
+      + `<span class="lt-sub">${catOf(s)}${subLabel(s)}${sub ? " · " + sub : ""}</span></td>`
+      + `<td class="c lt-ph"><span class="pdots">${dots}</span><br>${PHASE_LABEL[phaseOf(s)] || phaseOf(s)}</td>`
+      + `<td class="c lt-d">${dist < 1000 ? Math.round(dist) + "m" : (dist / 1000).toFixed(1) + "km"}</td>`;
+    tr.onclick = () => showSignal(s, true);
+    body.appendChild(tr);
+  });
+  return tb;
+}
 function renderApt(a) {
   const p = document.getElementById("panel");
   const near = signalsNearPoint([a.lon, a.lat], true);   // 단지 사실=필터 무관
@@ -3424,9 +3492,7 @@ function renderApt(a) {
     if (!near.length) { list.innerHTML = `<div class="pickhint">반경 내 호재 없음</div>`; return; }
     const arr = panelArrange(near);
     if (!arr.length) { list.innerHTML = `<div class="pickhint">${LEVEL_NAME[panelGrade] || panelGrade}급 호재 없음</div>`; return; }
-    arr.forEach(({ s, dist }) => list.appendChild(
-      makeCard(s, `<span class="badge-near">${dist < 1000 ? Math.round(dist) + "m" : (dist / 1000).toFixed(1) + "km"}</span>`)));
-    animateCards(list);
+    list.appendChild(aptSigTable(arr));
   };
   panelListRender();
 }
@@ -3438,13 +3504,16 @@ const YR_MIN = 2024, YR_MAX = 2034;
 function yearValLabel() { return YEAR_SEL ? `'${String(YEAR_SEL).slice(2)} 시점 기준` : "전체 보기"; }
 function yearChipsHtml() {
   const v = YEAR_SEL || YR_MAX;   // 전체(null)면 thumb 오른쪽 끝
-  return `<div class="yslide">
+  /* ★ 슬라이더는 **접어 둔다** (2026-08-13 시안 §07): *"'24~'34 슬라이더는 처음 볼 때 필요
+     없습니다. 기본은 전체, 단계 칩으로 좁히는 쪽이 직관적입니다. 슬라이더는 하단 「시점으로
+     보기」에 접습니다."* 값이 걸려 있으면(YEAR_SEL) 펼친 채로 둔다 — 걸어 놓고 잊게 하지 않는다. */
+  return `<details class="yfold"${YEAR_SEL ? " open" : ""}><summary>시점으로 보기</summary><div class="yslide">
     <div class="yhead"><span class="ylbl">시점 · 드래그로 조정</span>
       <span class="yr-right"><span class="yval ${YEAR_SEL ? "" : "all"}" id="yr-val">${yearValLabel()}</span>
         <span class="ychip ${YEAR_SEL ? "" : "on"}" id="yr-all">전체</span></span></div>
     <input type="range" id="yr-slide" min="${YR_MIN}" max="${YR_MAX}" step="1" value="${v}">
     <div class="yticks"><span>'24</span><span>'26</span><span>'28</span><span>'30</span><span>'32</span><span>'34</span></div>
-  </div>`;
+  </div></details>`;
 }
 let panelListRender = null;   // 현재 뷰의 #list 재생성 함수 (슬라이더 드래그가 이것만 호출 → 슬라이더 유지)
 let panelGrade = null;   // 패널 카드 등급 필터(null=전체 / "A"·"B"·"C") — 상단 등급 매트릭스 클릭으로 토글
@@ -3840,7 +3909,7 @@ function cmpColumn(a) {
     // 거리순에서는 등급 구분선이 못 쓰이므로(등급이 뒤섞인다) 등급을 **행마다** 붙인다 —
     // 어느 축으로 보든 등급·거리·단계 세 사실이 다 보여야 한다.
     const gtag = byDist && r.g
-      ? `<span class="gmini" style="--gc:${LVL_COLOR[r.g]}">${r.g === "미정" ? LEVEL_NAME["미정"] : r.g}</span>` : "";
+      ? `<span class="gmini" style="--gc:var(--ink2)">${r.g === "미정" ? LEVEL_NAME["미정"] : r.g}</span>` : "";
     return `<div class="csig${warn ? " warn" : ""}"><span class="d" style="background:${warn ? "var(--warn)" : CAT_COLOR[catOf(r.s)] || "#999"}"></span>
       <span class="ttl" title="${esc(r.s.title || "")}">${warn ? "⚠ " : ""}${esc(r.s.title || "")}</span>
       <span class="meta">${gtag}<span class="dst">${dist(r.d)}</span><span class="ph${dash ? " dash" : ""}">${phaseLabel(p)}</span></span></div>`;
@@ -3875,7 +3944,9 @@ function cmpColumn(a) {
       <div class="sum">반경 내 호재 <b>${n}건</b></div>
       <div class="gcount">${["S", "A", "B", "C", "미정"].map(g => {
         const c = rows.filter(r => r.s.status !== "정체" && r.g === g).length;
-        return c ? `<span class="gc" style="--gc:${LVL_COLOR[g]}">${g === "미정" ? LEVEL_NAME["미정"] : g}<b>${c}</b></span>` : "";
+        /* 등급 칩도 **무채색**이다 — 색 채널은 유형 전용(2026-08-13 시안 §07).
+           ☠ 이 화면에만 남아 있던 다섯 번째 사본이었다(lvlPill·gradeBadgeHtml·hmc·gmini에 이어). */
+        return c ? `<span class="gc" style="--gc:var(--ink2)">${g === "미정" ? LEVEL_NAME["미정"] : g}<b>${c}</b></span>` : "";
       }).join("")}</div>
     </div>
     <div class="siglist">${out || `<div class="gsep">반경 내 호재 없음</div>`}</div>
@@ -3901,8 +3972,34 @@ function cmpSummaryHtml(cols) {
     + cols.map(c => { const v = cnt(c.rows, g);
         return `<div class="cv"><i style="width:${(v / max * 100).toFixed(1)}%;background:${ink[g]}"></i>`
           + `<b class="${v ? "" : "z"}">${v}</b></div>`; }).join("")).join("");
+  /* ★ 2026-08-13 시안 §08 — 등급 행 위·아래에 **나머지 축**을 같은 문법으로 붙인다.
+     시안 표의 행 구성: 반경 내 호재 → 등급 5행 → 유형 구성 → 착공 이후 → 가장 가까운 S·A.
+     ★ 막대는 **두 종류뿐**이다(시안): 등급 행 = 절대 건수(세 열이 같은 눈금) ·
+       착공 이후 = 비율(회색 트랙 = 전체). 점 하나당 1건으로 세면 30건이 넘을 때 셀 수 없으므로
+       길이로만 말하고 **정확한 값은 항상 옆에 적는다**(`6/12`).
+     ⚠ 0은 빈칸이 아니라 **0으로 명시**한다 — 「모른다」와 「없다」는 다른 말이다(P2). */
+  const live = rows0 => rows0.filter(r => r.s.status !== "정체");
+  const tot = cols.map(c => live(c.rows).length);
+  const totMax = Math.max(1, ...tot);
+  const totRow = `<div class="rl">반경 내 호재</div>`
+    + cols.map((c, i) => `<div class="cv"><i style="width:${(tot[i] / totMax * 100).toFixed(1)}%;background:var(--ink)"></i>`
+      + `<b class="${tot[i] ? "" : "z"}">${tot[i]}</b></div>`).join("");
+  const catRow = `<div class="rl">유형 구성</div>`
+    + cols.map(c => { const m = {}; live(c.rows).forEach(r => { const k = catOf(r.s); m[k] = (m[k] || 0) + 1; });
+      const t = CAT_KEYS.filter(k => m[k]).map(k => `<span style="color:${CAT_COLOR[k]};font-weight:600">${k} ${m[k]}</span>`).join(" · ");
+      return `<div class="cv txt">${t || '<span class="z">해당 없음</span>'}</div>`; }).join("");
+  const started = cols.map(c => live(c.rows).filter(r => (PHASE_IDX[phaseOf(r.s)] ?? 0) >= 2).length);
+  const phRow = `<div class="rl">착공 이후</div>`
+    + cols.map((c, i) => `<div class="cv ratio"><span class="trk"><i style="width:${tot[i] ? (started[i] / tot[i] * 100).toFixed(1) : 0}%;background:var(--ink2)"></i></span>`
+      + `<b class="${started[i] ? "" : "z"}">${started[i]}/${tot[i]}</b></div>`).join("");
+  const nearRow = `<div class="rl">가장 가까운 S·A</div>`
+    + cols.map(c => { const hit = live(c.rows).filter(r => r.g === "S" || r.g === "A")
+        .sort((a, b) => a.d - b.d)[0];
+      return `<div class="cv txt">${hit
+        ? `${esc(sigTitle(hit.s))} <b>${hit.g}</b> · ${phaseLabel(phaseOf(hit.s))} · ${hit.d < 1000 ? Math.round(hit.d) + "m" : (hit.d / 1000).toFixed(1) + "km"}`
+        : '<span class="z">해당 없음</span>'}</div>`; }).join("");
   return `<div class="cmpsum" style="grid-template-columns:64px repeat(${cols.length},minmax(0,1fr))">`
-    + `<div class="rl"></div>${head}${rows}</div>`;
+    + `<div class="rl"></div>${head}${totRow}${rows}${catRow}${phRow}${nearRow}</div>`;
 }
 function openCompare() {
   if (compareSet.length < 2) return;
@@ -4575,7 +4672,7 @@ function renderDock() {
   const nDirty = (CAT_KEYS.length - CAT_KEYS.filter(c => filter.cat.has(c)).length)
     + (PHASES.length - PHASES.filter(p => filter.phase.has(p)).length)
     + (["S", "A", "B", "C", "미정"].length - ["S", "A", "B", "C", "미정"].filter(l => filter.lvl.has(l)).length)
-    + (filter.region ? 1 : 0);
+    + ((filter.region || filter.sd) ? 1 : 0);
   const dirty = !!filter.region || !!filter.sd || !(ALL_SUBS.every(k => filter.sub.has(k)) && PHASES.every(k => filter.phase.has(k))
     && GRADES_DISP.every(k => filter.lvl.has(k)) && filter.lines.has("철도선") && filter.lines.has("도로선"));
   dock.innerHTML = `
@@ -6712,7 +6809,7 @@ function renderSheet() {
   const nf = (CAT_KEYS.length - CAT_KEYS.filter(c => filter.cat.has(c)).length)
     + (PHASES.length - PHASES.filter(p => filter.phase.has(p)).length)
     + (["S", "A", "B", "C", "미정"].length - ["S", "A", "B", "C", "미정"].filter(l => filter.lvl.has(l)).length)
-    + (filter.region ? 1 : 0);
+    + ((filter.region || filter.sd) ? 1 : 0);
   const fb = document.getElementById("ms-f");
   fb.hidden = !nf; fb.textContent = "필터 " + nf;
   const chip = (axis, k, label, extra, on, n) =>
@@ -6985,7 +7082,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813m");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813n");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -7170,7 +7267,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813m"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813n"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7196,7 +7293,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813m");
+  const CB = "?b=" + (window.BUILD || "20260813n");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
