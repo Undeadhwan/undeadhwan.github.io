@@ -962,7 +962,10 @@
   #flowv .card .cfresh { display:none; }
   #flowv .card .cmove:empty { display:none; }
   /* 변동 태그가 현재 단계를 말한다 — `● 준공·개통` 칩은 같은 말이라 감춘다 */
-  #flowv .card.haschg .cph { display:none; }
+  /* 변동 태그가 **등급·단계를 이미 그린다** — 같은 말을 옆에 또 두지 않는다(시안 §05 실물:
+     행에는 전→후 그림 하나뿐이고 등급 알약이 따로 없다). 2026-08-13: 신규 행에도 태그가
+     생기면서 `C · 계획` 옆에 `C급` 알약이 겹쳐 보였다. */
+  #flowv .card.haschg .cph, #flowv .card.haschg .lvtag { display:none; }
   @media (max-width: 768px) {
     #flowv .fitem { gap:8px; }
     #flowv .fdate { flex-basis:76px; }
@@ -1286,11 +1289,13 @@
   #dock .seg.g2 .s { border-radius:999px; padding:6px 13px; }
   /* ★ 시안 실물: 등급 버튼은 **링 위 · 글자 아래** 세로 배치이고 링 크기가 등급별로 다르다.
      가로로 눕히면 링이 글자 옆 장식이 되는데, 시안에서 링은 **크기가 곧 등급**이라 주인공이다. */
-  /* 5칸 균등은 「등급 없음」 라벨이 잘린다 — 마지막 칸만 넓게(시안도 그 칸이 더 길다). */
-  #dock .seg.g4 { display:grid; grid-template-columns:repeat(4, 1fr) 1.5fr; gap:5px; }
+  /* ★ **5칸 균등**(갱신 시안 §03 실물) — 마지막 칸이 기호 「?」가 되면서 넓힐 이유가 없어졌다.
+     종전엔 「등급 없음」 네 글자 때문에 1.5fr로 두었는데, 그 칸만 넓어 격자가 안 맞았다. */
+  #dock .seg.g4 { display:grid; grid-template-columns:repeat(5, 1fr); gap:5px; }
   #dock .seg.g4 .s { flex-direction:column; gap:3px; padding:8px 2px; font-size:11.5px; line-height:1.2; }
   #dock .seg.g4 .s i { margin:0; }
-  #dock .seg.g4 .s.wide { grid-column:auto; }
+  /* (`.s.wide` 규칙은 2026-08-13에 지웠다 — 마지막 칸이 기호가 되어 wide를 내는 곳이 없다.
+     부품이 사라지면 그 부품을 지키던 규칙도 없앤다.) */
   #dock .seg .s { display:inline-flex; align-items:center; justify-content:center; gap:5px; padding:6px 11px; border:1px solid var(--line2); border-radius:var(--r-s); font-size:var(--fs); background:#fff; color:var(--ink3); cursor:pointer; white-space:nowrap; }
   /* 격자 칸은 폭이 고정이라 긴 라벨(「준공·개통」)이 넘칠 수 있다 — 넘치면 자르지 말고 **줄인다**
      (자르면 이름이 거짓말이 된다). 좌우 여백을 먼저 양보한다. */
@@ -5055,8 +5060,12 @@ function renderDock() {
   const SZ = { S: HJR.S, A: HJR.A, B: HJR.B, C: HJR.C };
   // `wide` = 등급 격자에서 **한 줄을 통째로** 차지한다. 미판정은 규모 등급(S·A·B·C)과 다른 축이라
   // 같은 칸에 섞지 않는다(§seg 주석) — 줄이 갈리는 것이 사실에 맞는다.
+  /* ★ 마지막 칸은 **기호 「?」** (갱신 시안 §03 실물 — 사장님이 이 칸에 표시).
+     좁은 필터 칸에 「등급 없음」 네 글자를 넣으면 그 칸만 넓어져 **5칸이 안 맞고**, S·A·B·C가
+     기호인데 하나만 문장이라 문법이 갈린다. 뜻은 `title`이 말한다(글자를 지운 게 아니라 옮겼다) —
+     범례·표처럼 설명할 자리가 있는 곳에서는 그대로 `LEVEL_NAME`을 쓴다. */
   const gp = g => g === "미정"
-    ? `<span class="s wide${filter.lvl.has("미정") ? "" : " off"}" data-tog="lvl" data-k="미정"><i class="dia"></i>${LEVEL_NAME["미정"]}</span>`
+    ? `<span class="s${filter.lvl.has("미정") ? "" : " off"}" data-tog="lvl" data-k="미정" title="${LEVEL_NAME["미정"]}"><i class="dia"></i>?</span>`
     : `<span class="s${filter.lvl.has(g) ? "" : " off"}" data-tog="lvl" data-k="${g}"><i style="width:${SZ[g]}px;height:${SZ[g]}px"></i>${g}</span>`;
   // 초기화 = 전체선택·해제 2버튼의 대체. 기본 상태와 다를 때만 보인다(평소엔 화면에 없음).
   /* 「필터 N개 적용 중」 — 기본과 달라진 축의 수. 접힌 상태에서도 뭐가 걸려 있는지 보인다
@@ -5238,10 +5247,17 @@ function movDelta(s) {
 function movDeltaHtml(s) {
   const d = movDelta(s);
   if (!d) return "";
-  /* 「신규」는 **왼쪽 날짜 열이 이미 말한다** — 머리에 또 붙이면 한 카드에 같은 말이 두 번이다
-     (2026-08-12 사용자 "중복없이"). 변동만 머리로 보낸다: 그건 왼쪽 열이 담을 수 없는
-     **무엇에서 무엇으로**를 말하기 때문이다. */
-  if (d.kind === "신규") return "";
+  /* ★ 「신규」는 전 → 후가 없다 — 대신 **현재 상태 하나**를 같은 문법으로 그린다
+     (2026-08-13 갱신 시안 §05 실물 「◯ B · 계획」 · 사장님이 이 행에 표시).
+     ☠ 종전엔 빈 문자열이라 신규 행만 그 칸이 **비어 있었다** — 「무엇이 새로 생겼나」를
+       읽으려면 아래 본문까지 내려가야 했고, 한 열에 어떤 행은 그림이 있고 어떤 행은 없었다.
+     ⚠ 「신규」라는 **말**은 여전히 왼쪽 날짜 열이 하고 여기서 되풀이하지 않는다(2026-08-12
+       사용자 "중복없이") — 여기가 말하는 건 말이 아니라 **지금 어디까지 왔나**다. */
+  if (d.kind === "신규") {
+    const p = phaseOf(s), lv = levelOf(s);
+    return `<span class="mvtag new" title="새로 확인된 신호 — 지금 단계입니다">`
+      + `<span class="phcell"><b>${lv === "미정" ? "" : lv + " · "}<i class="ph${PHASE_IDX[p] ?? 0}"></i>${phaseLabel(p)}</b></span></span>`;
+  }
   const back = PHASE_IDX[d.to] < PHASE_IDX[d.from];   // 역행(인가→계획 등)은 정체·재추진 신호다(P5)
   /* ★ **전 → 후를 그림으로** (2026-08-13 시안 §05 머리기사):
      *"등급은 링이 굵어지고, 단계는 점선이 실선이 되고, 미판정 해소는 마름모가 원이 됩니다.
@@ -7607,7 +7623,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813ab");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813ac");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -7792,7 +7808,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813ab"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813ac"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7818,7 +7834,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813ab");
+  const CB = "?b=" + (window.BUILD || "20260813ac");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
