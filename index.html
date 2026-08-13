@@ -24,6 +24,12 @@
     --r:10px; --r-s:7px; --fs:14.5px; --fs-s:12.5px;
   }
   * { margin:0; box-sizing:border-box; }
+  /* ★ **스크롤바는 그리지 않는다** (2026-08-13 사장님 *"요즘 누가 스크롤바를 쓰냐. 그냥 휠 내리면
+     내려가야지"*). 스크롤 동작은 그대로 두고 **막대만** 감춘다 — 휠·트랙패드·터치 전부 그대로다.
+     ⚠ 종전엔 이 규칙이 `#dock`·`#maxis`·`.cchips`·`.ms-row` **네 곳에 따로** 적혀 있었다.
+       새 스크롤 영역을 만들 때마다 한 줄씩 빠뜨리는 구조라 전역으로 올린다(사본을 만들지 않는다). */
+  * { scrollbar-width:none; -ms-overflow-style:none; }
+  *::-webkit-scrollbar { width:0; height:0; display:none; }
   body { font-family:'Gothic A1','Apple SD Gothic Neo',sans-serif; -webkit-font-smoothing:antialiased;
          color:var(--ink); background:var(--bg); }
   /* ★ 숫자·날짜는 **모노스페이스**다 (시안 §06 「숫자와 날짜는 모노스페이스로 데이터임을 표시」).
@@ -127,7 +133,15 @@
   .ddgrp.off .ddsubs { opacity:.38; }   /* 대분류 꺼짐 = 하위도 비표시. 선택 상태는 보존 */
   .ddnosub { font-size:12px; color:#a8adb7; align-self:center; }
   .ddall { margin-top:12px; text-align:center; color:var(--accent); font-size:12.5px; font-weight:600; cursor:pointer; }
-  #wrap { display:flex; height:calc(100vh - 87px); position:relative; }
+  /* ══ 「한 화면에 딱」 — 높이를 **재지 않고 남긴다** (2026-08-13 사장님 *"스크롤바는 왜 생기는거야"*) ══
+     ☠ 종전엔 `height:calc(100vh - 87px)`였다. 87 = 헤더 59 + 푸터 28을 **손으로 더한 값**이라
+       헤더가 그보다 커지는 순간 지도가 화면 밖으로 밀려 **페이지 스크롤바**가 생겼다 —
+       운영 모드에서 헤더가 102px이 되어(도구 칩줄 + 토글) 실측 43px이 넘쳤다.
+     ⇒ body를 세로 flex로 두고 `#wrap`이 **남는 높이를 먹는다**. 헤더·푸터가 몇 px이든 따라온다
+       (모바일에는 이미 같은 규칙이 있었다 — 데스크톱만 조용한 예외였다).
+     ⚠ `min-height:0`이 없으면 flex 자식은 내용만큼 부풀어 다시 넘친다(flex의 기본 min-content). */
+  body { display:flex; flex-direction:column; height:100vh; height:100dvh; overflow:hidden; }
+  #wrap { display:flex; flex:1 1 auto; min-height:0; position:relative; }
   /* 상세 패널 = 지도를 **밀지 않고** 도크 옆에 떠 있는 카드(2026-07-23 사용자 요청). 도크(326)+12 여백 위치 */
   #panel { position:absolute; left:338px; top:12px; width:392px; max-height:calc(100% - 24px); overflow-y:auto;
     background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:0 8px 30px rgba(25,35,60,.16);
@@ -224,6 +238,14 @@
   .rpop .ri:hover { background:#f3f6ff; }
   .rpop .ri.on { background:#eef2ff; font-weight:700; color:var(--accent); }
   .rpop .rempty { padding:10px 11px; font-size:12px; color:var(--ink3); }
+  /* 선택 요약 + 조회 — 세 열 아래 한 줄을 통째로 차지한다(grid-column:1/-1) */
+  .rpop .rfoot { grid-column:1/-1; display:flex; align-items:center; justify-content:space-between;
+    gap:10px; padding:9px 11px; border-top:1px solid var(--line); background:#fbfcfe; }
+  .rpop .rsel { font-size:12.5px; font-weight:600; color:var(--ink2); overflow:hidden;
+    text-overflow:ellipsis; white-space:nowrap; }
+  .rpop .rgo { flex:none; min-height:32px; padding:0 16px; font-size:13px; font-weight:700;
+    color:#fff; background:var(--ink); border:0; border-radius:8px; cursor:pointer; }
+  .rpop .rgo:hover { opacity:.88; }
   /* 세대수도 조회 범위다 — 지역 칩과 같은 모양으로 둔다(시안 §03 헤더: 「300 세대+ ▾」) */
   #apt-hh { font-size:14.5px; font-weight:600; padding:8px 12px; border:1px solid #d9dee8; border-radius:9px;
     background:#fff; color:#1a2233; cursor:pointer; }
@@ -422,8 +444,7 @@
   /* 칩만 가로 스크롤 · 「비교하기」는 절대 안 밀린다(flex-shrink:0). 종전엔 칩과 버튼이 같은
      flex 자식이라 칩 3개부터 버튼이 화면 밖으로 나가 **누를 수가 없었다**(2026-08-04 실기기 제보). */
   .cmpbar .cchips { display:flex; align-items:center; gap:8px; overflow-x:auto; min-width:0;
-                    flex:1 1 auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
-  .cmpbar .cchips::-webkit-scrollbar { display:none; }
+                    flex:1 1 auto; -webkit-overflow-scrolling:touch; }
   .cmpbar .cchip { background:#333; border-radius:8px; padding:5px 8px; font-size:12px; display:flex; align-items:center; gap:6px; white-space:nowrap; flex-shrink:0; }
   .cmpbar .cchip .x { cursor:pointer; opacity:.7; } .cmpbar .cchip .x:hover { opacity:1; }
   .cmpbar .cgo { background:#fff; color:#1a1a1a; font-weight:800; border-radius:9px; padding:7px 13px; cursor:pointer; font-size:13px; white-space:nowrap; flex-shrink:0; }
@@ -546,6 +567,8 @@
   .mmeta b { color:#5b3fd4; }
   .card.dimyr { opacity:.42; }
   .phead { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
+  /* 이 패널이 무엇인지 — 제목보다 작고 앞선다(시안 §06 「선택한 호재 · 클릭」) */
+  .phead .pkind { font-size:11px; font-weight:700; letter-spacing:.04em; color:var(--ink3); padding-top:2px; }
   .closex { flex-shrink:0; width:26px; height:26px; border:1px solid var(--line); border-radius:50%;
             display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--muted); font-size:15px; background:#fff; }
   .closex:hover { color:var(--ink); border-color:var(--ink); }
@@ -832,11 +855,24 @@
   .track .done { color:var(--ink); }
   .track .now { font-weight:800; }
   .track .todo { color:var(--muted); }
-  .kv { font-size:12.5px; margin:6px 0; }
-  /* ★ 시안 실물의 라벨–값은 양끝 정렬이지만, 우리 `.kv`에는 **표·각주가 든 행도 섞여 있어**
-     flex를 걸면 그 행들이 세로로 뭉갠다(실측 2026-08-13: 「한 사업 · 3개 블록」 블록 붕괴).
-     ⇒ 정렬은 단순 라벨–값 행(`.kv.kvr`)에만 걸고, 나머지는 라벨 색·크기만 시안에 맞춘다. */
-  .kv b { display:inline-block; min-width:86px; color:var(--ink3); font-weight:500; font-size:12px; }
+  /* ★ 라벨–값 **2열처럼 보이게** — 값이 여러 줄이 되어도 둘째 줄부터 라벨 칸 밑으로 파고들지
+     않는다(내어쓰기). 2026-08-13 사장님 지적: 값이 어중간한 위치에서 시작하다 줄이 바뀌면
+     왼쪽 끝으로 붙어 **계단**이 생겼다.
+     ⚠ `display:grid`로 못 간다 — 값이 `배지 + 텍스트 + <span>`처럼 **여러 인라인 조각**인 행이
+       많아, 조각마다 격자 칸을 하나씩 차지해 3·4열로 흘러 버린다(실측). 내어쓰기는 조각 수와
+       무관하게 먹는다.
+     ⚠ 시안의 **양끝 정렬**은 단순 라벨–값 행(`.kv.kvr`)에만 건다 — 표·각주가 든 행에 걸면
+       세로로 뭉갠다(2026-08-13 실측: 「한 사업 · 3개 블록」 블록 붕괴). */
+  .kv { font-size:12.5px; margin:6px 0; padding-left:92px; text-indent:-92px; }
+  .kv.kvr, .kv.kvblock { padding-left:0; text-indent:0; }
+  /* ⚠ `text-indent`는 **상속된다** — 그리고 `inline-block` 자식은 전부 블록 컨테이너라 자기
+     첫 줄에도 -92px가 걸린다. 실측 2026-08-13: ① 라벨(`<b>`)이 상자 밖으로 밀려 **증발**했고,
+     ② 고친 뒤엔 값 머리의 칩(`±1km`)·배지(`기관 발표`)가 라벨 위로 **겹쳤다**.
+     ⇒ 내어쓰기는 바깥 블록에만 필요하므로 **안쪽 전부** 되돌린다(조각이 몇 개든 안전하다). */
+  .kv * { text-indent:0; }
+  .kv b { display:inline-block; min-width:86px; margin-right:6px;
+          color:var(--ink3); font-weight:500; font-size:12px; }
+  .kv.kvr b, .kv.kvblock b { margin-right:0; }
   .kv.kvr { display:flex; align-items:baseline; gap:12px; justify-content:space-between; }
   .kv.kvr b { min-width:0; flex:0 0 auto; }
   .kv.kvr > span, .kv.kvr > a { text-align:right; font-weight:600; }
@@ -971,8 +1007,7 @@
   #msheet .ms-tail b { color:var(--ink2); font-variant-numeric:tabular-nums; }
   #msheet .ms-more { display:block; margin:9px auto 0; min-height:38px; padding:0 18px; font-size:13px;
     font-weight:700; color:var(--ink); background:#fff; border:1px solid var(--line2); border-radius:10px; }
-  #msheet .ms-row { display:flex; gap:6px; overflow-x:auto; padding:8px 0 2px; scrollbar-width:none; }
-  #msheet .ms-row::-webkit-scrollbar { display:none; }
+  #msheet .ms-row { display:flex; gap:6px; overflow-x:auto; padding:8px 0 2px; }
   #msheet .ms-row .lb { flex:0 0 auto; align-self:center; font-size:11px; font-weight:700; color:var(--ink3); padding-right:2px; }
   #msheet .mc { flex:0 0 auto; display:inline-flex; align-items:center; gap:5px; min-height:34px;
     padding:6px 11px; border:1px solid var(--line2); border-radius:999px; background:#fff;
@@ -1032,10 +1067,11 @@
     /* 한 화면에 딱 맞춘다 — 조회조건이 시트로 빠진 뒤 지도 아래 244px이 **죽은 공간**으로 남았다
        (문서 568px < 화면 812px). 지도 앱에서 스크롤해야 나오는 여백은 그냥 손해다.
        body를 세로 flex로 두고 #wrap이 남은 높이를 전부 먹는다. 푸터는 fixed라 흐름에 없다.
-       100dvh — 모바일 브라우저는 주소창이 접히며 100vh가 실제보다 커진다(하단이 잘림). */
-    body { display:flex; flex-direction:column; height:100vh; height:100dvh; overflow:hidden; }
-    header { flex:none; }
-    #wrap { flex-direction:column; height:auto; flex:1 1 auto; min-height:0; }
+       100dvh — 모바일 브라우저는 주소창이 접히며 100vh가 실제보다 커진다(하단이 잘림).
+       ★ 2026-08-13: 이 규칙(body flex + #wrap이 남은 높이)을 **전 폭 기본**으로 올렸다 —
+         데스크톱만 `calc(100vh - 87px)` 손계산이라 조용한 예외였고, 그게 스크롤바의 원인이었다.
+         여기 남는 것은 **모바일에서만 다른 것**뿐이다: 지도·도크를 세로로 쌓는 방향. */
+    #wrap { flex-direction:column; }
     /* ★ 지도를 맨 위로 (2026-08-03 사용자 제보 "모바일 화면 보기가 너무 불편하네").
        종전엔 #map과 #dock이 **둘 다 order:0**이라 flex가 DOM 순서로 정렬했고, 도크(대분류 4개 ×
        중분류 전개, max-height:none)가 통째로 지도 위에 깔렸다 — 실측: 지도 시작점이 y=1502px로
@@ -1113,8 +1149,7 @@
   /* 2026-07-30 UI 개편 — DESIGN.md 문법 적용. 대분류 4개(교통 포함)가 동일한 행,
      중분류는 아코디언 안 체크박스, **표시 옵션(선형)은 스위치**(필터와 모양부터 다르게),
      전체선택·해제 2버튼 → "초기화" 링크 1개(기본과 다를 때만 노출), hover "only"로 1클릭 단독보기. */
-  #dock { width:272px; flex-shrink:0; border-right:1px solid var(--line); background:#fff; overflow-y:auto; padding:0 0 24px; order:-1; scrollbar-width:none; }
-  #dock::-webkit-scrollbar { display:none; }   /* 스크롤바 숨김(사용자 요청) — 필요 시 스크롤은 되되 바는 안 보임 */
+  #dock { width:272px; flex-shrink:0; border-right:1px solid var(--line); background:#fff; overflow-y:auto; padding:0 0 24px; order:-1; }
   /* ★ **헤더 고정** (2026-08-11 사용자 UI 제안 D2). 4개를 다 펼치면 도크가 **1,478px**(뷰포트 900)이
      되어, 스크롤하는 동안 「지금 몇 건을 보고 있나」와 「초기화」가 화면에서 사라졌다.
      동작은 그대로 두고 **길 잃는 것만** 막는다(아코디언으로 강제로 접지 않는다 — 두 축을 나란히
@@ -1280,9 +1315,8 @@
      ⚠ 헤더에 넣지 않고 지도 위에 띄운다 — 헤더는 이미 194px이고, 여기서 더 먹으면
        "지도가 첫 화면"(DESIGN §3-b) 규칙이 다시 무너진다. 지도 위 부유 문법. */
   #maxis { display:none; position:absolute; left:8px; right:8px; top:8px; z-index:1001;
-           gap:5px; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;
+           gap:5px; overflow-x:auto; -webkit-overflow-scrolling:touch;
            padding:1px; }
-  #maxis::-webkit-scrollbar { display:none; }
   /* 폭 예산 — 375px(SE)에서는 4번째가 살짝 잘리고 390px(12~15) 이상에서 넷 다 들어간다.
      잘리는 게 스크롤 가능하다는 신호라 그대로 둔다(라벨을 '주'로 줄이면 뜻을 잃는다). */
   #maxis .ax { flex:0 0 auto; display:inline-flex; align-items:center; gap:5px;
@@ -1336,10 +1370,16 @@
   <div class="regionbar" id="regionbar">
     <button type="button" class="rchip" id="r-chip" aria-haspopup="true" aria-expanded="false">
       <span id="r-chip-t">전국</span><span class="cv">▾</span></button>
+    <!-- ★ 고르는 동안은 **적용하지 않는다** (2026-08-13 사장님 *"레벨별로 바로 선택이 아닌 내가
+         원하는 레벨갯수를 선택하고 조회 가능하도록"*). 종전엔 한 칸 누를 때마다 지도가 날아가고
+         집계가 바뀌어, 읍면동을 스치듯 누르면 **화면이 3건으로 줄어 「호재원이 안 보인다」**가 됐다.
+         이제 세 열은 임시 선택만 담고 「조회」를 눌러야 조회 범위가 바뀐다. 닫으면 그대로 버린다. -->
     <div class="rpop" id="r-pop" hidden>
       <div class="rcol"><div class="rch">시도</div><div class="rlist" id="rp-sido"></div></div>
       <div class="rcol"><div class="rch">시군구</div><div class="rlist" id="rp-sgg"></div></div>
       <div class="rcol"><div class="rch">읍면동</div><div class="rlist" id="rp-dong"></div></div>
+      <div class="rfoot"><span class="rsel" id="rp-sel">전국</span>
+        <button type="button" class="rgo" id="rp-go">조회</button></div>
     </div>
     <select id="r-sido" hidden><option value="">시도 선택</option></select>
     <select id="r-sgg" disabled hidden><option value="">시군구 선택</option></select>
@@ -1444,7 +1484,8 @@
      '확인된 신호'를 시간축으로 보는 목록 모드(#listv)가 대신한다. 원시층 데이터(capital_raw.json)는
      후보층(signalize) 입력이라 파이프라인은 그대로다. ⚠ 이 블록의 r-sido/r-sgg는 헤더 지역선택과
      **id가 겹쳐** 있었다(getElementById가 헤더 것을 집어 조용히 어긋날 수 있는 상태). -->
-<div id="undet" style="display:none; height:calc(100vh - 87px); overflow-y:auto; padding:16px 20px 80px;">
+<!-- 높이는 flex가 남겨 준다(87px 손계산 폐기 — 위 #wrap 주석 참조) -->
+<div id="undet" style="display:none; flex:1 1 auto; min-height:0; overflow-y:auto; padding:16px 20px 80px;">
   <div style="max-width:1080px; margin:0 auto;">
     <div class="pt">등급 없음 목록</div>
     <div class="ps">우리가 정한 등급 기준(<b>일자리=연면적·투자액 / 주거개발=세대수 / 교통=노선종류</b>)에 필요한 데이터가 없어 <b>등급을 매기지 않은(미정)</b> 호재입니다. 임의 등급을 부여하지 않고 미정으로 두는 게 원칙(P2·P5). 아래를 보고 소스·기준을 보완하면 등급이 채워집니다.</div>
@@ -2914,8 +2955,11 @@ function regionLabel() {
   //   (「충청북도」)을 보여 준다 — 카운터가 「충북 음성군」이라고 쓰면 위아래가 다른 이름이라
   //   "이 숫자가 내가 고른 지역의 것"이라는 연결이 끊긴다(사용자 "카운터가 인식이 잘 안되서 그런가").
   const long = sd => SIDO_LONG[sd] || sd;
-  if (filter.region) { const [sd, ...rest] = filter.region.split(" "); return `${long(sd)} ${rest.join(" ")}`.trim(); }
-  return filter.sd ? long(filter.sd) : "";
+  /* ⚠ **읍면동까지 말한다** — 조회 범위가 「등촌동」인데 칩이 「강서구」라고 적으면 화면이
+     사실을 말하지 않는다(2026-08-13: 그 상태에서 총계 8건이 되니 「호재가 왜 이것뿐이지」가 된다). */
+  const dong = filter.dong ? " " + filter.dong : "";
+  if (filter.region) { const [sd, ...rest] = filter.region.split(" "); return `${long(sd)} ${rest.join(" ")}${dong}`.trim(); }
+  return filter.sd ? long(filter.sd) + dong : "";
 }
 function regionVisible(s, skipDong) {
   if (filter.region || filter.sd) {
@@ -3276,7 +3320,10 @@ const SIDO_LONG = { "서울": "서울특별시", "경기": "경기도", "인천"
 const SIDO_ORDER = ["서울", "인천", "경기", "부산", "대구", "전남광주", "대전", "울산", "세종",
   "강원", "충북", "충남", "전북", "경북", "경남", "제주"];   // 16개 — 2026-07-01 전남·광주 통합 반영
 const treeState = { selKey: null };        // 지도 마커 연동용(기존 참조 유지)
-const nav = { sd: null, sg: null, dong: null };   // 현재 드릴다운 위치(상단 드롭다운)
+const nav = { sd: null, sg: null, dong: null };   // **적용된** 조회 범위(칩이 말하는 것)
+/* 팝오버에서 고르는 중인 **임시** 선택. `nav`와 갈라 두어야 「고르는 중」이 「적용」이 되지 않는다
+   (2026-08-13 — 읍면동을 스치듯 눌렀다가 화면이 3건으로 줄어 「호재원 안 보여」가 된 자리). */
+let pend = { sd: null, sg: null, dong: null };
 function dongsOfSgg(sd, sg) {
   return DONG_GEO.features.filter(f => (f.properties.sido || "서울") === sd && f.properties.sgg === sg)
     .map(f => f.properties.EMD_KOR_NM).sort((a, b) => a.localeCompare(b, "ko"));
@@ -3317,28 +3364,28 @@ function initRegionBar() {
 function initRegionPop() {
   const chip = document.getElementById("r-chip"), pop = document.getElementById("r-pop");
   if (!chip || !pop) return;
-  const open = v => { pop.hidden = !v; chip.setAttribute("aria-expanded", v ? "true" : "false"); if (v) paintRegionPop(); };
+  /* 열려 있는 동안의 **임시 선택**. 적용된 범위(`nav`)와 갈라 두는 게 핵심이다 —
+     같은 객체를 쓰면 「고르는 중」이 곧 「적용」이 되어 되돌릴 수가 없다. */
+  const open = v => {
+    pop.hidden = !v; chip.setAttribute("aria-expanded", v ? "true" : "false");
+    if (v) { pend = { sd: nav.sd || null, sg: nav.sg || null, dong: nav.dong || null }; paintRegionPop(); }
+  };
   chip.onclick = e => { e.stopPropagation(); open(pop.hidden); };
   document.addEventListener("click", e => { if (!pop.hidden && !pop.contains(e.target) && e.target !== chip) open(false); });
   document.addEventListener("keydown", e => { if (e.key === "Escape") open(false); });
   pop.onclick = e => {
+    const go = e.target.closest("#rp-go");
+    if (go) {   // ★ 적용은 여기 한 번뿐 — 지도 이동·집계·목록이 이때만 움직인다
+      applyRegion(pend.sd, pend.sg, pend.dong);
+      syncRegionChip(); open(false); return;
+    }
     const it = e.target.closest(".ri"); if (!it) return;
     const col = it.dataset.col, v = it.dataset.v;
-    /* ★ **열을 먼저 다시 그리고 나서** 지역을 적용한다 (2026-08-13 사용자 제보 *"1레벨 선택되고
-       기다림, 2레벨 선택하고 기다림 이런식으로 느려"*). 종전엔 `selectSido`가 지도 이동·경계 지연
-       로드까지 끝낸 **뒤에** 다음 열이 그려져, 다음 단계를 고를 수 있기까지 그 시간을 다 기다렸다.
-       목록 자체는 동기 함수(`sggListOf`·`dongsOfSgg`)라 **먼저 그릴 수 있다** — 사람은 바로 다음
-       열을 누르고, 지도는 뒤에서 따라온다. */
-    if (col === "sido") nav.sd = v || null, nav.sg = null, nav.dong = null;
-    else if (col === "sgg") nav.sg = v || null, nav.dong = null;
-    paintRegionPop(); syncRegionChip();
-    setTimeout(() => {
-      if (col === "sido") selectSido(v);
-      else if (col === "sgg") selectSgg(v);
-      else selectDong(v);
-      syncRegionChip();
-    }, 0);
-    if (col === "dong" && v) open(false);   // 읍면동까지 골랐으면 더 고를 게 없다 — 닫는다
+    // 상위를 바꾸면 하위는 무효다 — 남겨 두면 「서울 + 해운대구」 같은 조합이 만들어진다
+    if (col === "sido") { pend.sd = v || null; pend.sg = null; pend.dong = null; }
+    else if (col === "sgg") { pend.sg = v || null; pend.dong = null; }
+    else pend.dong = v || null;
+    paintRegionPop();   // 목록은 동기 함수라 즉시 그린다(다음 열을 기다릴 이유가 없다)
   };
   syncRegionChip();
 }
@@ -3354,10 +3401,13 @@ function paintRegionPop() {
      내가 원하는 레벨갯수 선택할 수 있게"*). 이게 있어야 ① 고른 것을 되돌릴 수 있고
      ② **원하는 깊이에서 멈출 수 있다**(시군구까지만 볼지, 읍면동까지 볼지). */
   const ALL = { v: "", t: "전체" };
-  put("rp-sido", [ALL].concat(SIDO_ORDER.map(sd => ({ v: sd, t: SIDO_LONG[sd] }))), nav.sd || "", "sido", "—");
-  put("rp-sgg", nav.sd ? [ALL].concat(sggListOf(nav.sd).map(v => ({ v, t: v }))) : [], nav.sg || "", "sgg", "시도를 먼저 고르세요");
-  put("rp-dong", (nav.sd && nav.sg) ? [ALL].concat(dongsOfSgg(nav.sd, nav.sg).map(v => ({ v, t: v }))) : [], nav.dong || "", "dong",
-    nav.sg ? "이 시군구는 읍면동 경계 준비 중" : "시군구를 먼저 고르세요");
+  put("rp-sido", [ALL].concat(SIDO_ORDER.map(sd => ({ v: sd, t: SIDO_LONG[sd] }))), pend.sd || "", "sido", "—");
+  put("rp-sgg", pend.sd ? [ALL].concat(sggListOf(pend.sd).map(v => ({ v, t: v }))) : [], pend.sg || "", "sgg", "시도를 먼저 고르세요");
+  put("rp-dong", (pend.sd && pend.sg) ? [ALL].concat(dongsOfSgg(pend.sd, pend.sg).map(v => ({ v, t: v }))) : [], pend.dong || "", "dong",
+    pend.sg ? "이 시군구는 읍면동 경계 준비 중" : "시군구를 먼저 고르세요");
+  // 「무엇을 조회할지」를 누르기 전에 문장으로 확인시킨다 — 칩(적용된 범위)과 헷갈리지 않게 여기 둔다
+  const sel = document.getElementById("rp-sel");
+  if (sel) sel.textContent = [pend.sd && (SIDO_LONG[pend.sd] || pend.sd), pend.sg, pend.dong].filter(Boolean).join(" › ") || "전국";
 }
 /* 칩 문구 = 현재 조회 범위. 지도 이동으로 지역이 바뀌어도 같은 함수가 부른다(한 곳에서만 적는다). */
 function syncRegionChip() {
@@ -4319,7 +4369,9 @@ function renderDetail(s) {
   // — 같은 사실을 두 층이 말하면 반드시 어긋난다(간결 원칙). 칩이 없을 때만 텍스트 행이 폴백.
   const lb = lineBar(s);
   p.innerHTML = `
-    <div class="phead"><span></span><div class="closex" onclick="closePanel()">✕</div></div>
+    <!-- 「선택한 호재」 — 이 카드가 **무엇인지**부터 말한다(시안 §06 실물). 종전엔 빈 칸이라
+         옆 패널(동·단지·겹침)과 같은 자리에서 무엇을 보고 있는지 구분되지 않았다. -->
+    <div class="phead"><span class="pkind">선택한 호재</span><div class="closex" onclick="closePanel()">✕</div></div>
     <div class="detail">
       <!-- ★ 슬롯 1·2 (2026-08-13 시안 §06) — **이름이 첫 줄**이다.
            종전엔 유형·등급·근거·영향반경이 한 문장으로 제목 **위**를 차지해, 정작 이름이
@@ -4347,7 +4399,7 @@ function renderDetail(s) {
       ${(() => { const g = gradeBasisHtml(s).replace(/\s*·\s*$/, "").trim();
         return g ? `<div class="kv"><b>등급 근거</b> ${g}</div>` : ""; })()}
       ${s.addr ? `<div class="kv"><b>대지위치</b> ${s.addr} <span class="copyaddr" onclick="copyAddr(this,'${s.addr.replace(/'/g, "\\'")}')" title="주소 복사">📋</span></div>` : ""}
-      ${s.group_n ? `<div class="kv"><b>한 사업 · ${s.group_n}개 블록</b> 합계 연면적 ${(s.group_area_m2 || 0).toLocaleString()}㎡
+      ${s.group_n ? `<div class="kv kvblock"><b>한 사업 · ${s.group_n}개 블록</b> 합계 연면적 ${(s.group_area_m2 || 0).toLocaleString()}㎡
         <span class="note">— 블록별 허가가 따로 나와 지도엔 대표 1개로 접어 표시합니다(개별 사실은 아래 그대로).</span>
         <div class="fs-grid" style="margin-top:6px">${s.group_members.map(m =>
           `<span>${m.block || "-"}</span><b>${(m.area_m2 || 0).toLocaleString()}㎡${m.lvl ? ` · ${m.lvl}급` : ""}</b>`).join("")}</div></div>` : ""}
@@ -4810,7 +4862,14 @@ function dockCounts() {
        · 등급 건수 = 지역 + 분류 + 단계 (등급 자신은 제외 — 같은 이유)
      ⚠ 분류를 하나 끄면 분류별 합 > 총계가 된다. 그건 어긋남이 아니라 **꺼진 축이 몇 건인지
        보여 주는 것**이다(합이 총계와 같아지는 건 전 분류가 켜졌을 때). */
-  const base = s => regionVisible(s, true) && !isStaleFinished(s);
+  /* ☠☠ **한 화면이 두 숫자를 말하고 있었다** (2026-08-13 사장님 *"호재원 안보여"*).
+     읍면동을 고른 상태에서 헤더는 「호재 **3**」인데 유형별은 16·13·8·35였다 — 총계(`visible`)는
+     동을 적용하고 facet(`skipDong`)은 동을 무시했기 때문이다. 지도는 총계 쪽을 따르므로
+     **화면엔 3개만 그려지는데 옆의 숫자는 72를 말한다** → 「호재원이 안 보인다」로 읽힌다.
+     ⇒ 도크 집계는 **지도와 같은 자**를 쓴다(동까지 적용). 자기 축만 빼는 facet 규칙은 그대로.
+     ※ 종전 주석은 「도크 집계는 고른 지역의 재고이고 동은 그 아래 층」이라 적었는데, 그 설계는
+       총계에는 적용되지 않아 **한 함수 안에서 두 규칙**이 돌고 있었다. 규칙은 하나여야 한다. */
+  const base = s => regionVisible(s) && !isStaleFinished(s);
   const stageLvl = s => filter.phase.has(phaseOf(s)) && filter.lvl.has(levelOf(s));
   const pool = allSignalsFlat().filter(base);
   const cat = {}, sub = {}, lvl = {};
@@ -7452,7 +7511,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813z");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813aa");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -7637,7 +7696,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813z"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813aa"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7663,7 +7722,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813z");
+  const CB = "?b=" + (window.BUILD || "20260813aa");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
