@@ -710,11 +710,15 @@
   #flowv .fdate b { display:block; font-size:13px; font-variant-numeric:tabular-nums; letter-spacing:-.2px; }
   #flowv .fdate .mvk { display:inline-block; margin-top:5px; font-style:normal; font-size:11px; font-weight:700;
                        border-radius:999px; padding:1px 7px; border:1px solid; }
-  #flowv .fdate .mvk.chg { color:#1e40af; border-color:#bfd0f2; background:#f3f7ff; }
+  /* ★ 2026-08-13 시안 §05 — 변경 유형 배지는 **무채색, 신규만 검정**(색 채널은 유형 전용).
+     ☠ 같은 개념의 배지가 **두 벌**이었다(`.mvtag`·`.mvk`) — 한쪽만 고치면 화면에서 초록 배지가
+       그대로 살아난다(실측: `.mvtag`만 고쳤더니 업데이트 탭은 초록 그대로였다). 규칙은 양쪽에 건다.
+     ⚠ 역행(`.back`)만 정체색을 남긴다 — P5가 요구하는 사실이라 무채색에 섞으면 안 된다. */
+  #flowv .fdate .mvk.chg { color:var(--ink2); border-color:var(--line2); background:#fff; }
   #flowv .fdate .mvk.chg.back { color:var(--stall); border-color:#e6d3a3; background:#fdf8ec; }
-  #flowv .fdate .mvk.new { color:var(--c-house); border-color:#bfe3d0; background:#f1faf5; }
+  #flowv .fdate .mvk.new { color:#fff; border-color:var(--ink); background:var(--ink); }
   #flowv .fdate .mvk.seen { color:var(--ink3); border-color:var(--line2); background:var(--panel); }
-  #flowv .fdate .mvk.fld { color:#6d28d9; border-color:#d6ccf5; background:#f7f4ff; }
+  #flowv .fdate .mvk.fld { color:var(--ink2); border-color:var(--line2); background:#fff; }
   #flowv .fbody { flex:1 1 0; min-width:0; }
   #flowv .fbody .card { margin:0; }
   /* ★ 이 뷰에서는 **단계 바·어림 시각을 감춘다** (사용자 2026-08-12). 단계 변화는 왼쪽 태그와
@@ -741,9 +745,17 @@
   .mvtag { display:inline-flex; align-items:center; gap:3px; margin-left:6px; padding:1px 7px;
            border-radius:999px; font-size:11.5px; font-weight:600; white-space:nowrap;
            border:1px solid var(--line2); color:var(--ink2); background:#fff; }
-  .mvtag.chg { border-color:#bfd0f2; color:#1e40af; background:#f3f7ff; }
+  /* ★ 2026-08-13 시안 §05 — **배지는 무채색, 신규만 검정**.
+       *"두 축을 나눠 씁니다 — 좌측 바는 유형 색, 배지는 무채색으로 변경 유형. 같은 정보를 두 번
+       말하지 않으므로 「어떤 유형의 무엇이 바뀌었나」가 한눈에 읽힙니다."*
+       종전엔 배지가 파랑(변동)·초록(신규)이라 **유형 색과 채널이 겹쳤다** — 초록 배지가 주거개발
+       유형색과 같아 「무엇이 바뀌었나」와 「무슨 유형인가」가 한 색으로 뭉쳤다.
+     ⚠ **역행만 예외로 색을 남긴다**(`.back`). 시안은 「하향·철회도 같은 문법」이라지만, 이 저장소의
+       P5는 *정체 신호를 정체로 표시*하라고 요구한다 — 인가→계획 역행은 무채색에 섞이면 안 되는
+       사실이다. 정체 전용색(--stall)이 그 자리의 SSOT다. */
+  .mvtag.chg { border-color:var(--line2); color:var(--ink2); background:#fff; }
   .mvtag.chg.back { border-color:#e6d3a3; color:var(--stall); background:#fdf8ec; }
-  .mvtag.new { border-color:#bfe3d0; color:var(--c-house); background:#f1faf5; }
+  .mvtag.new { border-color:var(--ink); color:#fff; background:var(--ink); }
   /* ══ 하단 탭바(독) — 모바일 전용. 데스크톱은 헤더 칩이 같은 일을 한다(두 벌을 만들지 않는다) ══ */
   /* 문법(DESIGN §1): 무채색 뼈대 · 상태는 채움(굵기)으로. `env(safe-area-inset-bottom)` —
      푸터를 숨겨 탭바가 최하단이 됐으므로 아이폰 홈 바를 침범하면 안 된다. */
@@ -6524,10 +6536,12 @@ function renderList() {
        **높이 0**이라 발화하지 않았다. 스크롤 위치를 직접 재면 두 함정이 다 사라진다 —
        「최고의 프로세스는 간결한 프로세스」.
      ⚠ 버튼은 **감춘 폴백**으로 남긴다. 스크롤 계산이 어긋나도 목록이 잘린 채 멈추지는 않는다. */
-  /* ⚠ **버튼을 감추지 않는다** (2026-08-13 실측). 시안은 「페이지 버튼 없이」라고 하지만, 이 화면에서
-     스크롤 감지가 발화하지 않았다 — `#listv`의 계산 높이가 151px로 잡히는 별개의 레이아웃 문제가
-     얽혀 있다. 원인을 못 밝힌 채 버튼을 없애면 **목록이 60건에서 잘린 채 멈춘다**. 그건 시안이
-     막으려던 것(정보 손실)보다 나쁘다. 레이아웃을 고친 뒤 버튼을 내린다. */
+  /* ⚠ **버튼을 감추지 않는다** — 시안은 「페이지 버튼 없이」이지만 스크롤 적재를 **아직 검증하지
+     못했다**(2026-08-13). 에이전트 브라우저 창이 숨겨진 상태라 `innerHeight`·요소 높이가 전부 0으로
+     읽혀 스크롤 시험이 성립하지 않았다(한때 `#listv` 높이 151px를 레이아웃 결함으로 오진했는데,
+     스크린샷은 정상 전체 높이였다 — **계측 오류였다**).
+     검증 못 한 것을 「된다」로 두면 목록이 60건에서 잘린 채 멈출 수 있다. 그건 시안이 막으려던
+     정보 손실보다 나쁘다. ⇒ 실제 브라우저에서 스크롤 적재를 확인한 뒤 버튼을 내린다. */
   const more = document.getElementById("l-more");
   _listHasMore = rows.length > listShown;
   more.style.display = _listHasMore ? "inline-block" : "none";
@@ -6721,7 +6735,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813i");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813j");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -6905,7 +6919,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813i"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813j"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -6931,7 +6945,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813i");
+  const CB = "?b=" + (window.BUILD || "20260813j");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
