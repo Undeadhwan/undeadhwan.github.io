@@ -352,6 +352,12 @@
     border-radius:999px; background:#fff; font-size:12px; color:var(--ink); cursor:pointer; }
   .pcat i { width:8px; height:8px; border-radius:50%; }
   .pcat.on { border-color:var(--ink); font-weight:700; }
+  /* 전 → 후 그림 (시안 §05) — 지도 단계 문법을 그대로 쓴다 */
+  .mvtag .phcell { display:inline-flex; align-items:center; gap:4px; }
+  .mvtag .phcell.dim { color:var(--ink3); }
+  .mvtag .phcell.dim i { border-color:var(--ink3); }
+  .mvtag .arw { font-style:normal; margin:0 6px; color:var(--ink3); }
+  .mvtag .phcell b { display:inline-flex; align-items:center; gap:4px; font-weight:700; }
   /* 기간 칩 (시안 §05) */
   #flowv .fper { display:flex; gap:6px; flex-wrap:wrap; }
   #flowv .fpc { font-size:12.5px; padding:5px 11px; border:1px solid var(--line2); border-radius:999px;
@@ -4975,9 +4981,16 @@ function movDeltaHtml(s) {
      **무엇에서 무엇으로**를 말하기 때문이다. */
   if (d.kind === "신규") return "";
   const back = PHASE_IDX[d.to] < PHASE_IDX[d.from];   // 역행(인가→계획 등)은 정체·재추진 신호다(P5)
+  /* ★ **전 → 후를 그림으로** (2026-08-13 시안 §05 머리기사):
+     *"등급은 링이 굵어지고, 단계는 점선이 실선이 되고, 미판정 해소는 마름모가 원이 됩니다.
+     지도에서 쓰는 문법을 그대로 재사용하므로 새로 배울 것이 없습니다."*
+     글자만으로 「인가 → 착공」이라 쓰면 **무엇이 얼마나 확정됐는지**가 안 보인다 — 아이콘이 그걸 말한다. */
+  const pi = k => PHASE_IDX[k] ?? 0;
+  const dot = k => `<i class="ph${pi(k)}"></i>`;
   return `<span class="mvtag chg${back ? " back" : ""}" title="${back
-    ? "단계가 되돌아갔습니다 — 재검토·재추진 신호입니다" : "직전 단계에서 이렇게 바뀌었습니다"}">${
-    phaseLabel(d.from)} → <b>${phaseLabel(d.to)}</b></span>`;
+    ? "단계가 되돌아갔습니다 — 재검토·재추진 신호입니다" : "직전 단계에서 이렇게 바뀌었습니다"}">`
+    + `<span class="phcell dim">${dot(d.from)}${phaseLabel(d.from)}</span>`
+    + `<em class="arw">→</em><span class="phcell"><b>${dot(d.to)}${phaseLabel(d.to)}</b></span></span>`;
 }
 function flowRows() {
   return allSignalsFlat().filter(visible)
@@ -7233,7 +7246,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813u");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813v");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -7418,7 +7431,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813u"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813v"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7444,7 +7457,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813u");
+  const CB = "?b=" + (window.BUILD || "20260813v");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
