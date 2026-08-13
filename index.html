@@ -174,6 +174,19 @@
   .apttab .ptrack { display:inline-flex; align-items:center; gap:8px; white-space:nowrap; }
   .apttab .lt-ph { font-size:12px; line-height:1.3; }
   .apttab .pdots { margin:0; }
+  /* ☠ **거리 열이 패널 밖으로 나가 있었다** (2026-08-13 실물 대조 — 실측 표 426px ↔ 그릇 343px).
+     이 화면이 묻는 것은 「이 단지에서 얼마나 먼가」인데, 그 답을 담은 열이 눈에 닿은 적이 없다.
+     원인은 목록 탭용 `min-width:230px`(제목이 "가양 4…"로 잘리는 것을 막던 값)를 좁은 패널이
+     그대로 물려받은 것 — 넓은 화면의 규칙이 좁은 화면에서 반대로 작용한 자리다.
+     ⇒ 패널에서는 제목이 **줄바꿈으로 양보**한다(잘리는 게 아니라 두 줄이 된다). */
+  /* ⚠ `table-layout:fixed`만 걸면 네 열이 **똑같이** 나뉜다(실측 86px씩) — 이름이 등급 칸만큼
+     좁아진다. 폭은 **내용이 요구하는 만큼**만 못 박고 남는 폭은 전부 이름에 준다. */
+  .apttab { table-layout:fixed; }
+  .apttab .lt-nm { min-width:0; word-break:keep-all; }
+  .apttab th, .apttab td { padding-left:7px; padding-right:7px; }
+  .apttab th:nth-child(1), .apttab td:nth-child(1) { width:48px; }
+  .apttab th:nth-child(3), .apttab td:nth-child(3) { width:82px; }
+  .apttab th:nth-child(4), .apttab td:nth-child(4) { width:52px; }
   /* 등급 셀 = 링 + 글자 (시안 §04 실물) */
   /* 목록 건수 (시안 §04 실물) */
   #listv .bignum { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:26px; font-weight:700;
@@ -972,8 +985,8 @@
   #msheet .mc.off i { background:none !important; border:1.3px solid currentColor; }
   /* 좁은 폭에서는 열을 줄인다 — 6열은 375px에서 잘려 오히려 못 읽는다.
      소재지·확인일을 접고 호재명·유형·등급·단계만 남긴다(유형 색 바는 그대로라 지도 문법은 유지). */
-  #ms-list .ltab th:nth-child(5), #ms-list .ltab td:nth-child(5),
-  #ms-list .ltab th:nth-child(6), #ms-list .ltab td:nth-child(6) { display:none; }
+  /* (모바일 시트의 6열 표 숨김 규칙 2줄은 2026-08-13에 지웠다 — 시트 목록이 `.ms-item` 2줄 행으로
+     바뀌어 `#ms-list .ltab`을 내는 곳이 없어졌다. 부품이 사라지면 그 부품을 지키던 규칙도 없앤다.) */
   #ms-list .ltab { border:0; border-radius:0; }
   #ms-list .ltab th { top:0; }
   #ms-list .ltab .lt-nm { min-width:0; }
@@ -1223,6 +1236,24 @@
   #dock .seg .s:not(.off) { border-color:var(--ink); background:var(--ink); color:#fff; }
   #dock .seg .s i { border-radius:50%; background:currentColor; flex-shrink:0; display:inline-block; }
   #dock .seg .s i.dash { background:none; border:1.3px dashed currentColor; }
+  /* ══ 범례 아이콘은 **지도 마커 문법 그대로**다 (2026-08-13 시안 §02·§03 실물 대조) ══
+     ☠ 크기만 `HJR`에서 도출해 놓고(2026-08-13 오전) **채움이냐 링이냐**는 그대로 두었다 —
+       지도는 네 등급 모두 **속을 비운 링**인데 사이드바는 꽉 채운 원이었다. 비율이 맞아도
+       모양이 다르면 범례가 지도를 대변하지 못한다(§0-55j에서 고친 것의 더 근본적인 축).
+     ☠ 단계는 더 심했다 — 계획만 점선이고 **확정·착공·완공이 똑같은 채운 원**이라 네 값 중
+       셋이 한 모습이었다. 화면이 단계를 말하지 않은 것이다(P2).
+     ★ 목록 표의 단계 셀(`.phcell`)에는 같은 문법이 **이미** 있었다. 규칙이 한쪽에만 걸려
+       반대쪽이 조용한 예외가 되는 이 저장소의 반복 사고 — 그래서 도크와 모바일 시트를
+       **한 선택자**로 묶는다(사본을 만들지 않는다). */
+  #dock .seg.g4 .s i { box-sizing:border-box; background:none; border:2px solid currentColor; }
+  #dock .seg .s i.phi, #msheet .mc i.phi { box-sizing:border-box; width:11px; height:11px;
+    background:none; border:1.6px solid currentColor; border-radius:50%; }
+  #dock .seg .s i.phi.ph0, #msheet .mc i.phi.ph0 { border-style:dashed; }
+  #dock .seg .s i.phi.ph2, #msheet .mc i.phi.ph2,
+  #dock .seg .s i.phi.ph3, #msheet .mc i.phi.ph3 { border-width:3px; }
+  /* 완공 = 굵은 링 + **중심 코어** — 지도 마커가 준공에만 코어를 찍는 것과 같다 */
+  #dock .seg .s i.phi.ph3, #msheet .mc i.phi.ph3 {
+    background:radial-gradient(circle, currentColor 0 2.2px, transparent 2.4px); }
   /* 등급 없음 = 마름모(2026-08-12) — 지도와 같은 문법. 점선 원으로 둔 동안은 계획 단계와 구분이 안 됐다.
      원 = 등급이 있는 것 · 마름모 = 등급 축 밖. 후광(좌표 근사)은 원이니 둘이 섞이지 않는다. */
   #dock .seg .s i.dia { width:7px; height:7px; border-radius:0; background:none;
@@ -4866,7 +4897,9 @@ function renderDock() {
       <div class="subs">${subs}</div>
     </div>`;
   };
-  const ph = (p, dash) => `<span class="s${filter.phase.has(p) ? "" : " off"}" data-tog="phase" data-k="${p}"><i class="${dash ? "dash" : ""}" style="width:8px;height:8px"></i>${phaseLabel(p)}</span>`;
+  /* 아이콘은 **단계 그 자체**를 그린다(시안 §02) — 계획 점선 · 확정 실선 · 착공 굵은 · 완공 코어.
+     종전엔 계획만 점선이고 나머지 셋이 같은 점이라 화면이 단계를 말하지 않았다. */
+  const ph = p => `<span class="s${filter.phase.has(p) ? "" : " off"}" data-tog="phase" data-k="${p}"><i class="phi ph${PHASE_IDX[p] ?? 0}"></i>${phaseLabel(p)}</span>`;
   /* 등급 링 크기 — **지도 마커에서 도출한다** (2026-08-13 시안 §03).
      *"별도 범례는 두지 않았습니다 — 좌측 필터의 색·크기·링 두께가 그대로 범례 역할을 합니다."*
      ☠ 종전 15/13/11/9는 **손으로 적은 사본**이라 비율이 지도와 달랐다(사이드바 1:0.87:0.73:0.60 ↔
@@ -4909,7 +4942,7 @@ function renderDock() {
            종전 「실선=착공 후 · 점선=계획」은 단계를 두 값으로만 말하던 시절의 문구다 —
            이제 두께가 네 단계를 말하므로 그대로 두면 화면이 거짓을 말한다(PROCEDURE_화면품질). -->
       <div class="t">단계</div>
-      <div class="seg g2">${ph("계획", true)}${ph("인가", true)}${ph("착공", false)}${ph("준공·개통", false)}</div>
+      <div class="seg g2">${PHASES.map(ph).join("")}</div>
     </div>
     <div class="axis">
       <div class="t">선형 표시</div>
@@ -4919,7 +4952,10 @@ function renderDock() {
     <!-- ★ 「필터 N개 적용 중 · 초기화」는 사이드바 **맨 아래**다 (시안 §03 목업 위치).
          상단에 두면 제목줄이 붐비고, 아래에 두면 필터를 다 훑은 끝에 「지금 몇 개 걸렸나」가 온다. -->
     <div class="dk-foot">${dirty ? `<span class="dk-nf">필터 ${nDirty}개 적용 중</span> · ` : ""}<button class="dk-rst${dirty ? " show" : ""}" data-all="on">초기화</button></div>
-    <div class="dk-foot">흐릿한 후광 = 위치 근사 · 겹친 호재는 <b>+N</b>으로 묶임<br>
+    <!-- ☠ 「겹친 호재는 +N으로 묶임」이라 적혀 있었다 — +N 알약은 2026-08-13에 **유형 도넛**으로
+         바뀌었는데(시안 §01) 문구만 남아 화면이 없는 부품을 가리켰다. 부품을 바꾸면 그 부품을
+         설명하는 글도 같이 바뀐다(PROCEDURE_화면품질 — 규칙·이름은 언제나 쌍으로 존재한다). -->
+    <div class="dk-foot">흐릿한 후광 = 위치 근사 · 겹친 호재는 <b>유형 도넛</b>으로 묶임<br>
       <a href="methodology.html" target="_blank">데이터 · 방법론</a>
       <div class="dk-legal">투자 권유 아님 · 모든 신호는 미확정 — 사실(단계·날짜·거리)만 표시하며 매수/매도 판단은 다루지 않습니다.</div></div>`;
 }
@@ -5960,7 +5996,15 @@ function hojaeMarkerImage(col, r, bw, ph, fillOp, alpha, halo, shape) {
   //   거의 다 쓰므로, 4색을 아무리 잘 골라도 지도와의 색차는 ΔE 28쯤이 천장이다(실측).
   //   반면 어두운 외곽선은 **배경이 무슨 색이든** 경계를 만든다 — 지도 마커의 표준 해법.
   const cw = 2.2, ro = r + bw / 2 + cw / 2, ri = ro + cw / 2 + 0.35;   // 케이싱·바깥 헤어라인 반지름
-  const size = Math.ceil((halo ? r + 7 : ri + 1) * 2), c = size / 2;
+  /* ★ **클릭 영역은 크기와 무관하게 고정**이다 (시안 §02 40px · §10 터치 44px).
+     ☠ 종전엔 히트 영역 = 그려진 이미지라 C등급(지름 16)은 케이싱까지 쳐도 **27px**이었다 —
+       손가락으로는 거의 못 누르고 마우스로도 조준이 필요했다. 등급이 낮다고 누르기 어려울
+       이유는 없다(등급은 규모 분류이지 중요도가 아니다 — P3).
+     ⚠ **그림은 그대로 두고 캔버스만 넓힌다** — 투명 여백이 히트 영역이 된다.
+     ⚠ 겹침 걱정은 없다: 클러스터 격자가 `HJR.S*2.4`(≈41px)라 **따로 그려진 두 마커는 이미
+       그만큼 떨어져 있다**(더 가까우면 도넛으로 합쳐진다). */
+  const HIT = (typeof matchMedia === "function" && matchMedia("(pointer: coarse)").matches) ? 44 : 40;
+  const size = Math.max(HIT, Math.ceil((halo ? r + 7 : ri + 1) * 2)), c = size / 2;
   const dia = shape === "diamond";
   /* 마름모는 **같은 5겹 문법**을 유지하고 path만 바꾼다 — 케이싱·헤어라인은 배경 대비 장치라
      형태가 바뀌어도 걷어내지 않는다(2026-07-31 ΔE 28 실측이 그대로 유효). */
@@ -6224,6 +6268,16 @@ function initKakao() {
         if (!ov) {
           const el = document.createElement("div"); el.className = "cl-badge";
           el.onclick = () => { hideTip(); showCluster(el._g); };
+          /* 커서를 올리면 **한 줄로 「몇 건 · 어떤 유형인지」**만 (시안 §03 상호작용 1단계).
+             도넛의 원호가 비율을 말하지만 숫자는 총계뿐이라, 「교통 3 · 일자리 2」를 읽으려면
+             눌러서 목록을 열어야 했다. 클릭(2단계)은 그대로 상세 목록이다. */
+          el.onmouseenter = ev => { const g = el._g || [];
+            const m = {}; g.forEach(s => { const c = catOf(s); m[c] = (m[c] || 0) + 1; });
+            const parts = CAT_KEYS.filter(c => m[c]).map(c =>
+              '<span style="color:' + CAT_COLOR[c] + '">' + c + ' ' + m[c] + '</span>').join(" · ");
+            showTip('<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">이 지점 <b>'
+              + g.length + '</b>건</div><div class="apt-pop-cats">' + parts + '</div></div>', ev); };
+          el.onmouseleave = hideTip;
           // clickable:true + mousedown 차단 — 실마우스 클릭이 지도 패닝·텍스트 선택으로 새는 것 방지
           // (line-badge와 같은 사고 클래스, 2026-08-04)
           el.onmousedown = ev => { ev.preventDefault(); ev.stopPropagation(); };
@@ -7106,9 +7160,9 @@ function renderSheet() {
     `<i style="width:${HJR[g]}px;height:${HJR[g]}px;border:1.6px solid currentColor;background:none"></i>`,
     filter.lvl.has(g))).join("")
     + chip("lvl", "미정", LEVEL_NAME["미정"], '<i class="dia"></i>', filter.lvl.has("미정"));
+  // 아이콘은 도크와 **같은 부품**(`.phi`) — 계획 점선 · 확정 실선 · 착공 굵은 · 완공 코어.
   const phRow = PHASES.map(p => chip("phase", p, phaseLabel(p),
-    `<i class="${p === "계획" ? "dash" : ""}" style="${p === "계획" ? "" : "background:currentColor"}"></i>`,
-    filter.phase.has(p))).join("");
+    `<i class="phi ph${PHASE_IDX[p] ?? 0}"></i>`, filter.phase.has(p))).join("");
   document.getElementById("ms-filters").innerHTML =
     `<div class="ms-row"><span class="lb">등급</span>${lvRow}</div>`
     + `<div class="ms-row"><span class="lb">단계</span>${phRow}</div>`;
@@ -7398,7 +7452,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813y");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813z");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -7583,7 +7637,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813y"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813z"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7609,7 +7663,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813y");
+  const CB = "?b=" + (window.BUILD || "20260813z");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
