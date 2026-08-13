@@ -156,6 +156,16 @@
   #listv .lvsort { font-size:var(--fs-s); color:var(--ink2); display:flex; align-items:center; gap:6px; }
   #listv select, #listv input { font-size:var(--fs-s); padding:6px 8px; border:1px solid var(--line); border-radius:var(--r-s); background:#fff; color:var(--ink); }
   #listv input { min-width:150px; }
+  /* 표현 필터 줄 — 라벨(코멘트) + 유형 칩. 시안 실물: 켜짐=유형색 테두리+틴트 · 꺼짐=회색 외곽선 */
+  #listv .lvfilter { display:flex; align-items:center; gap:12px; flex:1 1 auto; min-width:0; }
+  #listv .lvflab { flex:none; font-size:11px; font-weight:700; letter-spacing:.04em; color:var(--ink3); }
+  #listv .lvchips { display:flex; gap:7px; flex-wrap:wrap; min-width:0; }
+  #listv .lvchip { display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600;
+    padding:6px 12px; border-radius:15px; border:1px solid var(--cc); background:color-mix(in srgb, var(--cc) 8%, #fff);
+    color:var(--ink); cursor:pointer; white-space:nowrap; }
+  #listv .lvchip i { width:8px; height:8px; border-radius:50%; background:var(--cc); flex:none; }
+  #listv .lvchip.off { border-color:var(--line2); background:#fff; color:var(--ink3); }
+  #listv .lvchip.off i { background:none; border:1.3px solid currentColor; }
   #listv .lvcount { max-width:920px; margin:0 auto 10px; font-size:var(--fs-s); color:var(--ink2); font-variant-numeric:tabular-nums; }
   #listv .lvcount b { color:var(--ink); }
   #listv #l-list { max-width:920px; margin:0 auto; }
@@ -404,6 +414,10 @@
   .mvtag .phcell.dim i { border-color:var(--ink3); }
   .mvtag .arw { font-style:normal; margin:0 6px; color:var(--ink3); }
   .mvtag .phcell b { display:inline-flex; align-items:center; gap:4px; font-weight:700; }
+  /* 「후」 = 유형색(시안 §05 실물). 링도 글자도 같은 색을 따라가야 한 덩어리로 읽힌다. */
+  .mvtag .phcell.now, .mvtag .phcell.now b { color:inherit; }
+  .mvtag .phcell.now i { border-color:currentColor; }
+  .mvtag .phcell.now i.ph3 { background:radial-gradient(circle, currentColor 0 2.2px, transparent 2.4px); }
   /* 기간 칩 (시안 §05) */
   /* ★ 시안 §05: 업데이트 행은 **전 → 후 아이콘 둘**로 말한다 — 4점 트랙은 그리지 않는다
      (2026-08-13 사장님 확정 · 종전엔 트랙 전체를 그렸다).
@@ -890,6 +904,9 @@
      ② 고친 뒤엔 값 머리의 칩(`±1km`)·배지(`기관 발표`)가 라벨 위로 **겹쳤다**.
      ⇒ 내어쓰기는 바깥 블록에만 필요하므로 **안쪽 전부** 되돌린다(조각이 몇 개든 안전하다). */
   .kv * { text-indent:0; }
+  /* 시안 §06 하단은 **두 자리**다 — 좌: 접히는 표기 규칙 · 우: 기준 전문(별도 문서로) */
+  .rulerow { display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+  .rulerow .ruledoc { flex:none; font-size:12px; font-weight:600; color:var(--accent); text-decoration:none; }
   /* 반경 내 단지 — 이름 왼쪽 · 거리 오른쪽(시안 §03 실물). 라벨-값 내어쓰기 밖에 두는 블록이라 kvblock */
   .kv.kvapt { padding-left:0; text-indent:0; }
   .kv .aptnear { margin:5px 0 2px 92px; display:flex; flex-direction:column; gap:3px; }
@@ -1501,12 +1518,14 @@
            뭔지 좀 애매해"). 애매했던 실제 이유는 **목록 기본 정렬이 최근순**이라 순서가 흐름과
            거의 같았던 것이다 — 이름만 다르고 하는 일이 겹쳐 보였다.
            목록 = **무엇이 있나(재고)** · 흐름 = **무엇이 바뀌었나(delta)**. 시간축은 흐름이 전담한다. -->
-      <div class="lvtitle">신호 목록</div>
+      <!-- ★ 시안 §04 목업 그대로 — 「표현 필터」 라벨 + 유형 칩(건수 품음)이 표 위 첫 줄이다.
+           목업의 목록 탭에는 사이드바가 없고, 이 줄이 그 자리를 대신한다. -->
+      <div class="lvfilter"><span class="lvflab">표현 필터</span><span class="lvchips" id="l-cats"></span></div>
       <div class="lvctl">
         <label class="lvsort">정렬
           <select id="l-sort">
             <!-- 기본은 **등급순**(재고를 보는 축). 최근순은 남긴다 — 없애는 게 아니라 기본을 옮긴다. -->
-            <option value="level">등급순</option>
+            <option value="level">등급 높은 순</option>
             <option value="recent">최근순 (움직임 · 확인일)</option>
             <option value="moved">문서상 움직임순 (관측일은 뒤로)</option>
             <option value="phase">단계순 (계획→준공)</option>
@@ -4572,7 +4591,7 @@ function renderDetail(s) {
       ${s.nm_basis ? `<div class="kv"><b>건물명 근거</b> ${s.nm_basis}</div>` : ""}
       ${s.name_status === "미확보" ? `<div class="kv"><b>시설명</b> <span class="hmhint">미확보 — 허가 원본에 고유 명칭이 없어 <b>동·지번으로 표시</b>합니다. 건축물대장은 <b>준공 후에 생성</b>되므로 인가·착공 단계에선 공식 명칭이 없을 수 있습니다. <b>사업의 존재</b>는 허가·착공 일자(위 팩트시트)가 근거이며, 이름을 임의로 지어내지 않습니다.</span></div>` : ""}
       ${[s.stage_note, s.status_note, s.note].filter(Boolean).length ? `<div class="kv"><b>비고</b> ${[s.stage_note, s.status_note, s.note].filter(Boolean).join(" · ")}</div>` : ""}
-      <details class="rulefold"><summary>표기 규칙 · 영향 반경 기준</summary><div class="note">완료=날짜(사실) · 미래=목표/미정 · 진척률(%) 없음 · 영향 반경은 유형 기준표 가안 — <a href="methodology.html" target="_blank">기준 전문</a></div></details>
+      <div class="rulerow"><details class="rulefold"><summary>표기 규칙 · 영향 반경 기준</summary><div class="note">완료=날짜(사실) · 미래=목표/미정 · 진척률(%) 없음 · 영향 반경은 유형 기준표 가안</div></details><a class="ruledoc" href="methodology.html" target="_blank" rel="noopener">기준 전문 ▾</a></div>
     </div>`;
 }
 
@@ -5295,7 +5314,7 @@ function movDeltaHtml(s) {
   if (d.kind === "신규") {
     const p = phaseOf(s), lv = levelOf(s);
     return `<span class="mvtag new" title="새로 확인된 신호 — 지금 단계입니다">`
-      + `<span class="phcell"><b>${lv === "미정" ? "" : lv + " · "}<i class="ph${PHASE_IDX[p] ?? 0}"></i>${phaseLabel(p)}</b></span></span>`;
+      + `<span class="phcell now" style="color:${colorOf(s)}"><b>${lv === "미정" ? "" : lv + " · "}<i class="ph${PHASE_IDX[p] ?? 0}"></i>${phaseLabel(p)}</b></span></span>`;
   }
   const back = PHASE_IDX[d.to] < PHASE_IDX[d.from];   // 역행(인가→계획 등)은 정체·재추진 신호다(P5)
   /* ★ **전 → 후를 그림으로** (2026-08-13 시안 §05 머리기사):
@@ -5307,7 +5326,10 @@ function movDeltaHtml(s) {
   return `<span class="mvtag chg${back ? " back" : ""}" title="${back
     ? "단계가 되돌아갔습니다 — 재검토·재추진 신호입니다" : "직전 단계에서 이렇게 바뀌었습니다"}">`
     + `<span class="phcell dim">${dot(d.from)}${phaseLabel(d.from)}</span>`
-    + `<em class="arw">→</em><span class="phcell"><b>${dot(d.to)}${phaseLabel(d.to)}</b></span></span>`;
+    /* ★ **「후」는 유형색**(갱신 시안 §05 실물 · 사장님이 이 열에 표시) — 「전」은 회색.
+       색 = 분류라는 전 화면 규칙 그대로다(§1-1): 바뀐 뒤의 상태가 곧 그 신호의 현재이고,
+       그 신호의 색은 유형이다. 회색→유형색의 대비가 **어느 쪽이 지금인지**를 말한다. */
+    + `<em class="arw">→</em><span class="phcell now" style="color:${colorOf(s)}"><b>${dot(d.to)}${phaseLabel(d.to)}</b></span></span>`;
 }
 function flowRows() {
   return allSignalsFlat().filter(visible)
@@ -6575,6 +6597,10 @@ function initKakao() {
        들어오면 이 줄이 거짓이 되므로 같이 고쳐야 한다. */
     /* ★ 「지도 이동 시 자동 조회」를 함께 적는다 (갱신 시안 §03 실물 — 사장님이 이 자리에 표시).
        별도 조회 버튼이 없다는 사실을 **화면이 스스로 말해야** 「왜 안 눌러도 바뀌지」가 안 생긴다. */
+    /* ★ **「이 화면 안」의 정본은 여기 하나다** (갱신 시안 §10 — 모바일 시트 머리가 같은 말을 한다).
+       지도가 방금 그린 pool을 그대로 넘긴다 — 시트가 뷰포트를 다시 계산하면 두 숫자가 갈린다. */
+    window._viewPool = pool;
+    if (typeof renderSheet === "function" && matchMedia("(max-width:768px)").matches) { try { renderSheet(); } catch (e) {} }
     _hjCountEl.innerHTML = '<b>' + pool.length.toLocaleString() + '</b>건 전부 표시 중 · 숨김 0'
       + '<i class="hjsep"></i><span class="hjauto">지도 이동 시 자동 조회</span>'; };
 
@@ -7286,6 +7312,10 @@ function setView(mode) {
   document.getElementById("listv").style.display = mode === "list" ? "block" : "none";
   const fv = document.getElementById("flowv");
   if (fv) { fv.style.display = mode === "flow" ? "block" : "none"; if (mode === "flow") renderFlow(); }
+  /* ★ 목록 탭에는 **사이드바가 없다**(시안 §04 목업) — 표가 화면 폭을 다 쓰고, 유형 필터는
+     표 위 「표현 필터」 줄이 대신한다. 지도·업데이트에서는 그대로 둔다. */
+  const _dk = document.getElementById("dock");
+  if (_dk && !matchMedia("(max-width:768px)").matches) _dk.style.display = mode === "list" ? "none" : "";
   document.getElementById("undet").style.display = mode === "undet" ? "block" : "none";
   const g = document.getElementById("gantt"); if (g) g.style.display = "none";
   for (const v of ["map", "flow", "list", "undet"])
@@ -7401,8 +7431,12 @@ function renderSheet() {
   const sh = document.getElementById("msheet"); if (!sh) return;
   initSheet();
   const sortEl = document.getElementById("ms-sort");
-  const rows = sortSignals(allSignalsFlat().filter(visible), sortEl ? sortEl.value : "level", null);
-  document.getElementById("ms-n").textContent = rows.length.toLocaleString() + "건";
+  /* ★ 시트가 세는 것은 **이 화면 안**이다(갱신 시안 §10) — 지도 위에 떠 있는 시트가
+     지도에 없는 것까지 세면 「보이는 것」과 「적힌 수」가 갈린다. 뷰포트 pool은 지도가 만든다. */
+  const vp = window._viewPool;
+  const rows = sortSignals(vp && vp.length ? vp.filter(visible) : allSignalsFlat().filter(visible),
+                           sortEl ? sortEl.value : "level", null);
+  document.getElementById("ms-n").innerHTML = '이 화면 안 <b>' + rows.length.toLocaleString() + '</b>건';
   /* 활성 필터 개수 = **기본과 달라진 축의 수**. 접힌 상태에서도 뭐가 걸려 있는지 보인다. */
   const nf = (CAT_KEYS.length - CAT_KEYS.filter(c => filter.cat.has(c)).length)
     + (PHASES.length - PHASES.filter(p => filter.phase.has(p)).length)
@@ -7484,6 +7518,18 @@ function renderList() {
   const sort = sortSel.value;
   const rows = sortSignals(pool, sort, apt);
   const byCat = {}; rows.forEach(s => { const c = catOf(s); byCat[c] = (byCat[c] || 0) + 1; });
+  /* ★ 표현 필터 칩 — 건수는 **도크와 같은 소스**(`dockCounts`)를 쓴다. 두 화면이 다른 숫자를
+     말하면 안 된다(모바일 축 칩과 같은 이유). 토글도 `toggleCat` 하나를 부른다(사본 금지). */
+  const _cc = document.getElementById("l-cats");
+  if (_cc) {
+    const C = dockCounts();
+    _cc.innerHTML = CAT_KEYS.map(c => {
+      const keys = SUB_KEYS[c] || [];
+      const on = keys.length ? keys.some(sk => filter.sub.has(subId(c, sk))) : filter.cat.has(c);
+      return `<button class="lvchip${on ? "" : " off"}" data-lvcat="${c}" style="--cc:${CAT_COLOR[c]}"><i></i>${c} ${(C.cat[c] || 0).toLocaleString()}</button>`;
+    }).join("");
+    _cc.querySelectorAll("[data-lvcat]").forEach(b2 => b2.onclick = () => { toggleCat(b2.dataset.lvcat); renderAll(); });
+  }
   // 이번 주 집계도 출처를 가른다 — 섞으면 "이번 주 2,588건 움직임"이라는 거짓 headline이 된다(P2).
   const wk = rows.filter(s => inWeek(s.last_movement));
   const wkMov = wk.filter(s => movBasis(s) !== "observed").length, wkObs = wk.length - wkMov;
@@ -7714,7 +7760,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260813ae");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260813af");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -7899,7 +7945,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813ae"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260813af"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -7925,7 +7971,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260813ae");
+  const CB = "?b=" + (window.BUILD || "20260813af");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
