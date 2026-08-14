@@ -5761,8 +5761,16 @@ function renderFlow() {
       <button class="fall${FLOW_KIND === "all" ? " on" : ""}" data-kind="all">전체 <span class="n">${(past.length + nFld).toLocaleString()}</span></button>
       <!-- 기간 = **칩**(시안 §05). 셀렉트는 값이 하나 보이고 나머지는 숨는데, 시안은 선택지를
            다 펼쳐 두어 「어느 창으로 보고 있나」가 한눈에 읽히게 했다. -->
+      <!-- ☠ 켜진 칩이 둘이었다 (2026-08-14 사장님 "기간 적용 선택했으면 1년은 선택안되어야지").
+           고정 칩이 FLOW_MONTHS만 보고 FLOW_CUSTOM을 안 봐서, 기간 지정을 켜도 「1년」이 켜진 채
+           남았다. 규칙은 이미 FLOW_CUSTOM 선언부에 적혀 있다 — "이 값이 있으면 FLOW_MONTHS는
+           무시된다". 동작은 규칙대로였는데 화면만 딴말을 했다(§화면품질: 규칙과 표시는 언제나
+           쌍이다 — 한쪽만 고치면 반대쪽이 조용히 거짓말한다).
+           ⚠ 반대 방향은 이미 맞다 — 고정 칩을 누르면 FLOW_CUSTOM = null (아래 핸들러).
+           ⚠ 이 블록은 템플릿 리터럴 안이다 — 주석에 백틱을 쓰면 문자열이 끊긴다(방금 밟았고
+             html_check [화면-문법]이 잡았다). 코드 이름은 백틱 없이 적는다. -->
       <div class="fper">${FLOW_PERIODS.map(([m, lb]) =>
-        `<button class="fpc${m === FLOW_MONTHS ? " on" : ""}" data-per="${m}">${lb}</button>`).join("")}
+        `<button class="fpc${!FLOW_CUSTOM && m === FLOW_MONTHS ? " on" : ""}" data-per="${m}">${lb}</button>`).join("")}
         <button class="fpc${FLOW_CUSTOM ? " on" : ""}" data-per="custom" id="fpc-custom">기간 지정 ▾</button>
         <div class="fcal" id="f-cal" hidden>
           <label>시작 <input type="date" id="f-cal-a" value="${FLOW_CUSTOM ? FLOW_CUSTOM[0] : ""}"></label>
@@ -8302,7 +8310,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260814e");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260814f");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8487,7 +8495,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260814e"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260814f"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8513,7 +8521,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260814e");
+  const CB = "?b=" + (window.BUILD || "20260814f");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
