@@ -1800,9 +1800,11 @@
            뭔지 좀 애매해"). 애매했던 실제 이유는 **목록 기본 정렬이 최근순**이라 순서가 흐름과
            거의 같았던 것이다 — 이름만 다르고 하는 일이 겹쳐 보였다.
            목록 = **무엇이 있나(재고)** · 흐름 = **무엇이 바뀌었나(delta)**. 시간축은 흐름이 전담한다. -->
-      <!-- ★ 시안 §04 목업 그대로 — 「표현 필터」 라벨 + 유형 칩(건수 품음)이 표 위 첫 줄이다.
-           목업의 목록 탭에는 사이드바가 없고, 이 줄이 그 자리를 대신한다. -->
-      <div class="lvfilter"><span class="lvflab">표현 필터</span><span class="lvchips" id="l-cats"></span></div>
+      <!-- ☠ 「표현 필터」 유형 칩 줄을 **지웠다** (2026-08-14 사장님 *"목록 페이지 상단 호재유형
+           뱃지 제거"*). 이 줄은 「목록 탭에는 사이드바가 없다」는 전제로 사이드바를 대신하던 것인데,
+           같은 지시에서 조회 컨트롤이 **좌측바로 모이면서** 그 전제가 사라졌다 — 좌측바를 목록
+           탭에도 띄우므로 이 줄은 같은 말을 두 번 하는 자리가 된다(그리고 등급·단계는 여기 없어서
+           §0-56d 「목록 탭 필터 구멍」이 계속 열려 있었다. 좌측바가 그 구멍까지 함께 닫는다). -->
     </div>
     <!-- ★ 목업 2행: 좌 **큰 건수** · 우 정렬(+이름 검색). 종전엔 정렬이 필터 줄에 붙고 건수는
          아래 작은 글씨였다 — 목업은 건수를 이 화면의 머리기사로 세운다. -->
@@ -7963,10 +7965,13 @@ function setView(mode) {
   document.getElementById("listv").style.display = mode === "list" ? "block" : "none";
   const fv = document.getElementById("flowv");
   if (fv) { fv.style.display = mode === "flow" ? "block" : "none"; if (mode === "flow") renderFlow(); }
-  /* ★ 목록 탭에는 **사이드바가 없다**(시안 §04 목업) — 표가 화면 폭을 다 쓰고, 유형 필터는
-     표 위 「표현 필터」 줄이 대신한다. 지도·업데이트에서는 그대로 둔다. */
+  /* ★ **목록 탭에도 좌측바를 띄운다** (2026-08-14 사장님 *"목록 페이지 상단 호재유형 뱃지 제거"*).
+     종전 전제는 「목록 탭엔 사이드바가 없으니 표 위 한 줄이 그 자리를 대신한다」였다. 그 줄에는
+     유형만 있고 **등급·단계가 없어서** 목록 탭에서는 그 두 축에 손이 닿지 않았다(§0-56d 구멍).
+     조회 조건의 자리를 좌측바 하나로 모으면 그 구멍이 닫히고, 표 위 줄은 같은 말의 사본이 되어
+     지울 수 있다 — 부품을 늘리지 않고 줄이면서 기능은 늘어난다. */
   const _dk = document.getElementById("dock");
-  if (_dk && !matchMedia("(max-width:768px)").matches) _dk.style.display = mode === "list" ? "none" : "";
+  if (_dk && !matchMedia("(max-width:768px)").matches) _dk.style.display = "";
   document.getElementById("undet").style.display = mode === "undet" ? "block" : "none";
   const g = document.getElementById("gantt"); if (g) g.style.display = "none";
   for (const v of ["map", "flow", "list", "undet"])
@@ -8169,18 +8174,6 @@ function renderList() {
   const sort = sortSel.value;
   const rows = sortSignals(pool, sort, apt);
   const byCat = {}; rows.forEach(s => { const c = catOf(s); byCat[c] = (byCat[c] || 0) + 1; });
-  /* ★ 표현 필터 칩 — 건수는 **도크와 같은 소스**(`dockCounts`)를 쓴다. 두 화면이 다른 숫자를
-     말하면 안 된다(모바일 축 칩과 같은 이유). 토글도 `toggleCat` 하나를 부른다(사본 금지). */
-  const _cc = document.getElementById("l-cats");
-  if (_cc) {
-    const C = dockCounts();
-    _cc.innerHTML = CAT_KEYS.map(c => {
-      const keys = SUB_KEYS[c] || [];
-      const on = keys.length ? keys.some(sk => filter.sub.has(subId(c, sk))) : filter.cat.has(c);
-      return `<button class="lvchip${on ? "" : " off"}" data-lvcat="${c}" style="--cc:${CAT_COLOR[c]}"><i></i>${c} ${(C.cat[c] || 0).toLocaleString()}</button>`;
-    }).join("");
-    _cc.querySelectorAll("[data-lvcat]").forEach(b2 => b2.onclick = () => { toggleCat(b2.dataset.lvcat); renderAll(); });
-  }
   // 이번 주 집계도 출처를 가른다 — 섞으면 "이번 주 2,588건 움직임"이라는 거짓 headline이 된다(P2).
   const wk = rows.filter(s => inWeek(s.last_movement));
   const wkMov = wk.filter(s => movBasis(s) !== "observed").length, wkObs = wk.length - wkMov;
@@ -8438,7 +8431,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260814i");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260814j");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8623,7 +8616,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260814i"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260814j"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8649,7 +8642,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260814i");
+  const CB = "?b=" + (window.BUILD || "20260814j");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
