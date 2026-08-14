@@ -192,7 +192,7 @@
   .ltab th.c, .ltab td.c { text-align:center; }
   .ltab td { padding:9px 10px; border-bottom:1px solid var(--line); font-size:12.5px; vertical-align:middle; }
   .ltab tbody tr { cursor:pointer; }
-  .ltab tbody tr:hover { background:#f6f8ff; }
+  .ltab tbody tr:hover, .ltab tbody tr.hl { background:#f6f8ff; }
   .ltab tbody tr:last-child td { border-bottom:0; }
   .ltab .lt-nm { position:relative; padding-left:16px; min-width:230px; }
   .ltab .lt-bar { position:absolute; left:0; top:6px; bottom:6px; width:4px; border-radius:2px; }   /* 유형 색 바 */
@@ -267,7 +267,10 @@
   .phead .ptsub { font-size:12.5px; font-weight:500; color:var(--ink3); margin-left:7px; }
   /* ══ 호버 미리보기 (시안 §12) — 폭 300px · 세 줄 안에서 끝난다 ══════════════════════════ */
   .hjtip { display:block; }
-  .hjt-band { display:block; height:3px; }                 /* 상단 유형색 띠 — 상세 패널과 같은 표기 */
+  /* 상단 유형색 띠 — 상세 패널과 같은 표기. 겹친 호재는 **유형 구성 비율**로 나눠 칠한다
+     (배지 도넛이 말하는 것과 같은 사실·같은 색). 한 유형이면 한 칸이라 결과는 같다. */
+  .hjt-band { display:flex; height:3px; }
+  .hjt-band i { display:block; height:100%; }
   .hjt-in { padding:11px 13px; display:flex; flex-direction:column; gap:8px; }
   /* 제목은 두 줄에서 …로 끊는다(폭 무제한이라 좌우가 잘리던 자리) */
   .hjt-nm { font-size:14px; font-weight:700; line-height:1.35; color:var(--ink);
@@ -4037,6 +4040,12 @@ function sigRowTable(arr, opt = {}) {
       + `<td class="c lt-ph"><span class="ptrack"><span class="pdots">${dots}</span>${PHASE_LABEL[phaseOf(s)] || phaseOf(s)}</span></td>`
       + `<td class="c lt-d">${km(tail === "impact" ? getRadius(s) : dist)}</td>`;
     tr.onclick = () => showSignal(s, true);
+    /* ☠ **행에 커서를 올리면 지도의 그 마커가 강조된다** — 카드(`makeCard`)가 갖고 있던 기능인데
+       행 표로 바꾸면서 통째로 흘렸다(2026-08-14 사장님 *"우측 지도에 해당 커서 하이라이트
+       됐었는데. 지금은 안되네?"*). 부품을 바꿀 때는 **그 부품이 하던 일**을 목록으로 옮겨야 한다 —
+       화면은 바꿔도 기능은 남는다(요약 칩 → 등급 열 머리 때와 같은 원칙). */
+    tr.onmouseenter = () => { tr.classList.add("hl"); mapApi?.emphasizePin?.(s); };
+    tr.onmouseleave = () => { tr.classList.remove("hl"); mapApi?.emphasizePin?.(null); };
     body.appendChild(tr);
   });
   const gh = tb.querySelector(".gh");
@@ -6910,6 +6919,24 @@ function initKakao() {
        clamp가 이미 막는다. 규칙을 그대로 적용하면 이 화면이 사실을 덜 말하게 된다.
      ⚠ 등급 근거는 **상세로 넘긴다**(시안): 「원장에 사업비가 없어 금액 눈금 미적용」은 등급 판정의
        근거라 상세의 등급 근거 행이 말할 내용이다. 여기 남기는 것은 날짜(단계 원문)뿐. */
+  /* ★★ 이 문법은 **지도 위 모든 호버**에 건다 — 부품을 하나로 둔다(`tipCard`).
+     ☠ 2026-08-14: §12를 호재 마커 **하나에만** 걸었더니 겹친 호재 배지·노선 라벨·정비구역이
+       조용히 예외로 남아, 사장님이 같은 화면을 두 번 지적했다(*"글씨 잘리는건 여전하네"* →
+       *"똑같은데?"*). 그 셋은 아파트 미리보기 카드 부품(`.apt-pop` — `min-width:210px` +
+       아래쪽 말풍선 꼬리)을 빌려 쓰고 있었다. 커서 툴팁에 꼬리가 달리고, 「이 지점 2건」처럼
+       짧은 내용에도 210px 빈 상자가 남았다. **규칙을 한쪽에만 걸면 반대쪽이 예외가 된다**
+       (CLAUDE.md 회귀 방지 — 철도/도로에서 세 번 밟은 그 형태). 새 호버는 이걸 쓴다. */
+  const tipChipCat = (col, txt) => '<span class="hjt-c cat" style="--cc:' + col + '"><i></i>' + txt + '</span>';
+  const tipChipRing = (txt, sz, bw, dia) => '<span class="hjt-c"><i class="lvring' + (dia ? " dia" : "")
+    + '" style="width:' + sz + 'px;height:' + sz + 'px' + (bw ? ";border-width:" + bw + "px" : "") + '"></i>' + txt + '</span>';
+  const tipCard = o =>
+    '<div class="hjtip"><span class="hjt-band">'
+    + (o.band || []).map(b => '<i style="flex:' + b.w + ';background:' + b.col + '"></i>').join("")
+    + '</span><div class="hjt-in"><div class="hjt-nm">' + o.title + '</div>'
+    + (o.chips && o.chips.length ? '<div class="hjt-chips">' + o.chips.join("") + '</div>' : "")
+    + (o.sub ? '<div class="hjt-sub">' + o.sub + '</div>' : "")
+    + (o.foot ? '<div class="hjt-foot">' + o.foot + '</div>' : "")
+    + '</div></div>';
   const hjHtml = s => { const t = hjStyle(s), lv = t.lvl;
     const sz = lv === "미정" ? 11 : Math.max(9, HJR[lv] || 9);
     const ph = phaseOf(s), pIdx = PHASE_IDX[ph] ?? 0;
@@ -6918,17 +6945,10 @@ function initKakao() {
          2줄 clamp 안에 넣으면 블록이 clamp를 깨고 문법도 상세와 갈린다. */
     const tail = [s.current_stage && s.current_stage !== ph ? s.current_stage : "",
                   s.stage_note, s.status_note, s.note].filter(Boolean).join(" · ");
-    return '<div class="hjtip"><i class="hjt-band" style="background:' + t.col + '"></i>'
-      + '<div class="hjt-in">'
-      + '<div class="hjt-nm">' + sigTitle(s) + '</div>'
-      + '<div class="hjt-chips">'
-      +   '<span class="hjt-c cat" style="--cc:' + t.col + '"><i></i>' + catOf(s) + subLabel(s).replace(/^\s*·\s*/, " · ") + '</span>'
-      +   '<span class="hjt-c"><i class="lvring' + (lv === "미정" ? " dia" : "") + '" style="width:' + sz + 'px;height:' + sz + 'px"></i>' + (lv === "미정" ? "등급 없음" : lv) + '</span>'
-      +   '<span class="hjt-c"><i class="lvring" style="width:11px;height:11px;border-width:' + (1.5 + pIdx * .8).toFixed(1) + 'px"></i>' + (PHASE_LABEL[ph] || ph) + '</span>'
-      + '</div>'
-      + (tail ? '<div class="hjt-sub">' + tail + '</div>' : "")
-      + '<div class="hjt-foot">클릭하면 근거·출처</div>'
-      + '</div></div>'; };
+    return tipCard({ band: [{ col: t.col, w: 1 }], title: sigTitle(s), sub: tail, foot: "클릭하면 근거·출처",
+      chips: [tipChipCat(t.col, catOf(s) + subLabel(s).replace(/^\s*·\s*/, " · ")),
+              tipChipRing(lv === "미정" ? "등급 없음" : lv, sz, 0, lv === "미정"),
+              tipChipRing(PHASE_LABEL[ph] || ph, 11, (1.5 + pIdx * .8).toFixed(1))] }); };
   /* ★ 뷰와 무관한 부분은 **데이터가 바뀔 때만** 다시 만든다 (2026-08-11 팬·줌 성능).
      종전엔 idle(=팬·줌이 멎을 때마다)마다 13개 신호 배열을 concat해 **5,700개짜리 배열을 새로
      만들고** 그 위에 필터를 여러 벌 더 얹었다 — 결과는 매번 같은데 매번 다시 만들었다.
@@ -7046,15 +7066,21 @@ function initKakao() {
           // 누르면 목록, 끌면 지도 이동 (dragThru — 2026-08-14). 종전의 mousedown 통째 차단은
           // 클릭을 살리려다 이 자리에서 시작한 드래그를 죽였다.
           dragThru(el, () => { hideTip(); showCluster(el._g); });
-          /* 커서를 올리면 **한 줄로 「몇 건 · 어떤 유형인지」**만 (시안 §03 상호작용 1단계).
+          /* 커서를 올리면 **「몇 건 · 어떤 유형인지」**만 (시안 §03 상호작용 1단계).
              도넛의 원호가 비율을 말하지만 숫자는 총계뿐이라, 「교통 3 · 일자리 2」를 읽으려면
-             눌러서 목록을 열어야 했다. 클릭(2단계)은 그대로 상세 목록이다. */
+             눌러서 목록을 열어야 했다. 클릭(2단계)은 그대로 상세 목록이다.
+             ★ 카드 문법은 호재 마커와 **같은 부품**(tipCard) — 띠는 유형 구성 비율로 나눠 칠한다
+               (배지의 도넛이 말하는 것과 같은 사실, 같은 색). */
           el.onmouseenter = ev => { const g = el._g || [];
             const m = {}; g.forEach(s => { const c = catOf(s); m[c] = (m[c] || 0) + 1; });
-            const parts = CAT_KEYS.filter(c => m[c]).map(c =>
-              '<span style="color:' + CAT_COLOR[c] + '">' + c + ' ' + m[c] + '</span>').join(" · ");
-            showTip('<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">이 지점 <b>'
-              + g.length + '</b>건</div><div class="apt-pop-cats">' + parts + '</div></div>', ev); };
+            const has = CAT_KEYS.filter(c => m[c]);
+            const f = g[0] || {};
+            showTip(tipCard({
+              band: has.map(c => ({ col: CAT_COLOR[c], w: m[c] })),
+              title: '이 지점 <span class="mono">' + g.length + '</span>건',
+              chips: has.map(c => tipChipCat(CAT_COLOR[c], c + " " + m[c])),
+              sub: [f.sd, f.sg, f.dong].filter(Boolean).join(" "),
+              foot: "클릭하면 이 지점 목록" }), ev, true); };
           el.onmouseleave = hideTip;
           ov = new K.CustomOverlay({ position: ll, content: el, zIndex: 11, yAnchor: .5, xAnchor: .5, clickable: true });
           ov._el = el; clusterOv.set(gk, ov);
@@ -7208,7 +7234,20 @@ function initKakao() {
       //   고시 세목 6)인데 전부 흐렸다. **소스가 바뀌었는데 그 소스를 전제로 만든 규칙이 남아 있었다.**
       const subdued = isRoad && /OpenStreetMap/.test(String(p.geom_src || ""));
       const segs = f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates];
-      const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + (isRoad ? "🛣" : "🚈") + " " + (p.full || p.name) + '</div><div class="apt-pop-sub">' + (p.linekind || "") + ' · <span style="color:' + col + '">' + p.status + '</span>' + (p.gate === "계획안" ? ' · <b style="color:#b3651e">계획(안) — 승인 전</b>' : "") + (p.approx ? " (근사 선형 — 공식 경유지 연결, 실선형 아님)" : dashed ? " (미확정 — 점선)" : "") + '</div>' + (p.gate === "계획안" ? '<div class="apt-pop-sub" style="color:#b3651e">노선·정거장 위치는 변경될 수 있습니다</div>' : "") + (p.geom_partial ? '<div class="apt-pop-sub" style="color:#b3651e">⚠ ' + (p.geom_cover_note || "선형 일부 구간만 확보") + '</div>' : "") + (p.geom_bridged_km ? '<div class="apt-pop-sub" style="color:#7a8699">┈ 이 중 ' + p.geom_bridged_km + 'km는 <b>보간</b>(' + ((p.geom_solid && p.geom_solid.length) ? "본선과 동일 표시" : "연한 선") + ') — 정점 사이를 이은 구간이라 형상 근거 없음</div>' : "") + '<div class="apt-pop-cats"><span style="color:' + col + '">● 단계 ' + (p.phase || (p.confirmed ? "착공" : "계획")) + '</span>' + (p.note ? " · " + p.note : "") + (p.geom_src ? " · " + p.geom_src : p.src_name ? " · 출처: " + p.src_name : "") + '</div></div>';
+      /* 노선 호버도 **같은 카드**(tipCard, 시안 §12) — 종전엔 `.apt-pop`을 빌려 써서 6~8줄까지
+         늘어나 화면 밖으로 밀렸다. 형상 경고(계획안·일부구간·보간)는 **버리지 않고** 근거 줄에
+         모아 두 줄로 접는다 — 전문은 클릭하면 상세에 있다(P2·P5: 미루는 것이지 감추는 것이 아니다). */
+      const _lph = p.phase || (p.confirmed ? "착공" : "계획");
+      const _lwarn = [p.gate === "계획안" ? "계획(안) — 승인 전 · 노선·정거장 위치는 변경될 수 있습니다" : "",
+        p.approx ? "근사 선형 — 공식 경유지 연결, 실선형 아님" : dashed ? "미확정 — 점선" : "",
+        p.geom_partial ? "⚠ " + (p.geom_cover_note || "선형 일부 구간만 확보") : "",
+        p.geom_bridged_km ? "┈ 이 중 " + p.geom_bridged_km + "km는 보간 — 형상 근거 없음" : "",
+        p.note || "", p.geom_src ? p.geom_src : p.src_name ? "출처: " + p.src_name : ""].filter(Boolean).join(" · ");
+      const html = tipCard({ band: [{ col: col, w: 1 }], title: (isRoad ? "🛣" : "🚈") + " " + (p.full || p.name),
+        chips: [tipChipCat(col, p.linekind || (isRoad ? "도로" : "철도")),
+                tipChipRing(_lph, 11, (1.5 + (PHASE_IDX[_lph] ?? 0) * .8).toFixed(1)),
+                tipChipCat("#8a90a0", p.status)].filter(Boolean),
+        sub: _lwarn, foot: "클릭하면 근거·출처" });
       const clickHandler = () => { _ovClickTs = Date.now(); hideTip();
         // 도로 선 클릭 — **키로 찾는다**. 종전엔 `title.startsWith(p.name)`였는데 2026-07-17에 표시명을
         // 공식 사업명으로 바꾸면서(계양강화고속도로 → "계양~강화 고속도로") 접두가 깨져 **8개 고속도로가
@@ -7301,8 +7340,8 @@ function initKakao() {
         });
         const hit = new K.Polyline({ path: hp, strokeColor: "#000", strokeWeight: 14, strokeOpacity: 0.001, zIndex: 4 });
         K.event.addListener(hit, "click", clickHandler);
-        K.event.addListener(hit, "mouseover", mev => showTip(html, evToClient(mev)));
-        K.event.addListener(hit, "mousemove", mev => showTip(html, evToClient(mev)));
+        K.event.addListener(hit, "mouseover", mev => showTip(html, evToClient(mev), true));
+        K.event.addListener(hit, "mousemove", mev => showTip(html, evToClient(mev), true));
         K.event.addListener(hit, "mouseout", hideTip);
         hits.push(hit);
       });
@@ -7488,8 +7527,14 @@ function initKakao() {
         const path = f.geometry.coordinates.map(r => r.map(([x, y]) => LL(x, y)));
         // ⚠ 미매칭 구역이 안 보이는데 클릭되는 유령 — Leaflet판과 같은 교정(2026-08-10). 점선 경계로 「단계 미상」 문법도 겸한다.
         const poly = new K.Polygon({ path, strokeColor: col, strokeWeight: tracked ? 1.1 : 1.4, strokeOpacity: tracked ? .45 : .65, strokeStyle: tracked ? "solid" : "shortdash", fillColor: col, fillOpacity: tracked ? .06 : .07, zIndex: 2 });
-        const html = '<div class="apt-pop"><div class="apt-pop-nm" style="font-size:13px">' + (p.name || "정비구역") + '</div><div class="apt-pop-sub">정비구역 · ' + p.jtype + (p.area ? " · " + (p.area / 1e4).toFixed(1) + "만㎡" : "") + '</div><div class="apt-pop-cats">' + (tracked ? '<span style="color:' + col + '">● ' + (p.stage || "추진 중") + '</span>' + (p.psrc ? '<span style="color:#8a90a0"> · ' + p.psrc + ' 기준</span>' : "") : '<span style="color:#8a90a0">단계 미상 · 고시 경계</span>') + (p.date ? " · 고시 " + p.date : "") + '</div></div>';
-        K.event.addListener(poly, "mouseover", mev => showTip(html, evToClient(mev))); K.event.addListener(poly, "mousemove", mev => showTip(html, evToClient(mev))); K.event.addListener(poly, "mouseout", hideTip);
+        // 정비구역 폴리곤 호버도 같은 카드(tipCard) — 지도 위 호버는 문법이 하나다(시안 §12)
+        const html = tipCard({ band: [{ col: col, w: 1 }], title: p.name || "정비구역",
+          chips: [tipChipCat(col, "정비구역 · " + p.jtype)]
+            .concat(p.area ? [tipChipCat("#8a90a0", (p.area / 1e4).toFixed(1) + "만㎡")] : [])
+            .concat([tipChipCat(tracked ? col : "#8a90a0", tracked ? (p.stage || "추진 중") : "단계 미상")]),
+          sub: [tracked && p.psrc ? p.psrc + " 기준" : tracked ? "" : "고시 경계", p.date ? "고시 " + p.date : ""].filter(Boolean).join(" · "),
+          foot: "클릭하면 근거·출처" });
+        K.event.addListener(poly, "mouseover", mev => showTip(html, evToClient(mev), true)); K.event.addListener(poly, "mousemove", mev => showTip(html, evToClient(mev), true)); K.event.addListener(poly, "mouseout", hideTip);
         K.event.addListener(poly, "click", () => { _ovClickTs = Date.now(); hideTip(); const ring = f.geometry.coordinates[0]; let sx = 0, sy = 0; ring.forEach(([x, y]) => { sx += x; sy += y; }); showSignal(jeongbiPolyToSignal(p, [sx / ring.length, sy / ring.length]), false); });
         f._kjb = poly;
       }
@@ -8257,7 +8302,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260814d");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260814e");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8442,7 +8487,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260814d"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260814e"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8468,7 +8513,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260814d");
+  const CB = "?b=" + (window.BUILD || "20260814e");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
