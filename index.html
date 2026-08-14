@@ -59,15 +59,34 @@
   .srch input { width:100%; box-sizing:border-box; font-size:14.5px; padding:9px 13px 9px 32px; border:1.5px solid #e3e6ec; border-radius:999px;
                 background:#fff; outline:none; text-overflow:ellipsis; transition:border-color .12s, box-shadow .12s; }
   .srch input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(37,99,235,.12); }
-  .srchpanel { position:absolute; top:calc(100% + 6px); left:0; z-index:1500; background:#fff; border:1px solid #eceef2;
-               border-radius:14px; box-shadow:0 10px 34px rgba(0,0,0,.16); width:360px; max-height:440px; overflow-y:auto;
-               padding:6px; display:none; }
-  .srchhead { font-size:10.5px; color:#9aa0ad; font-weight:700; padding:7px 10px 3px; }
-  .srchitem { display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:9px; cursor:pointer; }
-  .srchitem:hover, .srchitem.act { background:#f2f6ff; }
-  .srchtag { font-size:10px; font-weight:800; border-radius:5px; padding:1px 6px; color:#fff; flex-shrink:0; }
-  .srchmain { font-size:14.5px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .srchsub { font-size:12.5px; color:var(--muted); margin-left:auto; flex-shrink:0; padding-left:8px; white-space:nowrap; max-width:45%; overflow:hidden; text-overflow:ellipsis; }
+  /* ★ **드롭다운은 검색창 폭에 갇히지 않는다** (2026-08-14 시안 §04 갱신).
+     *"잘림의 원인은 줄 수가 아니라 폭입니다 — 드롭다운이 검색창 폭에 갇힌 채 배지·이름·부가정보
+     셋이 그 안을 다투고 있습니다. 560px로 넓히고 한 줄을 유지합니다."*
+     ⚠ 검색창은 최대 300px인데 드롭다운은 560px이라 **오른쪽으로 넘친다** — 좁은 창에서 화면 밖으로
+       나가지 않도록 뷰포트로 한 번 더 묶는다(잘림을 폭으로 고치면서 다른 잘림을 만들지 않는다). */
+  .srchpanel { position:absolute; top:calc(100% + 6px); left:0; z-index:1500; background:#fff; border:1px solid #dcdfe6;
+               border-radius:10px; box-shadow:0 4px 16px rgba(0,0,0,.13); width:560px; max-width:calc(100vw - 24px);
+               max-height:440px; overflow-y:auto; overflow-x:hidden; display:none; }
+  /* 그룹 헤더가 **종류를 대신 말한다** — 그래서 행마다 배지를 반복하지 않는다(시안 §04).
+     오른쪽 숫자는 그 종류에서 찾은 건수. */
+  .srchhead { display:flex; align-items:center; justify-content:space-between; padding:7px 12px;
+    font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; letter-spacing:.06em; color:var(--ink3);
+    background:#fafbfc; border-top:1px solid #f0f1f4; border-bottom:1px solid #f0f1f4; }
+  .srchpanel .srchhead:first-child { border-top:0; }
+  /* 한 줄 3열(호재만 4열) — 이름은 남는 폭을 전부 갖고, **우측 값은 92px 고정 열**이라 세로로 비교된다.
+     `min-width:0`이 없으면 격자 칸이 내용 크기를 하한으로 잡아 말줄임이 안 걸린다. */
+  .srchitem { display:grid; grid-template-columns:1fr auto 92px; align-items:center; gap:14px; padding:9px 13px;
+    cursor:pointer; border-left:3px solid transparent; }
+  .srchitem.sig { grid-template-columns:20px 1fr auto 92px; gap:10px 14px; }
+  .srchitem + .srchitem { border-top:1px solid #f4f5f7; }
+  .srchitem:hover, .srchitem.act { background:rgba(37,99,235,.06); border-left-color:var(--accent); }
+  .srchmain { font-size:14px; font-weight:700; color:var(--ink); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .srchsub { font-size:12px; color:var(--ink3); white-space:nowrap; min-width:0; overflow:hidden; text-overflow:ellipsis; }
+  .srchval { font-size:12px; color:var(--ink2); text-align:right; white-space:nowrap; }
+  .srchval.mono { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11.5px; }
+  /* 호재 행만 앞에 등급 링 — 지도·목록과 같은 문법이라 크기만으로 급이 읽힌다(배지가 사라진 자리) */
+  .srchring { box-sizing:border-box; border-radius:50%; border:2.5px solid var(--line2); justify-self:center; }
+  .srchring.dia { border-radius:2px; transform:rotate(45deg); border-style:dashed; border-width:1.6px; }
   .srchempty { padding:14px; font-size:12px; color:var(--muted); text-align:center; }
   .chips { display:flex; gap:6px; flex-wrap:wrap; }
   .chip { font-size:13px; border:1px solid var(--line); border-radius:999px; padding:5px 11px; cursor:pointer; user-select:none; color:var(--muted); }
@@ -287,6 +306,24 @@
     display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
   /* 「더 있다」를 말한다 — 요약임을 알려야 「정보가 부족하다」로 읽히지 않는다 */
   .hjt-foot { font-size:11px; color:var(--ink3); border-top:1px solid #f0f1f4; padding-top:7px; }
+  /* ══ 겹친 지점 툴팁 = **검정** (2026-08-14 시안 §13) ══════════════════════════════════════
+     *"흰 배경에 붉은 글자를 쓰면 클러스터 배지의 붉은 테두리와 서로를 흐립니다. 검정 배경 +
+     밝은 링으로 지도 위 어디서나 같은 대비를 얻고, 마커 문법도 그대로 재사용합니다."*
+     ★ 표면이 **대상 종류**를 말한다(시안 §03): 낱개 호재·노선·정비구역 = 흰 카드(`.hjtip` §12) ·
+       겹친 지점·클러스터 = 검정 툴팁(여기). 둘은 같은 그릇(`#_ktip`)을 쓰므로 그릇 스타일을
+       `showTip`이 모드로 되돌린다 — 한쪽만 칠하면 흰 그릇 위에 검은 카드가 얹혀 테두리가 남는다.
+     ⚠ 이름은 링·단계와 **한 줄**이다. 폭이 모자라면 이름만 …로 줄인다(값을 지우지 않는다). */
+  .hjdark { background:#26262b; border-radius:7px; padding:9px 12px; display:flex; flex-direction:column; gap:3px;
+    box-shadow:0 3px 12px rgba(0,0,0,.28); }
+  .hjdark .r { display:flex; align-items:center; gap:7px; font-size:12.5px; color:#fff; white-space:nowrap; }
+  .hjdark .r .lvring { box-sizing:border-box; border-radius:50%; border:2.5px solid #9aa0ad; flex:none; }
+  .hjdark .r .lvring.dia { border-radius:2px; transform:rotate(45deg); border-style:dashed; border-width:1.6px; }
+  .hjdark .r .g { font-family:'IBM Plex Mono',ui-monospace,monospace; font-weight:700; flex:none; }
+  .hjdark .r .n { font-weight:600; min-width:0; overflow:hidden; text-overflow:ellipsis; }
+  .hjdark .r .p { color:#c3c6cd; flex:none; margin-left:auto; padding-left:6px; }
+  .hjdark .tt { font-size:12.5px; font-weight:700; color:#fff; }
+  .hjdark .ax { font-size:11.5px; color:#c3c6cd; }
+  .hjdark .f { font-size:11px; color:#9fa2ab; border-top:1px solid #3a3a41; margin-top:3px; padding-top:5px; }
   /* 등급 셀 = 링 + 글자 (시안 §04 실물) */
   /* 목록 건수 (시안 §04 실물) */
   #listv .bignum { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:26px; font-weight:700;
@@ -449,20 +486,11 @@
   .hj-count b { color:var(--ink); font-weight:700; }
   .hj-count .hjsep { width:1px; height:11px; background:var(--line2); display:block; }
   .hj-count .hjauto { color:var(--ink3); }
-  .hmatrix { border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin:2px 0 14px; background:#fbfcfe; }
-  .hmhead { font-size:12px; color:var(--muted); margin-bottom:5px; }
-  .hmhead b { color:var(--ink); font-size:15px; font-weight:800; }
-  .hmrow { display:flex; align-items:center; gap:8px; padding:7px 6px; margin:0 -6px; border-bottom:1px solid var(--line); border-radius:7px; }
-  .hmrow:last-child { border-bottom:none; }
-  .hmrow.z { opacity:.4; }
-  .hmrow[role=button] { cursor:pointer; }
-  .hmrow[role=button]:hover { background:#eef1fb; }
-  .hmatrix.filtering .hmrow { opacity:.4; }
-  .hmatrix.filtering .hmrow.sel { opacity:1; background:#eef1fb; box-shadow:inset 0 0 0 1.5px #5b3fd4; }
+  /* (등급 매트릭스 `.hmatrix`/`.hmrow`/`.hmc`/`.hmpills`는 2026-08-14에 지웠다 — 시안 §12·§10이
+     폐기를 지시한 부품이라 `regionHeadHtml`(등급 링 칩 + 유형 비율 바)로 넘어갔다.
+     `.hmhint`는 상세·패널 곳곳의 작은 주석 글씨로 계속 쓰이므로 **남긴다**.) */
   .hmhint { font-size:10.5px; color:#a0a4ad; font-weight:500; }
-  .hmc { font-size:13px; font-weight:700; width:66px; flex-shrink:0; display:flex; align-items:center; gap:6px; }
-  .hdot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
-  .hmpills { display:flex; gap:5px; flex:1; flex-wrap:wrap; }
+  /* (`.hdot`도 그 매트릭스의 행 앞 점이었다 — 쓰는 자리가 없어 함께 지운다.) */
   .lvpill { font-size:11px; font-weight:800; padding:2px 8px; border-radius:20px; white-space:nowrap; }
   /* ★ 등급 = **무채색 링 칩** (2026-08-13 시안 §07).
      *"금색 S급·핑크 A급·보라 B급 배지가 유형 색과 충돌합니다. 지도에서 쓰는 등급 링(크기)을
@@ -523,8 +551,8 @@
   .yfold > summary::-webkit-details-marker { display:none; }
   .yfold > summary::after { content:" ▾"; color:var(--ink3); }
   .yfold[open] > summary::after { content:" ▴"; }
-  .hmz { font-size:11px; color:var(--muted); }
-  .hmtot { font-size:13px; color:var(--muted); font-weight:700; min-width:18px; text-align:right; }
+  /* (`.hmz`(「없음」 회색 글씨)·`.hmtot`도 등급 매트릭스의 부품이라 2026-08-14에 함께 지웠다.
+     「없음」은 이제 회색 글씨가 아니라 **숫자 0**이다 — 시안 §12.) */
   .cmplv { font-size:10.5px; font-weight:700; padding:1px 6px; border-radius:10px; white-space:nowrap; display:inline-block; margin:1px 1px; }
   /* ── 시점 드래그 슬라이더 ── */
   .yslide { position:sticky; top:0; z-index:6; background:#fff; margin:0 -16px 12px; padding:10px 16px 8px; border-bottom:1px solid var(--line); }
@@ -1062,6 +1090,29 @@
   .kv .aptnear .more { color:var(--ink3); font-size:12px; }
   .kv b { display:inline-block; min-width:86px; margin-right:6px;
           color:var(--ink3); font-weight:500; font-size:12px; }
+  /* ══ 접히는 비고 (2026-08-14 시안 §13) ════════════════════════════════════════════════
+     *"같은 사실이 다 남으면서 첫 화면은 세 배 짧아집니다 — 빼는 게 아니라 접는 것입니다."*
+     ★ 내용을 **summary 안에** 둔다 — 접힘/펼침이 「같은 글의 두 줄 ↔ 전문」이라 본문을 두 벌
+       적을 이유가 없다(두 벌이면 한쪽만 고쳐져 갈린다). 펼치면 clamp만 풀린다.
+     ⚠ `.kv`와 같은 라벨 문법(내어쓰기 92px)을 그대로 쓴다 — 비고만 다른 모양이면 행이 튄다. */
+  .notefold { font-size:12.5px; margin:6px 0; }
+  .notefold > summary { list-style:none; cursor:pointer; padding-left:92px; text-indent:-92px; }
+  .notefold > summary::-webkit-details-marker { display:none; }
+  .notefold > summary * { text-indent:0; }
+  .notefold > summary > b { display:inline-block; min-width:86px; margin-right:6px;
+    color:var(--ink3); font-weight:500; font-size:12px; }
+  .notefold .nfbody { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+    vertical-align:top; line-height:1.55; }
+  .notefold[open] .nfbody { display:block; }
+  .notefold .nfmore { display:block; margin:2px 0 0 92px; font-size:12px; font-weight:600; font-style:normal; color:var(--accent); }
+  .notefold .nfmore::after { content:"펼치기 ▾"; }
+  .notefold[open] .nfmore::after { content:"접기 ▴"; }
+  .notefold .nfext { margin:6px 0 0 92px; font-size:12px; line-height:1.55; color:var(--ink2);
+    border-left:2px solid var(--line); padding-left:9px; }
+  .notefold .nfext b { display:block; color:var(--ink3); font-weight:600; font-size:11px; margin-bottom:2px; }
+  .notefile { margin-top:5px; font-size:11.5px; color:var(--ink2); }
+  .notefile code { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11px;
+    background:var(--panel); border-radius:3px; padding:1px 5px; }
   .kv.kvr b, .kv.kvblock b { margin-right:0; }
   .kv.kvr { display:flex; align-items:baseline; gap:12px; justify-content:space-between; }
   .kv.kvr b { min-width:0; flex:0 0 auto; }
@@ -1427,8 +1478,17 @@
   #dock .cat { margin:0 12px 7px; }
   /* ★ 시안 실물 값: 테두리 = 유형색 35% · 배경 = 유형색 7% · radius 6 · padding 8/10.
      좌측 3px 바가 아니라 **테두리 전체가 유형색**이다(연하게). */
+  /* ★ 대분류 머리는 **머문다** (2026-08-14 시안 §03 갱신): *"여러 개를 동시에 펼칠 수 있고
+     (두 축을 나란히 비교하는 사용을 막지 않기 위해), 길어질 때 길을 잃지 않도록 대분류 머리를
+     sticky로 고정합니다."* — 동시 펼침은 이미 그렇다(`dockOpen`은 집합이다). 머무는 것만 더한다.
+     ⚠ `top`은 상수가 아니라 **잰 값**(`--dkh`)이다 — 위의 도크 헤더가 긴 지역명에서 두 줄이 된다.
+       상수로 박으면 그때 머리가 헤더 밑으로 숨는다(값을 두 곳에 적지 않는다).
+     ⚠ 배경이 유형색 7% **반투명**이라 그대로 머물면 지나가는 체크박스가 비쳐 보인다 —
+       흰 판을 깔아 불투명하게 만든다(색은 그대로 두고 투명만 없앤다). */
   #dock .cat-h { display:flex; align-items:center; gap:9px; padding:8px 10px; cursor:pointer;
-    position:relative; border:1px solid var(--ccb, var(--line)); border-radius:6px; background:var(--ccbg, #fff); }
+    position:sticky; top:var(--dkh, 44px); z-index:2;
+    border:1px solid var(--ccb, var(--line)); border-radius:6px;
+    background:linear-gradient(var(--ccbg, #fff), var(--ccbg, #fff)), #fff; }
   #dock .cat.off .cat-h { border-color:var(--line); background:#fff; color:var(--ink3); }
   #dock .cat-h:hover { border-color:var(--line2); }
   /* 펼침 삼각형 — **글리프는 작게, 과녁은 크게** (2026-08-01 사용자 "너무 작아서 클릭이 어려워").
@@ -2285,6 +2345,56 @@ function precNote(s) {
   return head + why;
 }
 
+/* ══ 노선의 「선형 정확도」 (2026-08-14 시안 §13) ═══════════════════════════════════════════
+   ☠ 노선 카드에 **점 신호 문법**이 붙어 있었다 — 「위치 ◇ ±1km · 등급 미상 — 근사로 취급」.
+     노선은 점이 아니라 선이라 점 정밀도 등급표(GEO_PREC)에 해당 값이 없고, 그래서 화면이
+     「등급 미상」이라 말하며 정작 **이 선을 어떻게 그렸는지**(geom_src)는 한 번도 말하지 않았다.
+   ⇒ 선에는 선의 행을 준다: 근사 여부 + 형상 확보 여부(요약). **방법론 전문은 접기 안**으로
+     (*"닮음변환·픽셀 추출·잔차 설명은 검증하려는 사람에게 필요합니다. 지우지 않고 접습니다."*)
+   ⚠ 「미확정 정거장은 표시되지 않습니다」 같은 문장은 **쓰지 않는다** — 우리 데이터는 가칭 정거장도
+     `st_status`로 표시한다. 시안 문구를 그대로 옮기면 화면이 사실이 아닌 말을 하게 된다. */
+/* 이 신호가 **선**인가 — 선에는 점 정밀도 문법(±50m/±200m/±1km)이 성립하지 않는다.
+   판정은 **가진 것**으로 한다(강한 쪽 열거): 노선 클릭 어댑터(_line) · 데이터가 스스로 선형이라
+   밝힌 것(geo_prec="line") · 선을 표본한 점 목록을 가진 도로 노선(access_points, IC 점은 pt_type로 갈린다).
+   ⚠ 「점이 아닌 것」을 열거하지 않는다 — 그 목록은 어댑터가 늘 때마다 낡고, 낡으면 노선 하나가
+     조용히 점 문법으로 되돌아간다(이 저장소가 반복해 밟은 그 형태). */
+const isLineSig = s => !!(s._line || s.geo_prec === "line" || (s._road && (s.access_points || []).length && !s.pt_type));
+function lineGeomRow(s) {
+  const approx = !!(s.approx || s.geo_approx);
+  const head = approx ? "근사 — 실측 선형 아님" : "공식 선형";
+  const sum = s.geom_adequacy_note ? " · " + esc(String(s.geom_adequacy_note)) : "";
+  const hint = approx
+    ? `<span class="hmhint">공식 노선도·경유지를 좌표계로 옮긴 선입니다 — 역·IC가 잔차만큼 선에서 떨어져 보일 수 있습니다.</span>`
+    : "";
+  return `<div class="kv"><b>선형 정확도</b> ${head}${sum} ${hint}</div>`;
+}
+/* ══ 비고는 **접는다** (2026-08-14 시안 §13) ═══════════════════════════════════════════════
+   *"근거가 풍부한 호재는 지금 팝업이 원문 파일명·공정 수치·부기를 한 문단에 통째로 쏟습니다.
+   세로 500px을 넘어 지도를 가리고, 정작 「이게 무엇이고 어느 단계인가」는 그 문단 어딘가에 묻힙니다."*
+   ⇒ **빼는 게 아니라 접는다** — 두 줄까지 보이고, 누르면 전문이 그대로 펼쳐진다(사실은 하나도 안 준다).
+   ⚠ 무엇을 접을지 **문구로 열거하지 않는다**(약한 쪽 열거 금지 — 부기 문구는 계속 는다).
+     기준은 길이 하나다: 두 줄에 안 들어가면 접는다.
+   ★ 저장소 보관 원문(`files/...pdf`)은 **문단에서 뽑아 따로 세운다** — 배포본에는 그 파일이 없어
+     링크가 되지 못하므로(배포 목록 밖) 링크인 척하지 않고 파일명만 모노로 적는다(P2). */
+const NOTE_FOLD_LEN = 90;          // 이 길이를 넘으면 접는다(패널 폭에서 대략 두 줄)
+const FILE_RE = /(?:원문\s*)?(files\/[^\s,)]+\.(?:pdf|png|jpe?g|hwp|xlsx?|zip))/gi;
+function noteRow(s) {
+  let full = [s.stage_note, s.status_note, s.note].filter(Boolean).join(" · ").trim();
+  /* 방법론(선을 어떻게 그렸나)은 **펼쳐야 보이는 층**이다 — 요약은 「선형 정확도」 행이 이미 말했다. */
+  const ext = s.geom_src
+    ? `<div class="nfext"><b>선형 근거</b> ${esc(String(s.geom_src).replace(/\*\*/g, ""))}</div>` : "";
+  if (!full && !ext) return "";
+  const files = [...new Set((full.match(FILE_RE) || []).map(m => m.replace(/^원문\s*/, "")))];
+  // 파일명을 빼내면 그 자리에 구두점이 남는다(「…2025-07-10, )」) — 괄호 안 꼬리와 빈 괄호를 정리한다.
+  if (files.length) full = full.replace(FILE_RE, "").replace(/[,·:]\s*\)/g, ")")
+    .replace(/\(\s*\)/g, "").replace(/\s{2,}/g, " ").replace(/\s+([,.)])/g, "$1").trim();
+  const body = esc(full)
+    + (files.length ? `<div class="notefile">보관 원문 ${files.map(f => `<code>${esc(f.split("/").pop())}</code>`).join(" · ")}
+        <span class="hmhint">— 저장소 보관본(공개 배포 대상 아님). 공개 원문은 위 「근거」 링크</span></div>` : "");
+  if (full.length <= NOTE_FOLD_LEN && !files.length && !ext) return `<div class="kv"><b>비고</b> ${body}</div>`;
+  return `<details class="notefold"><summary><b>비고</b> <span class="nfbody">${body || "—"}</span><i class="nfmore"></i></summary>${ext}</details>`;
+}
+
 /* 마일스톤 트랙 (DATA_STANDARD §3b): 완료=날짜(사실) / 미래=목표·미정(추정 금지) / 진척률 % 없음(§7) */
 const MS_STATE = { done:"완료", current:"현재", next:"다음", future:"미도래", target:"목표", stalled:"정체·중지" };
 function msTrack(s) {
@@ -2779,33 +2889,12 @@ function catBarHtml(sigs) {
   const bar = has.map(c => `<i style="width:${(byCat[c] / tot * 100).toFixed(1)}%;background:${CAT_COLOR[c]}"></i>`).join("");
   return `<div class="apt-pop-bar">${bar}</div><div class="apt-pop-leg">${has.map(c => `${c} ${byCat[c]}`).join(" · ")}</div>`;
 }
-/* 좌측 패널용: 등급(A/B/C)별 그루핑 매트릭스 — 각 등급 안에 분류 구성(교/일/인/주) 소표기 */
-/* opt.dense — **없는 등급은 아예 그리지 않는다** (2026-08-14 시안 §10).
-   *"「B급 없음」은 비교표에서 세 단지를 나란히 볼 때만 의미가 있습니다(칸이 비면 「모른다」로
-   읽히므로). 한 지점 안에서는 없는 등급을 아예 그리지 않습니다 — 세로만 먹습니다."*
-   ⚠ 동·구 패널은 종전대로 빈 행을 남긴다 — 거기서는 「이 동에 A급이 없다」가 읽어야 할 사실이다. */
-function hojaeMatrixHtml(sigs, opt = {}) {
-  panelGrade = null;   // 새 패널 렌더 = 등급 필터 초기화
-  const m = levelCounts(sigs);
-  if (!m._total) return `<div class="hmatrix"><div class="pickhint" style="padding:14px 8px">반경 내 호재 없음</div></div>`;
-  const shown = opt.dense
-    ? [...LEVELS, "미정"].filter(l => m[l] && m[l].total)
-    : [...LEVELS.filter(l => l !== "S" || m["S"].total), ...(m["미정"].total ? ["미정"] : [])];   // S·미정은 있을 때만 행 노출
-  const rows = shown.map(l => {
-    const g = m[l];
-    const cats = CAT_KEYS.filter(c => g.cats[c])
-      /* ★ **축약을 풀어쓴다** (2026-08-13 시안 §07): *"「일2 / 교1 인3」은 해독이 필요합니다."*
-         한 글자로 줄여 봐야 폭은 몇 px 아끼고 뜻은 통째로 잃는다. */
-      .map(c => `<span style="color:${CAT_COLOR[c]};font-weight:600">${c} ${g.cats[c]}</span>`).join(" · ");
-    // 급 있는 행만 클릭 가능(그 급만 필터). 재클릭=해제.
-    const clickable = g.total ? `role="button" tabindex="0" onclick="setPanelGrade('${l}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setPanelGrade('${l}')}"` : "";
-    return `<div class="hmrow ${g.total ? "" : "z"}" data-grade="${l}" ${clickable}>
-      <span class="hmc">${lvlPill(l)}</span>
-      <span class="hmpills">${cats || '<span class="hmz">없음</span>'}</span>
-      <span class="hmtot">${g.total || ""}</span></div>`;
-  }).join("");
-  return `<div class="hmatrix"><div class="hmhead">호재 <b>${m._total}</b>건 · 등급별 (${m["S"].total ? "S국가급 / " : ""}A핵심 / B중대형 / C일반${m["미정"].total ? " / " + LEVEL_NAME["미정"] : ""}) <span class="hmhint">— 등급 클릭 시 그 급만</span></div>${rows}</div>`;
-}
+/* (등급 매트릭스 `hojaeMatrixHtml`은 2026-08-14에 지웠다 — 시안 §12·§10이 **같은 이유로** 폐기를
+   지시한 부품이다: *"「A급 / 교통 6 / 6」은 등급·유형·건수를 한 줄에 섞고 건수를 두 번 말한다"* ·
+   *"A급 행에 유형색으로 크게 쓴 「인프라 1」은 등급 칸에서 유형을 말해 두 축이 섞인다"*.
+   대신 **`regionHeadHtml`(등급 링 칩 + 유형 비율 바)** 하나를 쓴다 — 세션57이 동·구 패널만 바꿔
+   겹친 호재 모달과 경계 미확보 동 피드에 옛 문법이 남아 있었다(규칙이 한쪽에만 걸린 그 형태).
+   부품이 사라지면 그 부품의 CSS(`.hmatrix`·`.hmrow`…)도 함께 없앤다.) */
 
 /* ══════════ 상태 ══════════ */
 // 서울 정비 데이터(의제처리구역 폴리곤·정비몽땅 점)는 공공누리 4유형(상업·변경 금지).
@@ -3026,7 +3115,11 @@ function buildRoadSignals() {
       sources: p.src_url ? [p.src_url] : [],
       // ⚠ 선형 출처는 데이터의 geom_src를 그대로 쓴다 — 종전엔 "선형=OSM(ODbL)"을 **하드코딩**해
       //   실제로는 공식 경유지 연결인데 화면이 OSM이라 거짓말했다(2026-07-23 사용자 제보로 발견, P2 위반).
-      stage_note: `${p.linekind || "도로"} · ${p.status}${p.geom_src ? " · " + p.geom_src : ""}`,
+      // ★ 2026-08-14(시안 §13): 그 문장을 **비고 문단에서 「선형 정확도」 행으로 옮긴다.**
+      //   비고 뒤에 이어 붙으면 방법론 한 줄이 사실 문단을 다섯 줄 밀어낸다 — *"빼는 게 아니라 접는 것"*.
+      geom_adequacy: p.geom_adequacy, geom_adequacy_note: p.geom_adequacy_note, approx: !!p.approx,
+      src_name: p.src_name, note: p.note,
+      stage_note: `${p.linekind || "도로"} · ${p.status}`,
       // 선을 못 그리는 코리더 도로(IC 없음)는 **대표 점**으로 표시(경로 미확정 근사). 그 외는 선/IC점이 담당.
       geometry: { coordinates: p.geom_point_only && p.geom_point ? p.geom_point : anchor },
       geo_approx: !!(p.geom_point_only || p.geom_partial),
@@ -4162,14 +4255,10 @@ function panelArrange(items) {
            : (B.last_movement || "").localeCompare(A.last_movement || ""));
     });
 }
-// 등급 매트릭스 행 클릭 → 그 급만 필터(재클릭=해제). 리스트만 갱신(매트릭스 active는 DOM 토글).
+// 등급 칩 클릭 → 그 급만 필터(재클릭=해제). 리스트만 갱신(칩 active는 DOM 토글).
 function setPanelGrade(g) {
   panelGrade = (panelGrade === g) ? null : g;
-  document.querySelectorAll(".hmatrix").forEach(mx => {
-    mx.classList.toggle("filtering", !!panelGrade);
-    mx.querySelectorAll(".hmrow").forEach(r => r.classList.toggle("sel", panelGrade && r.dataset.grade === panelGrade));
-  });
-  // 지역 패널의 등급 링 칩도 **같은 상태**를 보여야 한다 (시안 §12 — 매트릭스가 하던 일을 이어받았다)
+  // 등급 링 칩(시안 §12) — 동·구 패널 · 겹친 호재 모달 · 경계 미확보 동 피드가 **같은 부품**을 쓴다
   document.querySelectorAll(".gchip[data-grade]").forEach(b =>
     b.classList.toggle("on", !!panelGrade && b.dataset.grade === panelGrade));
   if (panelListRender) panelListRender();
@@ -4774,12 +4863,18 @@ function closeCompare() { document.getElementById("cmpModal").style.display = "n
    ⚠ 매트릭스가 겸하던 두 가지 부수 효과를 **그대로 옮긴다** — ① `panelGrade` 초기화
      ② 칩 클릭 = 그 등급만(국소 필터). 화면만 바꾸고 기능을 흘리면 사용자는 잃은 줄도 모른다.
    ⚠ S는 있을 때만 칩을 세운다 — 전국 대부분의 동에서 S는 0이고, 「S 0」을 상시 세우면
-     칩 줄이 늘 한 칸 낭비된다(A·B·C·없음은 시안대로 0도 적는다). */
-function regionHeadHtml(rel) {
+     칩 줄이 늘 한 칸 낭비된다(A·B·C·없음은 시안대로 0도 적는다).
+   ★ `opt.dense` = **없는 등급은 아예 그리지 않는다** (시안 §10 겹친 호재 모달):
+     *"「B급 없음」은 비교표에서 세 단지를 나란히 볼 때만 의미가 있습니다(칸이 비면 「모른다」로
+     읽히므로). 한 지점 안에서는 없는 등급을 아예 그리지 않습니다."*
+     동·구 패널은 dense가 아니다 — 거기서는 「이 동에 A급이 0」이 읽어야 할 사실이다(§12).
+   ⚠ 이 부품은 **동·구 패널 · 겹친 호재 모달 · 경계 미확보 동 피드** 셋이 공유한다. 사본을 만들지
+     않는다 — 2026-08-14에 동·구 패널만 새 문법으로 바꿔 나머지 둘에 옛 매트릭스가 남았었다. */
+function regionHeadHtml(rel, opt = {}) {
   panelGrade = null;   // 새 패널 렌더 = 등급 필터 초기화 (종전 hojaeMatrixHtml이 하던 일)
   const m = levelCounts(rel), tot = m._total;
   if (!tot) return `<div class="rgnhead"><div class="pickhint" style="padding:12px 4px">영향권 호재 없음</div></div>`;
-  const shown = GRADES_DISP.filter(g => g !== "S" || m.S.total);
+  const shown = GRADES_DISP.filter(g => opt.dense ? m[g].total : (g !== "S" || m.S.total));
   const chips = shown.map(g => {
     const n = m[g].total, sz = g === "미정" ? 11 : Math.max(9, HJR[g] || 9);
     return `<button type="button" class="gchip${n ? "" : " z"}" data-grade="${g}"${n ? "" : " disabled"}`
@@ -4801,15 +4896,21 @@ function regionHeadHtml(rel) {
 function wireRegionHead(p) {
   p.querySelectorAll(".gchip[data-grade]").forEach(b => b.onclick = () => setPanelGrade(b.dataset.grade));
 }
-/* ══════════ 패널: 동 피드 (§4.2 · 2026-08-14 시안 §12) ══════════ */
-function renderDong(feature) {
-  const p = document.getElementById("panel");
-  const name = dongName(feature);
-  // ★ 컬렉션 정본은 allSignalsFlat 하나다 (2026-08-10 사용자 "정작 선택하면 보이는 것도 없고").
-  //   종전엔 여기 수동 목록(SIGNALS·정비·DART·ARCH·도로 5개)이라 **철도 등 8개 컬렉션이 동 집계에서
-  //   통째로 빠졌다** — 신정동에 강북횡단선·신안산선이 0건으로 나온 이유. 어댑터 함정과 같은 형태:
-  //   컬렉션이 늘 때마다 이 수동 목록만 낡는다(superseded_by 4곳 누락과 동일 클래스).
-  //   JC(signal:false)는 집계 제외 — 일반 차량 진출입 불가(§7 거리≠수혜, 도로 어댑터 주석과 동일).
+/* 동 ↔ 신호 관계 목록 — **이 동이 몇 건인가를 정하는 규칙은 여기 하나다.**
+   ★ 컬렉션 정본은 allSignalsFlat 하나다 (2026-08-10 사용자 "정작 선택하면 보이는 것도 없고").
+     종전엔 여기 수동 목록(SIGNALS·정비·DART·ARCH·도로 5개)이라 **철도 등 8개 컬렉션이 동 집계에서
+     통째로 빠졌다** — 신정동에 강북횡단선·신안산선이 0건으로 나온 이유. 어댑터 함정과 같은 형태:
+     컬렉션이 늘 때마다 이 수동 목록만 낡는다(superseded_by 4곳 누락과 동일 클래스).
+     JC(signal:false)는 집계 제외 — 일반 차량 진출입 불가(§7 거리≠수혜, 도로 어댑터 주석과 동일).
+   ⚠ 검색 자동완성(시안 §04 「동 = 호재 건수」)도 **이 함수**를 쓴다 — 자동완성이 자기 셈법을
+     따로 가지면 「검색에선 0인데 눌러 보면 7」이 된다(같은 사실을 두 층이 말하면 반드시 어긋난다).
+   ⚠ 캐시 키에 `_relEpoch`를 넣는다 — 결과가 필터(visibleNoRegion)에 따라 달라지므로,
+     필터가 바뀌면 renderAll이 세대를 올려 캐시를 통째로 버린다. */
+let _relEpoch = 0, _relCache = new Map();
+function dongRelations(feature) {
+  const key = (feature.properties.adm_cd || feature.properties.adm_nm) + "|" + _relEpoch;
+  const hit = _relCache.get(key);
+  if (hit) return hit;
   const rel = [];
   allSignalsFlat().filter(visibleNoRegion).filter(s => !s._jb && s.signal !== false)
     .map(s => ({ s, r: dongRelation(s, feature) }))
@@ -4818,6 +4919,15 @@ function renderDong(feature) {
   JEONGBI_SIG.filter(visibleNoRegion)
     .filter(s => s.sg === feature.properties.sgg && s.dong === feature.properties.EMD_KOR_NM)
     .forEach(s => rel.push({ s, r: "소재" }));
+  if (_relCache.size > 60) _relCache.clear();
+  _relCache.set(key, rel);
+  return rel;
+}
+/* ══════════ 패널: 동 피드 (§4.2 · 2026-08-14 시안 §12) ══════════ */
+function renderDong(feature) {
+  const p = document.getElementById("panel");
+  const name = dongName(feature);
+  const rel = dongRelations(feature);
   const host = rel.filter(x => x.r === "소재"), near = rel.filter(x => x.r === "반경권");
   /* ★ 「소재 0 · 반경권 7」을 풀어쓴다 (시안 §12) — *"두 낱말 다 내부 용어입니다. 영향권이 이
      동을 덮는 호재 7 · 동 안에 있는 호재 0으로 풀면 왜 0과 7이 함께 뜨는지가 설명 없이 읽힙니다."* */
@@ -4882,6 +4992,10 @@ function renderDetail(s) {
            종전엔 제목 **위** 한 문장에 섞여 있어 「왜 이 등급인지」가 라벨 없이 흘렀다. -->
       ${(() => { const g = gradeBasisHtml(s).replace(/\s*·\s*$/, "").trim();
         return g ? `<div class="kv"><b>등급 근거</b> ${g}</div>` : ""; })()}
+      <!-- 「단계 근거」 — 등급 근거와 **한 쌍**이다(시안 §13 라벨–값 행: 등급 근거 / 단계 근거).
+           데이터(gate_basis)는 어댑터가 이미 나르고 있었는데 화면엔 「계획(안)」일 때만 나왔다 —
+           나머지 단계에선 「왜 이 단계인가」를 화면이 말하지 않았다(등급 근거와 같은 사고, 반대쪽). -->
+      ${s.gate_basis && s.gate !== "계획안" ? `<div class="kv"><b>단계 근거</b> ${esc(String(s.gate_basis))}</div>` : ""}
       ${s.addr ? `<div class="kv"><b>대지위치</b> ${s.addr} <span class="copyaddr" onclick="copyAddr(this,'${s.addr.replace(/'/g, "\\'")}')" title="주소 복사">📋</span></div>` : ""}
       ${s.group_n ? `<div class="kv kvblock"><b>한 사업 · ${s.group_n}개 블록</b> 합계 연면적 ${(s.group_area_m2 || 0).toLocaleString()}㎡
         <span class="note">— 블록별 허가가 따로 나와 지도엔 대표 1개로 접어 표시합니다(개별 사실은 아래 그대로).</span>
@@ -4912,9 +5026,9 @@ function renderDetail(s) {
       ${s.side_effects?.length ? `<div class="kv"><b>역효과 표기</b> ${s.side_effects.join(", ")}</div>` : ""}
       ${SUB_CAVEAT[subOf(s)] ? `<div class="kv"><b>시설 특성</b> <span class="hmhint">${SUB_CAVEAT[subOf(s)]}</span></div>` : ""}
       ${s.pt_type === "road_ic" && s.ic_note ? `<div class="kv"><b>지점 특성</b> ${s.ic_note.replace(/\*\*/g, "")}</div>` : ""}
-      <div class="kv"><b>위치</b> ${precNote(s)}${
+      ${isLineSig(s) ? lineGeomRow(s) : `<div class="kv"><b>위치</b> ${precNote(s)}${
         s.st_status && s.st_status !== "확정" && s.st_status !== "기존" ? ` · <b>${s.st_status}</b>(명칭·위치 미확정)` : ""}${
-        s.pt_type === "road_ic" ? " · 도로 IC(철도역 아님)" : ""}</div>
+        s.pt_type === "road_ic" ? " · 도로 IC(철도역 아님)" : ""}</div>`}
       ${(() => {   // ★ 갱신 시안 §03 상세 카드 — 「반경 Nkm 내 단지 N」 + 이름·거리(§7: 거리 사실 표기)
         const an = aptsNearSignal(s); if (!an || !an.n) return "";
         return `<div class="kv kvapt"><b>반경 ${an.km}km 내 단지</b> <span class="mono">${an.n.toLocaleString()}</span>
@@ -4929,7 +5043,11 @@ function renderDetail(s) {
         const NEEDQ = [[/hub\.go\.kr\/portal\/opn/, "건축HUB(주소로 검색)"], [/hub\.go\.kr\/portal\/dps/, "건축HUB 설계공모(공모명으로 검색)"],
                        [/jigu\.go\.kr/, "택지정보(지구명으로 검색)"]];
         const nq = NEEDQ.find(([re_]) => re_.test(u));
-        const lbl = nq ? nq[1] : /hub\.go\.kr/.test(u) ? "건축HUB 열람" : /eais\.go\.kr/.test(u) ? "세움터" : /opendart\.fss/.test(u) ? "DART 공시" : /g2b|nara/.test(u) ? "나라장터 공고" : /cleanup\.seoul/.test(u) ? "정비몽땅" : /gg\.go\.kr/.test(u) ? "경기 정비현황" : /data\.go\.kr/.test(u) ? "공공데이터포털" : `원문 ${i + 1}`;
+        /* ★ 이름 없는 링크는 **데이터가 아는 이름**으로 부른다 (2026-08-14 시안 §13 「기재부 고시 ·
+           예타 결과 →」). 종전 폴백이 `원문 1`이라, `src_name`에 「기획재정부 재정사업평가위」가
+           있는데도 화면은 「원문 1」이라고만 했다 — 어느 기관 것인지 눌러야 알 수 있었다. */
+        const lbl = nq ? nq[1] : /hub\.go\.kr/.test(u) ? "건축HUB 열람" : /eais\.go\.kr/.test(u) ? "세움터" : /opendart\.fss/.test(u) ? "DART 공시" : /g2b|nara/.test(u) ? "나라장터 공고" : /cleanup\.seoul/.test(u) ? "정비몽땅" : /gg\.go\.kr/.test(u) ? "경기 정비현황" : /data\.go\.kr/.test(u) ? "공공데이터포털"
+          : (s.sources.length === 1 && s.src_name ? esc(String(s.src_name).split("—")[0].trim()) + " 원문" : `원문 ${i + 1}`);
         return `<a href="${u}" target="_blank"${nq ? ' title="이 링크는 검색 조건을 직접 넣어야 해당 건이 보입니다 — 딥링크가 제공되지 않습니다"' : ""}>${lbl}</a>`;
       }).join(" · ") || "원문 링크 없음"}</span>${
         s.src_tier === "osm" ? ' · <b>진행단계·명칭은 공식 확인 전</b>(선형만 OSM 참고)' : ""}${
@@ -4938,7 +5056,7 @@ function renderDetail(s) {
       ${s.ext_basis ? `<div class="kv"><b>증축 규모</b> ${s.ext_basis}</div>` : ""}
       ${s.nm_basis ? `<div class="kv"><b>건물명 근거</b> ${s.nm_basis}</div>` : ""}
       ${s.name_status === "미확보" ? `<div class="kv"><b>시설명</b> <span class="hmhint">미확보 — 허가 원본에 고유 명칭이 없어 <b>동·지번으로 표시</b>합니다. 건축물대장은 <b>준공 후에 생성</b>되므로 인가·착공 단계에선 공식 명칭이 없을 수 있습니다. <b>사업의 존재</b>는 허가·착공 일자(위 팩트시트)가 근거이며, 이름을 임의로 지어내지 않습니다.</span></div>` : ""}
-      ${[s.stage_note, s.status_note, s.note].filter(Boolean).length ? `<div class="kv"><b>비고</b> ${[s.stage_note, s.status_note, s.note].filter(Boolean).join(" · ")}</div>` : ""}
+      ${noteRow(s)}
       <div class="rulerow"><details class="rulefold"><summary>표기 규칙 · 영향 반경 기준</summary><div class="note">완료=날짜(사실) · 미래=목표/미정 · 진척률(%) 없음 · 영향 반경은 유형 기준표 가안</div></details><a class="ruledoc" href="methodology.html" target="_blank" rel="noopener">기준 전문 ▾</a></div>
     </div>`;
 }
@@ -5102,18 +5220,19 @@ function renderDongSig(v) {
   p.innerHTML = `
     <div class="phead"><div class="pt">${v.dong}</div><div class="closex" onclick="closePanel()">✕</div></div>
     <div class="ps">${v.sg} · 이 동 영향권 호재 (정비·확정 기준 — 동 경계 미확보 지역)</div>
-    ${hojaeMatrixHtml(list)}
+    ${regionHeadHtml(list)}
     ${yearChipsHtml()}
     <div id="list"></div>`;
-  wireYearChips(p);
+  wireRegionHead(p); wireYearChips(p);
   const el = p.querySelector("#list");
   panelListRender = () => {
-    el.innerHTML = "";
+    el.className = ""; el.innerHTML = "";
     if (!list.length) { el.innerHTML = `<div class="pickhint">이 동 영향권 호재 없음</div>`; return; }
     const arr = panelArrange(list.slice());
     if (!arr.length) { el.innerHTML = `<div class="pickhint">${LEVEL_NAME[panelGrade] || panelGrade}급 호재 없음</div>`; return; }
-    arr.slice(0, 80).forEach(s => el.appendChild(makeCard(s)));
-    animateCards(el);
+    /* 카드(190px) → **4열 행 표**(시안 §12) — 이 화면도 동 패널이다. 경계가 없는 지역이라는
+       사정은 데이터 쪽 사정이지 화면 문법이 갈릴 이유가 아니다(같은 질문엔 같은 표). */
+    mountRowTable(el, arr.map(x => (x.s ? x : { s: x })), { tail: "impact", end: "행을 누르면 그 호재의 상세가 열립니다" });
   };
   panelListRender();
 }
@@ -5136,6 +5255,33 @@ function showCluster(sigs) {
    ⚠ 요약을 건너뛸 때 `panelGrade`를 손수 지운다 — 종전엔 `hojaeMatrixHtml`이 그 일을 겸했다.
      요약이 없는 화면에서 지난 패널의 등급 필터가 살아 있으면 목록이 **말없이** 비어 보인다. */
 const CLUSTER_SUMMARY_MIN = 6;   // 요약을 세우는 최소 건수 (시안 §10 「요약은 6건부터」)
+/* ══ 겹친 지점 **호버** 툴팁 (2026-08-14 시안 §13) ═══════════════════════════════════════
+   *"「교통 2」를 읽고 나서도 무엇인지 모르면 결국 클릭해야 합니다. 다섯 건까지는 등급 링 + 이름 +
+   단계를 그대로 적는 편이 짧고, 찾던 게 아니면 클릭조차 필요 없습니다."*
+   ★ 문턱은 **바로 위 상수 하나**다 — 탭했을 때 열리는 모달(§10)과 같은 수를 쓴다.
+     *"호버와 탭이 다른 수를 쓰면 사용자가 두 규칙을 배워야 합니다."*
+   ★ 6건 이상은 **두 축**으로 줄인다 — 유형만 말하면 *"「C등급 9건」인지 「S등급 9건」인지 모릅니다."*
+   ⚠ 검정 배경이라 링 색을 그대로 쓰면 어둡게 묻힌다 → 흰색을 섞어 **밝은 링**으로 올린다.
+     (색 자체는 CAT_COLOR 하나에서 온다 — 사본을 만들지 않고 섞기만 한다.) */
+function clusterTipHtml(g) {
+  const foot = '<span class="f">클릭해 펼치기</span>';
+  if (g.length < CLUSTER_SUMMARY_MIN) {
+    return '<div class="hjdark">' + g.map(s => {
+      const t = ringOf(s), lv = t.lv, sz = lv === "미정" ? 11 : Math.max(9, HJR[lv] || 9);
+      return '<span class="r"><i class="lvring' + (lv === "미정" ? " dia" : "") + '" style="width:' + sz + 'px;height:' + sz
+        + 'px;border-color:color-mix(in srgb, ' + t.col + ' 55%, #fff)"></i>'
+        + '<b class="g">' + (lv === "미정" ? "?" : lv) + '</b>'
+        + '<span class="n">' + sigTitle(s) + '</span>'
+        + '<span class="p">' + (PHASE_LABEL[phaseOf(s)] || phaseOf(s)) + '</span></span>';
+    }).join("") + foot + '</div>';
+  }
+  const cat = {}, lvl = {};
+  g.forEach(s => { const c = catOf(s), l = levelOf(s); cat[c] = (cat[c] || 0) + 1; lvl[l] = (lvl[l] || 0) + 1; });
+  return '<div class="hjdark"><span class="tt">이 지점 <span class="mono">' + g.length + '</span>건</span>'
+    + '<span class="ax">' + CAT_KEYS.filter(c => cat[c]).map(c => c + " " + cat[c]).join(" · ") + '</span>'
+    + '<span class="ax">' + GRADES_DISP.filter(l => lvl[l]).map(l => (l === "미정" ? LEVEL_NAME["미정"] : l) + " " + lvl[l]).join(" · ") + '</span>'
+    + foot + '</div>';
+}
 function renderCluster(v) {
   const p = document.getElementById("panel");
   const list = (v.sigs || []).filter(visible);
@@ -5146,11 +5292,11 @@ function renderCluster(v) {
   p.innerHTML = `
     <div class="phead"><div class="pt">이 지점 <span class="mono">${list.length}</span>건</div><div class="closex" onclick="closePanel()">✕</div></div>
     <div class="ps">${where || "같은 지점에 모인 호재"} · 지도상 한 배지로 묶임</div>
-    ${many ? hojaeMatrixHtml(list, { dense: true }) : ""}
+    ${many ? regionHeadHtml(list, { dense: true }) : ""}
     ${many ? yearChipsHtml() : ""}
     <div id="list"></div>
     <div class="rowhint">행을 누르면 그 호재의 상세가 열립니다 — 이 목록은 갈림길일 뿐입니다</div>`;
-  if (many) wireYearChips(p);
+  if (many) { wireRegionHead(p); wireYearChips(p); }
   const el = p.querySelector("#list");
   panelListRender = () => {
     el.className = ""; el.innerHTML = "";
@@ -5533,6 +5679,10 @@ function renderDock() {
     <div class="dk-foot">흐릿한 후광 = 위치 근사 · 겹친 호재는 <b>유형 도넛</b>으로 묶임<br>
       <a href="methodology.html" target="_blank">데이터 · 방법론</a>
       <div class="dk-legal">투자 권유 아님 · 모든 신호는 미확정 — 사실(단계·날짜·거리)만 표시하며 매수/매도 판단은 다루지 않습니다.</div></div>`;
+  /* sticky 대분류 머리가 **어디에 머무는지**를 헤더에서 잰다(시안 §03). 헤더는 지역명 길이에 따라
+     두 줄이 되므로 상수로 박으면 그때 머리가 헤더 밑으로 숨는다 — 세지 않고 잰다. */
+  const h = dock.querySelector(".dk-h");
+  if (h) dock.style.setProperty("--dkh", Math.round(h.getBoundingClientRect().height) + "px");
 }
 function initDock() {
   const dock = document.getElementById("dock");
@@ -5910,7 +6060,7 @@ function updateTabbar() {
   el.title = n ? `오늘 문서상 움직인 신호 ${n}건 — 흐름 탭의 「오늘」과 같은 수` : "";
   el.style.display = n ? "" : "none";
 }
-function renderAll() { renderChips(); renderDock(); renderAxis(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); if (VIEW_MODE === "list") renderList(); if (VIEW_MODE === "flow") renderFlow(); renderSheet(); updateTabbar(); layoutBottom(); }
+function renderAll() { _relEpoch++; renderChips(); renderDock(); renderAxis(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); if (VIEW_MODE === "list") renderList(); if (VIEW_MODE === "flow") renderFlow(); renderSheet(); updateTabbar(); layoutBottom(); }
 
 /* ══════════ 지도: 카카오 → Leaflet 폴백 ══════════ */
 function bootMap() {
@@ -6597,7 +6747,15 @@ function railToSignal(p, cen) {
     template_type: "철도", current_stage: p.status, phase: p.phase, status: p.drop ? "종결" : "활성", confirmed: p.confirmed,
     stage_checked: p.stage_checked, stage_src: p.stage_src,
     sd: null, geometry: { coordinates: cen },   // 노선은 여러 시도 경유 — 단일 sd 미표기
-    sources: p.src_url ? [p.src_url] : [], stage_note: `${p.linekind} · ${p.status}${p.note ? " · " + p.note : ""}`,
+    /* ★ 선형 근거를 **싣는다** (2026-08-14 시안 §13). 종전엔 노선 카드가 `geom_src`를 아예 안 날라
+       「이 선을 어떻게 그렸나」를 화면이 한 번도 말한 적이 없다 — 대신 점 신호용 「위치 ◇ ±1km
+       등급 미상」이 붙어 **노선에 점 정밀도 문법**을 쓰고 있었다(어댑터 함정: 도로 쪽은 이미 날랐다). */
+    src_name: p.src_name, src_tier: p.src_tier, approx: !!p.approx,
+    geom_src: p.geom_src, geom_adequacy: p.geom_adequacy, geom_adequacy_note: p.geom_adequacy_note,
+    milestones: p.milestones, last_movement: p.last_movement, first_seen: p.first_seen,
+    /* ⚠ `note`를 stage_note 뒤에 이어 붙이지 않는다 — 비고 행이 [stage_note, status_note, note]를
+       다시 join하므로 **같은 문단이 두 벌**이 된다. 층을 갈라 두면 접기(§13)도 층별로 걸린다. */
+    sources: p.src_url ? [p.src_url] : [], note: p.note, stage_note: `${p.linekind} · ${p.status}`,
   };
 }
 /* 도로 선 → 카드용 신호. **철도의 `railToSignal`과 같은 자격의 폴백**이다 (2026-08-09 신설).
@@ -6621,8 +6779,11 @@ function roadLineToSignal(p, geom) {
     owner: p.owner, src_tier: p.src_tier, geom_src: p.geom_src, geom_status: p.geom_status || null,
     milestones: p.milestones, stage_checked: p.stage_checked, stage_src: p.stage_src,
     stage_history: p.stage_history, last_movement: p.last_movement, first_seen: p.first_seen,   // 생애주기 — 흐름·신선도(어댑터 함정)
-    sources: p.src_url ? [p.src_url] : [],
-    stage_note: `${p.linekind || "도로"} · ${p.status}${p.geom_src ? " · " + p.geom_src : ""}`,
+    src_name: p.src_name, geom_adequacy: p.geom_adequacy, geom_adequacy_note: p.geom_adequacy_note, approx: !!p.approx,
+    sources: p.src_url ? [p.src_url] : [], note: p.note,
+    // ⚠ 선형 출처는 **선형 정확도 행**이 말한다(시안 §13) — 비고 문단 꼬리에 이어 붙이면
+    //   그 한 줄 때문에 비고가 대여섯 줄이 된다(철도 어댑터와 같은 규칙, 양쪽에 건다).
+    stage_note: `${p.linekind || "도로"} · ${p.status}`,
     geometry: { coordinates: cen }, geo_approx: !!(p.approx || p.geom_partial),
   };
 }
@@ -6764,9 +6925,17 @@ function initKakao() {
        통째로 잘렸다(실측 2026-08-14: 광명서울고속도로 툴팁 하단 3줄 소실).
      ⚠ 잘라서 감추지 않는다 — **자리를 옮긴다**. 사실을 지우는 대신 커서 위로 뒤집는다(P2·P5).
      ⚠ 가로 한계도 상수 310이 아니라 **잰 폭**을 쓴다 — bare(300)와 일반(내용폭)이 다르다. */
+  /* `bare === "dark"` = 겹친 지점 툴팁(시안 §13). 그릇을 **투명하게** 비켜 준다 — 안쪽 카드가
+     검정 배경·그림자·모서리를 직접 그리므로, 흰 그릇을 그대로 두면 검은 카드 둘레에 흰 테가 남는다.
+     폭은 내용이 정한다(이름 두어 개라 짧다) — 300px 고정은 §12 흰 카드의 규칙이다. */
   const showTip = (html, ev, bare) => { tip.innerHTML = html; tip.style.display = "block";
+    const dark = bare === "dark";
     tip.style.padding = bare ? "0" : "6px 9px";
-    tip.style.width = bare ? "300px" : "";
+    tip.style.width = bare && !dark ? "300px" : "";
+    tip.style.maxWidth = dark ? "min(360px, calc(100vw - 16px))" : "300px";
+    tip.style.background = dark ? "transparent" : "rgba(255,255,255,.97)";
+    tip.style.border = dark ? "0" : "1px solid #d3d7e0";
+    tip.style.boxShadow = dark ? "none" : "0 4px 14px rgba(0,0,0,.16)";
     tip.style.overflow = bare ? "hidden" : "";
     const x = ev ? ev.clientX : 0, y = ev ? ev.clientY : 0;
     tip.style.left = "0px"; tip.style.top = "0px";           // 재기 전에 초기화(직전 위치가 폭·높이를 왜곡한다)
@@ -7074,21 +7243,13 @@ function initKakao() {
           // 누르면 목록, 끌면 지도 이동 (dragThru — 2026-08-14). 종전의 mousedown 통째 차단은
           // 클릭을 살리려다 이 자리에서 시작한 드래그를 죽였다.
           dragThru(el, () => { hideTip(); showCluster(el._g); });
-          /* 커서를 올리면 **「몇 건 · 어떤 유형인지」**만 (시안 §03 상호작용 1단계).
-             도넛의 원호가 비율을 말하지만 숫자는 총계뿐이라, 「교통 3 · 일자리 2」를 읽으려면
-             눌러서 목록을 열어야 했다. 클릭(2단계)은 그대로 상세 목록이다.
-             ★ 카드 문법은 호재 마커와 **같은 부품**(tipCard) — 띠는 유형 구성 비율로 나눠 칠한다
-               (배지의 도넛이 말하는 것과 같은 사실, 같은 색). */
-          el.onmouseenter = ev => { const g = el._g || [];
-            const m = {}; g.forEach(s => { const c = catOf(s); m[c] = (m[c] || 0) + 1; });
-            const has = CAT_KEYS.filter(c => m[c]);
-            const f = g[0] || {};
-            showTip(tipCard({
-              band: has.map(c => ({ col: CAT_COLOR[c], w: m[c] })),
-              title: '이 지점 <span class="mono">' + g.length + '</span>건',
-              chips: has.map(c => tipChipCat(CAT_COLOR[c], c + " " + m[c])),
-              sub: [f.sd, f.sg, f.dong].filter(Boolean).join(" "),
-              foot: "클릭하면 이 지점 목록" }), ev, true); };
+          /* ★★ 겹친 지점 툴팁 = **5건까지 이름 그대로, 6건부터 두 축 요약** (2026-08-14 시안 §13).
+             ☠ 종전엔 「이 지점 2건 · 교통 2」뿐이라 *"어떤 등급·단계인지 알 수 없고"*, 흰 카드에
+               유형색 글자를 써서 클러스터 도넛의 붉은 테두리와 두 붉은색이 서로를 흐렸다.
+               *"두 건이라면 그 두 건을 그대로 보여주는 편이 요약보다 짧습니다."*
+             ★ 문턱은 **모달과 같은 상수**(CLUSTER_SUMMARY_MIN)다 — *"호버와 탭이 다른 수를 쓰면
+               사용자가 두 규칙을 배워야 합니다."* 값을 여기 다시 적지 않는다(적으면 갈린다). */
+          el.onmouseenter = ev => showTip(clusterTipHtml(el._g || []), ev, "dark");
           el.onmouseleave = hideTip;
           ov = new K.CustomOverlay({ position: ll, content: el, zIndex: 11, yAnchor: .5, xAnchor: .5, clickable: true });
           ov._el = el; clusterOv.set(gk, ov);
@@ -8194,7 +8355,8 @@ function renderUndet(more) {
 let RAW = null;
 
 /* ══════════ 상단 통합 검색 (동·시군구·아파트·호재) — 지역 파라미터 없음, 로드된 전 데이터 대상 ══════════ */
-const SRCH_TAG = { dong: { t: "동", c: "#4460e0" }, sgg: { t: "지역", c: "#2c3fb5" }, apt: { t: "아파트", c: "#d6156d" } };
+/* (종류 배지 색표 `SRCH_TAG`는 2026-08-14에 지웠다 — 배지를 그룹 헤더로 옮기면서 쓰는 자리가
+   없어졌다. 부품이 사라지면 그 부품을 지키던 상수도 없앤다: 죽은 표는 살아 있는 것으로 읽힌다.) */
 const srchNorm = s => (s || "").toLowerCase().replace(/\s+/g, "");
 /* ★ 낱말이 떨어져 있어도 찾는다 (2026-08-12 사용자 *"'CJ가양'이라고 검색하면 가양동 CJ공장부지가
      뜨게"*). 종전엔 공백만 지우고 **한 덩어리 부분일치**라, 이름 안에서 낱말 순서가 다르면
@@ -8226,29 +8388,38 @@ function srchResults(qRaw) {
   const out = [];
   // 접두 일치 우선 → 붙어 있는 부분일치 → 조각이 흩어진 것. **덩어리로 맞는 쪽이 언제나 위**다.
   const rank = name => { const n = srchNorm(name); return n.startsWith(q) ? 0 : n.includes(q) ? 1 : 2; };
-  // 동 (법정동 경계 보유 지역)
+  /* ★ 행 = **이름 · 부가정보 · 값** 세 칸이다 (2026-08-14 시안 §04 갱신).
+     *"동은 호재 건수, 아파트는 세대수, 호재는 단계. 92px 고정 열로 오른쪽에 세우면 값끼리
+     세로로 비교되고, 이름 열은 남는 폭을 전부 가져갑니다."*
+     ⚠ 종류 배지(`srchtag`)는 **그룹 헤더가 대신**하므로 행에서 뺀다 — 같은 말을 매 줄 다시 하며
+       이름 폭을 먹고 있었다(그 폭이 잘림의 원인이었다). */
+  // 동 (법정동 경계 보유 지역) — 값 = **그 동의 호재 건수**(패널과 같은 셈법: dongRelations)
   (DONG_GEO?.features || []).filter(f => srchHit(f.properties.EMD_KOR_NM, parts))
     .sort((a, b) => rank(a.properties.EMD_KOR_NM) - rank(b.properties.EMD_KOR_NM)
       || a.properties.EMD_KOR_NM.localeCompare(b.properties.EMD_KOR_NM, "ko"))
     .slice(0, 5)
     .forEach(f => out.push({ kind: "dong", name: f.properties.EMD_KOR_NM,
-      sub: `${f.properties.sido || "서울"} ${f.properties.sgg}`, run: () => showDong(f) }));
-  // 시군구 (전국 251)
+      sub: `${f.properties.sido || "서울"} ${f.properties.sgg}`,
+      val: `호재 ${dongRelations(f).length}`, mono: true, run: () => showDong(f) }));
+  // 시군구 (전국) — 값 칸은 비운다. 시군구 건수는 경계 링(ensureSggRings)이 있어야 세는데,
+  // 한 글자 칠 때마다 그걸 돌릴 수는 없다. **모르는 값을 지어내지 않고 빈칸으로 둔다**(P2).
   [...new Set((SGG_GEO?.features || []).map(f => `${f.properties.sido} ${sggDisplayName(f.properties.name)}`))]
     .filter(d => srchHit(d, parts)).sort((a, b) => rank(a) - rank(b)).slice(0, 3)
     .forEach(d => out.push({ kind: "sgg", name: d, sub: "시군구", run: () => showSgg(d) }));
-  // 아파트 (전국, 큰 단지 우선)
+  // 아파트 (전국, 큰 단지 우선) — 값 = 세대수(단지 **식별** 표기다. 비교 축이 아니다 — §08 각주와 같은 뜻)
   APTS.filter(a => srchHit(a.n, parts))
     .sort((a, b) => rank(a.n) - rank(b.n) || (b.hh || 0) - (a.hh || 0)).slice(0, 6)
     .forEach(a => out.push({ kind: "apt", name: a.n,
-      sub: `${a.sd || ""} ${a.sg || ""} ${a.dong || ""}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : ""}`.trim(),
-      run: () => showApt(a) }));
+      sub: `${a.sd || ""} ${a.sg || ""} ${a.dong || ""}`.trim(),
+      val: a.hh ? a.hh.toLocaleString() + "세대" : "", mono: true, run: () => showApt(a) }));
   // 호재 신호 (확정+정비+철도+도로+DART+건축 — 필터 무관 전체 검색, 등급순)
   const LVO = { A: 0, B: 1, C: 2, "미정": 3 };
   allSignalsFlat().filter(s => s.title && srchHit(s.title, parts))
     .sort((a, b) => rank(a.title) - rank(b.title) || LVO[levelOf(a)] - LVO[levelOf(b)]).slice(0, 8)
-    .forEach(s => out.push({ kind: "sig", name: s.title, color: colorOf(s),
-      sub: `${catOf(s)} · ${LEVEL_NAME[levelOf(s)]}${s.sg ? " · " + `${s.sd || ""} ${s.sg}`.trim() : ""}`,
+    .forEach(s => out.push({ kind: "sig", name: s.title, color: colorOf(s), lvl: levelOf(s),
+      // 등급은 **왼쪽 링**이 말한다 — 부가정보는 유형·세부, 값은 단계(시안 §04 실물)
+      sub: `${catOf(s)}${subLabel(s)}`,
+      val: PHASE_LABEL[phaseOf(s)] || phaseOf(s),
       run: () => srchGoSignal(s) }));
   return out;
 }
@@ -8284,18 +8455,35 @@ function initSearch() {
     srchItems.forEach((it, i) => {
       if (it.kind !== lastKind) {
         lastKind = it.kind;
-        const h = document.createElement("div"); h.className = "srchhead"; h.textContent = HEAD[it.kind]; panel.appendChild(h);
+        /* 그룹 헤더 = 종류 + **그 종류의 건수**(시안 §04 실물). 행의 배지를 대신하는 자리라
+           종류를 여기서 한 번만 말한다. */
+        const h = document.createElement("div"); h.className = "srchhead";
+        h.innerHTML = `<span>${HEAD[it.kind]}</span><span>${srchItems.filter(x => x.kind === it.kind).length}</span>`;
+        panel.appendChild(h);
       }
-      const el = document.createElement("div"); el.className = "srchitem";
-      const tag = it.kind === "sig"
-        ? `<span class="srchtag" style="background:${it.color}">호재</span>`
-        : `<span class="srchtag" style="background:${SRCH_TAG[it.kind].c}">${SRCH_TAG[it.kind].t}</span>`;
-      el.innerHTML = `${tag}<span class="srchmain">${srchHi(it.name, qRaw)}</span><span class="srchsub">${it.sub}</span>`;
+      const el = document.createElement("div"); el.className = "srchitem" + (it.kind === "sig" ? " sig" : "");
+      // 호재만 왼쪽에 등급 링 — 지도·목록과 **같은 문법**(크기=등급, 색=유형). 링 지름은 HJR에서 온다.
+      const ring = it.kind === "sig"
+        ? (() => { const sz = it.lvl === "미정" ? 11 : Math.max(9, HJR[it.lvl] || 9);
+            return `<i class="srchring${it.lvl === "미정" ? " dia" : ""}" style="width:${sz}px;height:${sz}px;border-color:${it.color}"></i>`; })()
+        : "";
+      el.innerHTML = `${ring}<span class="srchmain">${srchHi(it.name, qRaw)}</span><span class="srchsub">${it.sub}</span>`
+        + `<span class="srchval${it.mono ? " mono" : ""}">${it.val || ""}</span>`;
       el.onmousedown = e => e.preventDefault();   // blur보다 클릭이 먼저 처리되도록
       el.onclick = () => pick(i);
       it.el = el; panel.appendChild(el);
     });
     panel.style.display = "block";
+    place();
+  };
+  /* 드롭다운(560px)이 검색창(≤300px)보다 넓으므로 **오른쪽으로 넘칠 수 있다** — 넘친 만큼 왼쪽으로
+     민다(왼쪽 여백이 허락하는 만큼만). 잘림을 폭으로 고치면서 화면 밖 잘림을 만들지 않는다.
+     ⚠ 지도 툴팁(`showTip`)과 같은 규칙이다 — 뜨는 것은 **자리를 옮기지 잘리지 않는다**(§12·§13). */
+  const place = () => {
+    panel.style.left = "0px";
+    const r = panel.getBoundingClientRect(), M = 8;
+    const over = r.right - (window.innerWidth - M);
+    if (over > 0) panel.style.left = -Math.min(over, Math.max(0, r.left - M)) + "px";
   };
   inp.oninput = render;
   inp.onfocus = () => { if (inp.value.trim()) render(); };
@@ -8310,7 +8498,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260814f");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260814g");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8495,7 +8683,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260814f"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260814g"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8521,7 +8709,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260814f");
+  const CB = "?b=" + (window.BUILD || "20260814g");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
