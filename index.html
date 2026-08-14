@@ -953,6 +953,18 @@
     filter:drop-shadow(0 3px 2px rgba(0,0,0,.10)); }
   .apt-pop-nm { font-size:15px; font-weight:800; color:#1a1a1a; }
   .apt-pop-sub { font-size:11.5px; color:var(--muted); margin-top:3px; }
+  /* ★ **호버는 세 줄 안에서 끝난다** (시안 §12) — 지도 위 툴팁(`#_ktip`) 안에서만 건다.
+     노선 라벨 툴팁은 근거 문구가 6~8줄까지 늘어 화면 밖으로 밀렸다(2026-08-14 실측).
+     ⚠ 아파트 미리보기 팝업(`.apt-pop`을 지도에 직접 얹는 §07 카드)에는 걸지 않는다 — 거기선
+       같은 부품이 「읽는 카드」로 쓰여 자르면 안 된다. 그래서 `#_ktip` 안쪽으로 한정한다.
+     ⚠ 자른 만큼은 클릭하면 상세에 전부 있다(P2 — 감추는 게 아니라 미루는 것). */
+  #_ktip .apt-pop-nm { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; line-height:1.35; }
+  #_ktip .apt-pop-sub { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; line-height:1.5; }
+  /* ⚠ `max-height + overflow:hidden`으로 자르면 **글자가 반쯤 잘린 모습**이 된다 — 사장님이
+     지적한 그 증상과 똑같아진다. 잘렸다는 사실이 보이도록 **말줄임(…)**으로 끊는다.
+     그래서 flex를 -webkit-box로 덮는다(칩들은 인라인으로 흐른다). */
+  #_ktip .apt-pop-cats { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+    overflow:hidden; line-height:1.5; }
   .apt-pop-cats { font-size:12px; margin-top:8px; display:flex; flex-wrap:wrap; gap:4px 10px; border-top:1px solid var(--line); padding-top:7px; }
   .apt-pop-cats span { font-weight:700; }
   .apt-pop-cats .tot { color:var(--ink); font-weight:800; width:100%; margin-bottom:1px; }
@@ -6729,12 +6741,23 @@ function initKakao() {
   /* `bare` = 내용이 **자기 여백을 갖는** 카드다(호버 미리보기 §12 — 상단 유형색 띠가 모서리까지
      닿아야 해서 그릇의 padding을 0으로 내린다). 그릇 스타일이 인라인이라 CSS로는 못 이기므로
      여기서 직접 되돌린다 — 켠 자리와 끄는 자리를 한 함수 안에 둔다(한쪽만 남는 사고 방지). */
+  /* ☠ **화면 밖으로 나간 만큼이 그대로 잘렸다** (2026-08-14 사장님 *"글씨 잘리는건 여전하네"*).
+       종전 배치는 가로만 `innerWidth - 310`으로 막고 **세로는 `y - 10`에 그냥 놓았다** — 노선
+       라벨 툴팁처럼 6줄이 넘는 내용은 커서가 화면 아래쪽이면 바닥을 뚫고 나가 근거·출처가
+       통째로 잘렸다(실측 2026-08-14: 광명서울고속도로 툴팁 하단 3줄 소실).
+     ⚠ 잘라서 감추지 않는다 — **자리를 옮긴다**. 사실을 지우는 대신 커서 위로 뒤집는다(P2·P5).
+     ⚠ 가로 한계도 상수 310이 아니라 **잰 폭**을 쓴다 — bare(300)와 일반(내용폭)이 다르다. */
   const showTip = (html, ev, bare) => { tip.innerHTML = html; tip.style.display = "block";
     tip.style.padding = bare ? "0" : "6px 9px";
     tip.style.width = bare ? "300px" : "";
     tip.style.overflow = bare ? "hidden" : "";
     const x = ev ? ev.clientX : 0, y = ev ? ev.clientY : 0;
-    tip.style.left = Math.min(x + 14, window.innerWidth - 310) + "px"; tip.style.top = Math.max(8, y - 10) + "px"; };
+    tip.style.left = "0px"; tip.style.top = "0px";           // 재기 전에 초기화(직전 위치가 폭·높이를 왜곡한다)
+    const w = tip.offsetWidth, h = tip.offsetHeight, M = 8;
+    let L = x + 14, T = y - 10;
+    if (L + w > window.innerWidth - M) L = Math.max(M, x - 14 - w);   // 오른쪽이 좁으면 커서 왼쪽으로
+    if (T + h > window.innerHeight - M) T = window.innerHeight - M - h;
+    tip.style.left = Math.max(M, L) + "px"; tip.style.top = Math.max(M, T) + "px"; };
   const hideTip = () => { tip.style.display = "none"; };
   const evToClient = mev => { const pt = mev && mev.point ? mev.point : null; const r = mapEl.getBoundingClientRect();
     return pt ? { clientX: r.left + pt.x, clientY: r.top + pt.y } : { clientX: 0, clientY: 0 }; };
@@ -6759,19 +6782,41 @@ function initKakao() {
        ⚠ 터치는 건드리지 않는다 — 이 사고는 마우스 경로(`mousedown`)에서만 났고, 터치 경로를
          같이 바꾸면 핀치 줌까지 이 코드가 책임져야 한다. 이번 세션에서 검증한 범위만 고친다. */
   const DRAG_SLOP = 4;   // px — 이 이하로 움직였으면 클릭(손떨림 허용치)
+  /* ☠☠ **누적 델타를 쓰면 지도가 날아간다** (2026-08-14 사장님 *"지도가 파랗네"* — 이 코드의 첫 판).
+       `setCenter`를 부르면 **투영의 기준이 함께 움직인다**. 화면 중심은 언제나 컨테이너의
+       (w/2, h/2)이므로, 시작점 기준 누적 델타(`clientX - sx`)를 매 mousemove마다 다시 적용하면
+       **이벤트 수만큼 곱해서** 이동한다. 실측(2026-08-14): 100px 드래그를 이벤트 30개로 쪼개니
+       경도 -0.0300 대신 **-0.2805**(9배) — 실제 드래그는 이벤트가 훨씬 많아 지도가 maxBounds
+       모서리(서해)까지 밀리고, 거기엔 신호가 없으니 「0건 · 파란 화면」이 된다.
+     ⚠ 첫 판 검증이 이걸 못 잡은 이유: 합성 드래그는 mousemove가 1~2개라 곱이 1에 가까웠다.
+       **이벤트를 여러 개로 쪼개서** 재현해야 드러난다(회귀 시 같은 방식으로 재확인할 것).
+     ⇒ **월드 좌표**(`pointFromCoords`)로 옮긴다. 컨테이너 좌표와 달리 중심을 움직여도 값이
+       변하지 않는다(실측 2026-08-14: 중심을 0.15°·0.25° 옮겨도 같은 지점의 월드 좌표는
+       (257,460) 그대로 · 컨테이너 좌표는 (1043,412)→(-574,-620)). 기준이 안 움직이므로
+       **시작점 기준 누적 델타를 매번 적용해도 결과가 같다**(멱등) — 이벤트 수·처리 지연과 무관.
+       (증분 방식도 합은 맞지만, 매 이벤트가 직전 setCenter의 반영을 전제로 해서 투영 갱신이
+        한 박자 늦으면 그만큼 이동이 사라진다 — 실측에서 이벤트 120개일 때 이동량이 1/20로 줄었다.)
+     ⚠ 월드 단위와 화면 px의 비는 **재서** 쓴다(레벨마다 다를 수 있다 — 상수로 박지 않는다). */
   const dragThru = (el, onClick) => {
     el.onmousedown = ev => {
       if (ev.button) return;
       ev.preventDefault(); ev.stopPropagation();   // 텍스트 선택 방지는 그대로 남긴다
       const sx = ev.clientX, sy = ev.clientY;
-      let prj = null, p0 = null, moved = false;
-      try { prj = map.getProjection(); p0 = prj.containerPointFromCoords(map.getCenter()); } catch (e) { prj = null; }
+      let prj = null, p0 = null, kx = 1, ky = 1, moved = false;
+      try {
+        prj = map.getProjection();
+        p0 = prj.pointFromCoords(map.getCenter());
+        const q0 = prj.pointFromCoords(prj.coordsFromContainerPoint(new K.Point(0, 0)));
+        const q1 = prj.pointFromCoords(prj.coordsFromContainerPoint(new K.Point(100, 100)));
+        kx = (q1.x - q0.x) / 100; ky = (q1.y - q0.y) / 100;
+        if (!p0 || !isFinite(kx) || !kx || !isFinite(ky) || !ky) prj = null;
+      } catch (e) { prj = null; }
       const mv = e => {
         const dx = e.clientX - sx, dy = e.clientY - sy;
         if (!moved && Math.abs(dx) + Math.abs(dy) < DRAG_SLOP) return;
         if (!moved) { moved = true; hideTip(); }   // 끌기 시작 = 말풍선은 물러난다
         if (!prj) return;
-        try { map.setCenter(prj.coordsFromContainerPoint(new K.Point(p0.x - dx, p0.y - dy))); } catch (e) {}
+        try { map.setCenter(prj.coordsFromPoint(new K.Point(p0.x - dx * kx, p0.y - dy * ky))); } catch (e2) {}
       };
       const up = e => {
         window.removeEventListener("mousemove", mv, true);
@@ -8212,7 +8257,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260814c");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260814d");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8397,7 +8442,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260814c"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260814d"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8423,7 +8468,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260814c");
+  const CB = "?b=" + (window.BUILD || "20260814d");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
