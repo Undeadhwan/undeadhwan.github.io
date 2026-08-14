@@ -34,6 +34,30 @@
      검색창처럼 정말 글자를 넣는 곳은 자기 커서를 갖는다. */
   header { cursor:default; }
   header input, header select { cursor:auto; }
+  /* ★★ **화면 부속은 글이 아니다** — 캐럿이 앉지 않고, 지도를 잡은 손이 글자를 집지 않는다
+     (2026-08-14 사장님 *"커서 깜빡임 현상 다 제거했으면 합니다"* · *"드래그가 잘 안되고 부드럽지가 않어"*).
+     ⚠ 같은 사고를 **네 번, 지목당한 한 곳씩** 고쳐 왔다: `.line-badge`(08-04 *"프롬프트가 깜빡여"*) ·
+       `.dong-lbl`(08-11 *"드래그가 라벨을 파랗게 뒤덮는다"*) · `header{cursor:default}`(08-14 오전) ·
+       지역 팝오버(08-14 저녁, 이 건). 선택자를 하나씩 막는 한 **다음에 생기는 부품이 또 예외**가 된다
+       — 이 저장소가 이름 붙여 둔 「규칙이 한쪽에만 걸림」이다.
+     ⇒ 규칙을 **뿌리에** 건다. 실측(2026-08-14 라이브): 지도 위 pointer 대상 174개 중 **162개가
+       선택 가능**이었고 그중 겹침 배지만 107개다 — 지도를 끄는 손이 거의 언제나 글자 위에 있었다.
+       드래그가 선택으로 새면 그 손짓 동안 지도는 **아예 안 움직인다**(= "드래그가 잘 안된다").
+     ⚠ **약한 쪽(선택 금지 목록)은 열거하지 않는다** — 부품이 늘 때마다 낡는다(CLAUDE.md).
+       **강한 쪽 = 읽고 복사하는 것**만 되돌린다: 입력창과 상세 패널 본문(주소·근거·출처).
+     ※ 아래에 흩어져 남은 개별 `user-select:none`(.dong-lbl·.line-badge·.chip·.tnode…)은 이제
+       이 규칙에 덮인다 — 해로울 건 없어 남겨 두되, 새로 만들 때 **따라 적지 않는다**. */
+  body { user-select:none; -webkit-user-select:none; -webkit-tap-highlight-color:transparent; }
+  input, textarea, select, .detail { user-select:text; -webkit-user-select:text; }
+  /* ★ **지도 제스처는 지도가 갖는다** (같은 날 사장님 지적의 나머지 절반).
+     실측: `#map`이 `touch-action:auto`라 터치·트랙패드에서 브라우저가 같은 손짓을 페이지 스크롤·
+     확대로도 해석하고, 지도는 그 판정이 끝나기를 기다린다 — 그만큼 팬이 늦게 붙는다. 카카오가
+     자기 제스처를 직접 처리하므로 브라우저 몫을 비운다(Leaflet `.leaflet-container`가 같은 규칙).
+     `overscroll-behavior`는 지도 끝에서 페이지가 딸려 흔들리는 것(당겨서 새로고침 포함)을 막는다.
+     `grab/grabbing`은 "끌 수 있다 / 끌고 있다"를 손 모양으로 말한다 — 지도의 표준 문법이다. */
+  html, body { overscroll-behavior:none; }
+  #map { touch-action:none; cursor:grab; }
+  #map:active { cursor:grabbing; }
   body { font-family:'Gothic A1','Apple SD Gothic Neo',sans-serif; -webkit-font-smoothing:antialiased;
          color:var(--ink); background:var(--bg); }
   /* ★ 숫자·날짜는 **모노스페이스**다 (시안 §06 「숫자와 날짜는 모노스페이스로 데이터임을 표시」).
@@ -791,6 +815,11 @@
   .advfacts .advnote { font-size:10.5px; color:#a08a4d; margin-top:3px; }
   .back { font-size:12px; color:var(--accent); cursor:pointer; margin-bottom:8px; display:inline-block; }
   .summary { border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:12.5px; margin-bottom:12px; background:#fafafa; }
+  /* ⚠ **`.card` 계열은 현재 붙을 요소가 없다** (2026-08-14 — `makeCard`/`cardHtml` 폐기, 세션59).
+     목록·패널은 전부 행 표(`.ltab`/`.rowtab`)로 옮겨 갔다. 그런데도 지우지 않은 이유는 하나 —
+     이 블록 안의 `.card.dimyr`가 **「시점으로 보기」 슬라이더의 흐림 규칙**이고, 그 컨트롤을
+     되살릴지 걷을지가 아직 열려 있기 때문이다(`miniBarHtml` 위 주석 참조). 판단이 나오면
+     **한 번에** 정리한다 — 절반만 지우면 되살릴 때 짝이 안 맞는다. */
   .card { border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:10px; cursor:pointer; }
   .card:hover { border-color:#b0b0b6; }
   /* ══ 카드 문법 (2026-08-09 개편) — 다섯 줄이 각각 한 질문에 답한다. 데스크톱·모바일 공용이다
@@ -4411,6 +4440,18 @@ function asOfLabel(s, yr) {
   return "진행 중 (추정)";
 }
 /* 카드 미니 진행바: 공통 시간축 '24~'34, 완료=실선/잔여=빗금/◆목표/오늘·기준선 */
+/* ☠☠ **「시점으로 보기」 슬라이더가 효과 대부분을 잃었다** (2026-08-14 발견 · 판단 대기).
+   `YEAR_SEL`을 읽어 화면을 바꾸던 곳은 셋이었다 — ① 이 `miniBarHtml`(그 해 시점 상태 문구)
+   ② `makeCard`의 `dimyr`(기준연도 미도달 흐림) ③ `renderJeongbiPoly`(아직 고시 안 된 정비구역 숨김).
+   카드가 행 표로 바뀌며 ①②의 호출부가 0이 됐고(세션58), **③만 살아남았다.**
+   ⇒ 지금 슬라이더를 끌면 정비구역 폴리곤 몇 개가 나타났다 사라질 뿐, **호재 자체(핀·행·상세)는
+     시점을 전혀 반영하지 않는다.** 조작은 있는데 답이 거의 없는 상태라 P5(정직)에 걸린다.
+   ⚠ 이걸 「죽은 컨트롤」로 적었다가 정정했다(같은 날) — `YEAR_SEL` 검색 결과가 잘린 화면만 보고
+     단정했기 때문이다. **소비처를 셀 때는 목록을 끝까지 본다.**
+   ⇒ 이 함수와 `asOfLabel`·`targetLabel`·`sigTimeline`·`mpct`/`M0`/`M1`, 그리고 CSS `.card.dimyr`·
+     `.mbar`/`.mtrack` 계열은 **고아지만 일부러 남긴다**. 「되살릴지 / 컨트롤을 걷을지」가 정해지기
+     전에 지우면 되살릴 재료가 사라진다(사장님 판단 대기 — HANDOFF §0-59 열린 항목).
+   ⚠ 「호출부 0이니 죽었다」로 이것들을 지우지 말 것. 죽은 건 **연결**이지 부품이 아니다. */
 const M0 = 2024, M1 = 2034;
 const mpct = y => Math.max(0, Math.min(100, (y - M0) / (M1 - M0) * 100));
 function miniBarHtml(s) {
@@ -4458,127 +4499,8 @@ function miniBarHtml(s) {
     <div class="mmeta"><span class="e l">'24</span>${lbHtml}<span class="e r">'34</span></div>
   </div>`;
 }
-/* 마일스톤 트랙 — 계획·인가·착공·준공 4점. **진척률(%)·게이지가 아니라 점과 선**이다(§7).
-   도달=채움 · 현재=속 빈 링 · 미래=회색. 실선/점선 문법(§1-7)은 여기선 안 쓴다 — 도달 여부는
-   사실이고, 미래 칸은 애초에 회색으로 "아직 아님"을 말하므로 채널을 겹칠 이유가 없다. */
-function mtrackHtml(s) {
-  const i = PHASE_IDX[phaseOf(s)] ?? 0;
-  /* ★★ **트랙이 진행 표현의 정본이다** (2026-08-12 사용자 확정: *"바가 있을거면 다 있고 없을거면
-     다 없어야겠지. 모든 호재들은 단계를 갖고 있으니깐"*).
-     실측이 그 말을 뒷받침했다 — 미니 10년 바는 전국 5,213건 중 **456건(8.7%)**에만 그려지는
-     예외 부품이었고, 다 그리려면 날짜를 모르는 4,757건에 **빈 10년 축**을 그려야 했다(§7 근거 없는
-     정밀함). 네이버식 연대기로 바꿔도 **28%**만 연대기가 된다. **100%인 것은 단계뿐**이다.
-     ⇒ 트랙은 언제나 그리고, **아는 날짜만** 칸 아래에 붙인다. 모르면 칸 이름만 — 그게 사실이다.
-     ⚠ 목표(eta)는 「'31 목표」로 적어 **사실(지난 날짜)과 구분**한다(P2). */
-  const dots = PHASES.map((p, k) => {
-    const cls = k < i ? "done" : k === i ? "cur" : "";
-    return (k ? `<i class="ln ${k <= i ? "done" : ""}"></i>` : "") + `<i class="d ${cls}" title="${phaseLabel(p)}"></i>`;
-  }).join("");
-  const ms = s.milestones || [];
-  const _today = new Date(TODAY).toISOString().slice(0, 10);
-  const at = (p, isCur) => {
-    /* ☠ **한 칸에 사건이 여럿일 때 무엇을 보여줄 것인가** (2026-08-12 사용자 "서남선 계획이 '20.11이
-       아닐 텐데" → 전수조사 328건). 종전엔 무조건 **가장 이른 것**이라, 마곡나루역(서남선)이
-       6년 전 전신(목동선)의 2차 망 고시 '20.11을 달고 있었다 — 같은 칸에 '26.6 사건이 둘이나
-       더 있는데도. 칸마다 묻는 것이 다르다:
-         · **지난 단계** = 「언제 그 단계가 됐나」 → **최초**(도달일)
-         · **현재 단계** = 「지금 어디까지 왔나」 → **최신**
-       ⚠ **아직 오지 않은 날짜는 사실이 아니다**(P2). 소스가 `state:"done"`으로 보내도(고양은평선
-         「착공 2026-12 done」 9건 실측) 오늘 이후면 **목표**로 적는다 — 날짜를 지우지도, 사실이라
-         우기지도 않는다. */
-    const d = ms.filter(m => (m.phase === p || (p === "준공·개통" && (m.phase || "").indexOf("준공") === 0))
-                             && m.date && m.state !== "target" && m.state !== "future")
-      .map(m => String(m.date)).sort();
-    const past = d.filter(x => x <= _today);
-    const hit = past.length ? (isCur ? past[past.length - 1] : past[0]) : null;
-    // 그 날짜를 만든 마일스톤의 **원문 링크**(있으면) — 「무엇이 근거인가」로 바로 갈 수 있게 한다
-    const src = hit && ms.find(m => String(m.date) === hit && m.url);
-    if (hit) return { txt: _tcYm(hit), on: true, url: src && src.url };
-    if (d.length) return { txt: `${_tcYm(d[0])} 예정`, on: false };   // 소스가 준 날짜인데 아직 안 왔다
-    const eta = ms.filter(m => (m.phase === p || (p === "준공·개통" && (m.phase || "").indexOf("준공") === 0))
-                               && /^\d{4}$/.test(String(m.eta || "")))[0];
-    return eta ? { txt: `'${String(eta.eta).slice(2)} 목표`, on: false } : null;
-  };
-  const lbs = PHASES.map((p, k) => {
-    const d = at(p, k === i);
-    const dt = d ? (d.url
-      ? `<a href="${d.url}" target="_blank" rel="noopener" title="이 단계의 근거 원문" onclick="event.stopPropagation()">${d.txt}</a>`
-      : d.txt) : "";
-    return `<span class="${k === i ? "on" : ""}" style="left:${k / (PHASES.length - 1) * 100}%">${phaseLabel(p)}${
-      d ? `<em class="${d.on ? "fact" : "eta"}">${dt}</em>` : ""}</span>`;
-  }).join("");
-  return `<div class="mtrk" style="--phc:var(--accent)"><div class="row">${dots}</div><div class="lbs">${lbs}</div></div>`;
-}
-/* 카드 생성 (클릭 + hover 지도 연동) */
-function makeCard(s, extra = "", onClick, lead = "") {
-  const el = document.createElement("div");
-  el.className = "card";
-  // 기준연도까지 완료범위 미도달 신호는 흐림 (숨기지 않음 — 간트의 dim과 동일)
-  const t = targetOf(s);   // ⚠ `s.target_completion`을 직접 읽지 말 것 — 어댑터가 전부 null이다(§targetOf)
-  // 흐리지 **않을** 조건: 완료 시점을 알고 그 시점이 기준연도까지 왔거나, **이미 완료(시점 미상)**다.
-  // ⚠ 흐림은 「아직 아니다」라는 주장이다 — 완료된 것에 걸면 화면이 거짓말을 한다(P5).
-  const reached = t && (t.dateless || t.finEnd <= YEAR_SEL);
-  if (YEAR_SEL && !reached && s.status !== "종결") el.classList.add("dimyr");
-  el.innerHTML = cardHtml(s, extra, lead);
-  el.onclick = onClick || (() => showSignal(s, true));
-  el.onmouseenter = () => { el.classList.add("hl"); mapApi?.emphasizePin?.(s); };
-  el.onmouseleave = () => { el.classList.remove("hl"); mapApi?.emphasizePin?.(null); };
-  return el;
-}
 
 /* ══════════ 패널: 홈 ══════════ */
-function cardHtml(s, extra = "", lead = "") {
-  const ph = phaseOf(s);
-  const pIdx = PHASE_IDX[ph];
-  const roadLine = s._road && (s.access_points || []).length;   // 선형 보유 도로(지도에 선으로 표시됨)
-  const noCoord = !signalPoints(s).length && !roadLine;
-  const icMissing = roadLine && s.road_kind === "전용" && !(s.ic_points || []).length;
-  const km = (getRadius(s) / 1000).toFixed(1).replace(".0", "");
-  const dropped = s.status === "종결";
-  const detail = s.current_stage && s.current_stage !== ph ? ` — ${s.current_stage}` : "";
-  /* ── 카드 문법 (2026-08-09 개편 — 사용자 "프로토타입 버전이 훨씬 깔끔해, 특히 진척도 바").
-     다섯 줄이 각각 **하나의 질문**에 답한다(HANDOFF §2). 종전엔 첫 줄에 분류·중분류·등급·
-     등급근거·영향반경·배지 6종이 한꺼번에 들어가 모바일에서 **세 줄로 접혔고**, 그 아래 연도축은
-     대부분 「완료 시점 미상」만 말했다. 정보를 지운 게 아니라 **자리를 옮겼다**:
-       · 등급 근거(장문) → 등급 알약의 tooltip (사실은 남고 줄만 짧아진다)
-       · 영향 반경·근거·확인일 → 맨 아래 근거 줄
-       · 진행 상태 → **마일스톤 트랙**(점·선). 연도축은 목표 시점이 있을 때만.
-     ⚠ 정직성 배지(초안·미확정 / 무산·종결 / 위치 미확정 / 시설명 미확보 / 진출입 미확정)는
-       **한 개도 빼지 않는다** — P5는 화면이 좁다고 양보할 수 있는 게 아니다. */
-  const gb = String(gradeBasisHtml(s)).replace(/<[^>]+>/g, "").replace(/\s*·\s*$/, "").trim();
-  const mv = freshness(s);
-  const what = s.current_stage && s.current_stage !== ph ? s.current_stage : "";
-  const badges = [
-    /* ☠ **「확정층 승격 여부」와 「사실이 미확정인가」는 다른 축이다** (2026-08-12 사용자 *"초안,미확정
-       뱃지는 필요한건가?"*). `confirmed`는 건축HUB·DART 등 **후보층 어댑터가 전부 false로** 박는
-       운영 표시인데, 그걸 정직성 배지로 그대로 읽어 **착공일이 대장에 찍힌 건물까지** 「초안·미확정」을
-       달고 있었다 — 착공은 땅 위에서 벌어진 사실이라 초안이 아니다(P2: 사실은 사실로 적는다).
-       ⇒ 아직 **서류 단계(계획·인가)**일 때만 단다. 착공·준공에는 달지 않는다. */
-    (!s.confirmed && PHASE_IDX[phaseOf(s)] < PHASE_IDX["착공"]) ? '<span class="badge-draft">초안·미확정</span>' : "",
-    dropped ? '<span class="badge-drop">무산·종결</span>' : "",
-    noCoord ? '<span class="badge-near">위치 미확정 — 지도 미표시</span>' : "",
-    s.name_status === "미확보" ? '<span class="badge-near" title="허가 원본에 고유 명칭이 없어 동·지번으로 표시합니다. 건축물대장은 준공 후에 생성되므로 인가·착공 단계엔 공식 명칭이 없을 수 있습니다. 사업의 존재는 허가·착공 일자가 근거이며, 이름을 임의로 지어내지 않습니다.">시설명 미확보</span>' : "",
-    icMissing ? '<span class="badge-near" title="이 도로는 진출입 지점(IC·진입로)에서만 타고 내립니다. 공식 IC 위치가 아직 확정·공개되지 않아 영향권을 산정하지 않습니다(근거 없는 범위를 만들지 않음).">진출입 지점 미확정 — 영향권 미산정</span>' : "",
-  ].filter(Boolean).join(" ");
-  /* ★ **근거 링크가 카드에 없었다** (2026-08-12 사용자 "관련 고시 내용 사이트 링크 등도 같이 넣어줘").
-     실측: 신호 5,213건 중 **4,184건(80%)**이 `sources`를 갖고 있는데 상세 패널을 열어야만 보였다.
-     카드에서 바로 원문으로 갈 수 있게 한 칸 붙인다(카드 클릭과 겹치지 않게 전파를 멈춘다). */
-  const _srcs = (s.sources || []).filter(Boolean);
-  const srcLink = _srcs.length
-    ? _srcs.slice(0, 2).map((u, i) => `<a class="csrc" href="${u}" target="_blank" rel="noopener" onclick="event.stopPropagation()">원문${_srcs.length > 1 ? i + 1 : ""}</a>`).join(" ")
-    : "";
-  const foot = [gb, `영향 ${km}km`, stageCheckedHtml(s), srcLink].filter(x => x && String(x).trim()).join(" · ");
-  return `
-    <div class="chead">${lead}${levelPill(s)}<span class="cph" style="color:${colorOf(s)}">● ${phaseLabel(ph)}</span>
-      <span class="ccat" style="color:${colorOf(s)}">${catOf(s)}${subLabel(s)}</span>${srcBadge(s)}${extra}</div>
-    <div class="title">${sigTitle(s)}</div>
-    <div class="cmove"><span class="cfresh">${mv || '<span class="pmini">단계 변경 기록 없음</span>'}</span>${what ? `<span class="cwhat"> · ${what}</span>` : ""}</div>
-    ${fieldChangeHtml(s)}
-    ${mtrackHtml(s)}
-    ${badges ? `<div class="cbadges">${badges}</div>` : ""}
-    <div class="cfoot">${foot}</div>
-    ${miniBarHtml(s)}`;
-}
 function renderHome() {
   panelListRender = null;
   const p = document.getElementById("panel");
@@ -5824,13 +5746,6 @@ function fieldChangeList(s, days) {
   if (!cs.length) return [];
   if (!days) return cs;
   return cs.filter(c => { const d = Math.floor((TODAY - new Date(c.date)) / 864e5); return d >= 0 && d <= days; });
-}
-function fieldChangeHtml(s) {
-  const cs = fieldChangeList(s);
-  if (!cs.length) return "";
-  const one = c => `<span class="fchg"><b>${c.label}</b> ${String(c.from).slice(0, 22)} <i>→</i> ${String(c.to).slice(0, 22)}</span>`;
-  return `<div class="cfchg">${cs.slice(-3).map(one).join("")}
-    <span class="pmini">${cs[cs.length - 1].date} 확인</span></div>`;
 }
 function movDelta(s) {
   /* 소스 원문에 **날짜가 있는** 이력만으로 판정한다 — `observed`(우리가 처음 본 날)를 섞으면
@@ -8523,7 +8438,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260814h");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260814i");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8708,7 +8623,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260814h"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260814i"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8734,7 +8649,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260814h");
+  const CB = "?b=" + (window.BUILD || "20260814i");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
