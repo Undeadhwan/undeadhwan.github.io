@@ -413,6 +413,9 @@
     color:#fff; background:var(--ink); border:0; border-radius:8px; cursor:pointer; }
   .rpop .rgo:hover { opacity:.88; }
   /* 세대수도 조회 범위다 — 지역 칩과 같은 모양으로 둔다(시안 §03 헤더: 「300 세대+ ▾」) */
+  /* 세대수 셀렉트가 사이드바 슬롯으로 이사(2026-08-16 시안 §03) — 빈 헤더 상자는 접는다 */
+  #f-user:empty { display:none; }
+  #dk-hh-slot select { width:100%; box-sizing:border-box; }
   #apt-hh { font-size:14.5px; font-weight:600; padding:8px 12px; border:1px solid #d9dee8; border-radius:9px;
     background:#fff; color:#1a2233; cursor:pointer; }
   .regionbar select { font-size:14.5px; font-weight:600; padding:8px 11px; border:1px solid #d9dee8; border-radius:9px; background:#fff; color:#1a2233; cursor:pointer; min-width:94px; }
@@ -560,6 +563,37 @@
   .mvtag .phcell.now i { border-color:currentColor; }
   .mvtag .phcell.now i.ph3 { background:radial-gradient(circle, currentColor 0 2.2px, transparent 2.4px); }
   /* 기간 칩 (시안 §05) */
+  /* ★ 업데이트 탭 조회 축(기간·변경 유형)의 **사이드바 마운트** (2026-08-16 갱신 시안 §03·§05 —
+     *"사이드바는 세 탭에 모두 둡니다 — 자리는 같고 내용은 그 탭이 답하는 축입니다. …
+     업데이트는 기간·변경 유형입니다"*). 부품은 flow의 것 **그대로**(fbar·fsegs·fpc — 사본 아님,
+     renderFlow가 마운트만 갈아 끼운다). 여기 규칙은 272px 기둥에 맞춘 **배치 차이**만 적는다. */
+  #dk-flow { padding:11px 14px; display:flex; flex-direction:column; gap:10px; border-top:1px solid var(--line); }
+  #dk-flow:empty { display:none; }
+  #dk-flow .fbar { display:flex; flex-direction:column; align-items:stretch; gap:8px; margin:0; }
+  #dk-flow .fall { margin:0; font:600 var(--fs-s)/1 inherit; color:var(--ink2); background:#fff;
+    border:1px solid var(--line2); border-radius:999px; padding:7px 11px; cursor:pointer; text-align:center; }
+  #dk-flow .fall.on { background:var(--ink); border-color:var(--ink); color:#fff; }
+  #dk-flow .fper { display:flex; gap:5px; flex-wrap:wrap; }
+  #dk-flow .fpc { font-size:12px; padding:5px 9px; border:1px solid var(--line2); border-radius:999px;
+    cursor:pointer; background:#fff; color:var(--ink2); }
+  #dk-flow .fpc.on { background:var(--ink); border-color:var(--ink); color:#fff; font-weight:700; }
+  #dk-flow .fsegs { display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--line);
+    border-radius:var(--r-s); overflow:hidden; }
+  #dk-flow .fseg { background:#fff; border:0; border-right:1px solid var(--line); border-bottom:1px solid var(--line);
+    padding:9px 10px; text-align:left; cursor:pointer; font-size:12px; color:var(--ink2); }
+  #dk-flow .fseg:nth-child(2n) { border-right:0; }
+  #dk-flow .fseg:nth-last-child(-n+2) { border-bottom:0; }
+  #dk-flow .fseg .n { display:block; font-size:19px; font-weight:600; color:var(--ink);
+    font-variant-numeric:tabular-nums; }
+  #dk-flow .fseg.on { background:var(--panel); box-shadow:inset 0 -2px 0 var(--ink); }
+  #dk-flow .fcal { display:flex; flex-wrap:wrap; align-items:center; gap:6px; padding:8px;
+    border:1px solid var(--line2); border-radius:var(--r-s); background:#fff; }
+  #dk-flow .fcal[hidden] { display:none; }
+  #dk-flow .fcal label { display:inline-flex; align-items:center; gap:4px; font-size:11.5px; color:var(--ink2); }
+  #dk-flow .fcal input { font:inherit; font-size:12px; padding:4px 6px; border:1px solid var(--line2);
+    border-radius:6px; max-width:118px; }
+  #dk-flow .fcal-go { font:700 12px/1 inherit; color:#fff; background:var(--ink); border:0;
+    border-radius:6px; padding:6px 10px; cursor:pointer; }
   #flowv .fper { display:flex; gap:6px; flex-wrap:wrap; }
   #flowv .fpc { font-size:12.5px; padding:5px 11px; border:1px solid var(--line2); border-radius:999px;
     background:#fff; color:var(--ink2); cursor:pointer; white-space:nowrap; }
@@ -1353,7 +1387,18 @@
   /* 2026-07-30 UI 개편 — DESIGN.md 문법 적용. 대분류 4개(교통 포함)가 동일한 행,
      중분류는 아코디언 안 체크박스, **표시 옵션(선형)은 스위치**(필터와 모양부터 다르게),
      전체선택·해제 2버튼 → "초기화" 링크 1개(기본과 다를 때만 노출), hover "only"로 1클릭 단독보기. */
-  #dock { width:272px; flex-shrink:0; border-right:1px solid var(--line); background:#fff; overflow-y:auto; padding:0 0 24px; order:-1; }
+  /* ★ 기둥 구조 (2026-08-16 갱신 시안 §03) — 폭·경계·order는 **기둥(#dockcol)이** 갖고,
+     #dock은 그 안의 스크롤 영역만 맡는다. 지역 블록(#dk-region)은 스크롤 **밖**이라
+     3열 팝오버가 잘리지 않는다(마크업 주석 참조). */
+  #dockcol { width:272px; flex-shrink:0; border-right:1px solid var(--line); background:#fff;
+             order:-1; display:flex; flex-direction:column; min-height:0; }
+  #dk-region { flex:none; padding:12px 14px 11px; border-bottom:1px solid var(--line); }
+  #dk-region:empty { display:none; }
+  /* 시안 §03 실물: 「지역」 라벨 + 값 줄. 라벨은 axis 제목(.t)과 같은 문법이다 — 새 모양 금지. */
+  #dk-region .dk-rt { font-size:12px; font-weight:700; color:var(--ink2); margin-bottom:7px; }
+  #dk-region .regionbar { flex-wrap:nowrap; }
+  #dk-region .rchip { width:100%; justify-content:space-between; max-width:none; }
+  #dock { flex:1 1 auto; min-height:0; background:#fff; overflow-y:auto; padding:0 0 24px; }
   /* ★ **헤더 고정** (2026-08-11 사용자 UI 제안 D2). 4개를 다 펼치면 도크가 **1,478px**(뷰포트 900)이
      되어, 스크롤하는 동안 「지금 몇 건을 보고 있나」와 「초기화」가 화면에서 사라졌다.
      동작은 그대로 두고 **길 잃는 것만** 막는다(아코디언으로 강제로 접지 않는다 — 두 축을 나란히
@@ -1561,6 +1606,10 @@
   /* 모바일에서만 노출 — **기본 규칙 뒤**에 와야 display:none을 이긴다(캐스케이드 충돌 주의) */
   @media (max-width: 768px) { #maxis { display:flex; } }
   @media (max-width: 768px) {
+    /* 기둥은 모바일에서 투명해진다 — #dock의 바텀시트 규칙(아래)이 종전 그대로 동작.
+       지역은 JS(placeRegionBar)가 헤더로 되돌린다(시안 §11 — 값은 데스크톱과 같은 요소 하나). */
+    #dockcol { display:contents; }
+    #dk-region { display:none; }
     #dock { position:fixed; left:0; right:0; bottom:0; top:auto; width:auto;
             max-height:82vh; border:0; border-radius:16px 16px 0 0; z-index:1100;
             box-shadow:0 -6px 24px rgba(25,35,60,.20); overflow-y:auto;
@@ -1596,6 +1645,10 @@
        ⚠ 셀렉트 3개는 **지우지 않고 감춘다**. `syncRegionBar`·`fillRegion`·`enhanceSelects`가
          이것들을 상태 저장소로 쓰고 있어, 없애면 그 배선이 조용히 끊긴다. 팝오버는 같은
          `selectSido/selectSgg/selectDong`을 부르는 **표시 층**이다 — 로직을 복제하지 않는다. -->
+  <!-- `#rb-home` = 지역 블록의 **모바일 정착지 마커**. 데스크톱은 placeRegionBar가 이 블록을
+       사이드바(#dk-region)로 옮기고, 모바일로 좁아지면 이 마커 뒤로 되돌린다(시안 §03·§11 —
+       같은 요소 하나가 자리만 옮기므로 값·배선이 갈라질 수 없다). -->
+  <span id="rb-home" hidden></span>
   <div class="regionbar" id="regionbar">
     <button type="button" class="rchip" id="r-chip" aria-haspopup="true" aria-expanded="false">
       <span id="r-chip-t">전국</span><span class="cv">▾</span></button>
@@ -1648,7 +1701,19 @@
 </header>
 <div id="wrap">
   <div id="dock-dim" onclick="toggleDock(false)"></div>
-  <aside id="dock"></aside>
+  <!-- ★ 사이드바 기둥 (2026-08-16 갱신 시안 §03 — *"조회 조건을 사이드바 한 곳에 모읍니다 …
+       지역 → 유형 → 등급 → 단계 → 아파트 세대수 → 레이어"*).
+       `#dockcol` = 고정 기둥(272px·우측 경계선), 그 안에서
+       `#dk-region` = **지역 블록의 정착지**(세 탭 공유 · renderDock이 건드리지 않는 형제라
+         `#regionbar`의 팝오버·셀렉트 배선이 재렌더에도 산다. 스크롤 그릇 **밖**이라
+         3열 팝오버(420px+)가 잘리지 않고 지도 위로 뻗는다 — §0-59e가 걱정한 fixed 전환 불필요),
+       `#dock` = 스크롤 영역(유형·등급·단계·세대수·레이어 — renderDock이 통째로 다시 그림).
+       ⚠ 모바일(≤768px)에선 `#dockcol{display:contents}`로 투명해져 기존 바텀시트 규칙이 그대로다 —
+         지역은 JS가 헤더로 되돌린다(시안 §11 *"모바일은 상단 칩으로 나타납니다 — 값은 같습니다"*). -->
+  <aside id="dockcol">
+    <div id="dk-region"></div>
+    <div id="dock"></div>
+  </aside>
   <aside id="panel"></aside>
   <div id="map"></div>
   <!-- 모바일 하단 요약 바 — 조회조건에 맞는 신호 수 + 이번 주 **문서상** 움직임.
@@ -5304,6 +5369,14 @@ function renderDock() {
     + ((filter.region || filter.sd) ? 1 : 0);
   const dirty = !!filter.region || !!filter.sd || !(ALL_SUBS.every(k => filter.sub.has(k)) && PHASES.every(k => filter.phase.has(k))
     && GRADES_DISP.every(k => filter.lvl.has(k)) && filter.lines.has("철도선") && filter.lines.has("도로선"));
+  /* ★ 업데이트 탭의 사이드바 (2026-08-16 갱신 시안 §03·§05) — 자리는 같고 **내용은 그 탭의 축**이다.
+     지도·목록 = 유형·등급·단계·세대수·레이어 · 업데이트 = 기간·변경 유형(#dk-flow 마운트 —
+     내용은 renderFlow의 ctrlHtml 하나가 채운다). 지역 블록은 기둥(#dk-region)이라 세 탭 공유.
+     ⚠ 지도 축들의 상태(filter)는 flow에도 실제로 걸린다(visible) — 컨트롤을 숨기는 대신
+       아래 「필터 N개 적용 중 · 초기화」가 남아 걸린 것을 보이게·풀 수 있게 한다(숨은 필터 금지, P2).
+     ⚠ 모바일 시트는 종전 그대로 전체 축을 그린다(시안 §11 — 모바일 조회는 시트·칩 담당). */
+  const _flowTab = typeof VIEW_MODE !== "undefined" && VIEW_MODE === "flow"
+    && !matchMedia("(max-width:768px)").matches;
   dock.innerHTML = `
     <div class="dk-h">
       <b>${regionLabel() ? `<span class="rg" title="${regionLabel()}">${regionLabel()}</span>` : ""}<span
@@ -5311,6 +5384,7 @@ function renderDock() {
       
 
     </div>
+    ${_flowTab ? `<div id="dk-flow"></div>` : `
     <!-- ★ 시안 §03 목업 그대로 — 「유형」 제목 아래 「전체 선택」, 그 아래 대분류 아코디언 -->
     <div class="axis axis-cat">
       <div class="t">유형 <button class="dk-allcat" data-allcat="1" title="모든 유형·중분류를 켠다">전체 선택</button></div>
@@ -5327,12 +5401,21 @@ function renderDock() {
       <div class="t">단계</div>
       <div class="seg g2">${PHASES.map(ph).join("")}</div>
     </div>
+    <!-- ★ 아파트 세대수 — **단계 아래 · 레이어 위** (2026-08-16 갱신 시안 §03: *"지역 → 유형 →
+         등급 → 단계 → 아파트 세대수 → 레이어 … 세대수는 아파트를 걸러내는 부차적 조건이라
+         유형 위에 두지 않습니다"*). 종전 자리는 헤더(#f-user)였다 — 조회 조건이 두 곳에 갈려
+         있던 것을 사이드바 한 곳으로 모은다. 셀렉트는 **여기서 그리지 않는다** — 지도 초기화가
+         배선해 둔 요소(#apt-hh)를 renderDock 끝에서 이 슬롯에 다시 앉힌다(사본 금지). -->
+    <div class="axis axis-hh">
+      <div class="t">아파트</div>
+      <div id="dk-hh-slot"></div>
+    </div>
     <div class="axis">
       <!-- ★ 시안 실물엔 「선형 표시」 제목이 없다 — 아이콘(실선·점선)이 곧 이름이라 제목이 없어도
            무엇인지 읽힌다. 구분은 위 경계선 하나로 충분하다. -->
       <div class="opts">${LINE_OPTS.map(([k, lb, ln]) => `<div class="optrow${filter.lines.has(k) ? " on" : ""}" data-tog="lines" data-k="${k}">
         ${ln === null ? "" : `<i class="ln${ln}"></i>`}<span>${lb}</span><i class="sw"></i></div>`).join("")}</div>
-    </div>
+    </div>`}
     <!-- ★ 「필터 N개 적용 중 · 초기화」는 사이드바 **맨 아래**다 (시안 §03 목업 위치).
          상단에 두면 제목줄이 붐비고, 아래에 두면 필터를 다 훑은 끝에 「지금 몇 개 걸렸나」가 온다. -->
     <div class="dk-foot">${dirty ? `<span class="dk-nf">필터 ${nDirty}개 적용 중</span> · ` : ""}<button class="dk-rst${dirty ? " show" : ""}" data-all="on">초기화</button></div>
@@ -5346,10 +5429,42 @@ function renderDock() {
      두 줄이 되므로 상수로 박으면 그때 머리가 헤더 밑으로 숨는다 — 세지 않고 잰다. */
   const h = dock.querySelector(".dk-h");
   if (h) dock.style.setProperty("--dkh", Math.round(h.getBoundingClientRect().height) + "px");
+  // 세대수 셀렉트 재부착 — innerHTML 재작성으로 슬롯이 새로 생겼으니 **보관해 둔 같은 요소**를
+  // 앉힌다. 재생성하면 지도 초기화(레일러/카카오 두 갈래)가 걸어 둔 onchange가 죽는다.
+  const _hs = document.getElementById("dk-hh-slot");
+  if (_hs && window._aptHhEl) _hs.appendChild(window._aptHhEl);
+  // 업데이트 탭: 방금 innerHTML로 #dk-flow가 **빈 채** 새로 생겼다 — renderFlow가 다시 채운다.
+  // (renderFlow는 renderDock을 부르지 않으므로 순환 없음. 목록까지 다시 그리지만 셈 함수가 같아 무해)
+  if (_flowTab && typeof renderFlow === "function") renderFlow();
+}
+/* ★ 지역 블록의 자리 — **한 요소가 화면 폭에 따라 자리만 옮긴다** (2026-08-16 갱신 시안 §03·§11).
+   데스크톱 = 사이드바 최상단(#dk-region · 세 탭 공유) · 모바일 = 헤더(#rb-home 뒤).
+   복제하지 않고 **옮기는** 이유: `#regionbar`는 숨은 셀렉트 3개를 상태 저장소로 쓰고
+   팝오버 배선(paintRegionPop·clampPop)이 요소에 걸려 있다 — 사본을 만들면 값이 갈라진다.
+   DOM 이동은 리스너를 보존한다. */
+function placeRegionBar() {
+  const rb = document.getElementById("regionbar");
+  if (!rb) return;
+  const tgt = document.getElementById("dk-region"), home = document.getElementById("rb-home");
+  if (matchMedia("(max-width:768px)").matches) {
+    if (home && rb.previousElementSibling !== home) home.after(rb);
+  } else if (tgt && rb.parentElement !== tgt) {
+    if (!tgt.querySelector(".dk-rt")) tgt.insertAdjacentHTML("afterbegin", '<div class="dk-rt">지역</div>');
+    tgt.appendChild(rb);
+  }
 }
 function initDock() {
   const dock = document.getElementById("dock");
   if (!dock) return;
+  placeRegionBar();
+  /* ⚠ matchMedia change **하나에만 걸지 않는다** — 에뮬레이션·일부 웹뷰에서 발화하지 않아
+     지역 블록이 숨은 그릇(#dk-region, 모바일에서 display:none) 안에 갇힌 채 남았다(2026-08-16 실측).
+     resize는 반드시 온다 — 이동은 부모 비교 가드가 있어 매번 불러도 무해하다. */
+  try { matchMedia("(max-width:768px)").addEventListener("change", placeRegionBar); } catch (e) {}
+  window.addEventListener("resize", placeRegionBar);
+  // 세대수 셀렉트 참조 보관 — renderDock이 innerHTML을 다시 쓸 때마다 슬롯에 **같은 요소**를
+  // 다시 앉힌다(요소가 살아야 지도 초기화가 걸어 둔 onchange 배선이 산다).
+  window._aptHhEl = document.getElementById("apt-hh") || window._aptHhEl;
   /* ★ 필터 클릭 배선은 **하나다** — 도크(데스크톱)와 바텀시트(모바일)가 같은 핸들러를 쓴다
      (2026-08-13 시안 §11). 시트에 사본을 만들면 두 화면의 필터가 조용히 갈린다. */
   bindFilterClicks(dock);
@@ -5493,7 +5608,7 @@ function movDeltaHtml(s) {
   }
   const back = PHASE_IDX[d.to] < PHASE_IDX[d.from];   // 역행(인가→계획 등)은 정체·재추진 신호다(P5)
   /* ★ **전 → 후를 그림으로** (2026-08-13 시안 §05 머리기사):
-     *"등급은 링이 굵어지고, 단계는 점선이 실선이 되고, 미판정 해소는 마름모가 원이 됩니다.
+     *"등급은 링이 굵어지고, 단계는 점선이 실선이 되고, 등급 없음 해소는 마름모가 원이 됩니다.
      지도에서 쓰는 문법을 그대로 재사용하므로 새로 배울 것이 없습니다."*
      글자만으로 「인가 → 착공」이라 쓰면 **무엇이 얼마나 확정됐는지**가 안 보인다 — 아이콘이 그걸 말한다. */
   const pi = k => PHASE_IDX[k] ?? 0;
@@ -5557,11 +5672,13 @@ function renderFlow() {
   const upRows = chgRows.filter(x => _lvlChg(x).some(c => String(c.from) !== String(c.to) && !/미정|없음/.test(String(c.to))));
   const undetRows = chgRows.filter(x => _lvlChg(x).some(c => /미정|없음/.test(String(c.from)) && !/미정|없음/.test(String(c.to))));
   const nUp = upRows.length, nUndet = undetRows.length;
-  let html = `<div class="fwrap">
-    <!-- 부제·요약줄을 뺐다 (2026-08-12 사용자 "제거"): 지역은 좌측 헤더가, 건수는 아래
-         세그먼트가 이미 말한다 — 같은 말을 세 군데서 하면 정작 목록이 밀린다. -->
+  /* ★ 조회 축(전체·기간·변경 유형)의 자리 — **데스크톱은 사이드바 마운트(#dk-flow), 모바일은
+     본문 머리** (2026-08-16 갱신 시안 §03·§05 "업데이트 탭의 축은 기간·변경 유형 — 자리는
+     사이드바"). 마크업·핸들러는 아래 ctrlHtml **하나**고 마운트만 갈린다 — 두 벌이면 기간·종류
+     상태가 조용히 갈린다(「규칙이 한쪽에만」). renderDock이 flow 분기에서 마운트를 만든다. */
+  const ctrlHtml = `
     <div class="fbar">
-      <!-- ★ 변경 유형을 **4개로 고정**한다 (시안 §05): 신규 · 단계 진행 · 등급 상향 · 미판정 해소.
+      <!-- ★ 변경 유형을 **4개로 고정**한다 (시안 §05): 신규 · 단계 진행 · 등급 상향 · 등급 없음 해소(2026-08-16 시안 개칭 — 「미판정」은 화면 어휘에서 뺀다).
            *"상단 요약 숫자가 곧 필터"* — 0건이어도 칸을 없애지 않는다. 없애면 「그런 변화는 애초에
            안 센다」로 읽히고, 0으로 두면 「이번 기간엔 없었다」는 사실이 된다(P2). -->
       <button class="fall${FLOW_KIND === "all" ? " on" : ""}" data-kind="all">전체 <span class="n">${(past.length + nFld).toLocaleString()}</span></button>
@@ -5588,8 +5705,14 @@ function renderFlow() {
          0건이어도 칸을 없애지 않는다: 없애면 「그런 변화는 애초에 안 센다」로 읽히고,
          0으로 두면 「이번 기간엔 없었다」는 사실이 된다(P2). -->
     <div class="fsegs">${seg("new", "신규", nNew)}${
-      seg("chg", "단계 진행", nChg)}${seg("up", "등급 상향", nUp)}${seg("undet", "미판정 해소", nUndet)}</div>
-    `
+      seg("chg", "단계 진행", nChg)}${seg("up", "등급 상향", nUp)}${seg("undet", "등급 없음 해소", nUndet)}</div>`;
+  const _dkf = document.getElementById("dk-flow");
+  const _ctrlHost = (_dkf && !matchMedia("(max-width:768px)").matches) ? _dkf : null;
+  if (_ctrlHost) _ctrlHost.innerHTML = ctrlHtml;
+  let html = `<div class="fwrap">
+    <!-- 부제·요약줄을 뺐다 (2026-08-12 사용자 "제거"): 지역은 좌측 헤더가, 건수는 아래
+         세그먼트가 이미 말한다 — 같은 말을 세 군데서 하면 정작 목록이 밀린다. -->
+    ` + (_ctrlHost ? "" : ctrlHtml)
     + (future.length ? `<div class="fempty" style="margin:2px 0 6px">※ ${future.length.toLocaleString()}건은 소스의 날짜가 <b>아직 오지 않은 날</b>(착공 예정일 등)이라 움직임으로 세지 않았습니다</div>` : "");
   html += shown.length ? `<div class="fg" data-g="main"></div>`
     : `<div class="fempty">이 기간에 문서상 움직인 신호가 없습니다 — 기간을 넓혀 보세요</div>`;
@@ -5660,8 +5783,10 @@ function renderFlow() {
   if (seenN.length) put("확인", seenN);
   const fold = host.querySelector("#seenFold");
   if (fold) fold.onclick = () => { FLOW_SEEN_OPEN = !FLOW_SEEN_OPEN; renderFlow(); };
-  host.querySelectorAll(".fseg, .fall").forEach(b => b.onclick = () => { FLOW_KIND = b.dataset.kind; renderFlow(); });
-  const _go = host.querySelector("#f-cal-go");
+  // 컨트롤 배선은 **실제 마운트**에서 찾는다 — 사이드바(#dk-flow)에 심었으면 host에는 없다.
+  const _cb = _ctrlHost || host;
+  _cb.querySelectorAll(".fseg, .fall").forEach(b => b.onclick = () => { FLOW_KIND = b.dataset.kind; renderFlow(); });
+  const _go = _cb.querySelector("#f-cal-go");
   if (_go) _go.onclick = () => {
     const a = document.getElementById("f-cal-a").value, z = document.getElementById("f-cal-b").value;
     if (!a) { document.getElementById("f-cal-a").focus(); return; }
@@ -5669,7 +5794,7 @@ function renderFlow() {
     FLOW_CUSTOM = (z && z < a) ? [z, a] : [a, z || ""];
     renderFlow();
   };
-  host.querySelectorAll(".fpc").forEach(b => b.onclick = () => {
+  _cb.querySelectorAll(".fpc").forEach(b => b.onclick = () => {
     /* 「기간 지정」 = 시작·끝을 **직접** 고른다(시안 §05). 고정 칸(이번 주~1년)이 답하지 못하는
        질문 — 「지난 분기에 뭐가 움직였나」 — 이 자리에서만 답할 수 있다.
        ⚠ 날짜만 받고 **셈은 같은 함수**가 한다(`inWin`) — 기간 계산을 두 벌로 만들지 않는다. */
@@ -7745,6 +7870,10 @@ function setView(mode) {
     document.getElementById("v-" + v)?.classList.toggle("on", mode === v);
   // 하단 탭바와 헤더 칩은 **같은 상태**를 보여야 한다(두 곳에 있는 같은 스위치)
   document.querySelectorAll("#tabbar .tb").forEach(b => b.classList.toggle("on", b.dataset.view === mode));
+  // 사이드바 내용은 **탭의 축**이다(2026-08-16 시안 §03) — 탭이 바뀌면 사이드바도 갈아입는다.
+  // (flow 진입 시 renderDock이 renderFlow까지 부르므로 아래 mode==="flow" 분기의 renderFlow와
+  //  한 번 겹치지만, 같은 상태를 같은 함수로 두 번 그리는 것이라 무해하다 — 갈라짐이 없다.)
+  try { renderDock(); } catch (e) {}
   layoutBottom();
   // 상세 패널은 지도 위에 뜨는 부유 카드다 — 목록 위에 겹치면 목록을 가린다.
   const pn = document.getElementById("panel"); if (pn && mode !== "map") pn.style.display = "none";
@@ -8198,7 +8327,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260816a");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260816b");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8383,7 +8512,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260816a"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260816b"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8409,7 +8538,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260816a");
+  const CB = "?b=" + (window.BUILD || "20260816b");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
