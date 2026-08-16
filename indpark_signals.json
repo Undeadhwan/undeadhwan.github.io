@@ -9,7 +9,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 55,057,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 5505.7만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 55057000,
@@ -56,7 +56,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 9,325,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 932.5만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 9325000,
@@ -98,12 +98,153 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-고정-보령시",
+   "title": "고정 국가산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "A",
+   "lvl_basis": "지정면적 630.4만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 6304000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 1개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "충남",
+   "sg": "보령시",
+   "loc": "충남 보령시 고정 국가산업단지",
+   "indpark_kind": "국가",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085874/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 144010 「고정」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.48976191,
+     36.39703994
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
+   "id": "IP-옥포-거제시",
+   "title": "옥포 국가산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "A",
+   "lvl_basis": "지정면적 598.6만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 5986000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 1개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "경남",
+   "sg": "거제시",
+   "loc": "경남 거제시 옥포 국가산업단지",
+   "indpark_kind": "국가",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085874/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 148020 「옥포」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.70776637,
+     34.87721559
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
+   "id": "IP-현대제철구송산-당진시",
+   "title": "현대제철 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "A",
+   "lvl_basis": "지정면적 571.7만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 5717000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 1개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "충남",
+   "sg": "당진시",
+   "loc": "충남 당진시 현대제철 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244250 「현대제철」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.69708081,
+     36.99054914
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-갈사만조선-하동군",
    "title": "갈사만조선 일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 5,613,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 561.3만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 5613000,
@@ -145,12 +286,106 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-죽도-거제시",
+   "title": "죽도 국가산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "A",
+   "lvl_basis": "지정면적 418.1만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 4181000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 1개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "경남",
+   "sg": "거제시",
+   "loc": "경남 거제시 죽도 국가산업단지",
+   "indpark_kind": "국가",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085874/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 148030 「죽도」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.59695581,
+     34.90330539
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
+   "id": "IP-보은-보은군",
+   "title": "보은 국가산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "A",
+   "lvl_basis": "지정면적 417.8만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 4178000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 1개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "충북",
+   "sg": "보은군",
+   "loc": "충북 보은군 보은 국가산업단지",
+   "indpark_kind": "국가",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085874/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "zone_poi",
+   "geo_approx": true,
+   "geo_basis": "POI 정확일치 「보은산업단지」(시군 경계 가드 3.0km)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.732874,
+     36.427224
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-율촌제2-여수시",
    "title": "율촌제2 일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 3,793,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 379.3만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 3793000,
@@ -192,12 +427,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-우정지구③-화성시",
+   "title": "우정지구",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "A",
+   "lvl_basis": "지정면적 368.5만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 3685000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 1개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "경기",
+   "sg": "화성시",
+   "loc": "경기 화성시 우정지구",
+   "indpark_kind": "국가",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085874/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "sgg",
+   "geo_approx": true,
+   "geo_basis": "경기 화성시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.912751,
+     37.148921
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-광주연구개발특구첨단3지구광주경제자유구역-북구",
    "title": "광주연구개발특구첨단3지구(광주경제자유구역)",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 3,629,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 362.9만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 3629000,
@@ -239,12 +521,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-진해-창원시진해구",
+   "title": "진해 국가산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "A",
+   "lvl_basis": "지정면적 326.9만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 3269000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 3개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "경남",
+   "sg": "창원시 진해구",
+   "loc": "경남 창원시 진해구 진해 국가산업단지",
+   "indpark_kind": "국가",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085874/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 148040 「진해」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.70402471,
+     35.10433194
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-세종스마트-세종",
    "title": "세종스마트 국가산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 2,753,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 275.3만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 2753000,
@@ -286,12 +615,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-영일만4-포항시",
+   "title": "영일만4 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "A",
+   "lvl_basis": "지정면적 260.0만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 2600000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 1개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "경북",
+   "sg": "포항시",
+   "loc": "경북 포항시 영일만4 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247510 「영일만4」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.41237162,
+     36.10470556
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-삼척종합발전-삼척시",
    "title": "삼척종합발전 일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 2,581,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 258.1만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 2581000,
@@ -338,7 +714,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 2,477,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 247.7만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 2477000,
@@ -380,12 +756,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-세풍광양만권경제자유구역-광양시",
+   "title": "세풍(광양만권경제자유구역) 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "A",
+   "lvl_basis": "지정면적 242.2만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 2422000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 5개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "전남광주",
+   "sg": "광양시",
+   "loc": "전남 광양시 세풍(광양만권경제자유구역) 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "sgg",
+   "geo_approx": true,
+   "geo_basis": "전남 광양시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.658513,
+     35.032336
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-대산그린컴플렉스일반산업단지-서산시",
    "title": "대산그린컴플렉스일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 2,261,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 226.1만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 2261000,
@@ -432,7 +855,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 2,241,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 224.1만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 2241000,
@@ -479,7 +902,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 2,200,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 220.0만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 2200000,
@@ -526,7 +949,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 2,105,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 210.5만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 2105000,
@@ -573,7 +996,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 2,095,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 209.5만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 2095000,
@@ -603,8 +1026,6 @@
      36.792927
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -617,12 +1038,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-당진1철강-당진시",
+   "title": "당진1철강 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "A",
+   "lvl_basis": "지정면적 208.0만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 2080000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 4개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "충남",
+   "sg": "당진시",
+   "loc": "충남 당진시 당진1철강 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244540 「당진1철강」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.72806282,
+     36.98670803
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-오창테크노폴리스-청주시",
    "title": "오창테크노폴리스",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 2,017,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 201.7만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 2017000,
@@ -652,8 +1120,6 @@
      36.650667
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 8건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -671,7 +1137,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,817,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 181.7만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 1817000,
@@ -718,7 +1184,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,744,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 174.4만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 1744000,
@@ -765,7 +1231,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,739,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 173.9만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 1739000,
@@ -812,7 +1278,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,735,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 173.5만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 1735000,
@@ -842,8 +1308,6 @@
      36.991389
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -861,7 +1325,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,698,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 169.8만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 1698000,
@@ -903,12 +1367,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-밀양나노융합-밀양시",
+   "title": "밀양나노융합 국가산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "A",
+   "lvl_basis": "지정면적 165.4만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 1654000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 4개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "경남",
+   "sg": "밀양시",
+   "loc": "경남 밀양시 밀양나노융합 국가산업단지",
+   "indpark_kind": "국가",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085874/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 148090 「밀양나노」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.73226335,
+     35.49446326
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-오창나노테크스마트밸리산업단지-청주시",
    "title": "오창나노테크스마트밸리산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,612,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 161.2만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 1612000,
@@ -938,8 +1449,6 @@
      36.650667
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 8건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -957,7 +1466,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,594,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 159.4만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 1594000,
@@ -1004,7 +1513,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,575,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 157.5만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 1575000,
@@ -1056,7 +1565,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,565,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 156.5만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 1565000,
@@ -1103,7 +1612,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,481,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 148.1만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 1481000,
@@ -1150,7 +1659,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,460,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 146.0만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 1460000,
@@ -1197,7 +1706,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,410,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 141.0만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 1410000,
@@ -1244,7 +1753,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,371,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 137.1만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 1371000,
@@ -1291,7 +1800,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,305,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 130.5만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 1305000,
@@ -1333,12 +1842,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-영보-보령시",
+   "title": "영보 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "A",
+   "lvl_basis": "지정면적 125.1만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 1251000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 1개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "충남",
+   "sg": "보령시",
+   "loc": "충남 보령시 영보 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244310 「영보」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.49713179,
+     36.41620337
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-김천1일반산업단지4단계-김천시",
    "title": "김천1일반산업단지(4단계)",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,241,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 124.1만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 1241000,
@@ -1385,7 +1941,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,240,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 124.0만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 1240000,
@@ -1432,7 +1988,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,199,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 119.9만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 1199000,
@@ -1479,7 +2035,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,193,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 119.3만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 1193000,
@@ -1531,7 +2087,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,186,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 118.6만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 1186000,
@@ -1578,7 +2134,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,135,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 113.5만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 1135000,
@@ -1625,7 +2181,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,129,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 112.9만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 1129000,
@@ -1672,7 +2228,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,129,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 112.9만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 1129000,
@@ -1719,7 +2275,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,126,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 112.6만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 1126000,
@@ -1766,7 +2322,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,121,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 112.1만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 1121000,
@@ -1808,12 +2364,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-황금-광양시",
+   "title": "황금 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "A",
+   "lvl_basis": "지정면적 111.6만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 1116000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 1개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "전남광주",
+   "sg": "광양시",
+   "loc": "전남 광양시 황금 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 246130 「황금」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.61793724,
+     34.91186104
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-남청주현도-청주시",
    "title": "남청주현도 일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,051,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 105.1만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 1051000,
@@ -1843,8 +2446,6 @@
      36.650667
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 8건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -1857,12 +2458,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-용산-음성군",
+   "title": "용산 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "A",
+   "lvl_basis": "지정면적 103.6만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 1036000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 3개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "충북",
+   "sg": "음성군",
+   "loc": "충북 음성군 용산 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 243900 「용산」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.6807428,
+     36.94360368
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-덕포-통영시",
    "title": "덕포 일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,017,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 101.7만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 1017000,
@@ -1909,7 +2557,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,007,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 100.7만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 1007000,
@@ -1956,7 +2604,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,003,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 100.3만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 1003000,
@@ -2003,7 +2651,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "A",
-   "lvl_basis": "부지면적 1,002,000㎡ — 일자리:부지 A",
+   "lvl_basis": "지정면적 100.2만㎡ — 일자리 A(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 1002000,
@@ -2033,8 +2681,6 @@
      36.650667
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 8건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -2052,7 +2698,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 992,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 99.2만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 992000,
@@ -2099,7 +2745,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 975,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 97.5만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 975000,
@@ -2151,7 +2797,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 967,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 96.7만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 967000,
@@ -2181,8 +2827,6 @@
      36.793635
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -2195,12 +2839,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-화성-화성시",
+   "title": "화성 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 96.0만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 960000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 1개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "경기",
+   "sg": "화성시",
+   "loc": "경기 화성시 화성 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 241420 「화성」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.06528446,
+     37.22019699
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-청주센트럴벨리일반산업단지구:국사-청주시",
    "title": "청주센트럴벨리일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 958,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 95.8만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 958000,
@@ -2230,8 +2921,6 @@
      36.650667
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 8건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -2249,7 +2938,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 942,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 94.2만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 942000,
@@ -2291,12 +2980,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-검단-경주시",
+   "title": "검단 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 93.2만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 932000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 2개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "경북",
+   "sg": "경주시",
+   "loc": "경북 경주시 검단 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "sgg",
+   "geo_approx": true,
+   "geo_basis": "경북 경주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.247687,
+     35.858512
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-광주에너지밸리-남구",
    "title": "광주에너지밸리",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 918,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 91.8만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 918000,
@@ -2343,7 +3079,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 918,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 91.8만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 918000,
@@ -2385,12 +3121,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-서오창테크노밸리-청주시",
+   "title": "서오창테크노밸리",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 90.0만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 900000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 2개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "충북",
+   "sg": "청주시",
+   "loc": "충북 청주시 서오창테크노밸리",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "sgg",
+   "geo_approx": true,
+   "geo_basis": "충북 청주시 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.464001,
+     36.650667
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-지평선제2일반산업단지-김제시",
    "title": "지평선제2일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 882,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 88.2만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 882000,
@@ -2437,7 +3220,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 878,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 87.8만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 878000,
@@ -2484,7 +3267,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 875,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 87.5만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 875000,
@@ -2536,7 +3319,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 871,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 87.1만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 871000,
@@ -2583,7 +3366,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 870,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 87.0만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 870000,
@@ -2630,7 +3413,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 855,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 85.5만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 855000,
@@ -2677,7 +3460,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 850,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 85.0만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 850000,
@@ -2724,7 +3507,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 849,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 84.9만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 849000,
@@ -2771,7 +3554,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 848,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 84.8만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 848000,
@@ -2813,12 +3596,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-고창-고창군",
+   "title": "고창 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 83.7만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 837000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 3개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "전북",
+   "sg": "고창군",
+   "loc": "전북 고창군 고창 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "zone_poi",
+   "geo_approx": true,
+   "geo_basis": "POI 정확일치 「고창일반산업단지」(시군 경계 가드 3.0km)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.674878,
+     35.414562
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-세종복합-세종",
    "title": "세종복합 일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 829,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 82.9만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 829000,
@@ -2865,7 +3695,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 828,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 82.8만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 828000,
@@ -2912,7 +3742,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 828,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 82.8만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 828000,
@@ -2942,8 +3772,6 @@
      37.021873
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -2961,7 +3789,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 826,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 82.6만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 826000,
@@ -3008,7 +3836,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 825,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 82.5만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 825000,
@@ -3050,12 +3878,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-명계3-경주시",
+   "title": "명계3 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 82.3만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 823000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 5개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "경북",
+   "sg": "경주시",
+   "loc": "경북 경주시 명계3 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247780 「명계3」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.23038642,
+     35.71776139
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-진천테크노폴리스-진천군",
    "title": "진천테크노폴리스",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 806,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 80.6만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 806000,
@@ -3102,7 +3977,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 795,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 79.5만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 795000,
@@ -3132,8 +4007,6 @@
      36.650667
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 8건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -3151,7 +4024,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 778,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 77.8만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 778000,
@@ -3193,12 +4066,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-남원-남원시",
+   "title": "남원 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 77.6만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 776000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 5개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "전북",
+   "sg": "남원시",
+   "loc": "전북 남원시 남원 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 245280 「남원」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.35143092,
+     35.49169213
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-증평3일반산업단지-증평군",
    "title": "증평3일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 772,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 77.2만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 772000,
@@ -3245,7 +4165,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 770,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 77.0만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 770000,
@@ -3292,7 +4212,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 765,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 76.5만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 765000,
@@ -3339,7 +4259,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 736,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 73.6만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 736000,
@@ -3386,12 +4306,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-남공주-공주시",
+   "title": "남공주 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 73.2만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 732000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 4개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "충남",
+   "sg": "공주시",
+   "loc": "충남 공주시 남공주 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244610 「남공주」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.07589043,
+     36.42474342
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-청양일반산업단지-청양군",
    "title": "청양일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 732,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 73.2만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 732000,
@@ -3438,7 +4405,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 719,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 71.9만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 719000,
@@ -3485,7 +4452,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 709,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 70.9만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 709000,
@@ -3532,7 +4499,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 696,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 69.6만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 696000,
@@ -3574,12 +4541,106 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-장좌-고성군",
+   "title": "장좌 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 69.5만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 695000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 1개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "경남",
+   "sg": "고성군",
+   "loc": "경남 고성군 장좌 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248530 「장좌」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.46463902,
+     34.99289037
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
+   "id": "IP-이화-북구",
+   "title": "이화 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 69.4만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 694000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 1개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "울산",
+   "sg": "북구",
+   "loc": "울산 북구 이화 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 231070 「이화」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.3497257,
+     35.67035825
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-군내-진도군",
    "title": "군내 일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 686,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 68.6만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 686000,
@@ -3626,7 +4687,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 685,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 68.5만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 685000,
@@ -3673,7 +4734,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 681,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 68.1만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 681000,
@@ -3715,12 +4776,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-현대대죽-서산시",
+   "title": "현대대죽 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 67.3만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 673000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 2개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "충남",
+   "sg": "서산시",
+   "loc": "충남 서산시 현대대죽 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244580 「현대대죽」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.40363117,
+     37.01428219
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-흥사-사천시",
    "title": "흥사 일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 673,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 67.3만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 673000,
@@ -3767,7 +4875,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 668,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 66.8만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 668000,
@@ -3814,7 +4922,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 667,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 66.7만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 667000,
@@ -3844,8 +4952,6 @@
      36.792927
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -3863,7 +4969,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 656,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 65.6만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 656000,
@@ -3915,7 +5021,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 653,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 65.3만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 653000,
@@ -3957,12 +5063,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-모사-거제시",
+   "title": "모사 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 64.7만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 647000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 1개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "경남",
+   "sg": "거제시",
+   "loc": "경남 거제시 모사 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248750 「모사」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.59475938,
+     34.93949743
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-천안신사일반산업단지-천안시",
    "title": "천안신사일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 633,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 63.3만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 633000,
@@ -4009,7 +5162,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 629,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 62.9만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 629000,
@@ -4056,7 +5209,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 621,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 62.1만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 621000,
@@ -4103,7 +5256,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 611,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 61.1만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 611000,
@@ -4150,7 +5303,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 609,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 60.9만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 609000,
@@ -4192,12 +5345,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-넥센-창녕군",
+   "title": "넥센 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 59.4만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 594000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 1개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "경남",
+   "sg": "창녕군",
+   "loc": "경남 창녕군 넥센 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248560 「넥센」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.43819469,
+     35.62595983
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-북평제2-동해시",
    "title": "북평제2 일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 593,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 59.3만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 593000,
@@ -4239,12 +5439,64 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-경북바이오2차-안동시",
+   "title": "경북바이오2차 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 57.5만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 575000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 3개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "경북",
+   "sg": "안동시",
+   "loc": "경북 안동시 경북바이오2차 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 247770 「경북바이오2차」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.54989135,
+     36.59905519
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-04-10",
+     "basis": "source"
+    },
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-07-22",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-상우구감곡-음성군",
    "title": "상우 일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 574,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 57.4만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 574000,
@@ -4291,7 +5543,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 567,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 56.7만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 567000,
@@ -4333,12 +5585,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-부산에코델타시티-강서구",
+   "title": "부산에코델타시티 도시첨단산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 55.2만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 552000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 3개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "부산",
+   "sg": "강서구",
+   "loc": "부산 강서구 부산에코델타시티 도시첨단산업단지",
+   "indpark_kind": "도시첨단",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085880/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 326040 「부산에코델타시티」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.91112519,
+     35.12047073
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-경산상림재활산업특화단지-경산시",
    "title": "경산상림재활산업특화단지 일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 541,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 54.1만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 541000,
@@ -4385,7 +5684,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 528,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 52.8만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 528000,
@@ -4427,12 +5726,106 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-내산-고성군",
+   "title": "내산 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 52.3만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 523000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 1개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "경남",
+   "sg": "고성군",
+   "loc": "경남 고성군 내산 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 248320 「내산」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.47612733,
+     35.05012237
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
+   "id": "IP-명동지구-강서구",
+   "title": "명동지구",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 50.6만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 506000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 2개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "부산",
+   "sg": "강서구",
+   "loc": "부산 강서구 명동지구",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "sgg",
+   "geo_approx": true,
+   "geo_basis": "부산 강서구 대표점(시군 폴백 — 단지 위치 미확정)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.897859,
+     35.120549
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-영종항공인천경제자유구역-중구",
    "title": "영종항공(인천경제자유구역) 일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 495,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 49.5만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 495000,
@@ -4453,8 +5846,6 @@
    ],
    "confirmed": false,
    "geo_basis": "좌표 미확보 — POI 미확인 · 시군 경계 미매칭(인천 중구: 행정구역 개편으로 옛 이름 경계 없음)",
-   "geo_prec": "none",
-   "geo_approx": true,
    "stage_history": [
     {
      "stage": "착공",
@@ -4472,7 +5863,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 493,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 49.3만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 493000,
@@ -4514,12 +5905,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-남구-남구",
+   "title": "남구 도시첨단산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 48.6만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 486000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 5개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "전남광주",
+   "sg": "남구",
+   "loc": "광주 남구 남구 도시첨단산업단지",
+   "indpark_kind": "도시첨단",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085880/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 329010 「남구」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.83145224,
+     35.09035373
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-아산신창일반산업단지-아산시",
    "title": "아산신창일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 484,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 48.4만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 484000,
@@ -4566,7 +6004,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 482,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 48.2만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 482000,
@@ -4613,7 +6051,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 467,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 46.7만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 467000,
@@ -4660,7 +6098,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 460,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 46.0만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 460000,
@@ -4707,7 +6145,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 460,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 46.0만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 460000,
@@ -4754,7 +6192,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 442,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 44.2만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 442000,
@@ -4801,7 +6239,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 423,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 42.3만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 423000,
@@ -4848,7 +6286,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 421,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 42.1만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 421000,
@@ -4895,7 +6333,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 421,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 42.1만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 421000,
@@ -4942,7 +6380,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 409,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 40.9만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 409000,
@@ -4989,7 +6427,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 403,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 40.3만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 403000,
@@ -5019,8 +6457,6 @@
      36.991389
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -5033,12 +6469,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-염치-아산시",
+   "title": "염치 일반산업단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 38.1만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 381000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 1개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "충남",
+   "sg": "아산시",
+   "loc": "충남 아산시 염치 일반산업단지",
+   "indpark_kind": "일반",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085886/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 244690 「염치」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.97144861,
+     36.84455788
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-묘도녹색-여수시",
    "title": "묘도녹색 일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 368,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 36.8만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 368000,
@@ -5085,7 +6568,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 352,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 35.2만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 352000,
@@ -5132,7 +6615,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 351,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 35.1만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 351000,
@@ -5162,8 +6645,6 @@
      36.792927
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 3건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -5181,7 +6662,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 349,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 34.9만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 349000,
@@ -5228,7 +6709,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 347,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 34.7만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 347000,
@@ -5275,7 +6756,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 345,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 34.5만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 345000,
@@ -5322,7 +6803,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 344,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 34.4만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 344000,
@@ -5369,7 +6850,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 337,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 33.7만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 337000,
@@ -5416,7 +6897,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 336,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 33.6만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 336000,
@@ -5463,7 +6944,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 334,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 33.4만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 334000,
@@ -5493,8 +6974,6 @@
      36.793635
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -5512,7 +6991,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 334,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 33.4만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 334000,
@@ -5542,8 +7021,6 @@
      37.503994
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -5561,7 +7038,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 334,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 33.4만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 334000,
@@ -5608,7 +7085,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 330,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 33.0만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 330000,
@@ -5638,8 +7115,6 @@
      35.398078
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -5652,12 +7127,59 @@
    "last_movement_basis": "observed"
   },
   {
+   "id": "IP-학교명암축산특화-함평군",
+   "title": "학교명암축산특화 농공단지",
+   "cat": "일자리",
+   "sub": "산업단지",
+   "lvl": "B",
+   "lvl_basis": "지정면적 31.8만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "area_m2": 318000,
+   "area_kind": "부지",
+   "phase": "착공",
+   "current_stage": "조성중",
+   "stage_note": "KICOX 조성상태 「조성중」 · 기준 2025-12-31 · 일부 입주 시작(가동업체 1개) — 조성은 진행 중",
+   "milestones": [],
+   "template_type": "기업이전",
+   "sd": "전남광주",
+   "sg": "함평군",
+   "loc": "전남 함평군 학교명암축산특화 농공단지",
+   "indpark_kind": "농공",
+   "src_tier": "official_report",
+   "src_name": "한국산업단지공단 전국산업단지현황통계(2025-12-31 기준)",
+   "sources": [
+    "https://www.data.go.kr/data/15085878/fileData.do"
+   ],
+   "confirmed": false,
+   "geo_prec": "jigu",
+   "geo_approx": true,
+   "geo_basis": "ILIS 산업입지정보 대표점(dan_id 446620 「학교명암축산」, 시군 경계 가드)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.54034924,
+     35.03323231
+    ]
+   },
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2026-08-16",
+     "basis": "observed"
+    }
+   ],
+   "first_seen": "2026-08-16",
+   "last_movement": "2026-08-16",
+   "last_movement_basis": "observed"
+  },
+  {
    "id": "IP-송선-공주시",
    "title": "송선 일반산업단지",
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 317,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 31.7만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 317000,
@@ -5704,7 +7226,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 317,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 31.7만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 317000,
@@ -5751,7 +7273,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 315,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 31.5만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 315000,
@@ -5798,7 +7320,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 314,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 31.4만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 314000,
@@ -5845,7 +7367,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 309,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 30.9만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 309000,
@@ -5892,7 +7414,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 308,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 30.8만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 308000,
@@ -5939,7 +7461,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 308,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 30.8만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 308000,
@@ -5986,7 +7508,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 308,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 30.8만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 308000,
@@ -6033,7 +7555,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 308,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 30.8만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 308000,
@@ -6080,7 +7602,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 306,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 30.6만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 306000,
@@ -6127,7 +7649,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 304,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 30.4만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 304000,
@@ -6174,7 +7696,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 304,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 30.4만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 304000,
@@ -6221,7 +7743,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 303,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 30.3만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 303000,
@@ -6268,7 +7790,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 303,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 30.3만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 303000,
@@ -6298,8 +7820,6 @@
      36.650667
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 8건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -6317,7 +7837,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 303,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 30.3만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 303000,
@@ -6364,7 +7884,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 301,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 30.1만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 301000,
@@ -6411,7 +7931,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "B",
-   "lvl_basis": "부지면적 300,000㎡ — 일자리:부지 B",
+   "lvl_basis": "지정면적 30.0만㎡ — 일자리 B(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 300000,
@@ -6458,7 +7978,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 299,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 29.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 299000,
@@ -6505,7 +8025,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 299,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 29.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 299000,
@@ -6552,7 +8072,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 297,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 29.7만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 297000,
@@ -6604,7 +8124,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 296,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 29.6만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 296000,
@@ -6651,7 +8171,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 296,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 29.6만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 296000,
@@ -6698,7 +8218,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 293,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 29.3만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 293000,
@@ -6745,7 +8265,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 291,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 29.1만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 291000,
@@ -6792,7 +8312,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 290,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 29.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 290000,
@@ -6822,8 +8342,6 @@
      37.021873
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -6841,7 +8359,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 283,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 28.3만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 283000,
@@ -6871,8 +8389,6 @@
      36.650667
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 8건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -6890,7 +8406,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 282,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 28.2만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 282000,
@@ -6937,7 +8453,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 281,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 28.1만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 281000,
@@ -6984,7 +8500,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 280,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 28.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 280000,
@@ -7031,7 +8547,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 279,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 27.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 279000,
@@ -7078,7 +8594,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 279,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 27.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 279000,
@@ -7125,7 +8641,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 278,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 27.8만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 278000,
@@ -7172,7 +8688,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 274,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 27.4만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 274000,
@@ -7219,7 +8735,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 272,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 27.2만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 272000,
@@ -7266,7 +8782,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 272,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 27.2만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 272000,
@@ -7323,7 +8839,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 267,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 26.7만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 267000,
@@ -7370,7 +8886,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 262,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 26.2만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 262000,
@@ -7417,7 +8933,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 262,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 26.2만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 262000,
@@ -7464,7 +8980,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 255,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 25.5만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 255000,
@@ -7494,8 +9010,6 @@
      35.398078
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -7513,7 +9027,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 252,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 25.2만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 252000,
@@ -7560,7 +9074,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 251,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 25.1만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 251000,
@@ -7607,7 +9121,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 250,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 25.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 250000,
@@ -7654,7 +9168,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 248,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 24.8만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 248000,
@@ -7701,7 +9215,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 243,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 24.3만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 243000,
@@ -7748,7 +9262,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 242,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 24.2만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 242000,
@@ -7795,7 +9309,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 237,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 23.7만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 237000,
@@ -7842,7 +9356,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 233,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 23.3만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 233000,
@@ -7889,7 +9403,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 230,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 23.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 230000,
@@ -7936,7 +9450,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 228,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 22.8만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 228000,
@@ -7983,7 +9497,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 227,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 22.7만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 227000,
@@ -8030,7 +9544,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 226,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 22.6만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 226000,
@@ -8060,8 +9574,6 @@
      37.503994
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -8079,7 +9591,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 225,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 22.5만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 225000,
@@ -8126,7 +9638,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 220,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 22.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 220000,
@@ -8173,7 +9685,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 218,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 21.8만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 218000,
@@ -8220,7 +9732,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 214,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 21.4만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 214000,
@@ -8267,7 +9779,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 210,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 21.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 210000,
@@ -8314,7 +9826,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 207,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 20.7만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 207000,
@@ -8361,7 +9873,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 201,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 20.1만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 201000,
@@ -8408,7 +9920,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 201,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 20.1만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 201000,
@@ -8455,7 +9967,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 200,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 20.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 200000,
@@ -8502,7 +10014,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 190,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 19.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 190000,
@@ -8549,7 +10061,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 189,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 18.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 189000,
@@ -8596,7 +10108,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 187,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 18.7만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 187000,
@@ -8643,7 +10155,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 187,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 18.7만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 187000,
@@ -8690,7 +10202,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 185,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 18.5만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 185000,
@@ -8737,7 +10249,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 185,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 18.5만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 185000,
@@ -8784,7 +10296,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 183,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 18.3만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 183000,
@@ -8831,7 +10343,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 181,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 18.1만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 181000,
@@ -8861,8 +10373,6 @@
      36.649746
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "인가",
@@ -8880,7 +10390,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 167,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 16.7만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 167000,
@@ -8927,7 +10437,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 158,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 15.8만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 158000,
@@ -8974,7 +10484,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 150,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 15.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 150000,
@@ -9021,7 +10531,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 150,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 15.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 150000,
@@ -9068,7 +10578,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 149,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 14.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 149000,
@@ -9115,7 +10625,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 149,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 14.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 149000,
@@ -9162,7 +10672,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 147,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 14.7만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 147000,
@@ -9209,7 +10719,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 146,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 14.6만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 146000,
@@ -9239,8 +10749,6 @@
      36.649746
     ]
    },
-   "map_hidden": true,
-   "map_hidden_reason": "같은 지점에 서로 다른 사업 2건이 겹침 — 위치 미확정으로 보고 지도에서 제외(목록·검색에는 유지). 정확한 좌표를 확보하면 자동 복귀 (§4.1)",
    "stage_history": [
     {
      "stage": "착공",
@@ -9258,7 +10766,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 146,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 14.6만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 146000,
@@ -9305,7 +10813,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 144,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 14.4만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 144000,
@@ -9352,7 +10860,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 140,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 14.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 140000,
@@ -9399,7 +10907,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 139,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 13.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 139000,
@@ -9446,7 +10954,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 137,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 13.7만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 137000,
@@ -9493,7 +11001,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 137,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 13.7만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 137000,
@@ -9540,7 +11048,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 136,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 13.6만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 136000,
@@ -9587,7 +11095,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 136,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 13.6만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 136000,
@@ -9634,7 +11142,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 134,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 13.4만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 134000,
@@ -9681,7 +11189,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 132,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 13.2만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 132000,
@@ -9728,7 +11236,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 130,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 13.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 130000,
@@ -9775,7 +11283,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 126,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 12.6만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 126000,
@@ -9822,7 +11330,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 122,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 12.2만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 122000,
@@ -9869,7 +11377,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 122,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 12.2만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 122000,
@@ -9916,7 +11424,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 121,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 12.1만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 121000,
@@ -9963,7 +11471,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 121,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 12.1만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 121000,
@@ -10010,7 +11518,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 120,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 12.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 120000,
@@ -10057,7 +11565,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 119,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 11.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 119000,
@@ -10104,7 +11612,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 119,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 11.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 119000,
@@ -10151,7 +11659,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 119,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 11.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 119000,
@@ -10198,7 +11706,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 119,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 11.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 119000,
@@ -10245,7 +11753,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 115,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 11.5만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 115000,
@@ -10292,7 +11800,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 114,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 11.4만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 114000,
@@ -10339,7 +11847,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 112,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 11.2만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 112000,
@@ -10386,7 +11894,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 112,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 11.2만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 112000,
@@ -10433,7 +11941,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 110,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 11.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 110000,
@@ -10480,7 +11988,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 109,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 10.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 109000,
@@ -10527,7 +12035,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 106,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 10.6만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 106000,
@@ -10574,7 +12082,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 104,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 10.4만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 104000,
@@ -10621,7 +12129,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 104,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 10.4만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 104000,
@@ -10668,7 +12176,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 104,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 10.4만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 104000,
@@ -10715,7 +12223,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 103,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 10.3만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 103000,
@@ -10762,7 +12270,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 101,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 10.1만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 101000,
@@ -10809,7 +12317,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 100,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 10.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 100000,
@@ -10856,7 +12364,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 96,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 9.6만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 96000,
@@ -10903,7 +12411,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 94,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 9.4만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 94000,
@@ -10950,7 +12458,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 90,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 9.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 90000,
@@ -10997,7 +12505,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 89,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 8.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 89000,
@@ -11044,7 +12552,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 88,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 8.8만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 88000,
@@ -11091,7 +12599,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 85,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 8.5만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 85000,
@@ -11138,7 +12646,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 80,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 8.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 80000,
@@ -11185,7 +12693,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 79,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 7.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 79000,
@@ -11232,7 +12740,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 78,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 7.8만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 78000,
@@ -11279,7 +12787,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 78,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 7.8만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 78000,
@@ -11326,7 +12834,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 78,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 7.8만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 78000,
@@ -11373,7 +12881,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 73,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 7.3만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 73000,
@@ -11420,7 +12928,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 73,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 7.3만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 73000,
@@ -11467,7 +12975,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 72,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 7.2만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 72000,
@@ -11514,7 +13022,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 70,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 7.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 70000,
@@ -11561,7 +13069,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 69,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 6.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 69000,
@@ -11608,7 +13116,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 68,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 6.8만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 68000,
@@ -11655,7 +13163,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 66,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 6.6만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 66000,
@@ -11702,7 +13210,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 66,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 6.6만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 66000,
@@ -11749,7 +13257,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 60,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 6.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 60000,
@@ -11796,7 +13304,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 59,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 5.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 59000,
@@ -11843,7 +13351,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 59,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 5.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 59000,
@@ -11890,7 +13398,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 57,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 5.7만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 57000,
@@ -11937,7 +13445,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 57,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 5.7만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 57000,
@@ -11984,7 +13492,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 56,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 5.6만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 56000,
@@ -12031,7 +13539,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 56,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 5.6만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 56000,
@@ -12078,7 +13586,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 55,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 5.5만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 55000,
@@ -12125,7 +13633,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 54,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 5.4만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 54000,
@@ -12172,7 +13680,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 52,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 5.2만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 52000,
@@ -12219,7 +13727,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 52,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 5.2만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 52000,
@@ -12266,7 +13774,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 51,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 5.1만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 51000,
@@ -12313,7 +13821,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 50,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 5.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 50000,
@@ -12360,7 +13868,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 50,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 5.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 50000,
@@ -12407,7 +13915,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 50,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 5.0만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 50000,
@@ -12454,7 +13962,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 48,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 4.8만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 48000,
@@ -12501,7 +14009,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 46,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 4.6만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 46000,
@@ -12548,7 +14056,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 46,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 4.6만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 46000,
@@ -12595,7 +14103,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 46,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 4.6만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 46000,
@@ -12642,7 +14150,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 45,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 4.5만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 45000,
@@ -12689,7 +14197,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 45,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 4.5만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 45000,
@@ -12736,7 +14244,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 44,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 4.4만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 44000,
@@ -12783,7 +14291,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 42,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 4.2만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 42000,
@@ -12830,7 +14338,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 42,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 4.2만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 42000,
@@ -12877,7 +14385,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 39,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 3.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 39000,
@@ -12924,7 +14432,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 35,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 3.5만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 35000,
@@ -12971,7 +14479,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 34,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 3.4만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 34000,
@@ -13018,7 +14526,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 33,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 3.3만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 착공 — 법정 절차 진행 중",
    "area_m2": 33000,
@@ -13065,7 +14573,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 31,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 3.1만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 31000,
@@ -13112,7 +14620,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 31,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 3.1만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 31000,
@@ -13159,7 +14667,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 29,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 2.9만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 29000,
@@ -13206,7 +14714,7 @@
    "cat": "일자리",
    "sub": "산업단지",
    "lvl": "C",
-   "lvl_basis": "부지면적 25,000㎡ — 일자리:부지 C",
+   "lvl_basis": "지정면적 2.5만㎡ — 일자리 C(산단 부지 축, S는 사업비 근거 있을 때만)",
    "gate": "신호",
    "gate_basis": "단계 인가 — 법정 절차 진행 중",
    "area_m2": 25000,
@@ -13292,13 +14800,6 @@
    "why": "기성 가동 단지의 잔여 조성(가동업체 1359개) — 부분 delta는 신호로 세지 않음"
   },
   {
-   "name": "우정지구 ③",
-   "sd": "경기",
-   "sg": "화성시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
    "name": "용인첨단시스템반도체클러스터국가산업단지",
    "sd": "경기",
    "sg": "용인시",
@@ -13306,25 +14807,11 @@
    "why": "큐레이션 마스터와 동일 단지(어간 「용인첨단시스템반도체」) — 그쪽이 마일스톤·좌표 우위"
   },
   {
-   "name": "보은",
-   "sd": "충북",
-   "sg": "보은군",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
    "name": "오송제3생명과학국가산업단지",
    "sd": "충북",
    "sg": "청주시",
    "state": "미개발",
    "why": "큐레이션 마스터와 동일 단지(어간 「오송제3생명과학」) — 그쪽이 마일스톤·좌표 우위"
-  },
-  {
-   "name": "고정",
-   "sd": "충남",
-   "sg": "보령시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
   },
   {
    "name": "장항국가생태산업단지",
@@ -13376,20 +14863,6 @@
    "why": "기성 가동 단지의 잔여 조성(가동업체 18개) — 부분 delta는 신호로 세지 않음"
   },
   {
-   "name": "옥포",
-   "sd": "경남",
-   "sg": "거제시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "죽도",
-   "sd": "경남",
-   "sg": "거제시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
    "name": "안정",
    "sd": "경남",
    "sg": "통영시",
@@ -13404,32 +14877,11 @@
    "why": "기성 가동 단지의 잔여 조성(가동업체 2836개) — 부분 delta는 신호로 세지 않음"
   },
   {
-   "name": "진해",
-   "sd": "경남",
-   "sg": "창원시 진해구",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 3개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "밀양나노융합",
-   "sd": "경남",
-   "sg": "밀양시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 4개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
    "name": "마곡",
    "sd": "서울",
    "sg": "강서구",
    "state": "조성중",
    "why": "기성 가동 단지의 잔여 조성(가동업체 149개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "명동지구",
-   "sd": "부산",
-   "sg": "강서구",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 2개) — 부분 delta는 신호로 세지 않음"
   },
   {
    "name": "동남권방사선의과학",
@@ -13458,13 +14910,6 @@
    "sg": "서구",
    "state": "조성중",
    "why": "기성 가동 단지의 잔여 조성(가동업체 70개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "이화",
-   "sd": "울산",
-   "sg": "북구",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
   },
   {
    "name": "중산",
@@ -13500,13 +14945,6 @@
    "sg": "화성시",
    "state": "조성중",
    "why": "기성 가동 단지의 잔여 조성(가동업체 35개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "화성",
-   "sd": "경기",
-   "sg": "화성시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
   },
   {
    "name": "안녕일반산업단지(구: 한강씨엠)",
@@ -13670,53 +15108,11 @@
    "why": "기성 가동 단지의 잔여 조성(가동업체 54개) — 부분 delta는 신호로 세지 않음"
   },
   {
-   "name": "용산",
-   "sd": "충북",
-   "sg": "음성군",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 3개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "서오창테크노밸리",
-   "sd": "충북",
-   "sg": "청주시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 2개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
    "name": "관창",
    "sd": "충남",
    "sg": "보령시",
    "state": "조성중",
    "why": "기성 가동 단지의 잔여 조성(가동업체 16개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "영보",
-   "sd": "충남",
-   "sg": "보령시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "현대제철(구 송산)",
-   "sd": "충남",
-   "sg": "당진시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "당진1철강",
-   "sd": "충남",
-   "sg": "당진시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 4개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "현대대죽",
-   "sd": "충남",
-   "sg": "서산시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 2개) — 부분 delta는 신호로 세지 않음"
   },
   {
    "name": "세종(구 가산)",
@@ -13740,13 +15136,6 @@
    "why": "기성 가동 단지의 잔여 조성(가동업체 16개) — 부분 delta는 신호로 세지 않음"
   },
   {
-   "name": "남공주",
-   "sd": "충남",
-   "sg": "공주시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 4개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
    "name": "송산2(산업단지) ①",
    "sd": "충남",
    "sg": "당진시",
@@ -13768,39 +15157,11 @@
    "why": "기성 가동 단지의 잔여 조성(가동업체 7개) — 부분 delta는 신호로 세지 않음"
   },
   {
-   "name": "염치",
-   "sd": "충남",
-   "sg": "아산시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "고창",
-   "sd": "전북",
-   "sg": "고창군",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 3개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
    "name": "완주테크노밸리(2단계)",
    "sd": "전북",
    "sg": "완주군",
    "state": "조성중",
    "why": "기성 가동 단지의 잔여 조성(가동업체 18개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "남원",
-   "sd": "전북",
-   "sg": "남원시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 5개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "황금",
-   "sd": "전남",
-   "sg": "광양시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
   },
   {
    "name": "해룡",
@@ -13815,13 +15176,6 @@
    "sg": "여수시",
    "state": "조성중",
    "why": "기성 가동 단지의 잔여 조성(가동업체 111개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "세풍(광양만권경제자유구역)",
-   "sd": "전남",
-   "sg": "광양시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 5개) — 부분 delta는 신호로 세지 않음"
   },
   {
    "name": "장흥바이오식품(구 해당)",
@@ -13852,13 +15206,6 @@
    "why": "기성 가동 단지의 잔여 조성(가동업체 6개) — 부분 delta는 신호로 세지 않음"
   },
   {
-   "name": "영일만4",
-   "sd": "경북",
-   "sg": "포항시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
    "name": "제내2",
    "sd": "경북",
    "sg": "경주시",
@@ -13887,27 +15234,6 @@
    "why": "기성 가동 단지의 잔여 조성(가동업체 13개) — 부분 delta는 신호로 세지 않음"
   },
   {
-   "name": "검단",
-   "sd": "경북",
-   "sg": "경주시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 2개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "경북바이오2차",
-   "sd": "경북",
-   "sg": "안동시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 3개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "명계3",
-   "sd": "경북",
-   "sg": "경주시",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 5개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
    "name": "산막",
    "sd": "경남",
    "sg": "양산시",
@@ -13915,37 +15241,9 @@
    "why": "기성 가동 단지의 잔여 조성(가동업체 216개) — 부분 delta는 신호로 세지 않음"
   },
   {
-   "name": "내산",
-   "sd": "경남",
-   "sg": "고성군",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
    "name": "대독",
    "sd": "경남",
    "sg": "고성군",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "장좌",
-   "sd": "경남",
-   "sg": "고성군",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "넥센",
-   "sd": "경남",
-   "sg": "창녕군",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "모사",
-   "sd": "경남",
-   "sg": "거제시",
    "state": "조성중",
    "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
   },
@@ -13985,13 +15283,6 @@
    "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
   },
   {
-   "name": "부산에코델타시티",
-   "sd": "부산",
-   "sg": "강서구",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 3개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
    "name": "모라",
    "sd": "부산",
    "sg": "사상구",
@@ -14004,13 +15295,6 @@
    "sg": "해운대구",
    "state": "미개발",
    "why": "큐레이션 마스터와 동일 단지(어간 「센텀2지구」) — 그쪽이 마일스톤·좌표 우위"
-  },
-  {
-   "name": "남구",
-   "sd": "광주",
-   "sg": "남구",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 5개) — 부분 delta는 신호로 세지 않음"
   },
   {
    "name": "행정중심복합도시4-2생활권",
@@ -14067,13 +15351,6 @@
    "sg": "임실군",
    "state": "조성중",
    "why": "기성 가동 단지의 잔여 조성(가동업체 2개) — 부분 delta는 신호로 세지 않음"
-  },
-  {
-   "name": "학교명암축산특화",
-   "sd": "전남",
-   "sg": "함평군",
-   "state": "조성중",
-   "why": "기성 가동 단지의 잔여 조성(가동업체 1개) — 부분 delta는 신호로 세지 않음"
   },
   {
    "name": "부북특별",
