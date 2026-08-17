@@ -4788,7 +4788,7 @@ function renderDetail(s) {
         return `<a href="${u}" target="_blank"${nq ? ' title="이 링크는 검색 조건을 직접 넣어야 해당 건이 보입니다 — 딥링크가 제공되지 않습니다"' : ""}>${lbl}</a>`;
       }).join(" · ") || "원문 링크 없음"}</span>${
         s.src_tier === "osm" ? ' · <b>진행단계·명칭은 공식 확인 전</b>(선형만 OSM 참고)' : ""}${
-        /hub\.go\.kr|eais\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 원본 수치는 위 팩트시트 그대로. 건축HUB는 <b>딥링크가 없어</b> 링크에서 <b>대지위치를 직접 입력</b>해야 이 건이 보입니다 — 위 <b>대지위치 📋</b>로 복사해 붙여 넣으세요</div>' : /data\.gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 개별 딥링크가 없어 <b>경기데이터드림 카탈로그</b> 연결 — 「<b>일반 정비 사업 추진 현황</b>」 검색 → Sheet 보기에서 위 사업장명으로 조회</div>' : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 개별 딥링크가 없어 포털 연결 — 위 사업장명으로 조회</div>' : ""}</div>
+        /hub\.go\.kr|eais\.go\.kr/.test((s.sources || [])[0] || "") ? `<div class="note" style="margin-top:3px">※ 원본 수치는 위 팩트시트 그대로. 건축HUB는 <b>딥링크가 없고 주소 붙여넣기 검색도 안 됩니다</b>(실측 2026-08-17 — 사장님 "링크 가봐야 볼 수가 없다") — 포털에서 <b>시도·시군구·법정동을 드롭다운으로 고르고 번·지 칸에 지번</b>(위 대지위치의 숫자)을 넣어 검색한 뒤, 결과 표의 <b>관리허가대장관리번호 <span class="mono">${esc(String(s.pk || ""))}</span></b> 행이 이 건입니다${s.pk ? "" : " (관리번호 미보유 — 허가일·연면적으로 대조)"}. 조회 기준월이 전월분이라 최신 건은 다음 달에 보일 수 있습니다</div>` : /data\.gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 개별 딥링크가 없어 <b>경기데이터드림 카탈로그</b> 연결 — 「<b>일반 정비 사업 추진 현황</b>」 검색 → Sheet 보기에서 위 사업장명으로 조회</div>' : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 개별 딥링크가 없어 포털 연결 — 위 사업장명으로 조회</div>' : ""}</div>
       ${s.master_ref ? `<div class="kv"><b>소속 지구</b> ${s.master_ref.title} <span class="hmhint">— 지구 마스터에 속한 개별 사업(경계 기반 병합)</span></div>` : ""}
       ${s.ext_basis ? `<div class="kv"><b>증축 규모</b> ${s.ext_basis}</div>` : ""}
       ${s.nm_basis ? `<div class="kv"><b>건물명 근거</b> ${s.nm_basis}</div>` : ""}
@@ -8341,7 +8341,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260817h");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260817i");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8526,7 +8526,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260817h"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260817i"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8552,7 +8552,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260817h");
+  const CB = "?b=" + (window.BUILD || "20260817i");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
