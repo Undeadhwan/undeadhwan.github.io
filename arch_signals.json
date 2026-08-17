@@ -144379,6 +144379,1461 @@
    "first_seen": "2026-07-26",
    "last_movement": "2026-04-02",
    "last_movement_basis": "source"
+  },
+  {
+   "title": "등촌동 서울특별시 어울림플라자 (노유자시설, 연면적 23천㎡)",
+   "cat": "인프라",
+   "sub": "공공시설",
+   "lvl": "B",
+   "area_m2": 23915.18,
+   "purp": "노유자시설",
+   "arch_gb": "신축",
+   "pk": "1017100099520",
+   "sd": "서울",
+   "sg": "강서구",
+   "dong": "등촌동",
+   "addr": "서울특별시 강서구 등촌동 645-11번지",
+   "confirmed": false,
+   "current_stage": "사용승인",
+   "phase": "준공·개통",
+   "status": "활성",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(서울특별시 강서구 등촌동 645-11번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정(사용승인 20251118)",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.861395,
+     37.553544
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "판정 단서 없음 — 공식 소스 기본값(재검토 대상)",
+   "lvl_basis": "연면적 23,915㎡ — 인프라:공공시설 B",
+   "bldrgst": {
+    "bld_nm": "서울특별시 어울림플라자",
+    "road_addr": "서울특별시 강서구 공항대로 489 (등촌동)",
+    "main_purps": "노유자시설",
+    "tot_area": 23915.18,
+    "use_apr_day": "20251118",
+    "hhld_cnt": 0,
+    "ho_cnt": 34,
+    "src": "국토부 건축HUB 건축물대장 표제부"
+   },
+   "road_addr": "서울특별시 강서구 공항대로 489 (등촌동)",
+   "completion_verified": {
+    "date": "2025-11-18",
+    "basis": "건축물대장 사용승인일"
+   },
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-02-10",
+     "state": "done",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "date": "2025-11-18",
+     "state": "current",
+     "src": "건축HUB"
+    }
+   ],
+   "addr_verified": {
+    "road_addr": "서울특별시 강서구 공항대로 489 (등촌동)",
+    "jibun_addr": "서울특별시 강서구 등촌동 645-11",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-02-10",
+     "basis": "source"
+    },
+    {
+     "stage": "준공·개통",
+     "date": "2025-11-18",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20220210",
+   "use_apr_day": "20251118",
+   "fin_date_unknown": true,
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+  },
+  {
+   "title": "여의도동 서울시 영등포구 여의도동 23-4 복합시설 (숙박시설, 연면적 56천㎡)",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "A",
+   "area_m2": 56361.93,
+   "purp": "숙박시설",
+   "arch_gb": "신축",
+   "pk": "1001100004705",
+   "sd": "서울",
+   "sg": "영등포구",
+   "dong": "여의도동",
+   "addr": "서울특별시 영등포구 여의도동 23-4번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(서울특별시 영등포구 여의도동 23-4번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.923379,
+     37.524216
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 56,362㎡ — 인프라:문화·관광·체육 A",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-02-24",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-02-24",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20220224",
+   "use_apr_day": ""
+  },
+  {
+   "title": "종암동 3-1260 (서울경찰청장) (업무시설, 연면적 14천㎡)",
+   "cat": "일자리",
+   "sub": "오피스",
+   "lvl": "C",
+   "area_m2": 14188.58,
+   "purp": "업무시설",
+   "arch_gb": "신축",
+   "pk": "1009100081162",
+   "sd": "서울",
+   "sg": "성북구",
+   "dong": "종암동",
+   "addr": "서울특별시 성북구 종암동 3-1260번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(서울특별시 성북구 종암동 3-1260번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.032249,
+     37.602017
+    ]
+   },
+   "name_status": "미확보",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 14,189㎡ — 일자리:오피스 C",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-12-13",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "addr_verified": {
+    "road_addr": "서울특별시 성북구 종암로 137 (종암동)",
+    "jibun_addr": "서울특별시 성북구 종암동 3-1260 서울종암경찰서",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "서울특별시 성북구 종암로 137 (종암동)",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-12-13",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20221213",
+   "use_apr_day": ""
+  },
+  {
+   "title": "병점동 더 케이 병점 (제2종근린생활시설, 연면적 13천㎡)",
+   "cat": "인프라",
+   "sub": "판매",
+   "lvl": "C",
+   "area_m2": 13859.9375,
+   "purp": "제2종근린생활시설",
+   "arch_gb": "신축",
+   "pk": "1124100291964",
+   "sd": "경기",
+   "sg": "화성시",
+   "dong": "병점동",
+   "addr": "경기도 화성시 병점구 병점동 886-4번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(경기도 화성시 병점구 병점동 886-4번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.030804,
+     37.206842
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 13,860㎡ — 인프라:판매 C",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-12-08",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-12-08",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20221208",
+   "use_apr_day": ""
+  },
+  {
+   "title": "초지동 (주)대일스마트허브스퀘어 (공장, 연면적 24천㎡)",
+   "cat": "일자리",
+   "sub": "공장",
+   "lvl": "C",
+   "area_m2": 24595.13,
+   "purp": "공장",
+   "arch_gb": "신축",
+   "pk": "1101100217595",
+   "sd": "경기",
+   "sg": "안산시",
+   "dong": "초지동",
+   "addr": "경기도 안산시 단원구 초지동 670-5번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(경기도 안산시 단원구 초지동 670-5번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.80462,
+     37.29918
+    ]
+   },
+   "nm_basis": "허가 원본 이름의 괄호 안 법인명 '(주)대일스마트허브스퀘어'",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 24,595㎡ — 일자리:공장 C",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-12-09",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-12-09",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20221209",
+   "use_apr_day": ""
+  },
+  {
+   "title": "월곶동 (업무시설, 연면적 19천㎡)",
+   "cat": "일자리",
+   "sub": "오피스",
+   "lvl": "C",
+   "area_m2": 19517.9912,
+   "purp": "업무시설",
+   "arch_gb": "신축",
+   "pk": "1112100143812",
+   "sd": "경기",
+   "sg": "시흥시",
+   "dong": "월곶동",
+   "addr": "경기도 시흥시 월곶동 1004-4번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(경기도 시흥시 월곶동 1004-4번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.741383,
+     37.390251
+    ]
+   },
+   "name_status": "미확보",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 19,518㎡ — 일자리:오피스 C",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-03-22",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-03-22",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20220322",
+   "use_apr_day": ""
+  },
+  {
+   "title": "신현동 신현 문화체육복합센터 (업무시설, 연면적 14천㎡)",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "B",
+   "area_m2": 14384.67,
+   "purp": "업무시설",
+   "arch_gb": "신축",
+   "pk": "1125100296759",
+   "sd": "경기",
+   "sg": "광주시",
+   "dong": "신현동",
+   "addr": "경기도 광주시 신현동 623-1번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(경기도 광주시 신현동 623-1번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.158753,
+     37.365244
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 14,385㎡ — 인프라:문화·관광·체육 B",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-01-27",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "addr_verified": {
+    "road_addr": "경기도 광주시 머루숯길 70 (신현동)",
+    "jibun_addr": "경기도 광주시 신현동 623-1",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "경기도 광주시 머루숯길 70 (신현동)",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-01-27",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20220127",
+   "use_apr_day": ""
+  },
+  {
+   "title": "상대원동 동원 성남복합공장 (공장, 연면적 116천㎡)",
+   "cat": "일자리",
+   "sub": "공장",
+   "lvl": "A",
+   "area_m2": 116985.58,
+   "purp": "공장",
+   "arch_gb": "신축",
+   "pk": "1089100062214",
+   "sd": "경기",
+   "sg": "성남시",
+   "dong": "상대원동",
+   "addr": "경기도 성남시 중원구 상대원동 369-3번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(경기도 성남시 중원구 상대원동 369-3번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.177682,
+     37.435607
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 116,986㎡ — 일자리:공장 A",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-12-20",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-12-20",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20221220",
+   "use_apr_day": ""
+  },
+  {
+   "title": "다산동 (케이비부동산신탁주식회사) (공장, 연면적 79천㎡)",
+   "cat": "일자리",
+   "sub": "공장",
+   "lvl": "B",
+   "area_m2": 79697.04,
+   "purp": "공장",
+   "arch_gb": "신축",
+   "pk": "1110100095430",
+   "sd": "경기",
+   "sg": "남양주시",
+   "dong": "다산동",
+   "addr": "경기도 남양주시 다산동 6243번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(경기도 남양주시 다산동 6243번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.177367,
+     37.597697
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 79,697㎡ — 일자리:공장 B",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-05-17",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-05-17",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20220517",
+   "use_apr_day": "",
+   "master_ref": {
+    "id": "M-41360KL2008001",
+    "title": "남양주 다산지금 공공주택지구"
+   }
+  },
+  {
+   "title": "별내동 (공장, 연면적 33천㎡)",
+   "cat": "일자리",
+   "sub": "공장",
+   "lvl": "B",
+   "area_m2": 33546.53,
+   "purp": "공장",
+   "arch_gb": "신축",
+   "pk": "1110100087842",
+   "sd": "경기",
+   "sg": "남양주시",
+   "dong": "별내동",
+   "addr": "경기도 남양주시 별내동 970번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(경기도 남양주시 별내동 970번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.129442,
+     37.654779
+    ]
+   },
+   "name_status": "미확보",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 33,547㎡ — 일자리:공장 B",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-05-13",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "addr_verified": {
+    "road_addr": "경기도 남양주시 송산로 123 (별내동)",
+    "jibun_addr": "경기도 남양주시 별내동 970-2",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "경기도 남양주시 송산로 123 (별내동)",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-05-13",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20220513",
+   "use_apr_day": ""
+  },
+  {
+   "title": "색달동 (노유자시설, 연면적 20천㎡)",
+   "cat": "인프라",
+   "sub": "공공시설",
+   "lvl": "B",
+   "area_m2": 20682.046,
+   "purp": "노유자시설",
+   "arch_gb": "신축",
+   "pk": "1277100202165",
+   "sd": "제주",
+   "sg": "서귀포시",
+   "dong": "색달동",
+   "addr": "제주특별자치도 서귀포시 색달동 873번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(제주특별자치도 서귀포시 색달동 873번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.397964,
+     33.272419
+    ]
+   },
+   "name_status": "미확보",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 20,682㎡ — 인프라:공공시설 B",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-08-31",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-08-31",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20220831",
+   "use_apr_day": ""
+  },
+  {
+   "title": "충무공동 진주혁신도시 상업5블럭 신축공사 (숙박시설, 연면적 191천㎡)",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "A",
+   "area_m2": 191739.55,
+   "purp": "숙박시설",
+   "arch_gb": "신축",
+   "pk": "1258100167007",
+   "sd": "경남",
+   "sg": "진주시",
+   "dong": "충무공동",
+   "addr": "경상남도 진주시 충무공동 292번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(경상남도 진주시 충무공동 292번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.14385,
+     35.174697
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 191,740㎡ — 인프라:문화·관광·체육 A",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-11-04",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-11-04",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20221104",
+   "use_apr_day": ""
+  },
+  {
+   "title": "대명동 대구대표도서관 (교육연구시설, 연면적 14천㎡)",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "B",
+   "area_m2": 14957.33,
+   "purp": "교육연구시설",
+   "arch_gb": "신축",
+   "pk": "1048100068549",
+   "sd": "대구",
+   "sg": "남구",
+   "dong": "대명동",
+   "addr": "대구광역시 남구 대명동 67-2번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(대구광역시 남구 대명동 67-2번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.592039,
+     35.842435
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 14,957㎡ — 인프라:문화·관광·체육 B",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-06-07",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "addr_verified": {
+    "road_addr": "대구광역시 남구 중앙대로22길 26 (대명동)",
+    "jibun_addr": "대구광역시 남구 대명동 67-2 대구도서관",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "대구광역시 남구 중앙대로22길 26 (대명동)",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-06-07",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20220607",
+   "use_apr_day": ""
+  },
+  {
+   "title": "도동 주식회사 엘케이 (운동시설, 연면적 3천㎡)",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "C",
+   "area_m2": 3616.11,
+   "purp": "운동시설",
+   "arch_gb": "신축",
+   "pk": "1234100134481",
+   "sd": "경북",
+   "sg": "영천시",
+   "dong": "도동",
+   "addr": "경상북도 영천시 도동 259-4번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(경상북도 영천시 도동 259-4번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.929509,
+     35.944576
+    ]
+   },
+   "nm_basis": "허가 원본 이름의 괄호 안 법인명 '주식회사 엘케이'",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 3,616㎡ — 인프라:문화·관광·체육 C",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-03-03",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-03-03",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20220303",
+   "use_apr_day": ""
+  },
+  {
+   "title": "황지동 태호 주식회사 (노유자시설, 연면적 3천㎡)",
+   "cat": "인프라",
+   "sub": "공공시설",
+   "lvl": "C",
+   "area_m2": 3727.21,
+   "purp": "노유자시설",
+   "arch_gb": "신축",
+   "pk": "1137100033642",
+   "sd": "강원",
+   "sg": "태백시",
+   "dong": "황지동",
+   "addr": "강원특별자치도 태백시 황지동 405번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(강원특별자치도 태백시 황지동 405번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.981972,
+     37.158747
+    ]
+   },
+   "nm_basis": "허가 원본 이름의 괄호 안 법인명 '태호 주식회사'",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 3,727㎡ — 인프라:공공시설 C",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-08-12",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "addr_verified": {
+    "road_addr": "강원특별자치도 태백시 대학길 35 (황지동)",
+    "jibun_addr": "강원특별자치도 태백시 황지동 405-15",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "강원특별자치도 태백시 대학길 35 (황지동)",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-08-12",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20220812",
+   "use_apr_day": ""
+  },
+  {
+   "title": "소양로3가 명성제일개발주식회사 (숙박시설, 연면적 14천㎡)",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "B",
+   "area_m2": 14790.37,
+   "purp": "숙박시설",
+   "arch_gb": "신축",
+   "pk": "1133100123854",
+   "sd": "강원",
+   "sg": "춘천시",
+   "dong": "소양로3가",
+   "addr": "강원특별자치도 춘천시 소양로3가 66-1번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(강원특별자치도 춘천시 소양로3가 66-1번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.725286,
+     37.883289
+    ]
+   },
+   "nm_basis": "허가 원본 이름의 괄호 안 법인명 '명성제일개발주식회사'",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 14,790㎡ — 인프라:문화·관광·체육 B",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-07-26",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-07-26",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20220726",
+   "use_apr_day": ""
+  },
+  {
+   "title": "조양동 속초 블루 스테이 (숙박시설, 연면적 22천㎡)",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "B",
+   "area_m2": 22660.37,
+   "purp": "숙박시설",
+   "arch_gb": "신축",
+   "pk": "1138100062229",
+   "sd": "강원",
+   "sg": "속초시",
+   "dong": "조양동",
+   "addr": "강원특별자치도 속초시 조양동 1379-5번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(강원특별자치도 속초시 조양동 1379-5번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.600617,
+     38.18623
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 22,660㎡ — 인프라:문화·관광·체육 B",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-04-29",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-04-29",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20220429",
+   "use_apr_day": ""
+  },
+  {
+   "title": "봉산동 케이비부동산신탁(주) (숙박시설, 연면적 17천㎡)",
+   "cat": "인프라",
+   "sub": "문화·관광·체육",
+   "lvl": "B",
+   "area_m2": 17621.066,
+   "purp": "숙박시설",
+   "arch_gb": "신축",
+   "pk": "1204100185878",
+   "sd": "전남광주",
+   "sg": "여수시",
+   "dong": "봉산동",
+   "addr": "전라남도 여수시 봉산동 275-7번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(전라남도 여수시 봉산동 275-7번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.722923,
+     34.731749
+    ]
+   },
+   "nm_basis": "허가 원본 이름의 괄호 안 법인명 '케이비부동산신탁(주)'",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 17,621㎡ — 인프라:문화·관광·체육 B",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-03-28",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "addr_verified": {
+    "road_addr": "전남광주통합특별시 여수시 봉산남8길 11 (봉산동)",
+    "jibun_addr": "전남광주통합특별시 여수시 봉산동 275-7",
+    "bld_nm": null,
+    "src": "행안부 도로명주소 검색 API"
+   },
+   "road_addr": "전남광주통합특별시 여수시 봉산남8길 11 (봉산동)",
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-03-28",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20220328",
+   "use_apr_day": ""
+  },
+  {
+   "title": "연제동 지식산업센터 (공장, 연면적 62천㎡)",
+   "cat": "일자리",
+   "sub": "지식산업센터",
+   "lvl": "B",
+   "area_m2": 62476.11,
+   "purp": "공장",
+   "arch_gb": "신축",
+   "pk": "1068120063455",
+   "sd": "전남광주",
+   "sg": "북구",
+   "dong": "연제동",
+   "addr": "광주광역시 북구 연제동 1097번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "last_movement": "2026-08-03",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel",
+   "geo_basis": "지번 지오코딩(광주광역시 북구 연제동 1097번지)",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.868328,
+     35.197273
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 62,476㎡ — 일자리:지식산업센터 B",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-03-22",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "geo_approx": false,
+   "stage_history": [
+    {
+     "stage": "계획",
+     "date": "2026-08-03",
+     "basis": "observed"
+    },
+    {
+     "stage": "착공",
+     "date": "2022-03-22",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "observed",
+   "arch_pms_day": "",
+   "real_stcns_day": "20220322",
+   "use_apr_day": ""
+  },
+  {
+   "title": "식사동 식사2지구 도시개발구역 상업 2-1 업무시설 (업무시설, 연면적 21천㎡)",
+   "cat": "일자리",
+   "sub": "오피스",
+   "lvl": "C",
+   "area_m2": 21090.8168,
+   "purp": "업무시설",
+   "arch_gb": "신축",
+   "pk": "1104100085104",
+   "sd": "경기",
+   "sg": "고양시",
+   "dong": "식사동",
+   "addr": "경기도 고양시 일산동구 식사동 블록",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "arch_pms_day": "",
+   "real_stcns_day": "20220628",
+   "use_apr_day": "",
+   "last_movement": "2022-06-28",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "none",
+   "geo_basis": "지오코딩 실패 — 대장 주소가 지번이 아님(경기도 고양시 일산동구 식사동 블록) · 블록형은 지구 경계 자료 확보 시 재시도",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 21,091㎡ — 일자리:오피스 C",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-06-28",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "geo_approx": true,
+   "block_unresolved": true,
+   "position_confidence": "블록형 택지 — 대지위치에 블록번호가 없어 지구 내 위치 특정 불가. 표시 좌표는 지구·동 수준 근사이며 실제 부지 위치가 아님",
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2022-06-28",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "source"
+  },
+  {
+   "title": "여좌동 진해공공임대형 지식산업센터 (공장, 연면적 12천㎡)",
+   "cat": "일자리",
+   "sub": "지식산업센터",
+   "lvl": "C",
+   "area_m2": 12074.19,
+   "purp": "공장",
+   "arch_gb": "신축",
+   "pk": "12523000135857",
+   "sd": "경남",
+   "sg": "창원시",
+   "dong": "여좌동",
+   "addr": "경상남도 창원시 진해구 여좌동 924-1번지",
+   "confirmed": false,
+   "current_stage": "착공",
+   "phase": "착공",
+   "status": "활성",
+   "arch_pms_day": "",
+   "real_stcns_day": "20220614",
+   "use_apr_day": "",
+   "last_movement": "2022-06-14",
+   "src_tier": "official_report",
+   "pt_type": "facility",
+   "geo_prec": "parcel_base",
+   "geo_basis": "지번 지오코딩(경상남도 창원시 진해구 여좌동 924) — parcel_base 근사",
+   "note": "인허가 대장 crtnDay 창 밖 백필(2026-08-03) — 착공 진행 중 클래스, 준공은 건축물대장 표제부 사용승인으로 교차 확정",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.669142,
+     35.157964
+    ]
+   },
+   "gate": "신호",
+   "gate_basis": "단계 착공 — 법정 절차 진행 중",
+   "lvl_basis": "연면적 12,074㎡ — 일자리:지식산업센터 C",
+   "milestones": [
+    {
+     "phase": "착공",
+     "stage": "착공",
+     "date": "2022-06-14",
+     "state": "current",
+     "src": "건축HUB"
+    },
+    {
+     "phase": "준공·개통",
+     "stage": "사용승인",
+     "state": "future"
+    }
+   ],
+   "geo_approx": true,
+   "stage_history": [
+    {
+     "stage": "착공",
+     "date": "2022-06-14",
+     "basis": "source"
+    }
+   ],
+   "first_seen": "2026-08-03",
+   "last_movement_basis": "source"
   }
  ]
 }
