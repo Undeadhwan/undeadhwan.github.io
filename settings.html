@@ -238,6 +238,18 @@ function onEdit(e) {
   if (inp.dataset.t) document.querySelectorAll(
       `input[data-t="${inp.dataset.t}"][data-k="${inp.dataset.k}"][data-lv="${inp.dataset.lv}"]`
     ).forEach(o => { if (o !== inp) o.value = inp.value; });
+  /* ★ 0(하한없음) 표기 잔상 해소 (2026-08-18 사장님 *"10000으로 저장했는데 왜 회색이냐"*):
+     회색·「하한없음」 라벨은 **열 때 값이 0이었던 흔적**이라, 값을 바꿔도 칸의 옷이 안 바뀌어
+     「저장이 안 된 것처럼」 보였다(실제 저장은 됐다). 값이 바뀌면 옷도 그 자리에서 갈아입힌다. */
+  if (inp.dataset.t) document.querySelectorAll(
+      `input[data-t="${inp.dataset.t}"][data-k="${inp.dataset.k}"][data-lv="${inp.dataset.lv}"]`
+    ).forEach(o => {
+      const zero = v === 0;
+      o.classList.toggle("zero", zero);
+      const lbl = o.nextElementSibling;
+      const kind = Object.keys(TABLE).find(k => TABLE[k] === o.dataset.t);   // 표 이름 → 단위 역참조
+      if (lbl && lbl.tagName === "I") lbl.textContent = zero ? "하한없음" : (UNIT[kind] || "");
+    });
   count();
 }
 
