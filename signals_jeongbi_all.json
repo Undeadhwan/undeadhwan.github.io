@@ -605,7 +605,7 @@
    "stage": "착공",
    "phase": "착공",
    "type": "가로주택정비",
-   "hh": null,
+   "hh": 298,
    "drop": false,
    "geo_prec": "parcel",
    "geo_approx": false,
@@ -640,7 +640,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-08-09",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "hh_src": "건축HUB 인허가 hhldCnt(지번 일치 · 공동주택 · 허가 20230731 ≥ 인가 20201230)"
   },
   {
    "n": "번동 4구역 가로주택 정비사업 조합 (가로주택정비)",
@@ -652,7 +653,7 @@
    "stage": "착공",
    "phase": "착공",
    "type": "가로주택정비",
-   "hh": null,
+   "hh": 318,
    "drop": false,
    "geo_prec": "parcel",
    "geo_approx": false,
@@ -687,7 +688,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-08-09",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "hh_src": "건축HUB 인허가 hhldCnt(지번 일치 · 공동주택 · 허가 20230731 ≥ 인가 20201201)"
   },
   {
    "n": "번동2구역 가로주택정비사업조합 (가로주택정비)",
@@ -699,7 +701,7 @@
    "stage": "착공",
    "phase": "착공",
    "type": "가로주택정비",
-   "hh": null,
+   "hh": 254,
    "drop": false,
    "geo_prec": "parcel",
    "geo_approx": false,
@@ -734,7 +736,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-08-09",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "hh_src": "건축HUB 인허가 hhldCnt(지번 일치 · 공동주택 · 허가 20230731 ≥ 인가 20200414)"
   },
   {
    "n": "번동1구역 가로주택정비사업조합 (가로주택정비)",
@@ -746,7 +749,7 @@
    "stage": "착공",
    "phase": "착공",
    "type": "가로주택정비",
-   "hh": null,
+   "hh": 146,
    "drop": false,
    "geo_prec": "parcel",
    "geo_approx": false,
@@ -781,7 +784,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-08-09",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "hh_src": "건축HUB 인허가 hhldCnt(지번 일치 · 공동주택 · 허가 20230731 ≥ 인가 20190920)"
   },
   {
    "n": "번동 3구역 가로주택 정비사업 조합 (가로주택정비)",
@@ -793,7 +797,7 @@
    "stage": "착공",
    "phase": "착공",
    "type": "가로주택정비",
-   "hh": null,
+   "hh": 226,
    "drop": false,
    "geo_prec": "parcel",
    "geo_approx": false,
@@ -828,7 +832,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-08-09",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "hh_src": "건축HUB 인허가 hhldCnt(지번 일치 · 공동주택 · 허가 20230731 ≥ 인가 20201116)"
   },
   {
    "n": "번동3-2구역 가로주택정비사업 (가로주택정비)",
@@ -9569,9 +9574,9 @@
    "sg": "마포구",
    "dong": "아현동",
    "stage": "착공",
-   "phase": "착공",
+   "phase": "준공·개통",
    "type": "재개발(도시정비형)",
-   "hh": null,
+   "hh": 239,
    "drop": false,
    "geo_prec": "parcel",
    "geo_approx": false,
@@ -9584,11 +9589,20 @@
      "stage": "착공",
      "date": "2026-07-18",
      "basis": "observed"
+    },
+    {
+     "stage": "준공",
+     "date": "2023-10",
+     "basis": "apt_cross"
     }
    ],
    "first_seen": "2026-07-18",
-   "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement": "2023-10",
+   "last_movement_basis": "apt_cross",
+   "hh_src": "건축HUB 인허가 hhldCnt(지번 일치 · 공동주택 · 허가 20090312)",
+   "status": "종결",
+   "done_apt": "마포푸르지오더센트럴(2023.10)",
+   "done_basis": "완공 아파트 근접(184m)+세대수 부합(239↔239) 확인: 마포푸르지오더센트럴 준공 2023.10 (폴리곤 없음 — 교차증거 추정) — 소스 진행단계('착공')는 stale"
   },
   {
    "n": "합정역세권 도시정비형 재개발구역 (재개발(도시정비형))",
@@ -22407,7 +22421,7 @@
    "stage": "착공",
    "phase": "착공",
    "type": "재개발(주택정비형)",
-   "hh": null,
+   "hh": 199,
    "drop": false,
    "geo_prec": "parcel",
    "geo_approx": false,
@@ -22424,7 +22438,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "hh_src": "건축HUB 인허가 hhldCnt(지번 일치 · 공동주택 · 허가 20110422)"
   },
   {
    "n": "옥천동 123-2번지 일대 신속통합기획 주택재개발사업 (재개발(주택정비형))",
@@ -51406,7 +51421,7 @@
    "stage": "철거",
    "phase": "착공",
    "type": "재건축",
-   "hh": null,
+   "hh": 68,
    "drop": false,
    "geo_prec": "parcel",
    "geo_approx": false,
@@ -51423,7 +51438,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "hh_src": "건축HUB 인허가 hhldCnt(지번 일치 · 공동주택 · 허가 20231018)"
   },
   {
    "n": "중화동131-35번지일대 주택재건축정비사업 조합설립추진위원회 (재건축)",
@@ -52326,7 +52342,7 @@
    "stage": "철거 및 착공",
    "phase": "착공",
    "type": "지역주택",
-   "hh": null,
+   "hh": 32,
    "drop": false,
    "geo_prec": "parcel",
    "geo_approx": false,
@@ -52343,7 +52359,8 @@
    ],
    "first_seen": "2026-07-18",
    "last_movement": "2026-07-18",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "hh_src": "건축HUB 인허가 hhldCnt(지번 일치 · 공동주택 · 허가 20081215)"
   },
   {
    "n": "돈암동역세권지역주택조합 (지역주택)",
@@ -114987,7 +115004,7 @@
    "stage": "착공",
    "phase": "착공",
    "type": "가로주택정비",
-   "hh": null,
+   "hh": 41,
    "drop": false,
    "geo_prec": "parcel",
    "geo_approx": false,
@@ -115023,7 +115040,8 @@
    ],
    "first_seen": "2026-08-09",
    "last_movement": "2026-08-09",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "hh_src": "건축HUB 인허가 hhldCnt(지번 일치 · 공동주택 · 허가 20201105 ≥ 인가 20161214)"
   },
   {
    "n": "영동,한양빌라 가로주택정비사업 (가로주택정비)",
@@ -115131,7 +115149,7 @@
    "stage": "착공",
    "phase": "착공",
    "type": "가로주택정비",
-   "hh": null,
+   "hh": 118,
    "drop": false,
    "geo_prec": "parcel",
    "geo_approx": false,
@@ -115167,7 +115185,8 @@
    ],
    "first_seen": "2026-08-09",
    "last_movement": "2026-08-09",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "hh_src": "건축HUB 인허가 hhldCnt(지번 일치 · 공동주택 · 허가 20220817 ≥ 인가 20191209)"
   },
   {
    "n": "비취타운 가로주택정비사업 (가로주택정비)",
@@ -116398,7 +116417,7 @@
    "stage": "착공",
    "phase": "착공",
    "type": "가로주택정비",
-   "hh": null,
+   "hh": 34,
    "drop": false,
    "geo_prec": "none",
    "geo_approx": true,
@@ -116434,7 +116453,8 @@
    ],
    "first_seen": "2026-08-09",
    "last_movement": "2026-08-09",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "hh_src": "건축HUB 인허가 hhldCnt(지번 일치 · 공동주택 · 허가 20210818 ≥ 인가 20160509)"
   },
   {
    "n": "서초동 1622 일대 가로주택정비사업 (가로주택정비)",
@@ -116709,7 +116729,7 @@
    "stage": "착공",
    "phase": "착공",
    "type": "가로주택정비",
-   "hh": null,
+   "hh": 120,
    "drop": false,
    "geo_prec": "parcel",
    "geo_approx": false,
@@ -116745,7 +116765,8 @@
    ],
    "first_seen": "2026-08-09",
    "last_movement": "2026-08-09",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "hh_src": "건축HUB 인허가 hhldCnt(지번 일치 · 공동주택 · 허가 20230809 ≥ 인가 20201030)"
   },
   {
    "n": "한신아파트 가로주택정비사업 (가로주택정비)",

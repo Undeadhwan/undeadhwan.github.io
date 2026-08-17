@@ -3931,6 +3931,11 @@ function syncRegionBar() {
   const dong = document.getElementById("r-dong");
   dong.value = nav.dong || "";
   syncSelx();   // ⚠ `.value` 직접 대입은 change를 안 쏜다 — 표시 층을 여기서 다시 읽는다
+  /* ☠ 지역 표시 층은 **둘**이다 — 숨은 셀렉트(여기)와 칩 라벨(#r-chip-t). 종전엔 칩을 팝오버의
+     「조회」 경로만 갱신해서, 다른 경로(초기화·showSgg·showDong·goHome)로 지역이 바뀌면 칩이
+     옛 지역을 계속 말했다(2026-08-17 사장님 제보: 초기화 후 호재는 전국인데 칩은 「경기도 › 김포시」).
+     상태를 표시로 미는 곳은 이 함수 하나뿐이므로 칩도 여기서 함께 민다 — 쌍은 같은 곳에서 갱신한다. */
+  syncRegionChip();
 }
 function buildTree() { syncRegionBar(); }   // 트리 제거 → 지역 드롭다운 동기화로 대체
 
@@ -4708,7 +4713,8 @@ function renderDetail(s) {
       <div class="dsub"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}${subLabel(s)}</span>${(() => {
         const pl = placeText(s); return pl ? " · " + pl : ""; })()}</div>
       <div class="dchips">
-        ${s.area_shape ? "" : `<span class="dchip lv" style="border-color:${colorOf(s)}">${levelOf(s) === "미정" ? LEVEL_NAME["미정"] : levelOf(s) + "등급"}</span>`}
+        ${s.area_shape && levelOf(s) === "미정" ? "" : `<span class="dchip lv" style="border-color:${colorOf(s)}">${levelOf(s) === "미정" ? LEVEL_NAME["미정"] : levelOf(s) + "등급"}</span>`}<!-- 딱지도 등급을 가지면 칩을 단다(2026-08-17 딱지 등급 부여 — 지도 원은 A인데 카드만 무등급이면 쌍이 갈린다). 미등급 딱지만 칩 생략(면적 칩이 규모를 말한다) -->
+
         <span class="dchip ph${phaseSolid(s) || dropped ? "" : " ph-plan"}" style="${phaseSolid(s) && !dropped ? `background:${colorOf(s)}` : `color:${colorOf(s)}`}">${PHASE_LABEL[ph] || ph}</span>
         <span class="dchip">${s.area_shape ? (s.area_m2 ? `지구 ${(s.area_m2 / 1e6).toFixed(1)}km²` : "면적 미상")
           : `영향 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km`}</span>
@@ -6255,7 +6261,8 @@ function initLeaflet() {
     if (map.getZoom() < 10) return;   // 줌아웃은 시도 알약·시군구 뱃지 층이 담당(카카오 LOD와 동일 사상)
     const bd = map.getBounds();
     const act = allSignalsFlat().filter(visible)
-      .filter(s => s.geometry && s.geometry.coordinates && !s.area_shape && s.signal !== false);
+      // `!s.area_shape` 제거(2026-08-17) — 카카오판 hjBase와 같은 이유(영역 층이 빈 함수라 마커 소실). 쌍으로 고친다.
+      .filter(s => s.geometry && s.geometry.coordinates && s.signal !== false);
     let n = 0;
     for (const sg of act) {
       if (n > 500) break;                        // 폴백 성능 가드(정식 화면은 카카오)
@@ -6939,7 +6946,14 @@ function initKakao() {
          카드는 「진출입 지점 미확정 — 영향권 미산정」이라고 정직하게 말하는데, 그 카드에 닿을
          마커 자체가 없었다(정직한 결손은 소리를 내지 않는다). */
       .filter(s => !(s._road && s.access_points && s.road_kind === "전용" && (s.ic_points || []).length))
-      .filter(s => !s.area_shape).filter(s => s.signal !== false)
+      /* ☠ `!s.area_shape` 필터를 걷어냈다 (2026-08-17 사장님 "김포 주거개발 1건이 지도에 어디 있는지
+         못찾겠다"). 이 필터의 전제는 「지구 딱지는 renderMasterArea(영역 층)가 그린다」였는데, 그 층은
+         2026-07-22에 폐기돼(convex hull 경계 부정확 — P5) **빈 함수**다. 부품이 사라졌는데 그 부품에
+         기대던 필터만 남아 — master 66건(동탄2~김포한강2)이 집계·목록엔 있고 지도엔 마커가 없었다.
+         「카드에 닿을 마커 자체가 없다」(2026-08-06 IC 없는 전용도로와 같은 형태). 07-22 결정이 기각한
+         것은 엉터리 **경계**이지 마커가 아니다 — 점 호재원(마름모=등급 축 밖 · 후광=근사)은 경계를
+         지어내지 않는다. 지구 폴리곤 소스가 생겨 영역 층이 부활하면 그때 이 필터도 함께 되살린다. */
+      .filter(s => s.signal !== false)
       .filter(s => s.geometry && s.geometry.coordinates);
     return _hjBase;
   };
@@ -8327,7 +8341,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260817c");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260817e");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8512,7 +8526,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260817c"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260817e"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8538,7 +8552,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260817c");
+  const CB = "?b=" + (window.BUILD || "20260817e");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
