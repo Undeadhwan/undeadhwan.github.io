@@ -1340,6 +1340,11 @@
    "template_type": "정비사업",
    "stage_history": [
     {
+     "stage": "계획",
+     "date": "2023-01-26",
+     "basis": "source"
+    },
+    {
      "stage": "인가",
      "date": "2026-06-29",
      "basis": "source"
@@ -1347,7 +1352,57 @@
    ],
    "first_seen": "2026-07-22",
    "geo_basis": "좌표 미확보 — 고시명에 지번 없음·동 토큰 없음(지구명만 기재). 실제 위치는 첨부 고시문 PDF 안에 있다(미파싱)",
-   "last_movement_basis": "source"
+   "last_movement_basis": "source",
+   "field_changes": [
+    {
+     "date": "2026-08-16",
+     "field": "title",
+     "label": "사업명",
+     "from": "부산대저 공공주택지구 지구지정 변경(1차) 및 지구계획 승인",
+     "to": "부산대저 공공주택지구",
+     "basis": "observed"
+    },
+    {
+     "date": "2026-08-16",
+     "field": "area_m2",
+     "label": "연면적",
+     "from": 2385744,
+     "to": 2425795,
+     "basis": "observed"
+    },
+    {
+     "date": "2026-08-16",
+     "field": "current_stage",
+     "label": "소스 단계",
+     "from": "국토교통부 고시 제2026-325호",
+     "to": "지구 지정",
+     "basis": "observed"
+    },
+    {
+     "date": "2026-08-17",
+     "field": "title",
+     "label": "사업명",
+     "from": "부산대저 공공주택지구",
+     "to": "부산대저 공공주택지구 지구지정 변경(1차) 및 지구계획 승인",
+     "basis": "observed"
+    },
+    {
+     "date": "2026-08-17",
+     "field": "area_m2",
+     "label": "연면적",
+     "from": 2425795,
+     "to": 2385744,
+     "basis": "observed"
+    },
+    {
+     "date": "2026-08-17",
+     "field": "current_stage",
+     "label": "소스 단계",
+     "from": "지구 지정",
+     "to": "국토교통부 고시 제2026-325호",
+     "basis": "observed"
+    }
+   ]
   },
   {
    "id": "E-637403",

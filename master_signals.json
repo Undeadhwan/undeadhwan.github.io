@@ -1,6 +1,6 @@
 {
  "_note": "S급 마스터 신호 — 택지정보 지구 대장(jigu_dstrc.csv)+가구획지(jigu_blocks.json). master_fetch.py 생성(백지 재현). 마스터-조각 병합은 master_merge.py.",
- "generated": "2026-08-16",
+ "generated": "2026-08-17",
  "signals": [
   {
    "id": "M-41590MX2008001",
@@ -5953,11 +5953,18 @@
     "https://www.jigu.go.kr"
    ],
    "src_name": "국토부 택지정보시스템 지구 대장",
-   "geo_prec": "none",
+   "geo_prec": "sgg",
    "geo_approx": true,
-   "geo_basis": "지구 필지(가구획지) 미생성 — 택지정보 대장은 개발계획 승인 뒤에 필지를 싣는다. 지구지정 단계라 지구 경계·중심점을 아직 얻을 수 없다(승인 시 자동 확보)",
+   "geo_basis": "지구 필지 미생성 → **시군구 대표점**으로 표시(실좌표 아님)",
    "confirmed": false,
    "area_shape": true,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.148776,
+     37.219548
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -5965,7 +5972,7 @@
      "basis": "source"
     }
    ],
-   "first_seen": "2026-08-16",
+   "first_seen": "2026-08-17",
    "last_movement_basis": "source"
   },
   {
@@ -6007,11 +6014,18 @@
     "https://www.jigu.go.kr"
    ],
    "src_name": "국토부 택지정보시스템 지구 대장",
-   "geo_prec": "none",
+   "geo_prec": "sgg",
    "geo_approx": true,
-   "geo_basis": "지구 필지(가구획지) 미생성 — 택지정보 대장은 개발계획 승인 뒤에 필지를 싣는다. 지구지정 단계라 지구 경계·중심점을 아직 얻을 수 없다(승인 시 자동 확보)",
+   "geo_basis": "지구 필지 미생성 → **시군구 대표점**으로 표시(실좌표 아님)",
    "confirmed": false,
    "area_shape": true,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.777918,
+     35.204731
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -6019,7 +6033,7 @@
      "basis": "source"
     }
    ],
-   "first_seen": "2026-08-16",
+   "first_seen": "2026-08-17",
    "last_movement_basis": "source"
   },
   {
@@ -6061,11 +6075,18 @@
     "https://www.jigu.go.kr"
    ],
    "src_name": "국토부 택지정보시스템 지구 대장",
-   "geo_prec": "none",
+   "geo_prec": "sgg",
    "geo_approx": true,
-   "geo_basis": "지구 필지(가구획지) 미생성 — 택지정보 대장은 개발계획 승인 뒤에 필지를 싣는다. 지구지정 단계라 지구 경계·중심점을 아직 얻을 수 없다(승인 시 자동 확보)",
+   "geo_basis": "지구 필지 미생성 → **시군구 대표점**으로 표시(실좌표 아님)",
    "confirmed": false,
    "area_shape": true,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.048616,
+     37.14801
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -6073,7 +6094,7 @@
      "basis": "source"
     }
    ],
-   "first_seen": "2026-08-16",
+   "first_seen": "2026-07-22",
    "last_movement_basis": "source"
   },
   {
@@ -6115,11 +6136,18 @@
     "https://www.jigu.go.kr"
    ],
    "src_name": "국토부 택지정보시스템 지구 대장",
-   "geo_prec": "none",
+   "geo_prec": "sgg",
    "geo_approx": true,
-   "geo_basis": "지구 필지(가구획지) 미생성 — 택지정보 대장은 개발계획 승인 뒤에 필지를 싣는다. 지구지정 단계라 지구 경계·중심점을 아직 얻을 수 없다(승인 시 자동 확보)",
+   "geo_basis": "지구 필지 미생성 → **시군구 대표점**으로 표시(실좌표 아님)",
    "confirmed": false,
    "area_shape": true,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.131172,
+     37.64106
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -6127,7 +6155,7 @@
      "basis": "source"
     }
    ],
-   "first_seen": "2026-08-16",
+   "first_seen": "2026-08-17",
    "last_movement_basis": "source"
   },
   {
@@ -6169,11 +6197,18 @@
     "https://www.jigu.go.kr"
    ],
    "src_name": "국토부 택지정보시스템 지구 대장",
-   "geo_prec": "none",
+   "geo_prec": "sgg",
    "geo_approx": true,
-   "geo_basis": "지구 필지(가구획지) 미생성 — 택지정보 대장은 개발계획 승인 뒤에 필지를 싣는다. 지구지정 단계라 지구 경계·중심점을 아직 얻을 수 없다(승인 시 자동 확보)",
+   "geo_basis": "지구 필지 미생성 → **시군구 대표점**으로 표시(실좌표 아님)",
    "confirmed": false,
    "area_shape": true,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.067492,
+     37.461583
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -6181,7 +6216,7 @@
      "basis": "source"
     }
    ],
-   "first_seen": "2026-08-16",
+   "first_seen": "2026-07-22",
    "last_movement_basis": "source"
   },
   {
@@ -6217,56 +6252,32 @@
    "sd": "부산",
    "sg": "강서구",
    "loc": "부산광역시 강서구 대저 동 대저 동 1 , 2 일원",
-   "last_movement": "2026-06-29",
+   "last_movement": "2023-01-26",
    "src_tier": "official_report",
    "sources": [
     "https://www.jigu.go.kr"
    ],
    "src_name": "국토부 택지정보시스템 지구 대장",
-   "geo_prec": "none",
+   "geo_prec": "sgg",
    "geo_approx": true,
-   "geo_basis": "지구 필지(가구획지) 미생성 — 택지정보 대장은 개발계획 승인 뒤에 필지를 싣는다. 지구지정 단계라 지구 경계·중심점을 아직 얻을 수 없다(승인 시 자동 확보)",
+   "geo_basis": "지구 필지 미생성 → **시군구 대표점**으로 표시(실좌표 아님)",
    "confirmed": false,
    "area_shape": true,
-   "field_changes": [
-    {
-     "date": "2026-08-16",
-     "field": "title",
-     "label": "사업명",
-     "from": "부산대저 공공주택지구 지구지정 변경(1차) 및 지구계획 승인",
-     "to": "부산대저 공공주택지구",
-     "basis": "observed"
-    },
-    {
-     "date": "2026-08-16",
-     "field": "area_m2",
-     "label": "연면적",
-     "from": 2385744,
-     "to": 2425795,
-     "basis": "observed"
-    },
-    {
-     "date": "2026-08-16",
-     "field": "current_stage",
-     "label": "소스 단계",
-     "from": "국토교통부 고시 제2026-325호",
-     "to": "지구 지정",
-     "basis": "observed"
-    }
-   ],
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.943257,
+     35.224404
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
      "date": "2023-01-26",
      "basis": "source"
-    },
-    {
-     "stage": "인가",
-     "date": "2026-06-29",
-     "basis": "source"
     }
    ],
-   "first_seen": "2026-07-22",
+   "first_seen": "2026-08-17",
    "last_movement_basis": "source"
   },
   {
@@ -6308,11 +6319,18 @@
     "https://www.jigu.go.kr"
    ],
    "src_name": "국토부 택지정보시스템 지구 대장",
-   "geo_prec": "none",
+   "geo_prec": "sgg",
    "geo_approx": true,
-   "geo_basis": "지구 필지(가구획지) 미생성 — 택지정보 대장은 개발계획 승인 뒤에 필지를 싣는다. 지구지정 단계라 지구 경계·중심점을 아직 얻을 수 없다(승인 시 자동 확보)",
+   "geo_basis": "지구 필지 미생성 → **시군구 대표점**으로 표시(실좌표 아님)",
    "confirmed": false,
    "area_shape": true,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.077585,
+     37.184337
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -6320,7 +6338,7 @@
      "basis": "source"
     }
    ],
-   "first_seen": "2026-08-16",
+   "first_seen": "2026-08-17",
    "last_movement_basis": "source"
   },
   {
@@ -6362,11 +6380,18 @@
     "https://www.jigu.go.kr"
    ],
    "src_name": "국토부 택지정보시스템 지구 대장",
-   "geo_prec": "none",
+   "geo_prec": "sgg",
    "geo_approx": true,
-   "geo_basis": "지구 필지(가구획지) 미생성 — 택지정보 대장은 개발계획 승인 뒤에 필지를 싣는다. 지구지정 단계라 지구 경계·중심점을 아직 얻을 수 없다(승인 시 자동 확보)",
+   "geo_basis": "지구 필지 미생성 → **시군구 대표점**으로 표시(실좌표 아님)",
    "confirmed": false,
    "area_shape": true,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.088499,
+     37.041358
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -6374,7 +6399,7 @@
      "basis": "source"
     }
    ],
-   "first_seen": "2026-08-16",
+   "first_seen": "2026-08-17",
    "last_movement_basis": "source"
   },
   {
@@ -6416,11 +6441,18 @@
     "https://www.jigu.go.kr"
    ],
    "src_name": "국토부 택지정보시스템 지구 대장",
-   "geo_prec": "none",
+   "geo_prec": "sgg",
    "geo_approx": true,
-   "geo_basis": "지구 필지(가구획지) 미생성 — 택지정보 대장은 개발계획 승인 뒤에 필지를 싣는다. 지구지정 단계라 지구 경계·중심점을 아직 얻을 수 없다(승인 시 자동 확보)",
+   "geo_basis": "지구 필지 미생성 → **시군구 대표점**으로 표시(실좌표 아님)",
    "confirmed": false,
    "area_shape": true,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.675068,
+     37.633274
+    ]
+   },
    "stage_history": [
     {
      "stage": "계획",
@@ -6428,7 +6460,7 @@
      "basis": "source"
     }
    ],
-   "first_seen": "2026-08-16",
+   "first_seen": "2026-08-17",
    "last_movement_basis": "source"
   }
  ]

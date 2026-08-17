@@ -1,14 +1,14 @@
 {
  "type": "FeatureCollection",
  "_note": "신규 학교(초등·특목·대학)(학교 3,000㎡+·결정고시 2023+, 집행상태 미집행·부분집행만) — 브이월드 도시계획 API 자동수집. 집행완료(=이미 있는 공원)와 상태 미상은 제외. upis_fetch.py --type school. 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A) — 부지면적 아님",
- "collected": "2026-08-10",
+ "collected": "2026-08-17",
  "boxes": 182,
- "all_over_min": 4369,
- "delta_new": 110,
+ "all_over_min": 4171,
+ "delta_new": 94,
  "by_grade": {
-  "B": 57,
-  "C": 30,
-  "A": 23
+  "B": 56,
+  "C": 23,
+  "A": 15
  },
  "features": [
   {
@@ -58,7 +58,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -92,15 +92,15 @@
     "kind": "facility",
     "cat": "인프라",
     "sub": "학교",
-    "title": "경남정보대학교 (75,351㎡)",
+    "title": "경남정보대학교 (75,272㎡)",
     "lvl": "B",
     "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
+    "current_stage": "조성계획 변경 결정 · 기타",
     "phase": "인가",
     "status": "활성",
     "confirmed": false,
     "purp": "교육",
-    "area_m2": 75351,
+    "area_m2": 75272,
     "area_kind": "부지",
     "pt_type": "facility",
     "geo_prec": "parcel",
@@ -113,7 +113,7 @@
     "lvl_lock": true,
     "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
     "radius_m": 1500,
-    "note": "조성계획 변경(경남정보대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-12-22 · 집행 미집행 · 근거 고시: 도시계획시설사업(경남정보대학교) 실시계획인가(변경) 및 도시관리계획 결정(변경)고시",
+    "note": "조성계획 변경(경남정보대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-12-22 · 집행 기타 · 근거 고시: 도시계획시설사업(경남정보대학교) 실시계획인가(변경) 및 도시관리계획 결정(변경)고시",
     "milestones": [
      {
       "phase": "인가",
@@ -133,19 +133,19 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      129.010806,
-      35.145647
+      129.010733,
+      35.145536
      ]
     },
     "stage_history": [
      {
       "stage": "인가",
-      "date": "2025-12-22",
+      "date": "2023-12-20",
       "basis": "source"
      }
     ],
@@ -156,8 +156,8 @@
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.010806,
-     35.145647
+     129.010733,
+     35.145536
     ]
    }
   },
@@ -208,7 +208,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -238,1831 +238,6 @@
     "coordinates": [
      127.590414,
      37.375763
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "부산가톨릭대학교 (149,893㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 149893,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "26000NTC202512040005",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(부산가톨릭대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-12-04 · 집행 미집행 · 근거 고시: 도시관리계획(시설:부산가톨릭대학교) 결정(변경) 및 지형도면 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-12-04",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      129.098462,
-      35.244172
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-12-04",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2025-12-04",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     129.098462,
-     35.244172
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "홍익대학교 (35,214㎡)",
-    "lvl": "C",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 35214,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "41590NTC202512040458",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1000,
-    "note": "조성계획 변경(홍익대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-12-04 · 집행 미집행 · 근거 고시: 도시관리계획[시설:학교, 도로] 결정(변경).세부시설 조성계획 결정 및 지형도면 고시 - 홍익대학교 4차산업혁명캠퍼스 -",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-12-04",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.980028,
-      37.217165
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-12-04",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2025-12-04",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.980028,
-     37.217165
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "영남신학대학교 (56,767㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 부분집행",
-    "phase": "착공",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 56767,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "47290NTC202512010001",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(영남신학대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-12-01 · 집행 부분집행 · 근거 고시: 경산 도시관리계획(영남신학대학교 조성계획) 결정(변경) 및 지형도면 승인 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-12-01",
-      "state": "done",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "current"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      128.81702,
-      35.881444
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-12-01",
-      "basis": "source"
-     },
-     {
-      "stage": "착공",
-      "date": "2026-07-31",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2026-07-31",
-    "last_movement_basis": "observed"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     128.81702,
-     35.881444
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "동아대학교 (662,489㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 662489,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "26000NTC202511120002",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(동아대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-11-12 · 집행 미집행 · 근거 고시: 도시계획시설사업(동아대학교 승학캠퍼스) 실시계획(변경)인가 및 도시관리계획 변경결정 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-11-12",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      128.966907,
-      35.115098
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-11-12",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-30",
-    "last_movement": "2025-11-12",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     128.966907,
-     35.115098
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "대학교 (767,407㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 767407,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "27000NTC202510300006",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-10-30 · 집행 미집행 · 근거 고시: 도시계획시설(학교) 변경결정 및 지형도면 작성 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-10-30",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      128.611453,
-      35.889172
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-10-30",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-30",
-    "last_movement": "2025-10-30",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     128.611453,
-     35.889172
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "초등학교 (11,526㎡)",
-    "lvl": "A",
-    "template_type": "생활인프라",
-    "current_stage": "도시계획시설(학교) 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 11526,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "26290NTC202510010004",
-    "gate": "신호",
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 500,
-    "note": "신규 학교(초등·특목·대학)(초등학교) · 결정고시 2025-10-01 · 집행 미집행 · 근거 고시: 도시관리계획시설학교지형도면 고시(결정고시-남부교육지원청고시 제2025-5호)",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-10-01",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "gate_basis": "단계 인가 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      129.109039,
-      35.122626
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-10-01",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-30",
-    "last_movement": "2025-10-01",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     129.109039,
-     35.122626
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "대학 (118,882㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 118882,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "46790NTC202509250637",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(대학) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-09-25 · 집행 미집행 · 근거 고시: 화순 군관리계획(학교) 세부시설 조성계획 결정(변경) 및 지형도면 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-09-25",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      127.00152,
-      35.05536
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-09-25",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2025-09-25",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     127.00152,
-     35.05536
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "남서울대학교 (622,849㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 부분집행",
-    "phase": "착공",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 622849,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "44130NTC202509010002",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(남서울대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-09-01 · 집행 부분집행 · 근거 고시: 천안 도시관리계획(시설:학교. 도로, 저수지 및 남서울대학교 세부시설조성계획) 결정(변경) 및 지형도면 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-09-01",
-      "state": "done",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "current"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      127.140822,
-      36.906672
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-09-01",
-      "basis": "source"
-     },
-     {
-      "stage": "착공",
-      "date": "2026-07-31",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2026-07-31",
-    "last_movement_basis": "observed"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     127.140822,
-     36.906672
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "대학 (61,223㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 61223,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "47150NTC202508070001",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(대학) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-08-07 · 집행 미집행 · 근거 고시: 김천 도시관리계획(학교) 결정(변경) 및 지형도면 고시 등",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-08-07",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      128.084402,
-      36.138255
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-08-07",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2025-08-07",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     128.084402,
-     36.138255
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "동탄13중학교 (13,548㎡)",
-    "lvl": "C",
-    "template_type": "생활인프라",
-    "current_stage": "도시계획시설(학교) 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 13548,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "41590NTC202507280256",
-    "gate": "신호",
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1000,
-    "note": "신규 학교(초등·특목·대학)(동탄13중학교) · 결정고시 2025-07-28 · 집행 미집행 · 근거 고시: 학교[(가칭)동탄13중학교] 시설사업 시행계획 승인",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-07-28",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "gate_basis": "단계 인가 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      127.099714,
-      37.162697
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-07-28",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2025-07-28",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     127.099714,
-     37.162697
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "초등학교 (13,000㎡)",
-    "lvl": "A",
-    "template_type": "생활인프라",
-    "current_stage": "도시계획시설(학교) 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 13000,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "41590NTC202507280257",
-    "gate": "신호",
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 500,
-    "note": "신규 학교(초등·특목·대학)(초등학교) · 결정고시 2025-07-28 · 집행 미집행 · 근거 고시: 학교[(가칭)봉담2-1초등학교] 시설사업 시행계획 승인",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-07-28",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "gate_basis": "단계 인가 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.942304,
-      37.230547
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-07-28",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-30",
-    "last_movement": "2025-07-28",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.942304,
-     37.230547
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "동의중학교 (8,908㎡)",
-    "lvl": "C",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 8908,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "26230NTC202507160001",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1000,
-    "note": "조성계획 변경(동의중학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-07-16 · 집행 미집행 · 근거 고시: 도시관리계획(동의중학교) 결정(변경) 및 지형도면 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-07-16",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      129.07041,
-      35.164899
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-07-16",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2025-07-16",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     129.07041,
-     35.164899
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "중학교 (16,397㎡)",
-    "lvl": "C",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 부분집행",
-    "phase": "착공",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 16397,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "46800NTC202507030001",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1000,
-    "note": "조성계획 변경(중학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-07-03 · 집행 부분집행 · 근거 고시: 장흥 군관리계획(학교) 결정(변경) 지형도면 승인 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-07-03",
-      "state": "done",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "current"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.912252,
-      34.682032
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-07-03",
-      "basis": "source"
-     },
-     {
-      "stage": "착공",
-      "date": "2026-07-31",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2026-07-31",
-    "last_movement_basis": "observed"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.912252,
-     34.682032
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "남양고등학교 (14,640㎡)",
-    "lvl": "C",
-    "template_type": "생활인프라",
-    "current_stage": "도시계획시설(학교) 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 14640,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "41590NTC202507030211",
-    "gate": "신호",
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1000,
-    "note": "신규 학교(초등·특목·대학)(남양고등학교) · 결정고시 2025-07-03 · 집행 미집행 · 근거 고시: 학교(가칭:남양고등학교) 시설사업 시행계획 승인",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-07-03",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "gate_basis": "단계 인가 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.83369,
-      37.195417
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-07-03",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2025-07-03",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.83369,
-     37.195417
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "동명대학교 (306,806㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 306806,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "26000NTC202506260009",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(동명대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-06-26 · 집행 미집행 · 근거 고시: 도시계획시설사업(동명대학교) 실시계획 인가(변경) 및  도시관리계획 결정(변경) 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-06-26",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      129.101633,
-      35.12048
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-06-26",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2025-06-26",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     129.101633,
-     35.12048
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "대학 (13,300㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 13300,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "26000NTC202506180003",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(대학) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-06-18 · 집행 미집행 · 근거 고시: 도시관리계획(시설:학교) 결정(신설, 변경) 및 지형도면 고시 (남구 용당동 490-36번지 일원)",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-06-18",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      129.101895,
-      35.11902
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-06-18",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2025-06-18",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     129.101895,
-     35.11902
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "명지대학교 (741,858㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 부분집행",
-    "phase": "착공",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 741858,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "41460NTC202506100001",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(명지대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-06-10 · 집행 부분집행 · 근거 고시: 용인도시계획시설(명지대학교) 결정(변경) 및 실시계획 인가",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-06-10",
-      "state": "done",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "current"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      127.187562,
-      37.22166
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-06-10",
-      "basis": "source"
-     },
-     {
-      "stage": "착공",
-      "date": "2026-07-31",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2026-07-31",
-    "last_movement_basis": "observed"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     127.187562,
-     37.22166
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "부산보건대학교 (104,418㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 104418,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "26000NTC202506040006",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(부산보건대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-06-04 · 집행 미집행 · 근거 고시: 도시관리계획(시설:학교) 결정(변경) 및 지형도면 고시(부산보건대학교)",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-06-04",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      128.996841,
-      35.104658
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-06-04",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2025-06-04",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     128.996841,
-     35.104658
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "초등학교 (9,597㎡)",
-    "lvl": "A",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 9597,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "26710NTC202506040001",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 500,
-    "note": "조성계획 변경(초등학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-06-04 · 집행 미집행 · 근거 고시: 도시관리계획(학교, 도로) 결정(변경) 및 지형도면 고시 (기장군 일광읍 이천리 929-4번지 일원)",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-06-04",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      129.239198,
-      35.267645
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-06-04",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-30",
-    "last_movement": "2025-06-04",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     129.239198,
-     35.267645
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "대학교 (68,058㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 68058,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "27000NTC202505300011",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-05-30 · 집행 미집행 · 근거 고시: 도시계획시설(학교) 변경결정 및 지형도면 작성 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-05-30",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      128.622813,
-      35.895818
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-05-30",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-30",
-    "last_movement": "2025-05-30",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     128.622813,
-     35.895818
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "장산중학교 (23,445㎡)",
-    "lvl": "C",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 23445,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "47290NTC202504170002",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1000,
-    "note": "조성계획 변경(장산중학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-04-17 · 집행 미집행 · 근거 고시: 경산 도시관리계획(장산중학교) 결정(변경) 및 지형도면승인 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-04-17",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      128.71629,
-      35.822493
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-04-17",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2025-04-17",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     128.71629,
-     35.822493
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "고등학교 (24,629㎡)",
-    "lvl": "C",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 부분집행",
-    "phase": "착공",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 24629,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "48120NTC202504020105",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1000,
-    "note": "조성계획 변경(고등학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-04-02 · 집행 부분집행 · 근거 고시: 학교시설사업(마산제일여자 중·고등학교) 시행계획(변경) 승인 고시 [마산합포구 문화동 14-1번지 일원]",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-04-02",
-      "state": "done",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "current"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      128.557066,
-      35.188913
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-04-02",
-      "basis": "source"
-     },
-     {
-      "stage": "착공",
-      "date": "2026-07-31",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2026-07-31",
-    "last_movement_basis": "observed"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     128.557066,
-     35.188913
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "초등학교 (11,879㎡)",
-    "lvl": "A",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 11879,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "31000NTC202503270002",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 500,
-    "note": "조성계획 변경(초등학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-03-27 · 집행 미집행 · 근거 고시: 주택건설사업계획 승인(변경), 도시관리계획(학교, 지구단위계획구역 및 계획) 결정(변경) 및 지형도면 고시[학성2지구]",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-03-27",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      129.329792,
-      35.558998
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-03-27",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-30",
-    "last_movement": "2025-03-27",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     129.329792,
-     35.558998
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "대학 (82,793㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 82793,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "27000NTC202503200001",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(대학) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-03-20 · 집행 미집행 · 근거 고시: 도시계획시설(학교) 변경결정 및 지형도면 작성 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-03-20",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      128.543064,
-      35.835716
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-03-20",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2025-03-20",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     128.543064,
-     35.835716
     ]
    }
   },
@@ -2113,7 +288,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -2147,188 +322,33 @@
     "kind": "facility",
     "cat": "인프라",
     "sub": "학교",
-    "title": "중학교 (19,755㎡)",
-    "lvl": "C",
+    "title": "신한대학교 (141,680㎡)",
+    "lvl": "B",
     "template_type": "생활인프라",
-    "current_stage": "도시계획시설(학교) 결정 · 미집행",
+    "current_stage": "조성계획 변경 결정 · 집행완료",
     "phase": "인가",
     "status": "활성",
     "confirmed": false,
     "purp": "교육",
-    "area_m2": 19755,
+    "area_m2": 141680,
     "area_kind": "부지",
     "pt_type": "facility",
     "geo_prec": "parcel",
     "src_tier": "official_notice",
     "src_name": "국토부 도시계획 결정고시(브이월드)",
     "sources": [],
-    "ntfc": "26470NTC202501160001",
-    "gate": "신호",
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1000,
-    "note": "신규 학교(초등·특목·대학)(중학교) · 결정고시 2025-01-16 · 집행 미집행 · 근거 고시: 도시관리계획(시설:학교) 지형도면 고시(결정-동래교육청고시 제2025-1호)",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2025-01-16",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "gate_basis": "단계 인가 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      129.064157,
-      35.182609
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-01-16",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2025-01-16",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     129.064157,
-     35.182609
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "용인대학교 (408,846㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 부분집행",
-    "phase": "착공",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 408846,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "41460NTC202501140001",
+    "ntfc": "41150NTC202412160269",
     "gate": "관찰",
     "gate_lock": true,
     "lvl_lock": true,
     "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
     "radius_m": 1500,
-    "note": "조성계획 변경(용인대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2025-01-14 · 집행 부분집행 · 근거 고시: 용인도시계획시설(대학교8호:용인대학교) 결정(변경)",
+    "note": "조성계획 변경(신한대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-12-16 · 집행 집행완료 · 근거 고시: 도시계획시설[공공·문화체육시설:학교(신한대학교)]사업 실시계획 변경 인가 고시",
     "milestones": [
      {
       "phase": "인가",
       "stage": "도시계획시설(학교) 결정",
-      "date": "2025-01-14",
-      "state": "done",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "current"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      127.169103,
-      37.22712
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2025-01-14",
-      "basis": "source"
-     },
-     {
-      "stage": "착공",
-      "date": "2026-07-31",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2026-07-31",
-    "last_movement_basis": "observed"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     127.169103,
-     37.22712
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "한국해양대학교 (90,952㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 90952,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "26000NTC202412190031",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(한국해양대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-12-19 · 집행 미집행 · 근거 고시: 도시계획시설(한국해양대학교 제2캠퍼스)사업 실시계획 변경인가 및 도시관리계획 결정(변경), 지형도면 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2024-12-19",
+      "date": "2024-12-16",
       "state": "current",
       "src": "국토부 결정고시"
      },
@@ -2343,106 +363,31 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      129.080257,
-      35.072546
+      127.043702,
+      37.710238
      ]
     },
     "stage_history": [
      {
       "stage": "인가",
-      "date": "2024-12-19",
+      "date": "2024-12-16",
       "basis": "source"
      }
     ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2024-12-19",
+    "first_seen": "2026-08-17",
+    "last_movement": "2024-12-16",
     "last_movement_basis": "source"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.080257,
-     35.072546
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "용인고등학교 (20,127㎡)",
-    "lvl": "C",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 20127,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "26000NTC202412050002",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1000,
-    "note": "조성계획 변경(용인고등학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-12-05 · 집행 미집행 · 근거 고시: 도시관리계획(시설:용인고등학교) 결정(변경) 및 지형도면 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2024-12-05",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      129.094901,
-      35.214048
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2024-12-05",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2024-12-05",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     129.094901,
-     35.214048
+     127.043702,
+     37.710238
     ]
    }
   },
@@ -2493,7 +438,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -2527,187 +472,34 @@
     "kind": "facility",
     "cat": "인프라",
     "sub": "학교",
-    "title": "대학 (780,189㎡)",
+    "title": "창원대학교 (339,275㎡)",
     "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 부분집행",
-    "phase": "착공",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 780189,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "44200NTC202411110001",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(대학) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-11-11 · 집행 부분집행 · 근거 고시: 아산 도시관리계획(학교) 결정(변경), 도시계획시설사업 실시계획변경인가 및 지형도면 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2024-11-11",
-      "state": "done",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "current"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.95591,
-      36.748311
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2024-11-11",
-      "basis": "source"
-     },
-     {
-      "stage": "착공",
-      "date": "2026-07-31",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2026-07-31",
-    "last_movement_basis": "observed"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.95591,
-     36.748311
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "동의대학교 (57,502㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 57502,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "26000NTC202410310001",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(동의대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-10-31 · 집행 미집행 · 근거 고시: 도시관리계획(시설:학교) 결정(변경) 및 지형도면 고시(동의대학교, 세정고등학교)",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2024-10-31",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      129.076733,
-      35.168758
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2024-10-31",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2024-10-31",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     129.076733,
-     35.168758
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "초등학교 (13,044㎡)",
-    "lvl": "A",
     "template_type": "생활인프라",
     "current_stage": "도시계획시설(학교) 결정 · 미집행",
     "phase": "인가",
     "status": "활성",
     "confirmed": false,
     "purp": "교육",
-    "area_m2": 13044,
+    "area_m2": 339275,
     "area_kind": "부지",
     "pt_type": "facility",
     "geo_prec": "parcel",
     "src_tier": "official_notice",
     "src_name": "국토부 도시계획 결정고시(브이월드)",
     "sources": [],
-    "ntfc": "26000NTC202410170001",
-    "gate": "신호",
+    "ntfc": "26000NTC202410080002",
+    "gate": "관찰",
+    "gate_lock": true,
+    "gate_basis": "대학 캠퍼스 — 신설·이전인지 기존 부지 재기록인지 판별 전(추측 승격 금지)",
     "lvl_lock": true,
     "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 500,
-    "note": "신규 학교(초등·특목·대학)(초등학교) · 결정고시 2024-10-17 · 집행 미집행 · 근거 고시: 도시관리계획(시설:학교) 결정(신설) 및 지형도면 고시 (동래구 명륜동 228번지 일원)",
+    "radius_m": 1500,
+    "note": "조성계획 변경(창원대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-10-08 · 집행 미집행 · 근거 고시: 창원대학교 외 1교 임대형 민자사업(BTL)[국립한국해양대학교] 실시계획 승인 고시",
     "milestones": [
      {
       "phase": "인가",
       "stage": "도시계획시설(학교) 결정",
-      "date": "2024-10-17",
+      "date": "2024-10-08",
       "state": "current",
       "src": "국토부 결정고시"
      },
@@ -2722,32 +514,31 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
-    "gate_basis": "단계 인가 — 법정 절차 진행 중",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      129.082924,
-      35.208035
+      129.091585,
+      35.077181
      ]
     },
     "stage_history": [
      {
       "stage": "인가",
-      "date": "2024-10-17",
+      "date": "2024-10-08",
       "basis": "source"
      }
     ],
-    "first_seen": "2026-07-30",
-    "last_movement": "2024-10-17",
+    "first_seen": "2026-08-17",
+    "last_movement": "2024-10-08",
     "last_movement_basis": "source"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.082924,
-     35.208035
+     129.091585,
+     35.077181
     ]
    }
   },
@@ -2798,7 +589,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -2823,241 +614,6 @@
     "coordinates": [
      129.075636,
      35.195311
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "대학 (591,120㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 부분집행",
-    "phase": "착공",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 591120,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "44810NTC202409300001",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(대학) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-09-30 · 집행 부분집행 · 근거 고시: 예산 군관리계획(학교) 결정(변경) 및 지형도면 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2024-09-30",
-      "state": "done",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "current"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.86034,
-      36.668988
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2024-09-30",
-      "basis": "source"
-     },
-     {
-      "stage": "착공",
-      "date": "2026-07-31",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2026-07-31",
-    "last_movement_basis": "observed"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.86034,
-     36.668988
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "구미정보고등학교 (38,765㎡)",
-    "lvl": "C",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 부분집행",
-    "phase": "착공",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 38765,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "47190NTC202409200001",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1000,
-    "note": "조성계획 변경(구미정보고등학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-09-20 · 집행 부분집행 · 근거 고시: 학교시설사업(구미정보고등학교) 시행계획 승인, 도시관리계획 결정(변경) 및 지형도면 등 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2024-09-20",
-      "state": "done",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "current"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      128.43374,
-      36.117939
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2024-09-20",
-      "basis": "source"
-     },
-     {
-      "stage": "착공",
-      "date": "2026-07-31",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2026-07-31",
-    "last_movement_basis": "observed"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     128.43374,
-     36.117939
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "초등학교 (22,149㎡)",
-    "lvl": "A",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 22149,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "44150NTC202409190002",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 500,
-    "note": "조성계획 변경(초등학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-09-19 · 집행 미집행 · 근거 고시: 공주 도시관리계획(도시계획시설:학교) 결정(변경) 및 지형도면 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2024-09-19",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      127.116739,
-      36.601939
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2024-09-19",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-30",
-    "last_movement": "2024-09-19",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     127.116739,
-     36.601939
     ]
    }
   },
@@ -3109,7 +665,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -3143,33 +699,33 @@
     "kind": "facility",
     "cat": "인프라",
     "sub": "학교",
-    "title": "초등학교 (9,933㎡)",
-    "lvl": "A",
+    "title": "호수고등학교 (17,460㎡)",
+    "lvl": "C",
     "template_type": "생활인프라",
     "current_stage": "조성계획 변경 결정 · 미집행",
     "phase": "인가",
     "status": "활성",
     "confirmed": false,
     "purp": "교육",
-    "area_m2": 9933,
+    "area_m2": 17460,
     "area_kind": "부지",
     "pt_type": "facility",
     "geo_prec": "parcel",
     "src_tier": "official_notice",
     "src_name": "국토부 도시계획 결정고시(브이월드)",
     "sources": [],
-    "ntfc": "46130NTC202409050001",
+    "ntfc": "44130NTC202408210004",
     "gate": "관찰",
     "gate_lock": true,
     "lvl_lock": true,
     "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 500,
-    "note": "조성계획 변경(초등학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-09-05 · 집행 미집행 · 근거 고시: 여수 도시관리계획(학교) 결정 변경 및 지형도면 승인 고시<소라초신흥분교장>",
+    "radius_m": 1000,
+    "note": "조성계획 변경(호수고등학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-08-21 · 집행 미집행 · 근거 고시: 천안 도시관리계획(시설:호수고등학교 외 3개) 결정(변경) 및 지형도면 고시",
     "milestones": [
      {
       "phase": "인가",
       "stage": "도시계획시설(학교) 결정",
-      "date": "2024-09-05",
+      "date": "2024-08-21",
       "state": "current",
       "src": "국토부 결정고시"
      },
@@ -3184,31 +740,31 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      127.589628,
-      34.772395
+      127.127981,
+      36.8512
      ]
     },
     "stage_history": [
      {
       "stage": "인가",
-      "date": "2024-09-05",
+      "date": "2024-08-21",
       "basis": "source"
      }
     ],
-    "first_seen": "2026-07-30",
-    "last_movement": "2024-09-05",
+    "first_seen": "2026-08-17",
+    "last_movement": "2024-08-21",
     "last_movement_basis": "source"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.589628,
-     34.772395
+     127.127981,
+     36.8512
     ]
    }
   },
@@ -3259,7 +815,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -3293,7 +849,7 @@
     "kind": "facility",
     "cat": "인프라",
     "sub": "학교",
-    "title": "용암초등학교 (10,053㎡)",
+    "title": "용암초등학교 (9,837㎡)",
     "lvl": "A",
     "template_type": "생활인프라",
     "current_stage": "조성계획 변경 결정 · 미집행",
@@ -3301,7 +857,7 @@
     "status": "활성",
     "confirmed": false,
     "purp": "교육",
-    "area_m2": 10053,
+    "area_m2": 9837,
     "area_kind": "부지",
     "pt_type": "facility",
     "geo_prec": "parcel",
@@ -3334,13 +890,13 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      129.054848,
-      35.095597
+      129.015553,
+      35.078283
      ]
     },
     "stage_history": [
@@ -3357,8 +913,8 @@
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.054848,
-     35.095597
+     129.015553,
+     35.078283
     ]
    }
   },
@@ -3409,7 +965,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -3443,90 +999,15 @@
     "kind": "facility",
     "cat": "인프라",
     "sub": "학교",
-    "title": "강릉원주대학교 (659,252㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 집행완료",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 659252,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "51150NTC202407010001",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(강릉원주대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-07-01 · 집행 집행완료 · 근거 고시: 강릉 도시계획시설(학교: 강릉원주대학교) 사업 시행자 지정 및 실시계획(변경)인가 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2024-07-01",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      128.869834,
-      37.768913
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2024-07-01",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-30",
-    "last_movement": "2024-07-01",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     128.869834,
-     37.768913
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "고성여중학교 (10,572㎡)",
-    "lvl": "A",
+    "title": "고성여중학교 (24,265㎡)",
+    "lvl": "C",
     "template_type": "생활인프라",
     "current_stage": "조성계획 변경 결정 · 미집행",
     "phase": "인가",
     "status": "활성",
     "confirmed": false,
     "purp": "교육",
-    "area_m2": 10572,
+    "area_m2": 24265,
     "area_kind": "부지",
     "pt_type": "facility",
     "geo_prec": "parcel",
@@ -3538,7 +1019,7 @@
     "gate_lock": true,
     "lvl_lock": true,
     "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 500,
+    "radius_m": 1000,
     "note": "조성계획 변경(고성여중학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-06-27 · 집행 미집행 · 근거 고시: 고성군관리계획(학교) 변경 결정 및 지형도면 고시 - 학교(고성여중학교 외 5개소 -",
     "milestones": [
      {
@@ -3559,13 +1040,13 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      128.260017,
-      35.098421
+      128.325547,
+      34.979715
      ]
     },
     "stage_history": [
@@ -3575,15 +1056,15 @@
       "basis": "source"
      }
     ],
-    "first_seen": "2026-07-30",
+    "first_seen": "2026-08-17",
     "last_movement": "2024-06-27",
     "last_movement_basis": "source"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     128.260017,
-     35.098421
+     128.325547,
+     34.979715
     ]
    }
   },
@@ -3634,7 +1115,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -3713,7 +1194,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "gate_basis": "단계 인가 — 법정 절차 진행 중",
     "geo_approx": false,
     "geometry": {
@@ -3788,7 +1269,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "gate_basis": "단계 인가 — 법정 절차 진행 중",
     "geo_approx": false,
     "geometry": {
@@ -3823,7 +1304,7 @@
     "kind": "facility",
     "cat": "인프라",
     "sub": "학교",
-    "title": "대학교 (557,796㎡)",
+    "title": "연암대학교 (569,313㎡)",
     "lvl": "B",
     "template_type": "생활인프라",
     "current_stage": "조성계획 변경 결정 · 부분집행",
@@ -3831,25 +1312,25 @@
     "status": "활성",
     "confirmed": false,
     "purp": "교육",
-    "area_m2": 557796,
+    "area_m2": 569313,
     "area_kind": "부지",
     "pt_type": "facility",
     "geo_prec": "parcel",
     "src_tier": "official_notice",
     "src_name": "국토부 도시계획 결정고시(브이월드)",
     "sources": [],
-    "ntfc": "44200NTC202406100002",
+    "ntfc": "44130NTC202406030003",
     "gate": "관찰",
     "gate_lock": true,
     "lvl_lock": true,
     "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
     "radius_m": 1500,
-    "note": "조성계획 변경(대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-06-10 · 집행 부분집행 · 근거 고시: 아산 도시관리계획(학교) 결정(변경), 도시계획시설사업 실시계획변경인가 및 지형도면 고시",
+    "note": "조성계획 변경(연암대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-06-03 · 집행 부분집행 · 근거 고시: 천안 도시관리계획[연암대학교 세부시설조성계획] 결정(변경) 및 지형도면 고시",
     "milestones": [
      {
       "phase": "인가",
       "stage": "도시계획시설(학교) 결정",
-      "date": "2024-06-10",
+      "date": "2024-06-03",
       "state": "done",
       "src": "국토부 결정고시"
      },
@@ -3864,36 +1345,36 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.934762,
-      36.76944
+      127.156769,
+      36.949826
      ]
     },
     "stage_history": [
      {
       "stage": "인가",
-      "date": "2024-06-10",
+      "date": "2024-06-03",
       "basis": "source"
      },
      {
       "stage": "착공",
-      "date": "2026-07-30",
+      "date": "2026-08-17",
       "basis": "observed"
      }
     ],
-    "first_seen": "2026-07-30",
-    "last_movement": "2026-07-30",
+    "first_seen": "2026-08-17",
+    "last_movement": "2026-08-17",
     "last_movement_basis": "observed"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.934762,
-     36.76944
+     127.156769,
+     36.949826
     ]
    }
   },
@@ -3944,7 +1425,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -3969,6 +1450,156 @@
     "coordinates": [
      129.115295,
      37.414695
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "동명대학교 (320,106㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 320106,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "26000NTC202405230001",
+    "gate": "관찰",
+    "gate_lock": true,
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1500,
+    "note": "조성계획 변경(동명대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-05-23 · 집행 미집행 · 근거 고시: 도시계획시설사업(동명대학교) 실시계획 인가(변경) 및 도시관리계획 결정(변경) 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2024-05-23",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.101421,
+      35.117956
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2025-06-26",
+      "basis": "source"
+     }
+    ],
+    "first_seen": "2026-07-31",
+    "last_movement": "2025-06-26",
+    "last_movement_basis": "source"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.101421,
+     35.117956
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "부경대학교 (354,597㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 354597,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "26000NTC202405220001",
+    "gate": "관찰",
+    "gate_lock": true,
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1500,
+    "note": "조성계획 변경(부경대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-05-22 · 집행 미집행 · 근거 고시: 도시계획시설사업(부경대학교 대연캠퍼스) 실시계획 변경인가 및 도시관리계획 결정(변경) 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2024-05-22",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.10371,
+      35.133598
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2024-05-22",
+      "basis": "source"
+     }
+    ],
+    "first_seen": "2026-08-17",
+    "last_movement": "2024-05-22",
+    "last_movement_basis": "source"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.10371,
+     35.133598
     ]
    }
   },
@@ -4019,7 +1650,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -4093,7 +1724,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "gate_basis": "단계 인가 — 법정 절차 진행 중",
     "geo_approx": false,
     "geometry": {
@@ -4169,7 +1800,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -4203,7 +1834,7 @@
     "kind": "facility",
     "cat": "인프라",
     "sub": "학교",
-    "title": "도곡초등학교 (14,615㎡)",
+    "title": "업성2초등학교 (15,200㎡)",
     "lvl": "A",
     "template_type": "생활인프라",
     "current_stage": "조성계획 변경 결정 · 미집행",
@@ -4211,7 +1842,82 @@
     "status": "활성",
     "confirmed": false,
     "purp": "교육",
-    "area_m2": 14615,
+    "area_m2": 15200,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "44130NTC202404110009",
+    "gate": "관찰",
+    "gate_lock": true,
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 500,
+    "note": "조성계획 변경(업성2초등학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-04-11 · 집행 미집행 · 근거 고시: 천안 도시관리계획(도시계획시설 : 업성2초등학교, 도로) 결정(변경) 및 지형도면 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2024-04-11",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.127271,
+      36.846636
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2024-04-11",
+      "basis": "source"
+     }
+    ],
+    "first_seen": "2026-08-17",
+    "last_movement": "2024-04-11",
+    "last_movement_basis": "source"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.127271,
+     36.846636
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "도곡초등학교 (14,600㎡)",
+    "lvl": "A",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 14600,
     "area_kind": "부지",
     "pt_type": "facility",
     "geo_prec": "parcel",
@@ -4244,13 +1950,13 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      127.299747,
-      37.370705
+      127.299729,
+      37.370678
      ]
     },
     "stage_history": [
@@ -4267,163 +1973,8 @@
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.299747,
-     37.370705
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "중학교 (19,660㎡)",
-    "lvl": "C",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 부분집행",
-    "phase": "착공",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 19660,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "41820NTC202403140001",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1000,
-    "note": "조성계획 변경(중학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-03-14 · 집행 부분집행 · 근거 고시: 가평 군관리계획[군계획시설(공공·문화체육시설:학교)] 결정(변경) 및 지형도면 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2024-03-14",
-      "state": "done",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "current"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      127.510094,
-      37.827145
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2024-03-14",
-      "basis": "source"
-     },
-     {
-      "stage": "착공",
-      "date": "2026-07-31",
-      "basis": "observed"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2026-07-31",
-    "last_movement_basis": "observed"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     127.510094,
-     37.827145
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "경포대초등학교 (16,500㎡)",
-    "lvl": "A",
-    "template_type": "생활인프라",
-    "current_stage": "도시계획시설(학교) 결정 · 집행완료",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 16500,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "51150NTC202403130002",
-    "gate": "신호",
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 500,
-    "note": "신규 학교(초등·특목·대학)(경포대초등학교) · 결정고시 2024-03-13 · 집행 집행완료 · 근거 고시: 강릉 도시계획시설(학교: 경포대초등학교)사업 사업시행자 지정 및 실시계획인가 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2024-03-13",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "gate_basis": "단계 인가 — 법정 절차 진행 중",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      128.89759,
-      37.802601
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2024-03-13",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-30",
-    "last_movement": "2024-03-13",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     128.89759,
-     37.802601
+     127.299729,
+     37.370678
     ]
    }
   },
@@ -4474,7 +2025,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -4549,7 +2100,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -4624,7 +2175,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -4699,7 +2250,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -4724,81 +2275,6 @@
     "coordinates": [
      127.038595,
      37.300402
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "전북대학교 (139,982㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 미집행",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 139982,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "45140NTC202402050001",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(전북대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-02-05 · 집행 미집행 · 근거 고시: 익산 도시관리계획(도시계획시설/학교:전북대학교) 조성계획 결정(변경) 및 지형도면 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2024-02-05",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      126.960317,
-      35.94162
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2024-02-05",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-31",
-    "last_movement": "2024-02-05",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     126.960317,
-     35.94162
     ]
    }
   },
@@ -4849,7 +2325,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -4924,7 +2400,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -4958,7 +2434,83 @@
     "kind": "facility",
     "cat": "인프라",
     "sub": "학교",
-    "title": "수원과학대학교 (228,584㎡)",
+    "title": "목포대학교 (156,385㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "도시계획시설(학교) 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 156385,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "46110NTC202401250016",
+    "gate": "관찰",
+    "gate_lock": true,
+    "gate_basis": "대학 캠퍼스 — 신설·이전인지 기존 부지 재기록인지 판별 전(추측 승격 금지)",
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1500,
+    "note": "조성계획 변경(목포대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-01-25 · 집행 미집행 · 근거 고시: 목포 도시계획시설[학교(목포대학교)]사업 실시계획인가 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2024-01-25",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.40422,
+      34.810038
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2024-01-25",
+      "basis": "source"
+     }
+    ],
+    "first_seen": "2026-08-17",
+    "last_movement": "2024-01-25",
+    "last_movement_basis": "source"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.40422,
+     34.810038
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "여수대학교 (402,058㎡)",
     "lvl": "B",
     "template_type": "생활인프라",
     "current_stage": "조성계획 변경 결정 · 집행완료",
@@ -4966,7 +2518,82 @@
     "status": "활성",
     "confirmed": false,
     "purp": "교육",
-    "area_m2": 228584,
+    "area_m2": 402058,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "46130NTC202401180002",
+    "gate": "관찰",
+    "gate_lock": true,
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1500,
+    "note": "조성계획 변경(여수대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-01-18 · 집행 집행완료 · 근거 고시: 여수 도시계획시설(학교)사업 실시계획(변경)인가 및 지형도면 고시<여수대학교5>",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2024-01-18",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.697715,
+      34.774543
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2024-01-18",
+      "basis": "source"
+     }
+    ],
+    "first_seen": "2026-08-17",
+    "last_movement": "2024-01-18",
+    "last_movement_basis": "source"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.697715,
+     34.774543
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "수원과학대학교 (229,426㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 집행완료",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 229426,
     "area_kind": "부지",
     "pt_type": "facility",
     "geo_prec": "parcel",
@@ -4999,13 +2626,13 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      126.9841,
-      37.192578
+      126.984508,
+      37.192558
      ]
     },
     "stage_history": [
@@ -5022,8 +2649,83 @@
    "geometry": {
     "type": "Point",
     "coordinates": [
-     126.9841,
-     37.192578
+     126.984508,
+     37.192558
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "전북대학교 (139,982㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 139982,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "45140NTC202401050001",
+    "gate": "관찰",
+    "gate_lock": true,
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1500,
+    "note": "조성계획 변경(전북대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2024-01-05 · 집행 미집행 · 근거 고시: 익산 도시관리계획(도시계획시설/학교:전북대학교) 조성계획 결정(변경) 및 지형도면 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2024-01-05",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.960317,
+      35.94162
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2024-02-05",
+      "basis": "source"
+     }
+    ],
+    "first_seen": "2026-07-31",
+    "last_movement": "2024-02-05",
+    "last_movement_basis": "source"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.960317,
+     35.94162
     ]
    }
   },
@@ -5074,7 +2776,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -5149,7 +2851,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -5183,7 +2885,7 @@
     "kind": "facility",
     "cat": "인프라",
     "sub": "학교",
-    "title": "대경대학교 (192,200㎡)",
+    "title": "대경대학교 (193,115㎡)",
     "lvl": "B",
     "template_type": "생활인프라",
     "current_stage": "조성계획 변경 결정 · 집행완료",
@@ -5191,7 +2893,7 @@
     "status": "활성",
     "confirmed": false,
     "purp": "교육",
-    "area_m2": 192200,
+    "area_m2": 193115,
     "area_kind": "부지",
     "pt_type": "facility",
     "geo_prec": "parcel",
@@ -5224,13 +2926,13 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      127.23764,
-      37.748167
+      127.237636,
+      37.748312
      ]
     },
     "stage_history": [
@@ -5247,8 +2949,8 @@
    "geometry": {
     "type": "Point",
     "coordinates": [
-     127.23764,
-     37.748167
+     127.237636,
+     37.748312
     ]
    }
   },
@@ -5299,7 +3001,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -5374,7 +3076,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -5399,81 +3101,6 @@
     "coordinates": [
      128.000754,
      34.8304
-    ]
-   }
-  },
-  {
-   "type": "Feature",
-   "properties": {
-    "kind": "facility",
-    "cat": "인프라",
-    "sub": "학교",
-    "title": "경남정보대학교 (75,272㎡)",
-    "lvl": "B",
-    "template_type": "생활인프라",
-    "current_stage": "조성계획 변경 결정 · 기타",
-    "phase": "인가",
-    "status": "활성",
-    "confirmed": false,
-    "purp": "교육",
-    "area_m2": 75272,
-    "area_kind": "부지",
-    "pt_type": "facility",
-    "geo_prec": "parcel",
-    "src_tier": "official_notice",
-    "src_name": "국토부 도시계획 결정고시(브이월드)",
-    "sources": [],
-    "ntfc": "26000NTC202312200009",
-    "gate": "관찰",
-    "gate_lock": true,
-    "lvl_lock": true,
-    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 1500,
-    "note": "조성계획 변경(경남정보대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-12-20 · 집행 기타 · 근거 고시: 도시계획시설사업(경남정보대학교) 실시계획인가(변경) 고시",
-    "milestones": [
-     {
-      "phase": "인가",
-      "stage": "도시계획시설(학교) 결정",
-      "date": "2023-12-20",
-      "state": "current",
-      "src": "국토부 결정고시"
-     },
-     {
-      "phase": "착공",
-      "stage": "조성·건립",
-      "state": "future"
-     },
-     {
-      "phase": "준공",
-      "stage": "개장·개원",
-      "state": "future"
-     }
-    ],
-    "audited": "2026-08-10",
-    "geo_approx": false,
-    "geometry": {
-     "type": "Point",
-     "coordinates": [
-      129.010733,
-      35.145536
-     ]
-    },
-    "stage_history": [
-     {
-      "stage": "인가",
-      "date": "2023-12-20",
-      "basis": "source"
-     }
-    ],
-    "first_seen": "2026-07-30",
-    "last_movement": "2023-12-20",
-    "last_movement_basis": "source"
-   },
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     129.010733,
-     35.145536
     ]
    }
   },
@@ -5524,7 +3151,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -5599,7 +3226,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -5624,6 +3251,86 @@
     "coordinates": [
      126.932898,
      37.1749
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "대학교 (780,189㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 부분집행",
+    "phase": "착공",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 780189,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "44200NTC202311300004",
+    "gate": "관찰",
+    "gate_lock": true,
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1500,
+    "note": "조성계획 변경(대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-11-30 · 집행 부분집행 · 근거 고시: 아산 도시관리계획(학교) 결정(변경), 도시계획시설사업 시행자 지정 및 실시계획인가 및 지형도면 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2023-11-30",
+      "state": "done",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "current"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.95591,
+      36.748311
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2024-06-10",
+      "basis": "source"
+     },
+     {
+      "stage": "착공",
+      "date": "2026-07-30",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-07-30",
+    "last_movement": "2026-07-30",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.95591,
+     36.748311
     ]
    }
   },
@@ -5674,7 +3381,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -5754,7 +3461,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -5829,7 +3536,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -5904,7 +3611,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -5980,7 +3687,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -6019,33 +3726,33 @@
     "kind": "facility",
     "cat": "인프라",
     "sub": "학교",
-    "title": "방어진초등학교 (15,517㎡)",
-    "lvl": "A",
+    "title": "대학 (66,857㎡)",
+    "lvl": "B",
     "template_type": "생활인프라",
     "current_stage": "조성계획 변경 결정 · 미집행",
     "phase": "인가",
     "status": "활성",
     "confirmed": false,
     "purp": "교육",
-    "area_m2": 15517,
+    "area_m2": 66857,
     "area_kind": "부지",
     "pt_type": "facility",
     "geo_prec": "parcel",
     "src_tier": "official_notice",
     "src_name": "국토부 도시계획 결정고시(브이월드)",
     "sources": [],
-    "ntfc": "31000NTC202311160005",
+    "ntfc": "48840NTC202311090005",
     "gate": "관찰",
     "gate_lock": true,
     "lvl_lock": true,
     "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
-    "radius_m": 500,
-    "note": "조성계획 변경(방어진초등학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-11-16 · 집행 미집행 · 근거 고시: 도시관리계획(학교:방어진초등학교) 결정(변경) 및 지형도면고시",
+    "radius_m": 1500,
+    "note": "조성계획 변경(대학) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-11-09 · 집행 미집행 · 근거 고시: 남해군관리계획(시설:학교) 결정(변경) 고시",
     "milestones": [
      {
       "phase": "인가",
       "stage": "도시계획시설(학교) 결정",
-      "date": "2023-11-16",
+      "date": "2023-11-09",
       "state": "current",
       "src": "국토부 결정고시"
      },
@@ -6060,31 +3767,31 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
      "coordinates": [
-      129.424708,
-      35.487431
+      127.899061,
+      34.837142
      ]
     },
     "stage_history": [
      {
       "stage": "인가",
-      "date": "2023-11-16",
+      "date": "2023-11-09",
       "basis": "source"
      }
     ],
-    "first_seen": "2026-07-30",
-    "last_movement": "2023-11-16",
+    "first_seen": "2026-08-17",
+    "last_movement": "2023-11-09",
     "last_movement_basis": "source"
    },
    "geometry": {
     "type": "Point",
     "coordinates": [
-     129.424708,
-     35.487431
+     127.899061,
+     34.837142
     ]
    }
   },
@@ -6134,7 +3841,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "gate_basis": "단계 인가 — 법정 절차 진행 중",
     "geo_approx": false,
     "geometry": {
@@ -6210,7 +3917,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -6235,6 +3942,81 @@
     "coordinates": [
      128.554928,
      35.857931
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "초등학교 (16,450㎡)",
+    "lvl": "A",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 16450,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "44130NTC202310230002",
+    "gate": "관찰",
+    "gate_lock": true,
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 500,
+    "note": "조성계획 변경(초등학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-10-23 · 집행 미집행 · 근거 고시: 천안 도시관리계획(도시계획시설 : 학교, 도로)결정(변경) 및 지형도면 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2023-10-23",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.143181,
+      36.844135
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2023-10-23",
+      "basis": "source"
+     }
+    ],
+    "first_seen": "2026-08-17",
+    "last_movement": "2023-10-23",
+    "last_movement_basis": "source"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.143181,
+     36.844135
     ]
    }
   },
@@ -6285,7 +4067,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -6310,6 +4092,82 @@
     "coordinates": [
      126.974489,
      37.293826
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "목포해양대학교 (292,044㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "도시계획시설(학교) 결정 · 집행완료",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 292044,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "46110NTC202310190060",
+    "gate": "관찰",
+    "gate_lock": true,
+    "gate_basis": "대학 캠퍼스 — 신설·이전인지 기존 부지 재기록인지 판별 전(추측 승격 금지)",
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1500,
+    "note": "조성계획 변경(목포해양대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-10-19 · 집행 집행완료 · 근거 고시: 목포 도시계획시설[목포해양대학교(안전인프라)]사업 실시계획 인가 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2023-10-19",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.363188,
+      34.793445
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2023-10-19",
+      "basis": "source"
+     }
+    ],
+    "first_seen": "2026-08-17",
+    "last_movement": "2023-10-19",
+    "last_movement_basis": "source"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.363188,
+     34.793445
     ]
    }
   },
@@ -6360,7 +4218,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -6385,6 +4243,157 @@
     "coordinates": [
      128.370367,
      36.085375
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "세종고등학교 (28,695㎡)",
+    "lvl": "C",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 28695,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "36110NTC202309200002",
+    "gate": "관찰",
+    "gate_lock": true,
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1000,
+    "note": "조성계획 변경(세종고등학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-09-20 · 집행 미집행 · 근거 고시: 세종특별자치시 도시관리계획(시설 : 학교 및 문화시설) 결정(변경) 및 지형도면 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2023-09-20",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.299122,
+      36.610635
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2023-09-20",
+      "basis": "source"
+     }
+    ],
+    "first_seen": "2026-08-17",
+    "last_movement": "2023-09-20",
+    "last_movement_basis": "source"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.299122,
+     36.610635
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "가천대학교 (333,827㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "도시계획시설(학교) 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 333827,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "41130NTC202309110001",
+    "gate": "관찰",
+    "gate_lock": true,
+    "gate_basis": "대학 캠퍼스 — 신설·이전인지 기존 부지 재기록인지 판별 전(추측 승격 금지)",
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1500,
+    "note": "조성계획 변경(가천대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-09-11 · 집행 미집행 · 근거 고시: 도시계획시설(가천대학교)사업 사업시행자 지정 및 실시계획인가 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2023-09-11",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.130397,
+      37.452748
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2023-09-11",
+      "basis": "source"
+     }
+    ],
+    "first_seen": "2026-08-17",
+    "last_movement": "2023-09-11",
+    "last_movement_basis": "source"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.130397,
+     37.452748
     ]
    }
   },
@@ -6435,7 +4444,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -6460,6 +4469,161 @@
     "coordinates": [
      127.651009,
      37.791927
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "한양대학교 안산캠퍼스 (1,313,845㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 1313845,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "41270NTC202308230418",
+    "gate": "관찰",
+    "gate_lock": true,
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1500,
+    "note": "조성계획 변경(한양대학교 안산캠퍼스) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-08-23 · 집행 미집행 · 근거 고시: 안산 도시관리계획(도시계획시설 : 학교, 연구시설) 결정(변경) 및 지형도면 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2023-08-23",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.836321,
+      37.295593
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2023-08-23",
+      "basis": "source"
+     }
+    ],
+    "first_seen": "2026-08-17",
+    "last_movement": "2023-08-23",
+    "last_movement_basis": "source"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.836321,
+     37.295593
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "대학 (741,858㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 부분집행",
+    "phase": "착공",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 741858,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "41460NTC202308180001",
+    "gate": "관찰",
+    "gate_lock": true,
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1500,
+    "note": "조성계획 변경(대학) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-08-18 · 집행 부분집행 · 근거 고시: 용인도시계획시설(대학교:명지대) 결정(변경) 및 실시계획인가",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2023-08-18",
+      "state": "done",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "current"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.187562,
+      37.22166
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2023-08-18",
+      "basis": "source"
+     },
+     {
+      "stage": "착공",
+      "date": "2026-08-17",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-17",
+    "last_movement": "2026-08-17",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.187562,
+     37.22166
     ]
    }
   },
@@ -6510,7 +4674,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -6585,7 +4749,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -6660,7 +4824,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -6685,6 +4849,157 @@
     "coordinates": [
      127.130115,
      37.318681
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "부산가톨릭대학교 (147,739㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 147739,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "26000NTC202307190003",
+    "gate": "관찰",
+    "gate_lock": true,
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1500,
+    "note": "조성계획 변경(부산가톨릭대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-07-19 · 집행 미집행 · 근거 고시: 도시계획시설사업(학교:부산가톨릭대학교 제2캠퍼스) 실시계획(변경)인가 및 도시관리계획 결정(변경) 고시 (부곡동 9번지 일원)",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2023-07-19",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.096072,
+      35.240955
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2025-12-04",
+      "basis": "source"
+     }
+    ],
+    "first_seen": "2026-07-31",
+    "last_movement": "2025-12-04",
+    "last_movement_basis": "source"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.096072,
+     35.240955
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "동서울대학교 (118,231㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 118231,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "41130NTC202306260001",
+    "gate": "관찰",
+    "gate_lock": true,
+    "gate_basis": "대학 캠퍼스 — 신설·이전인지 기존 부지 재기록인지 판별 전(추측 승격 금지)",
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1500,
+    "note": "조성계획 변경(동서울대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-06-26 · 집행 미집행 · 근거 고시: 성남 도시계획시설(동서울대학교) 실시계획(변경)인가 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2023-06-26",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.129085,
+      37.459693
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2023-06-26",
+      "basis": "source"
+     }
+    ],
+    "first_seen": "2026-08-17",
+    "last_movement": "2023-06-26",
+    "last_movement_basis": "source"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.129085,
+     37.459693
     ]
    }
   },
@@ -6735,7 +5050,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -6760,6 +5075,81 @@
     "coordinates": [
      127.096864,
      37.258767
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "중학교 (13,000㎡)",
+    "lvl": "C",
+    "template_type": "생활인프라",
+    "current_stage": "도시계획시설(학교) 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 13000,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "41590NTC202306150700",
+    "gate": "신호",
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1000,
+    "note": "신규 학교(초등·특목·대학)(중학교) · 결정고시 2023-06-15 · 집행 미집행 · 근거 고시: 학교(가칭: 봉담2-1중학교) 시설사업 시행계획 승인",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2023-06-15",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "gate_basis": "단계 인가 — 법정 절차 진행 중",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      126.942634,
+      37.232001
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2023-06-15",
+      "basis": "source"
+     }
+    ],
+    "first_seen": "2026-08-17",
+    "last_movement": "2023-06-15",
+    "last_movement_basis": "source"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     126.942634,
+     37.232001
     ]
    }
   },
@@ -6810,7 +5200,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -6885,7 +5275,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -6960,7 +5350,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -6994,7 +5384,7 @@
     "kind": "facility",
     "cat": "인프라",
     "sub": "학교",
-    "title": "중학교 (33,396㎡)",
+    "title": "중학교 (33,402㎡)",
     "lvl": "C",
     "template_type": "생활인프라",
     "current_stage": "조성계획 변경 결정 · 부분집행",
@@ -7002,7 +5392,7 @@
     "status": "활성",
     "confirmed": false,
     "purp": "교육",
-    "area_m2": 33396,
+    "area_m2": 33402,
     "area_kind": "부지",
     "pt_type": "facility",
     "geo_prec": "parcel",
@@ -7035,7 +5425,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -7044,6 +5434,24 @@
       36.386327
      ]
     },
+    "field_changes": [
+     {
+      "date": "2026-08-17",
+      "field": "title",
+      "label": "사업명",
+      "from": "중학교 (33,396㎡)",
+      "to": "중학교 (33,402㎡)",
+      "basis": "observed"
+     },
+     {
+      "date": "2026-08-17",
+      "field": "area_m2",
+      "label": "연면적",
+      "from": 33396,
+      "to": 33402,
+      "basis": "observed"
+     }
+    ],
     "stage_history": [
      {
       "stage": "인가",
@@ -7115,7 +5523,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -7140,6 +5548,81 @@
     "coordinates": [
      128.715982,
      36.562739
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "서정대학교 (120,400㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 집행완료",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 120400,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "41630NTC202304380001",
+    "gate": "관찰",
+    "gate_lock": true,
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1500,
+    "note": "조성계획 변경(서정대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-04-38 · 집행 집행완료 · 근거 고시: 도시계획시설(학교:서정대학교) 실시계획(변경)인가 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2023-04-38",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.038314,
+      37.855574
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2023-04-38",
+      "basis": "source"
+     }
+    ],
+    "first_seen": "2026-08-17",
+    "last_movement": "2023-04-38",
+    "last_movement_basis": "source"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.038314,
+     37.855574
     ]
    }
   },
@@ -7190,7 +5673,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -7224,7 +5707,7 @@
     "kind": "facility",
     "cat": "인프라",
     "sub": "학교",
-    "title": "서울신학대학교 (72,913㎡)",
+    "title": "대구한의대학교 (297,986㎡)",
     "lvl": "B",
     "template_type": "생활인프라",
     "current_stage": "조성계획 변경 결정 · 부분집행",
@@ -7232,25 +5715,25 @@
     "status": "활성",
     "confirmed": false,
     "purp": "교육",
-    "area_m2": 72913,
+    "area_m2": 297986,
     "area_kind": "부지",
     "pt_type": "facility",
     "geo_prec": "parcel",
     "src_tier": "official_notice",
     "src_name": "국토부 도시계획 결정고시(브이월드)",
     "sources": [],
-    "ntfc": "41190NTC202304170002",
+    "ntfc": "47290NTC202304200001",
     "gate": "관찰",
     "gate_lock": true,
     "lvl_lock": true,
     "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
     "radius_m": 1500,
-    "note": "조성계획 변경(서울신학대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-04-17 · 집행 부분집행 · 근거 고시: 부천 도시계획시설(학교:서울신학대학교) 세부시설 조성계획 결정(변경) 및 지형도면 승인 고시",
+    "note": "조성계획 변경(대구한의대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-04-20 · 집행 부분집행 · 근거 고시: 경산 도시관리계획(대구한의대학교-삼성캠퍼스) 결정(변경) 및 지형도면승인 고시",
     "milestones": [
      {
       "phase": "인가",
       "stage": "도시계획시설(학교) 결정",
-      "date": "2023-04-17",
+      "date": "2023-04-20",
       "state": "done",
       "src": "국토부 결정고시"
      },
@@ -7265,7 +5748,88 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      128.776713,
+      35.796355
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2023-04-20",
+      "basis": "source"
+     },
+     {
+      "stage": "착공",
+      "date": "2026-08-17",
+      "basis": "observed"
+     }
+    ],
+    "first_seen": "2026-08-17",
+    "last_movement": "2026-08-17",
+    "last_movement_basis": "observed"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     128.776713,
+     35.796355
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "서울신학대학교 (72,913㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 72913,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "41190NTC202304170002",
+    "gate": "관찰",
+    "gate_lock": true,
+    "gate_basis": "대학 캠퍼스 — 신설·이전인지 기존 부지 재기록인지 판별 전(추측 승격 금지)",
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1500,
+    "note": "조성계획 변경(서울신학대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-04-17 · 집행 미집행 · 근거 고시: 부천 도시계획시설(학교:서울신학대학교) 세부시설 조성계획 결정(변경) 및 지형도면 승인 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2023-04-17",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -7274,6 +5838,16 @@
       37.47902
      ]
     },
+    "field_changes": [
+     {
+      "date": "2026-08-17",
+      "field": "current_stage",
+      "label": "소스 단계",
+      "from": "조성계획 변경 결정 · 부분집행",
+      "to": "조성계획 변경 결정 · 미집행",
+      "basis": "observed"
+     }
+    ],
     "stage_history": [
      {
       "stage": "인가",
@@ -7345,7 +5919,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -7420,7 +5994,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -7445,6 +6019,81 @@
     "coordinates": [
      127.552586,
      36.701877
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "부산대학교 (152,031㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 미집행",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 152031,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "48330NTC202304060001",
+    "gate": "관찰",
+    "gate_lock": true,
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1500,
+    "note": "조성계획 변경(부산대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-04-06 · 집행 미집행 · 근거 고시: 양산도시관리계획(공공·문화체육시설:학교) 세부시설 결정(변경), 지형도면 고시 및 양산 도시계획시설사업『부산대학교 [학교: 부",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2023-04-06",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      129.004576,
+      35.319859
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2023-04-06",
+      "basis": "source"
+     }
+    ],
+    "first_seen": "2026-08-17",
+    "last_movement": "2023-04-06",
+    "last_movement_basis": "source"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     129.004576,
+     35.319859
     ]
    }
   },
@@ -7495,7 +6144,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -7570,7 +6219,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -7650,7 +6299,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -7725,7 +6374,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -7800,7 +6449,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -7879,7 +6528,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "gate_basis": "단계 인가 — 법정 절차 진행 중",
     "geo_approx": false,
     "geometry": {
@@ -7955,7 +6604,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -7985,6 +6634,82 @@
     "coordinates": [
      128.807899,
      35.910181
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "고려대학교 (416,897㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "도시계획시설(학교) 결정 · 집행완료",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 416897,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "36110NTC202302200001",
+    "gate": "관찰",
+    "gate_lock": true,
+    "gate_basis": "대학 캠퍼스 — 신설·이전인지 기존 부지 재기록인지 판별 전(추측 승격 금지)",
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1500,
+    "note": "조성계획 변경(고려대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-02-20 · 집행 집행완료 · 근거 고시: 도시계획시설사업(대학:고려대학교) 실시계획인가 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2023-02-20",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.288495,
+      36.610348
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2023-02-20",
+      "basis": "source"
+     }
+    ],
+    "first_seen": "2026-08-17",
+    "last_movement": "2023-02-20",
+    "last_movement_basis": "source"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.288495,
+     36.610348
     ]
    }
   },
@@ -8035,7 +6760,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -8110,7 +6835,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -8185,7 +6910,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -8260,7 +6985,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
@@ -8285,6 +7010,81 @@
     "coordinates": [
      126.844099,
      35.229546
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "facility",
+    "cat": "인프라",
+    "sub": "학교",
+    "title": "경민대학교 (116,575㎡)",
+    "lvl": "B",
+    "template_type": "생활인프라",
+    "current_stage": "조성계획 변경 결정 · 집행완료",
+    "phase": "인가",
+    "status": "활성",
+    "confirmed": false,
+    "purp": "교육",
+    "area_m2": 116575,
+    "area_kind": "부지",
+    "pt_type": "facility",
+    "geo_prec": "parcel",
+    "src_tier": "official_notice",
+    "src_name": "국토부 도시계획 결정고시(브이월드)",
+    "sources": [],
+    "ntfc": "41150NTC202301050003",
+    "gate": "관찰",
+    "gate_lock": true,
+    "lvl_lock": true,
+    "lvl_basis": "학교 종류 판정 — 등급=학교 종류(초등 C·광역특목 B·전국특목·대학 A)",
+    "radius_m": 1500,
+    "note": "조성계획 변경(경민대학교) — 확장/개편 판별 대기(지도 미표시) · 결정고시 2023-01-05 · 집행 집행완료 · 근거 고시: 도시관리계획(경민대학교) 결정(변경) 및 도시계획시설[공공·문화체육시설:학교(경민대학교)]사업 실시계획(변경)인가 고시",
+    "milestones": [
+     {
+      "phase": "인가",
+      "stage": "도시계획시설(학교) 결정",
+      "date": "2023-01-05",
+      "state": "current",
+      "src": "국토부 결정고시"
+     },
+     {
+      "phase": "착공",
+      "stage": "조성·건립",
+      "state": "future"
+     },
+     {
+      "phase": "준공",
+      "stage": "개장·개원",
+      "state": "future"
+     }
+    ],
+    "audited": "2026-08-17",
+    "geo_approx": false,
+    "geometry": {
+     "type": "Point",
+     "coordinates": [
+      127.021974,
+      37.744851
+     ]
+    },
+    "stage_history": [
+     {
+      "stage": "인가",
+      "date": "2023-01-05",
+      "basis": "source"
+     }
+    ],
+    "first_seen": "2026-08-17",
+    "last_movement": "2023-01-05",
+    "last_movement_basis": "source"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     127.021974,
+     37.744851
     ]
    }
   },
@@ -8335,7 +7135,7 @@
       "state": "future"
      }
     ],
-    "audited": "2026-08-10",
+    "audited": "2026-08-17",
     "geo_approx": false,
     "geometry": {
      "type": "Point",
