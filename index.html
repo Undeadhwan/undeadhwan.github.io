@@ -8191,6 +8191,16 @@ function undetReason(s) {
       ? `세대수 ${Number(s.hh).toLocaleString()}세대 — 최소 등급기준(C·${minC.toLocaleString()}세대) 미만`
       : `세대수 ${Number(s.hh).toLocaleString()}세대인데 등급 미부여 — 판정 경로 점검 필요(정상 아님)`;
   }
+  /* ☠ **데이터에 사유가 있는데 화면이 딴말을 했다** (2026-08-18 사장님 제보 — 「수서역사는 터미널로,
+     체육센터는 문화·관광·체육으로 가면 될 것 같다」). 그 건들은 **이미 그렇게 분류돼 있었고**,
+     미판정 사유는 전부 **증축분 산정 불가**였다. 그런데 화면은 「노선종류 미상」·「등급 기준 데이터
+     미확보」라고 말해, 읽는 사람이 **분류가 잘못됐다고 이해**하게 만들었다(P2 — 화면이 사실을 말해야).
+     `ext_basis`에 왜 못 쟀는지가 문장으로 남아 있다 — 지어내지 말고 그걸 그대로 쓴다. */
+  if (s.arch_gb === "증축" && !s.ext_delta_m2) {
+    const why = String(s.ext_basis || "").replace(/\*\*/g, "").trim();
+    return why ? "증축분 산정 불가 — " + (why.length > 150 ? why.slice(0, 150) + "…" : why)
+                : "증축분 산정 불가 (전체 연면적은 있으나 이번 공사분 미상)";
+  }
   if (c === "일자리") return "연면적·투자액 미확보";
   if (c === "교통") return "노선종류 미상";
   return "등급 기준 데이터 미확보";
@@ -8383,7 +8393,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260818g");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260818h");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8568,7 +8578,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260818g"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260818h"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8594,7 +8604,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260818g");
+  const CB = "?b=" + (window.BUILD || "20260818h");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
