@@ -256,6 +256,8 @@
   .ltab .lt-bar { position:absolute; left:0; top:6px; bottom:6px; width:4px; border-radius:2px; }   /* 유형 색 바 */
   .ltab .lt-t { display:block; font-weight:600; color:var(--ink); line-height:1.35; }
   .ltab .lt-sub { display:block; font-size:11.5px; color:var(--ink3); line-height:1.4; margin-top:1px; }
+  /* 영향권 행의 소재 표기(동·시군구 패널) — 새 색 없음: 기존 토큰(--ink2)만 쓴다(DESIGN §1) */
+  .ltab .lt-sub .outzone { color:var(--ink2); font-weight:700; }
   .ltab .lt-cat { color:var(--ink2); white-space:nowrap; }
   .ltab .lt-loc { color:var(--ink2); white-space:nowrap; }
   .ltab .lt-ph { color:var(--ink2); white-space:nowrap; }
@@ -2913,6 +2915,11 @@ function buildArchSignals() {
     current_stage: s.current_stage || "인허가", phase: s.phase || "계획", status: s.status || "활성", confirmed: false,
     sd: s.sd, sg: s.sg, dong: s.dong || null, addr: s.addr || null, area_m2: s.area_m2, purp: s.purp,
     arch_gb: s.arch_gb || null, arch_pms_day: s.arch_pms_day || null, real_stcns_day: s.real_stcns_day || null, use_apr_day: s.use_apr_day || null,   // 원본 팩트시트(상세 표기용)
+    // 팩트시트 확장(2026-08-18 사장님 "건축HUB 링크가 빈 화면" — 포털이 딥링크를 막으니 **원문 수치는
+    // 카드가 전부 보여준다**). ⚠ 어댑터에 안 실으면 화면에 안 온다(어댑터 함정 — 이 파일에서 3회 밟음)
+    plat_area: s.plat_area || null, vlrat: s.vlrat || null, jiyuk: s.jiyuk || null,
+    road_addr: s.road_addr || null, block: s.block || null,
+    hhld_cnt: s.hhld_cnt || 0, ho_cnt: s.ho_cnt || 0,
     // 생애주기 이력(lifecycle.py가 부착) — 어댑터가 필드를 골라 복사하므로 명시하지 않으면 화면까지 안 온다(2026-07-18)
     stage_history: s.stage_history || null, first_seen: s.first_seen || null, pk: s.pk || null,
     // 블록 조각 접기(block_merge) — **여기 안 적으면 화면까지 안 온다**(위 주석과 같은 함정을
@@ -4103,9 +4110,15 @@ function sigRowTable(arr, opt = {}) {
   const km = m => m < 1000 ? Math.round(m) + "m"
     : tail === "impact" ? (m / 1000).toFixed(1).replace(/\.0$/, "") + "km" : (m / 1000).toFixed(1) + "km";
   const body = document.createElement("tbody"); tb.appendChild(body);
-  arr.forEach(({ s, dist }) => {
+  arr.forEach((x) => {
+    const { s, dist } = x;
     const t = ringOf(s), lv = t.lv;
-    const sub = gradeBasisHtml(s).replace(/\s*·\s*$/, "").trim();
+    let sub = gradeBasisHtml(s).replace(/\s*·\s*$/, "").trim();
+    /* ★ 영향권 행은 **소재가 밖임을 행 자신이 말한다** (2026-08-18 사장님 "동 선택시 호재 리스트가
+       해당 동이 아닌것들이 표시되네" — 소재 0건일 때 영향권 호재만 등급순으로 나열되어 타 동
+       호재로 읽혔다. 머리의 「동 안 N · 영향권 M」 두 수는 있었지만 행이 어느 쪽인지 말하지
+       않았다 — 같은 사실을 층은 알고 행은 모르면 목록이 거짓말처럼 보인다). */
+    if (x.r === "반경권" && opt.outLabel) sub = `<b class="outzone">${opt.outLabel}</b>${sub ? " · " + sub : ""}`;
     /* 4점 트랙 — 몇 번째 단계까지 찼는지만. 날짜는 카드를 열면 나온다(시안 §07). */
     const dots = PHASES.map((p, i) =>
       `<i class="pd${i <= t.ph ? " on" : ""}"></i>`).join("");
@@ -4678,12 +4691,16 @@ function renderDong(feature) {
   panelListRender = () => {
     list.className = ""; list.innerHTML = "";
     if (!rel.length) { list.innerHTML = `<div class="pickhint">이 동 영향권 호재 없음</div>`; return; }
-    const arr = panelArrange([...host, ...near]);
+    /* ★ **소재가 먼저다** (2026-08-18 사장님 제보 — 목록 탭(소재 기준 N건)과 이 패널의 첫인상이
+       달라 보였다). 등급순 전체 정렬은 동 밖 A급이 동 안 호재를 밀어냈다 — 동 안 호재를 앞에
+       세우고, 영향권 행은 각자 「동 밖 소재」를 말한다(sigRowTable outLabel). 두 수(머리)와
+       목록 순서가 같은 이야기를 하게 된다. */
+    const arr = [...panelArrange(host), ...panelArrange(near)];
     if (!arr.length) { list.innerHTML = `<div class="pickhint">${LEVEL_NAME[panelGrade] || panelGrade}급 호재 없음</div>`; return; }
     /* 카드(190px) → **4열 행 표**(시안 §12): *"○A급은 라디오 버튼으로 읽힙니다. 목록 탭과 같은
        등급·호재명·단계·영향 4열 행으로 바꾸면 7건이 한 화면에 들어오고 기호를 새로 배우지 않습니다."*
        ⚠ 마지막 열은 **영향 반경**이다 — 동은 점이 아니라 면이라 「단지에서 몇 m」 같은 거리가 없다. */
-    mountRowTable(list, arr, { tail: "impact", end: "행을 누르면 그 호재의 상세가 열립니다" });
+    mountRowTable(list, arr, { tail: "impact", outLabel: "동 밖 소재 — 영향권만", end: "행을 누르면 그 호재의 상세가 열립니다" });
   };
   panelListRender();
 }
@@ -4746,7 +4763,17 @@ function renderDetail(s) {
           <span>허가일</span><b>${fmtDay(s.arch_pms_day)}</b>
           <span>착공일</span><b>${fmtDay(s.real_stcns_day)}</b>
           <span>사용승인일</span><b>${fmtDay(s.use_apr_day)}</b>
-        </div></details>` : ""}
+          ${s.plat_area ? `<span>대지면적</span><b>${Number(s.plat_area).toLocaleString()}㎡</b>` : ""}
+          ${s.vlrat ? `<span>용적률</span><b>${Number(s.vlrat).toLocaleString()}%</b>` : ""}
+          ${s.jiyuk ? `<span>용도지역</span><b>${esc(String(s.jiyuk))}</b>` : ""}
+          ${s.block ? `<span>블록</span><b>${esc(String(s.block))}</b>` : ""}
+          ${s.hhld_cnt > 0 ? `<span>세대수</span><b>${Number(s.hhld_cnt).toLocaleString()}</b>` : ""}
+          ${s.ho_cnt > 0 ? `<span>호수</span><b>${Number(s.ho_cnt).toLocaleString()}</b>` : ""}
+          ${s.road_addr ? `<span>도로명주소</span><b>${esc(String(s.road_addr))}</b>` : ""}
+          ${s.pk ? `<span>관리허가대장관리번호</span><b class="mono">${esc(String(s.pk))}</b>` : ""}
+        </div>
+        <div class="note" style="margin-top:4px">※ 건축HUB 포털은 이 건으로 바로 가는 링크를 제공하지 않아(딥링크 없음 — 기관 측 구조),
+        원문 수치를 여기 전부 옮겨 둡니다. 위 관리번호가 포털 결과 표의 「관리허가대장관리번호」와 대조 기준입니다.</div></details>` : ""}
       ${s._road && (s.access_points || []).length ? (s.road_kind === "전용"
         ? `<div class="kv"><b>영향권</b> ${(s.ic_points || []).length
             ? `진출입 IC ${s.ic_points.length}개소 반경 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km (전용도로 — 선 자체는 영향권 미산정)`
@@ -4777,7 +4804,11 @@ function renderDetail(s) {
         // 링크 전수조사(2026-07-30, link_audit.py)에서 참조 1,216건(72%)이 **조회조건 없는 메인**으로
         // 드러났다 — 링크는 살아 있는데 그 신호를 찾을 수 없어 "정보가 무의미"하게 느껴진다(사용자 지적).
         // GET 파라미터 딥링크는 실측 불가(건축HUB는 파라미터를 줘도 응답이 동일) → **라벨에 조회 방법을 박는다.**
-        const NEEDQ = [[/hub\.go\.kr\/portal\/opn/, "건축HUB(주소로 검색)"], [/hub\.go\.kr\/portal\/dps/, "건축HUB 설계공모(공모명으로 검색)"],
+        // ★ 2026-08-18 메커니즘 확정(사장님 "여전히 암것도 안나와" 재제보): 기본개요 화면의 검색 그리드는
+        //   bimatrix(i-AUD) BI **iframe**(idx-bi-matrix.do?rCode=…)이고 컨트롤 ID가 세션 생성 GUID다 —
+        //   URL 파라미터로 필터를 채우는 길이 **구조적으로 없다**. 딥링크 재시도는 낭비(시도 대장 성격의 기록).
+        //   ⇒ 원문 수치는 팩트시트가 전부 보여주고, 라벨이 「빈 검색화면」을 미리 말한다(P2 — 화면이 사실을).
+        const NEEDQ = [[/hub\.go\.kr\/portal\/opn/, "건축HUB 포털(빈 검색화면 — 직접 조회 필요)"], [/hub\.go\.kr\/portal\/dps/, "건축HUB 설계공모(공모명으로 검색)"],
                        [/jigu\.go\.kr/, "택지정보(지구명으로 검색)"]];
         const nq = NEEDQ.find(([re_]) => re_.test(u));
         /* ★ 이름 없는 링크는 **데이터가 아는 이름**으로 부른다 (2026-08-14 시안 §13 「기재부 고시 ·
@@ -4788,7 +4819,7 @@ function renderDetail(s) {
         return `<a href="${u}" target="_blank"${nq ? ' title="이 링크는 검색 조건을 직접 넣어야 해당 건이 보입니다 — 딥링크가 제공되지 않습니다"' : ""}>${lbl}</a>`;
       }).join(" · ") || "원문 링크 없음"}</span>${
         s.src_tier === "osm" ? ' · <b>진행단계·명칭은 공식 확인 전</b>(선형만 OSM 참고)' : ""}${
-        /hub\.go\.kr|eais\.go\.kr/.test((s.sources || [])[0] || "") ? `<div class="note" style="margin-top:3px">※ 원본 수치는 위 팩트시트 그대로. 건축HUB는 <b>딥링크가 없고 주소 붙여넣기 검색도 안 됩니다</b>(실측 2026-08-17 — 사장님 "링크 가봐야 볼 수가 없다") — 포털에서 <b>시도·시군구·법정동을 드롭다운으로 고르고 번·지 칸에 지번</b>(위 대지위치의 숫자)을 넣어 검색한 뒤, 결과 표의 <b>관리허가대장관리번호 <span class="mono">${esc(String(s.pk || ""))}</span></b> 행이 이 건입니다${s.pk ? "" : " (관리번호 미보유 — 허가일·연면적으로 대조)"}. 조회 기준월이 전월분이라 최신 건은 다음 달에 보일 수 있습니다</div>` : /data\.gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 개별 딥링크가 없어 <b>경기데이터드림 카탈로그</b> 연결 — 「<b>일반 정비 사업 추진 현황</b>」 검색 → Sheet 보기에서 위 사업장명으로 조회</div>' : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 개별 딥링크가 없어 포털 연결 — 위 사업장명으로 조회</div>' : ""}</div>
+        /hub\.go\.kr|eais\.go\.kr/.test((s.sources || [])[0] || "") ? `<div class="note" style="margin-top:3px">※ <b>링크를 열면 빈 검색화면이 뜹니다 — 정상입니다.</b> 건축HUB는 개별 건으로 가는 딥링크를 제공하지 않습니다(검색 그리드가 BI 컴포넌트 iframe — 실측 2026-08-17·08-18). 원본 수치는 위 팩트시트에 전부 있습니다. 포털에서 직접 보려면 <b>시도·시군구·법정동을 드롭다운으로 고르고 번·지 칸에 지번</b>(위 대지위치의 숫자)을 넣어 검색한 뒤, 결과 표의 <b>관리허가대장관리번호 <span class="mono">${esc(String(s.pk || ""))}</span></b> 행이 이 건입니다${s.pk ? "" : " (관리번호 미보유 — 허가일·연면적으로 대조)"}. 조회 기준월이 전월분이라 최신 건은 다음 달에 보일 수 있습니다</div>` : /data\.gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 개별 딥링크가 없어 <b>경기데이터드림 카탈로그</b> 연결 — 「<b>일반 정비 사업 추진 현황</b>」 검색 → Sheet 보기에서 위 사업장명으로 조회</div>' : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 개별 딥링크가 없어 포털 연결 — 위 사업장명으로 조회</div>' : ""}</div>
       ${s.master_ref ? `<div class="kv"><b>소속 지구</b> ${s.master_ref.title} <span class="hmhint">— 지구 마스터에 속한 개별 사업(경계 기반 병합)</span></div>` : ""}
       ${s.ext_basis ? `<div class="kv"><b>증축 규모</b> ${s.ext_basis}</div>` : ""}
       ${s.nm_basis ? `<div class="kv"><b>건물명 근거</b> ${s.nm_basis}</div>` : ""}
@@ -4874,10 +4905,12 @@ function renderSggFeed(disp) {
         : `<div class="pickhint">이 시군구 영향권 호재 없음</div>`;
       return;
     }
-    const arr = panelArrange([...host, ...near]);
+    // ★ 소재 먼저 + 영향권 행 표기 — 동 패널과 같은 규칙(2026-08-18 사장님 "시군구도 체크필요").
+    //   규칙이 한쪽(동)에만 걸리면 반대쪽(시군구)이 조용히 예외가 된다 — 양쪽에 건다.
+    const arr = [...panelArrange(host), ...panelArrange(near)];
     if (!arr.length) { list.innerHTML = `<div class="pickhint">${LEVEL_NAME[panelGrade] || panelGrade}급 호재 없음</div>`; return; }
     // 동 패널과 **같은 행 표**(시안 §12). 상한 80건은 유지 — 시군구는 수백 건이 걸린다.
-    mountRowTable(list, arr.slice(0, LIST_CAP), { tail: "impact", end: "행을 누르면 그 호재의 상세가 열립니다" });
+    mountRowTable(list, arr.slice(0, LIST_CAP), { tail: "impact", outLabel: "시군구 밖 소재 — 영향권만", end: "행을 누르면 그 호재의 상세가 열립니다" });
   };
   panelListRender();
   const cl = p.querySelector("#candlist");
@@ -8350,7 +8383,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260818d");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260818e");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8535,7 +8568,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260818d"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260818e"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8561,7 +8594,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260818d");
+  const CB = "?b=" + (window.BUILD || "20260818e");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
