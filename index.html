@@ -3125,8 +3125,20 @@ function buildRoadSignals() {
        둘을 묶어 읽는 바람에 '근거 미확인'으로 표기한 고막IC가 **분기점(JC) 목록에 섞여**
        "고막IC는 분기점"이라는 없는 사실을 화면이 말했다. 사유로 갈라서 각각 표기한다. */
     const _off = ics.filter(ic => ic.signal === false && ic.line && (ic.line === ln.osm_name || ic.line === ln.title));
-    ln.jc_points = _off.filter(ic => !ic.exists_status)
+    /* ☠ **같은 사고가 세 번째 사실을 물고 되살아났다** (2026-08-19 실측).
+       `ic_from_name`이 표준노드링크에서 끌어온 지점을 **전부** `signal:false`로 적는데, 그중
+       **35개가 실제로는 IC**다(기흥IC·양재IC·판교IC·수원신갈IC …). 그래서 화면이 그것들을
+       분기점 칸에 넣고 「차량 진출입 불가, 호재 아님」이라고 **없는 사실**을 말했다.
+       ⇒ 세 번째 사유를 갈라 적는다: **기존 IC** — 진출입은 되지만 이 사업으로 **새로 생기는 게
+         아니라**(확장·지하화는 기존 도로를 따라간다) delta가 아니어서 영향권에 세지 않는다.
+       판정은 이름이 아니라 데이터가 준 역할(`pt_role`)로 한다 — 이름 꼬리로 가르면 표기 변형
+       (JCT/분기점)에서 또 샌다. */
+    const _isJc = ic => (ic.pt_role || "").toLowerCase() === "jc"
+      || (!ic.pt_role && /(JC|JCT|분기점)$/.test(String(ic.title || "")));
+    ln.jc_points = _off.filter(ic => !ic.exists_status && _isJc(ic))
       .map(ic => ({ coordinates: ic.geometry.coordinates, name: ic.title }));   // 구조 정보(상세 표기용)
+    ln.existing_ic_points = _off.filter(ic => !ic.exists_status && !_isJc(ic))
+      .map(ic => ({ coordinates: ic.geometry.coordinates, name: ic.title }));
     ln.unverified_points = _off.filter(ic => ic.exists_status)
       .map(ic => ({ coordinates: ic.geometry.coordinates, name: ic.title, why: ic.exists_note || ic.exists_status }));
   });
@@ -4784,6 +4796,8 @@ function renderDetail(s) {
         `${a.name}${a.coordinates ? "" : " (좌표 미확보)"}`).join(" · ")}</div>` : ""}
       ${!lb && (s.jc_points || []).length ? `<div class="kv"><b>분기점(JC)</b> ${s.jc_points.map(j => j.name).join(" · ")}
         <span class="hmhint">— 차량 진출입 불가, 호재 아님(구조 정보)</span></div>` : ""}
+      ${!lb && (s.existing_ic_points || []).length ? `<div class="kv"><b>기존 IC</b> ${s.existing_ic_points.map(j => j.name).join(" · ")}
+        <span class="hmhint">— 진출입은 되지만 이 사업으로 새로 생기는 지점이 아닙니다(기존 도로를 따라가는 확장·지하화). 영향권에 세지 않습니다</span></div>` : ""}
       ${(s.unverified_points || []).length ? `<div class="kv"><b>근거 미확인</b> ${s.unverified_points.map(u => u.name).join(" · ")}
         <span class="hmhint">— 공식 원문에서 이름을 못 찾았습니다. 지우지 않고 표시하되 호재로 세지 않습니다</span></div>` : ""}
       ${s.geom_status ? `<div class="kv"><b>선형 범위</b> ${s.geom_status}</div>` : ""}
@@ -8393,7 +8407,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260818i");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260819a");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8578,7 +8592,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260818i"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260819a"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8604,7 +8618,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260818i");
+  const CB = "?b=" + (window.BUILD || "20260819a");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
