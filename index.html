@@ -5259,9 +5259,9 @@ function dockCounts() {
      ⇒ 도크 집계는 **지도와 같은 자**를 쓴다(동까지 적용). 자기 축만 빼는 facet 규칙은 그대로.
      ※ 종전 주석은 「도크 집계는 고른 지역의 재고이고 동은 그 아래 층」이라 적었는데, 그 설계는
        총계에는 적용되지 않아 **한 함수 안에서 두 규칙**이 돌고 있었다. 규칙은 하나여야 한다. */
-  const base = s => regionVisible(s) && !isStaleFinished(s);
+  // 풀은 livePool 하나에서 온다 — 등급 없음 목록과 같은 자(2026-08-18 SSOT 통합, 함수 주석 참조)
   const stageLvl = s => filter.phase.has(phaseOf(s)) && filter.lvl.has(levelOf(s));
-  const pool = allSignalsFlat().filter(base);
+  const pool = livePool().filter(regionVisible);
   const cat = {}, sub = {}, lvl = {};
   pool.forEach(s => {
     if (stageLvl(s)) {
@@ -8139,6 +8139,13 @@ function renderList() {
 function allSignalsFlat() {
   return [].concat(SIGNALS, MASTER_SIG, JOBS_SIG, MEGA_SIG, EUM_SIG, JEONGBI_SIG, RAIL_SIG, ROAD_SIG, DART_SIG, ARCH_SIG, UPIS_SIG, DPS_SIG, SH_SIG).filter(s => s && s.geometry);
 }
+/* ★★ 살아있는 신호 풀 — 「전체 신호가 몇 건인가」에 답하는 **자는 이 함수 하나**다 (2026-08-18).
+   끝난 신호(완공·종결·해산 후 1년 초과 = isStaleFinished)는 지도·목록·집계 전부에서 숨긴다는
+   규칙(2026-07-21 사용자 확정)이 visibleNoRegion에 있는데, 등급 없음 목록만 allSignalsFlat을
+   직접 세어 **두 화면이 다른 총계를 말했다**(사장님 제보: 목록 5,935 ↔ 지도 5,458 — 차이 477은
+   정비 준공·해산분 475 + 소수). 같은 질문에 자가 둘이면 반드시 갈린다(regionVisible 통합과 같은
+   사고 클래스). 제외분은 숨기지 않고 개수로 밝힌다(숨은 필터 금지). */
+function livePool() { return allSignalsFlat().filter(s => !isStaleFinished(s)); }
 function undetReason(s) {
   const c = catOf(s);
   // 판정기가 남긴 실제 사유(lvl_basis)가 있으면 그걸 쓴다 — 종전엔 41,518세대 신도시 딱지(의도적
@@ -8157,7 +8164,7 @@ function undetReason(s) {
 }
 let undetReady = false;
 function initUndet() {
-  const rows = allSignalsFlat().filter(s => !isGraded(s));
+  const rows = livePool().filter(s => !isGraded(s));
   if (!undetReady) {
     undetReady = true;
     const cats = [...new Set(rows.map(catOf))].sort();
@@ -8173,13 +8180,15 @@ function initUndet() {
 const UNDET_PAGE = 200;
 function renderUndet(more) {
   const cat = document.getElementById("u-cat").value, sido = document.getElementById("u-sido").value, q = document.getElementById("u-q").value.trim();
-  let rows = allSignalsFlat().filter(s => !isGraded(s))
+  let rows = livePool().filter(s => !isGraded(s))
     .filter(s => (!cat || catOf(s) === cat) && (!sido || s.sd === sido) && (!q || (s.title || "").includes(q)));
   window._undetShown = more ? window._undetShown + UNDET_PAGE : UNDET_PAGE;
   const byCat = {}; rows.forEach(s => byCat[catOf(s)] = (byCat[catOf(s)] || 0) + 1);
-  const total = allSignalsFlat().length, undet = allSignalsFlat().filter(s => !isGraded(s)).length;
+  const pool = livePool(), total = pool.length, undet = pool.filter(s => !isGraded(s)).length;
+  const staleN = allSignalsFlat().length - total;   // 제외를 숨기지 않는다 — 개수로 밝힌다
   document.getElementById("u-count").innerHTML =
-    `<b>${rows.length.toLocaleString()}건</b> 등급 없음 (전체 신호 ${total.toLocaleString()}건 중 등급 없음 ${undet.toLocaleString()}건) — `
+    `<b>${rows.length.toLocaleString()}건</b> 등급 없음 (전체 신호 ${total.toLocaleString()}건 중 등급 없음 ${undet.toLocaleString()}건`
+    + (staleN ? ` · <span title="완공·종결·해산 후 1년이 지났거나 완료일 미상인 신호 — 지도와 같은 기준으로 제외(2026-07-21 규칙)">오래된 완공 ${staleN.toLocaleString()}건 제외</span>` : "") + `) — `
     + CAT_KEYS.filter(c => byCat[c]).map(c => `<span style="color:${CAT_COLOR[c]};font-weight:700">${c} ${byCat[c]}</span>`).join(" · ");
   document.getElementById("u-list").innerHTML = rows.slice(0, window._undetShown).map(s => {
     const loc = [s.sd, s.sg, s.dong].filter(Boolean).join(" ");
@@ -8341,7 +8350,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260818c");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260818d");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8526,7 +8535,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260818c"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260818d"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8552,7 +8561,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260818c");
+  const CB = "?b=" + (window.BUILD || "20260818d");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
