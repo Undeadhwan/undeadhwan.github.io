@@ -1617,11 +1617,6 @@
      여기서는 **아이콘 자리만** 정한다 — 오른쪽 끝(`margin-left:auto`)에 지도 문법을 둔다.
      등급 링은 `HJR`(지도 반지름)에서 도출한 인라인 크기를 받으므로 여기서 크기를 적지 않는다
      (값을 두 곳에 적지 않는다 — 문턱이 바뀌면 자동으로 따라온다). */
-  #dock .cks { display:flex; flex-direction:column; }
-  #dock .cks .sub i { margin-left:auto; flex-shrink:0; box-sizing:border-box; }
-  #dock .cks .sub i.lvr { border:2px solid currentColor; border-radius:50%; background:none; }
-  #dock .cks .sub i.dia { width:7px; height:7px; border:1.6px solid currentColor; border-radius:2px;
-                          transform:rotate(45deg); background:none; }
   /* ★ 시안 실물: 단계는 **알약**이고 폭에 따라 자연스럽게 접힌다(격자 아님). */
   /* ★ 시안 실물: 등급 버튼은 **링 위 · 글자 아래** 세로 배치이고 링 크기가 등급별로 다르다.
      가로로 눕히면 링이 글자 옆 장식이 되는데, 시안에서 링은 **크기가 곧 등급**이라 주인공이다. */
@@ -1640,15 +1635,18 @@
      ★ 목록 표의 단계 셀(`.phcell`)에는 같은 문법이 **이미** 있었다. 규칙이 한쪽에만 걸려
        반대쪽이 조용한 예외가 되는 이 저장소의 반복 사고 — 그래서 도크와 모바일 시트를
        **한 선택자**로 묶는다(사본을 만들지 않는다). */
-  #dock .cks i.phi, #msheet .mc i.phi { box-sizing:border-box; width:11px; height:11px;
-    background:none; border:1.6px solid currentColor; border-radius:50%; }
+  /* 시안 §03 목업: 아이콘 **12px**. `flex:none`이 없으면 알약(flex) 안에서 눌려 8~9px이 된다
+     (2026-08-20 실측 — 화면엔 글자만 보였다). 두께는 지도 단계 문법과 같은 계단을 쓴다. */
+  #dock .pgrow i.phi, #msheet .mc i.phi { box-sizing:border-box; width:12px; height:12px; flex:none;
+    background:none; border:1.5px solid currentColor; border-radius:50%; }
   /* ⚠ 계획 아이콘은 **점선이 아니다**(2026-08-20 §14-3) — 점선은 위치 근사로 옮겼다.
      단계는 두께가 말하므로 계획은 **가장 얇은 실선**이다(마커와 같은 문법). */
-  #dock .cks i.phi.ph0, #msheet .mc i.phi.ph0 { border-width:1.2px; }
-  #dock .cks i.phi.ph2, #msheet .mc i.phi.ph2,
-  #dock .cks i.phi.ph3, #msheet .mc i.phi.ph3 { border-width:3px; }
+  #dock .pgrow i.phi.ph0, #msheet .mc i.phi.ph0 { border-width:1.2px; }
+  #dock .pgrow i.phi.ph1, #msheet .mc i.phi.ph1 { border-width:2px; }
+  #dock .pgrow i.phi.ph2, #msheet .mc i.phi.ph2,
+  #dock .pgrow i.phi.ph3, #msheet .mc i.phi.ph3 { border-width:3px; }
   /* 완공 = 굵은 링 + **중심 코어** — 지도 마커가 준공에만 코어를 찍는 것과 같다 */
-  #dock .cks i.phi.ph3, #msheet .mc i.phi.ph3 {
+  #dock .pgrow i.phi.ph3, #msheet .mc i.phi.ph3 {
     background:radial-gradient(circle, currentColor 0 2.2px, transparent 2.4px); }
   /* 등급 없음 = 마름모(2026-08-12) — 지도와 같은 문법. 점선 원으로 둔 동안은 계획 단계와 구분이 안 됐다.
      원 = 등급이 있는 것 · 마름모 = 등급 축 밖. 후광(좌표 근사)은 원이니 둘이 섞이지 않는다. */
@@ -8830,7 +8828,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260820e");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260820f");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -9015,7 +9013,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260820e"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260820f"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -9041,7 +9039,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260820e");
+  const CB = "?b=" + (window.BUILD || "20260820f");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
