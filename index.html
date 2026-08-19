@@ -3153,7 +3153,12 @@ function buildJeongbiSignals() {
     // ★ 제목에 법정동을 접두한다 (2026-08-10 사용자 "정비명만 보고 무슨 정비사업인지 구분이 안 된다").
     //   소스 사업명이 「주공4단지 (재건축)」처럼 지역 없는 통칭인 경우가 많다 — 동(사실 필드)을
     //   앞에 붙이면 카드·목록·검색 전부에서 구분된다. 이름을 지어내는 게 아니라 위치 사실의 표기다(P2).
-    _jb: true, _jbtype: c.type || "", src_tier: "official_report", milestones: c.milestones || [], title: (c.dong && !(c.n || "").includes(c.dong) ? c.dong + " " + c.n : c.n), cat: "주거개발", lvl: hhLevel(c.hh), lvl_basis: hhBasis(c.hh),   // 세대수 눈금 = thresholds.json(SSOT) · 사유는 카드에 표기
+    _jb: true, _jbtype: c.type || "", src_tier: "official_report", milestones: c.milestones || [], title: (c.dong && !(c.n || "").includes(c.dong) ? c.dong + " " + c.n : c.n), cat: "주거개발", lvl: hhLevel(c.hh), lvl_basis: hhBasis(c.hh) + (c.hh && c.hh_src ? " · 근거 " + c.hh_src : ""),   // 세대수 눈금 = thresholds.json(SSOT) · 사유는 카드에 표기
+    // ⚠ `hh_src`(세대수의 출처·구성)를 **어댑터가 실어야 화면에 온다** — 2026-08-19에 정비몽땅
+    //   사업개요 경로로 서울 440건의 세대수가 붙었는데, 어댑터가 근거를 떨어뜨려 화면은 숫자만
+    //   말하고 **어디서 온 값인지 못 말했다**(어댑터 함정 6회째. 위 주석들과 같은 형태다).
+    //   근거엔 분양/임대 구성까지 들어 있다 — 합만 보이면 임대 비중이 사라진다(P2·P5).
+    hh_src: c.hh_src || null,
     template_type: "정비사업", current_stage: c.stage, phase: c.phase, status: c.drop ? "종결" : "활성", confirmed: false,
     sd: c.sd, sg: c.sg, dong: c.dong, hh: c.hh, last_movement: c.last_movement || null, stage_history: c.stage_history || undefined,   // 실일자(경기 마일스톤 소급 등) → 신선도·정체 표시
     // ☠ 여기 있던 `target_completion: null`을 지웠다(2026-08-11) — 완료 시점은 `targetOf(s)`가 도출한다(§targetOf).
@@ -8407,7 +8412,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260819c");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260819d");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8592,7 +8597,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260819c"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260819d"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8618,7 +8623,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260819c");
+  const CB = "?b=" + (window.BUILD || "20260819d");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
