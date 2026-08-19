@@ -997,8 +997,17 @@
   .copyaddr:hover { background:#dde3f7; }
   .factsheet { border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin:8px 0; background:#fbfcfe; }
   .fs-h { font-size:11px; font-weight:700; color:var(--muted); margin-bottom:7px; }
-  .fs-grid { display:grid; grid-template-columns:auto 1fr auto 1fr; gap:4px 10px; font-size:12.5px; }
-  .fs-grid span { color:var(--muted); } .fs-grid b { color:var(--ink); }
+  /* ☠ **값이 글자 단위로 쪼개졌다** (2026-08-19 사장님 지적 — 「8,225 ㎡」가 두 줄, 도로명주소가
+     세로로 한 글자씩). 원인 둘: ① 라벨 열이 `auto`라 「관리허가대장관리번호」 같은 긴 라벨이 열을
+     밀어 값 칸이 극단적으로 좁아졌다 ② `1fr`은 내용보다 작아지지 못해 그 압력이 값의 줄바꿈으로 갔다.
+     → 라벨은 `max-content`, 값은 `minmax(0,1fr)`(줄어들 수 있게), 한글은 `keep-all`(어절 단위),
+       숫자·기호는 `nowrap`. 긴 값(도로명주소·관리번호)은 **한 줄 전체**를 쓴다. */
+  .fs-grid { display:grid; grid-template-columns:max-content minmax(0,1fr) max-content minmax(0,1fr);
+             gap:7px 12px; font-size:12.5px; align-items:baseline; }
+  .fs-grid span { color:var(--muted); white-space:nowrap; } 
+  .fs-grid b { color:var(--ink); word-break:keep-all; overflow-wrap:anywhere; }
+  .fs-grid b.num { white-space:nowrap; }
+  .fs-grid b.full { grid-column:2 / -1; }
   /* 레이더 파동 폐기(2026-08-12) — .radar/@keyframes는 쓰는 자리가 없지만 CSS를 남기지 않는다.
      죽은 클래스는 다음 사람에게 살아 있는 것으로 읽힌다. */
   /* ★ 시안 실물: 카드 **맨 위에 유형색 4px 바**, 이름 왼쪽에 **큰 원형 마커**(36px) */
@@ -3143,6 +3152,38 @@ function buildRoadSignals() {
       .map(ic => ({ coordinates: ic.geometry.coordinates, name: ic.title, why: ic.exists_note || ic.exists_status }));
   });
 }
+/* 건축HUB 포털 「이렇게 찾으세요」 — **그대로 따라 칠 값만** 보여준다 (2026-08-19 전면 개정).
+   ☠ 종전 문구는 사장님이 "작동하는건지도 모르겠고 너무 복잡하다"고 지적했다. 문제가 둘이었다:
+     ① 「빈 검색화면이 뜹니다 — 정상입니다」로 시작해 **고장처럼 읽혔다**(실제론 그 화면이 검색창이다)
+     ② 「번·지 칸에 지번(위 대지위치의 숫자)」처럼 **사용자가 직접 파싱**하게 시켰다 —
+        우리는 sd·sg·dong·번·지를 **이미 갖고 있으면서** 안 알려줬다.
+   실측(2026-08-19 브라우저): 시도→시군구→법정동을 고르면 하위 목록이 채워지고, 번·지를 넣고
+   [검색]하면 나온다(외발산동 276-36 → 5건, 그중 「메이필드 시니어타운」 행). **작동한다.**
+   딥링크만 불가하다 — 입력칸 name이 `TextBoxc73036dc-…` 같은 **매번 바뀌는 GUID**라 URL로 못 넣는다. */
+function hubHowTo(s) {
+  const m = String(s.addr || "").match(/(\d+)(?:-(\d+))?번지/);
+  const bun = m ? m[1] : null, ji = m ? (m[2] || "0") : null;
+  const kv = (k, v) => `<b>${esc(k)}</b> <span class="mono">${esc(v)}</span>`;
+  const steps = [];
+  if (s.sd && s.sg && s.dong) steps.push(kv("대지위치", `${s.sd} ${s.sg} ${s.dong}`) + " 선택");
+  if (bun) steps.push(kv("번·지", ji && ji !== "0" ? `${bun} - ${ji}` : bun) + " 입력");
+  steps.push("<b>[검색]</b>");
+  /* ★ 사장님 후속 지적(2026-08-19): "조회는 했는데 정작 증축면적 같은 정보는 어떻게 보나".
+     실측으로 두 가지를 확인했다:
+       ① 결과 표는 **폭 5,875px인데 화면엔 1,258px만** 보인다 — 연면적·대지면적·용적률 칸은
+          오른쪽에 있다. 가로 스크롤보다 **XLSX/CSV 버튼**이 확실하다(모든 칸이 담긴다).
+       ② **증축분은 포털에 없다.** 포털이 주는 건 「연면적」(=증축 후 건물 전체)뿐이고,
+          증축분은 우리가 **건축물대장 총괄표제부를 빼서** 낸 값이다(methodology §6-2c).
+          이걸 안 적으면 사장님이 포털에서 없는 것을 계속 찾게 된다. */
+  const isExt = String(s.arch_gb || "") === "증축";
+  return `<div class="note" style="margin-top:3px">※ 링크를 열면 <b>검색 화면</b>이 뜹니다 — ${steps.join(" → ")}.
+    ${s.pk ? `결과 표의 <b>관리번호 <span class="mono">${esc(String(s.pk))}</span></b> 행이 이 건입니다.` :
+             "결과 표에서 허가일·연면적으로 대조하세요(관리번호 미보유)."}
+    <br><b>면적·용적률은 표 오른쪽에 있습니다</b> — 가로로 끌거나 <b>[XLSX]</b> 버튼으로 받으면 전 항목이 담깁니다.
+    ${isExt ? `<br><b style="color:var(--warn)">증축분은 포털에 없습니다.</b> 포털의 「연면적」은 <b>증축 후 건물 전체</b>이고,
+      증축분은 그 값에서 <b>건축물대장 총괄표제부</b>를 뺀 것입니다 — 위 「증축 규모」 줄에 계산 과정을 적어 뒀습니다.` : ""}</div>`;
+}
+
 /* 정비(JEONGBI) 후보를 신호 형태로 어댑트 → 아파트 호재 카운팅·카드·4단계 필터에 정비 포함(분류=정비).
    phaseOf가 명시 phase 우선 사용, radius_type로 catOf(정비)·getRadius 결정. */
 function buildJeongbiSignals() {
@@ -3170,7 +3211,7 @@ function buildJeongbiSignals() {
     // 경기 근거는 도청 홈이 아니라 **경기데이터드림 데이터셋 카탈로그**로 (2026-08-10 사용자
     // "근거 링크 가보면 어떻게 정비정보를 보는지 알 수 없다"). 검색 폼이 CSRF POST라 결과
     // 딥링크는 불가 — 카탈로그에서 「일반 정비 사업 추진 현황」 검색 → Sheet에서 사업장명 조회.
-    sources: [c.sd === "서울" ? "https://cleanup.seoul.go.kr" : c.sd === "경기" ? "https://data.gg.go.kr/portal/data/dataset/searchDatasetPage.do" : "https://www.data.go.kr"],
+    sources: [c.sd === "서울" ? "https://cleanup.seoul.go.kr" : c.sd === "경기" ? "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=S62GFEEN7JMLMA0PH6CF19108891&infSeq=1" : "https://www.data.go.kr"],
     geometry: { coordinates: [c.lon, c.lat] }
   }));
 }
@@ -4776,21 +4817,20 @@ function renderDetail(s) {
         <div class="fs-grid">
           <span>건축구분</span><b>${s.arch_gb || "-"}</b>
           <span>주용도</span><b>${s.purp || "-"}</b>
-          <span>연면적</span><b>${s.area_m2 ? s.area_m2.toLocaleString() + "㎡" : "-"}</b>
+          <span>연면적</span><b class="num">${s.area_m2 ? s.area_m2.toLocaleString() + "㎡" : "-"}</b>
           <span>허가일</span><b>${fmtDay(s.arch_pms_day)}</b>
           <span>착공일</span><b>${fmtDay(s.real_stcns_day)}</b>
           <span>사용승인일</span><b>${fmtDay(s.use_apr_day)}</b>
-          ${s.plat_area ? `<span>대지면적</span><b>${Number(s.plat_area).toLocaleString()}㎡</b>` : ""}
-          ${s.vlrat ? `<span>용적률</span><b>${Number(s.vlrat).toLocaleString()}%</b>` : ""}
+          ${s.plat_area ? `<span>대지면적</span><b class="num">${Number(s.plat_area).toLocaleString()}㎡</b>` : ""}
+          ${s.vlrat ? `<span>용적률</span><b class="num">${Number(s.vlrat).toLocaleString()}%</b>` : ""}
           ${s.jiyuk ? `<span>용도지역</span><b>${esc(String(s.jiyuk))}</b>` : ""}
           ${s.block ? `<span>블록</span><b>${esc(String(s.block))}</b>` : ""}
-          ${s.hhld_cnt > 0 ? `<span>세대수</span><b>${Number(s.hhld_cnt).toLocaleString()}</b>` : ""}
-          ${s.ho_cnt > 0 ? `<span>호수</span><b>${Number(s.ho_cnt).toLocaleString()}</b>` : ""}
-          ${s.road_addr ? `<span>도로명주소</span><b>${esc(String(s.road_addr))}</b>` : ""}
-          ${s.pk ? `<span>관리허가대장관리번호</span><b class="mono">${esc(String(s.pk))}</b>` : ""}
+          ${s.hhld_cnt > 0 ? `<span>세대수</span><b class="num">${Number(s.hhld_cnt).toLocaleString()}</b>` : ""}
+          ${s.ho_cnt > 0 ? `<span>호수</span><b class="num">${Number(s.ho_cnt).toLocaleString()}</b>` : ""}
+          ${s.road_addr ? `<span>도로명주소</span><b class="full">${esc(String(s.road_addr))}</b>` : ""}
+          ${s.pk ? `<span>관리번호</span><b class="mono num full">${esc(String(s.pk))}</b>` : ""}
         </div>
-        <div class="note" style="margin-top:4px">※ 건축HUB 포털은 이 건으로 바로 가는 링크를 제공하지 않아(딥링크 없음 — 기관 측 구조),
-        원문 수치를 여기 전부 옮겨 둡니다. 위 관리번호가 포털 결과 표의 「관리허가대장관리번호」와 대조 기준입니다.</div></details>` : ""}
+        </details>` : ""}
       ${s._road && (s.access_points || []).length ? (s.road_kind === "전용"
         ? `<div class="kv"><b>영향권</b> ${(s.ic_points || []).length
             ? `진출입 IC ${s.ic_points.length}개소 반경 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km (전용도로 — 선 자체는 영향권 미산정)`
@@ -4838,7 +4878,7 @@ function renderDetail(s) {
         return `<a href="${u}" target="_blank"${nq ? ' title="이 링크는 검색 조건을 직접 넣어야 해당 건이 보입니다 — 딥링크가 제공되지 않습니다"' : ""}>${lbl}</a>`;
       }).join(" · ") || "원문 링크 없음"}</span>${
         s.src_tier === "osm" ? ' · <b>진행단계·명칭은 공식 확인 전</b>(선형만 OSM 참고)' : ""}${
-        /hub\.go\.kr|eais\.go\.kr/.test((s.sources || [])[0] || "") ? `<div class="note" style="margin-top:3px">※ <b>링크를 열면 빈 검색화면이 뜹니다 — 정상입니다.</b> 건축HUB는 개별 건으로 가는 딥링크를 제공하지 않습니다(검색 그리드가 BI 컴포넌트 iframe — 실측 2026-08-17·08-18). 원본 수치는 위 팩트시트에 전부 있습니다. 포털에서 직접 보려면 <b>시도·시군구·법정동을 드롭다운으로 고르고 번·지 칸에 지번</b>(위 대지위치의 숫자)을 넣어 검색한 뒤, 결과 표의 <b>관리허가대장관리번호 <span class="mono">${esc(String(s.pk || ""))}</span></b> 행이 이 건입니다${s.pk ? "" : " (관리번호 미보유 — 허가일·연면적으로 대조)"}. 조회 기준월이 전월분이라 최신 건은 다음 달에 보일 수 있습니다</div>` : /data\.gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 개별 딥링크가 없어 <b>경기데이터드림 카탈로그</b> 연결 — 「<b>일반 정비 사업 추진 현황</b>」 검색 → Sheet 보기에서 위 사업장명으로 조회</div>' : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? '<div class="note" style="margin-top:3px">※ 개별 딥링크가 없어 포털 연결 — 위 사업장명으로 조회</div>' : ""}</div>
+        /hub\.go\.kr|eais\.go\.kr/.test((s.sources || [])[0] || "") ? hubHowTo(s) : /data\.gg\.go\.kr/.test((s.sources || [])[0] || "") ? `<div class="note" style="margin-top:3px">※ 링크를 열면 <b>「일반 정비 사업 추진 현황」 데이터셋</b>이 바로 열립니다(Sheet 탭). 표에서 <b>${esc(String(s.title || s.n || "").split(" (")[0])}</b> 로 찾으세요.<br>원본 수치는 위 팩트시트에 있어 안 가셔도 됩니다. 경기도 분기 갱신이라 최신 변동은 늦을 수 있습니다.</div>` : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? `<div class="note" style="margin-top:3px">※ 링크를 열면 <b>정비몽땅</b>이 열립니다. <b>고시정보 &gt; 사업장 목록</b>에서 사업장명 칸에 <b>${esc(String(s.title || s.n || "").split(" (")[0])}</b> 를 넣고 검색 → 결과 줄 오른쪽 <b>[사업장]</b> 버튼을 누르면 조합 홈페이지의 <b>사업개요</b>(세대수·연면적·용적률)가 나옵니다.<br>원본 수치는 위 팩트시트에 있어 안 가셔도 됩니다.</div>` : ""}</div>
       ${s.master_ref ? `<div class="kv"><b>소속 지구</b> ${s.master_ref.title} <span class="hmhint">— 지구 마스터에 속한 개별 사업(경계 기반 병합)</span></div>` : ""}
       ${s.ext_basis ? `<div class="kv"><b>증축 규모</b> ${s.ext_basis}</div>` : ""}
       ${s.nm_basis ? `<div class="kv"><b>건물명 근거</b> ${s.nm_basis}</div>` : ""}
@@ -8412,7 +8452,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260819e");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260819f");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8597,7 +8637,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260819e"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260819f"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8623,7 +8663,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260819e");
+  const CB = "?b=" + (window.BUILD || "20260819f");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
