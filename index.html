@@ -1482,18 +1482,46 @@
   #dock .cat-h .nm { font-weight:700; font-size:14px; flex:1; }
   #dock .cat-h .cn { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:12px;
     color:var(--ink2); font-variant-numeric:tabular-nums; }
+  /* ★ **부분 선택은 「선택분 / 전체」로 적는다** (시안 §15-04 — `227 / 1,248`).
+     종전엔 전체만 적어서, 세부유형을 몇 개 꺼 둔 분류가 **다 켜진 분류와 똑같아 보였다** —
+     화면이 「이 축이 지금 얼마나 좁혀져 있는지」를 말하지 않던 자리(P2). */
+  #dock .cat-h .cn b { color:var(--ink); font-weight:700; }
+  #dock .cat-h .cn .sl { opacity:.5; margin:0 4px; font-weight:400; }   /* 시안 표기 「227 / 1,248」의 여백 */
   /* ★ `only`는 **항상 보인다** (2026-08-13 시안 §03 목업). hover에만 뜨면 있는 줄 모른다 —
      시안은 대분류 행마다 이 배지를 상시로 그려 두었다(터치 기기엔 hover도 없다). */
   /* ★ 시안 실물: **흰 배경 + 회색 테두리** 알약(10px·600·letter-spacing .04em·radius 9·padding 2/7).
      종전엔 회색 면에 테두리가 없어 「눌리는 것」으로 안 읽혔고, absolute라 건수와 자리를 다퉜다. */
-  #dock .cat-h .solo { font-size:10px; font-weight:600; letter-spacing:.04em; color:var(--ink2);
+  #dock .solo { font-size:10px; font-weight:600; letter-spacing:.04em; color:var(--ink2);
     border:1px solid var(--line2); border-radius:9px; padding:2px 7px; background:#fff; cursor:pointer; flex:none; }
-  #dock .cat-h .solo:hover { color:var(--ink); border-color:var(--ink3); }
+  #dock .solo:hover { color:var(--ink); border-color:var(--ink3); }
+  /* ★ 세부유형 `only`는 **hover에만** 나타난다 (시안 §15-04) — 대분류와 달리 행이 많아
+     상시로 그리면 체크박스 줄이 배지로 덮인다. 자리는 늘 잡아 둔다(`visibility`) —
+     `display:none`이면 나타날 때 줄이 밀려 눌리려던 체크박스가 움직인다.
+     ⚠ 터치 기기엔 hover가 없다 — `pointer:coarse`에선 상시 노출한다(2026-08-13 대분류
+       `only`를 상시로 바꾼 것과 같은 이유. 규칙이 한쪽에만 걸리지 않게 여기서 함께 건다). */
+  #dock .sub .solo { visibility:hidden; margin-left:2px; }
+  #dock .sub:hover .solo { visibility:visible; }
+  @media (pointer: coarse) { #dock .sub .solo { visibility:visible; } }
   #dock .cat.off .cd { background:var(--line2) !important; }
   #dock .cat.off .nm, #dock .cat.off .cn { color:var(--ink3); }
   /* 중분류 = 필터(무엇을 보나) → 체크박스 */
-  #dock .subs { display:none; padding:1px 14px 9px 35px; }
-  #dock .cat.open .subs { display:block; }
+  /* ★★ 세부유형은 **플라이아웃**이다 (2026-08-19 시안 §15-04 · 사장님 지시. 종전 아코디언 폐기).
+     아코디언은 펼치는 순간 **아래 대분류를 밀어내** 「두 축을 나란히 비교」가 안 되고, 도크가
+     세로로 계속 길어져 등급·단계 축이 화면 밖으로 나갔다(시안 §14-4가 지적한 결함).
+     ⚠ **`position:fixed`가 아니면 잘린다** — 도크는 272px 폭에 `overflow-y:auto`다. 지역
+       팝오버가 이미 밟은 함정(HANDOFF §0-59e)이라 같은 처방을 쓴다: 좌표는 상수가 아니라
+       **잰다**(`getBoundingClientRect`), 아래가 좁으면 위로 뒤집는다.
+     ⚠ DOM 위치는 `.cat` 안에 그대로 둔다 — `#dock .sub` 스타일과 클릭 배선(`bindFilterClicks`)이
+       그대로 산다. 사본을 만들지 않는다. */
+  #dock .subs { display:none; }
+  #dock .cat.fly > .subs { display:block; position:fixed; z-index:1200;
+    width:238px; max-height:min(62vh,520px); overflow-y:auto;
+    background:#fff; border:1px solid var(--line2); border-radius:10px;
+    box-shadow:0 10px 34px rgba(20,28,50,.18); padding:7px 11px 9px; }
+  /* 플라이아웃 머리 = 어느 분류의 세부인지 (떠 있는 판이라 문맥이 사라진다) */
+  #dock .subs .fh { display:flex; align-items:center; gap:7px; font-size:11.5px; font-weight:700;
+    color:var(--ink2); padding:1px 1px 6px; border-bottom:1px solid var(--line); margin-bottom:4px; }
+  #dock .subs .fh i { width:9px; height:9px; border-radius:50%; flex:none; }
   #dock .sub { display:flex; align-items:center; gap:7px; padding:4px 0; cursor:pointer; font-size:var(--fs); }
   #dock .sub .tick { width:15px; height:15px; border:1.5px solid var(--line2); border-radius:4px; flex-shrink:0; position:relative; }
   /* ★ 시안 실물: 중분류 체크박스는 **파란 채움**이다(시스템 액센트). 잉크 채움은 「선택된 행」이
@@ -2314,6 +2342,17 @@ const ROUGH_PREC = new Set(["dong", "sgg", "zone_poi", "zone_wide", "unknown",
                             "notice_map", "namu_map", "jigu", "zone", "none",
                             "ic_single", "moct_mid", "seg_anchor"]);
 const isApprox = s => !!(s.geo_approx || s.approx) || ROUGH_PREC.has(s.geo_prec);
+/* ★★ **후광은 평소에 그리지 않는다 — 선택·hover 때 그 마커에만** (2026-08-19 시안 §14-3 · 사장님 지시).
+   ☠ 근사 좌표가 **22%**라 후광이 화면 곳곳에서 서로 겹쳤다(시안 실측). 후광은 「이 근처」라는
+     사실을 말하는 장치인데, 다 켜 두면 아무것도 말하지 않는 배경이 된다.
+   ⚠ **표기를 없앤 것이 아니라 옮긴 것이다** — 상세 패널의 위치 정확도 슬롯(±50m/±200m/±1km,
+     `PREC_TIER`)이 상시로 수치를 말하고, 지도에서는 **가리키는 순간** 후광이 답한다.
+   ⚠ 시안의 「근사임은 마커 테두리 점선이 말한다」는 **적용하지 않았다** — 점선은 이미 「계획
+     단계」를 뜻한다(시안 §02: 점선=계획 · 두께=단계). 한 채널이 두 사실을 말하면 계획·정확 좌표와
+     착공·근사 좌표가 같은 모양이 된다(이 저장소가 금지하는 형태). 사장님 확인 후 바꿀 자리.
+   판정 대상은 **여전히 `isApprox`**다 — 정확한 좌표에는 가리켜도 후광이 없다. */
+let _haloHover = null, _haloSel = null;
+const haloOn = s => !!s && isApprox(s) && (s === _haloHover || s === _haloSel);
 /* ★ 위치 정확도 **3등급 고정** (2026-08-13 시안 §06):
    *"「구역 중심(근사)」, 「지물 기준(근사)」, 「지번 기준」 같은 서술 대신 ±50m / ±200m / ±1km
    세 등급으로 고정하고 마름모 아이콘을 붙입니다. 세 케이스가 같은 자리에서 같은 형식으로 읽힙니다."*
@@ -3535,24 +3574,61 @@ function roadLinePoints(sig) {
      노선 자체(선·클릭 영역)는 그대로 있다.
    순수 함수로 둔 이유: 지도 SDK 없이도 검증할 수 있어야 한다(카카오가 막힌 환경에서도 테스트된다). */
 function placeBadges(cands, opt) {
-  const o = opt || {}, gap = o.gap == null ? 2 : o.gap;
-  // 한 칸 = **배지 높이 + 간격**. 그보다 좁게 밀면 밀어도 여전히 겹쳐 헛걸음이 된다
-  // (실측: 26px씩 밀자 빽빽한 8개 중 2개만 남았다 — 36px로 하니 5개가 자리를 찾았다).
-  const stepY = o.stepY || 36, tries = o.tries == null ? 4 : o.tries;   // 최대 144px — 그 이상은 기점에서 멀어 오히려 오독
+  const o = opt || {}, gap = o.gap == null ? LAB_GAP : o.gap;
   const hit = (a, b) => !(a.x + a.w / 2 + gap <= b.x - b.w / 2 || b.x + b.w / 2 + gap <= a.x - a.w / 2
                        || a.y + gap <= b.y - b.h || b.y + gap <= a.y - a.h);   // y=배지 아래끝(기점 위로 뜬다)
   const placed = [];
   for (const c of cands) {
-    let put = null;
-    for (let k = 0; k <= tries; k++) {
-      const box = { x: c.x, y: c.y - k * stepY, w: c.w, h: c.h };
-      if (!placed.some(q => hit(box, q))) { put = box; break; }
-    }
-    if (put) { placed.push(put); c.dy = c.y - put.y; c.shown = true; }   // dy>0 = 위로 민 픽셀
-    else c.shown = false;
+    const box = { x: c.x, y: c.y, w: c.w, h: c.h };
+    if (placed.some(q => hit(box, q))) { c.shown = false; c.dy = 0; continue; }   // 겹치면 **접는다**
+    placed.push(box); c.dy = 0; c.shown = true;
   }
   return cands;
 }
+/* ★ **실측 텍스트 폭** (시안 §14-1). 글자수 × 상수는 한글·영문·숫자·괄호가 섞이면 크게 어긋나
+   — 좁게 잡으면 겹친 채 통과하고 넓게 잡으면 멀쩡한 라벨이 접힌다. 캔버스 한 장을 재사용하고
+   문자열로 캐시한다(같은 노선명이 매 렌더 다시 재이지 않도록). */
+const LAB_GAP = 4;                 // 시안 §14-1 「서로 4px 이상 떨어져야 통과」
+const LAB_H = 22;                  // 시안 §14-1 기준값 — 실측 상자를 못 만들 때만 쓰는 폴백
+/* ★ 배지는 기점 **위로 띄워** 그린다(CustomOverlay yAnchor). 충돌 상자도 **그 자리**를 재야 한다 —
+   기점을 그대로 아래끝으로 쓰면 실제 배지와 13px 어긋나 겹침이 그대로 통과한다(2026-08-19 실측).
+   값은 **한 곳**에만 둔다(오버레이 생성과 공유). */
+const BADGE_YANCHOR = 1.55;
+/* ★★ **상자는 진짜 배지로 잰다** (시안 §14-1 「실측 텍스트 폭」).
+   ☠ 1차에서 캔버스 `measureText`로 쟀다가 **11~15% 좁게** 나왔다(실측: 계산 62 ↔ 실제 69 ·
+     143 ↔ 165). 캔버스에 넘긴 font 문자열이 배지의 **계산된 폰트와 달랐기 때문**이다(글꼴 우선순위
+     차이 + padding·테두리 21px). 좁은 상자는 겹친 라벨을 그대로 통과시킨다 — 실제로 수도권 줌에서
+     3쌍이 새어 나왔다.
+   ⇒ `.line-badge` **같은 클래스의 숨은 판**을 하나 만들어 브라우저에게 직접 물어본다. 글꼴·padding·
+     테두리가 CSS에서 바뀌어도 자동으로 따라온다(값을 코드에 옮겨 적지 않는다).
+   ⚠ 텍스트별로 **한 번만** 재고 캐시한다 — 노선 362개를 매 렌더 재면 그 자체가 비용이 된다. */
+const _labWCache = new Map();
+let _labProbe = null, _labProbeH = 0;
+function _probe() {
+  if (!_labProbe) {
+    _labProbe = document.createElement("div");
+    _labProbe.className = "line-badge";
+    _labProbe.style.cssText = "position:absolute;left:-9999px;top:-9999px;visibility:hidden;pointer-events:none";
+    _labProbe.innerHTML = "<b></b><small></small>";
+    document.body.appendChild(_labProbe);
+  }
+  return _labProbe;
+}
+function labelBoxW(txt) {
+  const hit = _labWCache.get(txt);
+  if (hit != null) return hit;
+  let w = 0;
+  try {
+    const pr = _probe();
+    pr.firstChild.textContent = txt || "";
+    const r = pr.getBoundingClientRect();
+    w = Math.ceil(r.width); _labProbeH = Math.ceil(r.height) || _labProbeH;
+  } catch (e) { w = 0; }
+  if (!w) return (txt || "").length * 12 + 21;      // 레이아웃 불가(테스트·비표시 환경) — 캐시하지 않는다
+  _labWCache.set(txt, w);
+  return w;
+}
+function labelBoxH() { return _labProbeH || LAB_H; }
 /* ★★ **무엇이 그려지는가 — 정의는 여기 하나뿐** (2026-08-06 사용자 확정 "선이 SSOT").
    선 레이어(카카오·Leaflet)와 영향권 회랑이 **같은 이 함수**를 쓴다. 각자 형상을 해석하면
    반드시 어긋난다 — 실제로 어긋나 있었다(선은 solid/bridges를 갈라 그리는데 회랑은 원본
@@ -5269,6 +5345,7 @@ function sigGoTo(s) {
 }
 function showSignal(s, pan) {
   if (view.mode !== "detail") returnView = view;   // 신호 클릭 직전 뷰(동/구/단지) 기억
+  _haloSel = s;                                    // §14-3 — 선택한 것 하나만 후광
   view = { mode: "detail", signal: s }; renderPanel();
   mapApi?.refreshPins?.();
   if (pan) sigGoTo(s);
@@ -5281,6 +5358,7 @@ function showSignal(s, pan) {
 }
 /* 닫기: 신호 상세는 왔던 피드(동/구/단지)로 복귀(경계 강조 유지), 피드는 홈으로 */
 function closePanel() {
+  _haloSel = null;       // §14-3 — 선택이 풀리면 후광도 내린다
   mapApi?.hideTip?.();   // 남아 있는 말풍선 제거 — 복귀 경로(showApt/showDong 등)는 goHome을 안 거친다
   aptFocus = null; mapApi?.refreshPins?.();   // 아파트 포커스 해제
   if (view.mode === "detail" && returnView && returnView.mode && returnView.mode !== "home") {
@@ -5366,6 +5444,43 @@ function dockCounts() {
   });
   return { cat, sub, lvl, total: pool.filter(visible).length };
 }
+/* ══ 세부유형 플라이아웃 (2026-08-19 시안 §15-04) ═══════════════════════════════════
+   ★ 열림 = **고정(핀) ∪ 호버**. 핀은 ▶(chev)로 켜고 `dockOpen`에 저장되던 그 상태 그대로다 —
+     동작을 바꾼 게 아니라 **표시 자리**만 도크 안에서 옆으로 옮겼다.
+   ☠ 반드시 `syncFly()`를 **renderDock 끝에서** 부른다 — 도크는 innerHTML을 통째로 다시 쓰므로
+     체크박스를 하나 누르는 순간(=renderAll) 플라이아웃 DOM이 사라진다. 다시 그린 뒤 같은 분류를
+     열어 두지 않으면 **누를 때마다 판이 닫혀** 세부유형을 두 개 이상 못 고른다.
+   ⚠ 좌표는 **잰다**(상수 금지) — 도크 폭·헤더 높이는 지역명 길이에 따라 변한다. */
+let flyCat = null, _flyTimer = null;
+function positionFly(catEl) {
+  const box = catEl.querySelector(".subs"), head = catEl.querySelector(".cat-h");
+  const dock = document.getElementById("dock");
+  if (!box || !head || !dock) return;
+  const h = head.getBoundingClientRect(), d = dock.getBoundingClientRect();
+  box.style.left = "-9999px"; box.style.top = "0px";       // 먼저 붙여 실제 높이를 잰다
+  const bw = box.offsetWidth, bh = box.offsetHeight;
+  let left = d.right + 8;
+  if (left + bw > innerWidth - 8) left = Math.max(8, d.left - bw - 8);   // 오른쪽이 좁으면 왼쪽으로
+  let top = h.top;
+  if (top + bh > innerHeight - 12) top = Math.max(12, innerHeight - 12 - bh);   // 아래가 좁으면 위로
+  box.style.left = Math.round(left) + "px";
+  box.style.top = Math.round(top) + "px";
+}
+/* ★ **판은 한 번에 하나다** (2026-08-19 실측 — 두 개를 켜니 같은 자리에 겹쳐 아래 판을 덮었다).
+   ⚠ 아코디언 시절의 「동시 펼침」(2026-08-14 시안 §03: *"두 축을 나란히 비교하는 사용을 막지
+     않기 위해"*)은 **인라인 목록이라 성립하던 규칙**이다. 떠 있는 판은 나란히 놓을 자리가 없다 —
+     부품이 바뀌면 그 부품을 전제한 규칙도 함께 바뀐다(남겨 두면 겹침으로 나타난다).
+   보이는 판 = **호버가 있으면 호버, 없으면 핀**. 호버를 떼면 핀으로 돌아온다. */
+function syncFly() {
+  const active = flyCat || [...dockOpen][0] || null;
+  document.querySelectorAll("#dock .cat").forEach(el => {
+    const on = el.dataset.cat === active;
+    el.classList.toggle("fly", on);
+    if (on) positionFly(el);
+  });
+}
+function openFly(cat) { clearTimeout(_flyTimer); if (flyCat === cat) { syncFly(); return; } flyCat = cat; syncFly(); }
+function closeFlySoon() { clearTimeout(_flyTimer); _flyTimer = setTimeout(() => { flyCat = null; syncFly(); }, 220); }
 /* 대분류 토글 — 도크 헤더와 모바일 축 칩이 **같은 함수 하나**를 부른다.
    두 벌로 두면 반드시 갈린다(이 저장소의 반복 사고 — 규칙이 한쪽에만 걸린다).
    세부 축이 있는 대분류는 하위 중분류 **전체 선택/해제**가 곧 대분류 토글이다(catVisible의 게이트가
@@ -5425,18 +5540,30 @@ function renderDock() {
        건수는 선택 지역 기준이라 지역을 넓히면 그 축은 다시 나타난다. */
     const subs = keys.map(sk => { const id = subId(cat, sk), n = C.sub[id] || 0, on = filter.sub.has(id);
       if (!n) return "";
+      /* ★ 세부유형에도 `only` (시안 §15-04) — 대분류에만 있어서 「이 중분류 하나만 보기」가
+         **전체 해제 → 하나 켜기** 여러 클릭이었다. 배지는 hover에만 뜬다(CSS). */
       return `<div class="sub${on ? "" : " off"}" data-tog="sub" data-k="${id}">
-        <span class="tick"></span><span class="nm">${sk === "철도" ? "철도 · 역" : sk === "미상" ? "유형 미상" : sk}</span><span class="n">${n}</span></div>`; }).join("");
+        <span class="tick"></span><span class="nm">${sk === "철도" ? "철도 · 역" : sk === "미상" ? "유형 미상" : sk}</span>
+        <button class="solo" data-solosub="${id}" title="이 세부유형만 남기고 나머지 끄기">only</button><span class="n">${n}</span></div>`; }).join("");
     /* 유형색을 박스에 넘긴다 — 테두리(`--ccb` 35%)·배경(`--ccbg` 7%)·점(`--cc`).
        시안 실물 값 그대로다. 색은 CAT_COLOR 하나에서만 온다(사본 금지). */
-    return `<div class="cat${dockOpen.has(cat) ? " open" : ""}${on ? "" : " off"}" style="--cc:${col};--ccb:${hexA(col, .35)};--ccbg:${hexA(col, .07)}">
+    /* ★ **부분 선택 표기** (시안 §15-04 `227 / 1,248`) — 세부유형을 일부만 켠 분류가 다 켠
+       분류와 똑같아 보이던 자리. 선택분은 **켜진 중분류의 건수 합**이고 전체는 분류 건수다
+       (둘 다 `dockCounts` 한 자에서 온다 — 새로 세지 않는다). 다 켜졌으면 전체만 적는다. */
+    const tot = C.cat[cat] || 0;
+    const selN = keys.length ? keys.reduce((a, sk) => a + (filter.sub.has(subId(cat, sk)) ? (C.sub[subId(cat, sk)] || 0) : 0), 0) : (filter.cat.has(cat) ? tot : 0);
+    const partial = keys.length ? keys.some(sk => (C.sub[subId(cat, sk)] || 0) && !filter.sub.has(subId(cat, sk))) : !filter.cat.has(cat);
+    const cnHtml = partial
+      ? `<b>${selN.toLocaleString()}</b><span class="sl">/</span>${tot.toLocaleString()}`
+      : tot.toLocaleString();
+    return `<div class="cat${dockOpen.has(cat) ? " open" : ""}${on ? "" : " off"}" data-cat="${cat}" style="--cc:${col};--ccb:${hexA(col, .35)};--ccbg:${hexA(col, .07)}">
       <div class="cat-h" data-tog="cat" data-k="${cat}">
         <span class="chev" data-open="${cat}" title="${dockOpen.has(cat) ? "접기" : "펼치기"}"></span>
         <i class="cd" style="background:${col}"></i><span class="nm">${cat}</span>
         <button class="solo" data-solo="${cat}" title="이 분류만 남기고 나머지 끄기">only</button>
-        <span class="cn">${(C.cat[cat] || 0).toLocaleString()}</span>
+        <span class="cn">${cnHtml}</span>
       </div>
-      <div class="subs">${subs}</div>
+      <div class="subs"><div class="fh"><i style="background:${col}"></i>${cat} 세부유형</div>${subs}</div>
     </div>`;
   };
   /* 아이콘은 **단계 그 자체**를 그린다(시안 §02) — 계획 점선 · 확정 실선 · 착공 굵은 · 완공 코어.
@@ -5533,7 +5660,7 @@ function renderDock() {
     <!-- ☠ 「겹친 호재는 +N으로 묶임」이라 적혀 있었다 — +N 알약은 2026-08-13에 **유형 도넛**으로
          바뀌었는데(시안 §01) 문구만 남아 화면이 없는 부품을 가리켰다. 부품을 바꾸면 그 부품을
          설명하는 글도 같이 바뀐다(PROCEDURE_화면품질 — 규칙·이름은 언제나 쌍으로 존재한다). -->
-    <div class="dk-foot">흐릿한 후광 = 위치 근사 · 겹친 호재는 <b>유형 도넛</b>으로 묶임<br>
+    <div class="dk-foot">위치 근사는 마커를 <b>가리키거나 선택</b>할 때 후광으로 · 겹친 호재는 <b>유형 도넛</b>으로 묶임<br>
       <a href="methodology.html" target="_blank">데이터 · 방법론</a>
       <div class="dk-legal">투자 권유 아님 · 모든 신호는 미확정 — 사실(단계·날짜·거리)만 표시하며 매수/매도 판단은 다루지 않습니다.</div></div>`;
   /* sticky 대분류 머리가 **어디에 머무는지**를 헤더에서 잰다(시안 §03). 헤더는 지역명 길이에 따라
@@ -5547,6 +5674,9 @@ function renderDock() {
   // 업데이트 탭: 방금 innerHTML로 #dk-flow가 **빈 채** 새로 생겼다 — renderFlow가 다시 채운다.
   // (renderFlow는 renderDock을 부르지 않으므로 순환 없음. 목록까지 다시 그리지만 셈 함수가 같아 무해)
   if (_flowTab && typeof renderFlow === "function") renderFlow();
+  /* ☠ **여기가 빠지면 판이 매 클릭마다 닫힌다** — 위 innerHTML 재작성으로 플라이아웃 DOM이
+     통째로 새로 생기므로, 열려 있던 분류를 다시 열고 좌표를 다시 잰다(§15-04). */
+  syncFly();
 }
 /* ★ 지역 블록의 자리 — **한 요소가 화면 폭에 따라 자리만 옮긴다** (2026-08-16 갱신 시안 §03·§11).
    데스크톱 = 사이드바 최상단(#dk-region · 세 탭 공유) · 모바일 = 헤더(#rb-home 뒤).
@@ -5579,6 +5709,17 @@ function initDock() {
   /* ★ 필터 클릭 배선은 **하나다** — 도크(데스크톱)와 바텀시트(모바일)가 같은 핸들러를 쓴다
      (2026-08-13 시안 §11). 시트에 사본을 만들면 두 화면의 필터가 조용히 갈린다. */
   bindFilterClicks(dock);
+  /* 호버 배선 — 위임으로 건다(도크는 매번 다시 그려지므로 요소에 직접 걸면 사라진다). */
+  dock.addEventListener("mouseover", e => {
+    const h = e.target.closest(".cat-h");
+    if (h && h.closest(".cat")) { openFly(h.closest(".cat").dataset.cat); return; }
+    if (e.target.closest(".subs")) clearTimeout(_flyTimer);   // 판 위로 옮겨 가는 중엔 닫지 않는다
+  });
+  dock.addEventListener("mouseout", e => {
+    if (e.target.closest(".cat-h") || e.target.closest(".subs")) closeFlySoon();
+  });
+  dock.addEventListener("scroll", () => { if (flyCat || dockOpen.size) syncFly(); });
+  addEventListener("resize", () => { if (flyCat || dockOpen.size) syncFly(); });
   renderDock();
 }
 function bindFilterClicks(host) {
@@ -5587,13 +5728,16 @@ function bindFilterClicks(host) {
     const op = e.target.closest("[data-open]");
     if (op) {
       const k = op.dataset.open;
-      dockOpen.has(k) ? dockOpen.delete(k) : dockOpen.add(k);
+      // 핀도 하나만 — 새 분류를 핀하면 앞의 핀은 풀린다(판이 하나이므로 상태도 하나여야 한다)
+      if (dockOpen.has(k)) dockOpen.delete(k); else { dockOpen.clear(); dockOpen.add(k); }
       localStorage.setItem("hojae_dock_open", JSON.stringify([...dockOpen]));
       renderDock(); return;
     }
     // 전부 접기 — **필터를 건드리지 않는다**(펼침 상태만 바꾼다). 조회 조건과 화면 접힘은 다른 축이다.
     if (e.target.closest("[data-fold]")) {
       dockOpen.clear();
+      flyCat = null;   // ☠ 핀만 지우면 **호버 상태가 판을 다시 연다** — 「전부 접기」가 먹통이 된다(실측)
+      clearTimeout(_flyTimer);
       localStorage.setItem("hojae_dock_open", JSON.stringify([]));
       renderDock(); return;
     }
@@ -5603,6 +5747,14 @@ function bindFilterClicks(host) {
       const k = so.dataset.solo;
       CAT_KEYS.forEach(c => { c === k ? filter.cat.add(c) : filter.cat.delete(c);
         (SUB_KEYS[c] || []).forEach(sk => c === k ? filter.sub.add(subId(c, sk)) : filter.sub.delete(subId(c, sk))); });
+      renderAll(); return;
+    }
+    /* 세부유형 only — 그 중분류 하나만 남기고 전 분류의 나머지를 끈다(대분류 only와 같은 문법). */
+    const ss = e.target.closest("[data-solosub]");
+    if (ss) {
+      const id = ss.dataset.solosub, pc = id.split("|")[0];
+      ALL_SUBS.forEach(x => x === id ? filter.sub.add(x) : filter.sub.delete(x));
+      CAT_KEYS.forEach(c => c === pc ? filter.cat.add(c) : filter.cat.delete(c));
       renderAll(); return;
     }
     const t = e.target.closest("[data-tog],[data-all],[data-allcat]");
@@ -6231,9 +6383,9 @@ function initLeaflet() {
       + `<div class="sec"><b>색 = 분류</b>${cats}</div>`
       + `<div class="sec"><b>선 = 단계</b>${phase}</div>`
       + `<div class="sec"><b>크기 = 등급</b>${size}</div>`
-      + `<div class="sec"><b>흐릿한 후광</b>`
+      + `<div class="sec"><b>가리키면 뜨는 후광</b>`
       + `<span class="row"><i class="dot" style="background:${CAT_COLOR['교통']};box-shadow:0 0 0 6px ${CAT_COLOR['교통']}22"></i>위치 근사 <span style="color:#8a90a0">(이 근처)</span></span></div>`
-      + `<div class="hnote">회색 = 등급 근거 미상 또는 종결·무산.<br>후광이 있으면 정확한 지점이 아니라 <b>대략 위치</b>입니다.</div>`;
+      + `<div class="hnote">회색 = 등급 근거 미상 또는 종결·무산.<br>마커를 <b>가리키거나 선택</b>하면 근사 좌표에만 후광이 뜹니다 — 정확한 지점이 아니라 <b>대략 위치</b>라는 뜻(상세 카드는 ±수치로 말합니다).</div>`;
     const ttl = div.querySelector(".hlt");
     ttl.onclick = () => {
       const off = div.classList.toggle("collapsed");
@@ -6932,13 +7084,24 @@ function initKakao() {
        늘고 `[분류색]` 게이트 밖에 선다(사본 드리프트의 교과서적 형태).
      ⚠ 내용 갱신은 **문자열이 같으면 건너뛴다** — 팬·줌마다 SVG를 새로 파싱하면 클러스터가 많을 때
        프레임을 먹는다(2026-08-11 팬·줌 성능 작업과 같은 이유). */
+  /* 후광 전환은 **그 마커 하나만** 다시 그린다 — 전체 재렌더(refreshPins)는 팬·줌 성능 규칙을 깬다. */
+  const _reimage = s => {
+    if (!s || !s._kmk) return;
+    const t = hjStyle(s), tr = _shrinkRRef ? _shrinkRRef(t.r, t.lvl) : t.r;
+    s._kmk.setImage(hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape));
+    s._kmkKey = t.col + "|" + tr + "|" + t.bw + "|" + t.ph + "|" + t.fillOp + "|" + t.alpha + "|" + (haloOn(s) ? 1 : 0) + "|" + t.shape;
+  };
+  let _shrinkRRef = null;        // renderHojae가 자기 축소자를 여기 걸어 둔다(같은 자를 쓰기 위해)
   const clDonut = (el, g) => {
     const cnt = {}; for (const m of g) { const c = catOf(m); cnt[c] = (cnt[c] || 0) + 1; }
-    /* ★ 지름 = **안에 든 최고 등급**(갱신 시안 §01). 개수로 키우면 지도 전체가 지키는
-       「크기=등급」이 클러스터에서만 깨진다 — 큰 원이 중요한 호재인지 많은 호재인지 알 수 없다.
-       값은 `HJR`에서 도출한다(사본을 만들지 않는다). 케이싱만큼 살짝 키워 마커와 눈으로 같아진다. */
-    const top = GRADES_DISP.find(l => g.some(m => levelOf(m) === l)) || "C";
-    const D = Math.round((HJR[top] || 8) * 2 + 6);
+    /* ★ 지름 = **30 + 6 × log₂(건수)**, 최대 52 (2026-08-19 시안 §14-2 · 사장님 지시).
+       ⚠ **이 규칙은 종전 결정을 뒤집은 것이다.** 종전 주석은 「지름 = 안에 든 최고 등급(갱신 시안
+         §01) — 개수로 키우면 「크기=등급」이 클러스터에서만 깨진다」였다. 새 시안의 근거는 다르다:
+         묶는 반경이 56px로 커져 **도넛 자체가 30~50개로 줄면**, 등급 크기 차이는 **낱개 링**에서
+         읽히고 도넛은 「여기 몇 건인가」를 맡는다(축을 부품별로 나눈 것이지 섞은 것이 아니다).
+       ⚠ 되돌리려면 **왜 뒤집는지**를 여기 남길 것 — 두 규칙 다 나름의 근거가 있어 기억이 없으면
+         다음 사람이 왕복한다(이 저장소가 이미 밟은 형태). */
+    const D = Math.min(52, Math.round(30 + 6 * Math.log2(Math.max(2, g.length))));
     const key = g.length + "|" + D + "|" + Object.entries(cnt).map(([k, v]) => k + v).sort().join(",");
     if (el._clKey === key) return;
     el._clKey = key;
@@ -7118,6 +7281,7 @@ function initKakao() {
       if (lv < 9 || lvl === "S" || lvl === "A") return r;
       return Math.max(lv >= 11 ? 5 : 6, r - (lv >= 11 ? 3 : 2));   // 지름 10~12px 하한
     };
+    _shrinkRRef = _shrinkR;   // 후광 전환(_reimage)이 **같은 축소자**를 쓴다 — 두 벌이면 크기가 갈린다
     /* 겹침 격자 이력: 30px(남발) → 동일좌표만(2026-07-27) → 14px → **5px**(2026-08-04 사용자
        "14px로 하니깐 중첩이 너무 많이 되네. 5px정도로").
        ★★ 2026-08-13 **마커 크기에서 도출**로 바꾼다 (사용자 제보: *"확대시 동그라미 숫자가 많아서
@@ -7130,13 +7294,93 @@ function initKakao() {
          원래 이 뜻이다. 숨기는 게 아니라 **합치는 것**이라 무손실은 그대로다(합계는 도넛 안에 있다).
        ⚠ 사용자가 정한 5px을 임의로 되돌린 게 아니라, **그 값이 전제하던 조건이 사라져** 다시 도출한
          것이다. 마커를 키우거나 줄이면 이 값도 자동으로 따라온다. */
-    const _dppx = (() => { try { const bb = map.getBounds();
-      return (bb.getSouthWest() ? Math.abs(bb.getNorthEast().getLng() - bb.getSouthWest().getLng()) : .1) / (mapEl.clientWidth || 800); } catch (e) { return 1e-4; } })();
-    const _cell = _dppx * (HJR.S * 2.4);   // 지름(34) 기준 약 1.2배 — 서로 닿으면 묶는다
-    const cellKey = (x, y) => Math.round(x / _cell) + "," + Math.round(y / _cell);
+    /* ★★ **묶는 기준 = 화면 56px 반경** (2026-08-19 시안 §14-2 · 사장님 지시).
+       ☠ 종전은 **경위도 격자**였다(칸 = 마커 지름 × 1.2). 격자의 두 가지 결함:
+         ① **칸 경계**에 걸친 두 점은 1px 떨어져 있어도 안 묶인다 → 전국 줌에 2·3건 도넛이
+            108개(실측 2026-08-19). 낱개 링 200개가 도넛 200개로 **모양만 바뀐 것**이다.
+         ② 칸이 마커 지름에서 왔으므로 **줌마다 화면 밀도가 달라진다**.
+       ⇒ 지도 투영이 주는 **화면 픽셀**로 옮기고 반경 병합한다. 위경도로 근사하지 않는다 —
+         전국 줌은 위도 폭이 4도라 메르카토르 왜곡이 붙어 남북으로 다른 반경이 된다.
+       ⚠ 후보 탐색은 56px 격자로 좁히고(9칸), **판정은 반경**이다. 격자를 판정에 쓰면 ①이 되돌아온다. */
+    const CL_R = 56;                       // 시안 §14-2 — 모든 줌 동일
+    const _prjC = (() => { try { return map.getProjection && map.getProjection(); } catch (e) { return null; } })();
     const groups = new Map();
-    for (const s of pool) { const c = s.geometry.coordinates; const gk = cellKey(c[0], c[1]);
-      let g = groups.get(gk); if (!g) groups.set(gk, g = []); g.push(s); }
+    if (_prjC) {
+      const pts = [], idx = new Map();
+      for (const s of pool) {
+        let q = null;
+        try { q = _prjC.containerPointFromCoords(LL(s.geometry.coordinates[0], s.geometry.coordinates[1])); } catch (e) { q = null; }
+        if (!q) { pts.push(null); continue; }
+        const i = pts.push([q.x, q.y, s]) - 1;
+        const k = Math.floor(q.x / CL_R) + "," + Math.floor(q.y / CL_R);
+        let a = idx.get(k); if (!a) idx.set(k, a = []); a.push(i);
+      }
+      const taken = new Uint8Array(pts.length), raw = [];
+      const _px = new Map();                       // 신호 → 화면좌표(재병합에서 다시 투영하지 않는다)
+      for (const q of pts) if (q) _px.set(q[2], [q[0], q[1]]);
+      const pxOf = m => _px.get(m) || [0, 0];
+      for (let i = 0; i < pts.length; i++) {
+        if (!pts[i] || taken[i]) continue;
+        taken[i] = 1;
+        const x0 = pts[i][0], y0 = pts[i][1], g = [pts[i][2]];
+        const cx = Math.floor(x0 / CL_R), cy = Math.floor(y0 / CL_R);
+        for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
+          const a = idx.get((cx + dx) + "," + (cy + dy));
+          if (!a) continue;
+          for (let n = 0; n < a.length; n++) {
+            const j = a[n];
+            if (taken[j] || !pts[j]) continue;
+            const ex = pts[j][0] - x0, ey = pts[j][1] - y0;
+            if (ex * ex + ey * ey <= CL_R * CL_R) { taken[j] = 1; g.push(pts[j][2]); }
+          }
+        }
+        raw.push(g);
+      }
+      /* ★ **중심끼리도 56px 밖이어야 한다** — 도넛은 씨앗이 아니라 **멤버 중심**에 놓이므로,
+         씨앗 기준으로만 가르면 중심이 서로 당겨져 도넛이 겹친다(실측 2026-08-19: 전국 8쌍·
+         수도권 7쌍). 중심을 다시 재고 가까운 무리를 합치는 패스를 **수렴할 때까지**(최대 4회) 돈다.
+         ⚠ 무한 루프 방지로 상한을 두되, 상한에 걸렸는지는 조용히 넘기지 않는다(아래 경고). */
+      const cen = gs => { let x = 0, y = 0; for (const m of gs) { const q = pxOf(m); x += q[0]; y += q[1]; } return [x / gs.length, y / gs.length]; };
+      let cur = raw, pass = 0, merged = true;
+      while (merged && pass++ < 4) {
+        merged = false;
+        const cs = cur.map(cen), used = new Uint8Array(cur.length), out = [];
+        const gi2 = new Map();
+        cs.forEach((c, i) => { const k = Math.floor(c[0] / CL_R) + "," + Math.floor(c[1] / CL_R);
+          let a = gi2.get(k); if (!a) gi2.set(k, a = []); a.push(i); });
+        for (let i = 0; i < cur.length; i++) {
+          if (used[i]) continue;
+          used[i] = 1;
+          let acc = cur[i];
+          const cx = Math.floor(cs[i][0] / CL_R), cy = Math.floor(cs[i][1] / CL_R);
+          for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
+            const a = gi2.get((cx + dx) + "," + (cy + dy));
+            if (!a) continue;
+            for (const j of a) {
+              if (used[j]) continue;
+              const ex = cs[j][0] - cs[i][0], ey = cs[j][1] - cs[i][1];
+              if (ex * ex + ey * ey <= CL_R * CL_R) { used[j] = 1; acc = acc.concat(cur[j]); merged = true; }
+            }
+          }
+          out.push(acc);
+        }
+        cur = out;
+      }
+      /* 키는 **씨앗 좌표**다 — 팬 중에는 같은 무리가 같은 씨앗을 고르므로 오버레이가 재사용된다
+         (줌이 바뀌면 무리가 달라지고 키도 바뀐다. 그건 정상이다). */
+      for (const g of cur) {
+        const c0 = g[0].geometry.coordinates;
+        groups.set(c0[0].toFixed(5) + "," + c0[1].toFixed(5), g);
+      }
+    } else {
+      // 투영 API가 없는 환경(테스트·초기화 전) — 종전 격자로 폴백한다. 묶기를 **끄지는 않는다**.
+      const _dppx = (() => { try { const bb = map.getBounds();
+        return (bb.getSouthWest() ? Math.abs(bb.getNorthEast().getLng() - bb.getSouthWest().getLng()) : .1) / (mapEl.clientWidth || 800); } catch (e) { return 1e-4; } })();
+      const _cell = _dppx * CL_R;
+      const cellKey = (x, y) => Math.round(x / _cell) + "," + Math.round(y / _cell);
+      for (const s of pool) { const c = s.geometry.coordinates; const gk = cellKey(c[0], c[1]);
+        let g = groups.get(gk); if (!g) groups.set(gk, g = []); g.push(s); }
+    }
     const next = new Set(), nextCl = new Set();
     for (const [gk, g] of groups) {
       if (g.length > 1) {   // 겹침 → 배지 1개(멤버 중심에)
@@ -7168,15 +7412,16 @@ function initKakao() {
       const s = g[0];
       const t = hjStyle(s);
       const tr = _shrinkR(t.r, t.lvl);
-      const key = t.col + "|" + tr + "|" + t.bw + "|" + t.ph + "|" + t.fillOp + "|" + t.alpha + "|" + (isApprox(s) ? 1 : 0) + "|" + t.shape;
+      const key = t.col + "|" + tr + "|" + t.bw + "|" + t.ph + "|" + t.fillOp + "|" + t.alpha + "|" + (haloOn(s) ? 1 : 0) + "|" + t.shape;
       if (!s._kmk) {
         const [x, y] = s.geometry.coordinates;
-        const mk = new K.Marker({ position: LL(x, y), image: hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, isApprox(s), t.shape), zIndex: 10 });
-        K.event.addListener(mk, "mouseover", () => { const q = toPt(x, y); const rc = mapEl.getBoundingClientRect(); showTip(hjHtml(s), { clientX: rc.left + q.x, clientY: rc.top + q.y }, true); });
-        K.event.addListener(mk, "mouseout", hideTip);
+        const mk = new K.Marker({ position: LL(x, y), image: hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape), zIndex: 10 });
+        K.event.addListener(mk, "mouseover", () => { const q = toPt(x, y); const rc = mapEl.getBoundingClientRect(); showTip(hjHtml(s), { clientX: rc.left + q.x, clientY: rc.top + q.y }, true);
+          if (isApprox(s)) { _haloHover = s; _reimage(s); } });   // §14-3 — 가리킨 것 하나만
+        K.event.addListener(mk, "mouseout", () => { hideTip(); if (_haloHover === s) { _haloHover = null; _reimage(s); } });
         K.event.addListener(mk, "click", () => { hideTip(); showSignal(s, false); });
         s._kmk = mk; s._kmkKey = key;
-      } else if (s._kmkKey !== key) { s._kmk.setImage(hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, isApprox(s), t.shape)); s._kmkKey = key; }
+      } else if (s._kmkKey !== key) { s._kmk.setImage(hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape)); s._kmkKey = key; }
       // 노선 격리 중엔 호재 원을 **숨긴다**(2026-08-04 사용자 "호재별 원표시도 없애" — 흐림→제거.
       // 소속역은 하이라이트 링·역명 라벨이 대신 표기한다). 해제 시 clearRoute→renderHojae가 복원.
       s._kmk.setOpacity(dimOpacity(s));
@@ -7503,17 +7748,27 @@ function initKakao() {
       const prj = map.getProjection && map.getProjection();
       const px = c => { try { return prj && prj.containerPointFromCoords(LL(c[0], c[1])); } catch (e) { return null; } };
       const RANK = { S: 0, A: 1, B: 2, C: 3 };
+      // 화면중심(컨테이너 픽셀) — 정렬 3축의 마지막. 창 크기가 바뀌면 따라온다(상수 금지).
+      const _cx0 = (mapEl.clientWidth || 800) / 2, _cy0 = (mapEl.clientHeight || 600) / 2;
       const cands = [];
       for (const o of badgeCands) {
         const pt = px(o.mid);
-        const sub = o.ph + (o.beta ? " · 목표 '" + o.beta : "");
-        // 폭 추정: 한글 12px 굵게 ≈ 12px/자, 부제 10px ≈ 10px/자. 좌우 패딩·테두리 21px.
-        const w = Math.max(o.bnm.length * 12, sub.length * 10) + 21, h = 34;
-        cands.push({ o, x: pt ? pt.x : 0, y: pt ? pt.y : 0, w, h, shown: true, dy: 0, _noPt: !pt,
-                     rank: RANK[o.lvl] == null ? 4 : RANK[o.lvl] });
+        /* ☠ 종전 폭은 **두 줄 배지 시절의 추정**이었다(`h=34` · 글자수×12 + 부제). 부제는
+           2026-08-12에 없앴는데 **판정 자만 옛 값으로 남아** 실제 22px 배지를 34px로 재고 있었다
+           — 「부품이 바뀌면 그 부품을 전제한 값도 바뀐다」(§15-04 동시펼침과 같은 형태). */
+        const w = labelBoxW(o.bnm), h = labelBoxH();
+        // 아래끝 = 기점 − (yAnchor−1)×높이. 이 보정이 없으면 상자가 실제 배지보다 아래에 놓인다.
+        const by = pt ? pt.y - (BADGE_YANCHOR - 1) * h : 0;
+        cands.push({ o, x: pt ? pt.x : 0, y: by, w, h, shown: true, dy: 0, _noPt: !pt,
+                     rank: RANK[o.lvl] == null ? 4 : RANK[o.lvl],
+                     phr: PHASE_IDX[o.ph] == null ? 0 : PHASE_IDX[o.ph],
+                     d2: pt ? (pt.x - _cx0) * (pt.x - _cx0) + (pt.y - _cy0) * (pt.y - _cy0) : Infinity });
       }
-      // 등급이 높은 노선이 자리를 먼저 갖는다(같으면 위쪽 = 화면에서 먼저 읽히는 순서)
-      cands.sort((a, b) => a.rank - b.rank || a.y - b.y);
+      /* ★ 자리를 먼저 갖는 순서 = **등급(S→C) → 단계(완공→계획) → 화면중심 거리 가까운 순**
+         (시안 §14-1). 종전은 등급 → 화면 y였다 — y 정렬은 「위쪽이 먼저」라는 화면 좌표일 뿐이라
+         같은 등급 안에서 **덜 확정된 사업이 확정된 사업을 밀어내는** 일이 생겼다.
+         ⚠ 상한 숫자는 두지 않는다 — 몇 개가 남는지는 **화면 크기와 줌이 정한다**(시안 명시). */
+      cands.sort((a, b) => a.rank - b.rank || b.phr - a.phr || a.d2 - b.d2);
       // 좌표를 못 구하는 환경(투영 API 부재)에서는 **종전대로 전부 그린다** — 검증 못 하는 것을 지우지 않는다.
       const laid = cands.every(c => c._noPt) ? cands : placeBadges(cands);
       /* ★ **배지는 재사용한다** (2026-08-11 팬·줌 성능 3단 — 마지막 큰 덩어리였다).
@@ -7539,7 +7794,7 @@ function initKakao() {
           // zIndex 20 = 다른 오버레이(라벨 7·+N 11)보다 앞, 하이라이트(21+)보다는 뒤("맨 앞으로")
           // yAnchor 1.55 = 기점 **위로 띄운다**(아실 방식) — 기점에 겹쳐 두면 역명 라벨(.rail-name,
           // 오른쪽 오프셋)과 서로 가린다(2026-08-04 사용자 "노선 뱃지를 가려. 옆으로 옮겨야 할듯").
-          _ov = new K.CustomOverlay({ position: LL(o.mid[0], o.mid[1]), content: be, zIndex: 20, yAnchor: 1.55, xAnchor: .5, clickable: true });
+          _ov = new K.CustomOverlay({ position: LL(o.mid[0], o.mid[1]), content: be, zIndex: 20, yAnchor: BADGE_YANCHOR, xAnchor: .5, clickable: true });
           _ov._el = be; o._badge = _ov;
         }
         be._o = o;   // 핸들러가 읽는 대상(재사용 시 갱신)
@@ -7668,7 +7923,7 @@ function initKakao() {
     const cats = CAT_KEYS.map(c => '<span class="row"><i class="dot" style="background:' + CAT_COLOR[c] + '"></i>' + c + '</span>').join("");
     const phase = '<span class="row"><i class="ln" style="border-top-style:dashed"></i>계획 · 인가 <span style="color:#8a90a0">(서류)</span></span><span class="row"><i class="ln" style="border-top-style:solid"></i>착공 · 준공 <span style="color:#8a90a0">(공사)</span></span>';
     const size = '<span class="row sz">' + LEVELS.map(l => '<i style="width:' + (HJR[l] * 2) + 'px;height:' + (HJR[l] * 2) + 'px"></i>' + l).join("&nbsp;&nbsp;") + '</span>';
-    div.innerHTML = '<div class="hlt">지도 보는 법 <span class="car">' + (collapsed ? "▾" : "▴") + '</span></div><div class="sec"><b>색 = 분류</b>' + cats + '</div><div class="sec"><b>선 = 단계</b>' + phase + '</div><div class="sec"><b>크기 = 등급</b>' + size + '</div><div class="sec"><b>흐릿한 후광</b><span class="row"><i class="dot" style="background:' + CAT_COLOR['교통'] + ';box-shadow:0 0 0 6px ' + CAT_COLOR['교통'] + '22"></i>위치 근사 <span style="color:#8a90a0">(이 근처)</span></span></div><div class="hnote">회색 = 등급 근거 미상 또는 종결·무산.<br>후광이 있으면 정확한 지점이 아니라 <b>대략 위치</b>입니다.</div>';
+    div.innerHTML = '<div class="hlt">지도 보는 법 <span class="car">' + (collapsed ? "▾" : "▴") + '</span></div><div class="sec"><b>색 = 분류</b>' + cats + '</div><div class="sec"><b>선 = 단계</b>' + phase + '</div><div class="sec"><b>크기 = 등급</b>' + size + '</div><div class="sec"><b>가리키면 뜨는 후광</b><span class="row"><i class="dot" style="background:' + CAT_COLOR['교통'] + ';box-shadow:0 0 0 6px ' + CAT_COLOR['교통'] + '22"></i>위치 근사 <span style="color:#8a90a0">(이 근처)</span></span></div><div class="hnote">회색 = 등급 근거 미상 또는 종결·무산.<br>마커를 <b>가리키거나 선택</b>하면 근사 좌표에만 후광이 뜹니다 — 정확한 지점이 아니라 <b>대략 위치</b>라는 뜻(상세 카드는 ±수치로 말합니다).</div>';
     div.querySelector(".hlt").addEventListener("click", () => { const off = div.classList.toggle("collapsed"); localStorage.setItem("hojae_legend_off", off ? "1" : "0"); div.querySelector(".car").textContent = off ? "▾" : "▴"; });
     mapEl.appendChild(div); }
 
@@ -8465,7 +8720,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260819i");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260819j");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8650,7 +8905,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260819i"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260819j"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8676,7 +8931,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260819i");
+  const CB = "?b=" + (window.BUILD || "20260819j");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
