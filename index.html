@@ -1499,9 +1499,16 @@
      `display:none`이면 나타날 때 줄이 밀려 눌리려던 체크박스가 움직인다.
      ⚠ 터치 기기엔 hover가 없다 — `pointer:coarse`에선 상시 노출한다(2026-08-13 대분류
        `only`를 상시로 바꾼 것과 같은 이유. 규칙이 한쪽에만 걸리지 않게 여기서 함께 건다). */
-  #dock .sub .solo { visibility:hidden; margin-left:2px; }
-  #dock .sub:hover .solo { visibility:visible; }
-  @media (pointer: coarse) { #dock .sub .solo { visibility:visible; } }
+  /* ★★ **`only`는 hover에만** — 대분류·세부유형 **양쪽 같은 규칙**(2026-08-19 시안 §14-4 ②).
+     ⚠ 이는 2026-08-13 결정(「대분류 only는 항상 보인다」)을 **뒤집은 것**이다. 그때 근거는
+       *"hover에만 뜨면 있는 줄 모른다"*였는데, 플라이아웃으로 바뀌며 유형 블록이 4줄로 고정돼
+       배지 4개가 **건수 숫자와 시선을 다투는** 쪽이 더 커졌다(시안 §03: *"커서를 올린 줄에만
+       나타나므로 여덟 줄에 여덟 개가 떠서 건수 숫자와 시선을 다투지 않습니다"*).
+     ⚠ **터치 기기는 상시 노출**을 유지한다 — hover가 없으므로 감추면 기능이 사라진다.
+     ⚠ 자리는 늘 잡아 둔다(`visibility`) — `display:none`이면 나타날 때 줄이 밀려 건수가 움직인다. */
+  #dock .sub .solo, #dock .cat-h .solo { visibility:hidden; margin-left:2px; }
+  #dock .sub:hover .solo, #dock .cat:hover .cat-h .solo { visibility:visible; }
+  @media (pointer: coarse) { #dock .sub .solo, #dock .cat-h .solo { visibility:visible; } }
   #dock .cat.off .cd { background:var(--line2) !important; }
   #dock .cat.off .nm, #dock .cat.off .cn { color:var(--ink3); }
   /* 중분류 = 필터(무엇을 보나) → 체크박스 */
@@ -1598,7 +1605,9 @@
        **한 선택자**로 묶는다(사본을 만들지 않는다). */
   #dock .cks i.phi, #msheet .mc i.phi { box-sizing:border-box; width:11px; height:11px;
     background:none; border:1.6px solid currentColor; border-radius:50%; }
-  #dock .cks i.phi.ph0, #msheet .mc i.phi.ph0 { border-style:dashed; }
+  /* ⚠ 계획 아이콘은 **점선이 아니다**(2026-08-20 §14-3) — 점선은 위치 근사로 옮겼다.
+     단계는 두께가 말하므로 계획은 **가장 얇은 실선**이다(마커와 같은 문법). */
+  #dock .cks i.phi.ph0, #msheet .mc i.phi.ph0 { border-width:1.2px; }
   #dock .cks i.phi.ph2, #msheet .mc i.phi.ph2,
   #dock .cks i.phi.ph3, #msheet .mc i.phi.ph3 { border-width:3px; }
   /* 완공 = 굵은 링 + **중심 코어** — 지도 마커가 준공에만 코어를 찍는 것과 같다 */
@@ -2115,7 +2124,10 @@ const LVL_RANK = { S: 0, A: 1, B: 2, C: 3, "미정": 4 };
      C(8)보다 크게 두어야 형태가 작아 보이지 않는다. */
 const HJR = { S: 17, A: 13, B: 10, C: 8, "미정": 9 };
 /* 두께 = 단계 · 등급 크기에 비례 축소 (시안 §02: 착공 기준 S 4px → C 3px) */
-const BW_PHASE = [2, 2.5, 4, 4];                                  // 계획 · 확정(인가) · 착공 · 완공
+/* 계획 · 확정(인가) · 착공 · 완공 — **단계는 두께가 혼자 말한다**(시안 §02).
+   2026-08-20: 점선이 「위치 근사」로 옮겨 가면서(§14-3) 계획의 표식이 두께뿐이 됐다 →
+   계획 2 → 1.5 · 확정 2.5 → 2.8로 벌린다(0.5px 차이는 화면에서 같은 것으로 읽힌다). */
+const BW_PHASE = [1.5, 2.8, 4, 4];
 const BW_GRADE = { S: 1, A: 0.92, B: 0.83, C: 0.75, "미정": 0.75 };
 /* 신호 하나의 **링 문법**(색·두께) — 지도 마커와 목록 행이 이 하나를 공유한다. */
 function ringOf(s) {
@@ -5625,8 +5637,12 @@ function renderDock() {
     </div>
     ${_flowTab ? `<div id="dk-flow"></div>` : `
     <!-- ★ 시안 §03 목업 그대로 — 「유형」 제목 아래 「전체 선택」, 그 아래 대분류 아코디언 -->
+    <!-- ⚠ 「전체 선택」 링크는 **제거했다** (2026-08-19 시안 §14-4 ③ 부수) — 하단 「초기화」와
+         하는 일이 겹친다(초기화는 지역까지 푸는 상위 동작이라 이쪽이 사본이었다).
+         핸들러(data-allcat)는 남긴다 — 바텀시트가 같은 배선을 쓴다.
+         ⚠ 이 주석은 **템플릿 리터럴 안**이다 — 백틱을 쓰면 문자열이 그 자리에서 끊긴다(실측). -->
     <div class="axis axis-cat">
-      <div class="t">유형 <button class="dk-allcat" data-allcat="1" title="모든 유형·중분류를 켠다">전체 선택</button></div>
+      <div class="t">유형</div>
     </div>
     ${CAT_KEYS.map(catBlock).join("")}
     <div class="axis">
@@ -6382,7 +6398,8 @@ function initLeaflet() {
       + `</span>`;
     div.innerHTML = `<div class="hlt">지도 보는 법 <span class="car">${collapsed ? "▾" : "▴"}</span></div>`
       + `<div class="sec"><b>색 = 분류</b>${cats}</div>`
-      + `<div class="sec"><b>선 = 단계</b>${phase}</div>`
+      + `<div class="sec"><b>노선 선 = 단계</b>${phase}</div>`
+      + `<div class="sec"><b>마커 점선 = 위치 근사</b><span class="row"><i class="dot" style="border:1.6px dashed ${CAT_COLOR["교통"]};background:none"></i>대략 위치 <span style="color:#8a90a0">(상세는 ±수치)</span></span></div>`
       + `<div class="sec"><b>크기 = 등급</b>${size}</div>`
       + `<div class="sec"><b>가리키면 뜨는 후광</b>`
       + `<span class="row"><i class="dot" style="background:${CAT_COLOR['교통']};box-shadow:0 0 0 6px ${CAT_COLOR['교통']}22"></i>위치 근사 <span style="color:#8a90a0">(이 근처)</span></span></div>`
@@ -6849,7 +6866,7 @@ function hexA(hex, a) {
      ④ **코어 도트** — 채움을 옅게 낮춘 대신 중심에 점을 찍는다. 겹치거나 작아도 "여기 하나 있다"가
         사라지지 않는다. 착공 후=채운 점 / 계획·인가=속 빈 점으로 P2 문법(실선/점선)을 한 번 더 반복. */
 const _hjImg = {};
-function hojaeMarkerImage(col, r, bw, ph, fillOp, alpha, halo, shape) {
+function hojaeMarkerImage(col, r, bw, ph, fillOp, alpha, halo, shape, approx) {
   /* ★ 2026-08-13 **리디자인 시안 §02 문법으로 전환** (`design/hojaemap-redesign.html`).
      종전엔 **두께가 등급**을 말하고(S·A 2 / 나머지 1.6) 채움이 유형색이었다. 시안은 축을 갈랐다:
        · 크기 = 등급 (지름 34/26/20/16 → 반지름 17/13/10/8)
@@ -6894,8 +6911,16 @@ function hojaeMarkerImage(col, r, bw, ph, fillOp, alpha, halo, shape) {
   inner += ring(+ri.toFixed(2), "none", "rgba(0,0,0,0.22)", 0.7);
   inner += ring(+ro.toFixed(2), "none", "#fff", cw, ' opacity="0.95"');
   let dash = "";
-  if (ph === 0) {   // 점선은 **계획에만** — 확정부터는 실선이고 두께로 갈린다(시안 §02)
-                    // 둘레를 짝수 등분 → 크기가 달라도 결이 같다
+  /* ★★ **점선 = 위치 근사** (2026-08-19 시안 §14-3 · 사장님 확정 2026-08-20 「시안기준으로 맞춰」).
+     ⚠ 시안이 점선을 **두 번 쓴다** — §02는 「계획 = 점선」, §14-3은 「근사 = 점선」. §14가 나중이고
+       라이브 실측(근사 22%)을 근거로 쓴 절이라 **§14를 따른다**.
+     ⚠ 그러면 계획 단계는 무엇으로 말하나 → **두께**다. §02가 스스로 적은 원칙이 그것이다:
+       *"링 두께 하나로만 단계를 말하므로 … 확정도가 높을수록 굵어진다는 한 방향 규칙"*.
+       점선을 뺀 자리를 메우려고 `BW_PHASE`의 계획·확정 간격을 벌렸다(2/2.5 → 1.5/2.8) —
+       0.5px 차이는 화면에서 같은 것으로 읽힌다.
+     ⚠ **선(노선)의 점선은 그대로 단계**를 뜻한다(계획·인가 = 점선). 마커와 선이 같은 기호를
+       다르게 쓰는 자리라 범례가 둘을 갈라 적는다 — 시안이 마커에 한정해 지시했기 때문이다. */
+  if (approx) {     // 둘레를 짝수 등분 → 크기가 달라도 결이 같다
     const circ = dia ? 4 * r * Math.SQRT2 : 2 * Math.PI * r;   // 마름모는 변 길이 합(√2·r × 4)
     const n = Math.max(8, Math.round(circ / 4.6 / 2) * 2), seg = circ / n;
     dash = ' stroke-dasharray="' + (seg * 0.45).toFixed(2) + " " + (seg * 0.55).toFixed(2) + '" stroke-linecap="round"';
@@ -7089,8 +7114,8 @@ function initKakao() {
   const _reimage = s => {
     if (!s || !s._kmk) return;
     const t = hjStyle(s), tr = _shrinkRRef ? _shrinkRRef(t.r, t.lvl) : t.r;
-    s._kmk.setImage(hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape));
-    s._kmkKey = t.col + "|" + tr + "|" + t.bw + "|" + t.ph + "|" + t.fillOp + "|" + t.alpha + "|" + (haloOn(s) ? 1 : 0) + "|" + t.shape;
+    s._kmk.setImage(hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape, isApprox(s)));
+    s._kmkKey = t.col + "|" + tr + "|" + t.bw + "|" + t.ph + "|" + t.fillOp + "|" + t.alpha + "|" + (haloOn(s) ? 1 : 0) + "|" + t.shape + "|" + (isApprox(s) ? 1 : 0);
   };
   let _shrinkRRef = null;        // renderHojae가 자기 축소자를 여기 걸어 둔다(같은 자를 쓰기 위해)
   const clDonut = (el, g) => {
@@ -7413,16 +7438,16 @@ function initKakao() {
       const s = g[0];
       const t = hjStyle(s);
       const tr = _shrinkR(t.r, t.lvl);
-      const key = t.col + "|" + tr + "|" + t.bw + "|" + t.ph + "|" + t.fillOp + "|" + t.alpha + "|" + (haloOn(s) ? 1 : 0) + "|" + t.shape;
+      const key = t.col + "|" + tr + "|" + t.bw + "|" + t.ph + "|" + t.fillOp + "|" + t.alpha + "|" + (haloOn(s) ? 1 : 0) + "|" + t.shape + "|" + (isApprox(s) ? 1 : 0);
       if (!s._kmk) {
         const [x, y] = s.geometry.coordinates;
-        const mk = new K.Marker({ position: LL(x, y), image: hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape), zIndex: 10 });
+        const mk = new K.Marker({ position: LL(x, y), image: hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape, isApprox(s)), zIndex: 10 });
         K.event.addListener(mk, "mouseover", () => { const q = toPt(x, y); const rc = mapEl.getBoundingClientRect(); showTip(hjHtml(s), { clientX: rc.left + q.x, clientY: rc.top + q.y }, true);
           if (isApprox(s)) { _haloHover = s; _reimage(s); } });   // §14-3 — 가리킨 것 하나만
         K.event.addListener(mk, "mouseout", () => { hideTip(); if (_haloHover === s) { _haloHover = null; _reimage(s); } });
         K.event.addListener(mk, "click", () => { hideTip(); showSignal(s, false); });
         s._kmk = mk; s._kmkKey = key;
-      } else if (s._kmkKey !== key) { s._kmk.setImage(hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape)); s._kmkKey = key; }
+      } else if (s._kmkKey !== key) { s._kmk.setImage(hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape, isApprox(s))); s._kmkKey = key; }
       // 노선 격리 중엔 호재 원을 **숨긴다**(2026-08-04 사용자 "호재별 원표시도 없애" — 흐림→제거.
       // 소속역은 하이라이트 링·역명 라벨이 대신 표기한다). 해제 시 clearRoute→renderHojae가 복원.
       s._kmk.setOpacity(dimOpacity(s));
@@ -7924,7 +7949,7 @@ function initKakao() {
     const cats = CAT_KEYS.map(c => '<span class="row"><i class="dot" style="background:' + CAT_COLOR[c] + '"></i>' + c + '</span>').join("");
     const phase = '<span class="row"><i class="ln" style="border-top-style:dashed"></i>계획 · 인가 <span style="color:#8a90a0">(서류)</span></span><span class="row"><i class="ln" style="border-top-style:solid"></i>착공 · 준공 <span style="color:#8a90a0">(공사)</span></span>';
     const size = '<span class="row sz">' + LEVELS.map(l => '<i style="width:' + (HJR[l] * 2) + 'px;height:' + (HJR[l] * 2) + 'px"></i>' + l).join("&nbsp;&nbsp;") + '</span>';
-    div.innerHTML = '<div class="hlt">지도 보는 법 <span class="car">' + (collapsed ? "▾" : "▴") + '</span></div><div class="sec"><b>색 = 분류</b>' + cats + '</div><div class="sec"><b>선 = 단계</b>' + phase + '</div><div class="sec"><b>크기 = 등급</b>' + size + '</div><div class="sec"><b>가리키면 뜨는 후광</b><span class="row"><i class="dot" style="background:' + CAT_COLOR['교통'] + ';box-shadow:0 0 0 6px ' + CAT_COLOR['교통'] + '22"></i>위치 근사 <span style="color:#8a90a0">(이 근처)</span></span></div><div class="hnote">회색 = 등급 근거 미상 또는 종결·무산.<br>마커를 <b>가리키거나 선택</b>하면 근사 좌표에만 후광이 뜹니다 — 정확한 지점이 아니라 <b>대략 위치</b>라는 뜻(상세 카드는 ±수치로 말합니다).</div>';
+    div.innerHTML = '<div class="hlt">지도 보는 법 <span class="car">' + (collapsed ? "▾" : "▴") + '</span></div><div class="sec"><b>색 = 분류</b>' + cats + '</div><div class="sec"><b>노선 선 = 단계</b>' + phase + '</div><div class="sec"><b>마커 점선 = 위치 근사</b><span class="row"><i class="dot" style="border:1.6px dashed ' + CAT_COLOR['교통'] + ';background:none"></i>대략 위치 <span style="color:#8a90a0">(상세는 ±수치)</span></span></div><div class="sec"><b>크기 = 등급</b>' + size + '</div><div class="sec"><b>가리키면 뜨는 후광</b><span class="row"><i class="dot" style="background:' + CAT_COLOR['교통'] + ';box-shadow:0 0 0 6px ' + CAT_COLOR['교통'] + '22"></i>위치 근사 <span style="color:#8a90a0">(이 근처)</span></span></div><div class="hnote">회색 = 등급 근거 미상 또는 종결·무산.<br>마커를 <b>가리키거나 선택</b>하면 근사 좌표에만 후광이 뜹니다 — 정확한 지점이 아니라 <b>대략 위치</b>라는 뜻(상세 카드는 ±수치로 말합니다).</div>';
     div.querySelector(".hlt").addEventListener("click", () => { const off = div.classList.toggle("collapsed"); localStorage.setItem("hojae_legend_off", off ? "1" : "0"); div.querySelector(".car").textContent = off ? "▾" : "▴"; });
     mapEl.appendChild(div); }
 
@@ -8721,7 +8746,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260819k");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260820a");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8906,7 +8931,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260819k"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260820a"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8932,7 +8957,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260819k");
+  const CB = "?b=" + (window.BUILD || "20260820a");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
