@@ -1482,10 +1482,16 @@
   #dock .cat-h .chev:hover { color:var(--ink); background:var(--line); }
   /* 회전은 **글리프만** — 상자(과녁 28×30 + hover 배경)째 돌리면 세로 상자가 가로로 누워
      옆의 색 점을 5.8px 덮는다(2026-08-04 실측, 사용자 "접기 눌렀을 때 옆에 모양이 넘친다"). */
-  #dock .cat-h .chev::before { content:"▶"; display:inline-block; transition:transform .15s; }
-  #dock .cat.open .cat-h .chev::before { transform:rotate(90deg); }
+  /* ★ 시안 §03 목업은 **▸(닫힘) / ◂(열림)** 두 문자를 쓴다 — 회전이 아니라 방향 반전이다.
+     판이 **오른쪽에서** 열리므로 열린 줄은 ◂가 「이쪽이 열려 있다」를 가리킨다. */
+  #dock .cat-h .chev::before { content:"▸"; display:inline-block; }
+  #dock .cat.fly .cat-h .chev::before { content:"◂"; }
   #dock .cat-h .cd { width:11px; height:11px; border-radius:50%; flex-shrink:0; }
-  #dock .cat-h .nm { font-weight:700; font-size:14px; flex:1; }
+  #dock .cat-h .nmwrap { display:flex; flex-direction:column; gap:1px; flex:1; min-width:0; }
+  #dock .cat-h .nm { font-weight:700; font-size:14px; white-space:nowrap; }
+  /* 선택 요약(「공장만」) — 유형색으로 적어 어느 축이 걸렸는지 색으로도 말한다(시안 목업 10.5px 600) */
+  #dock .cat-h .selnm { font-size:10.5px; font-weight:600; color:var(--cc, var(--ink2)); white-space:nowrap; }
+  #dock .cat.off .cat-h .selnm { color:var(--ink3); }
   #dock .cat-h .cn { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:12px;
     color:var(--ink2); font-variant-numeric:tabular-nums; }
   /* ★ **부분 선택은 「선택분 / 전체」로 적는다** (시안 §15-04 — `227 / 1,248`).
@@ -1517,6 +1523,26 @@
   @media (pointer: coarse) { #dock .sub .solo, #dock .cat-h .solo { visibility:visible; } }
   #dock .cat.off .cd { background:var(--line2) !important; }
   #dock .cat.off .nm, #dock .cat.off .cn { color:var(--ink3); }
+  /* ══ 등급 = 가로 5칸 세그 · 단계 = 알약 (시안 §03 목업 수치 그대로 · 2026-08-20 복원) ══
+     ☠ 2026-08-19에 체크박스로 바꿨던 것이 **오독**이었다 — 목업에는 체크박스가 없다.
+     시안값: 세그 칸 `flex:1 · padding 7px 0 · radius 6 · gap 6` · 켜짐 = 검정 배경 + 흰 글자/링.
+             알약 `radius 14 · padding 6px 11px · gap 6 · 12px` · 켜짐 = 검정 배경 + 흰 글자/아이콘. */
+  #dock .sgrow { display:flex; gap:6px; }
+  #dock .sgbtn { flex:1; display:flex; flex-direction:column; align-items:center; gap:5px;
+    padding:7px 0; border:1px solid var(--line); border-radius:6px; background:#fff;
+    color:var(--ink2); font-size:12px; font-weight:600; cursor:pointer; line-height:1; }
+  #dock .sgbtn.on { background:var(--ink); border-color:var(--ink); color:#fff; font-weight:700; }
+  #dock .sgbtn:hover { border-color:var(--ink3); }
+  #dock .sgi { box-sizing:border-box; border-style:solid; border-color:currentColor; flex:none; }
+  #dock .sgi.lvr { border-radius:50%; }
+  #dock .sgi.dia { width:9px; height:9px; border-width:1.5px; transform:rotate(45deg); }
+  #dock .pgrow { display:flex; gap:6px; flex-wrap:wrap; }
+  #dock .pgbtn { display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600;
+    padding:6px 11px; border:1px solid var(--line); border-radius:14px; background:#fff;
+    color:var(--ink2); cursor:pointer; line-height:1; }
+  #dock .pgbtn.on { background:var(--ink); border-color:var(--ink); color:#fff; font-weight:700; }
+  #dock .pgbtn:hover { border-color:var(--ink3); }
+  #dock .pgbtn .phi { border-color:currentColor; }
   /* 중분류 = 필터(무엇을 보나) → 체크박스 */
   /* ★★ 세부유형은 **플라이아웃**이다 (2026-08-19 시안 §15-04 · 사장님 지시. 종전 아코디언 폐기).
      아코디언은 펼치는 순간 **아래 대분류를 밀어내** 「두 축을 나란히 비교」가 안 되고, 도크가
@@ -1535,6 +1561,11 @@
   #dock .subs .fh { display:flex; align-items:center; gap:7px; font-size:11.5px; font-weight:700;
     color:var(--ink2); padding:1px 1px 6px; border-bottom:1px solid var(--line); margin-bottom:4px; }
   #dock .subs .fh i { width:9px; height:9px; border-radius:50%; flex:none; }
+  /* ★ 시안 §03: *"패널 머리에 **전체 / 해제**를 둘 세로 여유도 생깁니다"* — 플라이아웃이라 자리가 난다. */
+  #dock .subs .fh .fhact { margin-left:auto; display:flex; gap:4px; }
+  #dock .subs .fh .fhact button { font-size:10.5px; font-weight:600; color:var(--ink2); background:none;
+    border:1px solid var(--line2); border-radius:8px; padding:1px 6px; cursor:pointer; }
+  #dock .subs .fh .fhact button:hover { color:var(--ink); border-color:var(--ink3); }
   #dock .sub { display:flex; align-items:center; gap:7px; padding:4px 0; cursor:pointer; font-size:var(--fs); }
   #dock .sub .tick { width:15px; height:15px; border:1.5px solid var(--line2); border-radius:4px; flex-shrink:0; position:relative; }
   /* ★ 시안 실물: 중분류 체크박스는 **파란 채움**이다(시스템 액센트). 잉크 채움은 「선택된 행」이
@@ -5579,17 +5610,29 @@ function renderDock() {
     const tot = C.cat[cat] || 0;
     const selN = keys.length ? keys.reduce((a, sk) => a + (filter.sub.has(subId(cat, sk)) ? (C.sub[subId(cat, sk)] || 0) : 0), 0) : (filter.cat.has(cat) ? tot : 0);
     const partial = keys.length ? keys.some(sk => (C.sub[subId(cat, sk)] || 0) && !filter.sub.has(subId(cat, sk))) : !filter.cat.has(cat);
+    /* 선택 요약 라벨 — 켜진 중분류가 1개면 그 이름, 여럿이면 「N종」. 전부면 없음. */
+    const _onSubs = keys.filter(sk => (C.sub[subId(cat, sk)] || 0) && filter.sub.has(subId(cat, sk)));
+    const _offSubs = keys.filter(sk => (C.sub[subId(cat, sk)] || 0) && !filter.sub.has(subId(cat, sk)));
+    const selLab = (!keys.length || !_offSubs.length) ? "" :
+      (_onSubs.length === 1 ? `${_onSubs[0] === "미상" ? "유형 미상" : _onSubs[0]}만`
+       : _onSubs.length ? `${_onSubs.length}종만` : "전부 해제");
     const cnHtml = partial
       ? `<b>${selN.toLocaleString()}</b><span class="sl">/</span>${tot.toLocaleString()}`
       : tot.toLocaleString();
     return `<div class="cat${dockOpen.has(cat) ? " open" : ""}${on ? "" : " off"}" data-cat="${cat}" style="--cc:${col};--ccb:${hexA(col, .35)};--ccbg:${hexA(col, .07)}">
       <div class="cat-h" data-tog="cat" data-k="${cat}">
-        <span class="chev" data-open="${cat}" title="${dockOpen.has(cat) ? "접기" : "펼치기"}"></span>
-        <i class="cd" style="background:${col}"></i><span class="nm">${cat}</span>
+        <i class="cd" style="background:${col}"></i>
+        <!-- ★ 이름 아래 **선택 요약**(시안 §03: 「공장만」) — 접힌 줄만 보고도 무엇으로 좁혔는지 안다.
+             전부 켜졌으면 적지 않는다(조건이 걸린 줄만 두 값이 되어 눈에 띈다 — 시안 문장 그대로). -->
+        <span class="nmwrap"><span class="nm">${cat}</span>${selLab ? `<span class="selnm">${selLab}</span>` : ""}</span>
         <button class="solo" data-solo="${cat}" title="이 분류만 남기고 나머지 끄기">only</button>
         <span class="cn">${cnHtml}</span>
+        <!-- ★ 화살표는 **오른쪽 끝**이고 열리면 ◂로 뒤집는다(시안 §03 목업) — 판이 옆에서 열린다는
+             방향을 기호가 말한다. 왼쪽 ▶는 「접힌 목록」으로 읽혀 아코디언 시절의 잔상이다. -->
+        <span class="chev" data-open="${cat}" title="${dockOpen.has(cat) ? "접기" : "세부유형 열기"}"></span>
       </div>
-      <div class="subs"><div class="fh"><i style="background:${col}"></i>${cat} 세부유형</div>${subs}</div>
+      <div class="subs"><div class="fh"><i style="background:${col}"></i>${cat} 세부유형
+        <span class="fhact"><button type="button" data-suball="${cat}">전체</button><button type="button" data-subnone="${cat}">해제</button></span></div>${subs}</div>
     </div>`;
   };
   /* 아이콘은 **단계 그 자체**를 그린다(시안 §02) — 계획 점선 · 확정 실선 · 착공 굵은 · 완공 코어.
@@ -5601,8 +5644,6 @@ function renderDock() {
        체크박스는 **세로 목록이라 그 폭 제약 자체가 사라진다.** DESIGN.md를 같은 커밋에서 고친다.
      아이콘은 **남긴다** — 체크박스는 "선택 여부", 아이콘은 "지도에서 어떻게 보이는지"로 역할이 갈린다.
      마크업은 중분류(`.sub`)와 **같은 것**을 쓴다(사본을 만들지 않는다). */
-  const ph = p => `<div class="sub${filter.phase.has(p) ? "" : " off"}" data-tog="phase" data-k="${p}">
-    <span class="tick"></span><span class="nm">${phaseLabel(p)}</span><i class="phi ph${PHASE_IDX[p] ?? 0}"></i></div>`;
   /* 등급 링 크기 — **지도 마커에서 도출한다** (2026-08-13 시안 §03).
      *"별도 범례는 두지 않았습니다 — 좌측 필터의 색·크기·링 두께가 그대로 범례 역할을 합니다."*
      ☠ 종전 15/13/11/9는 **손으로 적은 사본**이라 비율이 지도와 달랐다(사이드바 1:0.87:0.73:0.60 ↔
@@ -5619,11 +5660,29 @@ function renderDock() {
   /* ★ 「?」를 다시 **「등급 없음」**으로 돌린다 (2026-08-19). 기호로 줄였던 이유는 5칸 격자에서
      네 글자가 그 칸만 넓혀 칸이 안 맞았기 때문인데, 체크박스 세로 목록에는 그 제약이 없다.
      제약이 사라지면 그 제약 때문에 줄인 표기도 되돌린다 — 안 되돌리면 이유 없는 기호만 남는다. */
-  const gp = g => g === "미정"
-    ? `<div class="sub${filter.lvl.has("미정") ? "" : " off"}" data-tog="lvl" data-k="미정">
-        <span class="tick"></span><span class="nm">${LEVEL_NAME["미정"]}</span><i class="dia"></i></div>`
-    : `<div class="sub${filter.lvl.has(g) ? "" : " off"}" data-tog="lvl" data-k="${g}">
-        <span class="tick"></span><span class="nm">${g}</span><i class="lvr" style="width:${SZ[g]}px;height:${SZ[g]}px"></i></div>`;
+  /* ★★ **등급 = 가로 5칸 세그 버튼**(시안 §03 목업 그대로 · 2026-08-20 복원).
+     ☠ 2026-08-19에 「필터는 전부 체크박스」로 읽고 세로 체크박스로 바꿨는데 **오독이었다** —
+       시안 목업의 등급 블록에는 체크박스 마크업이 **0개**이고, 칸마다 「링 아이콘 + 글자」를
+       세로로 쌓은 **세그먼트 5칸**(flex:1 · gap 6 · radius 6)이다. 켜짐은 **검정 배경 + 흰 링**.
+     ★ 링 크기는 `HJR`에서 온다(사본 금지) — 시안 견본 15/12/10/8과 같은 계단이다.
+     ★ 미정 칸은 **마름모**(9px · rotate 45) + 「없음」 — 규모 등급과 다른 축이라 형태로 가른다. */
+  const gp = g => {
+    const on = filter.lvl.has(g);
+    const ico = g === "미정"
+      ? `<i class="sgi dia"></i>`
+      : `<i class="sgi lvr" style="width:${SZ[g]}px;height:${SZ[g]}px;border-width:${g === "S" ? 3 : g === "A" ? 2.5 : g === "B" ? 2 : 1.5}px"></i>`;
+    return `<button type="button" class="sgbtn${on ? " on" : ""}" data-tog="lvl" data-k="${g}"
+      title="${g === "미정" ? LEVEL_NAME["미정"] : g + "등급"}만 켜고 끄기">${ico}<span>${g === "미정" ? "없음" : g}</span></button>`;
+  };
+  /* ★★ **단계 = 알약 4개**(시안 §03 목업: radius 14 · padding 6/11 · 아이콘 12px + 글자).
+     아이콘은 지도 마커 문법을 그대로 재사용한다 — 계획 얇은 링 → 확정 → 착공 굵게 → 완공 코어.
+     ⚠ 시안 목업의 계획 아이콘은 **점선**인데 여기선 **얇은 실선**이다 — §14-3이 점선을
+       「위치 근사」로 가져갔기 때문이다(사장님 확정). 사이드바가 지도와 다른 말을 하면 안 된다. */
+  const ph = p => {
+    const on = filter.phase.has(p), i = PHASE_IDX[p] ?? 0;
+    return `<button type="button" class="pgbtn${on ? " on" : ""}" data-tog="phase" data-k="${p}"
+      title="${phaseLabel(p)} 단계만 켜고 끄기"><i class="phi ph${i}"></i>${phaseLabel(p)}</button>`;
+  };
   // 초기화 = 전체선택·해제 2버튼의 대체. 기본 상태와 다를 때만 보인다(평소엔 화면에 없음).
   /* 「필터 N개 적용 중」 — 기본과 달라진 축의 수. 접힌 상태에서도 뭐가 걸려 있는지 보인다
      (모바일 시트의 배지와 같은 문법 — 두 화면이 같은 뜻을 말한다). */
@@ -5660,14 +5719,14 @@ function renderDock() {
     ${CAT_KEYS.map(catBlock).join("")}
     <div class="axis">
       <div class="t">등급</div>
-      <div class="cks">${["S", "A", "B", "C", "미정"].map(gp).join("")}</div>
+      <div class="sgrow">${["S", "A", "B", "C", "미정"].map(gp).join("")}</div>
     </div>
     <div class="axis">
       <!-- ★ 범례는 마커 문법과 **쌍으로** 움직인다 (2026-08-13 시안 §02 전환).
            종전 「실선=착공 후 · 점선=계획」은 단계를 두 값으로만 말하던 시절의 문구다 —
            이제 두께가 네 단계를 말하므로 그대로 두면 화면이 거짓을 말한다(PROCEDURE_화면품질). -->
       <div class="t">단계</div>
-      <div class="cks">${PHASES.map(ph).join("")}</div>
+      <div class="pgrow">${PHASES.map(ph).join("")}</div>
     </div>
     <!-- ★ 아파트 세대수 — **단계 아래 · 레이어 위** (2026-08-16 갱신 시안 §03: *"지역 → 유형 →
          등급 → 단계 → 아파트 세대수 → 레이어 … 세대수는 아파트를 걸러내는 부차적 조건이라
@@ -5777,6 +5836,14 @@ function bindFilterClicks(host) {
       const k = so.dataset.solo;
       CAT_KEYS.forEach(c => { c === k ? filter.cat.add(c) : filter.cat.delete(c);
         (SUB_KEYS[c] || []).forEach(sk => c === k ? filter.sub.add(subId(c, sk)) : filter.sub.delete(subId(c, sk))); });
+      renderAll(); return;
+    }
+    /* 플라이아웃 머리의 「전체 / 해제」 — 그 분류 안에서만 켜고 끈다(다른 분류는 건드리지 않는다). */
+    const sa = e.target.closest("[data-suball]"), sn = e.target.closest("[data-subnone]");
+    if (sa || sn) {
+      const c = (sa || sn).dataset.suball || (sa || sn).dataset.subnone;
+      (SUB_KEYS[c] || []).forEach(sk => sa ? filter.sub.add(subId(c, sk)) : filter.sub.delete(subId(c, sk)));
+      sa ? filter.cat.add(c) : filter.cat.delete(c);
       renderAll(); return;
     }
     /* 세부유형 only — 그 중분류 하나만 남기고 전 분류의 나머지를 끈다(대분류 only와 같은 문법). */
@@ -8763,7 +8830,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260820d");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260820e");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8948,7 +9015,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260820d"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260820e"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8974,7 +9041,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260820d");
+  const CB = "?b=" + (window.BUILD || "20260820e");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
