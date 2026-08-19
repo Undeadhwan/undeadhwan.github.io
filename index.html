@@ -993,6 +993,12 @@
   .apt-pop-view { text-align:center; font-size:12.5px; font-weight:700; padding:12px 0; cursor:pointer;
     color:#fff; background:var(--ink); border:0; }
   .apt-pop-view:hover { opacity:.88; }
+  /* ★ 위치 정확도 = **별도 블록**(시안 §06 슬롯 7). 라벨–값 열에서 빼내 「한계」임을 형태로 말한다.
+     새 색을 만들지 않는다 — 기존 토큰(--panel·--line·--ink2)만 쓴다(DESIGN.md §1). */
+  .precblk { border:1px solid var(--line); border-left:3px solid var(--line2); border-radius:var(--r-s);
+    background:var(--panel); padding:8px 11px; margin:8px 0; font-size:var(--fs-s); line-height:1.55; }
+  .precblk .ph { font-size:11px; font-weight:700; color:var(--ink2); margin-bottom:3px; }
+  .precblk .ptier { font-weight:700; }
   .copyaddr { cursor:pointer; font-size:11px; padding:1px 4px; border-radius:5px; background:#eef1fb; margin-left:3px; user-select:none; }
   .copyaddr:hover { background:#dde3f7; }
   .factsheet { border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin:8px 0; background:#fbfcfe; }
@@ -2122,12 +2128,15 @@ const LVL_RANK = { S: 0, A: 1, B: 2, C: 3, "미정": 4 };
      면적이 등급에 비례하도록」). 종전 21/16/12/9는 지름 42/32/24/18이라 한 단계씩 컸다.
    ⚠ 미정(마름모)은 시안 swatch가 14px 정사각형을 45° 돌린 것이라 반대각선 ≈9.9다 —
      C(8)보다 크게 두어야 형태가 작아 보이지 않는다. */
-const HJR = { S: 17, A: 13, B: 10, C: 8, "미정": 9 };
+const HJR = { S: 17, A: 13, B: 10, C: 8, "미정": 7 };   // 지름 34·26·20·16 · 미정 마름모 14 — 전부 시안 §02 견본값
 /* 두께 = 단계 · 등급 크기에 비례 축소 (시안 §02: 착공 기준 S 4px → C 3px) */
-/* 계획 · 확정(인가) · 착공 · 완공 — **단계는 두께가 혼자 말한다**(시안 §02).
-   2026-08-20: 점선이 「위치 근사」로 옮겨 가면서(§14-3) 계획의 표식이 두께뿐이 됐다 →
-   계획 2 → 1.5 · 확정 2.5 → 2.8로 벌린다(0.5px 차이는 화면에서 같은 것으로 읽힌다). */
-const BW_PHASE = [1.5, 2.8, 4, 4];
+/* 계획 · 확정(인가) · 착공 · 완공 — **시안 §02 견본의 실측값 그대로**(2026-08-20 전문 대조).
+   시안 견본(26px A등급 기준): 계획 `2px` · 확정 `2.5px` · 착공 `4px` · 완공 `4px`+코어.
+   ⚠ 2026-08-20에 내가 1.5/2.8로 벌렸다가 **되돌렸다** — 사장님 지시가 「시안이랑 똑같이」다.
+   ⚠ **남은 문제를 숨기지 않는다**: 점선이 「위치 근사」로 옮겨 가면서(§14-3) 계획의 유일한
+     표식이 두께가 됐는데 계획 2 ↔ 확정 2.5는 **0.5px 차이**다. 시안은 계획을 점선으로 두고
+     쓴 값이라 이 상황을 상정하지 않았다 — 사장님 판단 자리(핸드오프에 적음). */
+const BW_PHASE = [2, 2.5, 4, 4];
 const BW_GRADE = { S: 1, A: 0.92, B: 0.83, C: 0.75, "미정": 0.75 };
 /* 신호 하나의 **링 문법**(색·두께) — 지도 마커와 목록 행이 이 하나를 공유한다. */
 function ringOf(s) {
@@ -4938,9 +4947,12 @@ function renderDetail(s) {
       ${s.side_effects?.length ? `<div class="kv"><b>역효과 표기</b> ${s.side_effects.join(", ")}</div>` : ""}
       ${SUB_CAVEAT[subOf(s)] ? `<div class="kv"><b>시설 특성</b> <span class="hmhint">${SUB_CAVEAT[subOf(s)]}</span></div>` : ""}
       ${s.pt_type === "road_ic" && s.ic_note ? `<div class="kv"><b>지점 특성</b> ${s.ic_note.replace(/\*\*/g, "")}</div>` : ""}
-      ${isLineSig(s) ? lineGeomRow(s) : `<div class="kv"><b>위치</b> ${precNote(s)}${
-        s.st_status && s.st_status !== "확정" && s.st_status !== "기존" ? ` · <b>${s.st_status}</b>(명칭·위치 미확정)` : ""}${
-        s.pt_type === "road_ic" ? " · 도로 IC(철도역 아님)" : ""}</div>`}
+      <!-- ★ **위치 정확도는 라벨–값 행이 아니라 별도 블록**이다 (시안 §06 슬롯 7 「위치 정확도 **경고**」:
+           *"한계는 눈에 보이게 — 마름모 아이콘과 함께 별도 블록으로 세웁니다"*).
+           kv 행에 섞으면 「사업비·확인일」과 같은 무게로 읽혀 **한계라는 사실이 묻힌다**(2026-08-20 대조). -->
+      ${isLineSig(s) ? lineGeomRow(s) : `<div class="precblk"><div class="ph">위치 정확도</div>${precNote(s)}${
+        s.st_status && s.st_status !== "확정" && s.st_status !== "기존" ? `<div class="gbasis"><b>${s.st_status}</b> — 명칭·위치 미확정</div>` : ""}${
+        s.pt_type === "road_ic" ? `<div class="gbasis">도로 IC(철도역 아님)</div>` : ""}</div>`}
       <!-- ☠ 「반경 Nkm 내 단지」 목록을 **지웠다** (2026-08-19 시안 「구현 3단계」 ⑨).
            *"호재를 보는 화면에서 단지 목록은 다른 질문입니다."* — 이 카드가 답하는 질문은
            「이 호재가 무엇이고 어디까지 왔나」다. 단지는 아파트 화면(미리보기·상세)의 축이고,
@@ -6889,7 +6901,11 @@ function hojaeMarkerImage(col, r, bw, ph, fillOp, alpha, halo, shape, approx) {
   //   색으로 배경을 이기는 데는 한계가 있다 — 카카오맵은 녹지·물·도로·지하철 9색으로 색상환을
   //   거의 다 쓰므로, 4색을 아무리 잘 골라도 지도와의 색차는 ΔE 28쯤이 천장이다(실측).
   //   반면 어두운 외곽선은 **배경이 무슨 색이든** 경계를 만든다 — 지도 마커의 표준 해법.
-  const cw = 2.2, ro = r + bw / 2 + cw / 2, ri = ro + cw / 2 + 0.35;   // 케이싱·바깥 헤어라인 반지름
+  /* 흰 케이싱 = **1.5px**(시안 §02 견본 `box-shadow:0 0 0 1.5px #fff`). 2026-08-20 2.2 → 1.5.
+     ⚠ 바깥 어두운 헤어라인은 **남긴다** — 시안 견본은 드롭섀도(`0 1px 4px rgba(0,0,0,.3)`)인데,
+       그건 흰 문서 배경 기준이다. 실제 지도 타일 위에서는 헤어라인이 같은 일을 하고(2026-07-31
+       ΔE 28 실측), SVG 드롭섀도는 마커 수백 개에서 필터 비용이 붙는다. 근거가 다른 자리라 바꾸지 않는다. */
+  const cw = 1.5, ro = r + bw / 2 + cw / 2, ri = ro + cw / 2 + 0.35;
   /* ★ **클릭 영역은 크기와 무관하게 고정**이다 (시안 §02 40px · §11 터치 44px).
      ☠ 종전엔 히트 영역 = 그려진 이미지라 C등급(지름 16)은 케이싱까지 쳐도 **27px**이었다 —
        손가락으로는 거의 못 누르고 마우스로도 조준이 필요했다. 등급이 낮다고 누르기 어려울
@@ -6927,7 +6943,9 @@ function hojaeMarkerImage(col, r, bw, ph, fillOp, alpha, halo, shape, approx) {
   }
   /* ★ **속을 비운다** — 채움은 유형색이 아니라 옅은 흰 베일이다(시안 swatch = rgba(255,255,255,.3)).
      종전엔 `hexA(col, fillOp)`로 유형색을 14%까지 깔아, 마커가 겹칠수록 지도가 사라졌다. */
-  inner += ring(r, "rgba(255,255,255," + fillOp + ")", col, bw, dash);
+  /* 채움 = 옅은 흰 베일. **마름모는 더 진하다**(시안 §02 견본: 원 `.3` · 마름모 `.45`) —
+     작고 각진 형태라 같은 농도면 배경에 묻힌다. */
+  inner += ring(r, "rgba(255,255,255," + (dia ? Math.min(1, fillOp + .15) : fillOp) + ")", col, bw, dash);
   /* ★ 코어 도트는 **완공에만** (시안 §02 — 「굵은 링 + 중심 코어」). 종전엔 전 마커에 찍혀
      단계를 말하지 않는 장식이었다.
      ★ 마름모에는 어느 단계에서도 찍지 않는다 — 가운데를 채우면 「값이 있다」로 읽힌다.
@@ -8746,7 +8764,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260820a");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260820b");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8931,7 +8949,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260820a"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260820b"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8957,7 +8975,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260820a");
+  const CB = "?b=" + (window.BUILD || "20260820b");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
