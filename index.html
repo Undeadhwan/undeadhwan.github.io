@@ -1536,26 +1536,24 @@
      ⚠ 모바일에도 **같은 규칙**을 건다. 375px에선 지금 한 줄에 들어가지만(즉 여기선 세로가 ~70px
        는다) 320px 기기에선 다시 제멋대로 접힌다 — 폭에 따라 규칙이 갈리면 반대쪽이 조용한 예외가
        되는 게 이 저장소의 반복 사고다. 두 화면이 같은 모양을 보이는 편이 낫다. */
-  #dock .seg { display:flex; flex-wrap:wrap; gap:5px; }
+  /* ★ 등급·단계 체크박스 목록 (2026-08-19 ⑧). 행 마크업은 중분류(`.sub`)와 **같은 것**이라
+     여기서는 **아이콘 자리만** 정한다 — 오른쪽 끝(`margin-left:auto`)에 지도 문법을 둔다.
+     등급 링은 `HJR`(지도 반지름)에서 도출한 인라인 크기를 받으므로 여기서 크기를 적지 않는다
+     (값을 두 곳에 적지 않는다 — 문턱이 바뀌면 자동으로 따라온다). */
+  #dock .cks { display:flex; flex-direction:column; }
+  #dock .cks .sub i { margin-left:auto; flex-shrink:0; box-sizing:border-box; }
+  #dock .cks .sub i.lvr { border:2px solid currentColor; border-radius:50%; background:none; }
+  #dock .cks .sub i.dia { width:7px; height:7px; border:1.6px solid currentColor; border-radius:2px;
+                          transform:rotate(45deg); background:none; }
   /* ★ 시안 실물: 단계는 **알약**이고 폭에 따라 자연스럽게 접힌다(격자 아님). */
-  #dock .seg.g2 { display:flex; flex-wrap:wrap; gap:6px; }
-  #dock .seg.g2 .s { border-radius:999px; padding:6px 13px; }
   /* ★ 시안 실물: 등급 버튼은 **링 위 · 글자 아래** 세로 배치이고 링 크기가 등급별로 다르다.
      가로로 눕히면 링이 글자 옆 장식이 되는데, 시안에서 링은 **크기가 곧 등급**이라 주인공이다. */
   /* ★ **5칸 균등**(갱신 시안 §03 실물) — 마지막 칸이 기호 「?」가 되면서 넓힐 이유가 없어졌다.
      종전엔 「등급 없음」 네 글자 때문에 1.5fr로 두었는데, 그 칸만 넓어 격자가 안 맞았다. */
-  #dock .seg.g4 { display:grid; grid-template-columns:repeat(5, 1fr); gap:5px; }
-  #dock .seg.g4 .s { flex-direction:column; gap:3px; padding:8px 2px; font-size:11.5px; line-height:1.2; }
-  #dock .seg.g4 .s i { margin:0; }
   /* (`.s.wide` 규칙은 2026-08-13에 지웠다 — 마지막 칸이 기호가 되어 wide를 내는 곳이 없다.
      부품이 사라지면 그 부품을 지키던 규칙도 없앤다.) */
-  #dock .seg .s { display:inline-flex; align-items:center; justify-content:center; gap:5px; padding:6px 11px; border:1px solid var(--line2); border-radius:var(--r-s); font-size:var(--fs); background:#fff; color:var(--ink3); cursor:pointer; white-space:nowrap; }
   /* 격자 칸은 폭이 고정이라 긴 라벨(「준공·개통」)이 넘칠 수 있다 — 넘치면 자르지 말고 **줄인다**
      (자르면 이름이 거짓말이 된다). 좌우 여백을 먼저 양보한다. */
-  #dock .seg.g2 .s, #dock .seg.g4 .s { padding-left:4px; padding-right:4px; min-width:0; }
-  #dock .seg .s:not(.off) { border-color:var(--ink); background:var(--ink); color:#fff; }
-  #dock .seg .s i { border-radius:50%; background:currentColor; flex-shrink:0; display:inline-block; }
-  #dock .seg .s i.dash { background:none; border:1.3px dashed currentColor; }
   /* ══ 범례 아이콘은 **지도 마커 문법 그대로**다 (2026-08-13 시안 §02·§03 실물 대조) ══
      ☠ 크기만 `HJR`에서 도출해 놓고(2026-08-13 오전) **채움이냐 링이냐**는 그대로 두었다 —
        지도는 네 등급 모두 **속을 비운 링**인데 사이드바는 꽉 채운 원이었다. 비율이 맞아도
@@ -1565,19 +1563,16 @@
      ★ 목록 표의 단계 셀(`.phcell`)에는 같은 문법이 **이미** 있었다. 규칙이 한쪽에만 걸려
        반대쪽이 조용한 예외가 되는 이 저장소의 반복 사고 — 그래서 도크와 모바일 시트를
        **한 선택자**로 묶는다(사본을 만들지 않는다). */
-  #dock .seg.g4 .s i { box-sizing:border-box; background:none; border:2px solid currentColor; }
-  #dock .seg .s i.phi, #msheet .mc i.phi { box-sizing:border-box; width:11px; height:11px;
+  #dock .cks i.phi, #msheet .mc i.phi { box-sizing:border-box; width:11px; height:11px;
     background:none; border:1.6px solid currentColor; border-radius:50%; }
-  #dock .seg .s i.phi.ph0, #msheet .mc i.phi.ph0 { border-style:dashed; }
-  #dock .seg .s i.phi.ph2, #msheet .mc i.phi.ph2,
-  #dock .seg .s i.phi.ph3, #msheet .mc i.phi.ph3 { border-width:3px; }
+  #dock .cks i.phi.ph0, #msheet .mc i.phi.ph0 { border-style:dashed; }
+  #dock .cks i.phi.ph2, #msheet .mc i.phi.ph2,
+  #dock .cks i.phi.ph3, #msheet .mc i.phi.ph3 { border-width:3px; }
   /* 완공 = 굵은 링 + **중심 코어** — 지도 마커가 준공에만 코어를 찍는 것과 같다 */
-  #dock .seg .s i.phi.ph3, #msheet .mc i.phi.ph3 {
+  #dock .cks i.phi.ph3, #msheet .mc i.phi.ph3 {
     background:radial-gradient(circle, currentColor 0 2.2px, transparent 2.4px); }
   /* 등급 없음 = 마름모(2026-08-12) — 지도와 같은 문법. 점선 원으로 둔 동안은 계획 단계와 구분이 안 됐다.
      원 = 등급이 있는 것 · 마름모 = 등급 축 밖. 후광(좌표 근사)은 원이니 둘이 섞이지 않는다. */
-  #dock .seg .s i.dia { width:7px; height:7px; border-radius:0; background:none;
-                        border:1.3px solid currentColor; transform:rotate(45deg); }
   /* 선형 토글 라벨 앞 선 아이콘 — 토글이 범례를 겸하게 한다(지도: 실선=철도 · 점선=도로) */
   #dock .optrow i.ln { width:20px; height:0; border-top:2.5px solid var(--c-traffic); flex-shrink:0; margin-right:8px; }
   #dock .optrow i.ln.dashed { border-top-style:dashed; }
@@ -5441,7 +5436,15 @@ function renderDock() {
   };
   /* 아이콘은 **단계 그 자체**를 그린다(시안 §02) — 계획 점선 · 확정 실선 · 착공 굵은 · 완공 코어.
      종전엔 계획만 점선이고 나머지 셋이 같은 점이라 화면이 단계를 말하지 않았다. */
-  const ph = p => `<span class="s${filter.phase.has(p) ? "" : " off"}" data-tog="phase" data-k="${p}"><i class="phi ph${PHASE_IDX[p] ?? 0}"></i>${phaseLabel(p)}</span>`;
+  /* ★ **필터는 전부 체크박스** (2026-08-19 시안 「구현 3단계」 ⑧ · 사용자 확정).
+     세 축(유형·등급·단계)이 모두 "무엇을 보나"인데 유형만 체크박스이고 둘은 세그 칩이라 부품이 갈렸다.
+     ⚠ DESIGN.md §3의 「단계·등급 = 세그 칩 · 격자(2×2, 4+1)」와 정면 충돌한다 — 그 규칙은
+       도크 폭 244px에 칩 합폭이 307/254라 **한 줄에 안 들어가서** 격자로 접은 것이었다(2026-08-11).
+       체크박스는 **세로 목록이라 그 폭 제약 자체가 사라진다.** DESIGN.md를 같은 커밋에서 고친다.
+     아이콘은 **남긴다** — 체크박스는 "선택 여부", 아이콘은 "지도에서 어떻게 보이는지"로 역할이 갈린다.
+     마크업은 중분류(`.sub`)와 **같은 것**을 쓴다(사본을 만들지 않는다). */
+  const ph = p => `<div class="sub${filter.phase.has(p) ? "" : " off"}" data-tog="phase" data-k="${p}">
+    <span class="tick"></span><span class="nm">${phaseLabel(p)}</span><i class="phi ph${PHASE_IDX[p] ?? 0}"></i></div>`;
   /* 등급 링 크기 — **지도 마커에서 도출한다** (2026-08-13 시안 §03).
      *"별도 범례는 두지 않았습니다 — 좌측 필터의 색·크기·링 두께가 그대로 범례 역할을 합니다."*
      ☠ 종전 15/13/11/9는 **손으로 적은 사본**이라 비율이 지도와 달랐다(사이드바 1:0.87:0.73:0.60 ↔
@@ -5455,9 +5458,14 @@ function renderDock() {
      좁은 필터 칸에 「등급 없음」 네 글자를 넣으면 그 칸만 넓어져 **5칸이 안 맞고**, S·A·B·C가
      기호인데 하나만 문장이라 문법이 갈린다. 뜻은 `title`이 말한다(글자를 지운 게 아니라 옮겼다) —
      범례·표처럼 설명할 자리가 있는 곳에서는 그대로 `LEVEL_NAME`을 쓴다. */
+  /* ★ 「?」를 다시 **「등급 없음」**으로 돌린다 (2026-08-19). 기호로 줄였던 이유는 5칸 격자에서
+     네 글자가 그 칸만 넓혀 칸이 안 맞았기 때문인데, 체크박스 세로 목록에는 그 제약이 없다.
+     제약이 사라지면 그 제약 때문에 줄인 표기도 되돌린다 — 안 되돌리면 이유 없는 기호만 남는다. */
   const gp = g => g === "미정"
-    ? `<span class="s${filter.lvl.has("미정") ? "" : " off"}" data-tog="lvl" data-k="미정" title="${LEVEL_NAME["미정"]}"><i class="dia"></i>?</span>`
-    : `<span class="s${filter.lvl.has(g) ? "" : " off"}" data-tog="lvl" data-k="${g}"><i style="width:${SZ[g]}px;height:${SZ[g]}px"></i>${g}</span>`;
+    ? `<div class="sub${filter.lvl.has("미정") ? "" : " off"}" data-tog="lvl" data-k="미정">
+        <span class="tick"></span><span class="nm">${LEVEL_NAME["미정"]}</span><i class="dia"></i></div>`
+    : `<div class="sub${filter.lvl.has(g) ? "" : " off"}" data-tog="lvl" data-k="${g}">
+        <span class="tick"></span><span class="nm">${g}</span><i class="lvr" style="width:${SZ[g]}px;height:${SZ[g]}px"></i></div>`;
   // 초기화 = 전체선택·해제 2버튼의 대체. 기본 상태와 다를 때만 보인다(평소엔 화면에 없음).
   /* 「필터 N개 적용 중」 — 기본과 달라진 축의 수. 접힌 상태에서도 뭐가 걸려 있는지 보인다
      (모바일 시트의 배지와 같은 문법 — 두 화면이 같은 뜻을 말한다). */
@@ -5490,14 +5498,14 @@ function renderDock() {
     ${CAT_KEYS.map(catBlock).join("")}
     <div class="axis">
       <div class="t">등급</div>
-      <div class="seg g4">${["S", "A", "B", "C", "미정"].map(gp).join("")}</div>
+      <div class="cks">${["S", "A", "B", "C", "미정"].map(gp).join("")}</div>
     </div>
     <div class="axis">
       <!-- ★ 범례는 마커 문법과 **쌍으로** 움직인다 (2026-08-13 시안 §02 전환).
            종전 「실선=착공 후 · 점선=계획」은 단계를 두 값으로만 말하던 시절의 문구다 —
            이제 두께가 네 단계를 말하므로 그대로 두면 화면이 거짓을 말한다(PROCEDURE_화면품질). -->
       <div class="t">단계</div>
-      <div class="seg g2">${PHASES.map(ph).join("")}</div>
+      <div class="cks">${PHASES.map(ph).join("")}</div>
     </div>
     <!-- ★ 아파트 세대수 — **단계 아래 · 레이어 위** (2026-08-16 갱신 시안 §03: *"지역 → 유형 →
          등급 → 단계 → 아파트 세대수 → 레이어 … 세대수는 아파트를 걸러내는 부차적 조건이라
@@ -8452,7 +8460,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260819f");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260819g");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8637,7 +8645,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260819f"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260819g"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8663,7 +8671,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260819f");
+  const CB = "?b=" + (window.BUILD || "20260819g");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
