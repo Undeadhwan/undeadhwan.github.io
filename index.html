@@ -1028,6 +1028,11 @@
      테두리 칩 셋을 나란히 두면 무엇이 중심인지 안 보인다 — 단계가 이 카드의 머리기사다. */
   .dchip { font-size:12px; line-height:1.6; padding:3px 10px; border-radius:7px;
     border:0; background:var(--panel); color:var(--ink); white-space:nowrap; font-weight:600; }
+  /* ★ 등급 칩은 **무채색**이다 (DESIGN.md §1 「색 = 분류 또는 경고일 때만」 · 시안 「구현 3단계」 ⑫).
+     유형색을 쓰면 「붉은색 = S등급」으로 오독된다 — 색은 유형만 담당한다.
+     ☠ 마크업에 `style="border-color:유형색"`이 붙어 있었는데 `.dchip{border:0}`이라 **아무 일도
+       안 했다**(실제 테두리는 아래 box-shadow의 무채색). 일하는 것처럼 읽히는 죽은 코드라
+       2026-08-19에 지웠다 — 다음 사람이 「등급이 유형색이네」로 오해할 자리였다. */
   .dchip.lv { background:#fff; box-shadow:inset 0 0 0 1.5px var(--line2); }
   .dchip.ph { color:#fff; }                              /* 단계 = 유형색 채움 */
   .dchip.ph-plan { background:#fff; box-shadow:inset 0 0 0 1.5px currentColor; }
@@ -4783,7 +4788,7 @@ function renderDetail(s) {
       <div class="dsub"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}${subLabel(s)}</span>${(() => {
         const pl = placeText(s); return pl ? " · " + pl : ""; })()}</div>
       <div class="dchips">
-        ${s.area_shape && levelOf(s) === "미정" ? "" : `<span class="dchip lv" style="border-color:${colorOf(s)}">${levelOf(s) === "미정" ? LEVEL_NAME["미정"] : levelOf(s) + "등급"}</span>`}<!-- 딱지도 등급을 가지면 칩을 단다(2026-08-17 딱지 등급 부여 — 지도 원은 A인데 카드만 무등급이면 쌍이 갈린다). 미등급 딱지만 칩 생략(면적 칩이 규모를 말한다) -->
+        ${s.area_shape && levelOf(s) === "미정" ? "" : `<span class="dchip lv">${levelOf(s) === "미정" ? LEVEL_NAME["미정"] : levelOf(s) + "등급"}</span>`}<!-- 딱지도 등급을 가지면 칩을 단다(2026-08-17 딱지 등급 부여 — 지도 원은 A인데 카드만 무등급이면 쌍이 갈린다). 미등급 딱지만 칩 생략(면적 칩이 규모를 말한다) -->
 
         <span class="dchip ph${phaseSolid(s) || dropped ? "" : " ph-plan"}" style="${phaseSolid(s) && !dropped ? `background:${colorOf(s)}` : `color:${colorOf(s)}`}">${PHASE_LABEL[ph] || ph}</span>
         <span class="dchip">${s.area_shape ? (s.area_m2 ? `지구 ${(s.area_m2 / 1e6).toFixed(1)}km²` : "면적 미상")
@@ -4847,13 +4852,13 @@ function renderDetail(s) {
       ${isLineSig(s) ? lineGeomRow(s) : `<div class="kv"><b>위치</b> ${precNote(s)}${
         s.st_status && s.st_status !== "확정" && s.st_status !== "기존" ? ` · <b>${s.st_status}</b>(명칭·위치 미확정)` : ""}${
         s.pt_type === "road_ic" ? " · 도로 IC(철도역 아님)" : ""}</div>`}
-      ${(() => {   // ★ 갱신 시안 §03 상세 카드 — 「반경 Nkm 내 단지 N」 + 이름·거리(§7: 거리 사실 표기)
-        const an = aptsNearSignal(s); if (!an || !an.n) return "";
-        return `<div class="kv kvapt"><b>반경 ${an.km}km 내 단지</b> <span class="mono">${an.n.toLocaleString()}</span>
-          <div class="aptnear">${an.top.map(x =>
-            `<span class="row"><span class="nm">${esc(x.a.n)}</span><span class="d">${x.d < 1000 ? Math.round(x.d) + "m" : (x.d / 1000).toFixed(1) + "km"}</span></span>`).join("")}
-            ${an.n > an.top.length ? `<span class="row more">외 ${(an.n - an.top.length).toLocaleString()}개 단지</span>` : ""}</div>
-          <span class="hmhint">거리 사실만 — 수혜 여부는 판단하지 않습니다(§7·P1)</span></div>`; })()}
+      <!-- ☠ 「반경 Nkm 내 단지」 목록을 **지웠다** (2026-08-19 시안 「구현 3단계」 ⑨).
+           *"호재를 보는 화면에서 단지 목록은 다른 질문입니다."* — 이 카드가 답하는 질문은
+           「이 호재가 무엇이고 어디까지 왔나」다. 단지는 아파트 화면(미리보기·상세)의 축이고,
+           거기엔 기준점(선택한 단지)이 있어 거리가 정의된다. 여기엔 기준점이 없다.
+           ⚠ aptsNearSignal()은 아파트 화면이 계속 쓰므로 함수는 남긴다(죽은 건 이 자리뿐).
+           ⚠ 이 주석은 **템플릿 리터럴 안**이다 — 백틱을 쓰면 문자열이 끊겨 화면이 백지가 된다
+             (2026-08-19 실측: 여기 백틱 하나로 html_check가 구문 오류를 냈다). -->
       <div class="kv"><b>근거</b> ${srcBadge(s)} <span class="src">${(s.sources || []).map((u, i) => {
         // 링크 전수조사(2026-07-30, link_audit.py)에서 참조 1,216건(72%)이 **조회조건 없는 메인**으로
         // 드러났다 — 링크는 살아 있는데 그 신호를 찾을 수 없어 "정보가 무의미"하게 느껴진다(사용자 지적).
@@ -8460,7 +8465,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260819g");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260819h");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -8645,7 +8650,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260819g"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260819h"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -8671,7 +8676,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260819g");
+  const CB = "?b=" + (window.BUILD || "20260819h");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {

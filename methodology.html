@@ -338,6 +338,27 @@ OSM은 <b>공식 사업으로 존재가 확인된 노선의 선형</b>에만 쓴
 <p class="note">⚠ <b>전제 하나</b>: <code>secrets.local.json</code>은 git에 없다(당연히 — 커밋 금지). 키 없이 돌리면 완주는 하지만 좌표 단계 둘이 건너뛰어진다(<code>signals_geocode</code> 실패 · <code>station_geo</code> 무동작) → 그 결과 제주 트램 노선 1건이 선형을 못 만들어 빠졌다(734→733). <b>키를 주입하니 734로 완전히 일치</b>했다. 즉 <b>이전에 필요한 것은 저장소 + 키 파일 둘뿐</b>이다.</p>
 <p class="note">이 시험이 확인해 준 것: 공식 지식(<code>rail_official</code>·<code>official_roads</code>·<code>sources</code>·<code>thresholds</code>·<code>regions</code>)이 <b>코드가 아니라 데이터로</b> 보관돼 있고, 수집 산출물도 커밋돼 있어 <b>외부 API 없이도 사이트 전체가 재생성</b>된다. 캐시(<code>geo_cache</code>)도 추적 대상이라 재조회 비용이 들지 않는다.</p>
 
+<h3>6-2b0. 시군구 경계 — <b>판정용은 법정동을 합쳐 만든다</b> (2026-08-19)</h3>
+<p>사장님 지적(<i>"같은 구로구인데 우리 지도만 뭉툭하다"</i>)에서 출발했는데, 재보니 <b>보기 문제가 아니라 판정 문제</b>였다.
+<code>region_util.sgg_offset_km</code>(안이면 0, 밖이면 km)이 이 폴리곤으로 「이 좌표가 그 구 안인가」를 재고,
+<code>namu_ic</code>(IC 좌표 검증)·<code>road_anchor_from_note</code>·<code>indpark_fetch</code>·<code>nlic_fetch</code>·
+<code>qa_check</code>(좌표시도 게이트)가 그 판정에 의존한다.
+그런데 화면용 <code>sgg_all.geojson</code>은 <b>전국 정점 중앙값 34 · 부산 중구 5점(오각형) · 구로구 11점</b>이었다.</p>
+<p>실측: <code>sd/sg</code>를 가진 신호 3,661건 중 「자기 시군구 밖」 판정이 <b>299건 → 40건</b>(8.2% → 1.1%).
+만드는 법은 <b>이미 가진 법정동을 union</b>(<code>gen_sgg_boundary.py</code>) — 새 데이터를 받을 필요가 없었다.
+재구성 가능 <b>211/252</b>이고, 못 만드는 41개(광역시 아닌 시의 일반구 · 인천 분구 신경계)는 옛 폴리곤을 그대로 두고 <code>boundary_src</code>로 구분한다.</p>
+<p>⚠ <b>정밀본(2.9MB)은 배포하지 않는다</b> — 브라우저 첫 렌더를 느리게 하지 않기 위해서다(사용자 지침).
+판정용 <code>sgg_precise.geojson</code>은 파이썬만 읽고, 없으면 <code>sgg_all</code>로 조용히 폴백한다.
+게이트 <code>qa_check.check_sgg_boundary</code>가 소실·재단순화를 오류로 막는다(바닥 98,000정점).
+화면 경계 정밀화는 「느려지지 않는 방법」을 따로 설계해야 하는 <b>미해결 과제</b>다.</p>
+<h3>6-3c. 정비사업 세대수 — <b>정비몽땅 「사업개요」</b> (2026-08-19)</h3>
+<p>사장님 지적(홍은동277-200: <i>"정비몽땅엔 40세대인데 우리는 미상"</i>). 원인은 소스가 없어서가 아니라 <b>한 층을 안 열었기 때문</b>이다 —
+우리가 쓰던 <code>정비몽땅_서울_사업장목록.xls</code>에는 <b>세대수 컬럼이 아예 없고</b>,
+목록 HTML에는 엑셀이 버리는 「이동」 칸(<code>cafeOpenPopup</code> = 사업장 딥링크)이 있다.
+경로: 목록 HTML → <code>/cafe/mainIndx.do?cafeUrl=</code> → cafeId → <code>…bsnsSumry…&amp;div=sumry</code>.
+실측 수율 <b>82%</b>(표본 40 중 33) · 전수 적용으로 <b>서울 정비 세대수 보유 418 → 858건</b>(35%→71%).
+세대수는 <b>분양 + 임대</b>를 합쳐 <code>hh</code>에 넣고 구성은 <code>hh_src</code>에 남긴다(합만 적으면 임대 비중이 사라진다).
+⚠ 값이 <b>고시보다 낡을 수 있다</b>(실측: 덕수연립 사업개요 54세대 ↔ 고시 66세대) — 고시 대조는 토지이음 복구 후 과제.</p>
 <h3>6-2b1. 판정은 등급·구조로 — <b>산문 근거 필드에 부분일치 금지</b> (2026-08-19)</h3>
 <p><code>geo_basis</code>·<code>lvl_basis</code> 같은 <b>근거 서술문</b>에는 판정값과 <b>이력 기록이 함께</b> 들어간다.
 그래서 부분일치(<code>in</code>)로 면제·분기를 정하면 <b>반대 뜻의 문장까지 걸린다</b>.
