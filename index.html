@@ -1462,12 +1462,16 @@
        상수로 박으면 그때 머리가 헤더 밑으로 숨는다(값을 두 곳에 적지 않는다).
      ⚠ 배경이 유형색 7% **반투명**이라 그대로 머물면 지나가는 체크박스가 비쳐 보인다 —
        흰 판을 깔아 불투명하게 만든다(색은 그대로 두고 투명만 없앤다). */
+  /* ★★ **켜진 줄 = 흰 바탕 + 중성 테두리 · 꺼진 줄 = 점선·회색 바탕·취소선** (시안 §15-05).
+     ☠ 종전엔 네 줄이 **모두 유형색 바탕**이었다 — 바탕이 「선택됨」이 아니라 **유형을 되풀이**해
+       (색 점이 이미 하는 일) 켜짐/꺼짐이 갈리지 않았다. 기본 상태를 조용하게 두고 **끈 줄만**
+       눈에 띄게 한다. 색은 11px 점 하나가 전담한다(한 채널 한 사실). */
   #dock .cat-h { display:flex; align-items:center; gap:9px; padding:8px 10px; cursor:pointer;
     position:sticky; top:var(--dkh, 44px); z-index:2;
-    border:1px solid var(--ccb, var(--line)); border-radius:6px;
-    background:linear-gradient(var(--ccbg, #fff), var(--ccbg, #fff)), #fff; }
-  #dock .cat.off .cat-h { border-color:var(--line); background:#fff; color:var(--ink3); }
+    border:1px solid var(--line); border-radius:6px; background:#fff; }
   #dock .cat-h:hover { border-color:var(--line2); }
+  #dock .cat.off .cat-h { border-style:dashed; border-color:var(--line2); background:var(--panel); color:var(--ink3); }
+  #dock .cat.off .cat-h .nm { text-decoration:line-through; }
   /* 펼침 삼각형 — **글리프는 작게, 과녁은 크게** (2026-08-01 사용자 "너무 작아서 클릭이 어려워").
      종전 12×글자높이(≈9px)는 손가락은 물론 마우스로도 빗나간다. 글자 크기는 11px로만 올리고
      상하 여백(margin 상쇄 padding)으로 **28×30px 과녁**을 만든다 — 레이아웃은 그대로 두고
@@ -1497,6 +1501,7 @@
   /* ★ **부분 선택은 「선택분 / 전체」로 적는다** (시안 §15-04 — `227 / 1,248`).
      종전엔 전체만 적어서, 세부유형을 몇 개 꺼 둔 분류가 **다 켜진 분류와 똑같아 보였다** —
      화면이 「이 축이 지금 얼마나 좁혀져 있는지」를 말하지 않던 자리(P2). */
+  #dock .cat-h .cn .dim { color:var(--ink3); }
   #dock .cat-h .cn b { color:var(--ink); font-weight:700; }
   #dock .cat-h .cn .sl { opacity:.5; margin:0 4px; font-weight:400; }   /* 시안 표기 「227 / 1,248」의 여백 */
   /* ★ `only`는 **항상 보인다** (2026-08-13 시안 §03 목업). hover에만 뜨면 있는 줄 모른다 —
@@ -1521,28 +1526,28 @@
   #dock .sub .solo, #dock .cat-h .solo { visibility:hidden; margin-left:2px; }
   #dock .sub:hover .solo, #dock .cat:hover .cat-h .solo { visibility:visible; }
   @media (pointer: coarse) { #dock .sub .solo, #dock .cat-h .solo { visibility:visible; } }
-  #dock .cat.off .cd { background:var(--line2) !important; }
+  /* 꺼진 줄의 색 점은 **빈 원** — 채움을 비워 「지금 안 보고 있다」를 형태로 말한다(시안 §15-05).
+     색은 그대로 둔다(무슨 유형인지는 여전히 사실이다). */
+  #dock .cat.off .cd { background:none !important; box-shadow:inset 0 0 0 1.5px var(--line2); }
   #dock .cat.off .nm, #dock .cat.off .cn { color:var(--ink3); }
   /* ══ 등급 = 가로 5칸 세그 · 단계 = 알약 (시안 §03 목업 수치 그대로 · 2026-08-20 복원) ══
      ☠ 2026-08-19에 체크박스로 바꿨던 것이 **오독**이었다 — 목업에는 체크박스가 없다.
      시안값: 세그 칸 `flex:1 · padding 7px 0 · radius 6 · gap 6` · 켜짐 = 검정 배경 + 흰 글자/링.
              알약 `radius 14 · padding 6px 11px · gap 6 · 12px` · 켜짐 = 검정 배경 + 흰 글자/아이콘. */
   #dock .sgrow { display:flex; gap:6px; }
+  /* ★ 켜진 칩 = **흰 바탕 + 잉크 테두리** · 꺼진 것만 옅게 (시안 §15-06).
+     ☠ 종전엔 켜짐이 검정 채움이라 **전부 켜진 기본 상태에서 검은 사각 5개**가 줄지어 서 있었다
+       — 기본이 시끄러우면 「무엇을 껐나」가 안 보인다(§15-05 유형 줄과 같은 원칙). */
   #dock .sgbtn { flex:1; display:flex; flex-direction:column; align-items:center; gap:5px;
-    padding:7px 0; border:1px solid var(--line); border-radius:6px; background:#fff;
-    color:var(--ink2); font-size:12px; font-weight:600; cursor:pointer; line-height:1; }
-  #dock .sgbtn.on { background:var(--ink); border-color:var(--ink); color:#fff; font-weight:700; }
+    padding:7px 0; border:1.5px solid var(--ink); border-radius:6px; background:#fff;
+    color:var(--ink); font-size:12px; font-weight:700; cursor:pointer; line-height:1; }
+  #dock .sgbtn.off { border:1px dashed var(--line2); color:var(--ink3); font-weight:600; background:var(--panel); }
   #dock .sgbtn:hover { border-color:var(--ink3); }
-  #dock .sgi { box-sizing:border-box; border-style:solid; border-color:currentColor; flex:none; }
+  /* 두께는 **2px 고정** — 크기만 등급을 말한다(두께는 단계 칩의 축이다) */
+  #dock .sgi { box-sizing:border-box; border:2px solid currentColor; flex:none; }
   #dock .sgi.lvr { border-radius:50%; }
-  #dock .sgi.dia { width:9px; height:9px; border-width:1.5px; transform:rotate(45deg); }
-  #dock .pgrow { display:flex; gap:6px; flex-wrap:wrap; }
-  #dock .pgbtn { display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600;
-    padding:6px 11px; border:1px solid var(--line); border-radius:14px; background:#fff;
-    color:var(--ink2); cursor:pointer; line-height:1; }
-  #dock .pgbtn.on { background:var(--ink); border-color:var(--ink); color:#fff; font-weight:700; }
-  #dock .pgbtn:hover { border-color:var(--ink3); }
-  #dock .pgbtn .phi { border-color:currentColor; }
+  #dock .sgi.dia { transform:rotate(45deg); }
+  #dock .pgrow .phi { border-color:currentColor; }
   /* 중분류 = 필터(무엇을 보나) → 체크박스 */
   /* ★★ 세부유형은 **플라이아웃**이다 (2026-08-19 시안 §15-04 · 사장님 지시. 종전 아코디언 폐기).
      아코디언은 펼치는 순간 **아래 대분류를 밀어내** 「두 축을 나란히 비교」가 안 되고, 도크가
@@ -1637,14 +1642,15 @@
        **한 선택자**로 묶는다(사본을 만들지 않는다). */
   /* 시안 §03 목업: 아이콘 **12px**. `flex:none`이 없으면 알약(flex) 안에서 눌려 8~9px이 된다
      (2026-08-20 실측 — 화면엔 글자만 보였다). 두께는 지도 단계 문법과 같은 계단을 쓴다. */
-  #dock .pgrow i.phi, #msheet .mc i.phi { box-sizing:border-box; width:12px; height:12px; flex:none;
+  /* 시안 §15-07: 지름 **14px 고정** · 두께만 변화 · 계획만 점선 */
+  #dock .pgrow i.phi, #msheet .mc i.phi { box-sizing:border-box; width:14px; height:14px; flex:none;
     background:none; border:1.5px solid currentColor; border-radius:50%; }
   /* ⚠ 계획 아이콘은 **점선이 아니다**(2026-08-20 §14-3) — 점선은 위치 근사로 옮겼다.
      단계는 두께가 말하므로 계획은 **가장 얇은 실선**이다(마커와 같은 문법). */
-  #dock .pgrow i.phi.ph0, #msheet .mc i.phi.ph0 { border-width:1.2px; }
-  #dock .pgrow i.phi.ph1, #msheet .mc i.phi.ph1 { border-width:2px; }
+  #dock .pgrow i.phi.ph0, #msheet .mc i.phi.ph0 { border-width:1.5px; border-style:dashed; }
+  #dock .pgrow i.phi.ph1, #msheet .mc i.phi.ph1 { border-width:1.5px; }
   #dock .pgrow i.phi.ph2, #msheet .mc i.phi.ph2,
-  #dock .pgrow i.phi.ph3, #msheet .mc i.phi.ph3 { border-width:3px; }
+  #dock .pgrow i.phi.ph3, #msheet .mc i.phi.ph3 { border-width:4px; }
   /* 완공 = 굵은 링 + **중심 코어** — 지도 마커가 준공에만 코어를 찍는 것과 같다 */
   #dock .pgrow i.phi.ph3, #msheet .mc i.phi.ph3 {
     background:radial-gradient(circle, currentColor 0 2.2px, transparent 2.4px); }
@@ -2159,16 +2165,10 @@ const LVL_RANK = { S: 0, A: 1, B: 2, C: 3, "미정": 4 };
      C(8)보다 크게 두어야 형태가 작아 보이지 않는다. */
 const HJR = { S: 17, A: 13, B: 10, C: 8, "미정": 7 };   // 지름 34·26·20·16 · 미정 마름모 14 — 전부 시안 §02 견본값
 /* 두께 = 단계 · 등급 크기에 비례 축소 (시안 §02: 착공 기준 S 4px → C 3px) */
-/* 계획 · 확정(인가) · 착공 · 완공 — **두께가 단계를 혼자 말한다**(시안 §02의 규정).
-   ★ 값의 근거(2026-08-20 확정): 시안 §02 견본은 계획 `2` · 확정 `2.5`인데, 그 값은 **계획이
-     점선이던 시절**에 쓰였다. §14-3이 점선을 「위치 근사」로 가져가면서 계획의 유일한 표식이
-     두께가 됐고, 0.5px 차이는 지도 축척에서 **식별되지 않는다** — 그러면 §02가 스스로 정한
-     규정(*"링 두께 하나로만 단계를 말한다 · 확정도가 높을수록 굵어진다"*)을 지키지 못한다.
-   ⇒ **견본 숫자가 아니라 규정을 따른다**: 계획 1.5 · 확정 2.8로 벌려 네 단계가 실제로 갈린다.
-     착공 4 · 완공 4+코어는 견본 그대로다(S 4px → C 3px 비례 축소도 유지).
-   ⚠ 되돌릴 일이 있으면 **왜 벌렸는지**가 여기 있다 — 숫자만 보고 견본값으로 되돌리면
-     계획·확정이 다시 화면에서 같은 것이 된다. */
-const BW_PHASE = [1.5, 2.8, 4, 4];
+/* 계획 · 확정(인가) · 착공 · 완공 — **시안 §02 견본값**(26px A등급 기준: 2 / 2.5 / 4 / 4+코어).
+   ★ 2026-08-20: 점선이 **계획으로 환원**(rev2 §14-3 정정)되면서 계획·확정은 **선 종류**가 가르므로
+     견본값을 그대로 쓴다. 한때 1.5/2.8로 벌렸던 것은 점선이 근사로 가 있던 동안의 임시 조치였다. */
+const BW_PHASE = [2, 2.5, 4, 4];
 const BW_GRADE = { S: 1, A: 0.92, B: 0.83, C: 0.75, "미정": 0.75 };
 /* 신호 하나의 **링 문법**(색·두께) — 지도 마커와 목록 행이 이 하나를 공유한다. */
 function ringOf(s) {
@@ -5613,9 +5613,15 @@ function renderDock() {
     const _offSubs = keys.filter(sk => (C.sub[subId(cat, sk)] || 0) && !filter.sub.has(subId(cat, sk)));
     const selLab = (!keys.length || !_offSubs.length) ? "" :
       (_onSubs.length === 1 ? `${_onSubs[0] === "미상" ? "유형 미상" : _onSubs[0]}만`
-       : _onSubs.length ? `${_onSubs.length}종만` : "전부 해제");
-    const cnHtml = partial
-      ? `<b>${selN.toLocaleString()}</b><span class="sl">/</span>${tot.toLocaleString()}`
+       : _onSubs.length ? `${_onSubs.length}종만` : "");   // 전부 꺼짐은 줄 자체(점선·취소선)가 말한다
+    /* ★ 건수 표기 세 갈래 (시안 §15-03·§15-04):
+         · 전부 켜짐 → 총계 하나
+         · **전부 꺼짐 → 총계만 옅게**(`0 / N`은 「이 유형이 0건」으로 오독된다 — 실제로는 N건이
+           있고 사용자가 껐을 뿐이다)
+         · 일부만 켜짐 → `선택분 / 총계` + 이름 아래 「공장만」 */
+    const allOff = keys.length ? !_onSubs.length : !filter.cat.has(cat);
+    const cnHtml = allOff ? `<span class="dim">${tot.toLocaleString()}</span>`
+      : partial ? `<b>${selN.toLocaleString()}</b><span class="sl">/</span>${tot.toLocaleString()}`
       : tot.toLocaleString();
     return `<div class="cat${dockOpen.has(cat) ? " open" : ""}${on ? "" : " off"}" data-cat="${cat}" style="--cc:${col};--ccb:${hexA(col, .35)};--ccbg:${hexA(col, .07)}">
       <div class="cat-h" data-tog="cat" data-k="${cat}">
@@ -5666,20 +5672,28 @@ function renderDock() {
      ★ 미정 칸은 **마름모**(9px · rotate 45) + 「없음」 — 규모 등급과 다른 축이라 형태로 가른다. */
   const gp = g => {
     const on = filter.lvl.has(g);
-    const ico = g === "미정"
-      ? `<i class="sgi dia"></i>`
-      : `<i class="sgi lvr" style="width:${SZ[g]}px;height:${SZ[g]}px;border-width:${g === "S" ? 3 : g === "A" ? 2.5 : g === "B" ? 2 : 1.5}px"></i>`;
-    return `<button type="button" class="sgbtn${on ? " on" : ""}" data-tog="lvl" data-k="${g}"
+    /* ★ **지름만 변화 · 두께 2px 고정**(시안 §15-06). 값은 손으로 적지 않고 지도 마커 크기
+       (`HJR` = 17/13/10/8, 인접 차 4·3·2)에서 도출한다 — *"범례가 지도를 대변하지 못하면
+       범례가 아니고, 손 사본은 비율이 어긋난다"*. 등급 없음은 **같은 지름의 마름모**.
+       ⚠ 종전엔 두께도 함께 변해(3/2.5/2/1.5) 단계 칩(두께가 축)과 채널이 겹쳤다. */
+    const d = g === "미정" ? HJR["미정"] : SZ[g];
+    const ico = `<i class="sgi ${g === "미정" ? "dia" : "lvr"}" style="width:${d}px;height:${d}px"></i>`;
+    return `<button type="button" class="sgbtn${on ? "" : " off"}" data-tog="lvl" data-k="${g}"
       title="${g === "미정" ? LEVEL_NAME["미정"] : g + "등급"}만 켜고 끄기">${ico}<span>${g === "미정" ? "없음" : g}</span></button>`;
   };
   /* ★★ **단계 = 알약 4개**(시안 §03 목업: radius 14 · padding 6/11 · 아이콘 12px + 글자).
      아이콘은 지도 마커 문법을 그대로 재사용한다 — 계획 얇은 링 → 확정 → 착공 굵게 → 완공 코어.
      ⚠ 시안 목업의 계획 아이콘은 **점선**인데 여기선 **얇은 실선**이다 — §14-3이 점선을
        「위치 근사」로 가져갔기 때문이다(사장님 확정). 사이드바가 지도와 다른 말을 하면 안 된다. */
+  /* ★ **단계 칩 = 등급 칩과 같은 형태**(시안 §15-07): 한 줄 · 아이콘 위 · 라벨 아래 ·
+     지름 14px 고정 · **두께만 변화**(계획 1.5 점선 → 확정 1.5 실선 → 착공 4 → 완공 4+코어).
+     ☠ 종전 가로 알약은 폭 때문에 **두 줄로 접혀** 「계획·확정 / 착공·완공」이라는 없는 경계를
+       만들었다. ★ 계획만 점선이고 점선/실선이 **미확정 ↔ 확정**을 가른다(rev2에서 점선을
+       위치 근사에서 단계 축으로 되돌렸다 — 사이드바가 곧 범례이므로 지도와 같은 문법이어야 한다). */
   const ph = p => {
     const on = filter.phase.has(p), i = PHASE_IDX[p] ?? 0;
-    return `<button type="button" class="pgbtn${on ? " on" : ""}" data-tog="phase" data-k="${p}"
-      title="${phaseLabel(p)} 단계만 켜고 끄기"><i class="phi ph${i}"></i>${phaseLabel(p)}</button>`;
+    return `<button type="button" class="sgbtn pgb${on ? "" : " off"}" data-tog="phase" data-k="${p}"
+      title="${phaseLabel(p)} 단계만 켜고 끄기"><i class="phi ph${i}"></i><span>${phaseLabel(p)}</span></button>`;
   };
   // 초기화 = 전체선택·해제 2버튼의 대체. 기본 상태와 다를 때만 보인다(평소엔 화면에 없음).
   /* 「필터 N개 적용 중」 — 기본과 달라진 축의 수. 접힌 상태에서도 뭐가 걸려 있는지 보인다
@@ -5688,6 +5702,14 @@ function renderDock() {
     + (PHASES.length - PHASES.filter(p => filter.phase.has(p)).length)
     + (["S", "A", "B", "C", "미정"].length - ["S", "A", "B", "C", "미정"].filter(l => filter.lvl.has(l)).length)
     + ((filter.region || filter.sd) ? 1 : 0);
+  /* 축별 「제외 중」 개수 — 이름이 붙어야 그 자리에서 읽힌다(시안 §15-09). 지역은 개수가 아니라
+     사실 하나라 「지역」으로만 적는다. 0인 축은 적지 않는다 — 없는 것을 말하면 줄만 길어진다. */
+  const _offCat = CAT_KEYS.length - CAT_KEYS.filter(c => filter.cat.has(c)).length;
+  const _offLvl = GRADES_DISP.length - GRADES_DISP.filter(l => filter.lvl.has(l)).length;
+  const _offPh = PHASES.length - PHASES.filter(p => filter.phase.has(p)).length;
+  const offLabel = [(filter.region || filter.sd) ? "지역" : "", _offCat ? `유형 ${_offCat}` : "",
+                    _offLvl ? `등급 ${_offLvl}` : "", _offPh ? `단계 ${_offPh}` : ""]
+    .filter(Boolean).join(" · ") + " 제외 중";
   const dirty = !!filter.region || !!filter.sd || !(ALL_SUBS.every(k => filter.sub.has(k)) && PHASES.every(k => filter.phase.has(k))
     && GRADES_DISP.every(k => filter.lvl.has(k)) && filter.lines.has("철도선") && filter.lines.has("도로선"));
   /* ★ 업데이트 탭의 사이드바 (2026-08-16 갱신 시안 §03·§05) — 자리는 같고 **내용은 그 탭의 축**이다.
@@ -5724,7 +5746,7 @@ function renderDock() {
            종전 「실선=착공 후 · 점선=계획」은 단계를 두 값으로만 말하던 시절의 문구다 —
            이제 두께가 네 단계를 말하므로 그대로 두면 화면이 거짓을 말한다(PROCEDURE_화면품질). -->
       <div class="t">단계</div>
-      <div class="pgrow">${PHASES.map(ph).join("")}</div>
+      <div class="sgrow pgrow">${PHASES.map(ph).join("")}</div>
     </div>
     <!-- ★ 아파트 세대수 — **단계 아래 · 레이어 위** (2026-08-16 갱신 시안 §03: *"지역 → 유형 →
          등급 → 단계 → 아파트 세대수 → 레이어 … 세대수는 아파트를 걸러내는 부차적 조건이라
@@ -5736,14 +5758,18 @@ function renderDock() {
       <div id="dk-hh-slot"></div>
     </div>
     <div class="axis">
-      <!-- ★ 시안 실물엔 「선형 표시」 제목이 없다 — 아이콘(실선·점선)이 곧 이름이라 제목이 없어도
-           무엇인지 읽힌다. 구분은 위 경계선 하나로 충분하다. -->
+      <!-- ★ **「표시」 라벨**을 붙인다 (시안 §15-10). 선형·노선명 배지는 「무엇을 보나」가 아니라
+           **「어떻게 보나」**다 — 구분선 하나로만 갈리면 위쪽 필터와 같은 종류로 읽힌다.
+           스위치 형태는 그대로 둔다(필터=체크·표시=스위치라는 부품 구분은 유지). -->
+      <div class="t">표시</div>
       <div class="opts">${LINE_OPTS.map(([k, lb, ln]) => `<div class="optrow${filter.lines.has(k) ? " on" : ""}" data-tog="lines" data-k="${k}">
         ${ln === null ? "" : `<i class="ln${ln}"></i>`}<span>${lb}</span><i class="sw"></i></div>`).join("")}</div>
     </div>`}
     <!-- ★ 「필터 N개 적용 중 · 초기화」는 사이드바 **맨 아래**다 (시안 §03 목업 위치).
          상단에 두면 제목줄이 붐비고, 아래에 두면 필터를 다 훑은 끝에 「지금 몇 개 걸렸나」가 온다. -->
-    <div class="dk-foot">${dirty ? `<span class="dk-nf">필터 ${nDirty}개 적용 중</span> · ` : ""}<button class="dk-rst${dirty ? " show" : ""}" data-all="on">초기화</button></div>
+    <!-- ★ **꺼진 축을 이름으로** (시안 §15-09): 「유형 1 · 등급 2 제외 중」.
+         종전 「필터 N개 적용 중」은 개수만 말해, 어느 축을 건드렸는지 보려면 스크롤을 올려야 했다. -->
+    <div class="dk-foot">${dirty ? `<span class="dk-nf">${offLabel}</span> · ` : ""}<button class="dk-rst${dirty ? " show" : ""}" data-all="on">초기화</button></div>
     <!-- ☠ 「겹친 호재는 +N으로 묶임」이라 적혀 있었다 — +N 알약은 2026-08-13에 **유형 도넛**으로
          바뀌었는데(시안 §01) 문구만 남아 화면이 없는 부품을 가리켰다. 부품을 바꾸면 그 부품을
          설명하는 글도 같이 바뀐다(PROCEDURE_화면품질 — 규칙·이름은 언제나 쌍으로 존재한다). -->
@@ -6943,7 +6969,7 @@ function hexA(hex, a) {
      ④ **코어 도트** — 채움을 옅게 낮춘 대신 중심에 점을 찍는다. 겹치거나 작아도 "여기 하나 있다"가
         사라지지 않는다. 착공 후=채운 점 / 계획·인가=속 빈 점으로 P2 문법(실선/점선)을 한 번 더 반복. */
 const _hjImg = {};
-function hojaeMarkerImage(col, r, bw, ph, fillOp, alpha, halo, shape, approx) {
+function hojaeMarkerImage(col, r, bw, ph, fillOp, alpha, halo, shape) {
   /* ★ 2026-08-13 **리디자인 시안 §02 문법으로 전환** (`design/hojaemap-redesign.html`).
      종전엔 **두께가 등급**을 말하고(S·A 2 / 나머지 1.6) 채움이 유형색이었다. 시안은 축을 갈랐다:
        · 크기 = 등급 (지름 34/26/20/16 → 반지름 17/13/10/8)
@@ -6992,16 +7018,14 @@ function hojaeMarkerImage(col, r, bw, ph, fillOp, alpha, halo, shape, approx) {
   inner += ring(+ri.toFixed(2), "none", "rgba(0,0,0,0.22)", 0.7);
   inner += ring(+ro.toFixed(2), "none", "#fff", cw, ' opacity="0.95"');
   let dash = "";
-  /* ★★ **점선 = 위치 근사** (2026-08-19 시안 §14-3 · 사장님 확정 2026-08-20 「시안기준으로 맞춰」).
-     ⚠ 시안이 점선을 **두 번 쓴다** — §02는 「계획 = 점선」, §14-3은 「근사 = 점선」. §14가 나중이고
-       라이브 실측(근사 22%)을 근거로 쓴 절이라 **§14를 따른다**.
-     ⚠ 그러면 계획 단계는 무엇으로 말하나 → **두께**다. §02가 스스로 적은 원칙이 그것이다:
-       *"링 두께 하나로만 단계를 말하므로 … 확정도가 높을수록 굵어진다는 한 방향 규칙"*.
-       점선을 뺀 자리를 메우려고 `BW_PHASE`의 계획·확정 간격을 벌렸다(2/2.5 → 1.5/2.8) —
-       0.5px 차이는 화면에서 같은 것으로 읽힌다.
-     ⚠ **선(노선)의 점선은 그대로 단계**를 뜻한다(계획·인가 = 점선). 마커와 선이 같은 기호를
-       다르게 쓰는 자리라 범례가 둘을 갈라 적는다 — 시안이 마커에 한정해 지시했기 때문이다. */
-  if (approx) {     // 둘레를 짝수 등분 → 크기가 달라도 결이 같다
+  /* ★★ **점선 = 계획 단계** (시안 rev2 §14-3 정정 · 2026-08-20 사장님 확정).
+     ☠ 초안은 「점선 = 위치 근사」였고 그대로 넣었다가 되돌렸다. 그러면 점선이 두 가지를 겸한다 —
+       사이드바 단계 필터는 「점선 = 계획」인데 지도는 「점선 = 근사」가 되어 **한 화면이 두 말**을
+       한다. rev2의 근거 셋: ⑴ 단계는 **모든** 호재에 있는 축이고 근사는 일부에만 붙는 부가
+       정보라 상시 있는 축이 기본 문법을 갖는다 ⑵ 근사는 이미 **후광 + ±수치** 두 장치가 있다
+       ⑶ *"사이드바 필터가 곧 범례"*라는 전제 위에서 지도와 필터의 문법이 갈리면 전제가 무너진다.
+     ⇒ 위치 근사는 **가리키거나 선택할 때만 후광**(§14-3) + **상세 ±수치**로만 말한다. */
+  if (ph === 0) {   // 계획만 점선. 둘레를 짝수 등분 → 크기가 달라도 결이 같다
     const circ = dia ? 4 * r * Math.SQRT2 : 2 * Math.PI * r;   // 마름모는 변 길이 합(√2·r × 4)
     const n = Math.max(8, Math.round(circ / 4.6 / 2) * 2), seg = circ / n;
     dash = ' stroke-dasharray="' + (seg * 0.45).toFixed(2) + " " + (seg * 0.55).toFixed(2) + '" stroke-linecap="round"';
@@ -7197,20 +7221,18 @@ function initKakao() {
   const _reimage = s => {
     if (!s || !s._kmk) return;
     const t = hjStyle(s), tr = _shrinkRRef ? _shrinkRRef(t.r, t.lvl) : t.r;
-    s._kmk.setImage(hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape, isApprox(s)));
+    s._kmk.setImage(hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape));
     s._kmkKey = t.col + "|" + tr + "|" + t.bw + "|" + t.ph + "|" + t.fillOp + "|" + t.alpha + "|" + (haloOn(s) ? 1 : 0) + "|" + t.shape + "|" + (isApprox(s) ? 1 : 0);
   };
   let _shrinkRRef = null;        // renderHojae가 자기 축소자를 여기 걸어 둔다(같은 자를 쓰기 위해)
   const clDonut = (el, g) => {
     const cnt = {}; for (const m of g) { const c = catOf(m); cnt[c] = (cnt[c] || 0) + 1; }
-    /* ★ 지름 = **30 + 6 × log₂(건수)**, 최대 52 (2026-08-19 시안 §14-2 · 사장님 지시).
-       ⚠ **이 규칙은 종전 결정을 뒤집은 것이다.** 종전 주석은 「지름 = 안에 든 최고 등급(갱신 시안
-         §01) — 개수로 키우면 「크기=등급」이 클러스터에서만 깨진다」였다. 새 시안의 근거는 다르다:
-         묶는 반경이 56px로 커져 **도넛 자체가 30~50개로 줄면**, 등급 크기 차이는 **낱개 링**에서
-         읽히고 도넛은 「여기 몇 건인가」를 맡는다(축을 부품별로 나눈 것이지 섞은 것이 아니다).
-       ⚠ 되돌리려면 **왜 뒤집는지**를 여기 남길 것 — 두 규칙 다 나름의 근거가 있어 기억이 없으면
-         다음 사람이 왕복한다(이 저장소가 이미 밟은 형태). */
-    const D = Math.min(52, Math.round(30 + 6 * Math.log2(Math.max(2, g.length))));
+    /* ★ 지름 = **40px 고정**(건수와 무연동) — 시안 rev2 §14-2 정정 · §15-12.
+       ☠ 초안은 `30 + 6·log₂(건수)`(최대 52)였다. **크기 채널은 등급이 이미 쓰고 있어**, 줌아웃에서
+         큰 도넛과 S등급 마커가 나란히 놓이면 둘 다 「크다」로만 읽히고 그것이 건수인지 등급인지
+         갈리지 않는다. 건수는 **숫자가 정확히** 말하므로 크기는 부정확한 중복이고, 원래 문제였던
+         「지형을 덮음」의 원인이기도 하다. 유형 비율은 원호가 말한다. */
+    const D = 40;
     const key = g.length + "|" + D + "|" + Object.entries(cnt).map(([k, v]) => k + v).sort().join(",");
     if (el._clKey === key) return;
     el._clKey = key;
@@ -7524,13 +7546,13 @@ function initKakao() {
       const key = t.col + "|" + tr + "|" + t.bw + "|" + t.ph + "|" + t.fillOp + "|" + t.alpha + "|" + (haloOn(s) ? 1 : 0) + "|" + t.shape + "|" + (isApprox(s) ? 1 : 0);
       if (!s._kmk) {
         const [x, y] = s.geometry.coordinates;
-        const mk = new K.Marker({ position: LL(x, y), image: hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape, isApprox(s)), zIndex: 10 });
+        const mk = new K.Marker({ position: LL(x, y), image: hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape), zIndex: 10 });
         K.event.addListener(mk, "mouseover", () => { const q = toPt(x, y); const rc = mapEl.getBoundingClientRect(); showTip(hjHtml(s), { clientX: rc.left + q.x, clientY: rc.top + q.y }, true);
           if (isApprox(s)) { _haloHover = s; _reimage(s); } });   // §14-3 — 가리킨 것 하나만
         K.event.addListener(mk, "mouseout", () => { hideTip(); if (_haloHover === s) { _haloHover = null; _reimage(s); } });
         K.event.addListener(mk, "click", () => { hideTip(); showSignal(s, false); });
         s._kmk = mk; s._kmkKey = key;
-      } else if (s._kmkKey !== key) { s._kmk.setImage(hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape, isApprox(s))); s._kmkKey = key; }
+      } else if (s._kmkKey !== key) { s._kmk.setImage(hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape)); s._kmkKey = key; }
       // 노선 격리 중엔 호재 원을 **숨긴다**(2026-08-04 사용자 "호재별 원표시도 없애" — 흐림→제거.
       // 소속역은 하이라이트 링·역명 라벨이 대신 표기한다). 해제 시 clearRoute→renderHojae가 복원.
       s._kmk.setOpacity(dimOpacity(s));
@@ -8828,7 +8850,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260820f");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260820g");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -9013,7 +9035,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260820f"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260820g"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -9039,7 +9061,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260820f");
+  const CB = "?b=" + (window.BUILD || "20260820g");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
