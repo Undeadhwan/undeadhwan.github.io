@@ -329,6 +329,10 @@ OSM 선형과 IC 점의 불일치 우려는 감쇠 표현으로 완화한다(선
 3) 가공        — 표준 필드 부여: src_tier / geo_prec / pt_type / phase / st_status
 4) QA 검사     — python3 qa_check.py  ← 배포 전 필수. 오류 0이어야 함
 5) 배포        — dist·dist-root 동시, BUILD 갱신, cmp 정합 확인
+                 ※ 배송 사본은 **원본의 투영**이다(`deploy_slim.py`) — 신호 레코드의
+                   `_`접두(빌드 내부 캐시) 제거 + minify. **원본은 벗기지 않는다**
+                   (road_geom_honest의 멱등성이 `_geom_full`에 걸려 있다).
+                   게이트 `html_check.deploy_slim_check`
 6) 기록        — methodology.html·DATA_STANDARD.md 갱신(규칙이 바뀐 경우)
 ```
 
