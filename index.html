@@ -7452,7 +7452,22 @@ function initKakao() {
        ⇒ 지도 투영이 주는 **화면 픽셀**로 옮기고 반경 병합한다. 위경도로 근사하지 않는다 —
          전국 줌은 위도 폭이 4도라 메르카토르 왜곡이 붙어 남북으로 다른 반경이 된다.
        ⚠ 후보 탐색은 56px 격자로 좁히고(9칸), **판정은 반경**이다. 격자를 판정에 쓰면 ①이 되돌아온다. */
-    const CL_R = 56;                       // 시안 §14-2 — 모든 줌 동일
+    /* ★★ **묶는 반경은 줌마다 다르다** (시안 rev4 §14-2·§15-12 정정 · 2026-08-20).
+       ☠ 56px 고정이 오류였다 — 그 값은 **전국 줌**에서 도넛 200개+를 30~50개로 줄이려고 잡은
+         것인데, 모든 줌에 같이 걸리자 **구 단위 줌에서 뚜렷하게 떨어진 마커까지 한 덩어리**가 되어
+         2건짜리 도넛이 화면을 덮었다(사장님 실화면 제보: 개별 호재가 안 보인다).
+       ⇒ 줌인할수록 화면에 여유가 생기므로 묶을 이유도 줄고, **동 단위에서는 아예 묶지 않는다**.
+       ⚠ 카카오 level은 **낮을수록 확대**(1=최대·14=최소). 구간은 이미 있는 상수에 맞춘다 —
+         `DONG_LV`(6)까지가 동·읍면이 읽히는 줌이고, 그 위가 시군구·광역·전국이다.
+         값을 새로 적지 않고 **화면 단위 이름**으로 가른다(상수를 두 곳에 적지 않는다). */
+    const _clLv = map.getLevel();
+    const CL_R = _clLv <= DONG_LV ? 0        // 동·읍면 — 묶지 않는다
+      : _clLv <= 8 ? 22                      // 시군구
+      : _clLv <= 10 ? 36                     // 광역(시도)
+      : 56;                                  // 전국
+    /* ★ 문턱 **3건** (rev4) — 두 개는 나란히 놓아도 서로를 가리지 않는데, 묶으면 「2」를 읽고
+       클릭해 펼쳐야 하므로 **정보가 줄고 조작이 늘어난다**. 묶음은 겹쳐서 못 읽을 때만 이득이다. */
+    const CL_MIN = 3;
     const _prjC = (() => { try { return map.getProjection && map.getProjection(); } catch (e) { return null; } })();
     const groups = new Map();
     if (_prjC) {
@@ -7466,6 +7481,7 @@ function initKakao() {
         let a = idx.get(k); if (!a) idx.set(k, a = []); a.push(i);
       }
       const taken = new Uint8Array(pts.length), raw = [];
+      // 반경 0(동·읍면 줌) = 묶지 않는다 — 아래 반경 판정이 자기 자신만 담게 되므로 자연히 낱개다.
       const _px = new Map();                       // 신호 → 화면좌표(재병합에서 다시 투영하지 않는다)
       for (const q of pts) if (q) _px.set(q[2], [q[0], q[1]]);
       const pxOf = m => _px.get(m) || [0, 0];
@@ -7533,7 +7549,7 @@ function initKakao() {
     }
     const next = new Set(), nextCl = new Set();
     for (const [gk, g] of groups) {
-      if (g.length > 1) {   // 겹침 → 배지 1개(멤버 중심에)
+      if (g.length >= CL_MIN) {   // 문턱 이상만 도넛 — 1~2건은 낱개 링으로 그대로(rev4)
         let sx = 0, sy = 0; for (const m of g) { sx += m.geometry.coordinates[0]; sy += m.geometry.coordinates[1]; }
         const ll = LL(sx / g.length, sy / g.length);
         let ov = clusterOv.get(gk);
@@ -7559,23 +7575,28 @@ function initKakao() {
         g.forEach(m => { if (m._kmk) m._kmk.setMap(null); hjShown.delete(m); });   // 개별 마커 숨김
         continue;
       }
-      const s = g[0];
-      const t = hjStyle(s);
-      const tr = _shrinkR(t.r, t.lvl);
-      const key = t.col + "|" + tr + "|" + t.bw + "|" + t.ph + "|" + t.fillOp + "|" + t.alpha + "|" + (haloOn(s) ? 1 : 0) + "|" + t.shape + "|" + (isApprox(s) ? 1 : 0);
-      if (!s._kmk) {
-        const [x, y] = s.geometry.coordinates;
-        const mk = new K.Marker({ position: LL(x, y), image: hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape), zIndex: 10 });
-        K.event.addListener(mk, "mouseover", () => { const q = toPt(x, y); const rc = mapEl.getBoundingClientRect(); showTip(hjHtml(s), { clientX: rc.left + q.x, clientY: rc.top + q.y }, true);
-          if (isApprox(s)) { _haloHover = s; _reimage(s); } });   // §14-3 — 가리킨 것 하나만
-        K.event.addListener(mk, "mouseout", () => { hideTip(); if (_haloHover === s) { _haloHover = null; _reimage(s); } });
-        K.event.addListener(mk, "click", () => { hideTip(); showSignal(s, false); });
-        s._kmk = mk; s._kmkKey = key;
-      } else if (s._kmkKey !== key) { s._kmk.setImage(hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape)); s._kmkKey = key; }
-      // 노선 격리 중엔 호재 원을 **숨긴다**(2026-08-04 사용자 "호재별 원표시도 없애" — 흐림→제거.
-      // 소속역은 하이라이트 링·역명 라벨이 대신 표기한다). 해제 시 clearRoute→renderHojae가 복원.
-      s._kmk.setOpacity(dimOpacity(s));
-      s._kmk.setMap(routeIsoName ? null : map); next.add(s); hjShown.delete(s); }
+      /* ★ 문턱 미만(1~2건)은 **무리 전체를 낱개로** 그린다 (rev4로 문턱이 3이 되면서 필요해졌다).
+         ☠ 종전엔 `g[0]` 하나만 그렸다 — 문턱이 2였을 땐 이 분기에 오는 무리가 항상 1건이라
+           드러나지 않던 버그다. 문턱을 올리는 순간 **2건짜리 무리에서 한 건이 조용히 사라진다**
+           (「조회조건에 걸린 호재는 하나도 숨기지 않는다」는 시안 §01 전제를 정면으로 깬다). */
+      for (const s of g) {
+        const t = hjStyle(s);
+        const tr = _shrinkR(t.r, t.lvl);
+        const key = t.col + "|" + tr + "|" + t.bw + "|" + t.ph + "|" + t.fillOp + "|" + t.alpha + "|" + (haloOn(s) ? 1 : 0) + "|" + t.shape + "|" + (isApprox(s) ? 1 : 0);
+        if (!s._kmk) {
+          const [x, y] = s.geometry.coordinates;
+          const mk = new K.Marker({ position: LL(x, y), image: hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape), zIndex: 10 });
+          K.event.addListener(mk, "mouseover", () => { const q = toPt(x, y); const rc = mapEl.getBoundingClientRect(); showTip(hjHtml(s), { clientX: rc.left + q.x, clientY: rc.top + q.y }, true);
+            if (isApprox(s)) { _haloHover = s; _reimage(s); } });   // §14-3 — 가리킨 것 하나만
+          K.event.addListener(mk, "mouseout", () => { hideTip(); if (_haloHover === s) { _haloHover = null; _reimage(s); } });
+          K.event.addListener(mk, "click", () => { hideTip(); showSignal(s, false); });
+          s._kmk = mk; s._kmkKey = key;
+        } else if (s._kmkKey !== key) { s._kmk.setImage(hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape)); s._kmkKey = key; }
+        // 노선 격리 중엔 호재 원을 **숨긴다**(2026-08-04 사용자 "호재별 원표시도 없애" — 흐림→제거.
+        // 소속역은 하이라이트 링·역명 라벨이 대신 표기한다). 해제 시 clearRoute→renderHojae가 복원.
+        s._kmk.setOpacity(dimOpacity(s));
+        s._kmk.setMap(routeIsoName ? null : map); next.add(s); hjShown.delete(s); }
+      }
     hjShown.forEach(s => s._kmk && s._kmk.setMap(null));   // 이번에 빠진 개별 마커 끔
     hjShown = next;
     clusterOv.forEach((ov, gk) => { if (!nextCl.has(gk)) ov.setMap(null); });   // 이번에 빠진 배지 끔
@@ -8869,7 +8890,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260820i");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260820j");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -9054,7 +9075,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260820i"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260820j"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -9080,7 +9101,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260820i");
+  const CB = "?b=" + (window.BUILD || "20260820j");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {

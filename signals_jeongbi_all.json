@@ -89004,7 +89004,7 @@
    "stage": "준공",
    "phase": "준공·개통",
    "type": "주거환경개선(전면개량)",
-   "hh": null,
+   "hh": 920,
    "drop": false,
    "geo_prec": "dong",
    "geo_approx": true,
@@ -89022,7 +89022,8 @@
    "first_seen": "2026-07-27",
    "last_movement_basis": "observed",
    "fin_date_unknown": true,
-   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)",
+   "hh_src": "인천 추정분담금정보시스템 정비사업개요(data.go.kr 15080866) 「세대수」 — 시군구+구역 유일 일치"
   },
   {
    "n": "송림4 (주거환경개선(전면개량))",
@@ -89192,7 +89193,7 @@
    "stage": "착공",
    "phase": "착공",
    "type": "재개발",
-   "hh": null,
+   "hh": 1321,
    "drop": false,
    "geo_prec": "parcel",
    "geo_approx": false,
@@ -89209,7 +89210,8 @@
    ],
    "first_seen": "2026-07-27",
    "last_movement": "2026-07-27",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "hh_src": "인천 추정분담금정보시스템 정비사업개요(data.go.kr 15080866) 「세대수」 — 시군구+구역 유일 일치"
   },
   {
    "n": "송현1,2차A (재건축)",
@@ -89710,7 +89712,7 @@
    "stage": "준공",
    "phase": "준공·개통",
    "type": "재개발",
-   "hh": null,
+   "hh": 1856,
    "drop": false,
    "geo_prec": "parcel",
    "geo_approx": false,
@@ -89728,7 +89730,8 @@
    "first_seen": "2026-07-18",
    "last_movement_basis": "observed",
    "fin_date_unknown": true,
-   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)",
+   "hh_src": "인천 추정분담금정보시스템 정비사업개요(data.go.kr 15080866) 「세대수」 — 시군구+구역 유일 일치"
   },
   {
    "n": "학익3 (재개발)",
@@ -89858,9 +89861,9 @@
    "sg": "미추홀구",
    "dong": null,
    "stage": "착공",
-   "phase": "착공",
+   "phase": "준공·개통",
    "type": "재개발",
-   "hh": null,
+   "hh": 562,
    "drop": false,
    "geo_prec": "parcel",
    "geo_approx": false,
@@ -89873,11 +89876,20 @@
      "stage": "착공",
      "date": "2026-07-27",
      "basis": "observed"
+    },
+    {
+     "stage": "준공",
+     "date": "2026-03",
+     "basis": "apt_cross"
     }
    ],
    "first_seen": "2026-07-27",
-   "last_movement": "2026-07-27",
-   "last_movement_basis": "observed"
+   "last_movement": "2026-03",
+   "last_movement_basis": "apt_cross",
+   "hh_src": "인천 추정분담금정보시스템 정비사업개요(data.go.kr 15080866) 「세대수」 — 시군구+구역 유일 일치",
+   "status": "종결",
+   "done_apt": "포레나인천학익(2026.03)",
+   "done_basis": "완공 아파트 근접(73m)+세대수 부합(562↔562) 확인: 포레나인천학익 준공 2026.03 (폴리곤 없음 — 교차증거 추정) — 소스 진행단계('착공')는 stale"
   },
   {
    "n": "학익장미A (재건축)",
@@ -90615,7 +90627,7 @@
    "stage": "준공",
    "phase": "준공·개통",
    "type": "재개발",
-   "hh": null,
+   "hh": 218,
    "drop": false,
    "geo_prec": "dong",
    "geo_approx": true,
@@ -90679,7 +90691,8 @@
    "first_seen": "2026-07-18",
    "last_movement_basis": "observed",
    "fin_date_unknown": true,
-   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)",
+   "hh_src": "인천 추정분담금정보시스템 정비사업개요(data.go.kr 15080866) 「세대수」 — 시군구+구역 유일 일치"
   },
   {
    "n": "비류마을 (주거환경개선(현지개량))",
@@ -92444,7 +92457,7 @@
    "stage": "준공",
    "phase": "준공·개통",
    "type": "재개발",
-   "hh": null,
+   "hh": 2371,
    "drop": false,
    "geo_prec": "parcel",
    "geo_approx": false,
@@ -92462,7 +92475,8 @@
    "first_seen": "2026-07-18",
    "last_movement_basis": "observed",
    "fin_date_unknown": true,
-   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)",
+   "hh_src": "인천 추정분담금정보시스템 정비사업개요(data.go.kr 15080866) 「세대수」 — 시군구+구역 유일 일치"
   },
   {
    "n": "작전현대A (재개발)",
@@ -92860,7 +92874,7 @@
    "stage": "준공",
    "phase": "준공·개통",
    "type": "재건축",
-   "hh": null,
+   "hh": 511,
    "drop": false,
    "geo_prec": "none",
    "geo_approx": true,
@@ -92878,7 +92892,8 @@
    "first_seen": "2026-07-27",
    "last_movement_basis": "observed",
    "fin_date_unknown": true,
-   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)"
+   "fin_note": "준공 확인 — 다만 **완료일 근거가 소스에 없다**(관측일을 완료일로 쓰지 않는다)",
+   "hh_src": "인천 추정분담금정보시스템 정비사업개요(data.go.kr 15080866) 「세대수」 — 시군구+구역 유일 일치"
   },
   {
    "n": "한신그랜드힐빌리지A (재건축)",
@@ -95430,9 +95445,9 @@
    "sg": "남구",
    "dong": "대명동",
    "stage": "착공",
-   "phase": "착공",
+   "phase": "준공·개통",
    "type": "재개발",
-   "hh": null,
+   "hh": 1758,
    "drop": false,
    "geo_prec": "parcel",
    "geo_approx": false,
@@ -95450,11 +95465,20 @@
      "stage": "준공·개통",
      "date": "2026-07-28",
      "basis": "observed"
+    },
+    {
+     "stage": "준공",
+     "date": "2025-12",
+     "basis": "apt_cross"
     }
    ],
    "first_seen": "2026-07-28",
-   "last_movement": "2026-07-28",
-   "last_movement_basis": "observed"
+   "last_movement": "2025-12",
+   "last_movement_basis": "apt_cross",
+   "hh_src": "대구 남구 재건축재개발현황(data.go.kr 3072395) 「세대수」 — 시군구+구역 유일 일치",
+   "status": "종결",
+   "done_apt": "e편한세상명덕역퍼스트마크(2025.12)",
+   "done_basis": "완공 아파트 근접(68m)+세대수 부합(1758↔1758) 확인: e편한세상명덕역퍼스트마크 준공 2025.12 (폴리곤 없음 — 교차증거 추정) — 소스 진행단계('착공')는 stale"
   },
   {
    "n": "봉덕1동구역 (재개발)",
@@ -95466,7 +95490,7 @@
    "stage": "조합설립인가",
    "phase": "인가",
    "type": "재개발",
-   "hh": null,
+   "hh": 621,
    "drop": false,
    "geo_prec": "parcel",
    "geo_approx": false,
@@ -95483,7 +95507,8 @@
    ],
    "first_seen": "2026-07-28",
    "last_movement": "2026-07-28",
-   "last_movement_basis": "observed"
+   "last_movement_basis": "observed",
+   "hh_src": "대구 남구 재건축재개발현황(data.go.kr 3072395) 「세대수」 — 시군구+구역 유일 일치"
   },
   {
    "n": "봉덕1동 우리 (재개발)",
