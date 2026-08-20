@@ -417,7 +417,11 @@
   /* 세대수도 조회 범위다 — 지역 칩과 같은 모양으로 둔다(시안 §03 헤더: 「300 세대+ ▾」) */
   /* 세대수 셀렉트가 사이드바 슬롯으로 이사(2026-08-16 시안 §03) — 빈 헤더 상자는 접는다 */
   #f-user:empty { display:none; }
-  #dk-hh-slot select { width:100%; box-sizing:border-box; }
+  /* ★ 아파트 셀렉트 = **13px 일반 굵기**(시안 §03 목업: 값 13px 400 · 숫자만 mono 600).
+     ⚠ 네이티브 select는 **옵션 글자의 일부만** 굵게·모노로 만들 수 없다 — 숫자만 강조하는 것은
+       구조상 불가라 크기·굵기만 맞추고 숫자 정렬은 `tabular-nums`로 보완한다. */
+  #dk-hh-slot select { width:100%; box-sizing:border-box; font-size:13px !important; font-weight:400 !important;
+    font-variant-numeric:tabular-nums; }
   #apt-hh { font-size:14.5px; font-weight:600; padding:8px 12px; border:1px solid #d9dee8; border-radius:9px;
     background:#fff; color:#1a2233; cursor:pointer; }
   .regionbar select { font-size:14.5px; font-weight:600; padding:8px 11px; border:1px solid #d9dee8; border-radius:9px; background:#fff; color:#1a2233; cursor:pointer; min-width:94px; }
@@ -1471,7 +1475,9 @@
     border:1px solid var(--line); border-radius:6px; background:#fff; }
   #dock .cat-h:hover { border-color:var(--line2); }
   #dock .cat.off .cat-h { border-style:dashed; border-color:var(--line2); background:var(--panel); color:var(--ink3); }
-  #dock .cat.off .cat-h .nm { text-decoration:line-through; }
+  /* ★ **취소선은 쓰지 않는다** (시안 rev3 §15-05 정정) — 필터는 「잠시 안 보는 것」이지 삭제·무효가
+     아니고, 취소선은 그 뜻을 과하게 말한다. 꺼짐 신호는 셋으로 충분하다:
+     **점선 테두리 · 회색 바탕 · 색 점을 빈 원으로**. */
   /* 펼침 삼각형 — **글리프는 작게, 과녁은 크게** (2026-08-01 사용자 "너무 작아서 클릭이 어려워").
      종전 12×글자높이(≈9px)는 손가락은 물론 마우스로도 빗나간다. 글자 크기는 11px로만 올리고
      상하 여백(margin 상쇄 padding)으로 **28×30px 과녁**을 만든다 — 레이아웃은 그대로 두고
@@ -1481,7 +1487,7 @@
      padding 12px가 먹혔다 — 2026-08-01에 "너무 작아서 클릭이 어려워"로 고친 값이 실제로는 한 번도
      적용된 적이 없다. **「고쳤다」와 「넓어졌다」가 갈린 자리**다.
      → border-box 기준으로 다시 적는다: width는 **과녁 전체**(28px), 글리프 자리는 28-12=16px로 그대로. */
-  #dock .cat-h .chev { color:var(--ink2); font-size:9px; width:26px; padding:9px 9px; margin:-9px -9px;
+  #dock .cat-h .chev { color:var(--ink2); font-size:11px; width:26px; padding:9px 9px; margin:-9px -9px;
     flex-shrink:0; text-align:center; border-radius:6px; }
   #dock .cat-h .chev:hover { color:var(--ink); background:var(--line); }
   /* 회전은 **글리프만** — 상자(과녁 28×30 + hover 배경)째 돌리면 세로 상자가 가로로 누워
@@ -1541,6 +1547,9 @@
   #dock .sgbtn { flex:1; display:flex; flex-direction:column; align-items:center; gap:5px;
     padding:7px 0; border:1.5px solid var(--ink); border-radius:6px; background:#fff;
     color:var(--ink); font-size:12px; font-weight:700; cursor:pointer; line-height:1; }
+  /* 시안 목업 글자 크기: 등급 12px · 「없음」 11px · 단계 11.5px */
+  #dock .sgbtn[data-k="미정"] { font-size:11px; }
+  #dock .pgrow .sgbtn { font-size:11.5px; }
   #dock .sgbtn.off { border:1px dashed var(--line2); color:var(--ink3); font-weight:600; background:var(--panel); }
   #dock .sgbtn:hover { border-color:var(--ink3); }
   /* 두께는 **2px 고정** — 크기만 등급을 말한다(두께는 단계 칩의 축이다) */
@@ -1601,7 +1610,7 @@
      종전엔 제목이 13.5px 굵은 검정이고 전체 선택이 회색 테두리 버튼이라 둘 다 무거웠다. */
   #dock .axis .t { display:flex; align-items:center; justify-content:space-between; gap:6px;
     font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11px; letter-spacing:.08em;
-    font-weight:500; color:var(--ink3); margin-bottom:7px; }
+    font-weight:400; color:var(--ink3); margin-bottom:7px; }   /* 시안 목업 400 */
   #dock .axis .t small { color:var(--ink3); }
   #dock .dk-allcat { border:0; background:none; padding:0; cursor:pointer;
     font:600 12px/1 'Gothic A1','Apple SD Gothic Neo',sans-serif; letter-spacing:0; color:var(--accent); }
@@ -5831,6 +5840,12 @@ function initDock() {
   dock.addEventListener("mouseout", e => {
     if (e.target.closest(".cat-h") || e.target.closest(".subs")) closeFlySoon();
   });
+  /* ☠ **재렌더된 요소에는 `mouseout`이 오지 않는다** (2026-08-20 사장님 제보 "선택하고 나면 팝업이
+     사라져야 되는데 남아있어"). `only`를 누르면 renderAll → renderDock이 DOM을 통째로 새로 만드는데,
+     커서 아래 있던 그 요소는 **이미 없어져** 떠날 때 이벤트를 낼 주체가 없다 → `flyCat`이 남아 판이
+     붙박이가 된다. `#dock` **자신**은 재렌더를 견디므로(innerHTML만 바뀐다) 여기에 걸면 확실하다.
+     ⚠ 핀(`dockOpen`)은 건드리지 않는다 — 그건 사용자가 명시적으로 고정한 상태다. */
+  dock.addEventListener("mouseleave", () => closeFlySoon());
   dock.addEventListener("scroll", () => { if (flyCat || dockOpen.size) syncFly(); });
   addEventListener("resize", () => { if (flyCat || dockOpen.size) syncFly(); });
   renderDock();
@@ -5860,6 +5875,7 @@ function bindFilterClicks(host) {
       const k = so.dataset.solo;
       CAT_KEYS.forEach(c => { c === k ? filter.cat.add(c) : filter.cat.delete(c);
         (SUB_KEYS[c] || []).forEach(sk => c === k ? filter.sub.add(subId(c, sk)) : filter.sub.delete(subId(c, sk))); });
+      flyCat = null; dockOpen.delete(k); localStorage.setItem("hojae_dock_open", JSON.stringify([...dockOpen]));   // 종결 동작 — 판을 닫는다
       renderAll(); return;
     }
     /* 플라이아웃 머리의 「전체 / 해제」 — 그 분류 안에서만 켜고 끈다(다른 분류는 건드리지 않는다). */
@@ -5876,6 +5892,9 @@ function bindFilterClicks(host) {
       const id = ss.dataset.solosub, pc = id.split("|")[0];
       ALL_SUBS.forEach(x => x === id ? filter.sub.add(x) : filter.sub.delete(x));
       CAT_KEYS.forEach(c => c === pc ? filter.cat.add(c) : filter.cat.delete(c));
+      /* `only`는 **종결 동작**이다 — 「이것만 보기」가 끝났으므로 판을 닫는다. 체크박스는 여러 개를
+         고르는 중이라 판을 유지하지만(rev2 §14-4), only는 한 번으로 끝난다. 핀도 함께 푼다. */
+      flyCat = null; dockOpen.delete(pc); localStorage.setItem("hojae_dock_open", JSON.stringify([...dockOpen]));
       renderAll(); return;
     }
     const t = e.target.closest("[data-tog],[data-all],[data-allcat]");
@@ -8850,7 +8869,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260820g");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260820h");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -9035,7 +9054,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260820g"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260820h"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -9061,7 +9080,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260820g");
+  const CB = "?b=" + (window.BUILD || "20260820h");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
