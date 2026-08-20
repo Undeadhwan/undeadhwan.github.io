@@ -7444,18 +7444,18 @@ function initKakao() {
          원래 이 뜻이다. 숨기는 게 아니라 **합치는 것**이라 무손실은 그대로다(합계는 도넛 안에 있다).
        ⚠ 사용자가 정한 5px을 임의로 되돌린 게 아니라, **그 값이 전제하던 조건이 사라져** 다시 도출한
          것이다. 마커를 키우거나 줄이면 이 값도 자동으로 따라온다. */
-    /* ★★ **묶는 기준 = 화면 56px 반경** (2026-08-19 시안 §14-2 · 사장님 지시).
+    /* ★★ **묶는 기준 = 화면 픽셀 반경**(값은 줌별 — 바로 아래 `CL_R`) (2026-08-19 시안 §14-2 · 알렉스 지시).
        ☠ 종전은 **경위도 격자**였다(칸 = 마커 지름 × 1.2). 격자의 두 가지 결함:
          ① **칸 경계**에 걸친 두 점은 1px 떨어져 있어도 안 묶인다 → 전국 줌에 2·3건 도넛이
             108개(실측 2026-08-19). 낱개 링 200개가 도넛 200개로 **모양만 바뀐 것**이다.
          ② 칸이 마커 지름에서 왔으므로 **줌마다 화면 밀도가 달라진다**.
        ⇒ 지도 투영이 주는 **화면 픽셀**로 옮기고 반경 병합한다. 위경도로 근사하지 않는다 —
          전국 줌은 위도 폭이 4도라 메르카토르 왜곡이 붙어 남북으로 다른 반경이 된다.
-       ⚠ 후보 탐색은 56px 격자로 좁히고(9칸), **판정은 반경**이다. 격자를 판정에 쓰면 ①이 되돌아온다. */
+       ⚠ 후보 탐색은 격자로 좁히고(9칸), **판정은 반경**이다. 격자를 판정에 쓰면 ①이 되돌아온다. */
     /* ★★ **묶는 반경은 줌마다 다르다** (시안 rev4 §14-2·§15-12 정정 · 2026-08-20).
        ☠ 56px 고정이 오류였다 — 그 값은 **전국 줌**에서 도넛 200개+를 30~50개로 줄이려고 잡은
          것인데, 모든 줌에 같이 걸리자 **구 단위 줌에서 뚜렷하게 떨어진 마커까지 한 덩어리**가 되어
-         2건짜리 도넛이 화면을 덮었다(사장님 실화면 제보: 개별 호재가 안 보인다).
+         2건짜리 도넛이 화면을 덮었다(알렉스 실화면 제보: 개별 호재가 안 보인다).
        ⇒ 줌인할수록 화면에 여유가 생기므로 묶을 이유도 줄고, **동 단위에서는 아예 묶지 않는다**.
        ⚠ 카카오 level은 **낮을수록 확대**(1=최대·14=최소). 구간은 이미 있는 상수에 맞춘다 —
          `DONG_LV`(6)까지가 동·읍면이 읽히는 줌이고, 그 위가 시군구·광역·전국이다.
@@ -7468,6 +7468,12 @@ function initKakao() {
     /* ★ 문턱 **3건** (rev4) — 두 개는 나란히 놓아도 서로를 가리지 않는데, 묶으면 「2」를 읽고
        클릭해 펼쳐야 하므로 **정보가 줄고 조작이 늘어난다**. 묶음은 겹쳐서 못 읽을 때만 이득이다. */
     const CL_MIN = 3;
+    /* ★ 격자 칸에는 **하한 1px**을 준다 — 반경은 0이 될 수 있어도(동·읍면 줌) 칸은 0이면 안 된다.
+       ☠ 0으로 나누면 키가 `Infinity`/`NaN`이 되어 **모든 점이 한 칸**에 떨어진다. 반경 판정이
+         뒤에서 다시 거르는 위 경로는 우연히 살아남지만(정확히 같은 좌표만 통과), 아래 **폴백 경로는
+         판정이 격자뿐이라 화면 전체가 도넛 하나**가 된다. 칸은 후보를 좁히는 도구일 뿐이므로
+         하한을 줘도 결과는 반경이 정한다. */
+    const CL_CELL = Math.max(CL_R, 1);
     const _prjC = (() => { try { return map.getProjection && map.getProjection(); } catch (e) { return null; } })();
     const groups = new Map();
     if (_prjC) {
@@ -7477,7 +7483,7 @@ function initKakao() {
         try { q = _prjC.containerPointFromCoords(LL(s.geometry.coordinates[0], s.geometry.coordinates[1])); } catch (e) { q = null; }
         if (!q) { pts.push(null); continue; }
         const i = pts.push([q.x, q.y, s]) - 1;
-        const k = Math.floor(q.x / CL_R) + "," + Math.floor(q.y / CL_R);
+        const k = Math.floor(q.x / CL_CELL) + "," + Math.floor(q.y / CL_CELL);
         let a = idx.get(k); if (!a) idx.set(k, a = []); a.push(i);
       }
       const taken = new Uint8Array(pts.length), raw = [];
@@ -7489,7 +7495,7 @@ function initKakao() {
         if (!pts[i] || taken[i]) continue;
         taken[i] = 1;
         const x0 = pts[i][0], y0 = pts[i][1], g = [pts[i][2]];
-        const cx = Math.floor(x0 / CL_R), cy = Math.floor(y0 / CL_R);
+        const cx = Math.floor(x0 / CL_CELL), cy = Math.floor(y0 / CL_CELL);
         for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
           const a = idx.get((cx + dx) + "," + (cy + dy));
           if (!a) continue;
@@ -7502,7 +7508,7 @@ function initKakao() {
         }
         raw.push(g);
       }
-      /* ★ **중심끼리도 56px 밖이어야 한다** — 도넛은 씨앗이 아니라 **멤버 중심**에 놓이므로,
+      /* ★ **중심끼리도 반경 밖이어야 한다** — 도넛은 씨앗이 아니라 **멤버 중심**에 놓이므로,
          씨앗 기준으로만 가르면 중심이 서로 당겨져 도넛이 겹친다(실측 2026-08-19: 전국 8쌍·
          수도권 7쌍). 중심을 다시 재고 가까운 무리를 합치는 패스를 **수렴할 때까지**(최대 4회) 돈다.
          ⚠ 무한 루프 방지로 상한을 두되, 상한에 걸렸는지는 조용히 넘기지 않는다(아래 경고). */
@@ -7512,13 +7518,13 @@ function initKakao() {
         merged = false;
         const cs = cur.map(cen), used = new Uint8Array(cur.length), out = [];
         const gi2 = new Map();
-        cs.forEach((c, i) => { const k = Math.floor(c[0] / CL_R) + "," + Math.floor(c[1] / CL_R);
+        cs.forEach((c, i) => { const k = Math.floor(c[0] / CL_CELL) + "," + Math.floor(c[1] / CL_CELL);
           let a = gi2.get(k); if (!a) gi2.set(k, a = []); a.push(i); });
         for (let i = 0; i < cur.length; i++) {
           if (used[i]) continue;
           used[i] = 1;
           let acc = cur[i];
-          const cx = Math.floor(cs[i][0] / CL_R), cy = Math.floor(cs[i][1] / CL_R);
+          const cx = Math.floor(cs[i][0] / CL_CELL), cy = Math.floor(cs[i][1] / CL_CELL);
           for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
             const a = gi2.get((cx + dx) + "," + (cy + dy));
             if (!a) continue;
@@ -7542,7 +7548,7 @@ function initKakao() {
       // 투영 API가 없는 환경(테스트·초기화 전) — 종전 격자로 폴백한다. 묶기를 **끄지는 않는다**.
       const _dppx = (() => { try { const bb = map.getBounds();
         return (bb.getSouthWest() ? Math.abs(bb.getNorthEast().getLng() - bb.getSouthWest().getLng()) : .1) / (mapEl.clientWidth || 800); } catch (e) { return 1e-4; } })();
-      const _cell = _dppx * CL_R;
+      const _cell = _dppx * CL_CELL;   // ← CL_R이면 동·읍면 줌에서 0이 되어 전 화면이 도넛 하나가 된다
       const cellKey = (x, y) => Math.round(x / _cell) + "," + Math.round(y / _cell);
       for (const s of pool) { const c = s.geometry.coordinates; const gk = cellKey(c[0], c[1]);
         let g = groups.get(gk); if (!g) groups.set(gk, g = []); g.push(s); }
@@ -8890,7 +8896,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260820k");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260820l");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -9075,7 +9081,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260820k"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260820l"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -9101,7 +9107,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260820k");
+  const CB = "?b=" + (window.BUILD || "20260820l");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
