@@ -6315,28 +6315,26 @@ function loadLeaflet() {
   document.head.appendChild(s);
 }
 function initLeaflet() {
-  /* ★ **원시층(capital_raw)은 이 폴백만 쓴다 — 그러니 여기서 받는다** (2026-08-21 실측).
-     ☠ 종전엔 부트가 전 방문자에게 **122KB(gz) · 928KB(원문)** 를 먼저 받게 했는데, 참조가
-       이 함수 안 `sggCounts` 한 곳뿐이었다. 카카오 렌더러(실제로 뜨는 화면)에는 `RAW`도
-       `renderSggBadges`도 **0곳**이다 — 리디자인이 시군구 원시 배지를 시도 알약·클러스터로
-       바꾸면서 이 층이 폴백에만 남았다.
-     ⇒ 쓰는 쪽이 낸다. 카카오로 뜨는 대다수 방문자는 이 파일을 아예 받지 않는다.
-     ☠☠ **더 정확히는, 지금 이 층은 어느 화면에도 안 뜬다** — `renderSggBadges`는 정의만 되어
-       있고 **`applyLOD`가 부르지 않는다**(2026-08-21 실측: 라이브 폴백에서도 배지 0개 · 종전
-       코드와 동일). 리디자인이 시군구 원시 배지를 시도 알약·클러스터로 바꾸면서 호출부만
-       사라지고 정의와 데이터 배송은 남았다.
-     ⚠ **그래도 지우지 않는다.** 「원시=시군구 뱃지 집계·목록」은 CLAUDE.md의 제품 규칙이고
-       3층 설계(원시→후보→확정)의 한 층이다. 되살릴지 접을지는 **제품 판단**이지 정리 대상이
-       아니다 — 지우면 되살릴 때 데이터 경로부터 다시 만들어야 한다.
-       되살린다면 이 지연 로드를 부트로 되돌릴 게 아니라 **양쪽 렌더러가 같은 자를 쓰게** 한다. */
-  const map = L.map("map", { zoomControl: false, maxBounds: [[32.6, 123.8], [39.6, 132.6]],
+  /* ★ **원시층(capital_raw)은 더 이상 브라우저로 배송하지 않는다** (2026-08-21 실측·확정).
+     ☠ 종전엔 부트가 전 방문자에게 **122KB(gz) · 928KB(원문)** 를 먼저 받게 했다. 그런데
+       참조가 이 함수 안 `renderSggBadges` 하나뿐이었고, **그 함수는 `applyLOD`가 부르지 않는다**
+       (호출부 0). 라이브 폴백을 직접 태워 배지 **0개**를 확인했다 — 종전 코드도 똑같이 0개다.
+       리디자인이 시군구 원시 배지를 시도 알약·클러스터로 바꾸면서 호출부만 사라지고
+       정의와 데이터 배송이 남은 것이다. **아무 화면에도 안 뜨는 코드가 매 방문 1MB를 끌었다.**
+     ★ 파일 자체는 **살아 있다** — `collect_capital` → `signalize`(원시→후보 승격)의 머리이고
+       `qa_expectations` 바닥값도 걸려 있다. 죽은 것은 **브라우저 배송뿐**이라 그것만 끊는다.
+       (`site_manifest`가 index.html의 fetch에서 배포 목록을 도출하므로, fetch가 없어지면
+        배포 거울에서도 자동으로 빠진다 — 손으로 지울 목록이 없다.)
+     ⚠ 되살리려면 그 파일을 fetch 하는 **한 줄**이면 배포까지 따라온다(site_manifest가 도출한다).
+       ☠ 단, **주석에 따옴표로 파일명을 적으면 그것만으로 배포된다** — site_manifest는 런타임
+         조립 경로를 건지려고 주석까지 일부러 훑는다(안전한 쪽으로 틀린다). 실제로 이 주석의
+         첫 판이 그 이유로 배포 목록을 붙잡고 있었다. 다만 되살릴 때는
+       부트로 되돌릴 게 아니라 **양쪽 렌더러가 같은 자를 쓰게** 해야 한다(§규칙은 양쪽에 건다).
+     ⚠ `renderSggBadges`·`renderDongBadges`는 **지우지 않는다** — 죽은 것은 사실이지만,
+       C20 경고로 열어 두는 편이 낫다(사실의 기록). 764KB 파일에서 함수를 문자열로 도려내는 건
+       CLAUDE.md가 금한 그 사고다. 되살릴 때 구현이 필요하기도 하다. */  const map = L.map("map", { zoomControl: false, maxBounds: [[32.6, 123.8], [39.6, 132.6]],
     maxBoundsViscosity: 1.0, minZoom: 6 }).setView([37.556, 126.95], 10);   // 수도권 전역 · 줌 슬라이더 제거(2026-07-23) · 한반도 밖 이탈 방지(2026-08-10 — 카카오판 클램프와 쌍)
   window._map = map;   // 디버그·검증용
-  if (!RAW || !RAW.length) {
-    fetch("capital_raw.json" + cbOf("capital_raw.json")).then(r => r.json())
-      .then(d => { RAW = (d && d.rows) || []; try { map.fire("moveend"); } catch (e) {} })
-      .catch(() => { RAW = []; });
-  }
   // 컨테이너 크기 변동 대응 (초기 0크기·모바일 회전 등)
   setTimeout(() => map.invalidateSize(), 300);
   new ResizeObserver(() => map.invalidateSize()).observe(document.getElementById("map"));
@@ -8983,8 +8981,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "adverse_facilities.json": "1d4b48c83a", "apartments_all.json": "65f9e8a1a4", "arch_signals.json": "a321869c42", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "40faa05417", "capital_raw.json": "9b7e9e92b9", "dart_signals.json": "1e2a409b35", "dps_signals.json": "86d69c8eec", "eum_signals.json": "aec4af4c01", "hospital_signals.json": "6074d464f8", "indpark_signals.json": "b54f4c3d59", "jeongbi_poly_seoul.json": "11a45f5e8d", "jobs_signals.json": "af8271939b", "logipark_signals.json": "ca69922a45", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2f8bd43f51", "mega_signals.json": "4488a73704", "methodology.html": "b8986fe85a", "park_signals.json": "a0b6d6d14e", "rail_reference.html": "ff84fa7143", "rail_signals.json": "8d0e578c6f", "regions.json": "9357f5440d", "report.html": "3850dd88e6", "retail_signals.json": "50b5b6d102", "road_signals.json": "629fa28ea8", "school_signals.json": "0788745519", "settings.html": "efc2bb5410", "sfz_signals.json": "dfb06b552c", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "0598a65502", "signals.json": "94f5712a9f", "signals_auto.json": "ef9980b273", "signals_jeongbi_all.json": "5c81f196db", "thresholds.json": "5b7226f4e1"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260821b");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "adverse_facilities.json": "1d4b48c83a", "apartments_all.json": "65f9e8a1a4", "arch_signals.json": "a321869c42", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "f1a7bd0ba6", "dart_signals.json": "1e2a409b35", "dps_signals.json": "86d69c8eec", "eum_signals.json": "aec4af4c01", "hospital_signals.json": "6074d464f8", "indpark_signals.json": "b54f4c3d59", "jeongbi_poly_seoul.json": "11a45f5e8d", "jobs_signals.json": "af8271939b", "logipark_signals.json": "ca69922a45", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2f8bd43f51", "mega_signals.json": "4488a73704", "methodology.html": "b8986fe85a", "park_signals.json": "a0b6d6d14e", "rail_reference.html": "ff84fa7143", "rail_signals.json": "8d0e578c6f", "regions.json": "9357f5440d", "report.html": "3850dd88e6", "retail_signals.json": "50b5b6d102", "road_signals.json": "629fa28ea8", "school_signals.json": "0788745519", "settings.html": "efc2bb5410", "sfz_signals.json": "dfb06b552c", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "0598a65502", "signals.json": "94f5712a9f", "signals_auto.json": "ef9980b273", "signals_jeongbi_all.json": "5c81f196db", "thresholds.json": "5b7226f4e1"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260821c");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
