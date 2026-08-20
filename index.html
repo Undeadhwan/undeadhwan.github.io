@@ -4407,7 +4407,7 @@ function renderApt(a) {
   panelListRender = () => {
     list.className = ""; list.innerHTML = "";
     if (!near.length) { list.innerHTML = `<div class="pickhint">반경 내 호재 없음</div>`; return; }
-    const arr = panelArrange(near);
+    const arr = panelArrange(near, true);   // 거리 열을 쓰는 화면 → 거리가 1차
     if (!arr.length) { list.innerHTML = `<div class="pickhint">${LEVEL_NAME[panelGrade] || panelGrade}급 호재 없음</div>`; return; }
     mountRowTable(list, arr, { tail: "dist", end: "행을 누르면 그 호재의 상세가 열립니다" });
   };
@@ -4417,17 +4417,36 @@ function renderApt(a) {
 let panelListRender = null;   // 현재 뷰의 #list 재생성 함수 (패널 안 필터가 이것만 호출)
 let panelCat = null;   // 패널 안 유형 필터(시안 §07) — 도크(전역)와 달리 이 패널만 좁힌다
 let panelGrade = null;   // 패널 카드 등급 필터(null=전체 / "A"·"B"·"C") — 상단 등급 매트릭스 클릭으로 토글
-// 카드 정렬·필터 공용: 등급(A>B>C) → 분류(교통>일자리>인프라>주거개발) 순, panelGrade 설정 시 그 급만
-function panelArrange(items) {
-  const gr = s => ({ A: 0, B: 1, C: 2 }[levelOf(s)] ?? 3);
-  const cr = s => { const i = DISPLAY_CAT_KEYS.indexOf(catOf(s)); return i < 0 ? 99 : i; };
+/* 카드 정렬·필터 공용. panelGrade·panelCat 설정 시 그 급/유형만.
+   ★ **정렬 축은 화면에 보이는 열과 같아야 한다** (2026-08-20 알렉스 제보 *"호재별 정렬 순서가
+     지금은 뒤죽박죽"*). 종전 축은 **등급 → 유형 → 거리**였는데, 표에 보이는 열은 등급과
+     거리 **둘뿐**이고 유형은 부제 안 작은 글씨였다. 규칙은 지켜지고 있었지만 보는 사람 눈엔
+     「1.0km 다음에 221m」로만 읽혀 **무질서로 보였다**(실측: 마곡수명산파크2단지 A급 4건 —
+     강서IC 1.0km(교통) → 서서울문화플라자 221m(인프라) → 통합청사 802m → VL 르웨스트 938m).
+     ⇒ **유형을 정렬 키에서 뺀다.** 유형으로 좁히는 일은 이미 **유형 칩**(§07)이 한다 —
+       같은 사실을 두 층이 말하면 반드시 어긋난다(이 저장소가 반복해 겪은 형태).
+   ☠ **버그: S급이 맨 아래로 밀리고 있었다.** `{A:0,B:1,C:2}[등급] ?? 3`이라 **S가 목록에 없어**
+     `undefined → 3`, 즉 **미정과 동급**이 됐다. S급 신호는 실측 **207건**(김포공항 도시재생
+     혁신지구·용인 반도체 클러스터 등) — 그런 단지를 열면 가장 큰 호재가 맨 밑에 있었다.
+     ⇒ 사다리를 `LEVELS`에서 직접 뽑는다(등급이 늘면 자동으로 따라간다 — 목록을 손으로 적지 않는다).
+   ★ **1차 축은 화면마다 다르다 — 마지막 열이 정한다**(`byDist`).
+     · 아파트 상세: 마지막 열이 **거리** → **거리 → 등급**(알렉스 확정 2026-08-20).
+       이 화면의 질문은 「내 단지 옆에 뭐가 생기나」다.
+     · 동·구 패널·겹친 호재: 마지막 열이 **영향 반경**이고 거리가 아예 없다
+       (동은 점이 아니라 면이다) → **등급 → 최근 움직임**. 거리로 정렬할 것 자체가 없다.
+     ⚠ 이 분기 때문에 함수를 두 벌로 나누지 않는다 — 열 하나 때문에 부품을 나누면 나머지가
+       조용히 갈린다(sigRowTable이 같은 이유로 한 벌이다). */
+function panelArrange(items, byDist = false) {
+  const gr = s => { const i = LEVELS.indexOf(levelOf(s)); return i < 0 ? 9 : i; };
+  const fin = v => v != null && isFinite(v);
   return items
     .filter(x => !panelGrade || levelOf(x.s || x) === panelGrade)
     .filter(x => !panelCat || catOf(x.s || x) === panelCat)
     .sort((a, b) => {
       const A = a.s || a, B = b.s || b;
-      return gr(A) - gr(B) || cr(A) - cr(B)
-        || ((a.dist != null && b.dist != null) ? a.dist - b.dist
+      if (byDist && fin(a.dist) && fin(b.dist)) return a.dist - b.dist || gr(A) - gr(B);
+      return gr(A) - gr(B)
+        || ((fin(a.dist) && fin(b.dist)) ? a.dist - b.dist
            : (B.last_movement || "").localeCompare(A.last_movement || ""));
     });
 }
@@ -8896,7 +8915,7 @@ function initSearch() {
 
 /* ══════════ 부트 ══════════ */
 (async () => {
-  const CB = "?b=" + (window.BUILD || "20260820l");   // 배포마다 갱신 → 데이터 캐시 무효화
+  const CB = "?b=" + (window.BUILD || "20260820m");   // 배포마다 갱신 → 데이터 캐시 무효화
   const gj = f => fetch(f + CB).then(r => r.json());
   // 기준(반경·세대수 눈금)을 **파일에서** 먼저 읽는다. 실패해도 기본값으로 계속 간다.
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
@@ -9081,7 +9100,7 @@ const bdongLoading = new Set();
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
-  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260820l"}` : "")
+  fetch(BDONG_IDX[sd].file ? `bdong/${BDONG_IDX[sd].file}?b=${window.BUILD || "20260820m"}` : "")
     .then(r => r.json())
     .then(d => {
       if (d && d.features && d.features.length) {
@@ -9107,7 +9126,7 @@ function loadBdongVisible() {
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
 async function loadDeferred() {
-  const CB = "?b=" + (window.BUILD || "20260820l");
+  const CB = "?b=" + (window.BUILD || "20260820m");
   const gj = f => fetch(f + CB).then(r => r.json());
   // 법정동 경계(전국 16시도, ~20MB) — 시도별 분할 파일을 뷰포트·선택 시에만 로드(bdong/index.json = bbox 카탈로그)
   gj("bdong/index.json").then(idx => {
