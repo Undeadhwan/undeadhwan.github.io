@@ -7668,7 +7668,14 @@ function initKakao() {
        지도가 방금 그린 pool을 그대로 넘긴다 — 시트가 뷰포트를 다시 계산하면 두 숫자가 갈린다. */
     window._viewPool = pool;
     if (typeof renderSheet === "function" && matchMedia("(max-width:768px)").matches) { try { renderSheet(); } catch (e) {} }
-    _hjCountEl.innerHTML = '<b>' + pool.length.toLocaleString() + '</b>건 전부 표시 중 · 숨김 0'
+    /* ★ **아직 받는 중이면 「전부」라고 말하지 않는다** (2026-08-20 스트리밍 도입).
+       무거운 소스 넷이 첫 화면 뒤에 도착하므로, 그 사이 「전부 표시 중 · 숨김 0」은 **거짓말**이다
+       (P2·P5 · §화면이 사실을 말하는가). 무엇이 안 왔는지까지 적는다 — 「불러오는 중」만으로는
+       빠진 게 철도인지 정비인지 방문자가 알 수 없다. 다 오면 원래 보증 문구로 돌아온다. */
+    _hjCountEl.innerHTML = '<b>' + pool.length.toLocaleString() + '</b>건 '
+      + (SRC_PENDING.size
+          ? '표시 중 <span class="hjauto">· ' + [...SRC_PENDING].join('·') + ' 불러오는 중</span>'
+          : '전부 표시 중 · 숨김 0')
       + '<i class="hjsep"></i><span class="hjauto">지도 이동 시 자동 조회</span>'; };
 
   // 동 라벨: feature에 1회 캐시(_klbl) — 충돌 계산만 매번, DOM 생성은 안 한다
@@ -8589,7 +8596,9 @@ function renderSheet() {
   const vp = window._viewPool;
   const rows = sortSignals(vp && vp.length ? vp.filter(visible) : allSignalsFlat().filter(visible),
                            sortEl ? sortEl.value : "level", null);
-  document.getElementById("ms-n").innerHTML = '이 화면 안 <b>' + rows.length.toLocaleString() + '</b>건';
+  /* 아직 받는 중이면 여기도 말한다 — 지도 배지와 **같은 규칙**이다(한쪽에만 걸면 모바일이 조용히 예외). */
+  document.getElementById("ms-n").innerHTML = '이 화면 안 <b>' + rows.length.toLocaleString() + '</b>건'
+    + (SRC_PENDING.size ? ' <span class="hjauto">· 불러오는 중</span>' : '');
   /* 활성 필터 개수 = **기본과 달라진 축의 수**. 접힌 상태에서도 뭐가 걸려 있는지 보인다. */
   const nf = (CAT_KEYS.length - CAT_KEYS.filter(c => filter.cat.has(c)).length)
     + (PHASES.length - PHASES.filter(p => filter.phase.has(p)).length)
@@ -8955,8 +8964,49 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "adverse_facilities.json": "1d4b48c83a", "apartments_all.json": "65f9e8a1a4", "arch_signals.json": "a321869c42", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "672d6218f5", "capital_raw.json": "9b7e9e92b9", "dart_signals.json": "1e2a409b35", "dps_signals.json": "86d69c8eec", "eum_signals.json": "aec4af4c01", "hospital_signals.json": "6074d464f8", "indpark_signals.json": "49bc60c2e7", "jeongbi_poly_seoul.json": "11a45f5e8d", "jobs_signals.json": "af8271939b", "logipark_signals.json": "19dcf210c9", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "30a77e5685", "mega_signals.json": "51a115d4e6", "methodology.html": "b8986fe85a", "park_signals.json": "a0b6d6d14e", "rail_reference.html": "ff84fa7143", "rail_signals.json": "8d0e578c6f", "regions.json": "9357f5440d", "report.html": "3850dd88e6", "retail_signals.json": "50b5b6d102", "road_signals.json": "629fa28ea8", "school_signals.json": "0788745519", "settings.html": "efc2bb5410", "sfz_signals.json": "687f7cac96", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "0598a65502", "signals.json": "94f5712a9f", "signals_auto.json": "b1f36ad1a3", "signals_jeongbi_all.json": "5c81f196db", "thresholds.json": "5b7226f4e1"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260820r");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "adverse_facilities.json": "1d4b48c83a", "apartments_all.json": "65f9e8a1a4", "arch_signals.json": "a321869c42", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "702ac4c73f", "capital_raw.json": "9b7e9e92b9", "dart_signals.json": "1e2a409b35", "dps_signals.json": "86d69c8eec", "eum_signals.json": "aec4af4c01", "hospital_signals.json": "6074d464f8", "indpark_signals.json": "49bc60c2e7", "jeongbi_poly_seoul.json": "11a45f5e8d", "jobs_signals.json": "af8271939b", "logipark_signals.json": "19dcf210c9", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "30a77e5685", "mega_signals.json": "51a115d4e6", "methodology.html": "b8986fe85a", "park_signals.json": "a0b6d6d14e", "rail_reference.html": "ff84fa7143", "rail_signals.json": "8d0e578c6f", "regions.json": "9357f5440d", "report.html": "3850dd88e6", "retail_signals.json": "50b5b6d102", "road_signals.json": "629fa28ea8", "school_signals.json": "0788745519", "settings.html": "efc2bb5410", "sfz_signals.json": "687f7cac96", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "0598a65502", "signals.json": "94f5712a9f", "signals_auto.json": "b1f36ad1a3", "signals_jeongbi_all.json": "5c81f196db", "thresholds.json": "5b7226f4e1"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260821a");
+
+/* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
+   ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
+     (철도·건축·정비·도로)이 전송량의 70%다 — 방문자는 강서구를 보려고 제주 철도 선형까지
+     기다렸다. 나머지 23개는 합쳐도 그 절반이 안 된다.
+   ⇒ 가벼운 것만 막고, 무거운 넷은 **도착하는 대로 각자 어댑트 → 다시 그린다**.
+     (이 패턴은 이미 `loadDeferred`가 아파트·정비 폴리곤에 쓰고 있다 — 새 발명이 아니다.)
+   ★ **화면은 아직 받는 중이라고 말한다.** 무손실 배지(시안 §01)가 「전부 표시 중 · 숨김 0」인데
+     아직 안 온 소스가 있으면 그건 **거짓말**이다(P2·P5 · §화면이 사실을 말하는가).
+     받는 동안은 무엇이 안 왔는지 배지에 적는다. */
+const SRC_PENDING = new Set();
+let _srcTimer = null;
+function srcArrive(name) {
+  SRC_PENDING.delete(name);
+  /* 넷이 비슷한 때 도착하면 `renderAll`이 **네 번** 돈다(실측 데스크톱 40~80ms · 폰은 몇 배).
+     첫 화면을 빠르게 만들어 놓고 그 직후를 버벅이게 하면 남는 게 없다 ⇒ **한 번으로 합친다**.
+     ⚠ 트레일링이라 마지막 도착 뒤에 그린다 — 늦게 오는 소스(정비 1.6s)는 자기 시점에 따로 그려진다. */
+  clearTimeout(_srcTimer);
+  _srcTimer = setTimeout(() => { if (typeof renderAll === "function") renderAll(); }, 80);
+}
+/* 확정 신호 ↔ 자동 도로 병합(승격) — 도로가 **늦게 도착하므로 함수로 뺀다**.
+   ☠ 이걸 부트에 인라인으로 두면 도로가 늦게 올 때 병합이 아예 안 돌아 **같은 사업이 두 번**
+     뜬다(확정 신호 + 자동 도로). 순서 의존은 스트리밍으로 바꿀 때 가장 먼저 깨지는 자리다.
+   ⚠ **멱등**이어야 한다 — 이미 흡수한 신호(`_road`)는 건너뛴다. 두 번 돌면 access_points가
+     중복되고 IC 개수가 부풀어 오른다(집계가 곧 사실인 화면에서 그건 오보다). */
+function mergeRoadRefs() {
+  SIGNALS.forEach(s => {
+    if (!s.road_ref || s._road) return;
+    // 매칭은 **내부 수집명(osm_name)** 기준 — title은 공식 사업명으로 바뀌므로 매칭 키로 쓰면 깨진다
+    // (2026-07-17 사고: 표시명 공식화 후 광명서울 IC 6개가 통째로 유실됨)
+    const i = ROAD_SIG.findIndex(r => r.access_points && (r.osm_name || r.title || "").includes(s.road_ref));
+    if (i < 0) return;   // 매칭 실패 시 양쪽 그대로(정직)
+    const rd = ROAD_SIG.splice(i, 1)[0];
+    s._road = true; s.road_kind = rd.road_kind;
+    if (!s.geometry || !s.geometry.coordinates) s.geometry = rd.geometry;
+    s.access_points = (s.access_points || []).concat(rd.access_points || []);
+    s.ic_points = rd.ic_points;
+    s.sources = [...new Set((s.sources || []).concat(rd.sources || []))];
+    s.merged_osm = rd.title;   // renderRail 선 클릭 → 이 확정 신호로 연결
+  });
+}
 
 /* ══════════ 부트 ══════════ */
 (async () => {
@@ -8965,7 +9015,7 @@ const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
   applyThresholds(await gj("thresholds.json").catch(() => null));
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
-  const [dong, sgg, main, macro, rawData, autoData, regions, jeongbiData, railData, roadData, dartData, archData, parkData, hospData, retailData, schoolData, dpsData, shData, masterData, jobsData, indparkData, logiparkData, sfzData, megaData, eumData, advData] = await Promise.all([
+  const [dong, sgg, main, macro, rawData, autoData, regions, dartData, parkData, hospData, retailData, schoolData, dpsData, shData, masterData, jobsData, indparkData, logiparkData, sfzData, megaData, eumData, advData] = await Promise.all([
     gj("bdong/서울.geojson"),      // 초기 = 서울 467동(§3.1 법정동). 나머지 15시도는 뷰포트·선택 시 지연 로드(bdong/index.json)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
@@ -8973,11 +9023,7 @@ const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD
     gj("capital_raw.json"),
     gj("signals_auto.json"),
     gj("regions.json").catch(() => null),
-    JEONGBI_LICENSED ? gj("signals_jeongbi_all.json").catch(() => ({ cands: [] })) : Promise.resolve({ cands: [] }),  // 정비 후보 신호(카운트·배지용, 357KB — 폴리곤은 지연)
-    RAIL_READY ? gj("rail_signals.json").catch(() => ({ features: [] })) : Promise.resolve({ features: [] }),  // 신규 철도 노선
-    gj("road_signals.json").catch(() => ({ features: [] })),   // 신규 도로(고속·간선 신설/확장/지하화, OSM) — IC=점·노선=다점 신호
     gj("dart_signals.json").catch(() => ({ signals: [] })),   // DART → 일자리 후보
-    gj("arch_signals.json").catch(() => ({ signals: [] })),   // 건축인허가(전국). 2026-07-19: 권역 4분할 삭제 — 신호의 sd가 권역을 담는다
     gj("park_signals.json").catch(() => ({ features: [] })),          // 도시계획시설(공원) 결정 — 미집행·부분집행만(브이월드)
     gj("hospital_signals.json").catch(() => ({ features: [] })),      // 도시계획시설(종합의료) 결정 — 같은 커넥터·같은 규칙(2026-07-29 배선)
     gj("retail_signals.json").catch(() => ({ features: [] })),        // 도시계획시설(유통·시장) — UQ154(2026-07-29)
@@ -8993,16 +9039,10 @@ const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD
     gj("eum_signals.json").catch(() => ({ signals: [] })),            // 토지이음 지자체 도시계획 고시(2026-07-22)
     gj("adverse_facilities.json").catch(() => ({ features: [] }))     // 역효과(UQ158 환경기초) — 지도 미표시, 아파트 카드 병기 전용(②안, 2026-07-30)
   ]);
-  RAIL = (railData && railData.features) || [];
-  buildRailSignals();   // 계획/건설역 → 교통 신호(신설역 근처 아파트 호재 카운팅 기준좌표)
-  ROADF = (roadData && roadData.features) || [];
-  buildRoadSignals();   // 도로 노선(다점)·IC(점) → 교통·도로 신호
   DART = ((dartData && dartData.signals) || []).filter(s => !s.superseded_by && !s.map_hidden);   // 승격 중복 제외
   buildDartSignals();   // DART → 일자리 후보 신호(호재 카운팅 포함)
   // 전국 건축인허가 = 서울·수도권 + 지방12 + 전남광주 (지역별 분할 수집 → 병합. 지역-무관 원칙: 파일만 추가)
   // 수도권(경기·인천) 파일 누락 교정(2026-07-18) — 종전엔 로드 목록에 없어 서울 파일에 섞인 분만 우연히 보였다
-  ARCH = ((archData && archData.signals) || []).filter(s => !s.superseded_by && !s.map_hidden);   // 권역 4분할 삭제 + 확정층 승격분 제외(핀 중복 방지) — 2026-07-19
-  buildArchSignals();   // 건축인허가 → 인프라·일자리 후보 신호(호재 카운팅 포함)
   // 신규 대형공원(브이월드 도시계획 API) — feature 형식이 이미 신호 어댑트와 동일(cat/lvl/geometry)라 그대로 pool 투입
   // upis_fetch(도시계획시설 결정) 산출물은 **모두 같은 모양**이라 한 배열에 담는다 — 유형이 늘어도
   // 전역·어댑터·풀 3곳을 또 고치지 않는다(어댑터 함정 재발 방지, 2026-07-29).
@@ -9063,9 +9103,7 @@ const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD
   SGG_GEO = sgg;
   RAW = rawData.rows;
   AUTO = autoData.candidates;
-  JEONGBI = (jeongbiData && jeongbiData.cands) || [];
   JEONGBI_POLY = [];   // 정비 폴리곤(1.9MB)은 지연 로드
-  buildJeongbiSignals();   // 정비 후보 → 신호 어댑트(호재 카운팅 포함용)
   APTS = [];   // 2026-07-19: 강서 정밀본 삭제 — Nominatim(OSM) 좌표가 브이월드 공식 좌표를 덮어쓰고 있었다. 전국본 지연 로드로 채운다.
   // 상태 파생 (§3.1: 정체 = 6개월+ 무움직임). status_override는 공사 진행 등
   // "무공시가 정상인 단계"에 한해 명시 근거(status_note)와 함께 사용
@@ -9079,20 +9117,7 @@ const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD
   MACRO = macro.signals;
   // 확정 신호 ↔ OSM 도로 병합(승격): signals.json에 road_ref 명시 시, 매칭 노선의 선형·샘플점·IC를 확정 신호가 승계하고
   // 자동(OSM) 신호는 제거 — 같은 사업 이중 카운트 방지 + 양쪽 계보(sources) 보존 (SSOT: 후보→확정 승격 지점)
-  SIGNALS.forEach(s => {
-    if (!s.road_ref) return;
-    // 매칭은 **내부 수집명(osm_name)** 기준 — title은 공식 사업명으로 바뀌므로 매칭 키로 쓰면 깨진다
-    // (2026-07-17 사고: 표시명 공식화 후 광명서울 IC 6개가 통째로 유실됨)
-    const i = ROAD_SIG.findIndex(r => r.access_points && (r.osm_name || r.title || "").includes(s.road_ref));
-    if (i < 0) return;   // 매칭 실패 시 양쪽 그대로(정직)
-    const rd = ROAD_SIG.splice(i, 1)[0];
-    s._road = true; s.road_kind = rd.road_kind;
-    if (!s.geometry || !s.geometry.coordinates) s.geometry = rd.geometry;
-    s.access_points = (s.access_points || []).concat(rd.access_points || []);
-    s.ic_points = rd.ic_points;
-    s.sources = [...new Set((s.sources || []).concat(rd.sources || []))];
-    s.merged_osm = rd.title;   // renderRail 선 클릭 → 이 확정 신호로 연결
-  });
+  mergeRoadRefs();   // 도로는 늦게 오므로 도착 시 다시 부른다(멱등)
   renderChips();
   initDock();
   initRegionBar();
@@ -9108,6 +9133,7 @@ const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD
   initTabbar();
   document.getElementById("v-undet").onclick = () => setView("undet");
   initOpsMode();
+  streamHeavy();    // 무거운 신호 4종(전송량 70%)은 첫 화면 뒤에 — 도착하는 대로 합류
   loadDeferred();   // 큰 파일(경기·인천 동경계·전국 아파트·정비 폴리곤)은 초기 렌더 뒤 백그라운드 로드
 })();
 
@@ -9166,6 +9192,33 @@ function loadBdongVisible() {
     const [x0, y0, x1, y1] = v.bbox;
     if (b.getWest() <= x1 && b.getEast() >= x0 && b.getSouth() <= y1 && b.getNorth() >= y0) loadBdongFor(sd);
   }
+}
+
+/* 무거운 신호 소스 스트리밍 — 첫 화면을 막지 않는다 (2026-08-20).
+   ⚠ **부트가 끝난 뒤에 시작한다.** 캐시가 뜨거우면 fetch가 즉시 resolve될 수 있는데, 그때
+     어댑터가 아직 안 채워진 전역(REGIONS·DONG_GEO 등)을 보면 조용히 반쪽으로 돈다.
+   ⚠ 라이선스·준비 플래그로 꺼진 소스는 **대기 목록에 넣지도 않는다** — 안 올 것을 기다리면
+     배지가 영원히 「불러오는 중」이라고 거짓말한다. */
+function streamHeavy() {
+  const gj = f => fetch(f + cbOf(f)).then(r => r.json());
+  const src = (name, on, file, empty, apply) => {
+    if (!on) return;
+    SRC_PENDING.add(name);
+    gj(file).catch(() => empty)
+      .then(d => { try { apply(d || empty); } catch (e) { console.error("[stream]", name, e); } })
+      .finally(() => srcArrive(name));
+  };
+  // 철도 8.5MB·건축 3.5MB·정비 3.1MB·도로 1.7MB = 첫 화면 전송량의 70%
+  src("철도", RAIL_READY, "rail_signals.json", { features: [] }, d => {
+    RAIL = (d && d.features) || []; buildRailSignals(); });          // 계획/건설역 → 교통 신호
+  src("도로", true, "road_signals.json", { features: [] }, d => {
+    ROADF = (d && d.features) || []; buildRoadSignals();             // 노선(다점)·IC(점)
+    mergeRoadRefs(); });                                             // ★ 도착 후 승격 병합(이중 카운트 방지)
+  src("건축", true, "arch_signals.json", { signals: [] }, d => {
+    ARCH = ((d && d.signals) || []).filter(x => !x.superseded_by && !x.map_hidden);
+    buildArchSignals(); });                                          // 확정층 승격분 제외(핀 중복 방지)
+  src("정비", JEONGBI_LICENSED, "signals_jeongbi_all.json", { cands: [] }, d => {
+    JEONGBI = (d && d.cands) || []; buildJeongbiSignals(); });
 }
 
 /* 지연 로드: 초기 화면(서울+전 신호)은 즉시 뜨고, 큰 파일은 뒤에서 스트리밍 → 도착분만 병합·재렌더. */
