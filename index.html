@@ -3357,8 +3357,22 @@ const filter = {
 /* 옛 localStorage에는 "노선명" 키가 없다 → 그대로 두면 **있던 배지가 갑자기 사라진다**.
    저장값에 철도선/도로선만 있고 노선명 흔적이 없으면 켠 것으로 복원한다(옛 이름 흡수와 같은 원칙). */
 if (!localStorage.getItem("hojae_lines_v2")) { filter.lines.add("노선명"); localStorage.setItem("hojae_lines_v2", "1"); }
-const dockOpen = new Set(JSON.parse(localStorage.getItem("hojae_dock_open")
-  || (window.innerHeight >= 900 ? JSON.stringify(CAT_KEYS) : "[]")));
+/* 세부유형 판의 **핀** — 세션 안에서만 산다. (2026-08-20 알렉스 제보 *"세부유형 팝업이
+   안 없어지고 떠 있는 경우가 있다"*)
+   ☠ 종전엔 `localStorage`에 저장했고, **창 높이 900px 이상이면 첫 방문부터 전 분류를 핀**했다
+     (`|| (innerHeight >= 900 ? CAT_KEYS : [])`). 둘 다 **아코디언 시절의 규칙**이다 —
+     그때 「핀」은 도크 안에서 목록을 펼쳐 두는 것이라, 저장해 두면 「자주 보는 축이 펼쳐진 채
+     열린다」가 되어 합리적이었다.
+   ⇒ 세션66이 표시를 **떠 있는 판**으로 바꾸면서 그 규칙을 그대로 뒀다. 같은 상태가 이제는
+     **「지도 위에 정체불명의 판이 떠 있고, ▶를 다시 찾기 전엔 안 닫힌다」**로 나타난다.
+     새로고침해도 살아나므로 사용자는 자기가 켰다는 것조차 모른다.
+   ★ 이 파일은 바로 이 함정을 **이미 적어 두었다**(§syncFly의 「동시 펼침」 주석):
+     *"부품이 바뀌면 그 부품을 전제한 규칙도 함께 바뀐다 — 남겨 두면 겹침으로 나타난다."*
+     한 사례(동시 펼침)만 고치고 **영속·자동 핀은 남겼던 것**이다. 규칙을 고칠 땐 그 규칙을
+     쓰는 자리를 전수로 본다.
+   ⚠ 옛 저장값은 **지운다** — 안 지우면 이미 켜 둔 사람은 영원히 그 상태다. */
+localStorage.removeItem("hojae_dock_open");
+const dockOpen = new Set();
 let view = { mode: "home", dong: null, signal: null };
 let mapApi = null;   // {panTo(lnglat), refreshPins()}
 /* ══ 화면 폭·높이는 **레이아웃 뷰포트**에서 잰다 (2026-08-14) ══════════════════════════════
@@ -5555,6 +5569,15 @@ function positionFly(catEl) {
      부품이 바뀌면 그 부품을 전제한 규칙도 함께 바뀐다(남겨 두면 겹침으로 나타난다).
    보이는 판 = **호버가 있으면 호버, 없으면 핀**. 호버를 떼면 핀으로 돌아온다. */
 function syncFly() {
+  /* ③ **꺼진 대분류의 「핀」은 풀린다** (2026-08-20). 실측 화면: 일자리가 꺼져 있는데(○)
+       그 세부유형 판이 떠 있었다 — 조회에서 뺀 축의 세부 목록을 지도 위에 띄우고 있던 셈.
+     ⚠ **호버는 건드리지 않는다.** 꺼진 분류에 마우스를 얹어 세부 하나만 켜는 건 정상 사용이다
+       (판의 체크박스가 그 일을 한다). 붙박이로 남는 **핀**만 푼다 — 규칙을 넓게 걸면
+       멀쩡한 동선을 막는다. */
+  for (const k of [...dockOpen]) {
+    const el0 = document.querySelector('#dock .cat[data-cat="' + k.replace(/"/g, '\\"') + '"]');
+    if (el0 && el0.classList.contains("off")) dockOpen.delete(k);
+  }
   const active = flyCat || [...dockOpen][0] || null;
   document.querySelectorAll("#dock .cat").forEach(el => {
     const on = el.dataset.cat === active;
@@ -5865,6 +5888,17 @@ function initDock() {
      붙박이가 된다. `#dock` **자신**은 재렌더를 견디므로(innerHTML만 바뀐다) 여기에 걸면 확실하다.
      ⚠ 핀(`dockOpen`)은 건드리지 않는다 — 그건 사용자가 명시적으로 고정한 상태다. */
   dock.addEventListener("mouseleave", () => closeFlySoon());
+  /* ② **판 밖을 누르면 닫힌다** (2026-08-20 알렉스 제보). 떠 있는 판의 상식적 동작인데
+     종전엔 ▶를 **다시 찾아 누르는 것 말고는 닫을 방법이 없었다** — 판이 도크에서 떨어져
+     지도 위에 뜨므로 그 ▶가 어디였는지도 알기 어렵다.
+     ⚠ 도크 안(판 포함) 클릭은 통과시킨다 — 체크박스를 누를 때마다 닫히면 세부유형을 두 개
+       이상 못 고른다(세션66이 `syncFly` 누락으로 겪은 바로 그 증상을 되살리는 셈).
+     ⚠ `capture`로 걸지 않는다 — 지도·마커의 자기 핸들러가 먼저 돌아야 한다. */
+  document.addEventListener("click", e => {
+    if (!flyCat && !dockOpen.size) return;
+    if (e.target.closest("#dock") || e.target.closest(".subs")) return;
+    dockOpen.clear(); flyCat = null; clearTimeout(_flyTimer); syncFly();
+  });
   dock.addEventListener("scroll", () => { if (flyCat || dockOpen.size) syncFly(); });
   addEventListener("resize", () => { if (flyCat || dockOpen.size) syncFly(); });
   renderDock();
@@ -5877,15 +5911,13 @@ function bindFilterClicks(host) {
       const k = op.dataset.open;
       // 핀도 하나만 — 새 분류를 핀하면 앞의 핀은 풀린다(판이 하나이므로 상태도 하나여야 한다)
       if (dockOpen.has(k)) dockOpen.delete(k); else { dockOpen.clear(); dockOpen.add(k); }
-      localStorage.setItem("hojae_dock_open", JSON.stringify([...dockOpen]));
-      renderDock(); return;
+      renderDock(); return;   // 핀은 세션 상태 — 저장하지 않는다(위 dockOpen 주석)
     }
     // 전부 접기 — **필터를 건드리지 않는다**(펼침 상태만 바꾼다). 조회 조건과 화면 접힘은 다른 축이다.
     if (e.target.closest("[data-fold]")) {
       dockOpen.clear();
       flyCat = null;   // ☠ 핀만 지우면 **호버 상태가 판을 다시 연다** — 「전부 접기」가 먹통이 된다(실측)
       clearTimeout(_flyTimer);
-      localStorage.setItem("hojae_dock_open", JSON.stringify([]));
       renderDock(); return;
     }
     // only = 이 분류만 남기기. 종전 "전체 해제 → 원하는 것 켜기"(2클릭+)를 1클릭으로.
@@ -5894,7 +5926,7 @@ function bindFilterClicks(host) {
       const k = so.dataset.solo;
       CAT_KEYS.forEach(c => { c === k ? filter.cat.add(c) : filter.cat.delete(c);
         (SUB_KEYS[c] || []).forEach(sk => c === k ? filter.sub.add(subId(c, sk)) : filter.sub.delete(subId(c, sk))); });
-      flyCat = null; dockOpen.delete(k); localStorage.setItem("hojae_dock_open", JSON.stringify([...dockOpen]));   // 종결 동작 — 판을 닫는다
+      flyCat = null; dockOpen.delete(k);   // 종결 동작 — 판을 닫는다
       renderAll(); return;
     }
     /* 플라이아웃 머리의 「전체 / 해제」 — 그 분류 안에서만 켜고 끈다(다른 분류는 건드리지 않는다). */
@@ -5913,7 +5945,7 @@ function bindFilterClicks(host) {
       CAT_KEYS.forEach(c => c === pc ? filter.cat.add(c) : filter.cat.delete(c));
       /* `only`는 **종결 동작**이다 — 「이것만 보기」가 끝났으므로 판을 닫는다. 체크박스는 여러 개를
          고르는 중이라 판을 유지하지만(rev2 §14-4), only는 한 번으로 끝난다. 핀도 함께 푼다. */
-      flyCat = null; dockOpen.delete(pc); localStorage.setItem("hojae_dock_open", JSON.stringify([...dockOpen]));
+      flyCat = null; dockOpen.delete(pc);
       renderAll(); return;
     }
     const t = e.target.closest("[data-tog],[data-all],[data-allcat]");
@@ -8923,8 +8955,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "e43f3b5214", "adverse_facilities.json": "8a1139277a", "apartments_all.json": "6ea6d59b04", "arch_signals.json": "5f9a12ed13", "bdong/index.json": "36adb58b99", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "878a1413de", "capital_raw.json": "6e03c5cb2d", "dart_signals.json": "493d564753", "dps_signals.json": "550506d92a", "eum_signals.json": "2d3aed854a", "hospital_signals.json": "7dc4687d2c", "indpark_signals.json": "22b0ee51da", "jeongbi_poly_seoul.json": "11a45f5e8d", "jobs_signals.json": "2d130e4749", "logipark_signals.json": "0ec0f376ce", "macro_signals_draft.json": "5d7377cd88", "master_signals.json": "996917f5ba", "mega_signals.json": "ac2c75fc74", "methodology.html": "b8986fe85a", "park_signals.json": "799fa9da04", "rail_reference.html": "ff84fa7143", "rail_signals.json": "e8a5ff74db", "regions.json": "8b80e460fe", "report.html": "3850dd88e6", "retail_signals.json": "05bbb43263", "road_signals.json": "2692e49b5a", "school_signals.json": "a4d1d677ac", "settings.html": "efc2bb5410", "sfz_signals.json": "2455f8d603", "sgg_all.geojson": "e821335f3f", "sh_signals.json": "9aef6675e9", "signals.json": "e4afb072be", "signals_auto.json": "c4941f8814", "signals_jeongbi_all.json": "565bd1d91d", "thresholds.json": "043a3eaf85"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260820n");
+window.FHASH = {"DATA_STANDARD.md": "e43f3b5214", "adverse_facilities.json": "8a1139277a", "apartments_all.json": "6ea6d59b04", "arch_signals.json": "5f9a12ed13", "bdong/index.json": "36adb58b99", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "b9b1dc89eb", "capital_raw.json": "6e03c5cb2d", "dart_signals.json": "493d564753", "dps_signals.json": "550506d92a", "eum_signals.json": "2d3aed854a", "hospital_signals.json": "7dc4687d2c", "indpark_signals.json": "22b0ee51da", "jeongbi_poly_seoul.json": "11a45f5e8d", "jobs_signals.json": "2d130e4749", "logipark_signals.json": "0ec0f376ce", "macro_signals_draft.json": "5d7377cd88", "master_signals.json": "996917f5ba", "mega_signals.json": "ac2c75fc74", "methodology.html": "b8986fe85a", "park_signals.json": "799fa9da04", "rail_reference.html": "ff84fa7143", "rail_signals.json": "e8a5ff74db", "regions.json": "8b80e460fe", "report.html": "3850dd88e6", "retail_signals.json": "05bbb43263", "road_signals.json": "2692e49b5a", "school_signals.json": "a4d1d677ac", "settings.html": "efc2bb5410", "sfz_signals.json": "2455f8d603", "sgg_all.geojson": "e821335f3f", "sh_signals.json": "9aef6675e9", "signals.json": "e4afb072be", "signals_auto.json": "c4941f8814", "signals_jeongbi_all.json": "565bd1d91d", "thresholds.json": "043a3eaf85"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260820o");
 
 /* ══════════ 부트 ══════════ */
 (async () => {
