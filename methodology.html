@@ -34,6 +34,17 @@
   .toc { background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 18px; font-size:13px; }
   .toc a { display:inline-block; margin:2px 12px 2px 0; }
 </style>
+  <!-- ══ 접속 통계 — Cloudflare Web Analytics (2026-08-21) ══════════════════
+       왜 비콘인가: 도메인은 Cloudflare가 관리하지만 **프록시는 꺼 두었다**
+       (무료 플랜이 한국 트래픽을 홍콩으로 보내 GitHub 인천 엣지보다 8배 느렸다 —
+        실측·근거는 PROCEDURE_도메인_CDN.md). 프록시가 꺼져 있으면 서버측 집계가
+       불가능하므로 스크립트로 수집한다. 프록시를 다시 켜면 이 줄은 없어도 된다.
+       ⚠ 쿠키·개인식별정보를 쓰지 않는다(Cloudflare Web Analytics 사양) — P5와 충돌 없음.
+       ⚠ `type=module`이라 **기본 defer**다. 첫 화면 렌더링을 막지 않는다
+          (오늘 첫 화면을 2,280KB→374KB로 줄여 놓고 여기서 되돌리면 안 된다).
+       ⚠ **운영 페이지(settings·report·rail_reference)에는 넣지 않는다** — 운영자 본인
+          사용이 방문 수를 부풀리면 통계가 거짓말을 한다(P2). 공개 페이지에만 단다. -->
+  <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "8abb852350ee4eb18bf696521744dfa7"}'></script>
 </head>
 <body>
 <div class="wrap">
