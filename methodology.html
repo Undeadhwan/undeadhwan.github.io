@@ -59,8 +59,16 @@
     try {
       const K = "hojae_vid";
       let v = localStorage.getItem(K);
-      if (!v) { v = ([1e7]+'').replace(/./g, () => (Math.random()*16|0).toString(16)).slice(0,16);
-                localStorage.setItem(K, v); }
+      // ⚠ 16자를 만든다. 종전 `([1e7]+'')`는 "10000000"(8글자)라 **8자만** 나왔다
+      //   (2026-08-21 실측 — 주석·README는 16자라고 적혀 있었다). 자릿수는 충돌 확률이라
+      //   말과 코드가 어긋나면 안 된다. crypto가 있으면 그걸 쓰고, 없으면 Math.random 폴백.
+      if (!v) {
+        const b = new Uint8Array(8);
+        if (self.crypto && self.crypto.getRandomValues) self.crypto.getRandomValues(b);
+        else for (let i = 0; i < 8; i++) b[i] = Math.random() * 256 | 0;
+        v = Array.from(b, x => x.toString(16).padStart(2, "0")).join("");
+        localStorage.setItem(K, v);
+      }
       const body = JSON.stringify({ v, p: location.pathname + location.search, r: document.referrer });
       const url = "https://hojaemap-visits.obey82.workers.dev/";
       // sendBeacon = 페이지를 붙잡지 않는다. 없으면 fetch(keepalive)로 떨어진다.

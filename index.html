@@ -266,13 +266,10 @@
   .ltab .lt-lv { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px;
     border-radius:50%; border-style:solid; font-size:11px; font-weight:700; color:var(--ink); }
   /* 4점 트랙 (시안 §07) — 건당 60px 트랙 대신 6px 점 4개 */
-  .rowtab .pdots { display:inline-flex; gap:3px; margin-bottom:3px; }
   /* ★ 시안 실물: 4점 트랙은 **채운 점**이다(빈 링이 아니다) — 미도래만 흐린 점. */
-  .rowtab .pd { width:6px; height:6px; border-radius:50%; border:0; background:var(--line2); display:block; }
-  .rowtab .pd.on { background:var(--ink); }
-  .rowtab .ptrack { display:inline-flex; align-items:center; gap:8px; white-space:nowrap; }
   .rowtab .lt-ph { font-size:12px; line-height:1.3; }
-  .rowtab .pdots { margin:0; }
+  /* 단계 표기는 목록 뷰와 **같은 컴포넌트**(`phcell`)를 쓴다 — 2026-08-21 통일 */
+  .rowtab .phcell { font-size:12px; }
   /* ☠ **거리 열이 패널 밖으로 나가 있었다** (2026-08-13 실물 대조 — 실측 표 426px ↔ 그릇 343px).
      이 화면이 묻는 것은 「이 단지에서 얼마나 먼가」인데, 그 답을 담은 열이 눈에 닿은 적이 없다.
      원인은 목록 탭용 `min-width:230px`(제목이 "가양 4…"로 잘리는 것을 막던 값)를 좁은 패널이
@@ -375,6 +372,9 @@
   .lvcell .lvring { border-style:solid; border-width:2px; border-radius:50%; flex:none; }
   .lvcell .lvring.dia { border-radius:2px; transform:rotate(45deg); border-width:1.8px; }
   /* 단계 셀 = 아이콘 + 글자 (지도 문법 재사용: 계획 점선 · 확정 실선 · 착공 굵은 · 완공 코어) */
+  /* 받는 중 표시 — 숫자 자리에 들어가므로 같은 크기 계열을 유지한다(자리가 흔들리면 그것도 거슬린다) */
+  .cnt .loading { color:var(--ink3); font-weight:500; animation:hjfade 1.1s ease-in-out infinite; }
+  @keyframes hjfade { 0%,100% { opacity:.45 } 50% { opacity:.9 } }
   .phcell { display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
   .phcell i { width:11px; height:11px; border-radius:50%; flex:none; border:1.6px solid var(--ink2); }
   .phcell i.ph0 { border-style:dashed; }
@@ -1753,8 +1753,16 @@
     try {
       const K = "hojae_vid";
       let v = localStorage.getItem(K);
-      if (!v) { v = ([1e7]+'').replace(/./g, () => (Math.random()*16|0).toString(16)).slice(0,16);
-                localStorage.setItem(K, v); }
+      // ⚠ 16자를 만든다. 종전 `([1e7]+'')`는 "10000000"(8글자)라 **8자만** 나왔다
+      //   (2026-08-21 실측 — 주석·README는 16자라고 적혀 있었다). 자릿수는 충돌 확률이라
+      //   말과 코드가 어긋나면 안 된다. crypto가 있으면 그걸 쓰고, 없으면 Math.random 폴백.
+      if (!v) {
+        const b = new Uint8Array(8);
+        if (self.crypto && self.crypto.getRandomValues) self.crypto.getRandomValues(b);
+        else for (let i = 0; i < 8; i++) b[i] = Math.random() * 256 | 0;
+        v = Array.from(b, x => x.toString(16).padStart(2, "0")).join("");
+        localStorage.setItem(K, v);
+      }
       const body = JSON.stringify({ v, p: location.pathname + location.search, r: document.referrer });
       const url = "https://hojaemap-visits.obey82.workers.dev/";
       // sendBeacon = 페이지를 붙잡지 않는다. 없으면 fetch(keepalive)로 떨어진다.
@@ -1825,6 +1833,10 @@
   </div>
   <div class="chips" id="f-view">
     <span class="chip" id="v-undet" title="등급 기준(면적·금액·세대수 등)에 매칭 안 돼 등급이 없는 호재 목록">❓ 등급 없음 목록</span>
+    <!-- ★ 운영 도구의 **입구는 관리자 허브 하나**다 (2026-08-21 — 「관리자용 메뉴는 어디서 보냐」).
+         개별 칩도 남긴다(손에 익은 경로를 끊지 않는다). 허브를 맨 앞에 둬서 처음 오는 사람이
+         거기부터 보게 한다. -->
+    <span class="chip" onclick="window.open('admin.html','_blank')" title="운영 도구 전부 — 기준 설정 · 대장 · 주간 변경 · 접속 기록">🔧 관리자</span>
     <span class="chip" id="v-settings" onclick="window.open('settings.html','_blank')" title="등급 눈금(면적·금액·세대수)과 영향 반경을 thresholds.json에 직접 설정 — 운영자 전용">⚙ 기준 설정</span>
     <span class="chip" onclick="window.open('rail_reference.html','_blank')" title="신규 철도 노선·역사 좌표 대장 (영향권 기준)">🚈 노선·역 대장</span>
     <span class="chip" onclick="window.open('methodology.html','_blank')" title="데이터 소스·추출·가공·매핑 방법 (운영 문서)">📄 데이터·방법론</span>
@@ -4364,17 +4376,21 @@ function sigRowTable(arr, opt = {}) {
        호재로 읽혔다. 머리의 「동 안 N · 영향권 M」 두 수는 있었지만 행이 어느 쪽인지 말하지
        않았다 — 같은 사실을 층은 알고 행은 모르면 목록이 거짓말처럼 보인다). */
     if (x.r === "반경권" && opt.outLabel) sub = `<b class="outzone">${opt.outLabel}</b>${sub ? " · " + sub : ""}`;
-    /* 4점 트랙 — 몇 번째 단계까지 찼는지만. 날짜는 카드를 열면 나온다(시안 §07). */
-    const dots = PHASES.map((p, i) =>
-      `<i class="pd${i <= t.ph ? " on" : ""}"></i>`).join("");
     const tr = document.createElement("tr");
     tr.innerHTML =
-      `<td class="c"><span class="lt-lv${lv === "미정" ? " nolv" : ""}" style="border-color:${t.col};border-width:${Math.max(1.5, t.bw * .7).toFixed(1)}px">${lv === "미정" ? "" : lv}</span></td>`
+      /* ☠ **등급 원의 두께에 단계를 담지 않는다** (2026-08-21 사용자 지적).
+         `t.bw`는 `BW_PHASE × BW_GRADE`라 **단계가 두께로 새어 들어간다.** 그런데 이 표에는
+         바로 옆에 **단계 컬럼이 따로 있다** — 같은 사실을 두 문법으로 말한 것이다.
+         지도에서는 라벨을 놓을 자리가 없어 두께가 단계를 말하는 게 맞지만, **컬럼이 있는 표에서는
+         중복**이다. ⇒ 표에서는 두께 = **등급만**(BW_GRADE). 지도 문법은 그대로 둔다. */
+      `<td class="c"><span class="lt-lv${lv === "미정" ? " nolv" : ""}" style="border-color:${t.col};border-width:${(2.6 * (BW_GRADE[lv] || 0.75)).toFixed(1)}px">${lv === "미정" ? "" : lv}</span></td>`
       + `<td class="lt-nm"><i class="lt-bar" style="background:${t.col}"></i>`
       + `<span class="lt-t">${sigTitle(s)}</span>`
       + `<span class="lt-sub">${catOf(s)}${subLabel(s)}${sub ? " · " + sub : ""}</span></td>`
-      /* ★ 시안 실물: 트랙과 단계 글자가 **가로로 나란히** 놓인다(세로로 쌓지 않는다). */
-      + `<td class="c lt-ph"><span class="ptrack"><span class="pdots">${dots}</span>${PHASE_LABEL[phaseOf(s)] || phaseOf(s)}</span></td>`
+      /* ★ 단계 표기는 **목록 뷰와 같은 문법**(`phcell`)이다 — 2026-08-21 통일.
+         종전엔 여기만 4점 트랙(`pdots`)이라 **같은 개념을 두 문법으로** 말했다
+         (`.mvtag`·`.mvk` 사고와 같은 형태 — 한쪽만 고쳐지면 조용히 갈린다). */
+      + `<td class="c lt-ph"><span class="phcell"><i class="ph${t.ph}"></i>${PHASE_LABEL[phaseOf(s)] || phaseOf(s)}</span></td>`
       + `<td class="c lt-d">${km(tail === "impact" ? getRadius(s) : dist)}</td>`;
     tr.onclick = () => showSignal(s, true);
     /* ☠ **행에 커서를 올리면 지도의 그 마커가 강조된다** — 카드(`makeCard`)가 갖고 있던 기능인데
@@ -5646,8 +5662,10 @@ function renderAxis() {
     const keys = SUB_KEYS[cat] || [];
     const on = keys.length ? keys.some(sk => filter.sub.has(subId(cat, sk))) : filter.cat.has(cat);
     const n = C.cat[cat] || 0;
+    // 받는 중에는 건수를 말하지 않는다 — 도크와 **같은 규칙**이다(한쪽만 걸면 두 곳이 다른 말을 한다)
+    const nTxt = SRC_PENDING.size ? "·" : n.toLocaleString();
     return `<span class="ax${on ? "" : " off"}" data-ax="${cat}" title="${cat} 신호 ${n.toLocaleString()}건 — 탭하면 켜고 끕니다(세부는 ☰ 조회조건)">`
-      + `<i style="background:${CAT_COLOR[cat]}"></i>${cat}<span class="n">${n.toLocaleString()}</span></span>`;
+      + `<i style="background:${CAT_COLOR[cat]}"></i>${cat}<span class="n">${nTxt}</span></span>`;
   }).join("");
 }
 function initAxis() {
@@ -5706,7 +5724,11 @@ function renderDock() {
            있고 사용자가 껐을 뿐이다)
          · 일부만 켜짐 → `선택분 / 총계` + 이름 아래 「공장만」 */
     const allOff = keys.length ? !_onSubs.length : !filter.cat.has(cat);
-    const cnHtml = allOff ? `<span class="dim">${tot.toLocaleString()}</span>`
+    /* 받는 중에는 건수를 말하지 않는다 — 총계·모바일 축 칩과 **같은 규칙**이다.
+       ☠ 한쪽만 걸면 총계는 「불러오는 중」인데 분류는 숫자를 말해 **합이 안 맞아 보인다**
+         (이 저장소가 특히 경계하는 형태). 세 곳이 같은 조건을 본다. */
+    const cnHtml = SRC_PENDING.size ? `<span class="dim">·</span>`
+      : allOff ? `<span class="dim">${tot.toLocaleString()}</span>`
       : partial ? `<b>${selN.toLocaleString()}</b><span class="sl">/</span>${tot.toLocaleString()}`
       : tot.toLocaleString();
     return `<div class="cat${dockOpen.has(cat) ? " open" : ""}${on ? "" : " off"}" data-cat="${cat}" style="--cc:${col};--ccb:${hexA(col, .35)};--ccbg:${hexA(col, .07)}">
@@ -5808,8 +5830,12 @@ function renderDock() {
     && !matchMedia("(max-width:768px)").matches;
   dock.innerHTML = `
     <div class="dk-h">
+      <!-- ☠ **받는 중에는 숫자를 말하지 않는다** (2026-08-21 사용자 제보 "815였다가 5191로 변하는데 거슬려").
+           스트리밍(streamHeavy) 도입으로 무거운 소스 넷이 첫 화면 뒤에 도착하는데, 그동안 이 숫자가
+           올라간다. 지도 배지·모바일 시트에는 「불러오는 중」을 걸어 두고 **여기만 빠뜨렸다** —
+           §규칙이 한쪽에만 걸린다의 그 형태다. 틀린 숫자를 잠깐 보여주느니 받는 중이라고 말한다(P2). -->
       <b>${regionLabel() ? `<span class="rg" title="${regionLabel()}">${regionLabel()}</span>` : ""}<span
-        class="fx">호재 <span class="cnt">${C.total.toLocaleString()}</span></span></b>
+        class="fx">호재 <span class="cnt">${SRC_PENDING.size ? '<span class="loading">불러오는 중</span>' : C.total.toLocaleString()}</span></span></b>
       
 
     </div>
@@ -9016,8 +9042,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "adverse_facilities.json": "1d4b48c83a", "apartments_all.json": "65f9e8a1a4", "arch_signals.json": "a321869c42", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "2e54851929", "dart_signals.json": "1e2a409b35", "dps_signals.json": "86d69c8eec", "eum_signals.json": "aec4af4c01", "hospital_signals.json": "6074d464f8", "indpark_signals.json": "b54f4c3d59", "jeongbi_poly_seoul.json": "11a45f5e8d", "jobs_signals.json": "af8271939b", "logipark_signals.json": "ca69922a45", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2f8bd43f51", "mega_signals.json": "4488a73704", "methodology.html": "67cf04c9e9", "park_signals.json": "a0b6d6d14e", "rail_reference.html": "ff84fa7143", "rail_signals.json": "8d0e578c6f", "regions.json": "9357f5440d", "report.html": "3850dd88e6", "retail_signals.json": "50b5b6d102", "road_signals.json": "629fa28ea8", "school_signals.json": "0788745519", "settings.html": "efc2bb5410", "sfz_signals.json": "dfb06b552c", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "0598a65502", "signals.json": "94f5712a9f", "signals_auto.json": "ef9980b273", "signals_jeongbi_all.json": "5c81f196db", "thresholds.json": "5b7226f4e1"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260821e");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "ccf6cadd63", "adverse_facilities.json": "1d4b48c83a", "apartments_all.json": "65f9e8a1a4", "arch_signals.json": "a321869c42", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "0ce32e1cb3", "dart_signals.json": "1e2a409b35", "dps_signals.json": "86d69c8eec", "eum_signals.json": "aec4af4c01", "hospital_signals.json": "6074d464f8", "indpark_signals.json": "b54f4c3d59", "jeongbi_poly_seoul.json": "11a45f5e8d", "jobs_signals.json": "af8271939b", "logipark_signals.json": "ca69922a45", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2f8bd43f51", "mega_signals.json": "4488a73704", "methodology.html": "98c9cb4ed1", "park_signals.json": "a0b6d6d14e", "rail_reference.html": "ff84fa7143", "rail_signals.json": "8d0e578c6f", "regions.json": "9357f5440d", "report.html": "3850dd88e6", "retail_signals.json": "50b5b6d102", "road_signals.json": "629fa28ea8", "school_signals.json": "0788745519", "settings.html": "efc2bb5410", "sfz_signals.json": "dfb06b552c", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "0598a65502", "signals.json": "94f5712a9f", "signals_auto.json": "ef9980b273", "signals_jeongbi_all.json": "5c81f196db", "thresholds.json": "5b7226f4e1"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260821f");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
