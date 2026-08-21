@@ -1739,6 +1739,30 @@
        ⚠ **운영 페이지(settings·report·rail_reference)에는 넣지 않는다** — 운영자 본인
           사용이 방문 수를 부풀리면 통계가 거짓말을 한다(P2). 공개 페이지에만 단다. -->
   <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "8abb852350ee4eb18bf696521744dfa7"}'></script>
+  <!-- ══ 접속 기록 비콘 — 자체 Worker (2026-08-21) ══════════════════════════
+       Cloudflare Web Analytics는 **IP를 주지 않는다**(집계만). GitHub Pages는 로그가 없다.
+       요청 로그(Logpush)는 Enterprise 전용이다. ⇒ IP별 이력은 우리가 직접 기록한다.
+       ★ 프록시를 켜지 않고 이 방식을 쓰는 이유: 전체 트래픽을 Cloudflare로 보내면 무료 플랜이
+         한국 트래픽을 홍콩으로 돌려 8배 느려진다(실측 · PROCEDURE_도메인_CDN.md).
+         본문은 GitHub 인천 엣지 직결로 두고 **비콘 한 방울만** Worker로 보낸다.
+       ⚠ `vid`는 브라우저 localStorage의 랜덤 16자다. IP는 한국에서 「누구」의 답이 못 된다
+         (모바일 CGNAT는 수천 명이 한 IP · 집/회사/모바일은 한 사람이 IP 3개). 둘 다 남긴다.
+       ⚠ 실패해도 **화면에 아무 영향이 없어야 한다** — 전부 try/catch에 fire-and-forget이다. -->
+  <script>
+  (() => {
+    try {
+      const K = "hojae_vid";
+      let v = localStorage.getItem(K);
+      if (!v) { v = ([1e7]+'').replace(/./g, () => (Math.random()*16|0).toString(16)).slice(0,16);
+                localStorage.setItem(K, v); }
+      const body = JSON.stringify({ v, p: location.pathname + location.search, r: document.referrer });
+      const url = "https://hojaemap-visits.obey82.workers.dev/";
+      // sendBeacon = 페이지를 붙잡지 않는다. 없으면 fetch(keepalive)로 떨어진다.
+      if (navigator.sendBeacon) navigator.sendBeacon(url, new Blob([body], { type: "text/plain" }));
+      else fetch(url, { method: "POST", body, keepalive: true, mode: "no-cors" }).catch(() => {});
+    } catch (e) { /* 기록 실패가 방문자 경험을 건드리면 안 된다 */ }
+  })();
+  </script>
 </head>
 <body>
 <header>
@@ -8992,8 +9016,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "adverse_facilities.json": "1d4b48c83a", "apartments_all.json": "65f9e8a1a4", "arch_signals.json": "a321869c42", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "64d5c41cc5", "dart_signals.json": "1e2a409b35", "dps_signals.json": "86d69c8eec", "eum_signals.json": "aec4af4c01", "hospital_signals.json": "6074d464f8", "indpark_signals.json": "b54f4c3d59", "jeongbi_poly_seoul.json": "11a45f5e8d", "jobs_signals.json": "af8271939b", "logipark_signals.json": "ca69922a45", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2f8bd43f51", "mega_signals.json": "4488a73704", "methodology.html": "66318df951", "park_signals.json": "a0b6d6d14e", "rail_reference.html": "ff84fa7143", "rail_signals.json": "8d0e578c6f", "regions.json": "9357f5440d", "report.html": "3850dd88e6", "retail_signals.json": "50b5b6d102", "road_signals.json": "629fa28ea8", "school_signals.json": "0788745519", "settings.html": "efc2bb5410", "sfz_signals.json": "dfb06b552c", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "0598a65502", "signals.json": "94f5712a9f", "signals_auto.json": "ef9980b273", "signals_jeongbi_all.json": "5c81f196db", "thresholds.json": "5b7226f4e1"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260821d");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "adverse_facilities.json": "1d4b48c83a", "apartments_all.json": "65f9e8a1a4", "arch_signals.json": "a321869c42", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "2e54851929", "dart_signals.json": "1e2a409b35", "dps_signals.json": "86d69c8eec", "eum_signals.json": "aec4af4c01", "hospital_signals.json": "6074d464f8", "indpark_signals.json": "b54f4c3d59", "jeongbi_poly_seoul.json": "11a45f5e8d", "jobs_signals.json": "af8271939b", "logipark_signals.json": "ca69922a45", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2f8bd43f51", "mega_signals.json": "4488a73704", "methodology.html": "67cf04c9e9", "park_signals.json": "a0b6d6d14e", "rail_reference.html": "ff84fa7143", "rail_signals.json": "8d0e578c6f", "regions.json": "9357f5440d", "report.html": "3850dd88e6", "retail_signals.json": "50b5b6d102", "road_signals.json": "629fa28ea8", "school_signals.json": "0788745519", "settings.html": "efc2bb5410", "sfz_signals.json": "dfb06b552c", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "0598a65502", "signals.json": "94f5712a9f", "signals_auto.json": "ef9980b273", "signals_jeongbi_all.json": "5c81f196db", "thresholds.json": "5b7226f4e1"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260821e");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷

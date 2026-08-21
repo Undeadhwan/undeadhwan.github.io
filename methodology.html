@@ -45,6 +45,30 @@
        ⚠ **운영 페이지(settings·report·rail_reference)에는 넣지 않는다** — 운영자 본인
           사용이 방문 수를 부풀리면 통계가 거짓말을 한다(P2). 공개 페이지에만 단다. -->
   <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "8abb852350ee4eb18bf696521744dfa7"}'></script>
+  <!-- ══ 접속 기록 비콘 — 자체 Worker (2026-08-21) ══════════════════════════
+       Cloudflare Web Analytics는 **IP를 주지 않는다**(집계만). GitHub Pages는 로그가 없다.
+       요청 로그(Logpush)는 Enterprise 전용이다. ⇒ IP별 이력은 우리가 직접 기록한다.
+       ★ 프록시를 켜지 않고 이 방식을 쓰는 이유: 전체 트래픽을 Cloudflare로 보내면 무료 플랜이
+         한국 트래픽을 홍콩으로 돌려 8배 느려진다(실측 · PROCEDURE_도메인_CDN.md).
+         본문은 GitHub 인천 엣지 직결로 두고 **비콘 한 방울만** Worker로 보낸다.
+       ⚠ `vid`는 브라우저 localStorage의 랜덤 16자다. IP는 한국에서 「누구」의 답이 못 된다
+         (모바일 CGNAT는 수천 명이 한 IP · 집/회사/모바일은 한 사람이 IP 3개). 둘 다 남긴다.
+       ⚠ 실패해도 **화면에 아무 영향이 없어야 한다** — 전부 try/catch에 fire-and-forget이다. -->
+  <script>
+  (() => {
+    try {
+      const K = "hojae_vid";
+      let v = localStorage.getItem(K);
+      if (!v) { v = ([1e7]+'').replace(/./g, () => (Math.random()*16|0).toString(16)).slice(0,16);
+                localStorage.setItem(K, v); }
+      const body = JSON.stringify({ v, p: location.pathname + location.search, r: document.referrer });
+      const url = "https://hojaemap-visits.obey82.workers.dev/";
+      // sendBeacon = 페이지를 붙잡지 않는다. 없으면 fetch(keepalive)로 떨어진다.
+      if (navigator.sendBeacon) navigator.sendBeacon(url, new Blob([body], { type: "text/plain" }));
+      else fetch(url, { method: "POST", body, keepalive: true, mode: "no-cors" }).catch(() => {});
+    } catch (e) { /* 기록 실패가 방문자 경험을 건드리면 안 된다 */ }
+  })();
+  </script>
 </head>
 <body>
 <div class="wrap">
