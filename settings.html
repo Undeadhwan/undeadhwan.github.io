@@ -70,6 +70,18 @@
   .qualdesc { display:block; font-size:11px; line-height:1.45; color:var(--ink,#333); max-width:230px;
               white-space:normal; word-break:keep-all; margin-top:2px; }
 
+  /* ── 원격 저장(관리 토큰) 입력 행 — admin.html의 토큰 행과 같은 문법.
+     새 색·크기를 만들지 않고 이 파일에 이미 있는 값(--line/--muted/--accent/#e3e6ec)만 쓴다. */
+  .tokrow { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:8px 0 3px; }
+  .tokrow input { flex:1; min-width:190px; max-width:330px; font:12.5px/1.5 ui-monospace,Menlo,monospace;
+                  padding:6px 9px; border:1.5px solid #e3e6ec; border-radius:6px; background:#fff; color:var(--ink); }
+  .tokrow input:focus { outline:none; border-color:var(--accent); }
+  .tokrow input.need { border-color:var(--A); background:#fff8e6; }   /* 경고색은 .warn과 같은 값 — 새 색 금지(DESIGN.md) */
+  .tokrow button { padding:6px 12px; font-size:12.5px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:9px; padding:10px 13px; font-size:13px; }
+  .card .hd { color:var(--accent); font-weight:800; }
+  .card a { color:var(--accent); }
+
   .bar { position:sticky; bottom:0; background:#fff; border-top:1px solid var(--line); padding:12px 22px;
          display:flex; align-items:center; gap:12px; box-shadow:0 -2px 12px rgba(0,0,0,.05); }
   .cnt { font-size:13px; font-weight:700; color:var(--accent); }
@@ -117,7 +129,8 @@
 <dialog id="dlg">
   <header><h1>저장할 내용</h1></header>
   <div class="body">
-    <p class="qual"><b>이 주소는 정적 호스팅이라 파일을 쓸 수 없습니다</b>(배선 문제가 아니라 환경 문제).
+    <p class="qual"><b>자동 저장 경로 두 개가 모두 막혔습니다</b> — 로컬 저장 서버도 없고,
+       원격 저장소도 응답하지 않습니다(위 메시지가 사유입니다).
        바로 저장하려면 로컬 저장 서버로 여세요 — <code>python3 settings_server.py</code> 실행 후
        <a href="http://localhost:8777/settings.html">localhost:8777/settings.html</a>.
        지금 당장 반영하려면 아래 내용을 <code>thresholds.json</code>에 붙여넣거나 다운로드해 교체하세요.</p>
@@ -134,6 +147,26 @@
 const COLOR = { "교통":"#b9003d", "일자리":"#2b4ea7", "인프라":"#b25ec5", "주거개발":"#38853e" };   // DESIGN.md §2 분류색과 1:1 (2026-08-12 명도 계단)
 const LEVELS = ["S","A","B","C"];   // S등급 신설(2026-07-22 — 1조/30만㎡/1만세대·교통 위계)
 let CFG = null, ORIG = null;
+
+/* ══ 저장 경로는 셋이다 (2026-08-22 — "아무데서나 접속해도 저장가능하게") ═══════════════
+   ① 로컬 저장 서버(settings_server.py)  → thresholds.json에 **바로 쓰고** 라이브 배포까지 한다
+   ② 원격 저장소(Cloudflare Worker + D1) → 어디서든(폰·남의 컴퓨터) 저장. **입력 창구일 뿐**
+   ③ 둘 다 막히면                        → 다운로드/복사 (사람이 파일을 교체)
+
+   ★ SSOT는 여전히 `thresholds.json`이다. 파이프라인 전체(grade.py·index.html)가 그 파일 하나를
+     읽는다. Worker를 SSOT로 만들면 기준이 두 곳이 되고 빌드가 네트워크에 의존한다 — 하지 않는다.
+     원격 저장은 **다음 빌드가 당겨 검증한 뒤에** 반영된다(thresholds_pull.py). 즉 ②로 저장하면
+     저장은 즉시, 화면 반영은 다음 빌드 — 그 시차를 화면에 **정직하게 적는다**(P2·P5).
+   ⚠ 이 주소의 SSOT는 `settings_store/wrangler.jsonc`의 `name`이다(`<name>.obey82.workers.dev`).
+     비워 두면 ②를 통째로 건너뛰고 ①→③으로만 동작한다. */
+const STORE  = "https://hojaemap-settings.obey82.workers.dev";
+const TOKKEY = "hojae_settings_token";      // admin.html도 같은 오리진에서 이 키를 읽는다
+const api = p => STORE.replace(/\/+$/, "") + p;
+let CAN_LOCAL = null;    // /api/health 응답 — null=아직 모름 · true=로컬 저장 가능 · false=아님
+// 서버가 준 문자열을 innerHTML에 넣을 때는 escape한다(우리 Worker라도 자를 하나로 둔다)
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+// ISO8601 → 보는 사람의 지역시. 못 읽으면 **원문을 그대로** 보인다(모르는 값을 지어내지 않는다)
+const fmtTime = s => { const d = new Date(s); return isNaN(+d) ? String(s || "") : d.toLocaleString("ko-KR", { hour12: false }); };
 
 const clean = o => Object.fromEntries(Object.entries(o).filter(([k]) => !k.startsWith("_")));
 
@@ -224,12 +257,18 @@ function render() {
     `<b>⚠ 공유 눈금</b> — 아래는 여러 유형이 <b>같은 눈금</b>을 씁니다. 한 곳을 고치면 함께 바뀝니다.<br>` +
     shared.map(([k, v]) => `<code>${k}</code> → ${v.join(", ")}`).join("<br>");
 
-  document.querySelectorAll("input").forEach(inp => inp.addEventListener("input", onEdit));
+  // ⚠ **기준 입력칸만** 잡는다. 종전엔 `querySelectorAll("input")`이라 페이지에 입력칸이 하나라도
+  //   더 생기면(관리 토큰 칸) 그것까지 편집 핸들러를 달았다 — 토큰이 숫자로 시작하면
+  //   `CFG[undefined][undefined]`로 터진다. 대상은 표 두 개(#cats·#mins) 안에만 있다.
+  document.querySelectorAll(CFGIN).forEach(inp => inp.addEventListener("input", onEdit));
   count();
 }
+const CFGIN = "#cats input, #mins input";   // 기준 값을 담은 입력칸의 범위 (SSOT — 두 곳이 함께 쓴다)
 
 function onEdit(e) {
   const inp = e.target, v = parseFloat(inp.value);
+  // 기준 칸이 아니면 손대지 않는다 — 어느 데이터 축에도 속하지 않는 입력칸(토큰 등)이 섞여도 안전
+  if (!inp.dataset.m && !inp.dataset.r && !inp.dataset.t) return;
   if (Number.isNaN(v)) return;
   if (inp.dataset.m) CFG["수집_문턱_㎡"][inp.dataset.m].값 = v;
   else if (inp.dataset.r) CFG.유형별_설정[inp.dataset.r][inp.dataset.rs].반경_km[inp.dataset.lv] = v;
@@ -257,7 +296,7 @@ function count() {
   const n = diffCount();
   const txt = n ? `${n}개 변경됨` : "";
   cnt.textContent = cnt2.textContent = txt;
-  document.querySelectorAll("input").forEach(i => {
+  document.querySelectorAll(CFGIN).forEach(i => {
     const pick = o => i.dataset.m ? o["수집_문턱_㎡"][i.dataset.m].값
       : i.dataset.r ? o.유형별_설정[i.dataset.r][i.dataset.rs].반경_km[i.dataset.lv]
       : o[i.dataset.t]?.[i.dataset.k]?.[i.dataset.lv];
@@ -265,17 +304,66 @@ function count() {
     i.classList.toggle("dirty", cur !== was);
   });
 }
-function diffCount() {
-  let n = 0;
-  const walk = (a, b) => {
+/* 바뀐 값의 **경로 목록**. 개수를 세는 자와 저장 이력에 적는 자가 갈리면 화면과 이력이 어긋난다
+   — 한 함수로 둔다(CLAUDE.md 「같은 자는 한 함수로」). */
+function diffPaths() {
+  const out = [];
+  const walk = (a, b, p) => {
     for (const k of Object.keys(a || {})) {
       if (k.startsWith("_")) continue;
-      if (typeof a[k] === "object" && a[k] !== null) walk(a[k], b?.[k]);
-      else if (a[k] !== b?.[k]) n++;
+      if (typeof a[k] === "object" && a[k] !== null) walk(a[k], b?.[k], p.concat(k));
+      else if (a[k] !== b?.[k]) out.push(p.concat(k).join("/"));
     }
   };
-  walk(CFG, ORIG);
-  return n;
+  walk(CFG, ORIG, []);
+  return out;
+}
+function diffCount() { return diffPaths().length; }
+
+/* ① 로컬 저장 서버 — thresholds.json에 **바로 쓰고** 라이브 배포까지 한다.
+   실패 사유(구조 검증 반려 등)를 삼키지 않는다 — 그대로 던져 위에서 말하게 한다. */
+async function saveLocal() {
+  const r = await fetch("/api/thresholds", { method: "POST",
+    headers: { "Content-Type": "application/json" }, body: JSON.stringify(CFG, null, 2) });
+  const j = await r.json();
+  if (!j.ok) throw new Error(j.error || "저장 실패");
+  ORIG = structuredClone(CFG);          // 저장 성공 = 이제 이것이 원본
+  count();
+  // 저장 = **라이브 반영까지** (2026-07-31 사용자 지시). 서버가 저장 직후 배포한다.
+  // 다만 "나갔다"를 서버가 말한 대로만 옮긴다 — 배포가 실패했으면 실패라고 말하고 수동 경로를 연다
+  // (P2·"푸시했다≠나갔다" — 저장만 하고 반영됐다고 착각하면 안 된다).
+  toast(`저장됨 ${j.saved} · ${j.note || "백업 " + j.backup}`, j.deployed !== false);
+  if (j.deployed === false) showDeployBar();   // 자동 배포 실패 때만 수동 버튼
+}
+
+/* ② 원격 저장소 — 어디서 접속하든 저장은 된다. 다만 **파일을 쓰는 것이 아니다.**
+   Worker는 받아 적을 뿐이고, thresholds.json은 다음 빌드가 당겨 검증한 뒤에 바뀐다.
+   그래서 "저장됨"과 "반영됨"을 **다른 문장으로** 말한다(P2 — 사실은 표시, 추정은 구분). */
+async function saveRemote() {
+  const tok = needToken();              // 없으면 여기서 던진다(입력칸으로 안내)
+  /* 이력에 **무엇을 바꿨는지** 함께 남긴다 — 되돌리려면 "언제"만으로는 부족하다(P5).
+     「누가」는 보내지 않는다: 로그인이 없어 자기신고 라벨뿐이고, 그건 신원을 아는 척하는 것이다(P2).
+     저장소가 IP·UA는 스스로 남긴다. ⚠ ORIG를 갈아치우기 **전에** 계산해야 한다. */
+  const d = diffPaths();
+  const note = `${d.length}개 변경: ${d.slice(0, 5).join(", ")}${d.length > 5 ? ` 외 ${d.length - 5}개` : ""}`;
+  const r = await fetch(api("/save?note=" + encodeURIComponent(note)), { method: "POST",
+    headers: { "Content-Type": "application/json", "X-Admin-Token": tok },
+    body: JSON.stringify(CFG, null, 2) });
+  let j = null;
+  try { j = await r.json(); } catch (e) { /* 본문이 JSON이 아니면 아래 상태코드로 말한다 */ }
+  if (r.status === 401) {
+    localStorage.removeItem(TOKKEY); renderSaveMode();
+    throw new Error("관리 토큰이 맞지 않습니다 — 다시 넣어 주세요");
+  }
+  if (!r.ok || !j || !j.ok) throw new Error((j && j.error) || `원격 저장 실패 (HTTP ${r.status})`);
+  ORIG = structuredClone(CFG);          // 서버가 ok를 준 **뒤에야** 이것이 원본이다
+  count();
+  const p = document.getElementById("pend");
+  if (p) p.remove();                    // 「미반영 값이 있다」 안내는 방금 내가 덮었으니 치운다
+  // 저장소가 「같은 값이라 새 버전을 만들지 않았다」고 하면 **그대로 옮긴다** — 새 버전이
+  // 생긴 것처럼 말하면 이력을 보러 갔을 때 없는 버전을 찾게 된다(P2).
+  toast(j.unchanged ? `원격 값과 같음 — 버전 ${j.version} 그대로` : `원격 저장됨 · 버전 ${j.version}`, true);
+  showRemoteBar(j);                     // 「아직 사이트는 안 바뀌었다」를 화면에 남긴다
 }
 
 async function doSave(btn) {
@@ -283,19 +371,18 @@ async function doSave(btn) {
   const label = btn.textContent;
   btn.disabled = true; btn.textContent = "저장 중…";
   try {
-    const r = await fetch("/api/thresholds", { method: "POST",
-      headers: { "Content-Type": "application/json" }, body: JSON.stringify(CFG, null, 2) });
-    const j = await r.json();
-    if (!j.ok) throw new Error(j.error || "저장 실패");
-    ORIG = structuredClone(CFG);          // 저장 성공 = 이제 이것이 원본
-    count();
-    // 저장 = **라이브 반영까지** (2026-07-31 사용자 지시). 서버가 저장 직후 배포한다.
-    // 다만 "나갔다"를 서버가 말한 대로만 옮긴다 — 배포가 실패했으면 실패라고 말하고 수동 경로를 연다
-    // (P2·"푸시했다≠나갔다" — 저장만 하고 반영됐다고 착각하면 안 된다).
-    toast(`저장됨 ${j.saved} · ${j.note || "백업 " + j.backup}`, j.deployed !== false);
-    if (j.deployed === false) showDeployBar();   // 자동 배포 실패 때만 수동 버튼
+    // 로컬 저장 서버가 있으면 **언제나 그쪽이 우선**이다 — 파일을 직접 쓰고 배포까지 한다.
+    if (CAN_LOCAL !== false) {
+      try { await saveLocal(); return; }
+      catch (e) {
+        // 로컬 서버가 **있다고 확인된** 상태의 실패는 진짜 실패다(구조 검증 반려 등).
+        // 그걸 원격으로 넘기면 반려된 값이 원격에 남는다 — 감추지 않고 그대로 알린다.
+        if (CAN_LOCAL === true || !STORE) throw e;
+      }
+    }
+    if (STORE) { await saveRemote(); return; }
+    throw new Error("이 주소에는 자동 저장 경로가 없습니다");
   } catch (e) {
-    // 저장 서버가 아니면(정적 서버) 파일을 못 쓴다 — 그때만 수동 경로를 연다.
     toast("자동 저장 불가 — " + e.message, false);
     out.value = JSON.stringify(CFG, null, 2); dlg.showModal();
   } finally { btn.disabled = false; btn.textContent = label; }
@@ -353,17 +440,51 @@ dl.onclick = () => {
 };
 reset.onclick = () => { CFG = structuredClone(ORIG); render(); };
 
-// 저장 서버(settings_server.py)가 있는지 **먼저** 확인한다. 없으면 편집 전에 알린다 —
-// 다 고쳐놓고 저장 단계에서 실패를 알게 되는 것이 가장 나쁜 순서다.
-fetch("/api/health").then(r => r.ok ? r.json() : null).then(j => !!(j && j.save)).catch(() => false)
-  .then(ok => {
-    const ro = document.getElementById("ro");
-    if (ok) {   // 저장 가능한 환경임을 **먼저** 알린다 — 저장 버튼이 진짜 파일을 쓴다는 확인
-      ro.innerHTML = `<div style="margin:0 0 11px;padding:9px 12px;border:1px solid #bfe3cf;background:#f2fbf6;
-        border-radius:9px;font-size:13px;color:#1f7a4d"><b>바로 저장 가능</b> — '변경사항 저장'(⌘S)을 누르면
-        <code>thresholds.json</code>에 바로 씁니다(저장 전 <code>attic/</code>에 자동 백업 · 구조 검증 통과 시에만 교체).</div>`;
-      return;
-    }
+/* ── 원격 저장 바 — 「저장됐다」와 「반영됐다」를 **다른 문장으로** 말한다.
+   원격 저장은 파일을 쓰지 않는다. 이 구분을 지우면 값을 바꿔놓고 사이트가 안 바뀌는 이유를
+   아무도 모르게 된다(2026-07-30 "저장했는데 왜 반영이 안되냐"와 같은 종류의 사고). */
+function showRemoteBar(j) {
+  let b = document.getElementById("rmtbar");
+  if (!b) {
+    b = document.createElement("div"); b.id = "rmtbar";
+    b.style.cssText = `position:fixed;left:50%;bottom:64px;transform:translateX(-50%);z-index:98;
+      background:#fff;border:1px solid #d9dee8;border-radius:12px;box-shadow:0 8px 26px rgba(0,0,0,.16);
+      padding:10px 14px;display:flex;align-items:center;gap:12px;font-size:13px;max-width:min(92vw,620px)`;
+    document.body.appendChild(b);
+  }
+  const t = token();
+  b.innerHTML = `<span><b>${j.unchanged ? "원격 값과 같음" : "원격 저장됨"}</b>
+      — 버전 ${esc(j.version)} · ${esc(fmtTime(j.saved_at))}<br>
+      <span style="color:var(--muted)">공개 사이트에는 <b>다음 빌드</b>에 반영됩니다 —
+      빌드가 이 값을 당겨 검증한 뒤 <code>thresholds.json</code>을 갱신합니다.</span></span>
+    ${t ? `<a href="${esc(api("/?t=" + encodeURIComponent(t)))}" target="_blank" rel="noopener"
+            style="color:var(--accent);white-space:nowrap">이력 →</a>` : ""}
+    <button id="rmtno" style="margin-left:auto">닫기</button>`;
+  b.querySelector("#rmtno").onclick = () => b.remove();
+}
+
+const token = () => (localStorage.getItem(TOKKEY) || "").trim();
+/* 토큰이 없으면 **저장을 시도하지 않고** 입력칸으로 데려간다. 없는 토큰으로 보내면
+   401을 받아 "저장 실패"라고만 말하게 되는데, 그건 사유를 감춘 것이다(P5). */
+function needToken() {
+  const t = token();
+  if (t) return t;
+  const i = document.getElementById("tokin");
+  if (i) { i.classList.add("need"); i.scrollIntoView({ block: "center", behavior: "smooth" }); i.focus(); }
+  throw new Error("관리 토큰을 먼저 넣어 주세요 (화면 위 '관리 토큰' 칸)");
+}
+
+/* 저장 경로를 화면 맨 위에 **먼저** 알린다 — 다 고쳐놓고 저장 단계에서 실패를 알게 되는 것이
+   가장 나쁜 순서다. 세 갈래(①로컬 ②원격 ③수동)가 각각 다른 문장을 갖는다. */
+function renderSaveMode() {
+  const ro = document.getElementById("ro");
+  if (CAN_LOCAL) {   // ① 저장 버튼이 진짜 파일을 쓴다는 확인
+    ro.innerHTML = `<div style="margin:0 0 11px;padding:9px 12px;border:1px solid #bfe3cf;background:#f2fbf6;
+      border-radius:9px;font-size:13px;color:#1f7a4d"><b>바로 저장 가능</b> — '변경사항 저장'(⌘S)을 누르면
+      <code>thresholds.json</code>에 바로 씁니다(저장 전 <code>attic/</code>에 자동 백업 · 구조 검증 통과 시에만 교체).</div>`;
+    return;
+  }
+  if (!STORE) {      // ③ 원격 창구조차 없는 구성 — 종전 안내 그대로
     ro.innerHTML =
       `<div class="warn" style="margin:0 0 11px"><b>이 주소에서는 저장할 수 없습니다.</b>
        정적 호스팅이라 브라우저가 파일을 쓸 방법이 없습니다(배선 문제 아님).
@@ -371,7 +492,81 @@ fetch("/api/health").then(r => r.ok ? r.json() : null).then(j => !!(j && j.save)
        <a href="http://localhost:8777/settings.html">localhost:8777/settings.html</a> 로 여세요 —
        지도(<code>index.html</code>)도 같은 주소에서 열립니다.
        지금 값만 옮기려면 저장 버튼 → JSON 다운로드로 <code>thresholds.json</code>을 교체하세요.</div>`;
-  });
+    return;
+  }
+  // ② 원격 저장 — 어디서 접속하든 저장은 된다. **반영 시점이 다르다**는 사실을 같은 자리에 적는다.
+  const t = token();
+  ro.innerHTML = `<div class="card" style="margin:0 0 11px">
+      <div><span class="hd">${t ? "원격 저장 가능" : "원격 저장 — 관리 토큰이 필요합니다"}</span>
+        — 이 주소는 정적 호스팅이라 파일을 쓸 수 없어, 변경사항을 <b>원격 저장소</b>에 남깁니다.</div>
+      <div class="qual" style="margin-top:4px">⚠ 저장은 즉시 · <b>공개 사이트 반영은 다음 빌드</b>입니다.
+        빌드가 저장된 값을 당겨 검증한 뒤 <code>thresholds.json</code>을 갱신합니다(기준의 SSOT는 그 파일 그대로).
+        지금 당장 반영해야 하면 <code>python3 settings_server.py</code> 로 여세요.</div>
+      <div class="tokrow">
+        <input id="tokin" type="password" placeholder="관리 토큰" autocomplete="off" spellcheck="false">
+        <button id="tokset">토큰 저장</button>
+        <button id="tokdel">지우기</button>
+        ${t ? `<a href="${esc(api("/?t=" + encodeURIComponent(t)))}" target="_blank" rel="noopener"
+                 style="color:var(--accent);white-space:nowrap">저장 이력 →</a>` : ""}
+      </div>
+      <div class="qual">토큰은 <b>이 브라우저에만</b> 저장됩니다(localStorage). 페이지에 박혀 있지 않아
+        배포본에 실리지 않습니다 — admin.html의 조회 토큰과 같은 규약입니다.</div>
+    </div>`;
+  const i = ro.querySelector("#tokin");
+  i.value = t;                                   // 값은 속성이 아니라 프로퍼티로 — 따옴표가 섞여도 안전
+  const set = () => { localStorage.setItem(TOKKEY, i.value.trim()); renderSaveMode(); checkPending(); };
+  ro.querySelector("#tokset").onclick = set;
+  ro.querySelector("#tokdel").onclick = () => { localStorage.removeItem(TOKKEY); renderSaveMode(); };
+  i.addEventListener("keydown", e => { if (e.key === "Enter") set(); });
+}
+
+/* ── ★ 「원격에 저장됐지만 아직 빌드가 안 가져간 값」을 조용히 덮지 않는다 (P5).
+   이 화면은 언제나 `thresholds.json`(=빌드가 반영한 값)을 읽는다. 그런데 원격 저장은
+   **다음 빌드까지 파일에 없다.** 그 사이에 다른 기기에서 이 화면을 열면 옛 값을 보게 되고,
+   거기서 저장하면 앞의 변경이 **말없이 사라진다.** 그래서 열 때 한 번 물어보고, 다르면 말한다.
+   키 순서 차이로 헛경보가 나지 않게 정렬해서 비교한다. */
+// ☠ **빌드가 남기는 표식은 비교에서 뺀다** (2026-08-22 정합성 검증이 잡은 결함).
+//   thresholds_pull.py 는 반영하면서 파일에 `_원격_반영`(어느 원격 버전에서 왔나)을 **추가로** 써넣는다.
+//   그걸 그대로 비교하면 빌드가 정상 반영한 **직후에도** 원격 data 와 화면 CFG 가 영원히 달라
+//   「아직 안 가져갔다」 배너가 상시 켜진다 — 화면이 사실 아닌 것을 말하고(P2·P5), 진짜 미반영을
+//   알려야 할 배너가 늑대소년이 되어 죽는다. 마커는 **값이 아니라 이력**이므로 뺀다.
+const PULL_MARK = "_원격_반영";              // thresholds_pull.py 의 MARK 와 같은 문자열이어야 한다
+const canon = o => Array.isArray(o) ? o.map(canon)
+  : (o && typeof o === "object")
+    ? Object.fromEntries(Object.keys(o).filter(k => k !== PULL_MARK).sort().map(k => [k, canon(o[k])])) : o;
+
+async function checkPending() {
+  if (CAN_LOCAL !== false || !STORE || !token() || !CFG) return;
+  let j = null;
+  try {
+    const r = await fetch(api("/latest?t=" + encodeURIComponent(token())));
+    if (!r.ok) return;                       // 부가 정보다 — 못 물어봐도 저장 기능은 그대로 돈다
+    j = await r.json();
+  } catch (e) { return; }
+  if (!j || !j.version || !j.data) return;   // 저장된 게 없으면(version 0) 말할 것도 없다
+  if (JSON.stringify(canon(j.data)) === JSON.stringify(canon(CFG))) return;
+  let p = document.getElementById("pend");
+  if (!p) {
+    p = document.createElement("div"); p.id = "pend"; p.className = "warn";
+    p.style.margin = "0 0 11px";
+    document.getElementById("cats").before(p);
+  }
+  p.innerHTML = `<b>⚠ 원격 저장소에 아직 빌드가 가져가지 않은 값이 있습니다</b>
+      — 버전 ${esc(j.version)} · ${esc(fmtTime(j.saved_at))}.
+      이 화면은 <code>thresholds.json</code>(빌드가 반영한 값)을 읽었으므로 <b>둘이 다릅니다</b>.
+      이대로 저장하면 그 값을 덮어씁니다.
+      <button id="pendload" style="margin-left:8px">원격 값 불러오기</button>`;
+  p.querySelector("#pendload").onclick = () => {
+    // ORIG(=파일)는 그대로 두고 CFG만 바꾼다 — 그러면 **무엇이 다른지**가 파란 칸으로 보인다
+    CFG = j.data; render();
+    p.innerHTML = `<b>원격 값을 불러왔습니다</b> — 버전 ${esc(j.version)}. 파란 칸이
+      <code>thresholds.json</code>과 다른 값입니다(아직 저장하지 않았습니다).`;
+  };
+}
+
+// 저장 서버(settings_server.py)가 있는지 확인 → 그 결과로 저장 경로를 정한다.
+fetch("/api/health").then(r => r.ok ? r.json() : null).then(j => !!(j && j.save)).catch(() => false)
+  .then(ok => { CAN_LOCAL = ok; renderSaveMode(); checkPending(); });
 // ⌘S / Ctrl+S = 저장 (브라우저 '페이지 저장'을 가로챈다 — 편집 화면에서 가장 기대되는 단축키)
 document.addEventListener("keydown", e => {
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") { e.preventDefault(); doSave(save2); }
@@ -379,7 +574,7 @@ document.addEventListener("keydown", e => {
 
 fetch("thresholds.json?" + Date.now())
   .then(r => r.json())
-  .then(j => { CFG = j; ORIG = structuredClone(j); render(); })
+  .then(j => { CFG = j; ORIG = structuredClone(j); render(); checkPending(); })
   .catch(e => { document.getElementById("cats").innerHTML =
     `<div class="warn">thresholds.json을 읽지 못했습니다 — 로컬 서버로 열어야 합니다.<br><code>${e}</code></div>`; });
 </script>
