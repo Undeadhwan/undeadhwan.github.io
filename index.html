@@ -2621,11 +2621,13 @@ function nextWatch(s) {
   return nx ? `<div class="nextwatch">🔭 다음 관찰 — <b>${nx}</b></div>` : "";
 }
 /* 노선 바: 역/IC/노선 신호 → 소속 노선 전체 + 지점 칩(클릭 이동, 아실·호갱노노 동선 — 2026-07-17) */
-/* ★ 지점 표기 통일 — 알렉스 지시(2026-08-24) *"101역 102역 이런식으로 다 통일해 지금보면 중구난방이야"*.
-   실측하니 정말 여섯 갈래였다(1,091개 전수): `001정거장` 335 · 이름+`역` 389 · `102정거장(가칭 중암)` 92 ·
-   `101 왕십리` 43 · `002-1정거장` 1 · 그 밖 231(`G04정거장(가칭 도래울)`·`오정(가칭)`…).
-   규칙은 둘뿐이다 — ① 이름이 있으면 이름, 없으면 번호 ② 끝은 언제나 「역」.
-   ⇒ `102정거장`→`102역` · `101 왕십리`→`왕십리역` · `G04정거장`→`G04역` · `위례중앙역`은 그대로.
+/* ★ 지점 표기 통일 — 알렉스 지시(2026-08-24).
+   1차로 「이름이 있으면 이름」으로 맞췄더니 정정이 왔다: *"아직 역명이 정해지지 않은 노선은
+   101 102 이런식으로 전부 숫자로 일관성있게 표시해야하지 않냐"*. 핵심은 **노선 안의 섞임**이었다 —
+   신설역만 번호로 나오고 기존 환승역은 이름으로 나와 한 줄이 두 문법으로 읽혔다.
+   ⇒ **번호 체계가 있는 노선은 「번호 + 이름」으로 줄을 세운다**(알렉스 확정: 이름도 함께).
+     `101 위례중앙` · `102` · `103 가락시장` — 번호가 없는 지점은 번호만, 이름이 있으면 뒤에 붙인다.
+   번호 자체가 없는 노선(131개 · GTX·대장홍대선 등 역명이 이미 확정)은 종전대로 「이름 + 역」이다.
    ☠ **도로에는 걸지 않는다.** 같은 칩 줄을 IC·JC가 함께 쓰는데 이 규칙을 태우면 `남정IC`가
      **`남정IC역`**이 된다(실측 확인). 여기서는 「규칙을 양쪽에 건다」가 아니라 **교통수단이
      파라미터**인 자리다 — 도로는 괄호만 떼고 끝낸다.
@@ -2643,6 +2645,32 @@ function chipName(x) {
 /* 명칭이 아직 확정이 아닌가 — **상세 카드와 칩이 같은 자를 쓴다**(따로 두면 한쪽만 고쳐진다).
    `null`은 「미확정」이 아니라 「정보 없음」이다 — 그것까지 점선으로 칠하면 251개가 거짓으로 흐려진다. */
 function stUndet(s) { return !!(s?.st_status && s.st_status !== "확정" && s.st_status !== "기존"); }
+/* 노선 지점 **번호** — 데이터에 필드로 없고 이름 문자열 안에만 있다(`102정거장`). 그래서 노선
+   단위로 도출한다. ☠ **없는 번호를 순서로 지어내지 않는다**(P2) — 다음 셋으로만 정한다:
+     ① 전 지점에 번호가 있으면 그대로 쓴다(검증이 필요 없다)
+     ② 일부만 있으면 **배열 순서와 등차 1로 정확히 일치할 때만** 빈 자리를 채운다
+     ③ 어긋나면 채우지 않는다 — 있는 번호만 쓰고 나머지는 이름으로 둔다
+   ②의 근거: 위례신사선 노선 note가 「정거장 11개(101위례중앙~111신사)」라 적었고 도출 결과가
+   그와 **정확히 일치**한다. 실측(1,091개 전수): 채움 가능 33 · 어긋나 안 채움 9 · 번호 없음 131. */
+function stationNos(list) {
+  const nums = (list || []).map(x => {
+    const m = /^(\d{1,4})(?:정거장|\s)/.exec((x?.title || "").split("(")[0].trim());
+    return m ? +m[1] : null;
+  });
+  const known = nums.map((n, i) => [i, n]).filter(([, n]) => n !== null);
+  if (!known.length) return null;
+  if (known.length === nums.length) return nums;
+  const base = known[0][1] - known[0][0];
+  const ok = base > 0 && known.every(([i, n]) => n === base + i);
+  return ok ? nums.map((_, i) => base + i) : nums;
+}
+/* 칩 하나의 표기. 번호가 있으면 「번호 이름」(이름이 없으면 번호만), 없으면 종전 규칙. */
+function stationLabel(x, no) {
+  if (no == null) return chipName(x);
+  const core = (x?.title || "").split("(")[0].trim()
+    .replace(/^\d{1,4}\s*정거장$/, "").replace(/^\d{1,4}\s+/, "").replace(/\s*역$/, "").trim();
+  return core ? no + " " + core : String(no);
+}
 function chipGo(i) { const x = window._chipSigs?.[i]; if (!x) return; if (x.geometry?.coordinates) mapApi?.panTo?.(x.geometry.coordinates); showSignal(x, true); }   // 칩 클릭=그 지점으로 지도 이동(2026-07-22 — 종전 pan=false라 이동 안 됨)
 /* 그 노선에 **그릴 수 있는 선형**이 있나. geom_omitted = "공식 지점이 성겨 직선이 실제 경로와
    다르다"고 판정해 일부러 뺀 선형(2026-07-23 정직 표준, 도로 59건). 숨긴 이유가 '거짓이라서'인데
@@ -2703,11 +2731,25 @@ function lineBar(s) {
     if (posOf) stations = stations.slice()
       .sort((a, b) => posOf(a.geometry.coordinates) - posOf(b.geometry.coordinates));
   }
+  /* 번호는 **노선 단위**로 한 번 도출한다(지점마다 따로 재면 같은 줄이 다른 답을 낼 수 있다).
+     도로는 IC·JC라 번호 체계가 없다 — 넘기지 않는다. */
+  let _nos = s._road ? null : stationNos(stations);
+  /* ☠ 위 주석의 「철도는 조서 순서가 이미 노선 순」이 **항상 참은 아니었다** (2026-08-24 실측):
+     동북선은 배열이 101·103·104…116 뒤에 **102가 맨 끝**으로 붙어 있었다(나중에 채워진 지점).
+     번호를 앞세우면 그 어긋남이 곧바로 눈에 띈다 — 그래서 **번호가 전부 있을 때는 번호순으로
+     세운다**. 도로의 호장 투영과 달리 번호는 노선 순서 그 자체라 지선을 섞을 위험이 없다.
+     번호가 일부만 있거나 없으면 **건드리지 않는다**(근거 없는 재배열은 사실을 바꾸는 일이다). */
+  if (_nos && _nos.every(n => n != null) && _nos.some((n, i) => i && n < _nos[i - 1])) {
+    const pair = stations.map((x, i) => [x, _nos[i]]).sort((a, b) => a[1] - b[1]);
+    stations = pair.map(p => p[0]);
+    _nos = pair.map(p => p[1]);
+  }
   window._chipSigs = stations;
   const chips = stations.map((x, i) =>
     `<span class="stchip${x.pt_type === "road_jc" ? " jc" : ""}${x === s ? " on" : ""}${
       stUndet(x) ? " undet" : ""}" onclick="chipGo(${i})" title="${
-      (x.title || "").replace(/"/g, "&quot;")}${stUndet(x) ? " — " + x.st_status + "(명칭 미확정)" : ""}">${chipName(x)}</span>`).join("");
+      (x.title || "").replace(/"/g, "&quot;")}${stUndet(x) ? " — " + x.st_status + "(명칭 미확정)" : ""}">${
+      stationLabel(x, _nos ? _nos[i] : null)}</span>`).join("");
   const nJc = stations.filter(x => x.pt_type === "road_jc").length;
   return `<div class="linebar"><div class="lb-h">${s._road ? "🛣" : "🚈"} <b>${s.line}</b>
     <span class="hmhint">${routeHasGeom(s.line) ? "노선 전체 하이라이트 중" : "선형 미확보 — 지점만 표시"} · 지점 ${stations.length}</span></div>
@@ -9105,8 +9147,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "55960c252e", "adverse_facilities.json": "1d4b48c83a", "apartments_all.json": "099e0e5d4e", "arch_signals.json": "d1175912a4", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "af85a9807d", "dart_signals.json": "1e2a409b35", "dps_signals.json": "ffbedeab95", "eum_signals.json": "2b18862f66", "hospital_signals.json": "12d18144f1", "indpark_signals.json": "b205d8f0af", "jeongbi_poly_seoul.json": "11a45f5e8d", "jobs_signals.json": "af8271939b", "logipark_signals.json": "45417e5c64", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "0834f919f4", "mega_signals.json": "09380d376d", "methodology.html": "98c9cb4ed1", "park_signals.json": "5f662cc3bf", "rail_reference.html": "584926cac8", "rail_signals.json": "563e5464f5", "regions.json": "9357f5440d", "report.html": "14d037c330", "retail_signals.json": "e0c505708e", "road_signals.json": "62a7566b71", "school_signals.json": "a27fba4e2e", "settings.html": "871c002645", "sfz_signals.json": "3cdeb22265", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "070349d6c7", "signals.json": "94f5712a9f", "signals_auto.json": "e041da79f5", "signals_jeongbi_all.json": "91179ec11e", "thresholds.json": "bccb1e6c0e"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260824j");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "55960c252e", "adverse_facilities.json": "1d4b48c83a", "apartments_all.json": "099e0e5d4e", "arch_signals.json": "d1175912a4", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "f5d881a361", "dart_signals.json": "1e2a409b35", "dps_signals.json": "ffbedeab95", "eum_signals.json": "2b18862f66", "hospital_signals.json": "12d18144f1", "indpark_signals.json": "b205d8f0af", "jeongbi_poly_seoul.json": "11a45f5e8d", "jobs_signals.json": "af8271939b", "logipark_signals.json": "45417e5c64", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "0834f919f4", "mega_signals.json": "09380d376d", "methodology.html": "98c9cb4ed1", "park_signals.json": "5f662cc3bf", "rail_reference.html": "584926cac8", "rail_signals.json": "563e5464f5", "regions.json": "9357f5440d", "report.html": "14d037c330", "retail_signals.json": "e0c505708e", "road_signals.json": "62a7566b71", "school_signals.json": "a27fba4e2e", "settings.html": "871c002645", "sfz_signals.json": "3cdeb22265", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "070349d6c7", "signals.json": "94f5712a9f", "signals_auto.json": "e041da79f5", "signals_jeongbi_all.json": "91179ec11e", "thresholds.json": "bccb1e6c0e"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260824k");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
