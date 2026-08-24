@@ -63,6 +63,8 @@
   input[type=number]:focus { outline:none; border-color:var(--accent); }
   input.dirty { border-color:var(--accent); background:#f4f7ff; }
   input[disabled] { background:#f4f5f8; color:#aab; border-style:dashed; }
+  /* 눈금이 없는 축임을 단위 자리에서 바로 읽히게 — 자리는 그대로 두고 글자만 바꾼다 */
+  td.cell i.na { color:var(--muted); opacity:.8; border-bottom:1px dotted currentColor; cursor:help; }
   .unit { font-size:11.5px; color:var(--muted); margin-left:5px; }
   .qual { font-size:11.5px; color:var(--muted); font-style:italic; }
   /* 위계 판정 유형(철도·도로) — '정성' 한 단어로 뭉뚱그리지 않고 **실제 판정 기준 문구**를 그대로 보인다
@@ -207,11 +209,19 @@ function render() {
           const row = (CFG[TABLE[r.kind]] || {})[r.key] || {};
           const has = row[lv] !== undefined;
           const zero = has && Number(row[lv]) === 0;
+          // ★ 눈금이 **없는** 축은 왜 없는지를 화면이 말한다 (2026-08-24 알렉스 지적
+          //   "산업단지, 물류단지 S급은 왜 입력불가야"). 이유는 데이터에 이미 있었다 —
+          //   thresholds `_설명`에 "S 없음 — … S는 사업비 1조로만"이라고. 그런데 화면까지
+          //   **한 번도 도달하지 않아** 회색 칸만 보였다(PROCEDURE_화면품질 — 화면이 사실을
+          //   말하는가). 비활성 칸은 단위 대신 「축 없음」을 보이고, 툴팁에 근거를 그대로 준다.
+          const why = (row._설명 || "").replace(/\*\*/g, "");
+          const naTip = `${r.kind} 눈금 · ${r.key} — 이 등급은 이 축으로 매기지 않습니다.`
+                      + (why ? "\n\n근거(thresholds.json): " + why : "");
           return `<input type="number" step="any" ${has ? "" : "disabled"} value="${has ? row[lv] : ""}"
                     data-t="${TABLE[r.kind]}" data-k="${r.key}" data-lv="${lv}"
                     class="${zero ? "zero" : ""}"
-                    title="${zero ? "0 = 하한 없음. 실질 하한은 아래 '수집 문턱'이다" : r.kind + " 눈금 · " + r.key}"
-                    ><i>${zero ? "하한없음" : UNIT[r.kind]}</i>`;
+                    title="${has ? (zero ? "0 = 하한 없음. 실질 하한은 아래 '수집 문턱'이다" : r.kind + " 눈금 · " + r.key) : naTip}"
+                    ><i class="${has ? "" : "na"}" title="${has ? "" : naTip}">${!has ? "축 없음" : (zero ? "하한없음" : UNIT[r.kind])}</i>`;
         // 수치 눈금이 없는 유형(철도·도로 = 위계 판정)은 '정성' 한 단어가 아니라 **그 등급의 실제
         // 판정 기준 문구**(등급설명 — 사용자가 정한 기준, 판정 코드 grade.rail_level와 1:1)를 보인다.
         }).join("") : `<span class="qualdesc" title="위계 판정 — 수치 눈금이 아니라 노선 종류·속도·직결 등 사실 축. 판정 규칙 SSOT: thresholds.교통_위계 · 코드 grade.py">${(s2.등급설명 || {})[lv] || "정성"}</span>`;
