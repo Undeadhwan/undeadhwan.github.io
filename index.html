@@ -4,10 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>호재맵 (가칭) — 신호 추적</title>
+<title>호재맵 — 신호 추적</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- ★ `display=optional` — 첫 화면에서 글자가 한 번 커지는 것을 **구조적으로** 없앤다 (2026-08-24).
+     `swap`은 폴백으로 그린 뒤 웹폰트가 오면 **반드시 바꿔치기**하므로 두 폰트 폭이 다른 만큼 화면이 출렁인다.
+     폭을 메트릭으로 맞춰 봤지만 배율이 문자열마다 다르다(실측 한글 110.2% · 숫자혼합 106.5% · 영문 114.1%)
+     — **단일 값으로는 0이 되지 않는다**. `optional`은 폰트가 제때 준비되면 처음부터 그것으로 그리고,
+     늦으면 이번 로드에서는 **바꿔치기하지 않는다** ⇒ 어느 쪽이든 시프트가 0이다(내려받기는 계속되어 다음 방문엔 적용).
+     그 대가로 느린 첫 방문은 폴백으로 보이므로, 아래 `HJ본문폴백`이 **폭을 Gothic A1에 맞춰** 배치를 지켜 준다. -->
+<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=optional" rel="stylesheet">
 <style>
   :root {
     /* ★ 2026-08-13 시안 대조 — 회색을 **중성(뉴트럴)**으로 맞춘다.
@@ -58,7 +64,20 @@
   html, body { overscroll-behavior:none; }
   #map { touch-action:none; cursor:grab; }
   #map:active { cursor:grabbing; }
-  body { font-family:'Gothic A1','Apple SD Gothic Neo',sans-serif; -webkit-font-smoothing:antialiased;
+  /* ★ 첫 화면에서 「글자 크기가 살짝 변하는」 것을 없앤다 — 폴백 폰트 **메트릭 정렬** (2026-08-24 실측).
+     뿌리: 웹폰트를 `display=swap`으로 받으므로 브라우저는 **폴백으로 먼저 그린 뒤 도착하면 바꿔치기**한다.
+     그런데 Gothic A1은 폴백(Apple SD Gothic Neo·맑은 고딕·Noto Sans KR)보다 **9.33% 넓다**
+     (100px 기준 1192.36 ↔ 1090.60 · 본문 16px 문장에서 31.75px 차이). 그래서 도착하는 순간
+     화면 전체 글자가 한 번 넓어진다 — 알렉스 제보 「최초 사이트 열었을때 텍스트 크기 살짝 변하는거」.
+     처방은 **두 겹**이다 — ① 위 `<link>`의 `display=optional`이 **바꿔치기 자체를 없애** 시프트를 0으로 만들고,
+     ② 그래서 폴백으로 그려지는 로드에서는 이 메트릭 정렬이 **폭을 Gothic A1에 맞춰** 배치를 지킨다.
+     ⚠ 110.2%는 **실측값**(400px 한글 전용 문자열 9532.6 ↔ 8650.0)이다. 배율은 문자열마다 다르므로
+     (숫자혼합 106.5% · 영문 114.1%) 화면 대부분을 차지하는 **한글 기준**을 택했다 — 그래서 ①이 필요하다.
+     본문 폰트를 바꾸면 같은 자로 다시 재고 이 값을 고친다(§수치는 실측으로). */
+  @font-face { font-family:'HJ본문폴백';
+    src:local('Apple SD Gothic Neo'), local('AppleSDGothicNeo-Regular'), local('Malgun Gothic'), local('Noto Sans KR');
+    size-adjust:110.2%; }
+  body { font-family:'Gothic A1','HJ본문폴백','Apple SD Gothic Neo',sans-serif; -webkit-font-smoothing:antialiased;
          color:var(--ink); background:var(--bg); }
   /* ★ 숫자·날짜는 **모노스페이스**다 (시안 §06 「숫자와 날짜는 모노스페이스로 데이터임을 표시」).
      시안은 이 폰트를 171곳에 쓴다 — 건수·연장·날짜·코드가 문장과 섞이지 않게 하는 장치다. */
@@ -1694,14 +1713,20 @@
   #maxis { display:none; position:absolute; left:8px; right:8px; top:8px; z-index:1001;
            gap:5px; overflow-x:auto; -webkit-overflow-scrolling:touch;
            padding:1px; }
-  /* 폭 예산 — 375px(SE)에서는 4번째가 살짝 잘리고 390px(12~15) 이상에서 넷 다 들어간다.
-     잘리는 게 스크롤 가능하다는 신호라 그대로 둔다(라벨을 '주'로 줄이면 뜻을 잃는다). */
+  /* 폭 예산 — 숫자 자리를 고정한 뒤(아래 `.n` min-width) 칩 넷의 합은 **484px**이라 375px(SE)에서도
+     390px(12~15)에서도 마지막 칩이 잘린다(2026-08-24 실측 · 종전 425px). 잘리는 게 스크롤 가능하다는
+     신호라 그대로 둔다(라벨을 '주'로 줄이면 뜻을 잃는다). 자리 고정이 만든 +59px은 **밀림을 없앤 값**이다. */
   #maxis .ax { flex:0 0 auto; display:inline-flex; align-items:center; gap:5px;
                background:var(--bg); border:1px solid var(--line2); border-radius:999px;
                padding:6px 9px; font-size:var(--fs-s); font-weight:700; color:var(--ink);
                box-shadow:0 2px 8px rgba(25,35,60,.14); cursor:pointer; white-space:nowrap; }
   #maxis .ax i { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-  #maxis .ax .n { font-weight:700; font-variant-numeric:tabular-nums; color:var(--ink2); }
+  /* ★ 숫자 자리를 **고정**한다 — 받는 중 표식(`·`)에서 건수로 바뀔 때 칩이 밀리지 않게 (2026-08-24 실측).
+     `·` 4.58px ↔ `1,418` 33.93px = **29.35px 차이**라 칩 하나가 그만큼 늘어나며 오른쪽 칩들을 통째로
+     민다(칩 폭 67.48→96.84px). 도크 총계(`.cnt` 4.2em)와 분류 카운트(`.cn` 3.4em)에는 이미 걸려 있던
+     처방이 **여기만 빠져 있었다** — §규칙은 양쪽에 건다의 그 형태. 3.4em은 5자리(`12,345` 3.3em) 실측 기준. */
+  #maxis .ax .n { font-weight:700; font-variant-numeric:tabular-nums; color:var(--ink2);
+                  display:inline-block; min-width:3.4em; text-align:right; }
   /* 꺼짐 = 흐리게 + 점 비움. 사라지지 않는다 — 꺼진 축도 건수는 계속 보여야 되돌릴 수 있다(P5) */
   #maxis .ax.off { color:var(--ink3); border-color:var(--line); background:rgba(255,255,255,.86); }
   #maxis .ax.off i { background:none !important; border:1.3px solid currentColor; }
@@ -1779,7 +1804,7 @@
 </head>
 <body>
 <header>
-  <div class="logo">호재맵<small>가칭 · 신호 추적 미디어 (내부 v0)</small></div>
+  <div class="logo">호재맵</div>
   <div class="srch" id="srch">
     <span class="srchicon">🔍</span>
     <input id="srch-in" type="search" placeholder="동 · 아파트 · 호재 검색" autocomplete="off">
@@ -9047,8 +9072,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "55960c252e", "adverse_facilities.json": "1d4b48c83a", "apartments_all.json": "099e0e5d4e", "arch_signals.json": "d1175912a4", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "7d8b6d550a", "dart_signals.json": "1e2a409b35", "dps_signals.json": "ffbedeab95", "eum_signals.json": "2b18862f66", "hospital_signals.json": "12d18144f1", "indpark_signals.json": "b205d8f0af", "jeongbi_poly_seoul.json": "11a45f5e8d", "jobs_signals.json": "af8271939b", "logipark_signals.json": "45417e5c64", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "0834f919f4", "mega_signals.json": "09380d376d", "methodology.html": "98c9cb4ed1", "park_signals.json": "5f662cc3bf", "rail_reference.html": "584926cac8", "rail_signals.json": "563e5464f5", "regions.json": "9357f5440d", "report.html": "14d037c330", "retail_signals.json": "e0c505708e", "road_signals.json": "62a7566b71", "school_signals.json": "a27fba4e2e", "settings.html": "871c002645", "sfz_signals.json": "3cdeb22265", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "070349d6c7", "signals.json": "94f5712a9f", "signals_auto.json": "e041da79f5", "signals_jeongbi_all.json": "91179ec11e", "thresholds.json": "bccb1e6c0e"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260824g");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "55960c252e", "adverse_facilities.json": "1d4b48c83a", "apartments_all.json": "099e0e5d4e", "arch_signals.json": "d1175912a4", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "6b35b7b799", "dart_signals.json": "1e2a409b35", "dps_signals.json": "ffbedeab95", "eum_signals.json": "2b18862f66", "hospital_signals.json": "12d18144f1", "indpark_signals.json": "b205d8f0af", "jeongbi_poly_seoul.json": "11a45f5e8d", "jobs_signals.json": "af8271939b", "logipark_signals.json": "45417e5c64", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "0834f919f4", "mega_signals.json": "09380d376d", "methodology.html": "98c9cb4ed1", "park_signals.json": "5f662cc3bf", "rail_reference.html": "584926cac8", "rail_signals.json": "563e5464f5", "regions.json": "9357f5440d", "report.html": "14d037c330", "retail_signals.json": "e0c505708e", "road_signals.json": "62a7566b71", "school_signals.json": "a27fba4e2e", "settings.html": "871c002645", "sfz_signals.json": "3cdeb22265", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "070349d6c7", "signals.json": "94f5712a9f", "signals_auto.json": "e041da79f5", "signals_jeongbi_all.json": "91179ec11e", "thresholds.json": "bccb1e6c0e"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260824h");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
