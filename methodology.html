@@ -184,7 +184,7 @@
   <tr><th>소스</th><th>주소</th><th>커버리지</th><th>왜 HTML인가</th></tr>
   <tr><td><span class="tag plan">HTML</span>국토부/서울시 보도자료</td><td><code>molit.go.kr</code>·<code>seoul.go.kr/news</code></td><td>전국·서울</td><td>대장홍대선·광명서울고속도로·김포공항 혁신지구 등 <b>승인·구상 발표</b>가 문서로 먼저 등장(고시 API 전 단계)</td></tr>
   <tr><td><span class="tag plan">HTML</span>서울시 도시철도망계획</td><td><code>news.seoul.go.kr/traffic</code></td><td>서울</td><td>서남선 등 신설노선 계획은 본보고서(문서)가 최초 소스</td></tr>
-  <tr><td><span class="tag plan">HTML</span>지자체 고시(citynet)</td><td><code>sido.*</code>·<code>announce.*</code>·<code>gosi.*</code>·<code>minwon.*</code> + 자체 게시판(전북·대구)</td><td>시·도 15곳 실측(2026-08-08)</td><td><b>관보·토지이음이 못 닿는 층</b>. 국지도·지방도·도시계획시설 도로·<b>광역도로(광역시도)</b>의 <b>도로구역·지형도면·실시계획인가 고시</b>가 여기에만 있다 — 착공 도로 선형의 유일한 근거(<code>local_gosi.py</code>). ⚠ 호스트 패턴 하나가 빠지면 그 시도 전체가 사각지대가 된다(<code>minwon.*</code> 누락으로 4개 시도를 「citynet 없음」으로 오판했었다)</td></tr>
+  <tr><td><span class="tag plan">HTML</span>지자체 고시(citynet)</td><td><code>sido.*</code>·<code>announce.*</code>·<code>gosi.*</code>·<code>minwon.*</code> + 자체 게시판(전북·대구)</td><td>시·도 15곳 실측(2026-08-08)</td><td><b>관보·토지이음이 못 닿는 층</b>. 국지도·지방도·도시계획시설 도로·<b>광역도로(광역시도)</b>의 <b>도로구역·지형도면·실시계획인가 고시</b>가 여기에만 있다 — 착공 도로 선형의 유일한 근거(<code>local_gosi.py</code>). ⚠ 호스트 패턴 하나가 빠지면 그 시도 전체가 사각지대가 된다(<code>minwon.*</code> 누락으로 4개 시도를 「citynet 없음」으로 오판했었다). ⚠ 경북 citynet은 2026-08-26 실측에서 <b>통째로 비어 있었다</b>(자체 게시판 <code>www.gb.go.kr</code>로 이관 — BOARDS <code>kind=gb</code>). ★ 2026-08-26부터 이 층으로 <b>발굴</b>도 한다(<code>local_gosi_discover.py</code> — 국지도 계열 검색어 전 페이지 스윕 → 원장 대조 → 없는 사업 자동 등재. 제5차 건설계획 목록 밖의 <b>이미 착공해 진행 중인 국도·국지도</b> 사각지대 해소. 생존 게이트 <code>check_discover_alive</code>)</td></tr>
   <tr><td><span class="tag plan">HTML</span>지방국토관리청 「국토관리청공고」</td><td>5개 청(서울·원주·대전·익산·부산) 게시판 BORD0201</td><td>국도·국지도(착공 단계)</td><td><b>보상계획 공고에 토지조서(세목)가 첨부로 붙는 유일한 층</b>(관보는 고시문만 싣고 세목은 별지 생략). XLSX/HWP/PDF 3형식 → <code>rocm_gosi.py</code>가 세목 텍스트로 변환해 회랑 파이프라인에 공급. ⚠ 「훈령/지침/고시」 메뉴가 아니라 <b>「…청공고」</b> 메뉴다. 같은 상세 응답에서 <b>게시일(등록일)</b>도 받아 <b>도로 추진 경과</b>의 일자 근거로 쓴다(2026-08-13 — 종전엔 자리표시 <code>20000101</code>을 넣어, 귀속까지 통과한 조서 65건이 이력에서 통째로 빠졌다)</td></tr>
   <tr><td><span class="tag plan">HTML</span>국가철도공단 편입토지현황</td><td><code>land.kr.or.kr</code> <code>sltIncrprLndListVw</code></td><td>국가철도(일반·고속) 사업 75건</td><td><b>철도판 세목</b> — 사업명·소재지·지번·지목·편입면적 13.2만 필지(<code>rail_parcel_db.py</code> 전수 14,199쪽). 검색은 서버 쪽이 실제로 고장이라(브라우저에서도 0건) 전 페이지 순회로 확보. ⚠ 도시철도·광역철도는 여기 없다 — 층이 다르다(아래 행)</td></tr>
   <tr><td><span class="tag plan">HTML</span>관보 실시계획 승인 고시(철도)</td><td><code>gwanbo.go.kr</code>(색인 <code>rail_gosi_index.json</code> 964건)</td><td>도시철도·광역철도</td><td>실시계획 승인 고시 본문에 <b>편입토지 세목</b>이 실린다(옥정~포천 598행 실측) — 착공·인가 근사선의 다수(37건 중 32건)가 도시철도라 이 층이 유일 창구(<code>rail_parcel_geom.py --gosi</code>). 귀속 가드 3중: 제목 토큰 + 세목 시도↔역 시도 + 역 좌표 없으면 안 뽑음. 최종 검증은 작도 단계의 <b>역 정합</b>(3km 안 역 ≥2)</td></tr>
@@ -201,7 +201,7 @@ UPIS가 「물류단지·산단」을 명시 제외(다른 소유자 전제)했�
 <table>
   <tr><th>사업 유형</th><th>소유 커넥터(SSOT)</th><th>상태</th></tr>
   <tr><td>철도 노선·역(계획~개통)</td><td><code>rail_official</code> 원장 + 국가철도망계획·고시·현장정보</td><td>가동</td></tr>
-  <tr><td>도로(고속·국도·국지도·광역)</td><td><code>official_roads</code> + 열린재정 자동발굴 + 고시 커넥터(관보·rocm·citynet)</td><td>가동</td></tr>
+  <tr><td>도로(고속·국도·국지도·광역)</td><td><code>official_roads</code> + 열린재정 자동발굴 + citynet 발굴(<code>local_gosi_discover</code>) + 고시 커넥터(관보·rocm·citynet)</td><td>가동</td></tr>
   <tr><td>정비(재개발·재건축·소규모)</td><td>정비몽땅·경기데이터드림·17시도 3층 + 서울시 분기 추진현황 + 토지이음 색인 마일스톤</td><td>가동</td></tr>
   <tr><td>택지·공공주택지구·신도시</td><td>택지정보 대장(<code>jigu</code>→mega/master)</td><td>가동</td></tr>
   <tr><td>대형 건축 인허가(민간 공장·지산·데이터센터·오피스)</td><td>건축HUB(<code>arch_fetch</code>)</td><td>가동</td></tr>
@@ -216,7 +216,7 @@ UPIS가 「물류단지·산단」을 명시 제외(다른 소유자 전제)했�
   <tr><td>공항</td><td><code>official_jobs.json</code> 대장 + **관보 기본계획 고시** 전수 대조</td><td>가동 <b>(2026-08-11 전수 대조 완료)</b> — 6곳 등재. ⚠ 백령·경기국제·인천5단계는 <b>기본계획 미고시라 공식 규모·좌표가 존재하지 않아</b> 정답지 backlog로 감시(고시되면 승격). 제7차 공항개발종합계획은 2026-08 현재 미고시(현행 최신=제6차)</td></tr>
   <tr><td><b>물류단지(도시첨단·일반)</b></td><td>NLIC 물류단지 현황(<code>nlic_fetch</code> → <code>logipark_signals.json</code>) — 59단지 중 <b>delta만</b>(검증통과=계획·건설중=착공), 운영중 제외. 주소가 지번급이라 좌표 대부분 정밀. ⚠ <b>연 1회 갱신</b>(2024.10 기준 명기)이라 discovery 층이고, <b>도시첨단은 이 목록에 없다</b>(시범 6곳은 아래 수동 SSOT 유지)</td><td><b>가동</b>(2026-08-10 — 실측 31건: 계획 17·착공 14)</td></tr>
   <tr><td>세종 지자체 고시 층</td><td>세종시 고시공고(자체 시스템 — <code>local_gosi.BOARDS["세종"]</code>, 무세션 GET 3단 + eminwon 첨부)</td><td><b>가동</b>(2026-08-11 관통 — 도로구역·지형도면 고시 다수 확인. 현재 원장의 세종 도로가 국토부 층 고속도로뿐이라 <b>수확 대상은 0</b>)</td></tr>
-  <tr><td>서울 지자체 고시 층</td><td>서울 고시공고 게시판(<code>local_gosi.BOARDS["서울"]</code>) — 도시관리계획 계열 관통(첨부 PDF 수신 확인)</td><td><b>부분</b>(2026-08-11 — 게시판이 <b>부서 선별 부분집합</b>이라 「도로구역」 0건. 정본인 <b>서울시보는 색인조차 프로그램 접근 불가</b>로 실측 확인 → 서울 도로구역 층은 여전히 미커버)</td></tr>
+  <tr><td>서울 지자체 고시 층</td><td>서울 고시공고 게시판(<code>local_gosi.BOARDS["서울"]</code>) — 도시관리계획 계열 관통(첨부 PDF 수신 확인)</td><td><b>가동</b>(게시판은 부서 선별 부분집합이라 「도로구역」 0건이지만, 정본인 <b>서울시보가 2026-08-11 열렸다</b> — <code>seoul_sibo.py</code> 색인 + 목차 HWPX + 면수 분할. <code>_seoul_search</code>가 두 창구를 합쳐 준다)</td></tr>
   <tr><td>방재(UQ156)·관광단지·유원지</td><td>—</td><td>의도적 미사용(호재 축 설계 선행 필요 — 기록만)</td></tr>
 </table>
 
