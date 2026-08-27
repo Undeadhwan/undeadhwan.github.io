@@ -551,6 +551,22 @@
   .hj-count b { color:var(--ink); font-weight:700; }
   .hj-count .hjsep { width:1px; height:11px; background:var(--line2); display:block; }
   .hj-count .hjauto { color:var(--ink3); }
+  /* 「내 위치」 버튼 (2026-08-27 · 알렉스 확정 — 네이버부동산과 같은 문법: **누를 때만 묻는다**).
+     무손실 배지(.hj-count)와 같은 가족으로 보이게 흰 바탕·--line 테두리·같은 그림자를 쓴다. */
+  .myloc { position:absolute; right:12px; bottom:12px; z-index:5; width:36px; height:36px;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:8px;
+    box-shadow:0 1px 6px rgba(0,0,0,.10); color:var(--ink2); padding:0; }
+  .myloc:hover { color:var(--ink); border-color:var(--line2); }
+  .myloc[disabled] { color:var(--ink3); cursor:progress; }
+  .myloc svg { width:18px; height:18px; display:block; }
+  .myloc.busy svg { animation:mylocSpin 1s linear infinite; }
+  @keyframes mylocSpin { to { transform:rotate(360deg); } }
+  /* 실패는 **말한다** — 조용히 아무 일도 안 하면 사용자는 버튼이 죽은 줄 안다(P5). */
+  .mylocmsg { position:absolute; right:12px; z-index:5; max-width:min(260px,62vw);
+    background:rgba(255,255,255,.97); border:1px solid var(--line); border-radius:6px;
+    padding:7px 10px; box-shadow:0 1px 6px rgba(0,0,0,.10);
+    font-size:11.5px; line-height:1.5; color:var(--ink2); }
   /* (등급 매트릭스 `.hmatrix`/`.hmrow`/`.hmc`/`.hmpills`는 2026-08-14에 지웠다 — 시안 §12·§10이
      폐기를 지시한 부품이라 `regionHeadHtml`(등급 링 칩 + 유형 비율 바)로 넘어갔다.
      `.hmhint`는 상세·패널 곳곳의 작은 주석 글씨로 계속 쓰이므로 **남긴다**.) */
@@ -6495,6 +6511,60 @@ function lastViewSave(lat, lng, lv) {
 }
 
 /* ══════════ 지도: 카카오 → Leaflet 폴백 ══════════ */
+/* ══════════ 「내 위치」 버튼 (2026-08-27 · 알렉스 확정) ══════════
+   ★ **누를 때만 묻는다.** 첫 진입에 권한 팝업을 띄우지 않는다 — 네이버부동산도 그렇다
+     (알렉스 화면 확인: 버튼을 누른 순간에 「내 위치 확인」 권한을 요청한다).
+   · 좌표는 **지도를 옮기는 데만** 쓴다. 어디에도 보내지 않는다(접속 기록 비콘에도 실리지 않는다).
+   · 실패하면 **말한다** — 거부·시간초과·국외를 구분해서. 조용히 아무 일도 안 하면 사용자는
+     버튼이 죽은 줄 안다(P5). 네이버도 실패 시 「일시적으로 내 위치를 확인할 수 없습니다」를 띄운다.
+   · **렌더러 무관** — 이동은 `mapGo`(카카오·Leaflet 둘 다 이해한다)를 탄다. 버튼은 `#map`의 자식이라
+     두 초기화 경로가 같은 함수를 부른다(규칙이 한쪽에만 걸리면 반대쪽이 조용한 예외가 된다).
+   · HTTPS에서만 동작한다(브라우저 정책) — 라이브는 HTTPS, 개발은 localhost 예외. */
+const MYLOC_ZOOM = 13;          // mapGo는 Leaflet 줌 문법 → 카카오 레벨 18-13 = 5(동네 수준)
+function mylocMount() {
+  const el = document.getElementById("map");
+  if (!el || el.querySelector(".myloc")) return;                 // 멱등 — 두 초기화가 다 불러도 하나만
+  const btn = document.createElement("button");
+  btn.className = "myloc"; btn.type = "button";
+  btn.title = "내 위치로 이동";
+  btn.setAttribute("aria-label", "내 위치로 이동");
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'
+    + '<circle cx="12" cy="12" r="6.2"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/>'
+    + '<path d="M12 1.8v3.2M12 19v3.2M22.2 12H19M5 12H1.8" stroke-linecap="round"/></svg>';
+  const msg = document.createElement("div");
+  msg.className = "mylocmsg"; msg.style.display = "none";
+  const place = () => {
+    const f = document.querySelector("footer");
+    const b = f ? Math.max(12, Math.round(el.getBoundingClientRect().bottom - f.getBoundingClientRect().top) + 12) : 12;
+    btn.style.bottom = b + "px"; msg.style.bottom = (b + 44) + "px";
+  };
+  const say = t => {
+    msg.textContent = t; msg.style.display = "";
+    clearTimeout(msg._t); msg._t = setTimeout(() => { msg.style.display = "none"; }, 6000);
+  };
+  btn.onclick = () => {
+    if (!navigator.geolocation) { say("이 브라우저는 위치 기능을 지원하지 않습니다."); return; }
+    btn.disabled = true; btn.classList.add("busy"); msg.style.display = "none";
+    const done = () => { btn.disabled = false; btn.classList.remove("busy"); };
+    navigator.geolocation.getCurrentPosition(pos => {
+      done();
+      const { latitude: la, longitude: ln } = pos.coords;
+      // ⚠ 국외면 **가지 않는다** — 지도가 대양으로 날아가는 대신 사실을 말한다(한반도 클램프와 같은 뜻).
+      if (la < KOREA_BB.s || la > KOREA_BB.n || ln < KOREA_BB.w || ln > KOREA_BB.e) {
+        say("현재 위치가 국내 범위 밖입니다. 호재맵은 국내 신호만 다룹니다."); return;
+      }
+      mapGo(la, ln, MYLOC_ZOOM);
+    }, err => {
+      done();
+      say(err && err.code === 1 ? "위치 권한이 거부돼 있습니다. 브라우저 주소창의 자물쇠에서 「위치」를 허용해 주세요."
+        : err && err.code === 3 ? "위치를 확인하는 데 시간이 너무 걸립니다. 잠시 후 다시 눌러 주세요."
+        : "일시적으로 내 위치를 확인할 수 없습니다.");
+    }, { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 });
+  };
+  el.appendChild(btn); el.appendChild(msg);
+  place(); window.addEventListener("resize", place);
+}
+
 function bootMap() {
   const s = document.createElement("script");
   s.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_JS_KEY}&autoload=false`;
@@ -6536,6 +6606,7 @@ function initLeaflet() {
     .setView([_lvL ? _lvL.lat : 37.556, _lvL ? _lvL.lng : 126.95],
              (_lvL && _lvL.lv >= 1 && _lvL.lv <= 13) ? Math.max(6, 18 - _lvL.lv) : 10);   // 수도권 전역 · 줌 슬라이더 제거(2026-07-23) · 한반도 밖 이탈 방지(2026-08-10 — 카카오판 클램프와 쌍)
   window._map = map;   // 디버그·검증용
+  mylocMount();        // 「내 위치」 버튼 — 카카오 경로와 **같은 함수**
   // 마지막 본 자리 기억 — 카카오의 `idle`과 같은 자리(레벨은 카카오 문법으로 환산해 **한 형식**으로 저장)
   map.on("moveend zoomend", () => {
     const c = map.getCenter(); lastViewSave(c.lat, c.lng, Math.max(1, 18 - map.getZoom()));
@@ -7381,6 +7452,7 @@ function initKakao() {
     const c = map.getCenter(); lastViewSave(c.getLat(), c.getLng(), map.getLevel());
   });
   window._map = map; window._kmap = map; map.setMaxLevel(13);
+  mylocMount();          // 「내 위치」 버튼 — 렌더러 무관(두 초기화가 같은 함수를 부른다)
   // 줌 슬라이더 제거(2026-07-23 사용자 요청) — 스크롤·핀치 줌으로 대체
   const DONG_LV = 6, APT_LV = 4, APT_ICON_LV = 5;   // 집 아이콘만 lv5부터(2026-07-29) — 라벨·등급 LOD(APT_LV)는 불변
   const lodGrades = lv => lv <= APT_LV ? ["S", "A", "B", "C", "미정"] : lv <= 6 ? ["S", "A", "B", "C"] : lv <= 8 ? ["S", "A", "B"] : lv <= 9 ? ["S", "A"] : ["S"];   // 수도권-와이드(lv10+)=S만(GTX 부각, 2026-07-22 사용자 "GTX가 S로 보여야") · B·C는 lv6/8부터
@@ -9213,8 +9285,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "081bb73075", "adverse_facilities.json": "cbd4a998ae", "apartments_all.json": "4181bcf85a", "arch_signals.json": "608f2a594e", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "3e01c49859", "dart_signals.json": "1e2a409b35", "dps_signals.json": "3ad7d938a5", "eum_signals.json": "babc9b52fd", "hospital_signals.json": "af9bc25fac", "indpark_signals.json": "c3345d0e2e", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "f0728a3014", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2dadcfbe0a", "mega_signals.json": "27947585bc", "methodology.html": "f2f0db7d21", "park_signals.json": "07186e6e50", "rail_reference.html": "5d0f57fcb2", "rail_signals.json": "187dee165f", "regions.json": "9357f5440d", "report.html": "302d3f9afc", "retail_signals.json": "87a3fefb48", "road_signals.json": "dd7f86c5a7", "school_signals.json": "10a9c89d94", "settings.html": "1ca2007f59", "sfz_signals.json": "e190b12521", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "cde47afebb", "signals.json": "94f5712a9f", "signals_auto.json": "50c80a5276", "signals_jeongbi_all.json": "e3cfda6050", "source_status.html": "08cc4c65f3", "thresholds.json": "be2e9787c0"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260827n");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "081bb73075", "adverse_facilities.json": "cbd4a998ae", "apartments_all.json": "4181bcf85a", "arch_signals.json": "608f2a594e", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "f01af351e2", "dart_signals.json": "1e2a409b35", "dps_signals.json": "3ad7d938a5", "eum_signals.json": "babc9b52fd", "hospital_signals.json": "af9bc25fac", "indpark_signals.json": "c3345d0e2e", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "f0728a3014", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2dadcfbe0a", "mega_signals.json": "27947585bc", "methodology.html": "f2f0db7d21", "park_signals.json": "07186e6e50", "rail_reference.html": "5d0f57fcb2", "rail_signals.json": "187dee165f", "regions.json": "9357f5440d", "report.html": "302d3f9afc", "retail_signals.json": "87a3fefb48", "road_signals.json": "dd7f86c5a7", "school_signals.json": "10a9c89d94", "settings.html": "1ca2007f59", "sfz_signals.json": "e190b12521", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "cde47afebb", "signals.json": "94f5712a9f", "signals_auto.json": "50c80a5276", "signals_jeongbi_all.json": "e3cfda6050", "source_status.html": "08cc4c65f3", "thresholds.json": "be2e9787c0"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260827o");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
