@@ -41,9 +41,15 @@
   .tokrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0 4px}
   .tokrow input{flex:1;min-width:220px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;
                 background:var(--bg);color:var(--fg);font:13px ui-monospace,Menlo,monospace}
+  /* ☠ 2026-08-27 — 「저장 버튼이 어디 있냐」(알렉스). 밝은 화면에서 **흰 바탕에 흰 버튼**이었다:
+     --card(#fff) = --bg(#fff)이고 테두리는 --line(#e6e8ec) 1px뿐이라 면이 사라진다.
+     주 동작(저장)은 **액센트로 채운다** — 새 색을 만들지 않고 이미 있는 --acc를 쓴다(DESIGN.md).
+     보조 동작(지우기)만 기존 외곽선 꼴로 남긴다 — 주·보조가 같은 무게면 주 동작이 안 보인다. */
   .tokrow button{padding:8px 14px;border:1px solid var(--line);border-radius:8px;background:var(--card);
                  color:var(--fg);font-size:13px;cursor:pointer}
-  .tokrow button:hover{border-color:var(--acc)}
+  .tokrow button#save{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
+  .tokrow button#save:hover{filter:brightness(1.08)}
+  .tokrow button#clear:hover{border-color:var(--acc)}
   .note{font-size:12.5px;color:var(--dim);line-height:1.55;margin-top:6px}
   .ok{color:#16a34a}.warn{color:#d97706}
   footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--dim)}
@@ -124,9 +130,16 @@
     $("tok").value = t;
     const lnk = $("lnk-log");
     if (t) {
-      lnk.href = W + "?t=" + encodeURIComponent(t);
+      /* ★ **내 방문자 ID를 링크에 실어 보낸다** (2026-08-27 · 알렉스: "나 이외에 다른 사람들이 얼마나").
+         뷰어는 **워커 오리진**이라 hojaemap.kr의 localStorage(`hojae_vid`)를 읽을 수 없다 —
+         같은 오리진인 이 페이지가 읽어서 `&me=`로 넘긴다. 손으로 옮길 일이 없어진다.
+         값이 없으면(비콘이 아직 안 돈 첫 방문) 그냥 안 붙는다 — 뷰어가 그 사실을 화면에서 말한다. */
+      const mine = (localStorage.getItem("hojae_vid") || "").trim();
+      lnk.href = W + "?t=" + encodeURIComponent(t) + (mine ? "&me=" + encodeURIComponent(mine) : "");
       lnk.classList.remove("off");
-      $("tokmsg").innerHTML = '<span class="ok">토큰 저장됨</span> — 아래 「접속 기록」이 열립니다.';
+      $("tokmsg").innerHTML = '<span class="ok">토큰 저장됨</span> — 아래 「접속 기록」이 열립니다.'
+        + (mine ? ' 내 방문자 ID <code>' + mine.slice(0, 8) + '…</code>는 <b>제외</b>하고 보여줍니다.'
+                : ' <span class="warn">이 브라우저의 방문자 ID가 아직 없습니다</span> — 사이트를 한 번 열면 생깁니다.');
     } else {
       lnk.href = "#"; lnk.classList.add("off");
       $("tokmsg").innerHTML = '<span class="warn">토큰이 없습니다</span> — 넣어야 접속 기록이 열립니다.';
