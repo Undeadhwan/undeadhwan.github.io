@@ -6469,6 +6469,31 @@ function updateTabbar() {
 }
 function renderAll() { _relEpoch++; renderChips(); renderDock(); renderAxis(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); if (VIEW_MODE === "list") renderList(); if (VIEW_MODE === "flow") renderFlow(); renderSheet(); updateTabbar(); layoutBottom(); }
 
+/* ══════════ 마지막으로 본 자리 (2026-08-27 · 알렉스 요청) ══════════
+   「사이트를 열면 마지막에 보던 곳이 나온다」 — 호갱노노·네이버부동산과 같은 문법이다.
+   ⚠ **위치 권한(GPS)을 쓰지 않는다.** 알렉스 확인: 그 서비스들도 「내 동네」가 아니라
+     **마지막 본 자리**로 연다. 권한 팝업이 없고, 좌표가 브라우저 밖으로 나가지 않는다.
+   · 저장은 지도가 멈췄을 때(idle)만 — 팬 프레임엔 개입하지 않는다(한반도 클램프와 같은 배려).
+   · 되살릴 때 **범위·레벨을 검사**한다. 저장값이 깨져 있으면 조용히 기본 뷰로 간다
+     (localStorage는 사용자가 지우거나 다른 버전이 쓴 값이 남을 수 있다).
+   · 시크릿 창·저장 차단 브라우저에서 접근 자체가 던진다 → 읽기·쓰기 둘 다 try/catch. */
+const KOREA_BB = { s: 32.6, n: 39.6, w: 123.8, e: 132.6 };   // 백령도~독도·제주~접경 여유 포함
+const LASTVIEW_KEY = "hojae_lastview";
+function lastViewLoad() {
+  try {
+    const v = JSON.parse(localStorage.getItem(LASTVIEW_KEY) || "null");
+    if (!v || typeof v.lat !== "number" || typeof v.lng !== "number") return null;
+    if (v.lat < KOREA_BB.s || v.lat > KOREA_BB.n || v.lng < KOREA_BB.w || v.lng > KOREA_BB.e) return null;
+    return v;
+  } catch (e) { return null; }
+}
+function lastViewSave(lat, lng, lv) {
+  try {
+    if (!(lat >= KOREA_BB.s && lat <= KOREA_BB.n && lng >= KOREA_BB.w && lng <= KOREA_BB.e)) return;
+    localStorage.setItem(LASTVIEW_KEY, JSON.stringify({ lat, lng, lv }));
+  } catch (e) { /* 저장 차단(시크릿 등) — 기억하지 못할 뿐, 화면은 그대로 돈다 */ }
+}
+
 /* ══════════ 지도: 카카오 → Leaflet 폴백 ══════════ */
 function bootMap() {
   const s = document.createElement("script");
@@ -6504,9 +6529,17 @@ function initLeaflet() {
        부트로 되돌릴 게 아니라 **양쪽 렌더러가 같은 자를 쓰게** 해야 한다(§규칙은 양쪽에 건다).
      ⚠ `renderSggBadges`·`renderDongBadges`는 **지우지 않는다** — 죽은 것은 사실이지만,
        C20 경고로 열어 두는 편이 낫다(사실의 기록). 764KB 파일에서 함수를 문자열로 도려내는 건
-       CLAUDE.md가 금한 그 사고다. 되살릴 때 구현이 필요하기도 하다. */  const map = L.map("map", { zoomControl: false, maxBounds: [[32.6, 123.8], [39.6, 132.6]],
-    maxBoundsViscosity: 1.0, minZoom: 6 }).setView([37.556, 126.95], 10);   // 수도권 전역 · 줌 슬라이더 제거(2026-07-23) · 한반도 밖 이탈 방지(2026-08-10 — 카카오판 클램프와 쌍)
+       CLAUDE.md가 금한 그 사고다. 되살릴 때 구현이 필요하기도 하다. */  const _lvL = lastViewLoad();   // ★ 마지막 본 자리 — **양쪽 렌더러에 같이 건다**(규칙이 한쪽에만 걸리면 반대쪽이 조용한 예외가 된다)
+  const map = L.map("map", { zoomControl: false,
+    maxBounds: [[KOREA_BB.s, KOREA_BB.w], [KOREA_BB.n, KOREA_BB.e]],
+    maxBoundsViscosity: 1.0, minZoom: 6 })
+    .setView([_lvL ? _lvL.lat : 37.556, _lvL ? _lvL.lng : 126.95],
+             (_lvL && _lvL.lv >= 1 && _lvL.lv <= 13) ? Math.max(6, 18 - _lvL.lv) : 10);   // 수도권 전역 · 줌 슬라이더 제거(2026-07-23) · 한반도 밖 이탈 방지(2026-08-10 — 카카오판 클램프와 쌍)
   window._map = map;   // 디버그·검증용
+  // 마지막 본 자리 기억 — 카카오의 `idle`과 같은 자리(레벨은 카카오 문법으로 환산해 **한 형식**으로 저장)
+  map.on("moveend zoomend", () => {
+    const c = map.getCenter(); lastViewSave(c.lat, c.lng, Math.max(1, 18 - map.getZoom()));
+  });
   // 컨테이너 크기 변동 대응 (초기 0크기·모바일 회전 등)
   setTimeout(() => map.invalidateSize(), 300);
   new ResizeObserver(() => map.invalidateSize()).observe(document.getElementById("map"));
@@ -7327,18 +7360,25 @@ function initKakao() {
       : "12px";
   };
   _placeHjCount(); window.addEventListener("resize", _placeHjCount);
-  const map = new K.Map(el, { center: new K.LatLng(37.556, 126.95), level: 8 });
+  // ★ **마지막으로 본 자리**가 있으면 거기서 연다(없으면 종전 기본 뷰) — 위 lastViewLoad 주석 참조.
+  const _lv0 = lastViewLoad();
+  const map = new K.Map(el, { center: new K.LatLng(_lv0 ? _lv0.lat : 37.556, _lv0 ? _lv0.lng : 126.95),
+                              level: (_lv0 && _lv0.lv >= 1 && _lv0.lv <= 13) ? _lv0.lv : 8 });
   // ★ 한반도 밖 이탈 방지 (2026-08-10 사용자 — "처리속도에 영향 주면 하지 말고" → **중심 클램프만**:
   //   이벤트당 비교 4번·렌더 비용 0. 드래그 관성이 끝나는 지점만 되돌리므로 팬 프레임엔 개입 없음).
   //   범위는 백령도~독도·제주~접경 여유 포함. 줌아웃 상한(레벨 13)으로 대양 뷰도 차단.
   map.setMaxLevel(13);
-  const _KB = { s: 32.6, n: 39.6, w: 123.8, e: 132.6 };
+  const _KB = KOREA_BB;   // ⚠ 범위는 **한 곳**에서만 정의한다(lastViewLoad와 같은 자)
   let _kbBusy = false;
   K.event.addListener(map, "center_changed", () => {
     if (_kbBusy) return;
     const c = map.getCenter(), la = Math.min(_KB.n, Math.max(_KB.s, c.getLat())),
           ln = Math.min(_KB.e, Math.max(_KB.w, c.getLng()));
     if (la !== c.getLat() || ln !== c.getLng()) { _kbBusy = true; map.setCenter(new K.LatLng(la, ln)); _kbBusy = false; }
+  });
+  // 지도가 멈출 때만 기억한다(드래그 중엔 쓰지 않는다).
+  K.event.addListener(map, "idle", () => {
+    const c = map.getCenter(); lastViewSave(c.getLat(), c.getLng(), map.getLevel());
   });
   window._map = map; window._kmap = map; map.setMaxLevel(13);
   // 줌 슬라이더 제거(2026-07-23 사용자 요청) — 스크롤·핀치 줌으로 대체
@@ -9173,8 +9213,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "081bb73075", "adverse_facilities.json": "cbd4a998ae", "apartments_all.json": "4181bcf85a", "arch_signals.json": "608f2a594e", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "d490cd4b78", "dart_signals.json": "1e2a409b35", "dps_signals.json": "3ad7d938a5", "eum_signals.json": "babc9b52fd", "hospital_signals.json": "af9bc25fac", "indpark_signals.json": "c3345d0e2e", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "f0728a3014", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2dadcfbe0a", "mega_signals.json": "27947585bc", "methodology.html": "f2f0db7d21", "park_signals.json": "07186e6e50", "rail_reference.html": "5d0f57fcb2", "rail_signals.json": "187dee165f", "regions.json": "9357f5440d", "report.html": "302d3f9afc", "retail_signals.json": "87a3fefb48", "road_signals.json": "dd7f86c5a7", "school_signals.json": "10a9c89d94", "settings.html": "1ca2007f59", "sfz_signals.json": "e190b12521", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "cde47afebb", "signals.json": "94f5712a9f", "signals_auto.json": "50c80a5276", "signals_jeongbi_all.json": "e3cfda6050", "source_status.html": "08cc4c65f3", "thresholds.json": "be2e9787c0"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260827m");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "081bb73075", "adverse_facilities.json": "cbd4a998ae", "apartments_all.json": "4181bcf85a", "arch_signals.json": "608f2a594e", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "3e01c49859", "dart_signals.json": "1e2a409b35", "dps_signals.json": "3ad7d938a5", "eum_signals.json": "babc9b52fd", "hospital_signals.json": "af9bc25fac", "indpark_signals.json": "c3345d0e2e", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "f0728a3014", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2dadcfbe0a", "mega_signals.json": "27947585bc", "methodology.html": "f2f0db7d21", "park_signals.json": "07186e6e50", "rail_reference.html": "5d0f57fcb2", "rail_signals.json": "187dee165f", "regions.json": "9357f5440d", "report.html": "302d3f9afc", "retail_signals.json": "87a3fefb48", "road_signals.json": "dd7f86c5a7", "school_signals.json": "10a9c89d94", "settings.html": "1ca2007f59", "sfz_signals.json": "e190b12521", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "cde47afebb", "signals.json": "94f5712a9f", "signals_auto.json": "50c80a5276", "signals_jeongbi_all.json": "e3cfda6050", "source_status.html": "08cc4c65f3", "thresholds.json": "be2e9787c0"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260827n");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
