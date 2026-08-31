@@ -53,12 +53,29 @@
   .note{font-size:12.5px;color:var(--dim);line-height:1.55;margin-top:6px}
   .ok{color:#16a34a}.warn{color:#d97706}
   footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--dim)}
+  .runbox { border:1px solid var(--line,#e5e7eb); border-radius:10px; padding:14px 16px; font-size:14px;
+            line-height:1.6; background:#fafafa; }
+  .runbox.ok  { border-color:#bcd9c6; background:#f3faf5; }
+  .runbox.bad { border-color:#e6c3c3; background:#fdf4f4; }
+  .runbox.debt{ border-color:#eddcb4; background:#fdf9ef; }
+  .runbox b.big { font-size:16px; }
+  .runbox .k { color:#6f7178; }
+  .runbox ul { margin:8px 0 0; padding-left:18px; }
+  .runbox li { margin:3px 0; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>호재맵 — 관리자</h1>
   <div class="sub">운영 도구 모음 · <a href="index.html">← 사이트로</a></div>
+
+  <!-- ★★ **예약 실행이 조용히 실패한다** (2026-08-31 · 3주 연속 실패로 발각).
+       QA 오류로 [6] 배포가 중단되면 수집분은 디스크에 남지만 **라이브엔 안 나간다**. 그런데
+       그 사실이 어디에도 안 뜬다 — 로그를 열어야만 안다(「발화할 수 없는 가드」의 배포판).
+       ⇒ 관리자가 이미 보는 화면에 **맨 위**로 띄운다. 값은 빌드가 남기는 두 파일이 정본이다:
+         `build_status.json`(마지막 실행 결과) · `qa_debt_open.json`(배포는 했지만 갚을 부채). -->
+  <h2>마지막 실행</h2>
+  <div id="runbox" class="runbox">읽는 중…</div>
 
   <h2>데이터 · 기준</h2>
   <div class="grid">
@@ -159,6 +176,34 @@
   $("clear").onclick = () => { localStorage.removeItem(K); apply(); };
   $("tok").addEventListener("keydown", e => { if (e.key === "Enter") $("save").click(); });
   apply();
+})();
+</script>
+
+<script>
+/* 마지막 실행 — **두 파일이 정본**이고 이 화면은 읽기만 한다(값을 여기서 만들지 않는다). */
+(async () => {
+  const box = document.getElementById("runbox");
+  const get = async f => { try { const r = await fetch(f + "?t=" + Date.now()); return r.ok ? await r.json() : null; } catch (e) { return null; } };
+  const [st, debt] = await Promise.all([get("build_status.json"), get("qa_debt_open.json")]);
+  if (!st) { box.textContent = "build_status.json을 읽지 못했습니다."; return; }
+  const okRun = st.result === "성공";
+  const nDebt = debt ? (debt.debt || 0) : 0;
+  box.className = "runbox " + (okRun ? (nDebt ? "debt" : "ok") : "bad");
+  const days = st.last_run ? Math.floor((Date.now() - new Date(st.last_run.replace(" ", "T") + ":00").getTime()) / 86400000) : null;
+  let h = `<b class="big">${okRun ? "✅ 성공" : "❌ " + (st.result || "실패")}</b> `
+        + `<span class="k">· ${st.last_run || "?"}${days != null ? ` (${days}일 전)` : ""}`
+        + ` · BUILD ${st.build || "?"} · ${st.deploy ? "배포함" : "배포 안 함"}`
+        + `${st.duration_s ? ` · ${Math.round(st.duration_s / 60)}분` : ""}</span>`;
+  if (!okRun)
+    h += `<div style="margin-top:8px">QA 오류로 <b>배포가 중단</b>됐습니다. 수집분은 디스크에 남아 있고, `
+       + `고친 뒤 다시 돌리면 함께 나갑니다. 상세는 <code>logs/weekly_*.log</code>.</div>`;
+  if (nDebt) {
+    h += `<div style="margin-top:8px">🟡 <b>갚아야 할 부채 ${nDebt}건</b> — 배포는 막지 않지만 `
+       + `늘어난 채로 두면 다음에 더 늘어도 안 걸립니다.<ul>`
+       + (debt.items || []).slice(0, 6).map(x => `<li>${(x.msg || "").slice(0, 140)}</li>`).join("")
+       + `</ul></div>`;
+  }
+  box.innerHTML = h;
 })();
 </script>
 </body>

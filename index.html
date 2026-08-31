@@ -562,6 +562,19 @@
   .myloc svg { width:18px; height:18px; display:block; }
   .myloc.busy svg { animation:mylocSpin 1s linear infinite; }
   @keyframes mylocSpin { to { transform:rotate(360deg); } }
+  /* 베이스맵 전환(지도 ↔ 위성) — 2026-08-30 알렉스 요청("카카오지도 스카이뷰가 우리도 되나").
+     ⚠ **새 색·새 그림자를 만들지 않는다** — 「내 위치」와 같은 가족(흰 바탕·--line·같은 그림자).
+       다른 건 폭뿐이다(글자 라벨이라 정사각형이 아니다).
+     ⚠ 이 버튼은 **카카오 렌더러에서만** 붙는다. Leaflet 폴백엔 위성 타일이 없으므로,
+       못 하는 일을 할 수 있는 것처럼 보이는 버튼을 두지 않는다(P2·P5 — 화면이 사실을 말한다). */
+  .mapbase { position:absolute; right:12px; z-index:5; height:36px; min-width:52px; padding:0 11px;
+    display:flex; align-items:center; justify-content:center; cursor:pointer; gap:5px;
+    background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:8px;
+    box-shadow:0 1px 6px rgba(0,0,0,.10); color:var(--ink2);
+    font-family:inherit; font-size:12px; font-weight:600; line-height:1; letter-spacing:-.01em; }
+  .mapbase:hover { color:var(--ink); border-color:var(--line2); }
+  .mapbase.on { color:var(--ink); border-color:var(--line2); }
+  .mapbase svg { width:15px; height:15px; display:block; }
   /* 실패는 **말한다** — 조용히 아무 일도 안 하면 사용자는 버튼이 죽은 줄 안다(P5). */
   .mylocmsg { position:absolute; right:12px; z-index:5; max-width:min(260px,62vw);
     background:rgba(255,255,255,.97); border:1px solid var(--line); border-radius:6px;
@@ -1296,16 +1309,16 @@
      6열 표를 그대로 넣으면 375px에서 뒤 열이 화면 밖으로 나가 가로 스크롤이 생긴다. */
   #msheet .ms-sort { margin-left:auto; font-size:12px; font-weight:600; color:var(--ink2);
     border:1px solid var(--line); border-radius:8px; padding:3px 6px; background:#fff; }
-  #msheet .ms-item { display:grid; grid-template-columns:4px 1fr auto; align-items:center; gap:11px;
+  .ms-item { display:grid; grid-template-columns:4px 1fr auto; align-items:center; gap:11px;
     padding:9px 0; border-top:1px solid var(--line); cursor:pointer; }
-  #msheet .ms-item:first-child { border-top:0; }
-  #msheet .ms-item .bar { width:4px; height:34px; border-radius:2px; }
-  #msheet .ms-item .nm { display:block; font-size:14px; font-weight:700; line-height:1.3; color:var(--ink); }
-  #msheet .ms-item .sb { display:block; font-size:12px; color:var(--ink2); margin-top:3px; }
-  #msheet .ms-item .ds { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:13px; color:var(--ink2); }
+  .ms-item:first-child { border-top:0; }
+  .ms-item .bar { width:4px; height:34px; border-radius:2px; }
+  .ms-item .nm { display:block; font-size:14px; font-weight:700; line-height:1.3; color:var(--ink); }
+  .ms-item .sb { display:block; font-size:12px; color:var(--ink2); margin-top:3px; }
+  .ms-item .ds { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:13px; color:var(--ink2); }
   /* 적재량을 **말한다** — 「n건 표시 중 · 남은 m건」. 말없이 자르지 않는다(P2·P5) */
-  #msheet .ms-tail { padding:12px 0 18px; font-size:12px; color:var(--ink3); text-align:center; }
-  #msheet .ms-tail b { color:var(--ink2); font-variant-numeric:tabular-nums; }
+  .ms-tail { padding:12px 0 18px; font-size:12px; color:var(--ink3); text-align:center; }
+  .ms-tail b { color:var(--ink2); font-variant-numeric:tabular-nums; }
   #msheet .ms-more { display:block; margin:9px auto 0; min-height:38px; padding:0 18px; font-size:13px;
     font-weight:700; color:var(--ink); background:#fff; border:1px solid var(--line2); border-radius:10px; }
   #msheet .ms-row { display:flex; gap:6px; overflow-x:auto; padding:8px 0 2px; }
@@ -2012,6 +2025,89 @@
   .rrow .rm { font-size:11.5px; color:var(--muted); margin-top:3px; }
   .rrow .rm b { color:var(--ink); font-weight:600; }
   .rrow a { color:var(--accent); text-decoration:none; font-size:11.5px; }
+  /* ══════════ 모바일 재설계 (2026-08-30) ══════════
+     ⚠ 새 색·새 폰트 크기를 만들지 않는다 — DESIGN.md §2 토큰만 쓴다.
+     ⚠ 「필터=체크박스 · 표시 옵션=스위치」 구분은 그대로다. 아래 칩은 **범위 선택**이라
+       필터도 옵션도 아니다(무엇을 보나가 아니라 **어디까지 찾나**) — 그래서 세그 알약이다. */
+  .mview { display:none; padding:12px 14px 24px; overflow-y:auto; }
+  @media (max-width:768px) { .mview { display:none; } }
+  .mb-head { position:sticky; top:0; z-index:3; background:var(--bg); padding-bottom:8px; margin:-12px -14px 0; padding:12px 14px 8px; border-bottom:1px solid var(--line); }
+  .mb-anchor { display:flex; align-items:center; gap:7px; width:100%; height:40px; padding:0 12px;
+    border:1px solid var(--ink); border-radius:999px; background:var(--bg); color:var(--ink);
+    font:inherit; font-size:14.5px; font-weight:600; letter-spacing:-.01em; cursor:pointer; }
+  .mb-anchor .tx { flex:1; text-align:left; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .mb-anchor .car { color:var(--ink3); font-weight:400; }
+  .mb-rchips { display:flex; gap:6px; margin-top:9px; flex-wrap:wrap; }
+  .mb-rchip { font-size:12.5px; padding:6px 13px; border-radius:999px; border:1px solid var(--line2);
+    background:var(--bg); color:var(--ink3); font-family:inherit; cursor:pointer; }
+  .mb-rchip.on { background:var(--ink); border-color:var(--ink); color:#fff; font-weight:600; }
+  .mb-secttl { display:flex; align-items:center; gap:8px; margin:14px 0 8px; font-size:15.5px; font-weight:700; letter-spacing:-.01em; }
+  .mb-secttl span { color:var(--ink3); font-weight:400; font-size:12.5px; }
+  .mb-star { margin-left:auto; border:1px solid var(--line2); background:var(--bg); color:var(--ink3);
+    width:32px; height:32px; border-radius:8px; font-size:15px; cursor:pointer; line-height:1; }
+  .mb-star.on { color:var(--c-traffic); border-color:var(--c-traffic); }
+  /* 「넓혔다」는 **사실의 표기**다(P2) — 조용히 넓히면 사용자는 3km 안에 있는 줄 안다 */
+  .mb-widen { font-size:12.5px; color:var(--warn); background:#fdf6ec; border:1px solid #f0dcc0;
+    border-radius:var(--r-s); padding:8px 11px; margin:6px 0 10px; line-height:1.5; }
+  .mb-sub { font-size:12.5px; color:var(--ink3); margin:4px 0 10px; line-height:1.5; }
+  .mb-more { font-size:12.5px; color:var(--ink3); text-align:center; margin:10px 0 0; }
+  .mb-empty { border:1px dashed var(--line2); border-radius:var(--r); padding:18px 14px; text-align:center;
+    display:flex; flex-direction:column; gap:7px; align-items:center; margin:8px 0; }
+  .mb-empty b { font-size:14.5px; }
+  .mb-empty span { font-size:12.5px; color:var(--ink3); line-height:1.55; }
+  .mb-btn { font:inherit; font-size:13px; font-weight:600; padding:9px 16px; border-radius:var(--r-s);
+    border:1px solid var(--line2); background:var(--bg); color:var(--ink2); cursor:pointer; text-decoration:none; display:inline-block; }
+  .mb-btn.pri { background:var(--ink); border-color:var(--ink); color:#fff; }
+  .mb-btnrow { display:flex; gap:8px; margin-top:14px; }
+  .mb-btnrow .mb-btn { flex:1; text-align:center; }
+  .mb-p { font-size:13.5px; color:var(--ink2); line-height:1.6; margin:0 0 10px; }
+  .mb-note { font-size:12px; color:var(--ink3); line-height:1.6; margin:12px 0 0; }
+  .mb-wl { display:flex; align-items:center; gap:10px; padding:11px 0; border-top:1px solid var(--line); }
+  .mb-wl:first-of-type { border-top:0; }
+  .mb-wl .tx { flex:1; min-width:0; }
+  .mb-wl .tx b { display:block; font-size:13.5px; font-weight:600; letter-spacing:-.01em;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .mb-wl .tx i { font-style:normal; font-size:12px; color:var(--ink3); }
+  .mb-sw { width:38px; height:22px; border-radius:11px; background:var(--c-traffic); position:relative;
+    border:0; padding:0; flex:none; cursor:pointer; }
+  .mb-sw::after { content:""; position:absolute; top:2px; left:18px; width:18px; height:18px; border-radius:50%; background:#fff; transition:.15s; }
+  .mb-sw.off { background:var(--line2); } .mb-sw.off::after { left:2px; }
+  .mb-x { border:0; background:none; color:var(--ink3); font-size:14px; cursor:pointer; padding:4px; flex:none; }
+  /* 공용 시트 — 기준점·제보가 같은 그릇을 쓴다(부품을 늘리지 않는다) */
+  #mbsheet { position:fixed; inset:0; z-index:2400; display:none; }
+  #mbsheet.on { display:block; }
+  #mbsheet .mb-scrim { position:absolute; inset:0; background:rgba(20,22,26,.38); }
+  #mbsheet .mb-card { position:absolute; left:0; right:0; bottom:0; background:var(--bg);
+    border-radius:16px 16px 0 0; padding:8px 16px calc(18px + env(safe-area-inset-bottom));
+    max-height:82vh; overflow-y:auto; box-shadow:0 -6px 26px rgba(0,0,0,.18); }
+  #mbsheet .mb-grip { width:38px; height:4px; border-radius:2px; background:var(--line2); margin:0 auto 12px; }
+  #mbsheet h3 { margin:0 0 12px; font-size:16px; font-weight:700; letter-spacing:-.015em; }
+  .mb-pick { display:flex; align-items:center; gap:11px; width:100%; padding:11px 2px; border:0;
+    border-top:1px solid var(--line); background:none; font:inherit; text-align:left; cursor:pointer; color:var(--ink); }
+  .mb-pick:first-of-type { border-top:0; }
+  .mb-pick .ic { width:24px; text-align:center; font-size:16px; flex:none; }
+  .mb-pick .tx { flex:1; min-width:0; }
+  .mb-pick .tx b { display:block; font-size:14px; font-weight:600; letter-spacing:-.01em; }
+  .mb-pick .tx i { font-style:normal; font-size:12px; color:var(--ink3); }
+  .mb-pick .go { color:var(--ink3); font-size:13px; flex:none; }
+  .mb-pick.sel .tx b, .mb-pick.sel .go { color:var(--c-traffic); }
+  #mbtoast { position:fixed; left:50%; transform:translateX(-50%); bottom:96px; z-index:2500;
+    max-width:min(340px,88vw); background:rgba(21,22,24,.94); color:#fff; font-size:13px; line-height:1.5;
+    border-radius:10px; padding:10px 14px; opacity:0; pointer-events:none; transition:opacity .18s; }
+  #mbtoast.on { opacity:1; }
+  /* E안 — 마일스톤을 **세로 레일**로 잇는다. 마크업(.mstrack/.msrow/.msdot)은 이미 세로다.
+     ⚠ 진척률 게이지가 아니다 — 점과 선만(§7). 미래 행은 흐리게 두는 기존 규칙을 그대로 둔다. */
+  .mstrack { position:relative; }
+  .mstrack .msrow { position:relative; }
+  .mstrack .msrow::before { content:""; position:absolute; left:5px; top:14px; bottom:-6px; width:1.5px; background:var(--line2); }
+  .mstrack .msrow:last-of-type::before { display:none; }
+  .mstrack .msrow.done::before, .mstrack .msrow.current::before { background:var(--c-traffic); }
+  @media (max-width:768px) {
+    .mview { padding-left:12px; padding-right:12px; }
+    /* 목록 표는 좁은 화면에서 가로로 넘친다 — 자기 그릇 안에서만 스크롤한다 */
+    .mview .ltab { min-width:0; }
+    .mview > div > .ltab, #near-list, #flow-mine { overflow-x:auto; }
+  }
 </style>
 
 <!-- 타임라인(간트) 뷰는 2026-07-22 폐기(연도 필터는 우측 목록에 통합)됐고, 2026-07-31에
@@ -2028,9 +2124,16 @@
        **등급·단계가 갈 곳이 없었다**(시안이 다루지 않은 구멍). 사장님 결정(2026-08-13):
        **표현 필터를 시트 안에** 넣는다 — 「거른 결과를 바로 읽는다」는 데스크톱 구조와 같아진다. -->
 <nav id="tabbar">
-  <button class="tb on" data-view="map"><svg viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>지도</button>
-  <button class="tb" data-view="flow"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>업데이트<span class="tbn" id="tb-mv"></span></button>
+  <!-- ★ **첫 화면이 「내 주변」이다** (2026-08-30 모바일 재설계). 데스크톱은 탐색, 모바일은 확인 —
+       그 차이가 탭 순서에 그대로 있다. 지도는 필요할 때 여는 두 번째 탭이다. -->
+  <button class="tb on" data-view="near"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="1.8" fill="currentColor" stroke="none"/><path d="M12 2v3M12 19v3M22 12h-3M5 12H2"/></svg>내 주변</button>
+  <button class="tb" data-view="map"><svg viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>지도</button>
+  <button class="tb" data-view="flow"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>이번 주<span class="tbn" id="tb-mv"></span></button>
+  <button class="tb" data-view="more"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>더보기</button>
 </nav>
+<!-- 모바일 전용 뷰 — `setView`가 켜고 끈다(데스크톱에선 탭바 자체가 숨어 도달하지 않는다). -->
+<section id="nearv" class="mview"></section>
+<section id="morev" class="mview"></section>
 <!-- 바텀시트 — 손잡이(peek) → 절반(half) → 전체(full). 모바일에서만 뜬다. -->
 <div id="msheet" data-det="peek">
   <div class="ms-grip" id="ms-grip">
@@ -5547,6 +5650,8 @@ function applyPanelSnap(snap, animate = true) {
      (inline style은 translateY(292px)인데 computed는 항등행렬). 값을 읽어 리플로우를 강제한 뒤
      같은 태스크에서 푼다 — 이러면 즉시 반영이 보장된다. */
   if (!animate) { void el.offsetHeight; el.classList.remove("nosnap"); }
+  // 시트가 자리를 옮겼으니 지도 위 버튼도 다시 앉힌다(가려지지 않게) — 한 박자 뒤에 실측한다.
+  setTimeout(replaceMapCtls, 0);
 }
 /* 내용 교체 후 호출 — 높이가 바뀌었으므로 오프셋을 다시 잰다. 한 박자 뒤에 재야
    레이아웃이 끝난 뒤의 실제 높이를 얻는다(교체 직후엔 이전 높이가 나온다).
@@ -6460,6 +6565,382 @@ function renderFlow() {
   });
 }
 
+/* ══════════════════ 모바일 재설계 (2026-08-30 · 알렉스 확정) ══════════════════
+   데스크톱에서 사용자는 **탐색**한다(지도 훑기·필터 조합·비교). 모바일에서는 **확인**한다
+   (뭐 바뀌었나 · 내 근처엔 · 여기 이건 뭔가). 그래서 첫 화면이 지도가 아니라 「내 주변」이다.
+
+   ■ 먼저 정한 것 넷 (알렉스 질문 → 결정)
+   ① **기준점(anchor) 하나로 통합** — 즐겨찾기를 따로 만들지 않는다. 현재 위치·집·직장·최근·
+      검색·지도 찍기가 **한 목록**이다. 이유 둘: F안(집↔직장)이 이미 집·직장 등록을 요구하므로
+      두 곳에서 관리하면 반드시 갈린다 · 「지금 어디 기준인가」가 늘 화면에 적혀 있어야 한다
+      (숨으면 사용자가 **남의 동네 신호를 자기 동네로 읽는다**).
+   ② **범위는 고정도 슬라이더도 아니다** — 기본 3km, **비면 넓히고 넓혔다고 말한다**.
+      밀도가 지역마다 극단적으로 달라(도심 3km 수십 건 ↔ 지방 0건) 고정하면 빈 화면이 나온다.
+      조정은 단계 칩(1·3·10km·시군구). 연속값이면 「지금 몇 km지」를 계속 확인해야 한다.
+      ⚠ **이름을 가른다** — 우리에겐 이미 「영향권 반경」이 있다(주거개발 800m 등). 이건 「찾는 범위」다.
+   ③ **구독은 켜는 곳이 문맥, 관리하는 곳이 한 곳** — ☆는 보고 있는 화면에, 목록은 더보기에.
+      설정 화면에 들어가야만 켤 수 있으면 아무도 안 켠다.
+   ④ **「이번 주」는 두 층** — 앞은 전국판(누구에게나 같아서 **공유된다**), 뒤는 내 지역
+      (지켜보는 것 + 기준점). 지역 단독 발행은 분량이 안 나온다(Phase 0: 강서 직결 월 1.2~2.0건).
+
+   ■ 저장은 전부 **이 기기 안**이다(localStorage) — 좌표가 브라우저 밖으로 나가지 않는다.
+     「마지막 본 자리」와 같은 사상. 시크릿 창·저장 차단에서 던지므로 읽기·쓰기 둘 다 try/catch.
+   ■ 자를 새로 만들지 않는다 — 거리는 `distToApt`, 정렬은 `sortSignals`, 행은 `listTable`,
+     표시 조건은 `visible` 하나를 그대로 쓴다(같은 질문에 자가 둘이면 반드시 갈린다).
+*/
+const MB_KEY = { anchor: "hojae_anchor", places: "hojae_places", watch: "hojae_watch", near: "hojae_nearR" };
+const NEAR_STEPS = [1, 3, 10];        // km — 「시군구」는 별도 모드(반경이 아니다)
+const NEAR_DEFAULT = 3;
+const ROUTE_BUFFER_KM = 2;            // F안 회랑 폭(편도) — 경로탐색이 아니라 두 점 사이 버퍼다
+
+function mbLoad(k, dflt) { try { return JSON.parse(localStorage.getItem(k) || "null") ?? dflt; } catch (e) { return dflt; } }
+function mbSave(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+/* 기준점 — {kind:'gps'|'home'|'work'|'pin'|'search', lat, lon, label} */
+let mbAnchor = mbLoad(MB_KEY.anchor, null);
+let mbPlaces = mbLoad(MB_KEY.places, {});          // {home:{lat,lon,label}, work:{...}}
+let mbWatch = mbLoad(MB_KEY.watch, []);            // [{id,kind,label,on}]
+let mbNearR = mbLoad(MB_KEY.near, NEAR_DEFAULT);   // 숫자(km) 또는 "sgg"
+let mbNearWidened = null;                          // 자동 확대 사실(화면이 말한다)
+
+/* ── 점 → 시군구 (「시군구 전체」 모드·구독 라벨) ─────────────────────────────
+   ⚠ 새 경계 데이터를 만들지 않는다 — 화면이 이미 읽는 `SGG_GEO`를 쓴다. */
+function mbPip(ring, x, y) {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i], [xj, yj] = ring[j];
+    if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+function mbSggFeatureAt(lat, lon) {
+  for (const b of (typeof sggBoxes === "function" ? sggBoxes() : [])) {
+    if (lon < b.x0 || lon > b.x1 || lat < b.y0 || lat > b.y1) continue;
+    for (const r of ringsOf(b.f)) if (mbPip(r, lon, lat)) return b.f;
+  }
+  return null;
+}
+function mbSggAt(lat, lon) {
+  const f = mbSggFeatureAt(lat, lon);
+  return f ? { sd: f.properties.sido, sg: sggDisplayName(f.properties.name) } : null;
+}
+
+/* ── 기준점 결정 · 라벨 ──────────────────────────────────────────────── */
+function mbAnchorPoint() {
+  if (mbAnchor && typeof mbAnchor.lat === "number") return mbAnchor;
+  // 기준점을 아직 안 정했으면 **지도가 보고 있는 자리**를 쓴다 — 권한 팝업 없이 시작한다
+  // (「마지막 본 자리」와 같은 사상. GPS는 사용자가 고를 때만 켠다).
+  const lv = typeof lastViewLoad === "function" ? lastViewLoad() : null;
+  return lv ? { kind: "map", lat: lv.lat, lon: lv.lng, label: "지도에서 보던 자리" } : null;
+}
+function mbAnchorLabel() {
+  const a = mbAnchorPoint();
+  if (!a) return "기준점을 정해 주세요";
+  if (a.label) return a.label;
+  const g = mbSggAt(a.lat, a.lon);
+  return g ? `${g.sd} ${g.sg}` : "선택한 자리";
+}
+const MB_ICON = { gps: "📍", home: "🏠", work: "🏢", pin: "✛", search: "🔍", map: "🗺" };
+
+function mbSetAnchor(a, opt) {
+  mbAnchor = a; mbSave(MB_KEY.anchor, a);
+  mbNearWidened = null;
+  if (!(opt && opt.stay)) mbCloseSheet();
+  if (VIEW_MODE === "near") renderNear(); else setView("near");
+}
+
+/* ── 기준점 시트 (Q1 — 즐겨찾기·검색·지도찍기가 한 목록) ────────────────── */
+function mbOpenAnchorSheet() {
+  const rows = [];
+  const cur = mbAnchor && mbAnchor.kind;
+  const row = (kind, icon, nm, sb, act, sel) =>
+    `<button class="mb-pick${sel ? " sel" : ""}" data-act="${act}"><span class="ic">${icon}</span>`
+    + `<span class="tx"><b>${nm}</b><i>${sb}</i></span><span class="go">${sel ? "✓" : "›"}</span></button>`;
+  rows.push(row("gps", MB_ICON.gps, "현재 위치", "GPS — 누를 때만 묻습니다", "gps", cur === "gps"));
+  ["home", "work"].forEach(k => {
+    const p = mbPlaces[k], nm = k === "home" ? "집" : "직장";
+    rows.push(p ? row(k, MB_ICON[k], nm, p.label || "등록됨", "use:" + k, cur === k)
+                : row(k, MB_ICON[k], nm + " 등록하기", "지금 보고 있는 자리로 저장합니다", "set:" + k, false));
+  });
+  rows.push(row("search", MB_ICON.search, "주소·단지로 찾기", "동 · 아파트 · 지번", "search", false));
+  rows.push(row("pin", MB_ICON.pin, "지도에서 찍기", "지도를 길게 눌러 그 자리를 기준점으로", "pin", cur === "pin"));
+  mbOpenSheet("어디를 기준으로 볼까요", rows.join("")
+    + `<p class="mb-note">기준점은 <b>이 기기 안에만</b> 저장됩니다 — 좌표가 밖으로 나가지 않습니다.</p>`);
+}
+
+/* ── 공용 시트 (기준점·지켜보기·제보가 같은 그릇을 쓴다) ────────────────── */
+function mbOpenSheet(title, html) {
+  let el = document.getElementById("mbsheet");
+  if (!el) {
+    el = document.createElement("div"); el.id = "mbsheet";
+    el.innerHTML = '<div class="mb-scrim"></div><div class="mb-card"><div class="mb-grip"></div>'
+      + '<h3 id="mb-title"></h3><div id="mb-body"></div></div>';
+    document.body.appendChild(el);
+    el.querySelector(".mb-scrim").onclick = mbCloseSheet;
+    el.addEventListener("click", e => {
+      const b = e.target.closest("[data-act]"); if (!b) return;
+      mbAct(b.dataset.act);
+    });
+  }
+  document.getElementById("mb-title").textContent = title;
+  document.getElementById("mb-body").innerHTML = html;
+  el.classList.add("on");
+}
+function mbCloseSheet() { document.getElementById("mbsheet")?.classList.remove("on"); }
+
+function mbAct(act) {
+  const [cmd, arg] = act.split(":");
+  if (cmd === "gps") return mbUseGps();
+  if (cmd === "use") { const p = mbPlaces[arg]; if (p) mbSetAnchor({ kind: arg, lat: p.lat, lon: p.lon, label: (arg === "home" ? "집 · " : "직장 · ") + (p.label || "") }); return; }
+  if (cmd === "set") return mbSetPlace(arg);
+  if (cmd === "search") { mbCloseSheet(); document.getElementById("q")?.focus(); return; }
+  if (cmd === "pin") { mbCloseSheet(); setView("map"); mbToast("지도를 **길게 눌러** 그 자리를 기준점으로 삼습니다"); return; }
+  if (cmd === "r") { mbNearR = arg === "sgg" ? "sgg" : Number(arg); mbSave(MB_KEY.near, mbNearR); mbNearWidened = null; renderNear(); return; }
+  if (cmd === "route") { mbNearR = "route"; renderNear(); return; }
+  if (cmd === "wtoggle") { const w = mbWatch.find(x => x.id === arg); if (w) { w.on = !w.on; mbSave(MB_KEY.watch, mbWatch); renderMore(); } return; }
+  if (cmd === "wdel") { mbWatch = mbWatch.filter(x => x.id !== arg); mbSave(MB_KEY.watch, mbWatch); renderMore(); return; }
+  if (cmd === "watchhere") return mbWatchHere();
+  if (cmd === "report") return mbReport();
+  if (cmd === "close") return mbCloseSheet();
+}
+
+function mbToast(t) {
+  let el = document.getElementById("mbtoast");
+  if (!el) { el = document.createElement("div"); el.id = "mbtoast"; document.body.appendChild(el); }
+  el.innerHTML = t.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+  el.classList.add("on");
+  clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove("on"), 4200);
+}
+
+function mbUseGps() {
+  if (!navigator.geolocation) { mbToast("이 브라우저는 위치 기능을 지원하지 않습니다."); return; }
+  mbToast("현재 위치를 확인하는 중…");
+  navigator.geolocation.getCurrentPosition(pos => {
+    const { latitude: la, longitude: ln } = pos.coords;
+    if (la < KOREA_BB.s || la > KOREA_BB.n || ln < KOREA_BB.w || ln > KOREA_BB.e) {
+      mbToast("현재 위치가 국내 범위 밖입니다. 호재맵은 국내 신호만 다룹니다."); return;
+    }
+    const g = mbSggAt(la, ln);
+    mbSetAnchor({ kind: "gps", lat: la, lon: ln, label: g ? `현재 위치 · ${g.sg}` : "현재 위치" });
+  }, err => {
+    mbToast(err && err.code === 1 ? "위치 권한이 거부돼 있습니다. 주소창의 자물쇠에서 「위치」를 허용해 주세요."
+      : "일시적으로 내 위치를 확인할 수 없습니다.");
+  }, { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 });
+}
+
+/* 집·직장 등록 = **지금 기준점(또는 지도 중심)을 그 이름으로 저장**한다.
+   ⚠ 주소 입력창을 새로 만들지 않는다 — 이미 있는 검색·지도로 그 자리에 가 있는 상태를 쓴다. */
+function mbSetPlace(k) {
+  const a = mbAnchorPoint();
+  if (!a) { mbToast("먼저 지도를 그 자리로 옮기거나 현재 위치를 켜 주세요."); return; }
+  const g = mbSggAt(a.lat, a.lon);
+  mbPlaces[k] = { lat: a.lat, lon: a.lon, label: g ? `${g.sd} ${g.sg}` : "" };
+  mbSave(MB_KEY.places, mbPlaces);
+  mbToast((k === "home" ? "집" : "직장") + "을 이 자리로 저장했습니다.");
+  mbOpenAnchorSheet();
+}
+
+/* ── 찾는 범위 (Q2) ────────────────────────────────────────────────────
+   ⚠ 「영향권」과 다른 말이다. 영향권은 신호가 주변에 미치는 범위이고, 이건 **찾는 범위**다. */
+function mbPtSegKm(p, a, b) {
+  const A = [a.lon, a.lat], B = [b.lon, b.lat];
+  const vx = B[0] - A[0], vy = B[1] - A[1];
+  const wx = p[0] - A[0], wy = p[1] - A[1];
+  const d2 = vx * vx + vy * vy;
+  const t = d2 ? Math.max(0, Math.min(1, (wx * vx + wy * vy) / d2)) : 0;
+  return meters(p, [A[0] + t * vx, A[1] + t * vy]) / 1000;
+}
+function mbNearRows() {
+  const a = mbAnchorPoint();
+  const pool = allSignalsFlat().filter(visible);
+  mbNearWidened = null;
+  if (mbNearR === "route") {
+    const h = mbPlaces.home, w = mbPlaces.work;
+    if (!h || !w) return { rows: [], mode: "route", need: true };
+    const rows = pool.filter(s => { const p = sigRepPoint(s); return p && mbPtSegKm(p, h, w) <= ROUTE_BUFFER_KM; });
+    return { rows: sortSignals(rows, "level", null), mode: "route" };
+  }
+  if (!a) return { rows: [], mode: "none" };
+  if (mbNearR === "sgg") {
+    /* ☠ **시군구 판정을 `sg` 필드로 하면 점 신호가 통째로 빠진다** (2026-08-31 실측 13 → 정정).
+       IC·역 같은 점 신호는 `sd/sg/dong`이 비어 있다(`listTable` 주석이 이미 적어 둔 사실) —
+       김포시로 보는데 **김포영사정IC가 없는** 화면이 된다. ⇒ 경계 폴리곤에 **좌표로** 묻는다
+       (선형은 대표점 = 중간 정점 — 귀속에 쓰는 기존 근사와 같은 자다). */
+    const f = mbSggFeatureAt(a.lat, a.lon);
+    if (!f) return { rows: [], mode: "sgg", need: true };
+    const rings = ringsOf(f);
+    const rows = pool.filter(s => {
+      const p = sigRepPoint(s);
+      return p && rings.some(r => mbPip(r, p[0], p[1]));
+    });
+    return { rows: sortSignals(rows, "dist", a), mode: "sgg",
+             label: `${f.properties.sido} ${sggDisplayName(f.properties.name)}` };
+  }
+  /* ★ **비면 넓히고, 넓혔다고 말한다.** 조용히 넓히면 사용자는 3km 안에 있는 줄 안다(P2). */
+  const steps = NEAR_STEPS.filter(r => r >= mbNearR).concat([25, 60]);
+  for (const r of steps) {
+    const rows = pool.filter(s => distToApt(s, a) <= r * 1000);
+    if (rows.length || r === steps[steps.length - 1]) {
+      if (r !== mbNearR) mbNearWidened = { from: mbNearR, to: r, n: rows.length };
+      return { rows: sortSignals(rows, "dist", a), mode: "km", r };
+    }
+  }
+  return { rows: [], mode: "km", r: mbNearR };
+}
+
+/* ── A. 내 주변 ─────────────────────────────────────────────────────── */
+function renderNear() {
+  const host = document.getElementById("nearv"); if (!host) return;
+  const a = mbAnchorPoint();
+  const res = mbNearRows();
+  const chip = (v, lb) => `<button class="mb-rchip${String(mbNearR) === String(v) ? " on" : ""}" data-act="r:${v}">${lb}</button>`;
+  const hasRoute = mbPlaces.home && mbPlaces.work;
+  const head =
+    `<button class="mb-anchor" data-act="anchor"><span class="ic">${MB_ICON[(mbAnchor && mbAnchor.kind) || "map"] || "🗺"}</span>`
+    + `<span class="tx">${mbAnchorLabel()}</span><span class="car">▾</span></button>`
+    + `<div class="mb-rchips">${NEAR_STEPS.map(r => chip(r, r + "km")).join("")}${chip("sgg", "시군구")}`
+    + (hasRoute ? `<button class="mb-rchip${mbNearR === "route" ? " on" : ""}" data-act="route">집↔직장</button>` : "")
+    + `</div>`;
+  let notice = "";
+  if (mbNearWidened)
+    notice = `<div class="mb-widen"><b>${mbNearWidened.from}km 안에는 신호가 없습니다.</b> `
+           + `${mbNearWidened.to}km까지 넓혀 ${mbNearWidened.n.toLocaleString()}건을 찾았습니다.</div>`;
+  if (res.mode === "route")
+    notice = res.need
+      ? `<div class="mb-widen">집과 직장을 먼저 등록해 주세요 — 기준점 시트에서 저장합니다.</div>`
+      : `<div class="mb-sub">집 ↔ 직장 사이 <b>${ROUTE_BUFFER_KM}km 회랑</b> 안. 경로 탐색이 아니라 두 점 사이 버퍼입니다.</div>`;
+  if (res.mode === "sgg" && res.need)
+    notice = `<div class="mb-widen">이 자리의 시군구를 찾지 못했습니다 — 반경으로 보세요.</div>`;
+
+  const n = res.rows.length;
+  const ttl = res.mode === "sgg" && res.label ? res.label
+            : res.mode === "route" ? "경로 위"
+            : `찾는 범위 ${mbNearWidened ? mbNearWidened.to : (res.r || mbNearR)}km 안`;
+  host.innerHTML = `<div class="mb-head">${head}</div>`
+    + `<div class="mb-secttl"><b>${ttl}</b><span>${n.toLocaleString()}건</span>`
+    + (a ? `<button class="mb-star${mbWatchHas(mbWatchIdHere()) ? " on" : ""}" data-act="watchhere" title="이 지역 지켜보기">★</button>` : "")
+    + `</div>${notice}<div id="near-list"></div>`;
+  const list = document.getElementById("near-list");
+  if (!n) {
+    list.innerHTML = `<div class="mb-empty"><b>이 범위에 우리가 아는 신호가 없습니다.</b>`
+      + `<span>공식 소스로 확인된 사업이 없다는 뜻입니다 — 없는 것을 지어내지 않습니다.</span>`
+      + `<button class="mb-btn pri" data-act="report">여기 공사 중이에요</button></div>`;
+  } else {
+    msListInto(list, res.rows, a, 80);
+  }
+}
+
+/* ── B. 지켜보기 (Q3 — 켜는 곳은 문맥, 관리는 한 곳) ───────────────────── */
+function mbWatchIdHere() {
+  const a = mbAnchorPoint(); if (!a) return null;
+  const g = mbSggAt(a.lat, a.lon);
+  return g ? "sgg:" + g.sd + " " + g.sg : null;
+}
+function mbWatchHas(id) { return !!(id && mbWatch.find(w => w.id === id)); }
+function mbWatchHere() {
+  const id = mbWatchIdHere();
+  if (!id) { mbToast("이 자리의 시군구를 찾지 못했습니다."); return; }
+  if (mbWatchHas(id)) { mbWatch = mbWatch.filter(w => w.id !== id); mbToast("지켜보기를 껐습니다."); }
+  else { mbWatch.push({ id, kind: "sgg", label: id.split(":")[1], on: true }); mbToast("지켜봅니다 — <b>이번 주</b>의 「내 지역」에 모입니다."); }
+  mbSave(MB_KEY.watch, mbWatch);
+  if (VIEW_MODE === "near") renderNear();
+}
+/* 신호 하나 지켜보기 — 상세에서 부른다(문맥 진입) */
+function mbWatchSignal(s) {
+  const id = "sig:" + (s.id || sigTitle(s));
+  if (mbWatchHas(id)) mbWatch = mbWatch.filter(w => w.id !== id);
+  else mbWatch.push({ id, kind: "sig", label: sigTitle(s), on: true });
+  mbSave(MB_KEY.watch, mbWatch);
+  mbToast(mbWatchHas(id) ? "지켜봅니다." : "지켜보기를 껐습니다.");
+  return mbWatchHas(id);
+}
+
+/* ── 더보기 (지켜보는 것 관리 · 등록한 자리) ───────────────────────────── */
+function renderMore() {
+  const host = document.getElementById("morev"); if (!host) return;
+  const wl = mbWatch.length ? mbWatch.map(w =>
+      `<div class="mb-wl"><span class="tx"><b>${w.label}</b><i>${w.kind === "sgg" ? "시군구" : "사업"}</i></span>`
+      + `<button class="mb-sw${w.on ? "" : " off"}" data-act="wtoggle:${w.id}" aria-label="알림 켜기/끄기"></button>`
+      + `<button class="mb-x" data-act="wdel:${w.id}" aria-label="삭제">✕</button></div>`).join("")
+    : `<div class="mb-empty"><b>아직 지켜보는 것이 없습니다.</b><span>지도·목록에서 <b>★</b>를 누르면 여기에 모입니다.</span></div>`;
+  const pl = ["home", "work"].map(k => {
+    const p = mbPlaces[k], nm = k === "home" ? "집" : "직장";
+    return `<div class="mb-wl"><span class="tx"><b>${MB_ICON[k]} ${nm}</b><i>${p ? (p.label || "등록됨") : "미등록"}</i></span>`
+      + `<button class="mb-btn" data-act="set:${k}">${p ? "이 자리로 바꾸기" : "지금 자리로 등록"}</button></div>`;
+  }).join("");
+  host.innerHTML = `<div class="mb-secttl"><b>지켜보는 것</b><span>${mbWatch.length}</span></div>${wl}`
+    + `<p class="mb-note">알림(푸시)은 <b>준비 중</b>입니다 — 지금은 「이번 주」의 <b>내 지역</b>에 모아 보여 드립니다. `
+    + `문서상 움직임만 알리고, 관측일은 「새로 확인」으로 이름부터 다르게 부릅니다.</p>`
+    + `<div class="mb-secttl" style="margin-top:18px"><b>등록한 자리</b></div>${pl}`
+    + `<p class="mb-note">전부 <b>이 기기 안에만</b> 저장됩니다.</p>`;
+}
+
+/* ── C. 이번 주 — 내 지역 층 (Q4) ────────────────────────────────────── */
+function mbMineRows() {
+  const ids = new Set(mbWatch.filter(w => w.on && w.kind === "sgg").map(w => w.label));
+  const a = mbAnchorPoint();
+  const g = a ? mbSggAt(a.lat, a.lon) : null;
+  if (g) ids.add(`${g.sd} ${g.sg}`);
+  const sigIds = new Set(mbWatch.filter(w => w.on && w.kind === "sig").map(w => w.label));
+  if (!ids.size && !sigIds.size) return null;
+  return flowRows().filter(s =>
+    sigIds.has(sigTitle(s)) || [...ids].some(k => k.endsWith(" " + (s.sg || " ")) || k === `${s.sd} ${s.sg}`));
+}
+function renderFlowMine() {
+  const fv = document.getElementById("flowv"); if (!fv) return;
+  let box = document.getElementById("flow-mine");
+  if (!box) { box = document.createElement("section"); box.id = "flow-mine"; fv.appendChild(box); }
+  fv.appendChild(box);                                  // 항상 맨 뒤(전국판 다음)
+  const rows = mbMineRows();
+  if (rows === null) {
+    box.innerHTML = `<div class="mb-secttl"><b>내 지역</b></div>`
+      + `<div class="mb-empty"><b>아직 지켜보는 지역이 없습니다.</b>`
+      + `<span>지도에서 <b>★</b>를 누르면 그 지역의 움직임이 여기 모입니다.</span></div>`;
+    return;
+  }
+  const mv = rows.filter(s => movBasis(s) === "source");
+  box.innerHTML = `<div class="mb-secttl"><b>내 지역</b><span>${mv.length.toLocaleString()}건 움직임</span></div>`;
+  if (!mv.length) { box.insertAdjacentHTML("beforeend", `<div class="mb-empty"><b>이번 주엔 움직임이 없었습니다.</b><span>정체도 사실입니다 — 없는 소식을 만들지 않습니다.</span></div>`); return; }
+  const ml = document.createElement("div"); box.appendChild(ml);
+  msListInto(ml, sortSignals(mv, "moved", null), null, 40);
+}
+
+/* ── D. 여기 뭐야? (지도 롱프레스) ─────────────────────────────────────
+   카카오는 모바일 **롱프레스를 `rightclick`으로** 준다(데스크톱 우클릭과 같은 이벤트).
+   그래서 두 입력이 한 코드로 처리된다 — 규칙을 한쪽에만 걸지 않는다. */
+function mbBindLongPress(map) {
+  if (!window.kakao?.maps?.event || !map) return;
+  kakao.maps.event.addListener(map, "rightclick", (e) => {
+    const ll = e.latLng; if (!ll) return;
+    const g = mbSggAt(ll.getLat(), ll.getLng());
+    mbSetAnchor({ kind: "pin", lat: ll.getLat(), lon: ll.getLng(), label: g ? `찍은 자리 · ${g.sg}` : "찍은 자리" });
+  });
+}
+function mbReport() {
+  const a = mbAnchorPoint();
+  const g = a ? mbSggAt(a.lat, a.lon) : null;
+  const where = g ? `${g.sd} ${g.sg}` : "이 자리";
+  mbOpenSheet("여기 공사 중이신가요?",
+    `<p class="mb-p"><b>${where}</b> · ${a ? a.lat.toFixed(5) + ", " + a.lon.toFixed(5) : ""}</p>`
+    + `<p class="mb-p">제보해 주시면 <b>신호로 바로 올리지 않습니다.</b> 대신 <b>그 사업을 잡아낼 공식 소스</b>를 찾아 커넥터로 붙입니다 — `
+    + `그래야 다음부터 같은 종류가 <b>전국에서 자동으로</b> 걸립니다.</p>`
+    + `<p class="mb-note">실제로 그렇게 고친 사례가 있습니다 — 「김포한강로 IC가 없다」는 제보 하나가 관보 색인의 결함 셋을 드러냈고, 도로 사업 수십 건이 함께 들어왔습니다.</p>`
+    + `<div class="mb-btnrow"><button class="mb-btn" data-act="close">닫기</button>`
+    + `<a class="mb-btn pri" href="mailto:obey82@dongwha.com?subject=${encodeURIComponent("[호재맵] 현장 제보 — " + where)}&body=${encodeURIComponent("위치: " + where + "\n좌표: " + (a ? a.lat.toFixed(5) + ", " + a.lon.toFixed(5) : "") + "\n\n무엇이 공사 중인가요? (보이는 안내판·공사명이 있으면 적어 주세요)\n")}">제보 보내기</a></div>`);
+}
+
+/* ── 부트 ────────────────────────────────────────────────────────────── */
+function initMobile() {
+  document.getElementById("nearv")?.addEventListener("click", e => {
+    const b = e.target.closest("[data-act]"); if (!b) return;
+    if (b.dataset.act === "anchor") return mbOpenAnchorSheet();
+    mbAct(b.dataset.act);
+  });
+  document.getElementById("morev")?.addEventListener("click", e => {
+    const b = e.target.closest("[data-act]"); if (b) mbAct(b.dataset.act);
+  });
+}
+
 /* 하단 탭바 — 모바일에서 헤더 칩을 대신한다. `조회조건`은 뷰가 아니라 시트라 따로 처리한다. */
 function initTabbar() {
   const bar = document.getElementById("tabbar");
@@ -6470,6 +6951,10 @@ function initTabbar() {
     setView(b.dataset.view);
   });
   updateTabbar();
+  initMobile();
+  /* ★ 모바일 첫 화면 = **내 주변**. 데스크톱은 종전대로 지도다(탭바가 아예 안 보인다).
+     ⚠ 「마지막 본 자리」를 덮지 않는다 — 지도 탭으로 가면 그 자리가 그대로 열린다. */
+  if (isMobileView() && VIEW_MODE === "map" && !location.hash) setView("near");
 }
 /* 흐름 탭 배지 = **오늘** 문서상 움직임 — 흐름 뷰의 첫 그룹(「오늘」)과 **같은 모집단·같은 자**를
    쓴다(`flowRows` + source + isToday). 종전엔 배지만 `weeksAgo===0`(≤3.5일)이라 **화면 어디에도
@@ -6521,6 +7006,89 @@ function lastViewSave(lat, lng, lv) {
      두 초기화 경로가 같은 함수를 부른다(규칙이 한쪽에만 걸리면 반대쪽이 조용한 예외가 된다).
    · HTTPS에서만 동작한다(브라우저 정책) — 라이브는 HTTPS, 개발은 localhost 예외. */
 const MYLOC_ZOOM = 13;          // mapGo는 Leaflet 줌 문법 → 카카오 레벨 18-13 = 5(동네 수준)
+/* ══════════ 베이스맵 전환 — 지도 ↔ 위성(카카오 스카이뷰) ══════════
+   2026-08-30 알렉스 요청: "카카오지도 스카이뷰가 우리도 되는지. 우린 **최근 지도만** 있으면 돼".
+   · 카카오 지도 SDK가 `MapTypeId.HYBRID`(위성 + 지명·도로 라벨)를 그대로 준다 — 추가 계약·키 없음.
+     「과거 스카이뷰」(시점 슬라이더)는 **카카오 앱 전용**이라 SDK에 애초에 없다 → 요청과 정확히 일치.
+   · **HYBRID를 쓴다(SKYVIEW 아님)** — 라벨 없는 위성은 방향을 잃는다. 우리 카드가 지명으로
+     말하는데 배경에 지명이 없으면 화면이 카드와 어긋난다.
+   · ⚠ **Leaflet 폴백엔 붙이지 않는다.** OSM 타일에 위성이 없으므로 버튼만 두면 거짓말이 된다
+     (P2·P5). 「규칙은 양쪽에 건다」의 예외가 아니라 — 능력이 실제로 다르면 **그 사실을 말한다**.
+   · 선택은 기억한다(`hojae_basemap`) — 「마지막 본 자리」와 같은 사상. */
+/* 지도 위 버튼이 **가려지지 않을 최소 bottom** — 하단 고정 요소를 전부 재서 도출한다.
+   ☠ 종전엔 「내 위치」가 푸터 하나만 봤고 `getBoundingClientRect().top`을 그대로 썼다. 그런데
+     **모바일은 CSS가 푸터를 `display:none`으로 숨긴다** → rect가 전부 0 → `map.bottom - 0 + 12`가
+     그대로 나와 bottom이 **824px**가 됐다(실측 2026-08-30, 375×812). 버튼이 화면 **위쪽 밖**으로
+     나가 모바일에서 「내 위치」가 **한 번도 보이지 않았다.** 게다가 모바일 하단은 푸터가 아니라
+     **탭바**(79px)라, 값을 고쳐도 탭바를 안 보면 그 뒤에 깔린다.
+   ⇒ `layoutBottom()`과 **같은 자**를 쓴다 — 보이는 요소만, 실측 높이로. 상수 금지. */
+function mapCtlBottom() {
+  const el = document.getElementById("map");
+  if (!el) return 12;
+  const mb = el.getBoundingClientRect().bottom;
+  let over = 0;
+  /* ★ **하단 시트(`#panel`)도 하단 고정 요소다** — 모바일에선 목록 시트가 늘 peek(88px)으로 떠 있어,
+     푸터·탭바만 피하면 버튼이 **시트 뒤에 깔린다**(2026-08-30 실측: 「내 위치」가 그랬다).
+     ⚠ 다만 시트는 **움직인다**(peek↔half↔full) — 그대로 따라가면 버튼이 화면 한가운데로 올라간다.
+       그래서 지도 높이의 **45%로 잘라 둔다**: 시트가 반 넘게 열리면 지도는 어차피 가려진다.
+     ⚠ 모바일 하단 시트는 **`#msheet`**다(`#panel`은 상세 시트라 평소 `display:none`). 실측으로 확인할 것 —
+       이름을 짐작하고 넣었다가 「넣었는데 그대로」가 되는 자리다. */
+  ["footer", "#tabbar", "#msheet", "#panel"].forEach(sel => {
+    const e = document.querySelector(sel);
+    if (!e || !e.offsetHeight || getComputedStyle(e).display === "none") return;
+    over = Math.max(over, mb - e.getBoundingClientRect().top);
+  });
+  const cap = el.getBoundingClientRect().height * 0.45;
+  return Math.max(12, Math.round(Math.min(over, cap)) + 12);
+}
+/* 시트가 움직이면 버튼 자리도 다시 잰다 — 자리 계산이 `mapCtlBottom` 하나이므로, 부르는 곳만 모은다.
+   (두 버튼이 각자 리스너를 달면 한쪽만 갱신되는 순간이 생긴다 — 「규칙은 쌍으로」) */
+window._mapCtlPlacers = window._mapCtlPlacers || [];
+function replaceMapCtls() { (window._mapCtlPlacers || []).forEach(f => { try { f(); } catch (e) {} }); }
+/* 시트 높이가 바뀌는 순간을 **관찰**한다 — 시트 코드마다 훅을 심으면 한 곳을 빠뜨린다(그게 이 병의 형태다). */
+function watchMapCtlObstacles() {
+  if (window._mapCtlRO || typeof ResizeObserver === "undefined") return;
+  window._mapCtlRO = new ResizeObserver(() => replaceMapCtls());
+  ["#msheet", "#panel", "#tabbar", "footer"].forEach(sel => {
+    const e = document.querySelector(sel); if (e) window._mapCtlRO.observe(e);
+  });
+}
+const BASEMAP_KEY = "hojae_basemap";
+function baseMapGet() { try { return localStorage.getItem(BASEMAP_KEY) === "sat" ? "sat" : "map"; } catch (e) { return "map"; } }
+function baseMapApply(mode) {
+  const m = window._kmap;
+  if (!m || !window.kakao?.maps?.MapTypeId) return;
+  m.setMapTypeId(mode === "sat" ? kakao.maps.MapTypeId.HYBRID : kakao.maps.MapTypeId.ROADMAP);
+}
+function baseMapMount() {
+  const el = document.getElementById("map");
+  if (!el || el.querySelector(".mapbase")) return;               // 멱등 — mylocMount와 같은 규약
+  if (!window._kmap) return;                                     // 카카오 렌더러에서만 (위 주석)
+  const btn = document.createElement("button");
+  btn.className = "mapbase"; btn.type = "button";
+  const paint = () => {
+    const sat = baseMapGet() === "sat";
+    btn.classList.toggle("on", sat);
+    btn.title = sat ? "일반 지도로 전환" : "위성 지도로 전환 (카카오 스카이뷰)";
+    btn.setAttribute("aria-pressed", sat ? "true" : "false");
+    btn.innerHTML = sat
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 7.5 9 4.5l6 3 6-3v12l-6 3-6-3-6 3z"/><path d="M9 4.5v12M15 7.5v12"/></svg><span>지도</span>'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.4"/><ellipse cx="12" cy="12" rx="3.6" ry="8.4"/><path d="M3.9 9.2h16.2M3.9 14.8h16.2"/></svg><span>위성</span>';
+  };
+  btn.onclick = () => {
+    const next = baseMapGet() === "sat" ? "map" : "sat";
+    try { localStorage.setItem(BASEMAP_KEY, next); } catch (e) {}
+    baseMapApply(next); paint();
+  };
+  paint();
+  /* 자리 = 「내 위치」 **위**(44px). 하단 여백은 `mapCtlBottom()` 하나가 정한다 — 두 버튼이
+     각자 계산하면 한쪽만 고쳐지는 순간이 생긴다(실제로 그래서 myloc이 모바일에서 안 보였다). */
+  const place = () => { btn.style.bottom = (mapCtlBottom() + 44) + "px"; };
+  window._mapCtlPlacers.push(place);
+  el.appendChild(btn); place(); window.addEventListener("resize", place);
+  watchMapCtlObstacles();
+  baseMapApply(baseMapGet());     // 새로고침해도 마지막 선택으로 열린다
+}
 function mylocMount() {
   const el = document.getElementById("map");
   if (!el || el.querySelector(".myloc")) return;                 // 멱등 — 두 초기화가 다 불러도 하나만
@@ -6534,9 +7102,8 @@ function mylocMount() {
   const msg = document.createElement("div");
   msg.className = "mylocmsg"; msg.style.display = "none";
   const place = () => {
-    const f = document.querySelector("footer");
-    const b = f ? Math.max(12, Math.round(el.getBoundingClientRect().bottom - f.getBoundingClientRect().top) + 12) : 12;
-    btn.style.bottom = b + "px"; msg.style.bottom = (b + 44) + "px";
+    const b = mapCtlBottom();          // ← 베이스맵 버튼과 **같은 자**(그 함수 주석 참조)
+    btn.style.bottom = b + "px"; msg.style.bottom = (b + 88) + "px";   // 말풍선은 베이스맵 버튼 위로
   };
   const say = t => {
     msg.textContent = t; msg.style.display = "";
@@ -6562,6 +7129,7 @@ function mylocMount() {
     }, { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 });
   };
   el.appendChild(btn); el.appendChild(msg);
+  window._mapCtlPlacers.push(place);
   place(); window.addEventListener("resize", place);
 }
 
@@ -7453,6 +8021,8 @@ function initKakao() {
   });
   window._map = map; window._kmap = map; map.setMaxLevel(13);
   mylocMount();          // 「내 위치」 버튼 — 렌더러 무관(두 초기화가 같은 함수를 부른다)
+  baseMapMount();        // 지도↔위성 — **카카오에만** 붙는다(폴백엔 위성 타일이 없다 · 함수 주석 참조)
+  mbBindLongPress(map);  // D안 「여기 뭐야?」 — 모바일 롱프레스 = 데스크톱 우클릭(같은 이벤트 하나)
   // 줌 슬라이더 제거(2026-07-23 사용자 요청) — 스크롤·핀치 줌으로 대체
   const DONG_LV = 6, APT_LV = 4, APT_ICON_LV = 5;   // 집 아이콘만 lv5부터(2026-07-29) — 라벨·등급 LOD(APT_LV)는 불변
   const lodGrades = lv => lv <= APT_LV ? ["S", "A", "B", "C", "미정"] : lv <= 6 ? ["S", "A", "B", "C"] : lv <= 8 ? ["S", "A", "B"] : lv <= 9 ? ["S", "A"] : ["S"];   // 수도권-와이드(lv10+)=S만(GTX 부각, 2026-07-22 사용자 "GTX가 S로 보여야") · B·C는 lv6/8부터
@@ -8785,7 +9355,14 @@ function setView(mode) {
   const mx = document.getElementById("maxis"); if (mx) mx.style.display = mode === "map" ? "" : "none";
   document.getElementById("listv").style.display = mode === "list" ? "block" : "none";
   const fv = document.getElementById("flowv");
-  if (fv) { fv.style.display = mode === "flow" ? "block" : "none"; if (mode === "flow") renderFlow(); }
+  if (fv) { fv.style.display = mode === "flow" ? "block" : "none"; if (mode === "flow") { renderFlow(); renderFlowMine(); } }
+  /* 모바일 전용 뷰(내 주변·더보기) — `inWrap`에 없으므로 wrap은 이미 숨는다. */
+  const _msh = document.getElementById("msheet");
+  if (_msh) _msh.style.display = (mode === "map" && isMobileView()) ? "" : "none";
+  const nv = document.getElementById("nearv");
+  if (nv) { nv.style.display = mode === "near" ? "block" : "none"; if (mode === "near") renderNear(); }
+  const mvw = document.getElementById("morev");
+  if (mvw) { mvw.style.display = mode === "more" ? "block" : "none"; if (mode === "more") renderMore(); }
   /* ★ **목록 탭에도 좌측바를 띄운다** (2026-08-14 사장님 *"목록 페이지 상단 호재유형 뱃지 제거"*).
      종전 전제는 「목록 탭엔 사이드바가 없으니 표 위 한 줄이 그 자리를 대신한다」였다. 그 줄에는
      유형만 있고 **등급·단계가 없어서** 목록 탭에서는 그 두 축에 손이 닿지 않았다(§0-56d 구멍).
@@ -8908,6 +9485,28 @@ function initSheet() {
    (유형 칩은 지도 위 `#maxis` 한 곳 — 2026-08-13 사장님 확정) */
 const MS_PAGE = 60;      // 한 번에 더 얹는 건수
 let _msShown = MS_PAGE;
+/* ★ **모바일 행은 부품 하나다** (2026-08-30 · 「내 주변」과 「내 지역」을 붙이며 추출).
+   종전엔 `renderSheet` 안에 인라인이었다 — 그대로 두고 새 화면에서 `listTable`(데스크톱 6열)을
+   썼더니 375px에서 열이 잘려 **호재명 말고는 못 읽는 표**가 됐다(실측). 행 모양을 두 곳에 적으면
+   반드시 갈린다는 규칙은 이미 `listTable` 주석에 적혀 있었다 — 같은 규칙을 모바일 행에도 건다.
+   ⚠ CSS 선택자도 `#msheet` 밖으로 넓혔다(부품과 그 스타일은 쌍으로 움직인다). */
+function msItemHtml(s, i, apt) {
+  const t = ringOf(s), lv = t.lv;
+  const d = apt ? distToApt(s, apt) : null;
+  return `<div class="ms-item" data-i="${i}"><i class="bar" style="background:${t.col}"></i>`
+    + `<span><span class="nm">${sigTitle(s)}</span>`
+    + `<span class="sb">${catOf(s)} · ${lv === "미정" ? LEVEL_NAME["미정"] : lv} · ${phaseLabel(phaseOf(s))}</span></span>`
+    + (d != null && isFinite(d) ? `<span class="ds">${d < 1000 ? Math.round(d) + "m" : (d / 1000).toFixed(1) + "km"}</span>` : "")
+    + `</div>`;
+}
+/* 목록 한 덩어리 + 클릭 배선 — 부르는 쪽이 배선을 잊지 않도록 한 함수로 묶는다. */
+function msListInto(box, rows, apt, cap) {
+  const show = Math.min(rows.length, cap || rows.length);
+  box.innerHTML = rows.slice(0, show).map((s, i) => msItemHtml(s, i, apt)).join("")
+    + (rows.length > show ? `<div class="ms-tail"><b>${show.toLocaleString()}</b>건 표시 중 · 남은 ${(rows.length - show).toLocaleString()}건</div>` : "");
+  box.querySelectorAll(".ms-item").forEach(el =>
+    el.addEventListener("click", () => showSignal(rows[+el.dataset.i], true)));
+}
 function renderSheet() {
   const sh = document.getElementById("msheet"); if (!sh) return;
   initSheet();
@@ -8955,15 +9554,7 @@ function renderSheet() {
   const apt = listAnchorApt();
   const box = document.getElementById("ms-list");
   const show = Math.min(rows.length, _msShown);
-  box.innerHTML = rows.slice(0, show).map((s, i) => {
-    const t = ringOf(s), lv = t.lv;
-    const d = apt ? distToApt(s, apt) : null;
-    return `<div class="ms-item" data-i="${i}"><i class="bar" style="background:${t.col}"></i>`
-      + `<span><span class="nm">${sigTitle(s)}</span>`
-      + `<span class="sb">${catOf(s)} · ${lv === "미정" ? LEVEL_NAME["미정"] : lv} · ${phaseLabel(phaseOf(s))}</span></span>`
-      + (d != null && isFinite(d) ? `<span class="ds">${d < 1000 ? Math.round(d) + "m" : (d / 1000).toFixed(1) + "km"}</span>` : "")
-      + `</div>`;
-  }).join("")
+  box.innerHTML = rows.slice(0, show).map((s, i) => msItemHtml(s, i, apt)).join("")
     + (rows.length > show
         ? `<div class="ms-tail"><b>${show.toLocaleString()}</b>건 표시 중 · 남은 ${(rows.length - show).toLocaleString()}건`
           + `<button class="ms-more" id="ms-more">더 보기</button></div>`
@@ -9285,8 +9876,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "081bb73075", "adverse_facilities.json": "cbd4a998ae", "apartments_all.json": "4181bcf85a", "arch_signals.json": "608f2a594e", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "5b02555227", "dart_signals.json": "1e2a409b35", "dps_signals.json": "3ad7d938a5", "eum_signals.json": "52e7857581", "hospital_signals.json": "af9bc25fac", "indpark_signals.json": "df31c9d60b", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "fcb1e8f85b", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "89abe30d4d", "mega_signals.json": "fc8fa636f7", "methodology.html": "f2f0db7d21", "park_signals.json": "07186e6e50", "rail_reference.html": "5228d47f1e", "rail_signals.json": "ea6015349d", "regions.json": "9357f5440d", "report.html": "302d3f9afc", "retail_signals.json": "87a3fefb48", "road_signals.json": "01d68150b6", "school_signals.json": "10a9c89d94", "settings.html": "1ca2007f59", "sfz_signals.json": "16fd3a773d", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "cde47afebb", "signals.json": "94f5712a9f", "signals_auto.json": "784ddf6769", "signals_jeongbi_all.json": "e3cfda6050", "source_status.html": "4af39f440a", "thresholds.json": "be2e9787c0"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260828d");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "4b1c770dad", "adverse_facilities.json": "914a2fcd3e", "apartments_all.json": "218769e5ce", "arch_signals.json": "7e250739cf", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "80dd1b9794", "dart_signals.json": "1e2a409b35", "dps_signals.json": "bedca89d87", "eum_signals.json": "35ec60d62b", "hospital_signals.json": "bb8446ed7f", "indpark_signals.json": "d858ad4494", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "adf75d5e2d", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "e1897b11da", "mega_signals.json": "da11cef2f9", "methodology.html": "f2f0db7d21", "park_signals.json": "ad97dcca84", "qa_debt_open.json": "a345470856", "rail_reference.html": "38643c0a3a", "rail_signals.json": "1525e109f8", "regions.json": "9357f5440d", "report.html": "32817e9f79", "retail_signals.json": "bf051410f9", "road_signals.json": "bcb425797c", "school_signals.json": "2c1fb0a181", "settings.html": "1ca2007f59", "sfz_signals.json": "42f05de40e", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "d36dcc8214", "signals.json": "94f5712a9f", "signals_auto.json": "b053dbbd27", "signals_jeongbi_all.json": "753e2b8f7e", "source_status.html": "455e9eb080", "thresholds.json": "be2e9787c0"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260831a");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
