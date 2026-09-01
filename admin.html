@@ -216,7 +216,9 @@
     if (ranD == null || ranD >= 2) { cls = "bad"; msg = `❌ 소급이 <b>${ranD ?? "?"}일째</b> 안 돌았습니다 — launchd(com.hojaemap.eumbackfill)·로그를 볼 것`; }
     else if (stuck) { cls = "debt"; msg = `🟡 소급 대상이 <b>사흘째 ${bf.pending.toLocaleString()}건 그대로</b> — 예산이 계속 0이거나 대상 계산이 고장`; }
     else msg = `⏳ 토지이음 소급: 남은 <b>${(bf.pending ?? 0).toLocaleString()}건</b>`
-             + (bf.days_limit ? ` (최근 ${bf.days_limit}일 창)` : "")
+             + (bf.days_limit ? (String(bf.days_limit).length === 8
+                 ? ` (창 바닥 ${String(bf.days_limit).replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3")})`
+                 : ` (최근 ${bf.days_limit}일 창)`) : "")
              + ` · 오늘 ${bf.taken || 0}건 수집 · 약 ${bf.est_runs_left || "?"}회 실행 남음`;
     h += `<div style="margin-top:8px">${msg}<span class="k"> · 마지막 실행 ${bf.ran || "?"}</span></div>`;
     if (cls === "bad" && okRun) box.className = "runbox debt";   // 빌드는 성공이라도 소급 死는 노랗게
