@@ -184,8 +184,9 @@
 (async () => {
   const box = document.getElementById("runbox");
   const get = async f => { try { const r = await fetch(f + "?t=" + Date.now()); return r.ok ? await r.json() : null; } catch (e) { return null; } };
-  const [st, debt, bf] = await Promise.all([get("build_status.json"), get("qa_debt_open.json"),
-                                            get("eum_backfill_progress.json")]);
+  const [st, debt, bf, en, uf] = await Promise.all([get("build_status.json"), get("qa_debt_open.json"),
+                                            get("eum_backfill_progress.json"),
+                                            get("eum_enroll.json"), get("upis_facility_geom.json")]);
   if (!st) { box.textContent = "build_status.json을 읽지 못했습니다."; return; }
   const okRun = st.result === "성공";
   const nDebt = debt ? (debt.debt || 0) : 0;
@@ -224,6 +225,20 @@
     if (cls === "bad" && okRun) box.className = "runbox debt";   // 빌드는 성공이라도 소급 死는 노랗게
   } else {
     h += `<div style="margin-top:8px">⏳ 토지이음 소급: <b>진척 파일 없음</b> — eum_backfill이 아직 한 번도 안 돌았거나 배포 전</div>`;
+  }
+  /* 색인 등재 + UPIS 조인 — 소급과 **같은 사상**으로 화면이 읽는다(2026-09-01 신설).
+     로그에만 있으면 며칠째 0건이어도 아무도 모른다. 두 갈래가 함께 도는 파이프라인이라
+     한 줄로 붙여 보여 준다: 등재가 신호를 세우고, 조인이 그 신호에 선형을 붙인다. */
+  if (en || uf) {
+    const bits = [];
+    if (en) bits.push(`색인 등재 <b>${(en.signals_after ?? 0).toLocaleString()}건</b>`
+                    + `<span class="k">(마지막 +${en.added ?? 0} · ${en.ran || "?"})</span>`);
+    if (uf) {
+      const held = Object.values(uf.held_why || {}).reduce((a, b) => a + b, 0);
+      bits.push(`UPIS 선형 <b>${(uf.corridors_total ?? 0).toLocaleString()}건</b>`
+              + `<span class="k">(마지막 배치 작도 ${uf.drawn_now ?? 0} · 보류 ${held} · ${uf.ran || "?"})</span>`);
+    }
+    h += `<div style="margin-top:8px">🧩 ${bits.join(" · ")}</div>`;
   }
   box.innerHTML = h;
 })();
