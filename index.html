@@ -2713,6 +2713,24 @@ function lineGeomRow(s) {
      산단계획 명명체계라 UPIS 레이어에 없어서 **못 그렸고**, 대신 다른 시설(고촌 대로2-1) 하나만
      935m 그렸다는 사실이 `geom_src`에 적혀 있었다.
    ⇒ 화면이 그 말을 안 하면 **맞는 데이터도 「엉뚱한 선」으로 보인다**(P2·P5). 근거를 그대로 보인다. */
+/* ★★ **「무슨 작업을 한다는 거지?」에 답한다** (2026-09-01 · 알렉스
+   *"여기 도로가 엄청 많은데 다 호재로 보는게 맞어? … 대부분 기존의 도로인데"*).
+   ☠ 실측: 회랑 보유 신호의 **28%가 집행완료만**이었다 — 이미 만들어진 도로다. 그런데 카드는
+     `upis_exec`을 **한 글자도 안 보여줬다**(화면 참조 0곳). 데이터는 알고 있는데 화면이 침묵하니
+     사용자는 「이게 왜 호재지?」를 알 길이 없다. 이 세션에서 반복해 나온 그 형태.
+   ⚠ 집행상태는 **참고 사실**이다 — 조회 시점의 등록값이고 시차·오표기가 있다(실측: 공사 중인
+     공세-지곡이 「집행완료」로 등록돼 있었다). 그래서 조회일을 함께 적고 단정하지 않는다(P2). */
+function execRow(s) {
+  if (!s.upis_exec) return "";
+  const v = String(s.upis_exec);
+  const done = /^집행완료/.test(v.split(" (")[0]);
+  const hint = done
+    ? "이 시설은 등록상 이미 개설된 것으로 나옵니다 — 남은 공사가 없을 수 있습니다."
+    : "미집행·부분집행이 섞여 있습니다 — 아직 만들지 않은 구간이 있다는 뜻입니다.";
+  return `<div class="kv"><b>집행 상태</b> ${esc(v)}`
+       + `<span class="hmhint">${hint} 도시계획시설 대장의 등록값이며 조회 시점 기준입니다 — `
+       + `실제 공사와 시차가 있을 수 있습니다.</span></div>`;
+}
 function corridorRow(s) {
   if (!s.corridor || (typeof isLineSig === "function" && isLineSig(s))) return "";
   const src = String(s.geom_src || "");
@@ -2721,7 +2739,7 @@ function corridorRow(s) {
   const head = partial ? "부분 — 사업의 일부만 그렸습니다" : "회랑 확보";
   const ver = s.geom_verify ? `<div class="gbasis">${esc(String(s.geom_verify))}</div>` : "";
   return `<div class="kv"><b>선형 근거</b> ${head}`
-       + `<span class="hmhint">${esc(src)}</span></div>${ver}`;
+       + `<span class="hmhint">${esc(src)}</span></div>${ver}${execRow(s)}`;
 }
 function mergedRoadRow(s) {
   if (!s.merged_road) return "";
@@ -10286,8 +10304,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "010af1c434", "adverse_facilities.json": "c2e8025e2b", "apartments_all.json": "e157a51133", "arch_signals.json": "e51e051966", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "f7125f887e", "dart_signals.json": "1e2a409b35", "dps_signals.json": "8060d3017a", "eum_backfill_progress.json": "1c5f616ecf", "eum_enroll.json": "5ebd110c5a", "eum_signals.json": "8afc28cf57", "hospital_signals.json": "e2b5412cad", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "a65c846446", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "7b241ec191", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "dffbb02a64", "mega_signals.json": "5b305b7875", "methodology.html": "0eae05b907", "park_signals.json": "c5d004b767", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "377eb50be6", "rail_reference.html": "ae8c1e4c35", "rail_signals.json": "1525e109f8", "regions.json": "71006bdb48", "report.html": "e5726f6172", "retail_signals.json": "f2bea49c55", "road_signals.json": "955b14f62b", "school_signals.json": "37a562b329", "settings.html": "1ca2007f59", "sfz_signals.json": "85d6dea144", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "4220771141", "signals.json": "94f5712a9f", "signals_auto.json": "cb72986d0e", "signals_jeongbi_all.json": "3976d1e748", "source_status.html": "cb23974eb2", "thresholds.json": "543fa6e7eb", "upis_facility_geom.json": "71f019cc87", "weekly.html": "9482bba1b9"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260901m");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "010af1c434", "adverse_facilities.json": "c2e8025e2b", "apartments_all.json": "e157a51133", "arch_signals.json": "e51e051966", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "92010bc749", "dart_signals.json": "1e2a409b35", "dps_signals.json": "8060d3017a", "eum_backfill_progress.json": "1c5f616ecf", "eum_enroll.json": "5ebd110c5a", "eum_signals.json": "a803432702", "hospital_signals.json": "e2b5412cad", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "a65c846446", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "7b241ec191", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "dffbb02a64", "mega_signals.json": "5b305b7875", "methodology.html": "0eae05b907", "park_signals.json": "c5d004b767", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "3cf5db94b0", "rail_reference.html": "ae8c1e4c35", "rail_signals.json": "1525e109f8", "regions.json": "71006bdb48", "report.html": "e5726f6172", "retail_signals.json": "f2bea49c55", "road_signals.json": "36b88a81ec", "school_signals.json": "37a562b329", "settings.html": "1ca2007f59", "sfz_signals.json": "85d6dea144", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "4220771141", "signals.json": "94f5712a9f", "signals_auto.json": "cb72986d0e", "signals_jeongbi_all.json": "3976d1e748", "source_status.html": "cb23974eb2", "thresholds.json": "543fa6e7eb", "upis_facility_geom.json": "71f019cc87", "weekly.html": "91e3f2e215"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260901n");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
