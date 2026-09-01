@@ -9046,6 +9046,14 @@ function initKakao() {
     for (const s of EUM_SIG) {
       const segs = s.corridor && (s.corridor.paths || (s.corridor.path ? [s.corridor.path] : null));
       if (!segs) continue;   // paths = 전 갈래(UPIS 시설 폴리곤 — 갈래마다 실물 · path는 하위호환)
+      let ebnm = null;   // 배지·툴팁 공용 짧은 이름(아래 계산 블록이 채움 — 먼저 계산)
+      { const des = [...(s.title || "").matchAll(/(광로|대로|중로|소로)\s*(\d)\s*(?:[-·]|류)\s*(\d+)\s*호?/g)]
+          .map(m2 => m2[1] + m2[2] + "-" + m2[3]);
+        if (des.length) ebnm = des[0] + (des.length > 1 ? " 외 " + (des.length - 1) : "");
+        else { const t0 = (s.title || "");
+          const cut = t0.search(/도시계획시설|도시관리계획|군계획시설|군관리계획|도시계획도로|결정\s*\(|실시계획/);
+          const nm2 = (cut > 0 ? t0.slice(0, cut) : "").replace(/[\(\{\[].*$/, "").trim();
+          if (nm2.length > 1) ebnm = nm2.length > 16 ? nm2.slice(0, 15) + "…" : nm2; } }
       const objs = [], objsLo = [], hits = [];
       const _eb = [Infinity, Infinity, -Infinity, -Infinity];
       for (const path of segs) {
@@ -9059,6 +9067,15 @@ function initKakao() {
         // ⚠ _ovClickTs를 먼저 찍는다 — 지도 click(goHome)이 같은 클릭에 연달아 발화해
         //   카드가 열리자마자 닫힌다(2026-09-01 알렉스 「선형은 클릭이 안 되고」 — 라이브 재현·확정)
         K.event.addListener(hit, "click", () => { _ovClickTs = Date.now(); showSignal(s, false); });
+        // 호버 툴팁 — 원장 노선과 같은 tipCard 문법(2026-09-01 알렉스 「마우스 갖다 대도 뭐가 안 뜨고」)
+        { const _eph = s.phase || "계획";
+          const _ehtml = tipCard({ band: [{ col: col, w: 1 }], title: "🛣 " + (ebnm || s.title),
+            chips: [tipChipCat(col, "도시계획시설 도로"), tipChipRing(_eph, 11, (1.5 + (PHASE_IDX[_eph] ?? 0) * .8).toFixed(1)),
+                    s.lvl ? tipChipCat("#8a90a0", s.lvl + "등급") : null].filter(Boolean),
+            sub: (s.geom_src || "").slice(0, 90), foot: "클릭하면 근거·출처" });
+          K.event.addListener(hit, "mouseover", mev => showTip(_ehtml, evToClient(mev), true));
+          K.event.addListener(hit, "mousemove", mev => showTip(_ehtml, evToClient(mev), true));
+          K.event.addListener(hit, "mouseout", hideTip); }
         hits.push(hit);
         for (const c of path) { if (c[0] < _eb[0]) _eb[0] = c[0]; if (c[1] < _eb[1]) _eb[1] = c[1];
           if (c[0] > _eb[2]) _eb[2] = c[0]; if (c[1] > _eb[3]) _eb[3] = c[1]; }
@@ -9068,16 +9085,9 @@ function initKakao() {
          고시 제목 전체는 배지가 못 된다 — ① 결정조서의 시설 표기(중로1-108 외 3)가 1순위,
          ② 없으면(진입도로류) 제목에서 보일러플레이트(도시계획시설…결정…고시)를 걷어낸 사업명.
          렌더 규칙(광역 줌 lv5~11·기점 앵커·겹침 해소·등급 순위)은 원장 노선과 같은 문법을 탄다. */
-      let bnm = null;
-      { const des = [...(s.title || "").matchAll(/(광로|대로|중로|소로)\s*(\d)\s*(?:[-·]|류)\s*(\d+)\s*호?/g)]
-          .map(m2 => m2[1] + m2[2] + "-" + m2[3]);
-        if (des.length) bnm = des[0] + (des.length > 1 ? " 외 " + (des.length - 1) : "");
-        else { const t0 = (s.title || "");
-          const cut = t0.search(/도시계획시설|도시관리계획|군계획시설|군관리계획|도시계획도로|결정\s*\(|실시계획/);
-          const nm2 = (cut > 0 ? t0.slice(0, cut) : "").replace(/[\(\{\[].*$/, "").trim();
-          if (nm2.length > 1) bnm = nm2.length > 16 ? nm2.slice(0, 15) + "…" : nm2; } }
+      const bnm = ebnm;
       const _mainSeg = segs.reduce((a, b) => ((b || []).length > (a || []).length ? b : a), segs[0]) || [];
-      railLineObjs.push({ objs, objsLo, hits, isRoad: true, ph: s.phase || "계획",
+      railLineObjs.push({ objs, objsLo, hits, isRoad: true, eum: true, ph: s.phase || "계획",
         bb: isFinite(_eb[0]) ? _eb : null, nms: [s.title].filter(Boolean),
         ck: () => { _ovClickTs = Date.now(); showSignal(s, false); }, bnm, beta: "",
         mid: bnm && _mainSeg.length ? _mainSeg[0] : null, lvl: s.lvl || "C" });
@@ -9135,7 +9145,9 @@ function initKakao() {
       }
       // 노선명 배지(2026-08-04 사용자 확정: 광역 줌 lv5~11 한정·노선당 1개(중점)·색=분류 유지·
       // 단계=우리 백본 + 목표년도는 소스가 준 것만 「목표 'NN」로). 확대(lv≤4)하면 역명 라벨과 교대.
-      if (show && filter.lines.has("노선명") && o.mid && _bLv >= 5 && _bLv <= 11 && _bB && _bB.contain(LL(o.mid[0], o.mid[1]))) {
+      // eum(시군 도로)은 확대(lv3~4)에서도 배지 유지 — 역명 라벨 교대가 없어 이름 잃을 이유가 없다(2026-09-01)
+      const _bandLo = o.eum ? 3 : 5;
+      if (show && filter.lines.has("노선명") && o.mid && _bLv >= _bandLo && _bLv <= 11 && (_bB || _bLv < 5) && (_bLv < 5 ? map.getBounds().contain(LL(o.mid[0], o.mid[1])) : _bB.contain(LL(o.mid[0], o.mid[1])))) {
         badgeCands.push(o);   // 배치는 뒤에서 한꺼번에 — 겹침은 **서로를 봐야** 풀린다(placeBadges)
       }
     }
@@ -9345,12 +9357,20 @@ function initKakao() {
   /* 진단 계수 — **이 가드는 눈으로 확인할 수 없다**(안 그리는 것이 정상 동작이라 화면에 표시가 없다).
      세어 두지 않으면 다음 사람이 「걸린 척」을 걸린 것으로 오해한다 — 1차에서 정확히 그랬다.
      쓰는 법: 콘솔에서 `_dbg.panStats()` → {요청, 실제그림, 팬중건너뜀, 지금팬중}. */
-  let _lodReq = 0, _lodAsk = 0, _lodRun = 0, _lodSkip = 0;
+  let _lodReq = 0, _lodAsk = 0, _lodRun = 0, _lodSkip = 0, _lodTO = 0;
   const applyLODSoon = () => {
     _lodAsk++;
     if (_panning) { _lodSkip++; return; }
     if (_lodReq) return;
-    _lodReq = requestAnimationFrame(() => { _lodReq = 0; _lodRun++; applyLOD(); });
+    /* ☠ rAF **하나에만** 걸면 안 된다 (2026-09-01 실측 — 알렉스 「확대 수준에 따라 어떤 경로는
+       보이고 안 보이고」). 문서가 hidden(창 가림·절전·백그라운드)이면 rAF가 멎는데, zoom_start는
+       이미 오버레이를 전부 내렸다 — 재렌더 예약만 남고 실행이 안 돼 **선이 영영 안 돌아온다**
+       (visibilityState=hidden에서 전 레벨 0객체 재현). 타임아웃 폴백이 rAF 미실행 시 대신 그린다. */
+    const _run = () => { if (_lodTO) { clearTimeout(_lodTO); _lodTO = 0; }
+      if (_lodReq && typeof cancelAnimationFrame === "function") cancelAnimationFrame(_lodReq);
+      _lodReq = 0; _lodRun++; applyLOD(); };
+    _lodReq = requestAnimationFrame(_run);
+    _lodTO = setTimeout(_run, 400);
   };
   K.event.addListener(map, "idle", applyLODSoon);
   /* ☠☠ **카카오 `dragstart/dragend`에 기대면 안 된다** (2026-08-14 2차 — 사장님 *"커서 끌어서
@@ -10183,8 +10203,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "2b50631411", "adverse_facilities.json": "c2e8025e2b", "apartments_all.json": "e157a51133", "arch_signals.json": "e51e051966", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "c9b579ea8a", "dart_signals.json": "1e2a409b35", "dps_signals.json": "8060d3017a", "eum_backfill_progress.json": "4e0cd6f907", "eum_signals.json": "c3418cf4f7", "hospital_signals.json": "e2b5412cad", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "a65c846446", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "7b241ec191", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "dffbb02a64", "mega_signals.json": "5b305b7875", "methodology.html": "7be1c79df3", "park_signals.json": "c5d004b767", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "c542596f29", "rail_reference.html": "ae8c1e4c35", "rail_signals.json": "1525e109f8", "regions.json": "9357f5440d", "report.html": "e5726f6172", "retail_signals.json": "f2bea49c55", "road_signals.json": "f5e65225a8", "school_signals.json": "37a562b329", "settings.html": "1ca2007f59", "sfz_signals.json": "85d6dea144", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "4220771141", "signals.json": "94f5712a9f", "signals_auto.json": "cb72986d0e", "signals_jeongbi_all.json": "3976d1e748", "source_status.html": "75b5b4f594", "thresholds.json": "543fa6e7eb"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260901j");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "2b50631411", "adverse_facilities.json": "c2e8025e2b", "apartments_all.json": "e157a51133", "arch_signals.json": "e51e051966", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "eac98d8710", "dart_signals.json": "1e2a409b35", "dps_signals.json": "8060d3017a", "eum_backfill_progress.json": "4e0cd6f907", "eum_signals.json": "5fdcca4c05", "hospital_signals.json": "e2b5412cad", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "a65c846446", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "7b241ec191", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "dffbb02a64", "mega_signals.json": "5b305b7875", "methodology.html": "7be1c79df3", "park_signals.json": "c5d004b767", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "1b409a5b0f", "rail_reference.html": "ae8c1e4c35", "rail_signals.json": "1525e109f8", "regions.json": "9357f5440d", "report.html": "e5726f6172", "retail_signals.json": "f2bea49c55", "road_signals.json": "2767492615", "school_signals.json": "37a562b329", "settings.html": "1ca2007f59", "sfz_signals.json": "85d6dea144", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "4220771141", "signals.json": "94f5712a9f", "signals_auto.json": "cb72986d0e", "signals_jeongbi_all.json": "3976d1e748", "source_status.html": "75b5b4f594", "thresholds.json": "543fa6e7eb"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260901k");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
