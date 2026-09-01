@@ -2705,6 +2705,24 @@ function lineGeomRow(s) {
 /* ★ **통합했다는 사실을 화면이 말한다** (2026-09-01 · merge_same_road와 같은 커밋).
    같은 도로를 지목한 고시 여럿을 한 사업으로 묶었다면 그건 편집이므로 **숨기지 않는다**(P2·P5).
    ☠ 안 붙이면 「데이터에 넣었는데 화면엔 없다」가 또 된다 — 이 세션에서만 세 번 밟은 자리다. */
+/* ★★ **회랑을 그렸으면 「무엇을 그렸는지」 카드가 말한다** (2026-09-01 · 알렉스 제보
+   *"세번째 캡쳐 보면 동그라미 친 데가 맞는 선형이야? 카카오맵상의 도로 예정된 곳은 거기가 아닌데?"*).
+   ☠ 실측: 「김포 한강시네폴리스 진입도로」는 지도에 선이 그려지는데 **카드가 선형에 대해 아무 말도
+     안 했다** — `isLineSig`가 false라(점 신호 + corridor 꼴) 선형 행을 통째로 안 탔다.
+     그 사이 데이터는 이미 알고 있었다: 실제 진입도로 시설(**시티** 대로2-3·2-4·중로1-7)은
+     산단계획 명명체계라 UPIS 레이어에 없어서 **못 그렸고**, 대신 다른 시설(고촌 대로2-1) 하나만
+     935m 그렸다는 사실이 `geom_src`에 적혀 있었다.
+   ⇒ 화면이 그 말을 안 하면 **맞는 데이터도 「엉뚱한 선」으로 보인다**(P2·P5). 근거를 그대로 보인다. */
+function corridorRow(s) {
+  if (!s.corridor || (typeof isLineSig === "function" && isLineSig(s))) return "";
+  const src = String(s.geom_src || "");
+  if (!src) return "";
+  const partial = /부분 회랑|레이어 밖|제외/.test(src);
+  const head = partial ? "부분 — 사업의 일부만 그렸습니다" : "회랑 확보";
+  const ver = s.geom_verify ? `<div class="gbasis">${esc(String(s.geom_verify))}</div>` : "";
+  return `<div class="kv"><b>선형 근거</b> ${head}`
+       + `<span class="hmhint">${esc(src)}</span></div>${ver}`;
+}
 function mergedRoadRow(s) {
   if (!s.merged_road) return "";
   const n = (s.merged_notices || []).length;
@@ -5391,7 +5409,7 @@ function renderDetail(s) {
       ${isLineSig(s) ? lineGeomRow(s) : `<div class="precblk"><div class="ph">위치 정확도</div>${precNote(s)}${
         stUndet(s) ? `<div class="gbasis"><b>${s.st_status}</b> — 명칭·위치 미확정</div>` : ""}${
         s.pt_type === "road_ic" ? `<div class="gbasis">도로 IC(철도역 아님)</div>` : ""}</div>`}
-      ${mergedRoadRow(s)}
+      ${corridorRow(s)}${mergedRoadRow(s)}
       <!-- ☠ 「반경 Nkm 내 단지」 목록을 **지웠다** (2026-08-19 시안 「구현 3단계」 ⑨).
            *"호재를 보는 화면에서 단지 목록은 다른 질문입니다."* — 이 카드가 답하는 질문은
            「이 호재가 무엇이고 어디까지 왔나」다. 단지는 아파트 화면(미리보기·상세)의 축이고,
@@ -9201,7 +9219,18 @@ function initKakao() {
       // 단계=우리 백본 + 목표년도는 소스가 준 것만 「목표 'NN」로). 확대(lv≤4)하면 역명 라벨과 교대.
       // eum(시군 도로)은 확대(lv3~4)에서도 배지 유지 — 역명 라벨 교대가 없어 이름 잃을 이유가 없다(2026-09-01)
       const _bandLo = o.eum ? 3 : 5;
-      if (show && filter.lines.has("노선명") && o.mid && _bLv >= _bandLo && _bLv <= 11 && (_bB || _bLv < 5) && (_bLv < 5 ? map.getBounds().contain(LL(o.mid[0], o.mid[1])) : _bB.contain(LL(o.mid[0], o.mid[1])))) {
+      /* ★★ **등급이 「얼마나 멀리서까지 이름표를 다는지」를 정한다** (2026-09-01 · 알렉스 제보
+         *"지도 멀리 보면 소규모 도로 뱃지가 다 보이니깐 너무 빽빽하네. 거리에 따라서 도로 등급에
+         따라서 좀 덜보이게 해야 될듯해"*).
+         ☠ 배지 상한이 **등급과 무관하게 lv11**이라, 시군 중로·소로 이름표가 **전국 줌에서도 전부**
+           떴다(백로그 등재로 그 층이 수천 개가 되면서 화면이 글자로 덮였다).
+         ⇒ 상한만 등급으로 가른다: 국가 사업(S·A)은 멀리서도, 광로·대로(B)는 중간부터,
+           중로·소로(C)는 가까이서만. **하한(_bandLo)은 그대로** — 확대하면 다 보인다.
+         ⚠ 이건 **표시 규칙이지 데이터 은폐가 아니다** — 선·마커·목록·집계는 하나도 안 줄어든다.
+           숨기는 것은 **이름표뿐**이고, 확대하면 돌아온다(CLAUDE.md 「선은 숨기지 말고」 전례 준수).
+         ⚠ 등급을 모르면 B와 같이 둔다 — 모르는 것을 가장 낮은 급으로 밀어내지 않는다(P2). */
+      const _bandHi = { S: 11, A: 11, B: 9, C: 7 }[o.lvl] ?? 9;
+      if (show && filter.lines.has("노선명") && o.mid && _bLv >= _bandLo && _bLv <= _bandHi && (_bB || _bLv < 5) && (_bLv < 5 ? map.getBounds().contain(LL(o.mid[0], o.mid[1])) : _bB.contain(LL(o.mid[0], o.mid[1])))) {
         badgeCands.push(o);   // 배치는 뒤에서 한꺼번에 — 겹침은 **서로를 봐야** 풀린다(placeBadges)
       }
     }
@@ -10257,8 +10286,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "010af1c434", "adverse_facilities.json": "c2e8025e2b", "apartments_all.json": "e157a51133", "arch_signals.json": "e51e051966", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "9760eccc34", "dart_signals.json": "1e2a409b35", "dps_signals.json": "8060d3017a", "eum_backfill_progress.json": "1c5f616ecf", "eum_enroll.json": "8efa736e9d", "eum_signals.json": "b6e34d0bae", "hospital_signals.json": "e2b5412cad", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "a65c846446", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "7b241ec191", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "dffbb02a64", "mega_signals.json": "5b305b7875", "methodology.html": "0eae05b907", "park_signals.json": "c5d004b767", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "987b99e812", "rail_reference.html": "ae8c1e4c35", "rail_signals.json": "1525e109f8", "regions.json": "71006bdb48", "report.html": "e5726f6172", "retail_signals.json": "f2bea49c55", "road_signals.json": "a8d60f053f", "school_signals.json": "37a562b329", "settings.html": "1ca2007f59", "sfz_signals.json": "85d6dea144", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "4220771141", "signals.json": "94f5712a9f", "signals_auto.json": "cb72986d0e", "signals_jeongbi_all.json": "3976d1e748", "source_status.html": "cb23974eb2", "thresholds.json": "543fa6e7eb", "upis_facility_geom.json": "71f019cc87", "weekly.html": "683f1243a8"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260901l");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "010af1c434", "adverse_facilities.json": "c2e8025e2b", "apartments_all.json": "e157a51133", "arch_signals.json": "e51e051966", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "f7125f887e", "dart_signals.json": "1e2a409b35", "dps_signals.json": "8060d3017a", "eum_backfill_progress.json": "1c5f616ecf", "eum_enroll.json": "5ebd110c5a", "eum_signals.json": "8afc28cf57", "hospital_signals.json": "e2b5412cad", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "a65c846446", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "7b241ec191", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "dffbb02a64", "mega_signals.json": "5b305b7875", "methodology.html": "0eae05b907", "park_signals.json": "c5d004b767", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "377eb50be6", "rail_reference.html": "ae8c1e4c35", "rail_signals.json": "1525e109f8", "regions.json": "71006bdb48", "report.html": "e5726f6172", "retail_signals.json": "f2bea49c55", "road_signals.json": "955b14f62b", "school_signals.json": "37a562b329", "settings.html": "1ca2007f59", "sfz_signals.json": "85d6dea144", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "4220771141", "signals.json": "94f5712a9f", "signals_auto.json": "cb72986d0e", "signals_jeongbi_all.json": "3976d1e748", "source_status.html": "cb23974eb2", "thresholds.json": "543fa6e7eb", "upis_facility_geom.json": "71f019cc87", "weekly.html": "9482bba1b9"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260901m");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
