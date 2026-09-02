@@ -49,12 +49,12 @@ function rows(items,cols){return items.map(function(i){return '<tr>'+cols.map(fu
 function tbl(head,items,cols){return items&&items.length?('<table><tr>'+head.map(function(h){return '<th>'+h+'</th>';}).join('')+'</tr>'+rows(items,cols)+'</table>'):'<p class="note">없음</p>';}
 function render(idx){
   var r=ARCH[idx], t=r.totals||{};
-  var kpi='<div class="kpi"><div><b>'+(t.add||0)+'</b>신규 호재</div><div><b>'+(t.rem||0)+'</b>제거·소멸</div>'
+  var kpi='<div class="kpi"><div><b>'+(t.add||0)+'</b>신규 호재</div><div><b>'+(t.rem||0)+'</b>제거·소멸</div>'+(t.merged?'<div><b>'+t.merged+'</b>통합 흡수</div>':'')
     +'<div><b>'+(t.trans||0)+'</b>단계 전이</div><div><b>'+(t.done||0)+'</b>정비 완료처리</div>'
     +(r.coverage_gaps!=null?'<div><b>'+r.coverage_gaps+'</b>발굴 잔여(미수록)</div>':'')+'</div>';
   document.getElementById('body').innerHTML=
     '<p class="note">'+esc(r.date)+' 무인 수집 회전</p>'+kpi
-    +'<h2>신호유형별 증감</h2>'+tbl(['유형','신규','제거'],r.files,['file','add','rem'])
+    +'<h2>신호유형별 증감</h2>'+tbl(['유형','신규','제거','통합 흡수'],r.files,['file','add','rem','merged'])
     +'<h2>신규 대형(S·A급)</h2>'+tbl(['등급','지역','사업','출처'],r.new_big,['lvl','sd','name','src'])
     +'<h2>단계 전이 (해당 주 도달)</h2>'+tbl(['사업','도달 단계'],r.transitions,['name','phase'])
     +'<h2>정비 완료 처리 (완공 확인)</h2>'+tbl(['지역','구역'],r.jeongbi_done_new,['sd','name']);
