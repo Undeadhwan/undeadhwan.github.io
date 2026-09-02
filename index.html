@@ -1634,6 +1634,9 @@
   #dock .sgbtn[data-k="미정"] { font-size:11px; }
   #dock .pgrow .sgbtn { font-size:11.5px; }
   #dock .sgbtn.off { border:1px dashed var(--line2); color:var(--ink3); font-weight:600; background:var(--panel); }
+  /* 공사 성격 칩 — 텍스트만(아이콘 채널은 등급·단계가 쓴다). 8칩이라 줄바꿈 허용. */
+  #dock .ntrow { flex-wrap:wrap; }
+  #dock .ntrow .sgbtn { flex:0 0 auto; min-width:44px; padding:5px 8px; font-size:11px; }
   #dock .sgbtn:hover { border-color:var(--ink3); }
   /* 두께는 **2px 고정** — 크기만 등급을 말한다(두께는 단계 칩의 축이다) */
   #dock .sgi { box-sizing:border-box; border:2px solid currentColor; flex:none; }
@@ -2789,6 +2792,13 @@ function spreadRow(s) {
   return `<div class="kv"><b>선형 분포</b> ${sp.n}곳으로 나뉨 · 최대 ${sp.km.toFixed(1)}km 떨어짐`
        + `<span class="hmhint">${why}</span></div>`;
 }
+function natureRow(s) {
+  /* 공사 성격 (2026-09-02 알렉스 — 「신설인가 확장인가가 중요」). 근거(어느 규칙이 정했나)를
+     같이 적는다 — 집행추정은 추정임이 근거문에 이미 들어 있다(P2: 사실은 표시, 추정은 구분). */
+  if (!s.work_nature || s.work_nature === "미상") return "";
+  const why = s.work_nature_basis ? `<span class="hmhint">${esc(String(s.work_nature_basis))}</span>` : "";
+  return `<div class="kv"><b>공사 성격</b> ${esc(String(s.work_nature))} ${why}</div>`;
+}
 function corridorRow(s) {
   /* ★ 회랑이 **없는** 이유도 사실이다 (2026-09-01 · `geom_hold` 1,468건이 참조 0곳이었다).
      「선형이 왜 없지?」는 「선형이 왜 이상하지?」와 똑같이 자주 나오는 질문이다 — 답을 갖고 있으면 적는다. */
@@ -3614,6 +3624,7 @@ function buildRoadSignals() {
     const p = f.properties;
     if (p.kind === "station") {   // IC·JC 점
       ROAD_SIG.push({ _road: true, title: p.name, cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "A",
+      work_nature: p.work_nature, work_nature_basis: p.work_nature_basis,
         lvl_basis: p.lvl_basis, gate: p.gate, gate_basis: p.gate_basis,   // 등급 근거·게이트 — 카드가 읽는다(어댑터 함정 7호)
         template_type: "도로", current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
         src_tier: p.src_tier, ic_loc: p.loc, ic_status: p.ic_status, ic_note: p.ic_note, pt_type: p.pt_type, geo_prec: p.geo_prec, geo_approx: !!p.geo_approx, geo_basis: p.geo_basis || null, milestones: p.milestones,
@@ -3654,6 +3665,7 @@ function buildRoadSignals() {
     // 표시명 = 공식 사업명 우선(OSM 이름은 선형 매칭용일 뿐 — 공식 SSOT 사상 2026-07-17)
     ROAD_SIG.push({ _road: true, _has_solid: !!dp.solid.length, title: p.official_name || `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "C",
       lvl_basis: p.lvl_basis, gate: p.gate, gate_basis: p.gate_basis,   // 등급 근거·게이트 — 카드가 읽는다(어댑터 함정 7호)
+      work_nature: p.work_nature, work_nature_basis: p.work_nature_basis,   // 공사 성격(2026-09-02 알렉스) — 어댑터 함정 예방
       template_type: "도로", current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
       status: "활성", confirmed: !!p.confirmed, sd: null, road_kind: roadKindOf(p), src_tier: p.src_tier,   // 소재 시도=_sggs(다중 귀속)
       owner: p.owner, osm_name: p.name, line: p.name, geom_src: p.geom_src, geom_status: p.geom_status || null, milestones: p.milestones,   // line=노선 하이라이트 키
@@ -3793,6 +3805,9 @@ function sggDisplayName(name) {
   const m = name.match(/^(.+?시)(.+구)$/);
   return m ? m[1] : name;
 }
+/* 공사 성격 조회축 어휘 — 정본은 work_nature.py VOCAB(빌드가 채운다). 화면은 표시 순서만 정한다.
+   (2026-09-02 알렉스 — "신설인가 확장인가 … 어떤 개선이 이뤄지는지가 중요") */
+const NATURE_KEYS = ["신설", "확장", "개량", "우회", "접속", "폐지", "서류변경", "미상"];
 const filter = {
   cat: new Set(CAT_KEYS),   // '기타'는 안전망(0건) — 필터 축에서 제외(v1.8)
   // 중분류 조회축(2026-07-18): 대분류 안의 세부(교통=철도/도로/환승, 인프라=병원/공원… 등)를 각각 on/off.
@@ -3801,6 +3816,9 @@ const filter = {
   scale: new Set(["광역", "지구", "근린"]),
   phase: new Set(PHASES),   // 조회축 = 4단계 백본(계획/인가/착공/준공·개통). 정체·무산은 필터 아닌 항상표시 표식
   lvl: new Set(GRADES_DISP),   // 등급 조회축(A/B/C/미정) — 지도 원·카드·집계 전 화면 일관(호재 중심 개편 2026-07-16)
+  // 공사 성격 조회축(신설/확장/…) — work_nature **있는 신호만** 거른다(철도·건축 등 미보유 신호는
+  // 항상 통과 — 안 그러면 「미상」을 끄는 순간 성격 개념이 없는 층 전체가 사라진다 · P2).
+  nature: new Set(NATURE_KEYS),
   // 노선 선형 표시(철도선/도로선) — 신호·집계는 불변, 지도 위 선만 on/off (호재 원 집중용, localStorage 유지)
   // 「노선명 배지」도 여기 담는다 — 선과 같은 **표시 옵션** 축이다(신호·집계 불변).
   //  2026-08-05 사용자: "도로, 전철 뱃지 때문에 제대로 맵을 볼 수가 없네. 토글로 껐다 켰다 하자".
@@ -3933,9 +3951,11 @@ function catVisible(s) {
 /* ★ 지역축 없는 가시성 (2026-08-10) — 동 패널은 관계(소재/반경권)를 dongRelation이 판정하므로
    지역 조회축이 **먼저** 자르면 인접 동 소재 신호가 반경권에 못 들어와 반경권이 구조적으로 0이 된다
    (사용자 "정작 선택하면 보이는 것도 없고"의 세 번째 원인). 동 패널은 이걸 쓴다. */
+const natureVisible = s => !s.work_nature || filter.nature.has(s.work_nature);   // 성격 축 — 미보유 신호는 통과(위 주석)
 const visibleNoRegion = s => catVisible(s)
   && filter.phase.has(phaseOf(s))                // 4단계 백본 조회축(전체해제는 단계를 비우지 않음 → 유지)
   && filter.lvl.has(levelOf(s))                  // 등급 조회축(A/B/C/미정)
+  && natureVisible(s)                            // 공사 성격 조회축(2026-09-02) — 도로류만 구속
   && !isStaleFinished(s);   // 끝난 신호(종료 후 1년 초과)는 지도·목록·집계 전부에서 숨김(사용자 2026-07-21)
 const visible = s => visibleNoRegion(s)
   && regionVisible(s);                           // 지역 조회축(시도 › 시군구 › 읍면동) — 아래 참조
@@ -5490,7 +5510,7 @@ function renderDetail(s) {
       ${isLineSig(s) ? lineGeomRow(s) : `<div class="precblk"><div class="ph">위치 정확도</div>${precNote(s)}${
         stUndet(s) ? `<div class="gbasis"><b>${s.st_status}</b> — 명칭·위치 미확정</div>` : ""}${
         s.pt_type === "road_ic" ? `<div class="gbasis">도로 IC(철도역 아님)</div>` : ""}</div>`}
-      ${corridorRow(s)}${mergedRoadRow(s)}
+      ${natureRow(s)}${corridorRow(s)}${mergedRoadRow(s)}
       <!-- ☠ 「반경 Nkm 내 단지」 목록을 **지웠다** (2026-08-19 시안 「구현 3단계」 ⑨).
            *"호재를 보는 화면에서 단지 목록은 다른 질문입니다."* — 이 카드가 답하는 질문은
            「이 호재가 무엇이고 어디까지 왔나」다. 단지는 아파트 화면(미리보기·상세)의 축이고,
@@ -6296,6 +6316,12 @@ function renderDock() {
      ☠ 종전 가로 알약은 폭 때문에 **두 줄로 접혀** 「계획·확정 / 착공·완공」이라는 없는 경계를
        만들었다. ★ 계획만 점선이고 점선/실선이 **미확정 ↔ 확정**을 가른다(rev2에서 점선을
        위치 근사에서 단계 축으로 되돌렸다 — 사이드바가 곧 범례이므로 지도와 같은 문법이어야 한다). */
+  /* 공사 성격 = 텍스트 칩(아이콘 채널은 등급=크기·단계=두께가 이미 쓴다 — 새 채널을 만들지 않는다). */
+  const nt = k => {
+    const on = filter.nature.has(k);
+    return `<button type="button" class="sgbtn ntb${on ? "" : " off"}" data-tog="nature" data-k="${k}"
+      title="${k} 성격의 도로 신호만 켜고 끄기 — 성격 정보가 없는 층(철도 등)은 영향 없음"><span>${k}</span></button>`;
+  };
   const ph = p => {
     const on = filter.phase.has(p), i = PHASE_IDX[p] ?? 0;
     return `<button type="button" class="sgbtn pgb${on ? "" : " off"}" data-tog="phase" data-k="${p}"
@@ -6307,17 +6333,21 @@ function renderDock() {
   const nDirty = (CAT_KEYS.length - CAT_KEYS.filter(c => filter.cat.has(c)).length)
     + (PHASES.length - PHASES.filter(p => filter.phase.has(p)).length)
     + (["S", "A", "B", "C", "미정"].length - ["S", "A", "B", "C", "미정"].filter(l => filter.lvl.has(l)).length)
+    + (NATURE_KEYS.length - NATURE_KEYS.filter(k => filter.nature.has(k)).length)
     + ((filter.region || filter.sd) ? 1 : 0);
   /* 축별 「제외 중」 개수 — 이름이 붙어야 그 자리에서 읽힌다(시안 §15-09). 지역은 개수가 아니라
      사실 하나라 「지역」으로만 적는다. 0인 축은 적지 않는다 — 없는 것을 말하면 줄만 길어진다. */
   const _offCat = CAT_KEYS.length - CAT_KEYS.filter(c => filter.cat.has(c)).length;
   const _offLvl = GRADES_DISP.length - GRADES_DISP.filter(l => filter.lvl.has(l)).length;
   const _offPh = PHASES.length - PHASES.filter(p => filter.phase.has(p)).length;
+  const _offNt = NATURE_KEYS.length - NATURE_KEYS.filter(k => filter.nature.has(k)).length;
   const offLabel = [(filter.region || filter.sd) ? "지역" : "", _offCat ? `유형 ${_offCat}` : "",
-                    _offLvl ? `등급 ${_offLvl}` : "", _offPh ? `단계 ${_offPh}` : ""]
+                    _offLvl ? `등급 ${_offLvl}` : "", _offPh ? `단계 ${_offPh}` : "",
+                    _offNt ? `성격 ${_offNt}` : ""]
     .filter(Boolean).join(" · ") + " 제외 중";
   const dirty = !!filter.region || !!filter.sd || !(ALL_SUBS.every(k => filter.sub.has(k)) && PHASES.every(k => filter.phase.has(k))
-    && GRADES_DISP.every(k => filter.lvl.has(k)) && filter.lines.has("철도선") && filter.lines.has("도로선"));
+    && GRADES_DISP.every(k => filter.lvl.has(k)) && NATURE_KEYS.every(k => filter.nature.has(k))
+    && filter.lines.has("철도선") && filter.lines.has("도로선"));
   /* ★ 업데이트 탭의 사이드바 (2026-08-16 갱신 시안 §03·§05) — 자리는 같고 **내용은 그 탭의 축**이다.
      지도·목록 = 유형·등급·단계·세대수·레이어 · 업데이트 = 기간·변경 유형(#dk-flow 마운트 —
      내용은 renderFlow의 ctrlHtml 하나가 채운다). 지역 블록은 기둥(#dk-region)이라 세 탭 공유.
@@ -6357,6 +6387,11 @@ function renderDock() {
            이제 두께가 네 단계를 말하므로 그대로 두면 화면이 거짓을 말한다(PROCEDURE_화면품질). -->
       <div class="t">단계</div>
       <div class="sgrow pgrow">${PHASES.map(ph).join("")}</div>
+    </div>
+    <div class="axis">
+      <!-- 공사 성격 (2026-09-02 알렉스) — 도로류 한정 축. 근거는 카드의 「공사 성격」 행이 말한다. -->
+      <div class="t">공사 성격 <span class="hmhint">도로만</span></div>
+      <div class="sgrow ntrow">${NATURE_KEYS.map(nt).join("")}</div>
     </div>
     <!-- ★ 아파트 세대수 — **단계 아래 · 레이어 위** (2026-08-16 갱신 시안 §03: *"지역 → 유형 →
          등급 → 단계 → 아파트 세대수 → 레이어 … 세대수는 아파트를 걸러내는 부차적 조건이라
@@ -6514,7 +6549,7 @@ function bindFilterClicks(host) {
     if (t.dataset.allcat) { CAT_KEYS.forEach(c => filter.cat.add(c)); ALL_SUBS.forEach(k => filter.sub.add(k)); renderAll(); return; }   // 초기화 = 공용 함수 하나(패널 안내도 같은 것을 부른다)
     const axis = t.dataset.tog, k = t.dataset.k;
     if (axis === "cat") { toggleCat(k); renderAll(); return; }
-    const set = { sub: filter.sub, phase: filter.phase, lvl: filter.lvl, lines: filter.lines }[axis];
+    const set = { sub: filter.sub, phase: filter.phase, lvl: filter.lvl, lines: filter.lines, nature: filter.nature }[axis];
     if (!set) return;
     set.has(k) ? set.delete(k) : set.add(k);
     // 중분류를 켜면 소속 대분류도 켜진 것으로(헤더·카운트 일관). 다 끄면 대분류도 끔.
@@ -6535,6 +6570,7 @@ function resetFilters() {
   ["철도선", "도로선", "노선명"].forEach(k => filter.lines.add(k));   // 표시 옵션 초기화 = 전부 켜짐
   PHASES.forEach(k => filter.phase.add(k));
   GRADES_DISP.forEach(k => filter.lvl.add(k));
+  NATURE_KEYS.forEach(k => filter.nature.add(k));
   localStorage.setItem("hojae_lines", JSON.stringify([...filter.lines]));
   renderAll(); window._dbg?.applyLOD?.();
 }
@@ -10014,6 +10050,7 @@ function renderSheet() {
   const nf = (CAT_KEYS.length - CAT_KEYS.filter(c => filter.cat.has(c)).length)
     + (PHASES.length - PHASES.filter(p => filter.phase.has(p)).length)
     + (["S", "A", "B", "C", "미정"].length - ["S", "A", "B", "C", "미정"].filter(l => filter.lvl.has(l)).length)
+    + (NATURE_KEYS.length - NATURE_KEYS.filter(k => filter.nature.has(k)).length)
     + ((filter.region || filter.sd) ? 1 : 0);
   const fb = document.getElementById("ms-f");
   fb.hidden = !nf; fb.textContent = "필터 " + nf;
@@ -10367,8 +10404,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "010af1c434", "adverse_facilities.json": "7e782ec557", "apartments_all.json": "9b4f418697", "arch_signals.json": "669571731b", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "22788d549d", "dart_signals.json": "1e2a409b35", "dps_signals.json": "678c016744", "eum_backfill_progress.json": "1c5f616ecf", "eum_enroll.json": "d983b4792f", "eum_signals.json": "d06e8fe5e5", "hospital_signals.json": "4c2ee28f91", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "cb9f79094c", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "4eddb23d1b", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2c50d26304", "mega_signals.json": "f7015a300a", "methodology.html": "0eae05b907", "park_signals.json": "fbf4268625", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "71ed18adb7", "rail_reference.html": "ae8c1e4c35", "rail_signals.json": "1525e109f8", "regions.json": "5d52225be0", "report.html": "49b9b36ec6", "retail_signals.json": "f5dac2d6bb", "road_signals.json": "5b3b122a8c", "school_signals.json": "db4650acc6", "settings.html": "1ca2007f59", "sfz_signals.json": "4f27cc072b", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "b561d411be", "signals.json": "94f5712a9f", "signals_auto.json": "aec59514a1", "signals_jeongbi_all.json": "ce53f5d100", "source_status.html": "c582d546cd", "thresholds.json": "543fa6e7eb", "upis_facility_geom.json": "62e28d39bd", "weekly.html": "91e3f2e215"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260902d");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "010af1c434", "adverse_facilities.json": "7e782ec557", "apartments_all.json": "9b4f418697", "arch_signals.json": "669571731b", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "dc673488e5", "dart_signals.json": "1e2a409b35", "dps_signals.json": "678c016744", "eum_backfill_progress.json": "1c5f616ecf", "eum_enroll.json": "d983b4792f", "eum_signals.json": "4a3f412c1f", "hospital_signals.json": "4c2ee28f91", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "cb9f79094c", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "4eddb23d1b", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2c50d26304", "mega_signals.json": "f7015a300a", "methodology.html": "17c98aa252", "park_signals.json": "fbf4268625", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "87df028b29", "rail_reference.html": "ae8c1e4c35", "rail_signals.json": "1525e109f8", "regions.json": "5d52225be0", "report.html": "49b9b36ec6", "retail_signals.json": "f5dac2d6bb", "road_signals.json": "61561c9e2f", "school_signals.json": "db4650acc6", "settings.html": "1ca2007f59", "sfz_signals.json": "4f27cc072b", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "b561d411be", "signals.json": "94f5712a9f", "signals_auto.json": "aec59514a1", "signals_jeongbi_all.json": "ce53f5d100", "source_status.html": "c582d546cd", "thresholds.json": "543fa6e7eb", "upis_facility_geom.json": "62e28d39bd", "weekly.html": "91e3f2e215"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260902e");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
