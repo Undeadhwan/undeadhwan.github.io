@@ -5,10 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>호재맵 — 관리자</title>
-<!-- ══ 관리자 허브 (2026-08-21) ═══════════════════════════════════════════
+<!-- ══ 관리자 허브 (2026-08-21 · 2026-09-02 전면 확장) ═══════════════════════════════
      ☠ 왜 만들었나: 운영 기능이 **네 곳에 흩어져** 있었다 — 기준 설정·노선 대장·주간 변경은
        index.html의 「운영 모드」 토글을 켜야 칩이 나타나고(그걸 아는 사람만 찾는다), 접속 기록은
        Worker 주소를 외워야 했다. 「관리자용 메뉴는 어디서 보냐」는 질문이 나온 게 그 증거다.
+     ★ 2026-09-02 알렉스: *"기본 hojaemap.kr에서 볼 수 없는 모든 페이지를 링크되도록 해(기준설정,
+       접속기록, 주간레포트 등)"* ⇒ 이 페이지의 계약 = **사이트 헤더에 없는 입구는 전부 여기 있다.**
+       발행물(지역판 16·지난 호)은 손으로 적지 않는다 — `weekly_index.json`(weekly_issue.py가
+       발행 때마다 도출)을 읽어 링크를 만든다. 손목록은 반드시 낡는다(행정구역 개편·매주 새 호).
      ⇒ **한 페이지에서 전부 연결**한다. 흩어진 입구를 하나로 모으는 것이 목적이고, 기능 자체는
        각 페이지가 그대로 갖는다(여기서 다시 구현하지 않는다 — §간결한 프로세스).
 
@@ -31,6 +35,7 @@
   .sub{color:var(--mut);font-size:13px;margin-bottom:24px}
   .sub a{color:var(--acc);text-decoration:none}
   h2{font-size:13px;font-weight:700;color:var(--mut);margin:26px 0 10px;letter-spacing:.02em}
+  h2 small{font-weight:500;color:var(--dim);margin-left:6px}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
   a.card{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;
          background:var(--card);text-decoration:none;color:inherit;transition:.12s}
@@ -38,6 +43,13 @@
   a.card b{display:block;font-size:15px;font-weight:700;margin-bottom:3px}
   a.card span{display:block;font-size:12.5px;color:var(--mut);line-height:1.45}
   a.card.off{opacity:.5;pointer-events:none}
+  /* 지역판·지난 호처럼 **같은 종류가 여럿**인 링크는 카드가 아니라 알약이다 — 16장을 카드로 깔면
+     허브가 아니라 목록이 된다. 알약 문법은 사이트 헤더 칩과 같은 무게(DESIGN.md 칩). */
+  .pills{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 2px}
+  .pills a{display:inline-block;padding:4px 11px;border:1px solid var(--line);border-radius:999px;
+           font-size:13px;text-decoration:none;color:inherit;background:var(--card)}
+  .pills a:hover{border-color:var(--acc);color:var(--acc)}
+  .pills .empty{font-size:12.5px;color:var(--dim)}
   .tokrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0 4px}
   .tokrow input{flex:1;min-width:220px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;
                 background:var(--bg);color:var(--fg);font:13px ui-monospace,Menlo,monospace}
@@ -52,6 +64,7 @@
   .tokrow button#clear:hover{border-color:var(--acc)}
   .note{font-size:12.5px;color:var(--dim);line-height:1.55;margin-top:6px}
   .ok{color:#16a34a}.warn{color:#d97706}
+  code{font:12.5px ui-monospace,Menlo,monospace}
   footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--dim)}
   .runbox { border:1px solid var(--line,#e5e7eb); border-radius:10px; padding:14px 16px; font-size:14px;
             line-height:1.6; background:#fafafa; }
@@ -62,12 +75,15 @@
   .runbox .k { color:#6f7178; }
   .runbox ul { margin:8px 0 0; padding-left:18px; }
   .runbox li { margin:3px 0; }
+  @media (prefers-color-scheme:dark){
+    .runbox{background:#151920} .runbox.ok{background:#12201a} .runbox.bad{background:#241416} .runbox.debt{background:#231e12}
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>호재맵 — 관리자</h1>
-  <div class="sub">운영 도구 모음 · <a href="index.html">← 사이트로</a></div>
+  <div class="sub">사이트 헤더에 없는 입구는 전부 여기 있습니다 · <a href="index.html">← 사이트로</a></div>
 
   <!-- ★★ **예약 실행이 조용히 실패한다** (2026-08-31 · 3주 연속 실패로 발각).
        QA 오류로 [6] 배포가 중단되면 수집분은 디스크에 남지만 **라이브엔 안 나간다**. 그런데
@@ -77,19 +93,33 @@
   <h2>마지막 실행</h2>
   <div id="runbox" class="runbox">읽는 중…</div>
 
-  <h2>데이터 · 기준</h2>
+  <!-- 발행물 — **독자용**. 전국판은 사이트 헤더(🗞 주간 신호)에도 있지만 지역판·지난 호는
+       발행물 안에서만 갈 수 있었다. 목록은 weekly_index.json이 정본(손목록 금지 — 파일 머리 주석). -->
+  <h2>발행물 <small>독자용 · 매주 월요일</small></h2>
+  <div class="grid">
+    <a class="card" id="lnk-weekly" href="weekly.html" target="_blank"><b>🗞 주간 신호 — 전국판</b>
+      <span id="weeklynote">이번 주 포착된 신호 — 새로 나온 것·단계가 오른 것·취소된 것.</span></a>
+    <a class="card" href="report.html" target="_blank"><b>🧾 주간 변경 보고 <small style="font-weight:500;color:var(--dim)">운영자용</small></b>
+      <span>무인 수집 회전에서 바뀐 것의 원본 diff. 발행물의 재료입니다(빌드가 자동 생성).</span></a>
+  </div>
+  <div class="note" style="margin-top:12px"><b>지역판</b> — 같은 호를 시도별로 봅니다(호수·기간·규칙 동일)</div>
+  <div class="pills" id="regions"><span class="empty">weekly_index.json 읽는 중…</span></div>
+  <div class="note" style="margin-top:10px"><b>지난 호</b> — 발행 시점 그대로 동결된 본문</div>
+  <div class="pills" id="backs"><span class="empty">읽는 중…</span></div>
+
+  <h2>운영 도구</h2>
   <div class="grid">
     <a class="card" href="settings.html" target="_blank"><b>⚙ 기준 설정</b>
-      <span>등급 눈금(면적·금액·세대수)과 영향 반경. <code>thresholds.json</code>에 저장됩니다.</span></a>
+      <span>등급 눈금(면적·금액·세대수)과 영향 반경. <code>thresholds.json</code>에 저장됩니다(공개본에서는 저장 불가 — 화면 상단 배너가 말합니다).</span></a>
     <a class="card" href="source_status.html" target="_blank"><b>📡 소스 수집 현황</b>
       <span>소스별로 <b>언제·몇 건·어느 기간</b>을 수집했는지. 정체된 커넥터를 여기서 잡습니다.
       <code>source_status.py</code>가 매 빌드 도출합니다.</span></a>
     <a class="card" href="rail_reference.html" target="_blank"><b>🚈 노선·역 대장</b>
-      <span>신규 철도 노선·역 좌표 대장. 영향권 판정의 기준입니다.</span></a>
-    <a class="card" href="report.html" target="_blank"><b>🗞 주간 변경</b>
-      <span>무인 수집 회전에서 바뀐 것. 빌드가 자동 생성합니다.</span></a>
+      <span>신규 철도·도로 노선과 역·IC 좌표 대장. 영향권 판정의 기준입니다.</span></a>
     <a class="card" href="index.html?ops=1&amp;view=undet" target="_blank"><b>❓ 등급 없음 목록</b>
       <span>등급 기준에 안 맞아 미정으로 남은 호재. <b>목록이 바로 열립니다.</b></span></a>
+    <a class="card" href="index.html?ops=1" target="_blank"><b>🧰 운영 모드로 사이트 열기</b>
+      <span>헤더에 운영 칩(기준 설정·대장·주간 변경)이 켜진 채로 지도를 엽니다. 이 브라우저에만 기억되고 <code>?ops=0</code>으로 끕니다.</span></a>
     <!-- 기준 저장소(원격) 이력 — 토큰은 **여기서 받지 않는다.** 그 토큰은 settings.html이
          저장할 때 쓰는 것이고 같은 오리진의 localStorage라 여기서도 읽힌다. 입력칸을 하나 더
          두면 같은 값을 두 곳에서 관리하게 된다(§간결한 프로세스 — 정보를 추가하지 않는 분할). -->
@@ -121,6 +151,19 @@
       <span>소스·추출·가공·매핑 규칙. 사이트 헤더에서도 열립니다.</span></a>
     <a class="card" href="DATA_STANDARD.md" target="_blank"><b>📋 데이터 표준</b>
       <span>필드 정의와 등급·단계 규칙의 원문.</span></a>
+  </div>
+
+  <!-- 상태 파일 — 화면이 아니라 **기계가 읽는 정본**이다. 위 「마지막 실행」이 이 파일들을 요약하지만,
+       원문을 직접 볼 입구도 있어야 요약이 틀렸을 때 잡는다(요약은 투영이지 정본이 아니다). -->
+  <h2>상태 파일 <small>기계가 읽는 정본 — 위 요약의 원문</small></h2>
+  <div class="pills">
+    <a href="build_status.json" target="_blank">build_status.json</a>
+    <a href="qa_debt_open.json" target="_blank">qa_debt_open.json</a>
+    <a href="eum_backfill_progress.json" target="_blank">eum_backfill_progress.json</a>
+    <a href="eum_enroll.json" target="_blank">eum_enroll.json</a>
+    <a href="upis_facility_geom.json" target="_blank">upis_facility_geom.json</a>
+    <a href="thresholds.json" target="_blank">thresholds.json</a>
+    <a href="weekly_index.json" target="_blank">weekly_index.json</a>
   </div>
 
   <footer>
@@ -176,6 +219,35 @@
   $("clear").onclick = () => { localStorage.removeItem(K); apply(); };
   $("tok").addEventListener("keydown", e => { if (e.key === "Enter") $("save").click(); });
   apply();
+})();
+</script>
+
+<script>
+/* 발행물 색인 — `weekly_index.json`이 정본(weekly_issue.py가 발행 때마다 도출). 여기서는 읽기만 한다.
+   ⚠ 링크 접두 `weekly_region/`·`weekly_back/`는 build_all이 **폴더 배포 근거**로 읽는 문자열이다 —
+     허브가 그 폴더를 링크하면 폴더째 배포된다(weekly.html과 같은 규약). 지우면 배포에서 빠진다. */
+(async () => {
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const R = document.getElementById("regions"), B = document.getElementById("backs");
+  let idx = null;
+  try { const r = await fetch("weekly_index.json?t=" + Date.now()); idx = r.ok ? await r.json() : null; } catch (e) { idx = null; }
+  if (!idx) {
+    R.innerHTML = '<span class="empty">weekly_index.json이 없습니다 — 발행(weekly_issue.py)이 아직 한 번도 안 돌았거나 배포 전</span>';
+    B.innerHTML = ""; return;
+  }
+  const wn = document.getElementById("weeklynote");
+  if (wn && idx.no) wn.innerHTML = `제${esc(idx.no)}호 · ${esc(idx.issue_date)} 발행 (기간 ${esc(idx.since)}~) — 새로 나온 것·단계가 오른 것·취소된 것.`;
+  const regs = idx.regions || [];
+  R.innerHTML = regs.length
+    ? regs.map(x => `<a href="weekly_region/${encodeURIComponent(x.sd)}.html" target="_blank">${esc(x.sd)}</a>`).join("")
+    : '<span class="empty">지역판 없음</span>';
+  const backs = idx.back || [];
+  // 지난 호 = 현재 호를 뺀 이력. 1호뿐이면 「아직 없다」고 말한다(빈칸은 사실을 말하지 않는다 — P5).
+  const prev = backs.filter(b => b.issue_date !== idx.issue_date);
+  B.innerHTML = prev.length
+    ? prev.map(b => `<a href="weekly_back/${encodeURIComponent(b.issue_date)}.html" target="_blank">제${esc(b.no)}호 · ${esc(b.issue_date)}</a>`).join("")
+    : `<span class="empty">아직 지난 호가 없습니다 — 현재 제${esc(idx.no)}호(${esc(idx.issue_date)})가 첫 호입니다.` +
+      (backs.length ? ` 현재 호의 동결본: <a href="weekly_back/${encodeURIComponent(idx.issue_date)}.html" target="_blank">${esc(idx.issue_date)}</a>` : "") + `</span>`;
 })();
 </script>
 

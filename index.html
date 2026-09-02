@@ -14,6 +14,29 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="호재맵">
+<!-- ★ 부트 지연 계측 (2026-09-02 · 알렉스 「최초에 열었을 때 화면이 너무 버벅인다」).
+     화면이 **자기 지연을 스스로 기록**한다 — 50ms 초과 메인스레드 작업(longtask)과 부트 단계 표식.
+     콘솔에서 `__perf()` 한 줄이면 「언제·얼마나 막혔나」가 표로 나온다. 실측 없이는 원인을 못 잡는다:
+     실제로 2.7초 한 덩어리의 정체가 어댑터·렌더(합쳐 0.1초)가 아니라 시군구 귀속 인덱스였다(sggBBOf 주석).
+     ⚠ 비용은 배열 하나(최대 200건)다. 값을 서버로 보내지 않는다. -->
+<script>
+(() => {
+  const LT = window.__lt = [];
+  try {
+    new PerformanceObserver(l => l.getEntries().forEach(e => {
+      if (LT.length < 200) LT.push({ at: Math.round(e.startTime), ms: Math.round(e.duration) });
+    })).observe({ type: "longtask", buffered: true });
+  } catch (e) {}
+  window.__perf = () => {
+    const marks = performance.getEntriesByType("mark").map(m => ({ mark: m.name, at: Math.round(m.startTime) }));
+    const paint = performance.getEntriesByType("paint").map(p => ({ mark: p.name, at: Math.round(p.startTime) }));
+    const blocked = LT.reduce((a, e) => a + e.ms, 0);
+    console.table(paint.concat(marks)); console.table(LT);
+    console.log(`막힌 시간 합계 ${blocked}ms · longtask ${LT.length}건`);
+    return { paint, marks, longtasks: LT, blocked };
+  };
+})();
+</script>
 <link rel="apple-touch-icon" href="icon-180.png">
 <title>호재맵 — 신호 추적</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4759,16 +4782,34 @@ function ensureSggRings() {
     ringsOf(f).forEach(r => (m[disp] = m[disp] || []).push(r)); });
   window._sggRings = m; return true;
 }
+/* 시군구 링 bbox — **렌더러 무관 프리필터** (2026-09-02 · 알렉스 「최초에 열었을 때 너무 버벅인다」).
+   ☠ 종전엔 프리필터가 `window._sggBounds`(Leaflet `poly.getBounds()`)였는데 그건 **Leaflet 렌더러만**
+     만든다. 카카오(라이브)에서는 사전이 비어 있어 아래 두 루프가 **252개 시군구 링을 전부** 점포함
+     검사했다 — 실측 라이브: ensureRailSgg 221ms + buildSggIndex 1,461ms = **1.7초 한 덩어리**가
+     첫 화면 직후 메인 스레드를 막았다(어댑터·렌더는 다 합쳐 0.1초). 폰은 몇 배다.
+     「규칙이 한쪽(Leaflet)에만 걸려 반대쪽이 조용히 예외」의 렌더러판 — 2026-08-10 같은 자리에서
+     같은 병(_sggBounds 둘 다 필수 관문)을 고쳤는데 프리필터는 남겨 뒀었다.
+   ⇒ bbox는 링에서 **직접** 만든다(렌더러 무관). `sggRelation`이 이미 같은 계산을 `_sggBB`에
+     캐시하고 있었다 — 자를 하나로 합친다(같은 자는 한 함수로). */
+function sggBBOf(disp) {
+  const c = (window._sggBB = window._sggBB || {});
+  if (c[disp]) return c[disp];
+  const rings = window._sggRings && window._sggRings[disp];
+  if (!rings || !rings.length) return null;
+  let x0 = 999, y0 = 999, x1 = -999, y1 = -999;
+  rings.forEach(r => r.forEach(v => { if (v[0] < x0) x0 = v[0]; if (v[0] > x1) x1 = v[0];
+                                      if (v[1] < y0) y0 = v[1]; if (v[1] > y1) y1 = v[1]; }));
+  return (c[disp] = [x0, y0, x1, y1]);
+}
+const inSggBB = (bb, x, y) => !bb || (x >= bb[0] && x <= bb[2] && y >= bb[1] && y <= bb[3]);
 function ensureRailSgg() {
   if (!ensureSggRings()) return false;
-  window._sggBounds = window._sggBounds || {};   // 프리필터 사전(비어 있어도 동작)
   if (RAIL_SIG.length && RAIL_SIG[0]._sgg === undefined) {
     const entries = Object.entries(window._sggRings);
     RAIL_SIG.forEach(s => {
       const [x, y] = s.geometry.coordinates; s._sgg = null;
       for (const [disp, rings] of entries) {
-        const bd = window._sggBounds[disp];
-        if (bd && !bd.contains([y, x])) continue;   // bbox 프리필터
+        if (!inSggBB(sggBBOf(disp), x, y)) continue;   // bbox 프리필터(렌더러 무관)
         if (rings.some(r => pointInRing(x, y, r))) { s._sgg = disp; break; }
       }
       // 실제 소재 시도·시군구 부여 (전국 확장 2026-07-17: 옛 sd:"수도권" 하드코딩 → 좌표 기준 산출)
@@ -4796,8 +4837,7 @@ function buildSggIndex() {
       for (const p of roadLinePoints(s)) {
         for (const [disp, rings] of entries) {
           if (hit.has(disp)) continue;
-          const bd = window._sggBounds[disp];
-          if (bd && !bd.contains([p.coord[1], p.coord[0]])) continue;
+          if (!inSggBB(sggBBOf(disp), p.coord[0], p.coord[1])) continue;   // bbox 프리필터(렌더러 무관)
           if (rings.some(r => pointInRing(p.coord[0], p.coord[1], r))) hit.add(disp);
         }
       }
@@ -5632,14 +5672,7 @@ function sggRelation(sig, disp) {
   const pts = signalPoints(sig);
   if (!pts.length) return null;
   const R = getRadius(sig);
-  const c = (window._sggBB = window._sggBB || {});
-  if (!c[disp]) {
-    let x0 = 999, y0 = 999, x1 = -999, y1 = -999;
-    rings.forEach(r => r.forEach(v => { if (v[0] < x0) x0 = v[0]; if (v[0] > x1) x1 = v[0];
-                                        if (v[1] < y0) y0 = v[1]; if (v[1] > y1) y1 = v[1]; }));
-    c[disp] = [x0, y0, x1, y1];
-  }
-  const bb = c[disp];
+  const bb = sggBBOf(disp);   // 링 bbox 캐시 — ensureRailSgg·buildSggIndex와 **같은 자**(sggBBOf)
   const dLat = R / 110540, dLng = R / (111320 * Math.cos((bb[1] + bb[3]) / 2 * Math.PI / 180));
   if (!pts.some(p => p.coord[0] >= bb[0] - dLng && p.coord[0] <= bb[2] + dLng
                   && p.coord[1] >= bb[1] - dLat && p.coord[1] <= bb[3] + dLat)) return null;
@@ -8457,6 +8490,7 @@ function hojaeMarkerImage(col, r, bw, ph, fillOp, alpha, halo, shape) {
    카카오 level은 낮을수록 확대(1=최대,14=최소) — Leaflet zoom과 반대. DONG_LV=6(z12)·APT_LV=4(z14) 실측 보정.
    circleMarker→CustomOverlay 고정픽셀 div, bindTooltip→공유 floating div, 반경 Circle은 meter(getRadius=meter) 직결. */
 function initKakao() {
+  performance.mark("map:init-start");   // 카카오 SDK 로드 완료 → 우리 초기화 시작(계측 — head의 __perf)
   const K = kakao.maps;
   const LL = (lng, lat) => new K.LatLng(lat, lng);   // [lng,lat] → LatLng
   const el = document.getElementById("map"); el.style.position = "relative";
@@ -9184,13 +9218,18 @@ function initKakao() {
                              || SIGNALS.find(s => s._road && s.road_ref && p.name.includes(s.road_ref));
           showSignal(sig || roadLineToSignal(p, f.geometry), false); return; }
         const flat = f.geometry.type === "MultiLineString" ? f.geometry.coordinates.flat() : f.geometry.coordinates; showSignal(railToSignal(p, flat[Math.floor(flat.length / 2)]), false); };
-      const objs = [], hits = [];
-      /* **근거 있는 구간과 없는 구간을 나눠 그린다** (2026-08-01 사용자 "팔아먹은 선형 다 있던거 복구해").
-         종전엔 근거 없는 구간을 **지웠다** — 그래서 46개 노선이 화면에서 통째로 사라졌다.
-         지우는 대신 말한다: `geom_solid`(근거 있음)는 진하게, `geom_bridges`(지점 사이 직선)는 연하게.
-         `geom_solid`가 빈 배열이면 그 노선은 **전 구간이 연한 점선** — 있다는 사실과 모른다는 사실을
-         동시에 보여준다(P2·P5). 선을 그릴 점이 2개 미만일 때만 여전히 미표시. */
-      const solid = drawnParts(p, f.geometry).solid;   // 정의는 drawnParts 하나 — 회랑도 같은 것을 쓴다
+      /* ★★ 지연 생성 + 다중경로 병합 (2026-09-02 · 알렉스 「최초에 열었을 때 화면이 너무 버벅인다」).
+         ☠ 실측(로컬 8777·카카오 · head의 __perf): 이 함수가 폴리라인 **19,609개**를 한 번에 만들었다
+           (노선 2,802개 — 그중 2,330개가 시군 회랑). 생성자만 661ms, 첫 실행은 **3.1초 한 덩어리**로
+           메인 스레드를 막았다 — 첫 화면이 뜨고도 손을 못 대는 그 시간이다. 폰은 몇 배다.
+           뷰포트 컬링(renderRail · 2026-08-11)은 **붙이는 수**만 줄였지 **만드는 수**는 그대로였다 —
+           서울 뷰에 걸리는 노선은 수십 개인데 전국 전량을 만들고 시작했다(규칙이 한쪽에만).
+         ⇒ ① 노선의 카카오 객체는 **처음 보일 때** 만든다(`build` — renderRail이 show일 때 부른다).
+              나머지는 유휴 시간에 조금씩 미리 만든다(`_prebuildIdle`) — 팬 때 한꺼번에 만들지 않도록.
+            ② 같은 스타일의 구간은 **다중경로 폴리라인 하나**로 합친다(카카오 path = 좌표 배열의 배열 ·
+              실측 getLength가 합산됨). 색·굵기·투명도·dash·zIndex 문법은 그대로다 — 객체 수만 준다.
+         ⚠ 표시 규칙(정직성 채널)·데이터는 하나도 안 바뀐다. **언제·몇 개로 만드느냐**만 바뀐다.
+         ⚠ 아래 스타일 결정의 사연(케이싱·점선 굵기·간축본·보간 표기)은 종전 주석 그대로 — 지우지 않았다. */
       // 흰 케이싱 + 색 본선(2026-07-30) — 지하철 노선도의 표준 문법. 종전엔 색 선 하나가
       // 주황 도로망 위에 그대로 얹혀 배경과 섞였다. 케이싱이 배경을 끊어 주므로 본선을
       // 더 얇게 해도 오히려 또렷하다. 점선은 촘촘한 dot로 바꿔 톱니를 없앤다.
@@ -9204,27 +9243,13 @@ function initKakao() {
       //   에서는 80m 톨러런스 간축본으로 스위치한다(lv7에서 80m ≈ 화면 2~4px — 형상 훼손 없음).
       //   데이터는 그대로다(표시 전용) — 정직성 채널(색·투명도·dash)은 두 벌이 동일해야 하므로
       //   생성을 한 함수(_mkSeg)로 묶는다(스타일 사본이 갈라지는 쌍 사고 방지).
-      const objsLo = [];
+      /* **근거 있는 구간과 없는 구간을 나눠 그린다** (2026-08-01 사용자 "팔아먹은 선형 다 있던거 복구해").
+         종전엔 근거 없는 구간을 **지웠다** — 그래서 46개 노선이 화면에서 통째로 사라졌다.
+         지우는 대신 말한다: `geom_solid`(근거 있음)는 진하게, `geom_bridges`(지점 사이 직선)는 연하게.
+         `geom_solid`가 빈 배열이면 그 노선은 **전 구간이 연한 점선** — 있다는 사실과 모른다는 사실을
+         동시에 보여준다(P2·P5). 선을 그릴 점이 2개 미만일 때만 여전히 미표시. */
+      const solid = drawnParts(p, f.geometry).solid;   // 정의는 drawnParts 하나 — 회랑도 같은 것을 쓴다
       const hasSolid = !!(p.geom_solid && p.geom_solid.length);
-      const _mkSeg = (seg, isBridge) => {
-        const so = isBridge ? (hasSolid ? (subdued ? .5 : .85) : .5) : (subdued ? .5 : .85);
-        const mo = isBridge ? (hasSolid ? (subdued ? .5 : isRoad ? .8 : .92) : .38)
-                            : (subdued ? .5 : isRoad ? .8 : .92);
-        for (const [sg, arr] of [[seg, objs], [simplifyLine(seg, 80), objsLo]]) {
-          const path = sg.map(([x, y]) => LL(x, y));
-          // ★ 케이싱은 **표식을 달아 둔다**(2026-08-11) — 광역 줌(lv10+)에서만 접기 위해서다.
-          //   흰 케이싱은 촘촘한 기본지도 위에서 선을 끊어 주는 장치인데(2026-07-30), 전국 뷰에서는
-          //   배경이 성글어 역할이 거의 없으면서 **폴리라인 수를 정확히 2배**로 만든다.
-          //   노선이 사라지는 게 아니라 후광만 접는 것이라 「줌아웃엔 선만」 규칙과 충돌하지 않는다.
-          const _cas = new K.Polyline({ path, strokeColor: "#ffffff", strokeWeight: dashed ? 6 : 5.6,
-            strokeOpacity: so, strokeStyle: "solid", zIndex: 2 });
-          _cas._casing = true;
-          arr.push(_cas);
-          arr.push(new K.Polyline({ path, strokeColor: col, strokeWeight: dashed ? 3.6 : 3,
-            strokeOpacity: mo, strokeStyle: dashed ? "shortdot" : "solid", zIndex: 3 }));
-        }
-      };
-      solid.forEach(seg => _mkSeg(seg, false));
       /* **보간 구간은 다르게 그린다** (2026-08-01 사용자 "말이 되냐 중간에 끊기는게?").
          정점이 촘촘한 선의 드문 빈틈은 **추측이 아니라 보간**이다 — 양쪽 다 실제 회랑 위의 점이고
          그 사이로 경로가 지난다는 건 안다. 그래서 끊지 않고 잇되, 그 구간만 **연하게** 그려
@@ -9241,30 +9266,63 @@ function initKakao() {
            지우지 않는다: 클릭 팝업·카드의 「이 중 Nkm는 보간」 문구가 말한다(P2는 텍스트 채널로).
          · **전 구간이 보간**(2점 앵커·성긴 근사, solid 없음) = 종전대로 연하게 — 이건 빈틈 잇기가
            아니라 선 전체가 근사라, 진하게 그리면 실형상 행세다(파주 앵커선 문법 — 사용자 "됐고"). */
-      (p.geom_bridges || []).forEach(seg => _mkSeg(seg, true));   // 스타일은 _mkSeg 한 곳(간축본 동시 생성)
-      segs.forEach(seg => {
-        const path = seg.map(([x, y]) => LL(x, y));
-        // 히트선 정점 다이어트(1/3) — 단 **꺾임 정점은 보존**한다. 종전 무조건 i%3은
-        // 정점이 몇 개 없는 앵커 노선에서 중간 경유점을 지워 히트선이 경로를 통째로
-        // 이탈시켰다(실측 최대 29km — "커서 대도 미리보기 안 되는 구간"의 원인, 2026-07-21).
-        // 성긴 경로(정점≤40)는 전량 유지, 긴 경로는 i%3 + 방향변화 12°+ 정점 유지.
-        const hp = path.length <= 40 ? path : path.filter((pt, i) => {
-          if (i === 0 || i === path.length - 1 || i % 3 === 0) return true;
-          const a = path[i - 1], b = path[i + 1];
-          const v1x = pt.getLng() - a.getLng(), v1y = pt.getLat() - a.getLat();
-          const v2x = b.getLng() - pt.getLng(), v2y = b.getLat() - pt.getLat();
-          const n1 = Math.hypot(v1x, v1y), n2 = Math.hypot(v2x, v2y);
-          if (!n1 || !n2) return false;
-          const cos = (v1x * v2x + v1y * v2y) / (n1 * n2);
-          return cos < 0.978;   // ≈12° 이상 꺾이는 정점은 남긴다
+      const build = o => {
+        const objs = o.objs, objsLo = o.objsLo, hits = o.hits;
+        const buckets = new Map();   // "so|mo"(투명도 쌍 = 스타일) → { so, mo, hi: [경로…], lo: [간축 경로…] }
+        const _mkSeg = (seg, isBridge) => {
+          const so = isBridge ? (hasSolid ? (subdued ? .5 : .85) : .5) : (subdued ? .5 : .85);
+          const mo = isBridge ? (hasSolid ? (subdued ? .5 : isRoad ? .8 : .92) : .38)
+                              : (subdued ? .5 : isRoad ? .8 : .92);
+          const k = so + "|" + mo;
+          let b = buckets.get(k); if (!b) { b = { so, mo, hi: [], lo: [] }; buckets.set(k, b); }
+          b.hi.push(seg.map(([x, y]) => LL(x, y)));
+          b.lo.push(simplifyLine(seg, 80).map(([x, y]) => LL(x, y)));
+        };
+        solid.forEach(seg => _mkSeg(seg, false));
+        (p.geom_bridges || []).forEach(seg => _mkSeg(seg, true));   // 스타일은 _mkSeg 한 곳(간축본 동시 생성)
+        for (const b of buckets.values()) {
+          for (const [paths, arr] of [[b.hi, objs], [b.lo, objsLo]]) {
+            if (!paths.length) continue;
+            // ★ 케이싱은 **표식을 달아 둔다**(2026-08-11) — 광역 줌(lv10+)에서만 접기 위해서다.
+            //   흰 케이싱은 촘촘한 기본지도 위에서 선을 끊어 주는 장치인데(2026-07-30), 전국 뷰에서는
+            //   배경이 성글어 역할이 거의 없으면서 **폴리라인 수를 정확히 2배**로 만든다.
+            //   노선이 사라지는 게 아니라 후광만 접는 것이라 「줌아웃엔 선만」 규칙과 충돌하지 않는다.
+            const _cas = new K.Polyline({ path: paths, strokeColor: "#ffffff", strokeWeight: dashed ? 6 : 5.6,
+              strokeOpacity: b.so, strokeStyle: "solid", zIndex: 2 });
+            _cas._casing = true;
+            arr.push(_cas);
+            arr.push(new K.Polyline({ path: paths, strokeColor: col, strokeWeight: dashed ? 3.6 : 3,
+              strokeOpacity: b.mo, strokeStyle: dashed ? "shortdot" : "solid", zIndex: 3 }));
+          }
+        }
+        const hps = [];
+        segs.forEach(seg => {
+          const path = seg.map(([x, y]) => LL(x, y));
+          // 히트선 정점 다이어트(1/3) — 단 **꺾임 정점은 보존**한다. 종전 무조건 i%3은
+          // 정점이 몇 개 없는 앵커 노선에서 중간 경유점을 지워 히트선이 경로를 통째로
+          // 이탈시켰다(실측 최대 29km — "커서 대도 미리보기 안 되는 구간"의 원인, 2026-07-21).
+          // 성긴 경로(정점≤40)는 전량 유지, 긴 경로는 i%3 + 방향변화 12°+ 정점 유지.
+          const hp = path.length <= 40 ? path : path.filter((pt, i) => {
+            if (i === 0 || i === path.length - 1 || i % 3 === 0) return true;
+            const a = path[i - 1], b = path[i + 1];
+            const v1x = pt.getLng() - a.getLng(), v1y = pt.getLat() - a.getLat();
+            const v2x = b.getLng() - pt.getLng(), v2y = b.getLat() - pt.getLat();
+            const n1 = Math.hypot(v1x, v1y), n2 = Math.hypot(v2x, v2y);
+            if (!n1 || !n2) return false;
+            const cos = (v1x * v2x + v1y * v2y) / (n1 * n2);
+            return cos < 0.978;   // ≈12° 이상 꺾이는 정점은 남긴다
+          });
+          if (hp.length >= 2) hps.push(hp);
         });
-        const hit = new K.Polyline({ path: hp, strokeColor: "#000", strokeWeight: 14, strokeOpacity: 0.001, zIndex: 4 });
-        K.event.addListener(hit, "click", clickHandler);
-        K.event.addListener(hit, "mouseover", mev => showTip(html, evToClient(mev), true));
-        K.event.addListener(hit, "mousemove", mev => showTip(html, evToClient(mev), true));
-        K.event.addListener(hit, "mouseout", hideTip);
-        hits.push(hit);
-      });
+        if (hps.length) {   // 히트선도 노선당 **하나**(다중경로) — 핸들러는 어차피 노선 단위였다
+          const hit = new K.Polyline({ path: hps, strokeColor: "#000", strokeWeight: 14, strokeOpacity: 0.001, zIndex: 4 });
+          K.event.addListener(hit, "click", clickHandler);
+          K.event.addListener(hit, "mouseover", mev => showTip(html, evToClient(mev), true));
+          K.event.addListener(hit, "mousemove", mev => showTip(html, evToClient(mev), true));
+          K.event.addListener(hit, "mouseout", hideTip);
+          hits.push(hit);
+        }
+      };
       // 노선명 배지 재료 — **기점(첫 좌표)**에 단다(2026-08-04 사용자 "뱃지를 맨 앞으로 빼고" —
       // 중점 배치는 GTX D처럼 긴 노선에서 김포 뷰포트에 배지가 안 보였다. 아실도 기점에 단다).
       // 목표년도 = 마일스톤 eta(소스가 준 목표만, 없으면 미표기 P2)
@@ -9282,7 +9340,7 @@ function initKakao() {
           if (c[0] < _bb[0]) _bb[0] = c[0];  if (c[1] < _bb[1]) _bb[1] = c[1];
           if (c[0] > _bb[2]) _bb[2] = c[0];  if (c[1] > _bb[3]) _bb[3] = c[1];
         }
-      railLineObjs.push({ objs, objsLo, hits, isRoad, ph: p.phase || "계획", bb: isFinite(_bb[0]) ? _bb : null,
+      railLineObjs.push({ objs: [], objsLo: [], hits: [], built: false, build, isRoad, ph: p.phase || "계획", bb: isFinite(_bb[0]) ? _bb : null,
         nms: [p.name, p.full, p.official_name].filter(Boolean),   // 노선 격리(상세 하이라이트) 매칭 키
         ck: clickHandler, bnm: p.name, beta: _beta, mid: _bflat[0],
         lvl: p.lvl || (isRoad ? "C" : railLevelOf(p.full || p.name, p.linekind)) });   // 등급 LOD용(어댑터와 같은 폴백)
@@ -9303,16 +9361,22 @@ function initKakao() {
           const cut = t0.search(/도시계획시설|도시관리계획|군계획시설|군관리계획|도시계획도로|결정\s*\(|실시계획/);
           const nm2 = (cut > 0 ? t0.slice(0, cut) : "").replace(/[\(\{\[].*$/, "").trim();
           if (nm2.length > 1) ebnm = nm2.length > 16 ? nm2.slice(0, 15) + "…" : nm2; } }
-      const objs = [], objsLo = [], hits = [];
       const _eb = [Infinity, Infinity, -Infinity, -Infinity];
-      for (const path of segs) {
-        if (!path || path.length < 2) continue;
-        const ll = path.map(([x, y]) => LL(x, y));
-        objs.push(new K.Polyline({ path: ll, strokeColor: col, strokeWeight: 10, strokeOpacity: .10, zIndex: 14 }),
-                  new K.Polyline({ path: ll, strokeColor: col, strokeWeight: 2.4, strokeOpacity: .8, strokeStyle: "shortdash", zIndex: 15 }));
-        objsLo.push(new K.Polyline({ path: simplifyLine(path, 80).map(([x, y]) => LL(x, y)),
-                  strokeColor: col, strokeWeight: 2, strokeOpacity: .7, strokeStyle: "shortdash", zIndex: 15 }));
-        const hit = new K.Polyline({ path: ll, strokeColor: "#000", strokeWeight: 14, strokeOpacity: .001, zIndex: 16 });
+      const _epaths = segs.filter(path => path && path.length >= 2);
+      for (const path of _epaths)
+        for (const c of path) { if (c[0] < _eb[0]) _eb[0] = c[0]; if (c[1] < _eb[1]) _eb[1] = c[1];
+          if (c[0] > _eb[2]) _eb[2] = c[0]; if (c[1] > _eb[3]) _eb[3] = c[1]; }
+      if (!_epaths.length) continue;
+      /* 객체는 **처음 보일 때** 만든다 — 위 원장 노선의 build와 같은 문법(2026-09-02 · 시군 회랑이 노선
+         2,802개 중 2,330개라 지연 생성의 효과는 여기서 가장 크다). 갈래(path)마다 폴리라인을 만들던 것을
+         **다중경로 하나**로 합친다 — 클릭·호버 핸들러는 원래 신호 단위였다. */
+      const build = o => {
+        const lls = _epaths.map(path => path.map(([x, y]) => LL(x, y)));
+        o.objs.push(new K.Polyline({ path: lls, strokeColor: col, strokeWeight: 10, strokeOpacity: .10, zIndex: 14 }),
+                    new K.Polyline({ path: lls, strokeColor: col, strokeWeight: 2.4, strokeOpacity: .8, strokeStyle: "shortdash", zIndex: 15 }));
+        o.objsLo.push(new K.Polyline({ path: _epaths.map(path => simplifyLine(path, 80).map(([x, y]) => LL(x, y))),
+                    strokeColor: col, strokeWeight: 2, strokeOpacity: .7, strokeStyle: "shortdash", zIndex: 15 }));
+        const hit = new K.Polyline({ path: lls, strokeColor: "#000", strokeWeight: 14, strokeOpacity: .001, zIndex: 16 });
         // ⚠ _ovClickTs를 먼저 찍는다 — 지도 click(goHome)이 같은 클릭에 연달아 발화해
         //   카드가 열리자마자 닫힌다(2026-09-01 알렉스 「선형은 클릭이 안 되고」 — 라이브 재현·확정)
         K.event.addListener(hit, "click", () => { _ovClickTs = Date.now(); showSignal(s, false); });
@@ -9325,22 +9389,38 @@ function initKakao() {
           K.event.addListener(hit, "mouseover", mev => showTip(_ehtml, evToClient(mev), true));
           K.event.addListener(hit, "mousemove", mev => showTip(_ehtml, evToClient(mev), true));
           K.event.addListener(hit, "mouseout", hideTip); }
-        hits.push(hit);
-        for (const c of path) { if (c[0] < _eb[0]) _eb[0] = c[0]; if (c[1] < _eb[1]) _eb[1] = c[1];
-          if (c[0] > _eb[2]) _eb[2] = c[0]; if (c[1] > _eb[3]) _eb[3] = c[1]; }
-      }
-      if (!objs.length) continue;
+        o.hits.push(hit);
+      };
       /* 배지 이름 = 짧은 사실 표기 (2026-09-01 알렉스 「신규 도로들은 배지가 없는데」).
          고시 제목 전체는 배지가 못 된다 — ① 결정조서의 시설 표기(중로1-108 외 3)가 1순위,
          ② 없으면(진입도로류) 제목에서 보일러플레이트(도시계획시설…결정…고시)를 걷어낸 사업명.
          렌더 규칙(광역 줌 lv5~11·기점 앵커·겹침 해소·등급 순위)은 원장 노선과 같은 문법을 탄다. */
       const bnm = ebnm;
       const _mainSeg = segs.reduce((a, b) => ((b || []).length > (a || []).length ? b : a), segs[0]) || [];
-      railLineObjs.push({ objs, objsLo, hits, isRoad: true, eum: true, ph: s.phase || "계획",
+      railLineObjs.push({ objs: [], objsLo: [], hits: [], built: false, build, isRoad: true, eum: true, ph: s.phase || "계획",
         bb: isFinite(_eb[0]) ? _eb : null, nms: [s.title].filter(Boolean),
         ck: () => { _ovClickTs = Date.now(); showSignal(s, false); }, bnm, beta: "",
         mid: bnm && _mainSeg.length ? _mainSeg[0] : null, lvl: s.lvl || "C" });
     }
+  };
+  /* 유휴 시간에 남은 노선을 미리 만든다(2026-09-02) — 첫 화면은 보이는 노선만 만들고(build), 나머지는
+     브라우저가 한가할 때 조금씩. 팬으로 새 노선이 들어올 때 수십 개를 한꺼번에 만드는 일이 없어진다.
+     ⚠ requestIdleCallback이 없는 브라우저(Safari)는 50ms 타이머로 흉내 낸다 — 한 회에 최대 40개. */
+  let _pbHandle = 0;
+  const _prebuildIdle = () => {
+    if (_pbHandle || !railLineObjs) return;
+    // ⚠ timeout을 두지 않는다 — 두면 「한가하지 않아도」 2초 뒤 강제 실행되어 손가락 움직임 중에 끼어든다.
+    const ric = window.requestIdleCallback ? (cb => window.requestIdleCallback(cb))
+                                           : (cb => setTimeout(() => cb({ timeRemaining: () => 8 }), 50));
+    const step = dl => { _pbHandle = 0; let n = 0, left = false;
+      for (const o of railLineObjs) {
+        if (o.built) continue;
+        if (n && dl.timeRemaining() < 6) { left = true; break; }
+        o.built = true; o.build(o); n++;
+        if (n >= 40) { left = true; break; }
+      }
+      if (left) _pbHandle = ric(step); };
+    _pbHandle = ric(step);
   };
   const renderRail = () => {
     railLabels.forEach(o => o.setMap(null)); railLabels = [];
@@ -9348,6 +9428,7 @@ function initKakao() {
     const nData = RAIL.length + ROADF.length + EUM_SIG.length;   // eum 회랑도 선 레이어 — 지연 도착 시 재생성(2026-09-01)
     if (!nData) return;
     if (nData !== _railCacheN) { buildRailLines(); _railCacheN = nData; }   // 지연 로드 대응 — 데이터가 바뀐 경우만 재생성
+    _prebuildIdle();   // 보이는 노선은 아래 루프가 즉시(build), 나머지는 유휴 시간에(예열) — 이 호출은 뒤로 미뤄져 실행된다
     const catOn = filter.cat.has("교통");
     const phaseFiltering = filter.phase.size < PHASES.length;
     const lodSet = new Set(lodGrades(map.getLevel()));   // 선도 핀과 같은 등급 LOD(줌아웃=S만, 2026-07-22)
@@ -9385,6 +9466,7 @@ function initKakao() {
          노선의 표시 상태를 한 문자열로 요약해 두고, 같으면 통째로 건너뛴다.
          ⚠ zoom_start가 오버레이를 직접 내리므로 **거기서 `_sig`를 지운다** — 안 지우면
            「이미 켜져 있음」으로 착각해 줌 뒤에 선이 안 돌아온다(상태 캐시의 전형적 사고). */
+      if (show && !o.built) { o.built = true; o.build(o); }   // ★ 지연 생성 — 처음 보이는 순간에만(buildRailLines 주석)
       const _sig = show ? (_lo ? "lo" : "hi") + (_noCasing ? "-nc" : "") : "off";
       if (o._sig !== _sig) {
         o._sig = _sig;
@@ -9896,8 +9978,10 @@ function initKakao() {
   const highlightRings = ringsXY => { clearHighlight(); if (!ringsXY || !ringsXY.length) return; ringsXY.forEach(r => hlPolys.push(new K.Polygon({ map, path: r.map(([x, y]) => LL(x, y)), strokeWeight: 2.5, strokeColor: "#5b3fd4", strokeOpacity: .95, fillColor: "#5b3fd4", fillOpacity: .12, zIndex: 6 }))); };
   const sggRingsFn = () => { if (window._sggRings) return window._sggRings; const m = {}; SGG_GEO.features.forEach(f => { const disp = f.properties.sido + " " + sggDisplayName(f.properties.name); ringsOf(f).forEach(r => (m[disp] = m[disp] || []).push(r)); }); return (window._sggRings = m); };
   mapApi = { refreshPins, panTo: ll => map.panTo(LL(ll[0], ll[1])), showRadius, showRadiusMany, clearRadius, showAptAnchor, highlightRings, clearHighlight, clearAptMarker, emphasizePin, sggRings: sggRingsFn, highlightRoute, clearRoute, hideTip, closeAptPop };   // viewFilter 제거(2026-07-27) — 소비처 없는 죽은 API였다
+  performance.mark("map:ready");   // 카카오 지도 API가 준비된 시점(계측 — head의 __perf)
   // (뱃지 카운트는 지역/필터 기준 고정 — 지도 이동마다 갱신하지 않는다, 2026-07-23)
   refreshPins();
+  performance.mark("map:first-draw");   // 첫 핀·선 그리기까지 끝난 시점(계측)
 }
 
 /* ══════════ 타임라인 (간트, §4.7) ══════════ */
@@ -10464,8 +10548,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "010af1c434", "adverse_facilities.json": "7e782ec557", "apartments_all.json": "9b4f418697", "arch_signals.json": "669571731b", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "28c044af2f", "dart_signals.json": "1e2a409b35", "dps_signals.json": "678c016744", "eum_backfill_progress.json": "e409bf2d15", "eum_enroll.json": "d983b4792f", "eum_signals.json": "4a3f412c1f", "hospital_signals.json": "4c2ee28f91", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "cb9f79094c", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "4eddb23d1b", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2c50d26304", "mega_signals.json": "f7015a300a", "methodology.html": "17c98aa252", "park_signals.json": "fbf4268625", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "1f6adfae20", "rail_reference.html": "ae8c1e4c35", "rail_signals.json": "1525e109f8", "regions.json": "5d52225be0", "report.html": "49b9b36ec6", "retail_signals.json": "f5dac2d6bb", "road_signals.json": "400f519589", "school_signals.json": "db4650acc6", "settings.html": "1ca2007f59", "sfz_signals.json": "4f27cc072b", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "b561d411be", "signals.json": "94f5712a9f", "signals_auto.json": "aec59514a1", "signals_jeongbi_all.json": "ce53f5d100", "source_status.html": "c582d546cd", "thresholds.json": "543fa6e7eb", "upis_facility_geom.json": "62e28d39bd", "weekly.html": "164e5a1794"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260902h");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "2e3336077b", "adverse_facilities.json": "7e782ec557", "apartments_all.json": "9b4f418697", "arch_signals.json": "669571731b", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "c7efc5003c", "dart_signals.json": "1e2a409b35", "dps_signals.json": "678c016744", "eum_backfill_progress.json": "e409bf2d15", "eum_enroll.json": "d983b4792f", "eum_signals.json": "4a3f412c1f", "hospital_signals.json": "4c2ee28f91", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "cb9f79094c", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "4eddb23d1b", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2c50d26304", "mega_signals.json": "f7015a300a", "methodology.html": "17c98aa252", "park_signals.json": "fbf4268625", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "b7843b9947", "rail_reference.html": "ae8c1e4c35", "rail_signals.json": "1525e109f8", "regions.json": "5d52225be0", "report.html": "49b9b36ec6", "retail_signals.json": "f5dac2d6bb", "road_signals.json": "17f3cefe53", "school_signals.json": "db4650acc6", "settings.html": "1ca2007f59", "sfz_signals.json": "4f27cc072b", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "b561d411be", "signals.json": "94f5712a9f", "signals_auto.json": "aec59514a1", "signals_jeongbi_all.json": "ce53f5d100", "source_status.html": "d9a5381f53", "thresholds.json": "543fa6e7eb", "upis_facility_geom.json": "62e28d39bd", "weekly.html": "164e5a1794", "weekly_index.json": "e762fd0c84"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260902i");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
@@ -10484,7 +10568,10 @@ function srcArrive(name) {
      첫 화면을 빠르게 만들어 놓고 그 직후를 버벅이게 하면 남는 게 없다 ⇒ **한 번으로 합친다**.
      ⚠ 트레일링이라 마지막 도착 뒤에 그린다 — 늦게 오는 소스(정비 1.6s)는 자기 시점에 따로 그려진다. */
   clearTimeout(_srcTimer);
-  _srcTimer = setTimeout(() => { if (typeof renderAll === "function") renderAll(); }, 80);
+  _srcTimer = setTimeout(() => {
+    if (typeof renderAll === "function") renderAll();
+    performance.mark("stream:render");   // 무거운 소스 합류 뒤 다시 그린 시점(계측 — head의 __perf)
+  }, 80);
 }
 /* 확정 신호 ↔ 자동 도로 병합(승격) — 도로가 **늦게 도착하므로 함수로 뺀다**.
    ☠ 이걸 부트에 인라인으로 두면 도로가 늦게 올 때 병합이 아예 안 돌아 **같은 사업이 두 번**
@@ -10622,6 +10709,7 @@ function mergeRoadRefs() {
   initAxis();        // 모바일 축 칩 — 부트는 renderAll()을 안 부르므로 여기서 따로 한 번(클릭 위임 포함)
   renderSheet();     // 바텀시트도 같은 이유로 여기서 한 번 — 이후는 renderAll이 갱신한다(시안 §11)
   layoutBottom();
+  performance.mark("boot:first-render");   // 가벼운 소스만으로 첫 화면을 다 그린 시점(계측 — head의 __perf)
   bootMap();
   document.getElementById("v-map").onclick = () => setView("map");
   document.getElementById("v-flow").onclick = () => setView("flow");
