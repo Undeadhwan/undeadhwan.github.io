@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>호재맵 주간 신호 — 2026-09-01</title>
+<style>
+:root{
+  --bg:#fff; --panel:#fafafa; --line:#e5e7eb; --line2:#d1d5db;
+  --ink:#151618; --ink2:#4b4d53; --ink3:#6f7178;
+  --c-traffic:#b9003d; --c-job:#2b4ea7; --c-infra:#b25ec5; --c-house:#38853e;
+  --accent:#2563eb; --warn:#b45309; --stall:#b8860b; --muted:#6f7178; --navy:#12263f;
+  --r:10px; --r-s:7px; --fs:14.5px; --fs-s:12.5px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-size:var(--fs);line-height:1.6;
+ font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 48px}
+header.pub{border-bottom:2px solid var(--navy);padding:28px 0 14px;margin-bottom:20px}
+.logo{font-weight:700;color:var(--navy);font-size:16px;letter-spacing:-.2px}
+.issueno{font-weight:400;color:var(--ink3);font-size:var(--fs-s);margin-left:6px}
+h1{font-size:16px;margin:10px 0 4px;font-weight:700}
+.tagline{color:var(--ink2);font-size:var(--fs);margin:6px 0 0}
+.meta{color:var(--ink3);font-size:var(--fs-s);margin-top:8px}
+h2{font-size:16px;font-weight:700;margin:32px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line2)}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}
+.strip div{border:1px solid var(--line2);border-radius:var(--r);padding:12px 8px;text-align:center;background:var(--panel)}
+.strip b{display:block;font-size:16px;font-weight:700}
+.strip span{font-size:var(--fs-s);color:var(--ink2)}
+.strip .stall b{color:var(--stall)}
+.card{border:1px solid var(--line2);border-radius:var(--r);padding:14px;margin:12px 0;background:var(--bg)}
+.card h3{font-size:15.5px;margin:0 0 8px;font-weight:600;line-height:1.45}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.chip{font-size:var(--fs-s);border:1px solid var(--line2);border-radius:999px;padding:2px 9px;color:var(--ink2)}
+.chip.cat{border-width:1.5px;font-weight:600}
+.chip.stall{border-color:var(--stall);color:var(--stall);font-weight:600}
+.why{font-size:var(--fs-s);color:var(--ink2);background:var(--panel);border-left:2px solid var(--line2);
+ padding:8px 10px;border-radius:var(--r-s);margin:10px 0}
+.track{display:flex;gap:0;margin:12px 0 8px;align-items:stretch}
+.track div{flex:1;border:1px solid var(--line);border-right:0;padding:7px 4px;text-align:center;font-size:var(--fs-s);color:var(--ink3)}
+.track div:first-child{border-radius:var(--r-s) 0 0 var(--r-s)}
+.track div:last-child{border-right:1px solid var(--line);border-radius:0 var(--r-s) var(--r-s) 0}
+.track div.done{background:var(--panel);color:var(--ink2);border-color:var(--line2)}
+.track div.current{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:600}
+.track b{display:block;font-weight:600}
+.track small{display:block;font-size:var(--fs-s);opacity:.85}
+.facts{font-size:var(--fs-s);color:var(--ink2);margin:8px 0 0}
+.facts span{margin-right:10px}
+.none{color:var(--ink3)}
+table{border-collapse:collapse;width:100%;font-size:var(--fs-s)}
+td,th{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left;vertical-align:top}
+th{color:var(--ink2);font-weight:600;border-bottom:1px solid var(--line2)}
+.rule{font-size:var(--fs-s);color:var(--ink2);background:var(--panel);border:1px solid var(--line);
+ border-radius:var(--r-s);padding:10px 12px;margin:10px 0}
+.rule b{font-weight:600;color:var(--ink)}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line2);font-size:var(--fs-s);color:var(--ink3)}
+footer b{color:var(--ink2);font-weight:600}
+a{color:var(--accent)}
+@media(max-width:768px){.strip{grid-template-columns:repeat(2,1fr)}.wrap{padding:0 14px 40px}}
+</style></head><body><div class="wrap">
+<header class="pub">
+  <div class="logo">호재맵 주간 신호 — 전남 <span class="issueno">제1호</span></div>
+  <p class="tagline">가격에 반영되기 전, 이번 주 포착된 신호</p>
+  <div class="meta">2026-09-01 발행 · 수집 기간 2026-08-25 ~ 2026-09-01
+   · 공개된 공식 고시·계획 문서에서 자동 수집</div>
+</header>
+<p class="rule"><b>전남 지역판</b> — 전국 신호 중 이 시도의 것만 담았습니다. <a href="../weekly.html">전국판 보기</a> · <a href="강원.html">강원</a> · <a href="경기.html">경기</a> · <a href="경남.html">경남</a> · <a href="경북.html">경북</a> · <a href="광주.html">광주</a> · <a href="대구.html">대구</a> · <a href="대전.html">대전</a> · <a href="부산.html">부산</a> · <a href="서울.html">서울</a> · <a href="세종.html">세종</a> · <a href="울산.html">울산</a> · <a href="인천.html">인천</a> · <a href="전북.html">전북</a> · <a href="제주.html">제주</a> · <a href="충남.html">충남</a> · <a href="충북.html">충북</a></p>
+
+<div class="strip">
+  <div><b>0</b><span>새로 포착</span></div>
+  <div><b>0</b><span>단계 상승</span></div>
+  <div><b>0</b><span>지도 표시 중</span></div>
+  <div class="stall"><b>0</b><span>정체(6개월+)</span></div>
+  <div><b>0</b><span>위치 확보 대기</span></div>
+  <div><b>0</b><span>취소·폐지</span></div>
+</div>
+
+
+<h2>이번 호의 신호</h2>
+<div class="rule"><b>이 3건을 고른 규칙</b><div>① 이번 호 기간에 단계가 오른 신호 — 관측일 최신순</div><div>② 모자라면 새로 포착된 신호 — 등급 분류 순(S→A→B→C), 동률은 최신순</div>
+  <div style="margin-top:6px">등급은 면적·사업비 <b>눈금에 따른 분류</b>이지 점수가 아닙니다 —
+  가중치를 합산하지 않으며, 어느 신호가 더 좋다는 뜻이 아닙니다.</div></div>
+<p class="none">이번 호 기간에 실을 신호가 없습니다 — 없는 것을 만들지 않습니다.</p>
+
+<h2>이번 호 기간에 단계가 오른 신호</h2>
+<p class="none">이번 호 기간에 확인된 단계 상승이 없습니다.</p>
+
+<h2>되돌린 고시 — 취소·폐지·해제</h2>
+<p class="rule">무산도 사실입니다. 진행 중인 것만 싣고 되돌아간 것을 빼면 그건 편집이 아니라 왜곡입니다.</p>
+<p class="none">이번 호 기간에 확인된 취소·폐지 고시가 없습니다.</p>
+
+
+<footer>
+  <p><b>이 리포트가 하는 일</b> — 공개된 공식 문서(고시·기본계획·관보)에서 아직 가격에 반영되지 않은
+  개발 신호를 포착하고, 그 단계를 추적해 사실만 적습니다.</p>
+  <p><b>하지 않는 일</b> — 매수·매도 의견, 수혜 단지 지목, 실현 시점 예측, 진척률 표기.
+  모든 신호는 <b>미확정</b>이며 무산·변경될 수 있습니다. 투자 권유가 아닙니다.</p>
+  <p>단계 표기는 도달이 확인된 곳까지만 칠합니다. 미래 구간은 비워 둡니다.</p>
+</footer>
+</div></body></html>

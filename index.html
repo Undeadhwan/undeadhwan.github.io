@@ -794,6 +794,8 @@
   .cmpitem .ds { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11.5px;
                  text-align:right; color:var(--ink2); }
   .cmpitem.warn .nm { color:var(--warn); }
+  /* 되돌린 고시 행 — 무산은 사실이라 숨기지 않고 **눈에 띄게** 적는다(P5 · 2026-09-02). */
+  .kv.warn b { color:var(--warn); }
   /* 0건은 「해당 없음」으로 명시한다 — 빈칸이면 「아직 안 그렸다」로 읽힌다(P2) */
   .cmpnone { padding:12px 0; border-top:1px solid var(--line); font-size:12px; color:var(--ink3); }
   .cmpmore { padding:8px 0 0; border-top:1px solid var(--line); font-size:11.5px; color:var(--ink2); cursor:pointer; }
@@ -2792,6 +2794,60 @@ function spreadRow(s) {
   return `<div class="kv"><b>선형 분포</b> ${sp.n}곳으로 나뉨 · 최대 ${sp.km.toFixed(1)}km 떨어짐`
        + `<span class="hmhint">${why}</span></div>`;
 }
+/* ══ 사실 행 6종 (2026-09-02 알렉스 승인 ①) — field_reach.py가 「화면이 안 읽는다」고 센 필드를
+   카드로 올린다. 「데이터에 넣었다 ≠ 화면에 보인다」의 역방향(실렸는데 아무도 안 읽는 것). ══ */
+function movementRow(s) {
+  /* 마지막 움직임 **날짜의 출처** — 원문 고시일인지 우리가 관측한 날인지(P2). 날짜만 있으면
+     사용자는 그게 사업의 사실인지 우리 수집의 사실인지 구별할 수 없다. */
+  if (!s.last_movement || !s.last_movement_basis) return "";
+  const b = String(s.last_movement_basis);
+  const say = b === "source" ? "원문 고시·공고의 날짜입니다"
+            : b === "observed" ? "우리 수집에서 처음 확인한 날입니다 — 실제 고시일은 더 이를 수 있습니다"
+            : b === "seen" ? "우리가 이 신호를 관측한 날입니다" : esc(b);
+  return `<div class="kv"><b>날짜 근거</b> ${esc(String(s.last_movement))}<span class="hmhint">${say}</span></div>`;
+}
+function gosiKindRow(s) {
+  /* 신규/변경/폐지 — 「실시계획(변경)인가」가 새 진척처럼 보이는 오해를 막는다(변경은 대개 진척이 아니다). */
+  if (!s.gosi_kind) return "";
+  const k = String(s.gosi_kind);
+  const say = k === "변경" ? "이미 고시된 사업의 내용을 바꾼 고시입니다 — 새 단계 도달이 아닐 수 있습니다"
+            : k === "폐지" ? "사업을 되돌리는 고시입니다" : "이 사업의 첫 고시입니다";
+  return `<div class="kv"><b>이번 고시</b> ${esc(k)}<span class="hmhint">${say}</span></div>`;
+}
+function posConfRow(s) {
+  /* 핀이 얼마나 정확한가 — 지도 정직성(§4.1). 근사면 근사라고 적는다. */
+  if (!s.position_confidence) return "";
+  return `<div class="kv"><b>위치 정확도</b> <span class="hmhint">${esc(String(s.position_confidence))}</span></div>`;
+}
+function gosiEffectRow(s) {
+  /* 무산도 사실이다(P5). 단계에는 이미 반영돼 있는데 카드가 이유를 말하지 않았다. */
+  if (!s.gosi_effect) return "";
+  return `<div class="kv warn"><b>되돌린 고시</b> <span class="hmhint">${esc(String(s.gosi_effect))}</span></div>`;
+}
+function dartRow(s) {
+  /* DART 공시 상세 — 제목만 있고 살이 없던 일자리 카드. */
+  if (!s._dart) return "";
+  const bits = [];
+  if (s.corp) bits.push(`<b>${esc(String(s.corp))}</b>`);
+  if (s.purpose) bits.push(esc(String(s.purpose)));
+  const per = [s.invest_start, s.invest_end].filter(Boolean).map(String);
+  if (per.length) bits.push(`투자기간 ${esc(per.join(" ~ "))}`);
+  if (!bits.length) return "";
+  return `<div class="kv"><b>공시 내용</b> ${bits.join(" · ")}`
+       + `<span class="hmhint">전자공시(DART) 원문 기재값입니다.</span></div>`;
+}
+function costRow(s) {
+  /* 공고 사업비 — 등급 근거(연면적)와 **다른 사실**이라 중복이 아니다(2026-09-02 실측 확인).
+     ⚠ P3: 금액을 점수·순위로 쓰지 않는다. 원문 기재 사실만 적는다. */
+  if (!s.cost_won) return "";
+  const w = Number(s.cost_won);
+  if (!isFinite(w) || w <= 0) return "";
+  const eok = w / 1e8;
+  const txt = eok >= 1 ? `${eok.toLocaleString(undefined, { maximumFractionDigits: 1 })}억 원`
+                       : `${Math.round(w / 1e4).toLocaleString()}만 원`;
+  return `<div class="kv"><b>공고 사업비</b> ${esc(txt)}`
+       + `<span class="hmhint">발주 공고의 기재 금액입니다 — 최종 사업비와 다를 수 있습니다.</span></div>`;
+}
 function natureRow(s) {
   /* 공사 성격 (2026-09-02 알렉스 — 「신설인가 확장인가가 중요」). 근거(어느 규칙이 정했나)를
      같이 적는다 — 집행추정은 추정임이 근거문에 이미 들어 있다(P2: 사실은 표시, 추정은 구분). */
@@ -3468,6 +3524,8 @@ function buildDartSignals() {   // DART 전자공시 = 법정 공시 → officia
     _dart: true, sub: s.sub || null, src_tier: "official_report", milestones: s.milestones, title: s.title, cat: "일자리", lvl: s.lvl || "C", template_type: "기업이전",
     current_stage: s.current_stage || "공시", phase: s.phase || "계획", status: "활성", confirmed: false,
     sd: s.sd, sg: s.sg, dong: s.dong || null, amount_eok: s.amount_eok,
+    corp: s.corp, purpose: s.purpose, invest_start: s.invest_start, invest_end: s.invest_end,   // 투자 상세(2026-09-02 알렉스 ①)
+    last_movement_basis: s.last_movement_basis,
     last_movement: s.rcept_dt && s.rcept_dt.length === 8 ? `${s.rcept_dt.slice(0,4)}-${s.rcept_dt.slice(4,6)}-${s.rcept_dt.slice(6,8)}` : null,
     // ☠ 여기 있던 `target_completion: null`을 지웠다(2026-08-11) — **값을 안 싣는 게 아니라
     //    「모른다」를 박아 넣고 있었다.** 완료 시점은 `targetOf(s)`가 마일스톤에서 도출한다.
@@ -3483,6 +3541,7 @@ function buildArchSignals() {
     arch_gb: s.arch_gb, ext_delta_m2: s.ext_delta_m2, ext_basis: s.ext_basis, nm_basis: s.nm_basis,
     name_status: s.name_status,   // '미확보' = 공식 시설명을 아직 못 찾음(카드에 그대로 밝힌다 — P2)
     area_kind: s.area_kind,
+    position_confidence: s.position_confidence, last_movement_basis: s.last_movement_basis,   // 위치 신뢰·움직임 근거(2026-09-02 알렉스 ①)
     sub: s.sub || undefined,   // 커넥터(arch_fetch)가 실은 중분류를 그대로 신뢰. 없으면 subOf가 purp·이름으로 유도
     lvl: s.lvl || "C", template_type: s.cat === "일자리" ? "기업이전" : s.cat === "교통" ? "환승·터미널" : "생활인프라",
     current_stage: s.current_stage || "인허가", phase: s.phase || "계획", status: s.status || "활성", confirmed: false,
@@ -3762,6 +3821,7 @@ function hubHowTo(s) {
    phaseOf가 명시 phase 우선 사용, radius_type로 catOf(정비)·getRadius 결정. */
 function buildJeongbiSignals() {
   JEONGBI_SIG = JEONGBI.filter(c => c.lat && c.lon).map(c => ({
+    position_confidence: c.position_confidence, last_movement_basis: c.last_movement_basis,   // 2026-09-02 알렉스 ①
     // 세대수 기준: A≥5천/B 1500~5천/C 500~1500. 500 미만·미확보 = 미정(미판정, 최소기준 미달/데이터없음)
     // ⚠ 원문 사업구분(`type`)을 어댑터가 반드시 실어야 중분류 축이 화면에 온다 —
     //    어댑터는 필드를 골라 복사하므로, 안 실으면 전부 '미상'으로 떨어진다(어댑터 함정 4회 경험).
@@ -5510,7 +5570,7 @@ function renderDetail(s) {
       ${isLineSig(s) ? lineGeomRow(s) : `<div class="precblk"><div class="ph">위치 정확도</div>${precNote(s)}${
         stUndet(s) ? `<div class="gbasis"><b>${s.st_status}</b> — 명칭·위치 미확정</div>` : ""}${
         s.pt_type === "road_ic" ? `<div class="gbasis">도로 IC(철도역 아님)</div>` : ""}</div>`}
-      ${natureRow(s)}${corridorRow(s)}${mergedRoadRow(s)}
+      ${gosiEffectRow(s)}${natureRow(s)}${gosiKindRow(s)}${dartRow(s)}${costRow(s)}${corridorRow(s)}${mergedRoadRow(s)}${movementRow(s)}${posConfRow(s)}
       <!-- ☠ 「반경 Nkm 내 단지」 목록을 **지웠다** (2026-08-19 시안 「구현 3단계」 ⑨).
            *"호재를 보는 화면에서 단지 목록은 다른 질문입니다."* — 이 카드가 답하는 질문은
            「이 호재가 무엇이고 어디까지 왔나」다. 단지는 아파트 화면(미리보기·상세)의 축이고,
@@ -10404,8 +10464,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "010af1c434", "adverse_facilities.json": "7e782ec557", "apartments_all.json": "9b4f418697", "arch_signals.json": "669571731b", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "bfe96df186", "dart_signals.json": "1e2a409b35", "dps_signals.json": "678c016744", "eum_backfill_progress.json": "1c5f616ecf", "eum_enroll.json": "d983b4792f", "eum_signals.json": "4a3f412c1f", "hospital_signals.json": "4c2ee28f91", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "cb9f79094c", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "4eddb23d1b", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2c50d26304", "mega_signals.json": "f7015a300a", "methodology.html": "17c98aa252", "park_signals.json": "fbf4268625", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "6575e85c45", "rail_reference.html": "ae8c1e4c35", "rail_signals.json": "1525e109f8", "regions.json": "5d52225be0", "report.html": "49b9b36ec6", "retail_signals.json": "f5dac2d6bb", "road_signals.json": "cf3bafc40c", "school_signals.json": "db4650acc6", "settings.html": "1ca2007f59", "sfz_signals.json": "4f27cc072b", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "b561d411be", "signals.json": "94f5712a9f", "signals_auto.json": "aec59514a1", "signals_jeongbi_all.json": "ce53f5d100", "source_status.html": "c582d546cd", "thresholds.json": "543fa6e7eb", "upis_facility_geom.json": "62e28d39bd", "weekly.html": "91e3f2e215"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260902f");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "010af1c434", "adverse_facilities.json": "7e782ec557", "apartments_all.json": "9b4f418697", "arch_signals.json": "669571731b", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "352c015805", "dart_signals.json": "1e2a409b35", "dps_signals.json": "678c016744", "eum_backfill_progress.json": "e409bf2d15", "eum_enroll.json": "d983b4792f", "eum_signals.json": "4a3f412c1f", "hospital_signals.json": "4c2ee28f91", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "cb9f79094c", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "4eddb23d1b", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2c50d26304", "mega_signals.json": "f7015a300a", "methodology.html": "17c98aa252", "park_signals.json": "fbf4268625", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "d9bf3e4ac1", "rail_reference.html": "ae8c1e4c35", "rail_signals.json": "1525e109f8", "regions.json": "5d52225be0", "report.html": "49b9b36ec6", "retail_signals.json": "f5dac2d6bb", "road_signals.json": "a0c135320a", "school_signals.json": "db4650acc6", "settings.html": "1ca2007f59", "sfz_signals.json": "4f27cc072b", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "b561d411be", "signals.json": "94f5712a9f", "signals_auto.json": "aec59514a1", "signals_jeongbi_all.json": "ce53f5d100", "source_status.html": "c582d546cd", "thresholds.json": "543fa6e7eb", "upis_facility_geom.json": "62e28d39bd", "weekly.html": "fd6e4e4724"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260902g");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
