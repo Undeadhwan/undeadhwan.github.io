@@ -298,6 +298,19 @@
   } else {
     h += `<div style="margin-top:8px">⏳ 토지이음 소급: <b>진척 파일 없음</b> — eum_backfill이 아직 한 번도 안 돌았거나 배포 전</div>`;
   }
+  /* 토지이음 예산 — **누가 얼마나 썼나**(2026-09-03). 위 「사흘째 그대로」 경고는 나흘을 켜져 있었는데 아무도 안 읽었다 —
+     원인은 02:00 빌드가 하루 150을 다 써 14:00 소급이 매일 0을 받은 것. 호출자별 실적이 있어야 「예약분(EUM_RESERVE)이
+     먹었나」를 이 화면에서 바로 판정한다. 정본 = eum_usage.json(eum_client가 쓴다). */
+  const us = await get("eum_usage.json");
+  if (us) {
+    const today = new Date().toISOString().slice(0, 10);
+    const day = Object.keys(us).filter(k => /^\d{4}-\d{2}-\d{2}$/.test(k)).sort().pop();
+    const by = (us.by || {})[day] || {};
+    const parts = Object.entries(by).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k.replace(/\.py$/, "")} ${v}`).join(" · ");
+    h += `<div style="margin-top:8px">📊 토지이음 요청 ${day === today ? "오늘" : day} <b>${us[day] || 0}/150</b>`
+       + (parts ? `<span class="k"> — ${parts}</span>` : `<span class="k"> — 호출자별 실적 없음(2026-09-03 이후 실행부터 쌓인다)</span>`)
+       + `<span class="k"> · 빌드는 60을 남기고 멈추고(EUM_RESERVE) 14:00 소급이 그 몫을 쓴다</span></div>`;
+  }
   /* 색인 등재 + UPIS 조인 — 소급과 **같은 사상**으로 화면이 읽는다(2026-09-01 신설).
      로그에만 있으면 며칠째 0건이어도 아무도 모른다. 두 갈래가 함께 도는 파이프라인이라
      한 줄로 붙여 보여 준다: 등재가 신호를 세우고, 조인이 그 신호에 선형을 붙인다. */
