@@ -271,6 +271,12 @@
   if (!okRun)
     h += `<div style="margin-top:8px">QA 오류로 <b>배포가 중단</b>됐습니다. 수집분은 디스크에 남아 있고, `
        + `고친 뒤 다시 돌리면 함께 나갑니다. 상세는 <code>logs/weekly_*.log</code>.</div>`;
+  /* 무거운 단계 상위 — build_all이 단계별 소요를 build_status.timing에 구조로 남긴다(2026-09-04 세션94).
+     「빌드가 느리다」의 답은 로그 채굴이 아니라 여기다. 실측: 27분 중 16분이 road_gosi_geom의 헛저장이었다. */
+  if (Array.isArray(st.timing) && st.timing.length) {
+    const top = st.timing.slice(0, 5).map(t => `${(t.cmd || "").replace(/^python3 /, "").slice(0, 34)} ${Math.round(t.s)}s`);
+    h += `<div class="k" style="margin-top:6px">⏱ 무거운 단계: ${top.join(" · ")}</div>`;
+  }
   if (nDebt) {
     h += `<div style="margin-top:8px">🟡 <b>갚아야 할 부채 ${nDebt}건</b> — 배포는 막지 않지만 `
        + `늘어난 채로 두면 다음에 더 늘어도 안 걸립니다.<ul>`
