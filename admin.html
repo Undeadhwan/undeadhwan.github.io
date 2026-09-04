@@ -285,8 +285,15 @@
     const hist = bf.history || [];
     const stuck = hist.length >= 3 && hist.slice(-3).every(x => x.pending === hist[hist.length - 1].pending)
                   && hist.slice(-3).every(x => !x.taken);
+    /* ④ taken>0도 끝이 아니다(2026-09-04): 소급이 갈아끼운 행에서 사라진 필드를 eum_backfill이 history.lost에 적는다
+       (자 = eum_refetch_ab._lost). 비어 있지 않으면 승계 규칙(eum_gosi.merge_by_seq)이 깨진 것 — qa 「소급승계」가 배포를 막는다.
+       화면이 안 말하면 필드가 없는 것과 같다 — 게이트만 읽는 필드는 다음 빌드까지 아무도 모른다. */
+    const last = hist[hist.length - 1] || {};
+    const lost = (last.lost && typeof last.lost === "object") ? Object.entries(last.lost) : [];
     let cls = "", msg = "";
     if (ranD == null || ranD >= 2) { cls = "bad"; msg = `❌ 소급이 <b>${ranD ?? "?"}일째</b> 안 돌았습니다 — launchd(com.hojaemap.eumbackfill)·로그를 볼 것`; }
+    else if (lost.length) { cls = "bad"; msg = `❌ ${last.date || ""} 소급이 갈아끼운 행에서 <b>사라진 필드 ${lost.reduce((a, [, v]) => a + (+v || 0), 0)}건</b> — `
+                                 + lost.slice(0, 5).map(([k, v]) => `${k} ${v}`).join(" · ") + ` (승계 규칙 깨짐 · eum_gosi.merge_by_seq · 다음 빌드 QA 「소급승계」가 막는다)`; }
     else if (stuck) { cls = "debt"; msg = `🟡 소급 대상이 <b>사흘째 ${bf.pending.toLocaleString()}건 그대로</b> — 예산이 계속 0이거나 대상 계산이 고장`; }
     else msg = `⏳ 토지이음 소급: 남은 <b>${(bf.pending ?? 0).toLocaleString()}건</b>`
              + (bf.days_limit ? (String(bf.days_limit).length === 8
