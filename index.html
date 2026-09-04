@@ -3986,6 +3986,44 @@ function mapFit(lls, padPx) {   // lls = [[lat,lon],...] 또는 경계객체({_s
   else { const b = new kakao.maps.LatLngBounds(); lls.forEach(([la, lo]) => b.extend(new kakao.maps.LatLng(la, lo)));
          window._map.setBounds(b, padPx || 30); }
 }
+/* ★ 줌은 그대로 두고 지점만 **보이는 지도 영역의 가운데**로 부드럽게 옮긴다 (2026-09-04 알렉스
+   *"줌아웃하지 말고 아파트가 중간에 오도록 부드럽게 이동만 시켜줘. 호갱노노처럼"*).
+   ☠ 종전 showApt는 그 단지 호재가 전부 들어오는 대칭 상자를 mapFit — 반경 1~4km 호재 때문에 단지를 고를 때마다
+     줌아웃됐다(호재 목록은 판이 거리와 함께 말하므로 화면에 다 들어올 필요가 없다).
+   「가운데」는 컨테이너 중심이 아니라 **상세 판이 가리지 않은 영역**의 중심이다 — 데스크톱 판은 지도 왼쪽에
+   떠 있어(#panel absolute) 컨테이너 중심에 두면 눈에는 왼쪽으로 치우친다. 모바일 상세는 전면(page)이라 판을
+   빼지 않는다(닫으면 지도 가운데다). 두 렌더러 다 panBy(px) — 둘 다 애니메이션이고 줌을 건드리지 않는다. */
+function mapCenterOn(lat, lon, minZ) {
+  const M = window._map; if (!M) return;
+  const isK = typeof M.getLevel === "function";   // 렌더러 판별은 카카오 전용 getLevel의 **존재**로(호출 아님 — 양쪽 분기가 아래 함께 있다)
+  /* 전국·광역처럼 **너무 먼 줌**에서 고르면 그 층이 보이는 줌까지 들어간다(minZ · Leaflet z 기준) — 줌아웃은 없다.
+     가까이 있을 땐 줌을 손대지 않는다. */
+  const z = isK ? 18 - M.getLevel() : M.getZoom();
+  if (minZ != null && z < minZ) mapGo(lat, lon, minZ);
+  const mapEl = document.getElementById("map"), mr = mapEl ? mapEl.getBoundingClientRect() : null;
+  if (!mr || !mr.width || !mr.height) { mapGo(lat, lon, Math.max(z, minZ || 0)); return; }   // 크기를 못 재면(숨은 탭·레이아웃 전) 즉시 중앙으로
+  let x0 = 0;
+  const p = document.getElementById("panel");
+  if (p && p.style.display !== "none" && !isMobileView()) {
+    const pr = p.getBoundingClientRect();
+    if (pr.width && pr.right > mr.left && pr.left < mr.left + mr.width / 2) x0 = Math.max(x0, pr.right - mr.left);   // 왼쪽에 뜬 판 폭만큼 뺀다
+  }
+  const cx = (x0 + mr.width) / 2, cy = mr.height / 2;
+  /* ⚠ 탭이 숨어 있으면 애니메이션 이동(panBy·panTo)은 **끝나지 않는다** — rAF가 안 돈다(2026-08-09 mapFit 주석과 같은
+     사고 · 2026-09-04 브라우저 패널 실측: document.hidden에서 panBy 8회 폴링 이동 0). 그때는 같은 목표 중심으로 즉시 옮긴다
+     (조용한 무동작을 만들지 않는다). 판정은 구조 조건 — document.hidden. */
+  let dx, dy, tgt;   // tgt = 이동 뒤의 중심(위도, 경도) — 숨은 탭에서는 mapGo(즉시)로 같은 자리에 간다
+  if (isK) {
+    const prj = M.getProjection(), pt = prj.containerPointFromCoords(new kakao.maps.LatLng(lat, lon)); dx = pt.x - cx; dy = pt.y - cy;
+    const c = prj.coordsFromContainerPoint(new kakao.maps.Point(mr.width / 2 + dx, mr.height / 2 + dy)); tgt = [c.getLat(), c.getLng()];
+  } else {
+    const pt = M.latLngToContainerPoint([lat, lon]); dx = pt.x - cx; dy = pt.y - cy;
+    const c = M.containerPointToLatLng([mr.width / 2 + dx, mr.height / 2 + dy]); tgt = [c.lat, c.lng];
+  }
+  if (document.hidden) mapGo(tgt[0], tgt[1], isK ? 18 - M.getLevel() : M.getZoom());
+  else if (isK) M.panBy(dx, dy);
+  else M.panBy([dx, dy]);
+}
 function mapRelayout() {
   if (!window._map) return;
   if (window._map.invalidateSize) window._map.invalidateSize();
@@ -4870,22 +4908,14 @@ function showApt(a) {
   aptFocus = new Set(signalsNearPoint([a.lon, a.lat], true).map(x => x.s));   // 이 단지 호재만 지도에(필터 무관)
   ANIMATE = true;
   renderPanel();
-  // 화면은 **이 단지의 호재가 전부 들어오는 범위**로(고정 줌이면 반경 1~4km 호재가 화면 밖 — 실측).
-  // 지도 이동은 공용 헬퍼만(mapGo/mapFit) — Leaflet 전용 API 직접 호출로 카카오에서 크래시하던
+  // 지도 이동은 공용 헬퍼만(mapGo/mapFit/mapCenterOn) — Leaflet 전용 API 직접 호출로 카카오에서 크래시하던
   // 클래스의 원천 해결(2026-07-29 전수 감사 A, html_check 게이트가 지킨다).
   if (window._map) {
-    /* ★ **아파트를 화면 중앙에 둔다** (2026-08-11 사용자 *"아파트 상세보기 하면 해당 아파트가
-       화면 중앙(좌우, 상하 모두)에 위치해야 하는데 그렇지 않은 경우들이 있어"*).
-       ☠ 종전엔 `mapFit(호재들 + 아파트)` — 즉 **바운딩박스 중심**에 맞췄다. 호재가 사방에 고르면
-         우연히 가운데 오지만, **한쪽에 몰리면 아파트가 가장자리로 밀린다**(실측: 검단1차피오레는
-         호재가 1.8km 떨어진 1건뿐이라 중심이 아파트와 그 호재의 중간에 잡혔다).
-       처방: 중심은 **아파트로 고정**하고 줌만 고른다 — 아파트를 중심으로 한 **대칭 상자**를
-       맞추면 중심이 아파트임이 기하학적으로 보장되고, 그 단지 호재도 함께 들어온다. */
-    const fpts = [...(aptFocus || [])].map(s => s.geometry && s.geometry.coordinates).filter(Boolean);
-    const maxM = fpts.reduce((m, c) => Math.max(m, meters([a.lon, a.lat], c)), 0);
-    const R = Math.max(maxM, 400) * 1.15;   // 최소 400m — 호재가 없는 단지도 적당한 줌으로
-    const dLat = R / 110540, dLon = R / (111320 * Math.cos(a.lat * Math.PI / 180));
-    mapFit([[a.lat - dLat, a.lon - dLon], [a.lat + dLat, a.lon + dLon]], 40);
+    /* ★ **줌은 그대로, 아파트만 보이는 영역의 가운데로 부드럽게** (2026-09-04 알렉스 — 호갱노노처럼).
+       이력: 2026-08-11 「아파트를 화면 중앙에」(대칭 상자 mapFit — 바운딩박스 중심이 호재 쪽으로 밀리던 것을 고침)
+       → 그 상자가 반경 1~4km 호재까지 담느라 **매번 줌아웃**됐다. 중앙 규칙은 그대로 살리고 줌만 손대지 않는다
+       (헬퍼 mapCenterOn — 데스크톱은 상세 판이 가린 폭을 뺀 가운데). */
+    mapCenterOn(a.lat, a.lon, 13);   // 13 = 아파트 아이콘이 보이는 줌(카카오 APT_ICON_LV 5 = 18-5) — 전국 줌에서 검색해 골라도 그 층까지는 들어간다
     mapApi?.showAptAnchor?.(a);
   }
   mapApi?.refreshPins?.();   // 이 단지 반경 호재만 등장(애니메이션)
@@ -6656,6 +6686,12 @@ function bindFilterClicks(host) {
     if (t.dataset.allcat) { CAT_KEYS.forEach(c => filter.cat.add(c)); ALL_SUBS.forEach(k => filter.sub.add(k)); renderAll(); return; }   // 초기화 = 공용 함수 하나(패널 안내도 같은 것을 부른다)
     const axis = t.dataset.tog, k = t.dataset.k;
     if (axis === "cat") { toggleCat(k); renderAll(); return; }
+    if (axis === "hh") {   // 아파트 세대수 = 단일 선택 · 상태는 #apt-hh 셀렉트 하나(시트 칩은 그 도출 · 2026-09-04)
+      const sel = window._aptHhEl || document.getElementById("apt-hh");
+      if (sel && sel.value !== k) { sel.value = k; sel.dispatchEvent(new Event("change")); }
+      if (typeof renderSheet === "function") renderSheet();
+      return;
+    }
     const set = { sub: filter.sub, phase: filter.phase, lvl: filter.lvl, lines: filter.lines, nature: filter.nature }[axis];
     if (!set) return;
     set.has(k) ? set.delete(k) : set.add(k);
@@ -10258,9 +10294,17 @@ function renderSheet() {
   // 아이콘은 도크와 **같은 부품**(`.phi`) — 계획 점선 · 확정 실선 · 착공 굵은 · 완공 코어.
   const phRow = PHASES.map(p => chip("phase", p, phaseLabel(p),
     `<i class="phi ph${PHASE_IDX[p] ?? 0}"></i>`, filter.phase.has(p))).join("");
+  /* ★ 아파트 세대수 — 모바일엔 이 조작이 **어디에도 없었다** (2026-09-04 알렉스 *"모바일앱에서 아파트 세대수
+     선택하는게 없는데 필요해"*). 데스크톱은 도크 슬롯의 `#apt-hh` 셀렉트가 담당하고 그 onchange는 지도 초기화
+     (렌더러 두 갈래)가 건다. 시트는 **그 셀렉트의 option에서 칩을 도출**하고, 클릭은 셀렉트 값을 바꿔 change를
+     쏜다(bindFilterClicks `hh`) — 상태도 핸들러도 하나다(사본 금지). 지도가 아직 안 떠서 option이 비었으면 행도 없다. */
+  const hhSel = window._aptHhEl || document.getElementById("apt-hh");
+  const hhRow = hhSel && hhSel.options.length
+    ? [...hhSel.options].map(o => chip("hh", o.value, o.text.replace(/^아파트\s*/, ""), "", o.value === hhSel.value)).join("") : "";
   document.getElementById("ms-filters").innerHTML =
     `<div class="ms-row"><span class="lb">등급</span>${lvRow}</div>`
-    + `<div class="ms-row"><span class="lb">단계</span>${phRow}</div>`;
+    + `<div class="ms-row"><span class="lb">단계</span>${phRow}</div>`
+    + (hhRow ? `<div class="ms-row"><span class="lb">아파트</span>${hhRow}</div>` : "");
   /* ══ 목록 = **2줄 행**(시안 §11) ═══════════════════════════════════════════════
      ☠ 종전엔 목록 탭의 6열 표(`listTable`)를 그대로 넣었다. 375px에서는 소재지·확인일이
        화면 밖으로 밀려 **가로 스크롤**이 생겼고, 정작 좁은 화면의 질문 세 가지
@@ -10593,8 +10637,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "7a5ab69242", "adverse_facilities.json": "c65c946c9b", "apartments_all.json": "22dbdd4e48", "arch_signals.json": "0f4b637348", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "2c167a930e", "dart_signals.json": "1e2a409b35", "dps_signals.json": "2ec870054c", "eum_backfill_progress.json": "ec87534594", "eum_enroll.json": "0fca81c416", "eum_signals.json": "563a80b349", "eum_usage.json": "e065d964d1", "hospital_signals.json": "d2f3228f0e", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "e41676d97d", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "6c654548db", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "0e3e1e3f21", "mega_signals.json": "3b975b8df7", "methodology.html": "c00fdc4167", "park_signals.json": "127983130c", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "d2814b097d", "rail_reference.html": "49091ce6e7", "rail_signals.json": "1525e109f8", "regions.json": "5d52225be0", "report.html": "b851674c56", "retail_signals.json": "9b86519325", "road_signals.json": "b832e11c1c", "school_signals.json": "0319898d38", "settings.html": "1ca2007f59", "sfz_signals.json": "77c6c208fb", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "a533b65c35", "signals.json": "94f5712a9f", "signals_auto.json": "b987d603a6", "signals_jeongbi_all.json": "20f653f6ee", "source_status.html": "f9b700fea9", "thresholds.json": "543fa6e7eb", "upis_facility_geom.json": "61ab5c3a9a", "weekly.html": "164e5a1794", "weekly_index.json": "e762fd0c84"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260904b");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "7a5ab69242", "adverse_facilities.json": "c65c946c9b", "apartments_all.json": "22dbdd4e48", "arch_signals.json": "0f4b637348", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "27fdfa654a", "dart_signals.json": "1e2a409b35", "dps_signals.json": "2ec870054c", "eum_backfill_progress.json": "ec87534594", "eum_enroll.json": "0fca81c416", "eum_signals.json": "563a80b349", "eum_usage.json": "e065d964d1", "hospital_signals.json": "d2f3228f0e", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "e41676d97d", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "6c654548db", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "0e3e1e3f21", "mega_signals.json": "3b975b8df7", "methodology.html": "c00fdc4167", "park_signals.json": "127983130c", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "96541faae5", "rail_reference.html": "49091ce6e7", "rail_signals.json": "1525e109f8", "regions.json": "5d52225be0", "report.html": "b851674c56", "retail_signals.json": "9b86519325", "road_signals.json": "7ef0472060", "school_signals.json": "0319898d38", "settings.html": "1ca2007f59", "sfz_signals.json": "77c6c208fb", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "a533b65c35", "signals.json": "94f5712a9f", "signals_auto.json": "b987d603a6", "signals_jeongbi_all.json": "20f653f6ee", "source_status.html": "f9b700fea9", "thresholds.json": "543fa6e7eb", "upis_facility_geom.json": "61ab5c3a9a", "weekly.html": "164e5a1794", "weekly_index.json": "e762fd0c84"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260904c");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
