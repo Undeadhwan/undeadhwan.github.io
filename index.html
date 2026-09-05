@@ -1076,17 +1076,15 @@
     color:var(--ink); background:#fff; border:0; }
   .apt-pop-cmp:hover { background:var(--panel); }
   .apt-pop-cmp.in { background:var(--ink); color:#fff; }
-  /* 상세보기+비교담기 2버튼 행 (2026-08-10 사용자 제보) — 팝업이 마커를 덮어 마커 클릭(상세보기)이
-     사실상 불가했고, 모바일은 탭이 mouseenter로 팝업을 먼저 띄워 상세보기 경로가 아예 없었다.
-     상세보기를 팝업 안의 **명시 버튼**(주 동작=채움)으로 두면 가림·탭 순서와 무관해진다. */
-  /* 시안 실물: 두 버튼이 **카드 폭을 나눠 하단을 채운다**(알약 아님 · 여백 없음 · 경계선 하나).
-     주 동작(상세보기)이 넓고 검정, 보조(비교 담기)가 좁고 흰색 — 무게로 우선순위를 말한다. */
+  /* ★ 카드 = 미리보기 본문 + 「＋ 비교 담기」 **한 줄** (2026-09-05 알렉스 「호버에 두 옵션이 뜨고 하나는 그냥 누른 거랑 같아 어색」 · 3안).
+     종전 2버튼 행(2026-08-10 — 팝업이 마커를 덮어 「N건 상세보기」 버튼을 뒀다)의 상세보기는 마커 클릭과 **같은 동작**이라
+     같은 일을 두 번 물었다 — 뺐다. 상세 = 아이콘 클릭이고, 카드 **본문 클릭도 같은 문**이다(선택지가 아니라 같은 동작 · 호갱노노 문법).
+     터치 기기(`NO_HOVER` = hover:none)는 호버 카드를 건너뛰고 탭 = 상세(비교 담기는 상세 판의 버튼이 맡는다).
+     게이트 = html_check.apt_pop_rules_check(두 렌더러 · 상세보기 버튼 0 · 본문 클릭 배선 · NO_HOVER 가드). DESIGN.md 「단지 미리보기 카드」 행. */
+  .apt-pop .apt-pop-body { cursor:pointer; border-radius:12px 12px 0 0; }
+  .apt-pop .apt-pop-body:hover { background:var(--panel); }
   .apt-pop-btns { display:flex; border-top:1px solid var(--line); }
-  .apt-pop-btns .apt-pop-view { flex:1.9; }
-  .apt-pop-btns .apt-pop-cmp { flex:1; border-left:1px solid var(--line); }
-  .apt-pop-view { text-align:center; font-size:12.5px; font-weight:700; padding:12px 0; cursor:pointer;
-    color:#fff; background:var(--ink); border:0; }
-  .apt-pop-view:hover { opacity:.88; }
+  .apt-pop-btns .apt-pop-cmp { flex:1; }
   /* ★ 위치 정확도 = **별도 블록**(시안 §06 슬롯 7). 라벨–값 열에서 빼내 「한계」임을 형태로 말한다.
      새 색을 만들지 않는다 — 기존 토큰(--panel·--line·--ink2)만 쓴다(DESIGN.md §1). */
   .precblk { border:1px solid var(--line); border-left:3px solid var(--line2); border-radius:var(--r-s);
@@ -5964,6 +5962,8 @@ function renderCluster(v) {
    ⚠ 끌기 판정은 **손잡이 영역(상단 28px)에서 시작한 터치만** 본다. 시트 본문에서 시작한
      스와이프까지 먹으면 내용 스크롤이 죽는다. */
 const isMobileView = () => matchMedia("(max-width: 768px)").matches;
+// 호버가 없는 기기(터치) — 단지 호버 카드를 건너뛰고 탭이 곧바로 상세(2026-09-05). 폭이 아니라 **입력 방식**으로 가른다.
+const NO_HOVER = (typeof matchMedia === "function" && matchMedia("(hover: none)").matches);
 function toggleDock(on) {
   const d = document.getElementById("dock"), dim = document.getElementById("dock-dim");
   if (!d) return;
@@ -7946,12 +7946,13 @@ function initLeaflet() {
       // hover 팝업: 마커 벗어나 빈 공간 가면 닫힘(300ms 유예 — 그 사이 팝업 위로 이동하면 유지 → 비교담기 클릭 가능).
       // 위치 = 아이콘 바로 위 중앙. 호재 건수는 열 때만 계산.
       m.on("mouseover", () => {
+        if (NO_HOVER) return;   // 터치 = 탭이 곧바로 상세(아래 click) · 카카오 층과 같은 규칙(2026-09-05)
         const inCmp = compareSet.some(x => x.n === a.n && x.dong === a.dong);
         const pop = `<div class="apt-pop"><div class="apt-pop-body"><div class="apt-pop-nm">${a.n}</div><div class="apt-pop-sub">${sub}</div>`
           + `<div class="apt-pop-cnt"><b>${near().length}</b><span>건</span></div>`
           + catBarHtml(near())
-          + `</div><div class="apt-pop-btns"><div class="apt-pop-view">${near().length}건 상세보기</div>`
-          + `<div class="apt-pop-cmp${inCmp ? " in" : ""}">${inCmp ? "✓ 비교함" : "비교 담기"}</div></div></div>`;
+          + `</div><div class="apt-pop-btns">`
+          + `<div class="apt-pop-cmp${inCmp ? " in" : ""}">${inCmp ? "✓ 비교함" : "＋ 비교 담기"}</div></div></div>`;
         const me = m.getElement(); const halfW = me ? Math.round(me.offsetWidth / 2) : 0;
         const pu = L.popup({ className: "apt-pop-wrap", closeButton: false, autoPan: false, offset: [halfW, -6] })
           .setLatLng([a.lat, a.lon]).setContent(pop).openOn(map);
@@ -7959,10 +7960,11 @@ function initLeaflet() {
         if (btn) L.DomEvent.on(btn, "click", e => {
           L.DomEvent.stop(e); toggleCompare(a);
           const on = compareSet.some(x => x.n === a.n && x.dong === a.dong);
-          btn.classList.toggle("in", on); btn.textContent = on ? "✓ 비교함" : "＋ 비교담기";
+          btn.classList.toggle("in", on); btn.textContent = on ? "✓ 비교함" : "＋ 비교 담기";
         });
-        const vbtn = el && el.querySelector(".apt-pop-view");
-        if (vbtn) L.DomEvent.on(vbtn, "click", e => {
+        // 본문 클릭 = 상세(마커 클릭과 같은 문 · 2026-09-05 3안) — 카카오 층과 같은 부품
+        const body = el && el.querySelector(".apt-pop-body");
+        if (body) L.DomEvent.on(body, "click", e => {
           L.DomEvent.stop(e); if (map._popup === pu) map.closePopup(pu);
           treeState.selKey = `apt|${a.n}|${a.dong}`; buildTree(); showApt(a);
         });
@@ -9738,11 +9740,12 @@ function initKakao() {
   const closeAptPop = () => { if (aptPop) { aptPop.remove(); aptPop = null; } };
   const openAptPop = (a, sub, pt) => { closeAptPop(); const near = signalsNearPoint([a.lon, a.lat], true); const inCmp = compareSet.some(x => x.n === a.n && x.dong === a.dong);   // all=true — 단지 사실은 조회조건 무관(Leaflet판 주석 참조)
     aptPop = document.createElement("div"); aptPop.style.cssText = "position:absolute;z-index:50;transform:translate(-50%,-100%);pointer-events:auto"; aptPop.style.left = pt.x + "px"; aptPop.style.top = (pt.y - 3) + "px";
-    aptPop.innerHTML = '<div class="apt-pop"><div class="apt-pop-body"><div class="apt-pop-nm">' + a.n + '</div><div class="apt-pop-sub">' + sub + '</div><div class="apt-pop-cnt"><b>' + near.length + '</b><span>건</span></div>' + catBarHtml(near) + '</div><div class="apt-pop-btns"><div class="apt-pop-view">' + near.length + '건 상세보기</div><div class="apt-pop-cmp' + (inCmp ? " in" : "") + '">' + (inCmp ? "✓ 비교함" : "비교 담기") + '</div></div></div>';
+    aptPop.innerHTML = '<div class="apt-pop"><div class="apt-pop-body"><div class="apt-pop-nm">' + a.n + '</div><div class="apt-pop-sub">' + sub + '</div><div class="apt-pop-cnt"><b>' + near.length + '</b><span>건</span></div>' + catBarHtml(near) + '</div><div class="apt-pop-btns"><div class="apt-pop-cmp' + (inCmp ? " in" : "") + '">' + (inCmp ? "✓ 비교함" : "＋ 비교 담기") + '</div></div></div>';
     mapEl.appendChild(aptPop); const btn = aptPop.querySelector(".apt-pop-cmp");
-    if (btn) btn.addEventListener("click", e => { e.stopPropagation(); toggleCompare(a); const on = compareSet.some(x => x.n === a.n && x.dong === a.dong); btn.classList.toggle("in", on); btn.textContent = on ? "✓ 비교함" : "＋ 비교담기"; });
-    const vbtn = aptPop.querySelector(".apt-pop-view");
-    if (vbtn) vbtn.addEventListener("click", e => { e.stopPropagation(); closeAptPop(); treeState.selKey = "apt|" + a.n + "|" + a.dong; buildTree(); showApt(a); });
+    if (btn) btn.addEventListener("click", e => { e.stopPropagation(); toggleCompare(a); const on = compareSet.some(x => x.n === a.n && x.dong === a.dong); btn.classList.toggle("in", on); btn.textContent = on ? "✓ 비교함" : "＋ 비교 담기"; });
+    // 본문 클릭 = 상세(아이콘 클릭과 같은 문 · 2026-09-05 3안). 「상세보기」 버튼은 없다 — 같은 일을 두 번 묻지 않는다.
+    const body = aptPop.querySelector(".apt-pop-body");
+    if (body) body.addEventListener("click", e => { e.stopPropagation(); closeAptPop(); treeState.selKey = "apt|" + a.n + "|" + a.dong; buildTree(); showApt(a); });
     aptPop.addEventListener("mouseenter", () => { if (aptPopTimer) clearTimeout(aptPopTimer); }); aptPop.addEventListener("mouseleave", () => closeAptPop()); };
   // 아파트 점: 단지 객체에 1회 캐시(_kdot) — setMap 토글 + 선택 상태만 className 갱신
   let aptShown = new Set();
@@ -9757,7 +9760,7 @@ function initKakao() {
           const d = document.createElement("div");   // 집모양 SVG(apt-dot, 2026-07-21)
           d.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 3.2 3.5 10.6V21h6.2v-5.6h4.6V21h6.2V10.6Z"/></svg>';
           const sub = a.sg + " " + a.dong + (a.hh ? " · " + a.hh.toLocaleString() + "세대" : " · 세대수 미상") + (a.built ? " · 준공 " + a.built : "");
-          d.addEventListener("mouseenter", () => { if (aptPopTimer) clearTimeout(aptPopTimer); openAptPop(a, sub, toPt(a.lon, a.lat)); });
+          d.addEventListener("mouseenter", () => { if (NO_HOVER) return; if (aptPopTimer) clearTimeout(aptPopTimer); openAptPop(a, sub, toPt(a.lon, a.lat)); });   // 터치 = 탭이 곧바로 상세(아래 click)
           d.addEventListener("mouseleave", () => { aptPopTimer = setTimeout(closeAptPop, 300); });
           d.addEventListener("click", e => { e.stopPropagation(); treeState.selKey = "apt|" + a.n + "|" + a.dong; buildTree(); showApt(a); });
           a._kdot = new K.CustomOverlay({ position: LL(a.lon, a.lat), content: d, zIndex: 8, yAnchor: .5, xAnchor: .5 });
@@ -9981,15 +9984,20 @@ function initKakao() {
   const clearScale = () => { scaleObjs.forEach(o => o.setMap(null)); scaleObjs = []; };
   const showScale = (lng, lat) => {
     clearScale();
-    [1000, 2000, 3000].forEach(m => {
+    [[1000, .8], [2000, .6], [3000, .45]].forEach(([m, op]) => {
       /* ⚠ `#d1d5db`·1px은 카카오 베이스맵 위에서 **거의 안 보였다**(2026-08-14 사장님 *"경계가
-         안보여"*). 눈금은 장식이 아니라 자이므로 읽혀야 한다 — 잉크 계열로 올리고 굵기를 준다.
-         영향 반경 원(유형색·채움 있음)과는 여전히 문법이 갈린다(무채색·채움 없음). */
-      scaleObjs.push(new K.Circle({ map, center: LL(lng, lat), radius: m, strokeWeight: 1.4,
-        strokeColor: "#6f7178", strokeOpacity: .55, strokeStyle: "solid", fillOpacity: 0, zIndex: 8 }));
+         안보여"*) → 회색 1.4px로 올렸는데 **그래도 묻혔다**(2026-09-05 알렉스 「회색이라 잘 안 띈다」).
+         색이 아니라 **배경**이 문제였다 — 물·녹지·도로 위를 지나는 얇은 단선은 어떤 회색이어도 절반은 묻힌다.
+         지도 라벨이 흰 테를 두르듯 원도 **두 겹**으로 그린다(아래 흰 4px · 위 잉크 1.6px). 1km가 가장 진하고
+         멀수록 옅다(굵기 없이 위계). 점선·유형색은 안 쓴다 — 이 화면에서 점선은 「계획 단계」, 유형색은 「영향
+         반경」의 문법이라 눈금이 빌리면 한 화면이 두 말을 한다(무채색·채움 없음은 그대로). */
+      scaleObjs.push(new K.Circle({ map, center: LL(lng, lat), radius: m, strokeWeight: 4,
+        strokeColor: "#ffffff", strokeOpacity: .9, strokeStyle: "solid", fillOpacity: 0, zIndex: 8 }));
+      scaleObjs.push(new K.Circle({ map, center: LL(lng, lat), radius: m, strokeWeight: 1.6,
+        strokeColor: "#151618", strokeOpacity: op, strokeStyle: "solid", fillOpacity: 0, zIndex: 8 }));   // #151618 = --ink
       const lb = document.createElement("div");
-      lb.style.cssText = "font:600 10px/1 ui-monospace,SFMono-Regular,monospace;color:var(--ink2);"
-        + "background:rgba(255,255,255,.92);padding:2px 5px;border-radius:3px;white-space:nowrap;pointer-events:none";
+      lb.style.cssText = "font:600 10px/1 ui-monospace,SFMono-Regular,monospace;color:var(--ink);"
+        + "background:rgba(255,255,255,.95);border:.8px solid var(--ink);padding:2px 5px;border-radius:3px;white-space:nowrap;pointer-events:none";
       lb.textContent = (m / 1000) + "km";
       // 라벨은 원 위쪽 테두리에 붙인다 — 거리를 숫자로 확정해 주지 않으면 원은 장식이 된다.
       scaleObjs.push(new K.CustomOverlay({ map, position: LL(lng, lat + m / 111320),
@@ -10667,8 +10675,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "b12da04dd8", "adverse_facilities.json": "d84ba9cfe9", "apartments_all.json": "de563047ab", "arch_signals.json": "6225a49776", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "62a6ead646", "dart_signals.json": "1e2a409b35", "dps_signals.json": "cf1bc644a2", "eum_backfill_progress.json": "66d543d09d", "eum_enroll.json": "2f2aa796ee", "eum_signals.json": "2ec256ed56", "eum_usage.json": "a47215d963", "hospital_signals.json": "8c0f0139be", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "5671230eb4", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "e5a6ae3373", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "1ac4b6c4d6", "mega_signals.json": "c19ca9bd05", "methodology.html": "39ef8574c4", "park_signals.json": "b146b8a938", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "e4ad02381c", "rail_reference.html": "2f9ce558c8", "rail_signals.json": "3f8e1528e1", "regions.json": "5d52225be0", "report.html": "a20f5515b0", "retail_signals.json": "584df1877a", "road_signals.json": "048122dce8", "school_signals.json": "93b4165c6c", "settings.html": "1ca2007f59", "sfz_signals.json": "c6438be8f8", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "baade1e1fe", "signals.json": "94f5712a9f", "signals_auto.json": "5ecc6baf0d", "signals_jeongbi_all.json": "6ecc0af749", "source_status.html": "3d558036a0", "thresholds.json": "1b59ee2aaf", "upis_facility_geom.json": "94a42922de", "upis_on_road.json": "5847491869", "weekly.html": "164e5a1794", "weekly_index.json": "e762fd0c84"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260905c");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "b12da04dd8", "adverse_facilities.json": "d84ba9cfe9", "apartments_all.json": "de563047ab", "arch_signals.json": "6225a49776", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "9bced423a5", "dart_signals.json": "1e2a409b35", "dps_signals.json": "cf1bc644a2", "eum_backfill_progress.json": "81ff48e3f0", "eum_enroll.json": "2f2aa796ee", "eum_signals.json": "ff46818310", "eum_usage.json": "5dc60ddc3a", "hospital_signals.json": "8c0f0139be", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "5671230eb4", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "e5a6ae3373", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "1ac4b6c4d6", "mega_signals.json": "c19ca9bd05", "methodology.html": "39ef8574c4", "park_signals.json": "b146b8a938", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "fd6843cea6", "rail_reference.html": "2f9ce558c8", "rail_signals.json": "3f8e1528e1", "regions.json": "5d52225be0", "report.html": "a20f5515b0", "retail_signals.json": "584df1877a", "road_signals.json": "da1fec99db", "school_signals.json": "93b4165c6c", "settings.html": "1ca2007f59", "sfz_signals.json": "c6438be8f8", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "baade1e1fe", "signals.json": "94f5712a9f", "signals_auto.json": "5ecc6baf0d", "signals_jeongbi_all.json": "6ecc0af749", "source_status.html": "c230c632eb", "thresholds.json": "1b59ee2aaf", "upis_facility_geom.json": "94a42922de", "upis_on_road.json": "5755863c04", "weekly.html": "164e5a1794", "weekly_index.json": "e762fd0c84"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260905d");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
