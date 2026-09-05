@@ -2804,6 +2804,27 @@ function corridorSpread(segs) {
     mx = Math.max(mx, Math.hypot((cents[i][0] - cents[j][0]) * 88.8, (cents[i][1] - cents[j][1]) * 111.0));
   return { n: g.size, km: mx };
 }
+/* ★★ **기존 도로 위 사업은 그렇게 말한다** (2026-09-05 세션95 · 알렉스 「기존 도로 위로 선형 호재가 있는데
+   공사 성격이 신설」). 일산 대로1-2(호수로 6.6km)가 UPIS 「미집행」 하나로 「신설」 회랑이 됐다.
+   데이터는 이제 국토부 표준노드링크(개통 도로)와 대조한 사실(`road_exists`)을 갖는다 — 새 필드는 만든 커밋에서
+   화면이 말한다(C23). 회랑 전체가 개통 도로 위면 선형은 표시 보류(`geom_hold`)되고 이 행이 그 이유를 적는다.
+   비율이 낮은 것도 사실이다 — 「개통 도로와 안 겹친다」는 새 도로라는 긍정 근거라 짧게 적는다. */
+function roadExistsRow(s) {
+  const r = s.road_exists;
+  if (!r || typeof r.share !== "number") return "";
+  const pct = Math.round(r.share * 100);
+  const when = r.date ? ` · ${esc(String(r.date))} 대조` : "";
+  const src = r.src ? esc(String(r.src)) : "국토부 표준노드링크";
+  if (r.name && r.share >= 0.9)
+    return `<div class="kv"><b>기존 도로 위</b> 회랑 전체가 개통 도로 「${esc(String(r.name))}」${r.rank ? `(${esc(String(r.rank))})` : ""} 위입니다`
+         + `<span class="hmhint">회랑 정점의 ${pct}%가 ${src} ${esc(String(r.tol_m || 25))}m 안${when}. 도로 자체는 이미 있고, `
+         + `이 고시는 그 시설의 변경·부대시설(확장·육교·교차로 등)일 수 있습니다 — 무엇을 바꾸는지는 원문 확인 전입니다.</span></div>`;
+  if (r.name && r.share >= 0.5)
+    return `<div class="kv"><b>개통 도로와 겹침</b> 일부(${pct}%)가 「${esc(String(r.name))}」 위`
+         + `<span class="hmhint">${src} 대조${when} — 기존 구간과 새 구간이 섞였을 수 있습니다.</span></div>`;
+  return `<div class="kv"><b>개통 도로와 대조</b> 개통 도로 위 비율 ${pct}%`
+       + `<span class="hmhint">${src} 대조${when} — 대부분 기존 도로와 겹치지 않는 선형입니다.</span></div>`;
+}
 function spreadRow(s) {
   const c = s.corridor;
   if (!c) return "";
@@ -2885,9 +2906,13 @@ function natureRow(s) {
 function corridorRow(s) {
   /* ★ 회랑이 **없는** 이유도 사실이다 (2026-09-01 · `geom_hold` 1,468건이 참조 0곳이었다).
      「선형이 왜 없지?」는 「선형이 왜 이상하지?」와 똑같이 자주 나오는 질문이다 — 답을 갖고 있으면 적는다. */
-  if (!s.corridor && s.geom_hold)
-    return `<div class="kv"><b>선형 미확보</b> 아직 못 그렸습니다`
+  if (!s.corridor && s.geom_hold) {
+    /* 「표시 보류 — 」 접두(upis_on_road.HOLD_PREFIX · 기계 표식)는 그렸다가 **일부러 안 보이는** 것이다 —
+       「못 그렸다」로 적으면 거짓이다(2026-09-05). 이유는 roadExistsRow가 앞서 말했으니 짧게. */
+    const held = /^표시 보류 — /.test(String(s.geom_hold));
+    return `<div class="kv"><b>${held ? "선형 표시 보류" : "선형 미확보"}</b> ${held ? "그리지 않았습니다" : "아직 못 그렸습니다"}`
          + `<span class="hmhint">${esc(String(s.geom_hold))}</span></div>`;
+  }
   if (!s.corridor || (typeof isLineSig === "function" && isLineSig(s))) return "";
   const src = String(s.geom_src || "");
   if (!src) return "";
@@ -3627,6 +3652,11 @@ function buildRailSignals() {
     if (f.properties.lvl_basis) basisByLine[f.properties.name] = f.properties.lvl_basis;
   });
   RAIL_SIG = RAIL.filter(f => f.properties.kind === "station")
+    /* ★ **대체·무산(drop) 노선의 역은 호재가 아니다** (2026-09-05 알렉스 「목동선은 없어진 노선인데 역별 호재는
+       그대로 표시되고, 클릭하면 선형도 보인다」). 선은 `p.drop`으로 안 그리면서 역 12개는 핀·목록·검색에 그대로
+       남아 있었다 — 같은 규칙이 선에만 걸린 형태. 대체 노선(서남선)의 역이 그 자리를 맡는다. 노선 카드는
+       「종결」로 남는다(P5 — 지우지 않는다). 정본 = rail_superseded.json 규칙 ①. */
+    .filter(f => !f.properties.drop)
     .filter(f => f.properties.gate !== "관찰")   // 관찰 게이트 = 지도 기본 뷰 미표시(§0-1 — 절차 진입 전)
     .map(f => ({
     _rail: true, title: f.properties.line && f.properties.line !== f.properties.name ? `${f.properties.name} (${f.properties.line})` : f.properties.name,
@@ -5654,7 +5684,7 @@ function renderDetail(s) {
       ${isLineSig(s) ? lineGeomRow(s) : `<div class="precblk"><div class="ph">위치 정확도</div>${precNote(s)}${
         stUndet(s) ? `<div class="gbasis"><b>${s.st_status}</b> — 명칭·위치 미확정</div>` : ""}${
         s.pt_type === "road_ic" ? `<div class="gbasis">도로 IC(철도역 아님)</div>` : ""}</div>`}
-      ${gosiEffectRow(s)}${natureRow(s)}${gosiKindRow(s)}${dartRow(s)}${costRow(s)}${corridorRow(s)}${mergedRoadRow(s)}${movementRow(s)}${posConfRow(s)}
+      ${gosiEffectRow(s)}${natureRow(s)}${roadExistsRow(s)}${gosiKindRow(s)}${dartRow(s)}${costRow(s)}${corridorRow(s)}${mergedRoadRow(s)}${movementRow(s)}${posConfRow(s)}
       <!-- ☠ 「반경 Nkm 내 단지」 목록을 **지웠다** (2026-08-19 시안 「구현 3단계」 ⑨).
            *"호재를 보는 화면에서 단지 목록은 다른 질문입니다."* — 이 카드가 답하는 질문은
            「이 호재가 무엇이고 어디까지 왔나」다. 단지는 아파트 화면(미리보기·상세)의 축이고,
@@ -8332,7 +8362,7 @@ function initLeaflet() {
     for (const f of RAIL.concat(ROADF)) {
       const p = f.properties;
       if (f.geometry.type === "Point") continue;
-      if (p.geom_omitted || p.geom_point_only) continue;   // 숨긴 선형·위치만 확보는 하이라이트에서도 안 그린다
+      if (p.geom_omitted || p.geom_point_only || p.drop) continue;   // 숨긴 선형·위치만 확보·대체(drop) 노선은 하이라이트에서도 안 그린다
       if (p.name !== lineName && p.full !== lineName && p.official_name !== lineName) continue;
       // 카카오 하이라이트와 **같은 규칙** — 본선(geom_solid) 있는 노선의 보간은 본선과 완전 동일,
       // 전 구간 근사만 연하게(2026-08-10 최종형). (한쪽 엔진에만 걸면 폴백에서 조용히 예외가 된다.)
@@ -8357,7 +8387,7 @@ function initLeaflet() {
     }
     for (const f of RAIL.concat(ROADF)) {   // 소속 역·IC 강조 링
       const p = f.properties;
-      if (p.kind !== "station" || p.signal === false) continue;
+      if (p.kind !== "station" || p.signal === false || p.drop) continue;
       if (p.line !== lineName && p.line_official !== lineName) continue;
       const [x, y] = f.geometry.coordinates;
       routeHl.push(L.circleMarker([y, x], { pane: "sig", radius: 9, color: "#fff", weight: 3.5, fill: false, opacity: .95, interactive: false }).addTo(map));
@@ -9973,7 +10003,7 @@ function initKakao() {
     // 벡터층 zIndex 10: 일반 선(2~3)·영향원(5) 위, 하이라이트 선(21~22) 아래. 타일도 함께 가려진다.
     routeHl.push(new K.Rectangle({ map, bounds: new K.LatLngBounds(LL(123.5, 32.5), LL(132.5, 39.8)),
       strokeWeight: 0, fillColor: "#ffffff", fillOpacity: .55, zIndex: 10 }));
-    for (const f of RAIL.concat(ROADF)) { const p = f.properties; if (f.geometry.type === "Point") continue; if (p.geom_omitted || p.geom_point_only) continue;   // 숨긴 선형·위치만 확보는 하이라이트에서도 안 그린다
+    for (const f of RAIL.concat(ROADF)) { const p = f.properties; if (f.geometry.type === "Point") continue; if (p.geom_omitted || p.geom_point_only || p.drop) continue;   // 숨긴 선형·위치만 확보·대체(drop) 노선은 하이라이트에서도 안 그린다
       if (p.name !== lineName && p.full !== lineName && p.official_name !== lineName) continue;
       const segs = f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates]; const dashed = (!["착공", "준공"].some(k => (p.phase || "").startsWith(k)));
       /* ⚠ **하이라이트도 근거 있는 구간과 없는 구간을 갈라 그린다** (2026-08-05 사용자
@@ -9988,7 +10018,7 @@ function initKakao() {
       (p.geom_bridges || []).forEach(seg => { const ll = seg.map(([x, y]) => { const q = LL(x, y); bounds.extend(q); return q; });
         routeHl.push(new K.Polyline({ map, path: ll, strokeColor: "#fff", strokeWeight: 11, strokeOpacity: hasSolid ? .85 : .45, zIndex: 20 }));
         routeHl.push(new K.Polyline({ map, path: ll, strokeColor: col, strokeWeight: 5.5, strokeOpacity: hasSolid ? .95 : .45, strokeStyle: dashed ? "shortdot" : "solid", zIndex: 21 })); }); } }
-    for (const f of RAIL.concat(ROADF)) { const p = f.properties; if (p.kind !== "station" || p.signal === false) continue; if (p.line !== lineName && p.line_official !== lineName) continue; const [x, y] = f.geometry.coordinates;
+    for (const f of RAIL.concat(ROADF)) { const p = f.properties; if (p.kind !== "station" || p.signal === false || p.drop) continue; if (p.line !== lineName && p.line_official !== lineName) continue; const [x, y] = f.geometry.coordinates;
       const elx = document.createElement("div"); elx.style.cssText = "width:18px;height:18px;border-radius:50%;border:3.5px solid #fff;box-shadow:0 0 0 1.5px " + col + ";pointer-events:none"; routeHl.push(new K.CustomOverlay({ map, position: LL(x, y), content: elx, zIndex: 23, yAnchor: .5, xAnchor: .5 }));
       // 역명 라벨 — 상세(하이라이트) 중엔 줌과 무관하게 소속역 이름을 단다(2026-08-04 아실 벤치마크).
       // 기존 z14+ 라벨 컴포넌트(.rail-name) 재사용 — 새 문법 추가 없음(DESIGN.md 불변).
@@ -10637,8 +10667,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "3161e057b5", "adverse_facilities.json": "d84ba9cfe9", "apartments_all.json": "de563047ab", "arch_signals.json": "b8e384a032", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "4c30cb6f0c", "dart_signals.json": "f8e89f20cc", "dps_signals.json": "014e0c2ba3", "eum_backfill_progress.json": "66d543d09d", "eum_enroll.json": "2f2aa796ee", "eum_signals.json": "fa7b6de1a0", "eum_usage.json": "38522ead9c", "hospital_signals.json": "8c0f0139be", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "5671230eb4", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "e5a6ae3373", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "29e7f81ff7", "mega_signals.json": "c19ca9bd05", "methodology.html": "39ef8574c4", "park_signals.json": "7fa1aca5a1", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "d6ca514bdc", "rail_reference.html": "49091ce6e7", "rail_signals.json": "1525e109f8", "regions.json": "5d52225be0", "report.html": "a20f5515b0", "retail_signals.json": "dbab2372e2", "road_signals.json": "d99128bfee", "school_signals.json": "c4454bdbc1", "settings.html": "1ca2007f59", "sfz_signals.json": "c6438be8f8", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "baade1e1fe", "signals.json": "94f5712a9f", "signals_auto.json": "5ecc6baf0d", "signals_jeongbi_all.json": "d2fd85408d", "source_status.html": "d6125aa9d8", "thresholds.json": "1b59ee2aaf", "upis_facility_geom.json": "9a02f7d943", "weekly.html": "164e5a1794", "weekly_index.json": "e762fd0c84"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260905a");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "b12da04dd8", "adverse_facilities.json": "d84ba9cfe9", "apartments_all.json": "de563047ab", "arch_signals.json": "755535fef8", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "d674e0914f", "dart_signals.json": "1e2a409b35", "dps_signals.json": "cf1bc644a2", "eum_backfill_progress.json": "66d543d09d", "eum_enroll.json": "2f2aa796ee", "eum_signals.json": "46feaa2f1d", "eum_usage.json": "a47215d963", "hospital_signals.json": "8c0f0139be", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "5671230eb4", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "e5a6ae3373", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "29e7f81ff7", "mega_signals.json": "c19ca9bd05", "methodology.html": "39ef8574c4", "park_signals.json": "7fa1aca5a1", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "8009f3bb66", "rail_reference.html": "2f9ce558c8", "rail_signals.json": "3f8e1528e1", "regions.json": "5d52225be0", "report.html": "a20f5515b0", "retail_signals.json": "dbab2372e2", "road_signals.json": "6ffdc87d11", "school_signals.json": "c4454bdbc1", "settings.html": "1ca2007f59", "sfz_signals.json": "c6438be8f8", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "baade1e1fe", "signals.json": "94f5712a9f", "signals_auto.json": "5ecc6baf0d", "signals_jeongbi_all.json": "707c3c1a08", "source_status.html": "ff018545c0", "thresholds.json": "1b59ee2aaf", "upis_facility_geom.json": "94a42922de", "upis_on_road.json": "502df816ee", "weekly.html": "164e5a1794", "weekly_index.json": "e762fd0c84"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260905b");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷

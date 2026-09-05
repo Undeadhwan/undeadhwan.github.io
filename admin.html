@@ -162,6 +162,7 @@
     <a href="eum_backfill_progress.json" target="_blank">eum_backfill_progress.json</a>
     <a href="eum_enroll.json" target="_blank">eum_enroll.json</a>
     <a href="upis_facility_geom.json" target="_blank">upis_facility_geom.json</a>
+    <a href="upis_on_road.json" target="_blank">upis_on_road.json</a>
     <a href="thresholds.json" target="_blank">thresholds.json</a>
     <a href="weekly_index.json" target="_blank">weekly_index.json</a>
   </div>
@@ -256,9 +257,10 @@
 (async () => {
   const box = document.getElementById("runbox");
   const get = async f => { try { const r = await fetch(f + "?t=" + Date.now()); return r.ok ? await r.json() : null; } catch (e) { return null; } };
-  const [st, debt, bf, en, uf] = await Promise.all([get("build_status.json"), get("qa_debt_open.json"),
+  const [st, debt, bf, en, uf, ur] = await Promise.all([get("build_status.json"), get("qa_debt_open.json"),
                                             get("eum_backfill_progress.json"),
-                                            get("eum_enroll.json"), get("upis_facility_geom.json")]);
+                                            get("eum_enroll.json"), get("upis_facility_geom.json"),
+                                            get("upis_on_road.json")]);   // 개통 대조(2026-09-05) — 워크리스트(모순·미측정)가 여기 있다
   if (!st) { box.textContent = "build_status.json을 읽지 못했습니다."; return; }
   const okRun = st.result === "성공";
   const nDebt = debt ? (debt.debt || 0) : 0;
@@ -335,6 +337,13 @@
       const held = Object.values(uf.held_why || {}).reduce((a, b) => a + b, 0);
       bits.push(`UPIS 선형 <b>${(uf.corridors_total ?? 0).toLocaleString()}건</b>`
               + `<span class="k">(마지막 배치 작도 ${uf.drawn_now ?? 0} · 보류 ${held} · ${uf.ran || "?"})</span>`);
+    }
+    /* 개통 대조(upis_on_road · 2026-09-05 알렉스 「기존 도로 위 신설」) — 「부채도 조용하지 않다」: 표시 보류·모순·미측정은
+       사람 워크리스트라 화면에 둔다. 값은 상태 파일이 정본이고 여기서는 읽기만 한다. */
+    if (ur) {
+      const con = (ur.contradict || []).length;
+      bits.push(`개통 대조 <b>${(ur.on_road ?? 0).toLocaleString()}건</b> 기존 도로 위`
+              + `<span class="k">(표시 보류 ${ur.muted ?? 0} · 성격어↔개통 모순 ${con} · 미측정 ${ur.unmeasured ?? 0} · ${ur.ran || "?"})</span>`);
     }
     h += `<div style="margin-top:8px">🧩 ${bits.join(" · ")}</div>`;
   }
