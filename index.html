@@ -4821,6 +4821,11 @@ function aptCount(a) {
   return a._cnt;
 }
 const aptDotLabel = n => (n > 99 ? "99+" : String(n));
+/* ★ 호버 카드는 아이콘 **위에 붙되 덮지 않는다** (2026-09-05 알렉스 「호갱노노처럼 아이콘 위에 붙지만 가리지는 않게」).
+   종전 카카오 `top = pt.y - 3`·Leaflet `offset -6`은 아이콘 **중심** 기준이라 위 절반을 덮었다(아이콘이 32px가 되며 더 드러남).
+   오프셋 = 아이콘 반높이(요소 실측 · 19/32px 둘 다 맞는다) + 화살표 7px + 틈 3px. 두 렌더러가 이 헬퍼 하나를 쓴다(게이트 ⑦). */
+const APT_POP_GAP = 10;   // 카드 ::after 화살표 7px + 아이콘 위 틈 3px
+const aptPopOffsetY = el => ((el && el.offsetHeight) ? el.offsetHeight / 2 : 10) + APT_POP_GAP;
 const aptDotClass = (n, big, sel, lf) => "apt-dot" + (big ? " big" : "") + (big && n === 0 ? " zero" : "") + (sel ? " sel" : "") + (lf ? " lf" : "");
 function signalsNearPoint(coord, all = false) {
   // 확정 신호 + 정비(어댑트) 통합 카운팅. 성능용 bbox 프리필터는 **최대 신호 반경에서 도출**한다.
@@ -7990,7 +7995,7 @@ function initLeaflet() {
           + catBarHtml(near())
           + `</div></div>`;   // 미리보기만 — 비교 담기는 상세 판(#cmpAdd) 한 곳(2026-09-05 알렉스)
         const me = m.getElement(); const halfW = me ? Math.round(me.offsetWidth / 2) : 0;
-        const pu = L.popup({ className: "apt-pop-wrap", closeButton: false, autoPan: false, offset: [halfW, -6] })
+        const pu = L.popup({ className: "apt-pop-wrap", closeButton: false, autoPan: false, offset: [halfW, -Math.round(aptPopOffsetY(me))] })   // 아이콘 위 · 덮지 않음(카카오 층과 같은 헬퍼)
           .setLatLng([a.lat, a.lon]).setContent(pop).openOn(map);
         const el = pu.getElement();
         // 본문 클릭 = 상세(마커 클릭과 같은 문 · 2026-09-05 3안) — 카카오 층과 같은 부품
@@ -9769,8 +9774,8 @@ function initKakao() {
   // 아파트 마커 + hover 팝업(비교담기)
   let aptDots = [], aptPop = null, aptPopTimer = null;
   const closeAptPop = () => { if (aptPop) { aptPop.remove(); aptPop = null; } };
-  const openAptPop = (a, sub, pt) => { closeAptPop(); const near = signalsNearPoint([a.lon, a.lat], true);   // all=true — 단지 사실은 조회조건 무관(Leaflet판 주석 참조)
-    aptPop = document.createElement("div"); aptPop.style.cssText = "position:absolute;z-index:50;transform:translate(-50%,-100%);pointer-events:auto"; aptPop.style.left = pt.x + "px"; aptPop.style.top = (pt.y - 3) + "px";
+  const openAptPop = (a, sub, pt, dotEl) => { closeAptPop(); const near = signalsNearPoint([a.lon, a.lat], true);   // all=true — 단지 사실은 조회조건 무관(Leaflet판 주석 참조) · dotEl = 아이콘 요소(카드를 그 위에 띄운다)
+    aptPop = document.createElement("div"); aptPop.style.cssText = "position:absolute;z-index:50;transform:translate(-50%,-100%);pointer-events:auto"; aptPop.style.left = pt.x + "px"; aptPop.style.top = (pt.y - aptPopOffsetY(dotEl)) + "px";
     aptPop.innerHTML = '<div class="apt-pop"><div class="apt-pop-body"><div class="apt-pop-nm">' + a.n + '</div><div class="apt-pop-sub">' + sub + '</div><div class="apt-pop-cnt"><b>' + near.length + '</b><span>건</span></div>' + catBarHtml(near) + '</div></div>';   // 미리보기만 — 비교 담기는 상세 판(#cmpAdd) 한 곳(2026-09-05 알렉스)
     mapEl.appendChild(aptPop);
     // 본문 클릭 = 상세(아이콘 클릭과 같은 문 · 2026-09-05 3안). 「상세보기」 버튼은 없다 — 같은 일을 두 번 묻지 않는다.
@@ -9791,7 +9796,7 @@ function initKakao() {
           const d = document.createElement("div");   // 집모양 SVG(apt-dot, 2026-07-21) + 건수 <b>(2026-09-05)
           d.innerHTML = '<svg viewBox="0 0 24 24"><path d="' + APT_D_DOOR + '"/></svg><b></b>';
           const sub = a.sg + " " + a.dong + (a.hh ? " · " + a.hh.toLocaleString() + "세대" : " · 세대수 미상") + (a.built ? " · 준공 " + a.built : "");
-          d.addEventListener("mouseenter", () => { if (NO_HOVER) return; if (aptPopTimer) clearTimeout(aptPopTimer); openAptPop(a, sub, toPt(a.lon, a.lat)); });   // 터치 = 탭이 곧바로 상세(아래 click)
+          d.addEventListener("mouseenter", () => { if (NO_HOVER) return; if (aptPopTimer) clearTimeout(aptPopTimer); openAptPop(a, sub, toPt(a.lon, a.lat), d); });   // 터치 = 탭이 곧바로 상세(아래 click)
           d.addEventListener("mouseleave", () => { aptPopTimer = setTimeout(closeAptPop, 300); });
           d.addEventListener("click", e => { e.stopPropagation(); treeState.selKey = "apt|" + a.n + "|" + a.dong; buildTree(); showApt(a); });
           a._kdot = new K.CustomOverlay({ position: LL(a.lon, a.lat), content: d, zIndex: 8, yAnchor: .5, xAnchor: .5 });
@@ -10709,8 +10714,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "b12da04dd8", "adverse_facilities.json": "d84ba9cfe9", "apartments_all.json": "de563047ab", "arch_signals.json": "6225a49776", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "4803bcec9e", "dart_signals.json": "1e2a409b35", "dps_signals.json": "cf1bc644a2", "eum_backfill_progress.json": "81ff48e3f0", "eum_enroll.json": "2f2aa796ee", "eum_signals.json": "a2bc71ac68", "eum_usage.json": "5dc60ddc3a", "hospital_signals.json": "8c0f0139be", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "5671230eb4", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "e5a6ae3373", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "1ac4b6c4d6", "mega_signals.json": "c19ca9bd05", "methodology.html": "39ef8574c4", "park_signals.json": "b146b8a938", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "06cbf108f5", "rail_reference.html": "2f9ce558c8", "rail_signals.json": "3f8e1528e1", "regions.json": "5d52225be0", "report.html": "a20f5515b0", "retail_signals.json": "584df1877a", "road_signals.json": "d8afa88303", "school_signals.json": "93b4165c6c", "settings.html": "1ca2007f59", "sfz_signals.json": "c6438be8f8", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "baade1e1fe", "signals.json": "94f5712a9f", "signals_auto.json": "5ecc6baf0d", "signals_jeongbi_all.json": "6ecc0af749", "source_status.html": "c230c632eb", "thresholds.json": "1b59ee2aaf", "upis_facility_geom.json": "94a42922de", "upis_on_road.json": "dca3bcf9f9", "weekly.html": "164e5a1794", "weekly_index.json": "e762fd0c84"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260905f");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "b12da04dd8", "adverse_facilities.json": "d84ba9cfe9", "apartments_all.json": "de563047ab", "arch_signals.json": "6225a49776", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "f6efac1c25", "dart_signals.json": "1e2a409b35", "dps_signals.json": "cf1bc644a2", "eum_backfill_progress.json": "81ff48e3f0", "eum_enroll.json": "2f2aa796ee", "eum_signals.json": "a2bc71ac68", "eum_usage.json": "5dc60ddc3a", "hospital_signals.json": "8c0f0139be", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "5671230eb4", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "e5a6ae3373", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "1ac4b6c4d6", "mega_signals.json": "c19ca9bd05", "methodology.html": "39ef8574c4", "park_signals.json": "b146b8a938", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "9343de07ff", "rail_reference.html": "2f9ce558c8", "rail_signals.json": "3f8e1528e1", "regions.json": "5d52225be0", "report.html": "a20f5515b0", "retail_signals.json": "584df1877a", "road_signals.json": "c404b98ab4", "school_signals.json": "93b4165c6c", "settings.html": "1ca2007f59", "sfz_signals.json": "c6438be8f8", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "baade1e1fe", "signals.json": "94f5712a9f", "signals_auto.json": "5ecc6baf0d", "signals_jeongbi_all.json": "6ecc0af749", "source_status.html": "c230c632eb", "thresholds.json": "1b59ee2aaf", "upis_facility_geom.json": "94a42922de", "upis_on_road.json": "9f74bedb34", "weekly.html": "164e5a1794", "weekly_index.json": "e762fd0c84"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260905g");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
