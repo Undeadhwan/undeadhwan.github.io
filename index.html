@@ -1182,6 +1182,13 @@
      ★ 내용을 **summary 안에** 둔다 — 접힘/펼침이 「같은 글의 두 줄 ↔ 전문」이라 본문을 두 벌
        적을 이유가 없다(두 벌이면 한쪽만 고쳐져 갈린다). 펼치면 clamp만 풀린다.
      ⚠ `.kv`와 같은 라벨 문법(내어쓰기 92px)을 그대로 쓴다 — 비고만 다른 모양이면 행이 튄다. */
+  /* 고시 이력 목록(gosiHistory · 2026-09-05 세션97) — 라벨 아래 값 열에 날짜·제목·번호 한 줄씩. 3건 넘으면 details로 접는다. */
+  .ghlist { display:block; text-indent:0; margin:3px 0 0; }
+  .ghlist .gh { display:flex; gap:6px; align-items:baseline; margin:2px 0; font-size:12px; line-height:1.4; }
+  .ghlist .gh.own a { font-weight:700; }
+  .ghlist .ghd { font-family:ui-monospace, Menlo, monospace; font-size:11px; color:var(--muted); flex:0 0 auto; }
+  .ghlist .ghmore > summary { list-style:none; cursor:pointer; color:var(--accent); font-weight:600; font-size:12px; margin-top:2px; }
+  .ghlist .ghmore > summary::-webkit-details-marker { display:none; }
   .notefold { font-size:12.5px; margin:6px 0; }
   .notefold > summary { list-style:none; cursor:pointer; padding-left:92px; text-indent:-92px; }
   .notefold > summary::-webkit-details-marker { display:none; }
@@ -2761,8 +2768,8 @@ function execRow(s) {
   const v = String(s.upis_exec);
   const done = /^집행완료/.test(v.split(" (")[0]);
   const hint = done
-    ? "이 시설은 등록상 이미 개설된 것으로 나옵니다 — 남은 공사가 없을 수 있습니다."
-    : "미집행·부분집행이 섞여 있습니다 — 아직 만들지 않은 구간이 있다는 뜻입니다.";
+    ? "등록상 이미 개설 — 남은 공사가 없을 수 있습니다."
+    : "아직 만들지 않은 구간이 있습니다.";   // 문구는 한 절로(2026-09-05 세션97 · 알렉스 「내용이 너무 방대」)
   /* ★ 우리가 단계를 옮겼으면 **그 근거도 같이 보인다** (2026-09-01 · field_reach.py가 잡았다 —
      `exec_basis` 666건이 참조 0곳이었다. C23을 문서화한 그날 내가 같은 죄를 지었다).
      사용자는 도로가 「완공」으로 뜨는 이유를 알 권리가 있다 — 준공 고시가 아니라 집행상태 근거다. */
@@ -2772,8 +2779,7 @@ function execRow(s) {
      적지 않으면 사용자는 둘 중 하나가 틀렸다고 읽는다 — 새 필드는 만든 커밋에서 화면 배선까지(C23). */
   const conflict = s.exec_conflict ? `<div class="gbasis">⚠ ${esc(String(s.exec_conflict))}</div>` : "";
   return `<div class="kv"><b>집행 상태</b> ${esc(v)}`
-       + `<span class="hmhint">${hint} 도시계획시설 대장의 등록값이며 조회 시점 기준입니다 — `
-       + `실제 공사와 시차가 있을 수 있습니다.</span></div>${why}${conflict}`;
+       + `<span class="hmhint">${hint} 대장 등록값(조회 시점)이라 실제 공사와 시차가 있을 수 있습니다.</span></div>${why}${conflict}`;
 }
 /* ★★ **선형이 여러 곳으로 나뉜 사업을 화면이 설명한다** (2026-09-01 · 알렉스
    *"이렇게 세트로 뜨는애들 많은데 다 고칠거지"* — 의정부 대로3-2·3-5가 5km 떨어져 두 덩어리로 떴다).
@@ -2786,6 +2792,24 @@ function execRow(s) {
    ⇒ **아는 것과 모르는 것을 그대로 적는다**(P2·P5): 몇 곳인지·얼마나 떨어졌는지는 사실이고,
      시설이 하나인데 갈렸다면 「함께 잡혔을 수 있다」고 말한다. 원문 조서를 받으면 그쪽이 이긴다.
    ⚠ 값은 **저장하지 않고 렌더 때 계산**한다 — 뒤 단계가 선형을 고치면 저장값은 낡는다. */
+/* ★★ 회랑 조각 = 「사업 조각(delta)」과 「이미 개설된 조각(built)」 (2026-09-05 세션97 · 알렉스 「선형이 제대로 되어 있지 않은 데가
+   많다 · 여러 곳으로 나뉘는 건 어쩔 수 없나」). UPIS 시설 폴리곤은 조각마다 집행상태(exc_nam)가 있는데 종전엔 합집합 한 줄로
+   뭉개 화면이 개설된 구간(level)과 남은 사업 구간(delta)을 **같은 점선**으로 그렸다. 조각 사실(corridor.pieces · paths와 같은
+   index · upis_facility_geom)이 있으면 집행완료 조각은 회색 얇은 실선(호재 아님 · 구조 정보 — JC·기존 IC와 같은 문법)으로,
+   나머지는 유형색 점선+띠로. 렌더 네 자리(카카오 상시·선택·하이라이트 · Leaflet 선택)와 영향권 띠 두 곳이 **이 함수 하나**를
+   쓴다 — 한 층만 다르면 클릭하는 순간 되살아난다(DESIGN.md 「선형 시각 채널 분리」의 세 층 규칙). 게이트 = html_check.pieces_render_check. */
+const BUILT_LINE = { col: "#8a93a3", w: 2, op: .6 };   // 회색 = 「호재 아님」 문법(분류 미상 마커와 같은 회색 · 새 hex 없음)
+function corridorSplit(s) {
+  const c = s && s.corridor;
+  if (!c) return null;
+  const segs = (c.paths || (c.path ? [c.path] : [])).filter(seg => seg && seg.length >= 2);
+  const raw = c.paths || (c.path ? [c.path] : []);
+  const pcs = Array.isArray(c.pieces) && c.pieces.length === raw.length ? c.pieces : null;
+  const delta = [], built = [];
+  raw.forEach((seg, i) => { if (!seg || seg.length < 2) return;
+    (pcs && pcs[i] && pcs[i].exec === "집행완료" ? built : delta).push(seg); });
+  return { delta, built, pieces: pcs, segs, raw };
+}
 function corridorSpread(segs) {
   if (!segs || segs.length < 2) return null;
   const key = i => segs[i], par = segs.map((_, i) => i);
@@ -2825,8 +2849,7 @@ function roadExistsRow(s) {
   const src = r.src ? esc(String(r.src)) : "국토부 표준노드링크";
   if (r.name && r.share >= 0.9)
     return `<div class="kv"><b>기존 도로 위</b> 회랑 전체가 개통 도로 「${esc(String(r.name))}」${r.rank ? `(${esc(String(r.rank))})` : ""} 위입니다`
-         + `<span class="hmhint">회랑 정점의 ${pct}%가 ${src} ${esc(String(r.tol_m || 25))}m 안${when}. 도로 자체는 이미 있고, `
-         + `이 고시는 그 시설의 변경·부대시설(확장·육교·교차로 등)일 수 있습니다 — 무엇을 바꾸는지는 원문 확인 전입니다.</span></div>`;
+         + `<span class="hmhint">정점 ${pct}% · ${src} 대조${when}. 도로는 이미 있고 무엇을 바꾸는지(확장·육교·교차로 등)는 원문 확인 전입니다.</span></div>`;
   if (r.name && r.share >= 0.5)
     return `<div class="kv"><b>개통 도로와 겹침</b> 일부(${pct}%)가 「${esc(String(r.name))}」 위`
          + `<span class="hmhint">${src} 대조${when} — 기존 구간과 새 구간이 섞였을 수 있습니다.</span></div>`;
@@ -2849,6 +2872,25 @@ function spreadRow(s) {
       + `있어 함께 잡혔을 수 있습니다. 고시 원문 조서를 확보하면 그쪽 근거로 정정됩니다.`;
   return `<div class="kv"><b>선형 분포</b> ${sp.n}곳으로 나뉨 · 최대 ${sp.km.toFixed(1)}km 떨어짐`
        + `<span class="hmhint">${why}</span></div>`;
+}
+/* 조각 사실 행 — 「N곳으로 나뉨」 대신 조각마다 무엇인지(길이·집행상태·결정 고시일)를 적는다(2026-09-05 세션97 ·
+   알렉스 「선형이 여러 곳으로 나뉘는 건 어쩔 수 없나」). 실측 610건 중 253건은 제목이 시설을 여럿 지목한 정상 다지점이고,
+   나머지는 같은 번호 시설이 **여러 결정으로** 그어진 것 — 결정 고시일이 다르면 별개 결정이다(같은 번호의 다른 시설일 수도).
+   사실이 없으면(되묻기 전) 종전 spreadRow. 한 조각·사업 조각뿐이면 집행 상태 행이 이미 말하므로 비운다. */
+function piecesRow(s) {
+  const cs = corridorSplit(s);
+  if (!cs || !cs.pieces) return spreadRow(s);
+  const n = cs.raw.length, built = cs.built.length;
+  if (n === 1 && !built) return "";
+  const it = cs.pieces.map((pc, i) => `${partsKm([cs.raw[i]]).toFixed(1)}km ${esc(String(pc.exec || "상태 미기재"))}`
+    + (pc.ntfc ? `('${String(pc.ntfc).slice(2, 4)}.${+String(pc.ntfc).slice(5, 7)} 결정)` : ""));
+  const sp = corridorSpread(cs.segs);
+  const head = `${n}구간` + (built ? ` · 그중 ${built}구간은 이미 개설` : "") + (sp && sp.km >= 0.5 ? ` · 최대 ${sp.km.toFixed(1)}km 떨어짐` : "");
+  const note = built ? " 개설된 구간은 지도에 회색 실선(호재 아님) — 유형색 점선만 남은 사업 구간입니다." : "";
+  const keys = new Set(((s.title || "").match(/(광로|대로|중로|소로)\s*\d\s*(?:[-·]|류)\s*\d+/g) || []).map(x => x.replace(/\s+/g, "")));
+  const why = (n >= 2 && keys.size <= 1 && new Set(cs.pieces.map(p => p.ntfc || "")).size >= 2)
+    ? " 결정 고시일이 다른 조각은 별개 결정의 구간입니다 — 같은 번호의 다른 시설이 섞였을 수도 있습니다(원문 조서가 오면 정정)." : "";
+  return `<div class="kv"><b>구간</b> ${head}<span class="hmhint">${it.join(" · ")}.${note}${why}</span></div>`;
 }
 /* ══ 사실 행 6종 (2026-09-02 알렉스 승인 ①) — field_reach.py가 「화면이 안 읽는다」고 센 필드를
    카드로 올린다. 「데이터에 넣었다 ≠ 화면에 보인다」의 역방향(실렸는데 아무도 안 읽는 것). ══ */
@@ -2928,13 +2970,15 @@ function corridorRow(s) {
   const head = partial ? "부분 — 사업의 일부만 그렸습니다" : "회랑 확보";
   const ver = s.geom_verify ? `<div class="gbasis">${esc(String(s.geom_verify))}</div>` : "";
   return `<div class="kv"><b>선형 근거</b> ${head}`
-       + `<span class="hmhint">${esc(src)}</span></div>${ver}${spreadRow(s)}${execRow(s)}`;
+       + `<span class="hmhint">${esc(src)}</span></div>${ver}${piecesRow(s)}${execRow(s)}`;
 }
 function mergedRoadRow(s) {
   if (!s.merged_road) return "";
   const n = (s.merged_notices || []).length;
-  const extra = n ? ` <span class="hmhint">그중 ${n}건은 뒤늦은 변경 고시라 단계 트랙에는 넣지 않았습니다 — 이미 지난 단계로 되돌아간 것이 아니기 때문입니다(출처에는 남아 있습니다).</span>` : "";
-  return `<div class="kv"><b>사업 통합</b> ${esc(String(s.merged_road))}${extra}</div>`;
+  // 통합 사실은 한 줄, 개별 고시는 「고시 이력」 목록이 날짜·번호로 보인다(2026-09-05 세션97 — 같은 사실을 세 행이 말하던 것을 하나로)
+  const main = String(s.merged_road).split(/\.\s*개별 고시는/)[0];
+  const extra = n ? ` <span class="hmhint">뒤늦은 변경 고시 ${n}건은 단계 트랙엔 안 넣고 「고시 이력」에 남깁니다.</span>` : "";
+  return `<div class="kv"><b>사업 통합</b> ${esc(main)}${extra}</div>`;
 }
 /* ★★ **얼마나 그렸는지 화면이 말한다** (2026-09-01 · 알렉스 제보 「노선도 왠지 의심되는데 맞는거야?」).
    ☠ 실측: 「국지도56호선 경기 군내~내촌」이 지도에 **끊긴 3조각**으로 보였다. 데이터는 멀쩡했다 —
@@ -2987,7 +3031,7 @@ const FILE_RE = /(?:원문\s*)?(files\/[^\s,)]+\.(?:pdf|png|jpe?g|hwp|xlsx?|zip)
 function noteRow(s) {
   let full = [s.stage_note, s.status_note, s.note].filter(Boolean).join(" · ").trim();
   /* 방법론(선을 어떻게 그렸나)은 **펼쳐야 보이는 층**이다 — 요약은 「선형 정확도」 행이 이미 말했다. */
-  const ext = s.geom_src
+  const ext = s.geom_src && !(s.corridor && typeof isLineSig === "function" && !isLineSig(s))   // 회랑 카드는 「선형 근거」 행이 전문을 이미 보였다(중복 금지 · 2026-09-05 세션97)
     ? `<div class="nfext"><b>선형 근거</b> ${esc(String(s.geom_src).replace(/\*\*/g, ""))}</div>` : "";
   if (!full && !ext) return "";
   const files = [...new Set((full.match(FILE_RE) || []).map(m => m.replace(/^원문\s*/, "")))];
@@ -3002,6 +3046,25 @@ function noteRow(s) {
 }
 
 /* 마일스톤 트랙 (DATA_STANDARD §3b): 완료=날짜(사실) / 미래=목표·미정(추정 금지) / 진척률 % 없음(§7) */
+/* ★★ 근거 링크는 「원문 N」이 아니라 **고시 이력**으로 (2026-09-05 세션97 · 알렉스 「근거가 원문 1~9까지 엄청 많은데 다 적절한가 ·
+   정리가 필요」). 같은 도로를 지목한 고시를 한 사업으로 통합했으니(merge_same_road) 출처 아홉은 정상이다 — 문제는 이름표가 없어
+   아홉이 똑같이 「원문 N」이었던 것. 빌드(eum_gosi --reclass)가 색인에서 고시일·고시번호·제목을 sources와 같은 index로 붙인다
+   (src_meta). 여기서는 날짜 내림차순으로 보이고, 같은 고시번호는 한 줄로 접는다(색인 중복 실측: 김포 2023-76호가 두 seq).
+   세 건 넘으면 나머지는 펼쳐야 보인다(비고와 같은 「빼는 게 아니라 접는」 문법). 사실이 없으면(빌드 전) ""를 내고 종전 근거 행이 그린다. */
+function gosiHistory(s) {
+  const meta = s.src_meta, srcs = s.sources || [];
+  if (!s._eum || !Array.isArray(meta) || meta.length !== srcs.length || !meta.some(m => m && m.date)) return "";
+  const seen = new Map();
+  srcs.forEach((u, i) => { const m = meta[i] || {}; const key = m.no ? `${m.no}|${m.date || ""}` : `u|${u}`;
+    if (seen.has(key)) return; seen.set(key, { u, date: m.date || "", no: m.no || "", title: m.title || "", own: i === 0 }); });
+  const rows = [...seen.values()].sort((a, b) => b.date.localeCompare(a.date));
+  const tail = t => { const i = t.indexOf(")"); return (i > 0 && i < 48 && t.slice(0, i).includes("(")) ? t.slice(i + 1).trim() : t; };
+  const li = r => `<div class="gh${r.own ? " own" : ""}"><span class="ghd">${esc(r.date || "날짜 미상")}</span><a href="${r.u}" target="_blank" rel="noopener" title="${esc(r.title || "")}">${esc(tail(r.title || r.no || "원문").slice(0, 60))}</a>`
+    + (r.no ? `<span class="hmhint">${esc(r.no.replace(/^.*?(고시|공고)\s*/, ""))}</span>` : "") + (r.own ? `<span class="hmhint">· 이 신호의 고시</span>` : "") + `</div>`;
+  const N = 3, rest = rows.slice(N);
+  return `<div class="kv"><b>고시 이력</b> ${rows.length}건 ${srcBadge(s)}<div class="ghlist">${rows.slice(0, N).map(li).join("")}`
+    + (rest.length ? `<details class="ghmore"><summary>나머지 ${rest.length}건 ▾</summary>${rest.map(li).join("")}</details>` : "") + `</div></div>`;
+}
 const MS_STATE = { done:"완료", current:"현재", next:"다음", future:"미도래", target:"목표", stalled:"정체·중지" };
 function msTrack(s) {
   // 표준 양식 v2 (2026-07-17): 4단계 백본 목록과 이력 타임라인을 **하나로 통합**.
@@ -3942,7 +4005,16 @@ function sggDisplayName(name) {
 }
 /* 공사 성격 조회축 어휘 — 정본은 work_nature.py VOCAB(빌드가 채운다). 화면은 표시 순서만 정한다.
    (2026-09-02 알렉스 — "신설인가 확장인가 … 어떤 개선이 이뤄지는지가 중요") */
-const NATURE_KEYS = ["신설", "확장", "개량", "우회", "접속", "폐지", "서류변경", "미상"];
+/* ★ 축은 값이 아니라 **그룹**이다 (2026-09-05 세션97 · 알렉스 「저렇게 나누는 게 맞나? 미상이 매우 많다」). 실측 eum 도로 3,261건:
+   신설 656 · 확장 818 · 미상 1,726 · 나머지 다섯 값 61건(2%) — 여덟 칩 중 다섯이 빈 칩이었고, 「미상」엔 근거 없음(1,178)과
+   **개통 도로 위라 추정을 철회한 것**(548)이 섞여 있었다. 독자의 질문은 「이 길이 새로 생기나」다. 값(work_nature)은 사실이라 그대로,
+   필터는 다섯 그룹. 아래 표는 work_nature.GROUPS의 **사본** — html_check.nature_groups_parity_check가 둘을 대조한다. */
+const NATURE_GROUPS = {"신설": ["신설", "우회", "접속"], "확장·개량": ["확장", "개량"], "기존도로": [], "변경·폐지": ["서류변경", "폐지"], "미상": ["미상"]};
+const NATURE_KEYS = Object.keys(NATURE_GROUPS);
+const NATURE_HINT = { "신설": "없던 길(우회도로·연결로 포함)", "확장·개량": "있는 길을 넓히거나 고침", "기존도로": "개통 도로 위 시설의 변경·부대 — 무엇을 바꾸는지는 원문 확인 전", "변경·폐지": "기간 연장·정정·폐지 고시", "미상": "성격 근거 없음" };
+const natureGroupOf = s => { if (!s || !s.work_nature) return null; if (s.work_nature_group) return s.work_nature_group;
+  if (s.work_nature === "미상" && /^개통대조/.test(String(s.work_nature_basis || ""))) return "기존도로";   // 빌드 전 폴백 — 기계 접두만 본다
+  for (const [g, ks] of Object.entries(NATURE_GROUPS)) if (ks.includes(s.work_nature)) return g; return "미상"; };
 const filter = {
   cat: new Set(CAT_KEYS),   // '기타'는 안전망(0건) — 필터 축에서 제외(v1.8)
   // 중분류 조회축(2026-07-18): 대분류 안의 세부(교통=철도/도로/환승, 인프라=병원/공원… 등)를 각각 on/off.
@@ -4124,7 +4196,7 @@ function catVisible(s) {
 /* ★ 지역축 없는 가시성 (2026-08-10) — 동 패널은 관계(소재/반경권)를 dongRelation이 판정하므로
    지역 조회축이 **먼저** 자르면 인접 동 소재 신호가 반경권에 못 들어와 반경권이 구조적으로 0이 된다
    (사용자 "정작 선택하면 보이는 것도 없고"의 세 번째 원인). 동 패널은 이걸 쓴다. */
-const natureVisible = s => !s.work_nature || filter.nature.has(s.work_nature);   // 성격 축 — 미보유 신호는 통과(위 주석)
+const natureVisible = s => { const g = natureGroupOf(s); return !g || filter.nature.has(g); };   // 성격 축(그룹) — 미보유 신호는 통과(위 주석)
 const visibleNoRegion = s => catVisible(s)
   && filter.phase.has(phaseOf(s))                // 4단계 백본 조회축(전체해제는 단계를 비우지 않음 → 유지)
   && filter.lvl.has(levelOf(s))                  // 등급 조회축(A/B/C/미정)
@@ -5732,7 +5804,7 @@ function renderDetail(s) {
            ⚠ aptsNearSignal()은 아파트 화면이 계속 쓰므로 함수는 남긴다(죽은 건 이 자리뿐).
            ⚠ 이 주석은 **템플릿 리터럴 안**이다 — 백틱을 쓰면 문자열이 끊겨 화면이 백지가 된다
              (2026-08-19 실측: 여기 백틱 하나로 html_check가 구문 오류를 냈다). -->
-      <div class="kv"><b>근거</b> ${srcBadge(s)} <span class="src">${(s.sources || []).map((u, i) => {
+      ${gosiHistory(s) || `<div class="kv"><b>근거</b> ${srcBadge(s)} <span class="src">${(s.sources || []).map((u, i) => {
         // 링크 전수조사(2026-07-30, link_audit.py)에서 참조 1,216건(72%)이 **조회조건 없는 메인**으로
         // 드러났다 — 링크는 살아 있는데 그 신호를 찾을 수 없어 "정보가 무의미"하게 느껴진다(사용자 지적).
         // GET 파라미터 딥링크는 실측 불가(건축HUB는 파라미터를 줘도 응답이 동일) → **라벨에 조회 방법을 박는다.**
@@ -5751,7 +5823,7 @@ function renderDetail(s) {
         return `<a href="${u}" target="_blank"${nq ? ' title="이 링크는 검색 조건을 직접 넣어야 해당 건이 보입니다 — 딥링크가 제공되지 않습니다"' : ""}>${lbl}</a>`;
       }).join(" · ") || "원문 링크 없음"}</span>${
         s.src_tier === "osm" ? ' · <b>진행단계·명칭은 공식 확인 전</b>(선형만 OSM 참고)' : ""}${
-        /hub\.go\.kr|eais\.go\.kr/.test((s.sources || [])[0] || "") ? hubHowTo(s) : /data\.gg\.go\.kr/.test((s.sources || [])[0] || "") ? `<div class="note" style="margin-top:3px">※ 링크를 열면 <b>「일반 정비 사업 추진 현황」 데이터셋</b>이 바로 열립니다(Sheet 탭). 표에서 <b>${esc(String(s.title || s.n || "").split(" (")[0])}</b> 로 찾으세요.<br>원본 수치는 위 팩트시트에 있어 안 가셔도 됩니다. 경기도 분기 갱신이라 최신 변동은 늦을 수 있습니다.</div>` : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? `<div class="note" style="margin-top:3px">※ 링크를 열면 <b>정비몽땅</b>이 열립니다. <b>고시정보 &gt; 사업장 목록</b>에서 사업장명 칸에 <b>${esc(String(s.title || s.n || "").split(" (")[0])}</b> 를 넣고 검색 → 결과 줄 오른쪽 <b>[사업장]</b> 버튼을 누르면 조합 홈페이지의 <b>사업개요</b>(세대수·연면적·용적률)가 나옵니다.<br>원본 수치는 위 팩트시트에 있어 안 가셔도 됩니다.</div>` : ""}</div>
+        /hub\.go\.kr|eais\.go\.kr/.test((s.sources || [])[0] || "") ? hubHowTo(s) : /data\.gg\.go\.kr/.test((s.sources || [])[0] || "") ? `<div class="note" style="margin-top:3px">※ 링크를 열면 <b>「일반 정비 사업 추진 현황」 데이터셋</b>이 바로 열립니다(Sheet 탭). 표에서 <b>${esc(String(s.title || s.n || "").split(" (")[0])}</b> 로 찾으세요.<br>원본 수치는 위 팩트시트에 있어 안 가셔도 됩니다. 경기도 분기 갱신이라 최신 변동은 늦을 수 있습니다.</div>` : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? `<div class="note" style="margin-top:3px">※ 링크를 열면 <b>정비몽땅</b>이 열립니다. <b>고시정보 &gt; 사업장 목록</b>에서 사업장명 칸에 <b>${esc(String(s.title || s.n || "").split(" (")[0])}</b> 를 넣고 검색 → 결과 줄 오른쪽 <b>[사업장]</b> 버튼을 누르면 조합 홈페이지의 <b>사업개요</b>(세대수·연면적·용적률)가 나옵니다.<br>원본 수치는 위 팩트시트에 있어 안 가셔도 됩니다.</div>` : ""}</div>`}
       ${s.master_ref ? `<div class="kv"><b>소속 지구</b> ${s.master_ref.title} <span class="hmhint">— 지구 마스터에 속한 개별 사업(경계 기반 병합)</span></div>` : ""}
       ${s.ext_basis ? `<div class="kv"><b>증축 규모</b> ${s.ext_basis}</div>` : ""}
       ${s.nm_basis ? `<div class="kv"><b>건물명 근거</b> ${s.nm_basis}</div>` : ""}
@@ -6534,7 +6606,7 @@ function renderDock() {
   const nt = k => {
     const on = filter.nature.has(k);
     return `<button type="button" class="sgbtn ntb${on ? "" : " off"}" data-tog="nature" data-k="${k}"
-      title="${k} 성격의 도로 신호만 켜고 끄기 — 성격 정보가 없는 층(철도 등)은 영향 없음"><span>${k}</span></button>`;
+      title="${k} — ${NATURE_HINT[k] || ""}. 이 성격의 도로 신호만 켜고 끄기(성격 정보가 없는 층(철도 등)은 영향 없음)"><span>${k}</span></button>`;
   };
   const ph = p => {
     const on = filter.phase.has(p), i = PHASE_IDX[p] ?? 0;
@@ -8046,7 +8118,8 @@ function initLeaflet() {
       `<span class="row"><i class="dot" style="background:${CAT_COLOR[c]}"></i>${c}</span>`).join("");
     // 실선 경계 = 착공(물리적 실체). 점선 = 계획·인가(서류 단계). phaseSolid와 동일 기준.
     const phase = `<span class="row"><i class="ln" style="border-top-style:dashed"></i>계획 · 인가 <span style="color:#8a90a0">(서류)</span></span>`
-      + `<span class="row"><i class="ln" style="border-top-style:solid"></i>착공 · 준공 <span style="color:#8a90a0">(공사)</span></span>`;
+      + `<span class="row"><i class="ln" style="border-top-style:solid"></i>착공 · 준공 <span style="color:#8a90a0">(공사)</span></span>`
+      + `<span class="row"><i class="ln" style="border-top-style:solid;border-top-color:${BUILT_LINE.col};border-top-width:${BUILT_LINE.w}px"></i>이미 개설된 구간 <span style="color:#8a90a0">(호재 아님)</span></span>`;
     const size = `<span class="row sz">`
       + LEVELS.map(l => `<i style="width:${HJ_R[l] * 2}px;height:${HJ_R[l] * 2}px"></i>${l}`).join("&nbsp;&nbsp;")
       + `</span>`;
@@ -8281,12 +8354,16 @@ function initLeaflet() {
   // 노선 선: 실제 LineString geometry면 실선(확정), corridor(approx)면 점선+회랑(§4.1)
   const drawLine = sg => {
     // corridor.paths = 전 갈래(2026-09-01 · 카카오판과 같은 확장 — path는 하위호환)
-    let segs = null, approx = false;
+    let segs = null, approx = false, built = [];
     if (sg.geometry && sg.geometry.type === "LineString") segs = [sg.geometry.coordinates];
     else if (sg.corridor && (sg.corridor.paths || sg.corridor.path)) {
-      segs = sg.corridor.paths || [sg.corridor.path]; approx = sg.corridor.type === "approx"; }
+      const cs = corridorSplit(sg); segs = cs.delta; built = cs.built; approx = sg.corridor.type === "approx"; }
     if (!segs) return;
     const col = colorOf(sg);   // 4분류 색상
+    for (const seg of built) {   // 개설된 조각 = 회색 실선(호재 아님) — 카카오판과 같은 규칙(2026-09-05 세션97)
+      const bl = L.polyline(seg.map(([x, y]) => [y, x]), { pane: "cand", color: BUILT_LINE.col, weight: BUILT_LINE.w + .5, opacity: BUILT_LINE.op }).addTo(map);
+      bl.bindTooltip(`${sg.title} — 이미 개설된 구간(등록상 집행완료 · 호재 아님)`, { sticky: true });
+      bl.on("click", () => showSignal(sg, false)); lines.push(bl); }
     for (const seg of segs) {
     if (!seg || seg.length < 2) continue;
     const latlngs = seg.map(([x, y]) => [y, x]);
@@ -8374,7 +8451,7 @@ function initLeaflet() {
     }
     if (s.corridor && (s.corridor.paths || s.corridor.path)) {
       // 시군 도로 회랑(eum) — 영향권은 선을 따라가는 버퍼(카카오판과 같은 규칙 · 2026-09-01)
-      const segs = s.corridor.paths || [s.corridor.path];
+      const segs = corridorSplit(s).delta;   // 개설된 조각엔 영향권을 안 그린다(카카오판과 같은 규칙 · 2026-09-05 세션97)
       // 표본은 거리 간격(반경×0.7) — 개수 기준은 짧은 도로에서 덩어리(카카오판 주석 참조 · 같은 규칙)
       const rM = getRadius(s), stepM = rM * 0.7;
       for (const seg of segs) { if (!seg || seg.length < 2) continue; let acc = stepM;
@@ -9477,7 +9554,7 @@ function initKakao() {
           if (c[0] > _bb[2]) _bb[2] = c[0];  if (c[1] > _bb[3]) _bb[3] = c[1];
         }
       const _entry = { objs: [], objsLo: [], hits: [], built: false, build, isRoad, ph: p.phase || "계획", bb: isFinite(_bb[0]) ? _bb : null,
-        nt: p.work_nature || null,   // 공사 성격 — 선도 같은 축을 탄다(2026-09-03 알렉스 A안 · 미보유(철도)는 통과)
+        nt: natureGroupOf(p),   // 공사 성격 그룹 — 선도 같은 축을 탄다(2026-09-03 알렉스 A안 · 미보유(철도)는 통과 · 자는 natureGroupOf 하나)
         nms: [p.name, p.full, p.official_name].filter(Boolean),   // 노선 격리(상세 하이라이트) 매칭 키
         ck: clickHandler, bnm: p.name, beta: _beta, mid: _bflat[0],
         lvl: p.lvl || (isRoad ? "C" : railLevelOf(p.full || p.name, p.linekind)) };   // 등급 LOD용(어댑터와 같은 폴백)
@@ -9490,7 +9567,8 @@ function initKakao() {
        배지(bnm)·중점 배지(mid)는 안 단다 — 시군 소로급까지 이름표를 달면 광역 줌이 잡티가 된다. */
     for (const s of EUM_SIG) {
       { const _c = _lineCache.get(s); if (_c) { railLineObjs.push(_c); continue; } }   // 같은 신호 = 같은 항목(캐시)
-      const segs = s.corridor && (s.corridor.paths || (s.corridor.path ? [s.corridor.path] : null));
+      const _cs = corridorSplit(s);   // 조각 = 사업(delta)·개설(built) — 집행완료 조각은 회색 실선(2026-09-05 세션97)
+      const segs = _cs && _cs.raw.length ? _cs.raw : null;
       if (!segs) continue;   // paths = 전 갈래(UPIS 시설 폴리곤 — 갈래마다 실물 · path는 하위호환)
       let ebnm = null;   // 배지·툴팁 공용 짧은 이름(아래 계산 블록이 채움 — 먼저 계산)
       { const des = [...(s.title || "").matchAll(/(광로|대로|중로|소로)\s*(\d)\s*(?:[-·]|류)\s*(\d+)\s*호?/g)]
@@ -9509,12 +9587,18 @@ function initKakao() {
       /* 객체는 **처음 보일 때** 만든다 — 위 원장 노선의 build와 같은 문법(2026-09-02 · 시군 회랑이 노선
          2,802개 중 2,330개라 지연 생성의 효과는 여기서 가장 크다). 갈래(path)마다 폴리라인을 만들던 것을
          **다중경로 하나**로 합친다 — 클릭·호버 핸들러는 원래 신호 단위였다. */
+      const _dpaths = _cs.delta, _bpaths = _cs.built;   // 사업 조각 · 개설 조각(회색 실선 · 띠 없음)
       const build = o => {
-        const lls = _epaths.map(path => path.map(([x, y]) => LL(x, y)));
-        o.objs.push(new K.Polyline({ path: lls, strokeColor: col, strokeWeight: 10, strokeOpacity: .10, zIndex: 14 }),
-                    new K.Polyline({ path: lls, strokeColor: col, strokeWeight: 2.4, strokeOpacity: .8, strokeStyle: "shortdash", zIndex: 15 }));
-        o.objsLo.push(new K.Polyline({ path: _epaths.map(path => simplifyLine(path, 80).map(([x, y]) => LL(x, y))),
-                    strokeColor: col, strokeWeight: 2, strokeOpacity: .7, strokeStyle: "shortdash", zIndex: 15 }));
+        const lls = _epaths.map(path => path.map(([x, y]) => LL(x, y)));   // 히트 영역은 전 조각
+        if (_dpaths.length) { const dl = _dpaths.map(path => path.map(([x, y]) => LL(x, y)));
+          o.objs.push(new K.Polyline({ path: dl, strokeColor: col, strokeWeight: 10, strokeOpacity: .10, zIndex: 14 }),
+                      new K.Polyline({ path: dl, strokeColor: col, strokeWeight: 2.4, strokeOpacity: .8, strokeStyle: "shortdash", zIndex: 15 }));
+          o.objsLo.push(new K.Polyline({ path: _dpaths.map(path => simplifyLine(path, 80).map(([x, y]) => LL(x, y))),
+                      strokeColor: col, strokeWeight: 2, strokeOpacity: .7, strokeStyle: "shortdash", zIndex: 15 })); }
+        if (_bpaths.length) { const bl = _bpaths.map(path => path.map(([x, y]) => LL(x, y)));
+          o.objs.push(new K.Polyline({ path: bl, strokeColor: BUILT_LINE.col, strokeWeight: BUILT_LINE.w, strokeOpacity: BUILT_LINE.op, zIndex: 13 }));
+          o.objsLo.push(new K.Polyline({ path: _bpaths.map(path => simplifyLine(path, 80).map(([x, y]) => LL(x, y))),
+                      strokeColor: BUILT_LINE.col, strokeWeight: 1.6, strokeOpacity: .5, zIndex: 13 })); }
         const hit = new K.Polyline({ path: lls, strokeColor: "#000", strokeWeight: 14, strokeOpacity: .001, zIndex: 16 });
         // ⚠ _ovClickTs를 먼저 찍는다 — 지도 click(goHome)이 같은 클릭에 연달아 발화해
         //   카드가 열리자마자 닫힌다(2026-09-01 알렉스 「선형은 클릭이 안 되고」 — 라이브 재현·확정)
@@ -9537,7 +9621,7 @@ function initKakao() {
       const bnm = ebnm;
       const _mainSeg = segs.reduce((a, b) => ((b || []).length > (a || []).length ? b : a), segs[0]) || [];
       const _entry = { objs: [], objsLo: [], hits: [], built: false, build, isRoad: true, eum: true, ph: s.phase || "계획",
-        nt: s.work_nature || null,   // 공사 성격 — 원장 노선과 같은 자(natureVisible과 같은 규칙)
+        nt: natureGroupOf(s),   // 공사 성격 그룹 — 원장 노선과 같은 자(natureVisible과 같은 규칙)
         bb: isFinite(_eb[0]) ? _eb : null, nms: [s.title].filter(Boolean),
         ck: () => { _ovClickTs = Date.now(); showSignal(s, false); }, bnm, beta: "",
         mid: bnm && _mainSeg.length ? _mainSeg[0] : null, lvl: s.lvl || "C" };
@@ -9830,7 +9914,7 @@ function initKakao() {
   { const div = document.createElement("div"); div.className = "hj-legend"; div.style.cssText = "position:absolute;right:10px;bottom:26px;z-index:40";
     const collapsed = localStorage.getItem("hojae_legend_off") === "1"; if (collapsed) div.classList.add("collapsed");
     const cats = CAT_KEYS.map(c => '<span class="row"><i class="dot" style="background:' + CAT_COLOR[c] + '"></i>' + c + '</span>').join("");
-    const phase = '<span class="row"><i class="ln" style="border-top-style:dashed"></i>계획 · 인가 <span style="color:#8a90a0">(서류)</span></span><span class="row"><i class="ln" style="border-top-style:solid"></i>착공 · 준공 <span style="color:#8a90a0">(공사)</span></span>';
+    const phase = '<span class="row"><i class="ln" style="border-top-style:dashed"></i>계획 · 인가 <span style="color:#8a90a0">(서류)</span></span><span class="row"><i class="ln" style="border-top-style:solid"></i>착공 · 준공 <span style="color:#8a90a0">(공사)</span></span><span class="row"><i class="ln" style="border-top-style:solid;border-top-color:' + BUILT_LINE.col + ';border-top-width:' + BUILT_LINE.w + 'px"></i>이미 개설된 구간 <span style="color:#8a90a0">(호재 아님)</span></span>';
     const size = '<span class="row sz">' + LEVELS.map(l => '<i style="width:' + (HJR[l] * 2) + 'px;height:' + (HJR[l] * 2) + 'px"></i>' + l).join("&nbsp;&nbsp;") + '</span>';
     div.innerHTML = '<div class="hlt">지도 보는 법 <span class="car">' + (collapsed ? "▾" : "▴") + '</span></div><div class="sec"><b>색 = 분류</b>' + cats + '</div><div class="sec"><b>노선 선 = 단계</b>' + phase + '</div><div class="sec"><b>마커 점선 = 위치 근사</b><span class="row"><i class="dot" style="border:1.6px dashed ' + CAT_COLOR['교통'] + ';background:none"></i>대략 위치 <span style="color:#8a90a0">(상세는 ±수치)</span></span></div><div class="sec"><b>크기 = 등급</b>' + size + '</div><div class="sec"><b>가리키면 뜨는 후광</b><span class="row"><i class="dot" style="background:' + CAT_COLOR['교통'] + ';box-shadow:0 0 0 6px ' + CAT_COLOR['교통'] + '22"></i>위치 근사 <span style="color:#8a90a0">(이 근처)</span></span></div><div class="hnote">회색 = 등급 근거 미상 또는 종결·무산.<br>마커를 <b>가리키거나 선택</b>하면 근사 좌표에만 후광이 뜹니다 — 정확한 지점이 아니라 <b>대략 위치</b>라는 뜻(상세 카드는 ±수치로 말합니다).</div>';
     div.querySelector(".hlt").addEventListener("click", () => { const off = div.classList.toggle("collapsed"); localStorage.setItem("hojae_legend_off", off ? "1" : "0"); div.querySelector(".car").textContent = off ? "▾" : "▴"; });
@@ -9973,13 +10057,15 @@ function initKakao() {
 
   let lines = [], pins = [], circles = [];
   const clearRadius = () => { circles.forEach(o => o.setMap(null)); circles = []; };
-  const drawLine = sg => { let segs = null, approx = false;
+  const drawLine = sg => { let segs = null, approx = false, built = [];
     // corridor.paths = 전 갈래(2026-09-01 — UPIS 시설 폴리곤은 갈래마다 실물이라 전부 그린다.
     // 최장 갈래만 실으면 진입도로 4시설 중 풍곡IC 구간이 떨어진다 · path는 하위호환)
     if (sg.geometry && sg.geometry.type === "LineString") segs = [sg.geometry.coordinates];
     else if (sg.corridor && (sg.corridor.paths || sg.corridor.path)) {
-      segs = sg.corridor.paths || [sg.corridor.path]; approx = sg.corridor.type === "approx"; }
+      const cs = corridorSplit(sg); segs = cs.delta; built = cs.built; approx = sg.corridor.type === "approx"; }
     if (!segs) return; const col = colorOf(sg);
+    for (const path of built) { const ll = path.map(([x, y]) => LL(x, y));   // 개설된 조각 = 회색 실선(호재 아님 · 2026-09-05 세션97)
+      const bl = new K.Polyline({ map, path: ll, strokeColor: BUILT_LINE.col, strokeWeight: BUILT_LINE.w + .5, strokeOpacity: BUILT_LINE.op, zIndex: 17 }); K.event.addListener(bl, "click", () => { _ovClickTs = Date.now(); showSignal(sg, false); }); lines.push(bl); }
     for (const path of segs) { if (!path || path.length < 2) continue; const ll = path.map(([x, y]) => LL(x, y));
     if (approx) { lines.push(new K.Polyline({ map, path: ll, strokeColor: col, strokeWeight: 16, strokeOpacity: .12, zIndex: 18 }));
       const dl = new K.Polyline({ map, path: ll, strokeColor: col, strokeWeight: 3, strokeOpacity: .85, strokeStyle: "shortdash", zIndex: 19 }); K.event.addListener(dl, "click", () => { _ovClickTs = Date.now(); showSignal(sg, false); }); lines.push(dl);
@@ -10003,7 +10089,7 @@ function initKakao() {
       // 시군 도로 회랑(eum)도 원장 도로와 같은 문법 — 영향권은 핀 중심 원이 아니라 **선을 따라가는
       // 버퍼**다(2026-09-01 알렉스 「호재원이랑 도로랑 위치가 다른 것이냐」 — 핀은 고시 위치 지번의
       // 사실이고, 파급은 시설을 따라간다. 두 사실을 한 원으로 뭉개면 지도가 어긋나 보인다).
-      const segs = s.corridor.paths || [s.corridor.path];
+      const segs = corridorSplit(s).delta;   // 개설된 조각엔 영향권을 안 그린다 — 남은 delta가 없다(2026-09-05 세션97)
       /* ⚠ 표본은 **거리 간격**으로 뽑는다 (2026-09-01 알렉스 「이거 난리다」 — 개수 기준(40등분)은
          짧은 도로에서 반경 1km 원 수십 개가 겹쳐 시뻘건 덩어리가 된다: 겹침 배수 ~30 × 투명도 .07
          ≈ 불투명. 간격 = 반경×0.7이면 길이와 무관하게 겹침 배수가 일정하다 — 원장 도로 밴드와 같은 농도). */
@@ -10081,8 +10167,12 @@ function initKakao() {
     //    남의 상시 선이 같이 진하게 남아 「여러 도로가 선택된」 것처럼 보였다 — 알렉스 재재보고).
     if (routeHl.length <= 1) {   // 베일 하나뿐 = 원장 미적중
       const es = EUM_SIG.find(x => x.title === lineName && x.corridor);
-      if (es) { const esegs = es.corridor.paths || [es.corridor.path];
-        for (const seg of esegs) { if (!seg || seg.length < 2) continue;
+      if (es) { const ecs = corridorSplit(es);   // 개설 조각은 하이라이트에서도 회색 실선 — 상시 층과 같은 규칙(2026-09-05 세션97)
+        for (const seg of ecs.built) {
+          const ll = seg.map(([x, y]) => { const q = LL(x, y); bounds.extend(q); return q; });
+          routeHl.push(new K.Polyline({ map, path: ll, strokeColor: "#fff", strokeWeight: 8, strokeOpacity: .85, zIndex: 21 }));
+          routeHl.push(new K.Polyline({ map, path: ll, strokeColor: BUILT_LINE.col, strokeWeight: 3, strokeOpacity: .9, zIndex: 22 })); }
+        for (const seg of ecs.delta) {
           const ll = seg.map(([x, y]) => { const q = LL(x, y); bounds.extend(q); return q; });
           routeHl.push(new K.Polyline({ map, path: ll, strokeColor: "#fff", strokeWeight: 11, strokeOpacity: .85, zIndex: 21 }));
           routeHl.push(new K.Polyline({ map, path: ll, strokeColor: col, strokeWeight: 5.5, strokeOpacity: .95, strokeStyle: "shortdash", zIndex: 22 })); } } }
@@ -10720,8 +10810,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "b12da04dd8", "adverse_facilities.json": "d84ba9cfe9", "apartments_all.json": "de563047ab", "arch_signals.json": "6225a49776", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "a2839d3e26", "dart_signals.json": "1e2a409b35", "dps_signals.json": "cf1bc644a2", "eum_backfill_progress.json": "81ff48e3f0", "eum_enroll.json": "2f2aa796ee", "eum_signals.json": "5e299b618e", "eum_usage.json": "5dc60ddc3a", "hospital_signals.json": "8c0f0139be", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "5671230eb4", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "e5a6ae3373", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "1ac4b6c4d6", "mega_signals.json": "c19ca9bd05", "methodology.html": "39ef8574c4", "park_signals.json": "b146b8a938", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "8f348d32a7", "rail_reference.html": "2f9ce558c8", "rail_signals.json": "3f8e1528e1", "regions.json": "5d52225be0", "report.html": "a20f5515b0", "retail_signals.json": "584df1877a", "road_signals.json": "14e9f19686", "school_signals.json": "93b4165c6c", "settings.html": "1ca2007f59", "sfz_signals.json": "c6438be8f8", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "baade1e1fe", "signals.json": "94f5712a9f", "signals_auto.json": "5ecc6baf0d", "signals_jeongbi_all.json": "6ecc0af749", "source_status.html": "c230c632eb", "thresholds.json": "1b59ee2aaf", "upis_facility_geom.json": "94a42922de", "upis_on_road.json": "97e75e0377", "weekly.html": "164e5a1794", "weekly_index.json": "e762fd0c84"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260905i");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "b12da04dd8", "adverse_facilities.json": "d84ba9cfe9", "apartments_all.json": "de563047ab", "arch_signals.json": "6225a49776", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "27d3cbfa2c", "dart_signals.json": "1e2a409b35", "dps_signals.json": "cf1bc644a2", "eum_backfill_progress.json": "81ff48e3f0", "eum_enroll.json": "2e0aa252d9", "eum_signals.json": "18e346e08b", "eum_usage.json": "5dc60ddc3a", "hospital_signals.json": "8c0f0139be", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "5671230eb4", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "e5a6ae3373", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "1ac4b6c4d6", "mega_signals.json": "c19ca9bd05", "methodology.html": "39ef8574c4", "park_signals.json": "b146b8a938", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "97c9ffbae4", "rail_reference.html": "2f9ce558c8", "rail_signals.json": "3f8e1528e1", "regions.json": "5d52225be0", "report.html": "a20f5515b0", "retail_signals.json": "584df1877a", "road_signals.json": "e301aec7f4", "school_signals.json": "93b4165c6c", "settings.html": "1ca2007f59", "sfz_signals.json": "c6438be8f8", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "baade1e1fe", "signals.json": "94f5712a9f", "signals_auto.json": "5ecc6baf0d", "signals_jeongbi_all.json": "6ecc0af749", "source_status.html": "08ea026d47", "thresholds.json": "1b59ee2aaf", "upis_facility_geom.json": "94a42922de", "upis_on_road.json": "1c46fdf60c", "weekly.html": "164e5a1794", "weekly_index.json": "e762fd0c84"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260905j");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
