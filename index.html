@@ -2946,6 +2946,8 @@ function gosiKindRow(s) {
 function posConfRow(s) {
   /* 핀이 얼마나 정확한가 — 지도 정직성(§4.1). 근사면 근사라고 적는다. */
   if (!s.position_confidence) return "";
+  // 위치 근거(geo_basis)와 같은 문장이면 위치 정확도 블록(precNote)이 이미 말한다 — 같은 사실은 한 행(2026-09-06 세션101 · 흑산공항·마곡 지식산업센터 실측)
+  if (String(s.position_confidence) === String(s.geo_basis || "")) return "";
   return `<div class="kv"><b>위치 정확도</b> <span class="hmhint">${esc(String(s.position_confidence))}</span></div>`;
 }
 function gosiEffectRow(s) {
@@ -3052,8 +3054,11 @@ function lineCoverRow(s) {
   const br = parseFloat(s.bridge_km) || 0;
   const note = pct >= 95 ? "전 구간 확보" : `부분 확보 ${pct}%`;
   const brs = br > 0.05 ? ` · 보간 ${br.toFixed(2)}km(근거 없는 구간을 이은 것)` : "";
+  /* 빌더의 선형 상태 문장(`geom_status` — 「경로 미확정 — 구간 양끝만 확보」·「지상 노선 중심선 기준 근사」)은 같은 사실(선형 범위)의
+     정성 서술이다 — 같은 라벨의 행 둘이 아니라 **한 행의 힌트**로(2026-09-06 세션101 · 카드 행 중복 자: 원장 노선 표본 60 중 9가 「선형 범위」 두 줄). */
+  const st = s.geom_status ? `${esc(String(s.geom_status)).replace(/\*\*/g, "")} · ` : "";
   return `<div class="kv"><b>선형 범위</b> 고시 연장 ${km}km 중 근거 구간 ${drawn.toFixed(2)}km — ${note}${brs}`
-       + `<span class="hmhint">근거를 못 얻은 구간은 비워 둡니다 — 없는 경로를 직선으로 지어내지 않습니다. `
+       + `<span class="hmhint">${st}근거를 못 얻은 구간은 비워 둡니다 — 없는 경로를 직선으로 지어내지 않습니다. `
        + `선이 조각나 보이는 것은 그 때문입니다.</span></div>`;
 }
 /* ★ 국토부 건설사업정보시스템(calspia) 공사정보 — 공사별 **준공구분·공사기간**(2026-09-03).
@@ -5864,7 +5869,7 @@ function renderDetail(s) {
         <span class="hmhint">— 진출입은 되지만 이 사업으로 새로 생기는 지점이 아닙니다(기존 도로를 따라가는 확장·지하화). 영향권에 세지 않습니다</span></div>` : ""}
       ${(s.unverified_points || []).length ? `<div class="kv"><b>근거 미확인</b> ${s.unverified_points.map(u => u.name).join(" · ")}
         <span class="hmhint">— 공식 원문에서 이름을 못 찾았습니다. 지우지 않고 표시하되 호재로 세지 않습니다</span></div>` : ""}
-      ${s.geom_status ? `<div class="kv"><b>선형 범위</b> ${s.geom_status}</div>` : ""}
+      ${s.geom_status && !lineCoverRow(s) ? `<div class="kv"><b>선형 범위</b> ${esc(String(s.geom_status)).replace(/\*\*/g, "")}</div>` : ""}
       ${s.side_effects?.length ? `<div class="kv"><b>역효과 표기</b> ${s.side_effects.join(", ")}</div>` : ""}
       ${SUB_CAVEAT[subOf(s)] ? `<div class="kv"><b>시설 특성</b> <span class="hmhint">${SUB_CAVEAT[subOf(s)]}</span></div>` : ""}
       ${s.pt_type === "road_ic" && s.ic_note ? `<div class="kv"><b>지점 특성</b> ${s.ic_note.replace(/\*\*/g, "")}</div>` : ""}
@@ -10921,8 +10926,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "b12da04dd8", "adverse_facilities.json": "970cc9b782", "apartments_all.json": "77de39cb26", "arch_signals.json": "ba052c58ac", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "333a274fdd", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "27aa228b5e", "dart_signals.json": "1e2a409b35", "dps_signals.json": "5c3a069018", "eum_backfill_progress.json": "81ff48e3f0", "eum_enroll.json": "2ad21207b7", "eum_signals.json": "30575feb11", "eum_usage.json": "fde5652fd4", "hospital_signals.json": "4b7e994860", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "ffc954c0d1", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "43145cabc3", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "4966933bc9", "mega_signals.json": "baad8c8b5d", "methodology.html": "5d9c0b4aed", "park_signals.json": "3b9ab7b6bd", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "596042134b", "rail_reference.html": "f2cebdb566", "rail_signals.json": "3f8e1528e1", "regions.json": "5d52225be0", "report.html": "fdc5364d66", "retail_signals.json": "bf392bbbb4", "road_signals.json": "4c9482761b", "school_signals.json": "43c7914615", "settings.html": "1ca2007f59", "sfz_signals.json": "a8b722784e", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "9de3ab9838", "signals.json": "94f5712a9f", "signals_auto.json": "03dff2eeba", "signals_jeongbi_all.json": "e7880306a3", "source_status.html": "b91b92d53d", "thresholds.json": "ed27dd9e28", "upis_facility_geom.json": "efec16a0a4", "upis_on_road.json": "5b5ba52ecd", "weekly.html": "164e5a1794", "weekly_index.json": "e762fd0c84"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260906c");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "b12da04dd8", "adverse_facilities.json": "970cc9b782", "apartments_all.json": "77de39cb26", "arch_signals.json": "ba052c58ac", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "f8f777f810", "dart_signals.json": "1e2a409b35", "dps_signals.json": "5c3a069018", "eum_backfill_progress.json": "81ff48e3f0", "eum_enroll.json": "2ad21207b7", "eum_signals.json": "d987d03d07", "eum_usage.json": "fde5652fd4", "hospital_signals.json": "4b7e994860", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "8669abd04d", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "050497b0de", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "b8c17f819c", "mega_signals.json": "baad8c8b5d", "methodology.html": "5d9c0b4aed", "park_signals.json": "3b9ab7b6bd", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "d15b995519", "rail_reference.html": "f2cebdb566", "rail_signals.json": "3f8e1528e1", "regions.json": "5d52225be0", "report.html": "fdc5364d66", "retail_signals.json": "bf392bbbb4", "road_signals.json": "589cc18091", "school_signals.json": "43c7914615", "settings.html": "1ca2007f59", "sfz_signals.json": "a8b722784e", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "9de3ab9838", "signals.json": "94f5712a9f", "signals_auto.json": "03dff2eeba", "signals_jeongbi_all.json": "e7880306a3", "source_status.html": "b91b92d53d", "thresholds.json": "cca4518e26", "upis_facility_geom.json": "77cc84c2a1", "upis_on_road.json": "78d565fe8b", "weekly.html": "164e5a1794", "weekly_index.json": "e762fd0c84"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260906d");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
