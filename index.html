@@ -124,6 +124,23 @@
      FRESH_MAX_H(JS 한 벌)를 넘기거나 마지막 빌드가 실패면 .stale = --warn 굵게. 색은 경고에만(DESIGN 「데이터 기준 시각 배지」). */
   header .fresh { font-size:var(--fs-s); color:var(--ink3); white-space:nowrap; }
   header .fresh.stale { color:var(--warn); font-weight:600; }
+  /* ★ 건수 설명 말풍선(#xtip · countExplain 한 자 · 2026-09-06 세션102) — 지도 말풍선과 같은 어두운 카드(DESIGN 「건수 설명」 행). 색·크기는 토큰만. */
+  #xtip { display:none; position:fixed; z-index:60; max-width:420px; padding:8px 10px; border-radius:var(--r-s); background:var(--ink); color:#fff;
+          font-size:var(--fs-s); line-height:1.45; pointer-events:none; box-shadow:0 4px 14px rgba(0,0,0,.18); }
+  #xtip b { color:#fff; }
+  /* ★ 페이지 자가검사 결과 판(#selfcheck · `?selfcheck=1` · 2026-09-06 세션102) — 관리자 전용 오버레이. 통과 ✓는 잉크, ✗는 --warn. */
+  #selfcheck { position:fixed; right:12px; bottom:12px; z-index:61; width:min(460px, calc(100vw - 24px)); max-height:70vh; overflow:auto; padding:10px 12px;
+               border:1px solid var(--line2); border-radius:var(--r); background:#fff; font-size:var(--fs-s); line-height:1.5; box-shadow:0 8px 24px rgba(0,0,0,.14); }
+  #selfcheck > b { display:block; font-size:var(--fs); margin-bottom:4px; }
+  #selfcheck .x { position:absolute; right:10px; top:8px; cursor:pointer; color:var(--ink3); }
+  #selfcheck div.ok { color:var(--ink2); }
+  #selfcheck div.bad { color:var(--warn); font-weight:600; }
+  #selfcheck div small { display:block; font-weight:400; color:var(--ink3); margin-left:18px; }
+  #selfcheck > small { display:block; color:var(--ink3); margin-top:6px; }
+  /* ★ 시군 피드 「이 지역 결손」 절(.gaps · region_gaps.json · 2026-09-06 세션102) — 회색 면 위 본문 작은 글. 숫자는 모노(DESIGN §1-4). */
+  .gaps { margin:6px 12px 2px; padding:8px 10px; background:var(--panel); border-radius:var(--r-s); font-size:var(--fs-s); color:var(--ink2); line-height:1.5; }
+  .gaps > div { margin-top:2px; }
+  .gaps small { color:var(--ink3); }
   header .region { font-size:13px; border:1px solid var(--line); border-radius:8px; padding:4px 10px; background:#fff; }
   /* ── 상단 통합 검색 (동·시군구·아파트·호재) ── */
   /* ★ **검색창은 헤더에 남는 폭을 먹는다** (2026-08-14 시안 §04 갱신).
@@ -5972,12 +5989,13 @@ function renderSggFeed(disp) {
   const LIST_CAP = 80;
   p.innerHTML = `
     <div class="phead"><div class="pt">${disp}</div><div class="closex" onclick="closePanel()">✕</div></div>
-    <div class="ps">영향권이 이 시군구를 덮는 호재 <b class="mono">${near.length}</b> · 시군구 안에 있는 호재 <b class="mono">${host.length}</b>${rel.length > LIST_CAP ? ` · 상위 ${LIST_CAP}건 표시` : ""}</div>
+    <div class="ps" onmouseenter="explainTip(event,'sgg','영향권이 덮음 ${near.length} · 안에 소재 ${host.length} (지역축 대신 시군구 경계·반경권으로 판정 · 정비는 소재만)')" onmouseleave="explainHide()">영향권이 이 시군구를 덮는 호재 <b class="mono">${near.length}</b> · 시군구 안에 있는 호재 <b class="mono">${host.length}</b>${rel.length > LIST_CAP ? ` · 상위 ${LIST_CAP}건 표시` : ""}</div>
     ${regionHeadHtml(rel)}
     <div id="list"></div>
     ${cands.length ? `<div class="group-h">후보 신호 (자동 생성 — 5억+·DART, 중복 통합, 단계는 추정)</div><div id="candlist"></div>
 ` : ""}`;
   wireRegionHead(p);
+  renderRegionGaps(p, disp);   // 「이 지역 결손」 절 — 화면에 못 실은 것의 건수·사유(region_gaps.json · 2026-09-06 세션102)
   const list = p.querySelector("#list");
   panelListRender = () => {
     list.className = ""; list.innerHTML = "";
@@ -6739,7 +6757,7 @@ function renderDock() {
            올라간다. 지도 배지·모바일 시트에는 「불러오는 중」을 걸어 두고 **여기만 빠뜨렸다** —
            §규칙이 한쪽에만 걸린다의 그 형태다. 틀린 숫자를 잠깐 보여주느니 받는 중이라고 말한다(P2). -->
       <b>${regionLabel() ? `<span class="rg" title="${regionLabel()}">${regionLabel()}</span>` : ""}<span
-        class="fx">호재 <span class="cnt">${SRC_PENDING.size ? '<span class="loading">···</span>' : C.total.toLocaleString()}</span></span></b>
+        class="fx">호재 <span class="cnt" onmouseenter="explainTip(event,'dock')" onmouseleave="explainHide()">${SRC_PENDING.size ? '<span class="loading">···</span>' : C.total.toLocaleString()}</span></span></b>
       
 
     </div>
@@ -7098,7 +7116,7 @@ function renderFlow() {
     : past.filter(s => (movDelta(s) || {}).kind === (FLOW_KIND === "chg" ? "변동" : "신규"));
   shown.sort((a, b) => String(b.last_movement).localeCompare(String(a.last_movement)));   // 최신순(사용자 확정)
   // 라벨 위 · 큰 숫자 아래(시안 실물). 종전엔 한 줄에 라벨+작은 숫자였다.
-  const seg = (k, lb, n) => `<button class="fseg${FLOW_KIND === k ? " on" : ""}" data-kind="${k}">${lb}<span class="n">${n.toLocaleString()}</span></button>`;
+  const seg = (k, lb, n) => `<button class="fseg${FLOW_KIND === k ? " on" : ""}" data-kind="${k}" onmouseenter="explainTip(event,'flow','${lb}(기간 창 안 · 노선당 1건) ${n.toLocaleString()}')" onmouseleave="explainHide()">${lb}<span class="n">${n.toLocaleString()}</span></button>`;
   const nFld = chgRows.length;
   /* 등급 축 두 개 — `field_changes`의 등급 항목에서 도출한다.
      ⚠ 값 변경 추적(WATCH)은 2026-08-12 도입이라 다음 주간 수집(첫 실행은 기준선)부터 쌓인다.
@@ -9369,6 +9387,7 @@ function initKakao() {
        무거운 소스 넷이 첫 화면 뒤에 도착하므로, 그 사이 「전부 표시 중 · 숨김 0」은 **거짓말**이다
        (P2·P5 · §화면이 사실을 말하는가). 무엇이 안 왔는지까지 적는다 — 「불러오는 중」만으로는
        빠진 게 철도인지 정비인지 방문자가 알 수 없다. 다 오면 원래 보증 문구로 돌아온다. */
+    _hjCountEl.onmouseenter = ev => explainTip(ev, "view"); _hjCountEl.onmouseleave = explainHide;   // 건수 설명 — 도크·목록과 같은 자(countExplain · 2026-09-06 세션102)
     _hjCountEl.innerHTML = '<b>' + pool.length.toLocaleString() + '</b>건 '
       + (SRC_PENDING.size
           ? '표시 중 <span class="hjauto">· ' + [...SRC_PENDING].join('·') + ' 불러오는 중</span>'
@@ -9646,6 +9665,7 @@ function initKakao() {
         }
       const _entry = { objs: [], objsLo: [], hits: [], built: false, build, isRoad, ph: p.phase || "계획", bb: isFinite(_bb[0]) ? _bb : null,
         stale: isStaleFinishedProps(p),   // 끝난 신호 1년 규칙 — 점(visible)과 같은 자(2026-09-06 · 종전엔 선에만 없었다)
+        _p: p,   // 원본 피처 속성 — 자가검사(__selfcheck ③)가 「선의 stale = 원본의 isStaleFinished」를 다시 잰다(2026-09-06 세션102)
         nt: natureGroupOf(p),   // 공사 성격 그룹 — 선도 같은 축을 탄다(2026-09-03 알렉스 A안 · 미보유(철도)는 통과 · 자는 natureGroupOf 하나)
         nms: [p.name, p.full, p.official_name].filter(Boolean),   // 노선 격리(상세 하이라이트) 매칭 키
         ck: clickHandler, bnm: p.name, beta: _beta, mid: _bflat[0],
@@ -9714,6 +9734,7 @@ function initKakao() {
       const bnm = ebnm;
       const _mainSeg = segs.reduce((a, b) => ((b || []).length > (a || []).length ? b : a), segs[0]) || [];
       const _entry = { objs: [], objsLo: [], hits: [], built: false, build, isRoad: true, eum: true, ph: s.phase || "계획",
+        _s: s,   // 원본 신호 — 자가검사(__selfcheck ③)가 「선의 stale = 원본의 isStaleFinished」를 다시 잰다(2026-09-06 세션102)
         stale: isStaleFinished(s),   // ★ 끝난 신호 1년 규칙(2026-07-21)이 **선에는 없었다** — 점은 숨고 회랑(전부 집행완료 = 전부 회색)만 남았다(2026-09-06 알렉스 「완공 1년 지났으면 표기할 필요 없지 않나」 · 실측 652건 중 559건이 규칙상 숨겨야 할 것)
         nt: natureGroupOf(s),   // 공사 성격 그룹 — 원장 노선과 같은 자(natureVisible과 같은 규칙)
         bb: isFinite(_eb[0]) ? _eb : null, nms: [s.title].filter(Boolean),
@@ -10542,8 +10563,8 @@ function renderSheet() {
   const rows = sortSignals(vp && vp.length ? vp.filter(visible) : allSignalsFlat().filter(visible),
                            sortEl ? sortEl.value : "level", null);
   /* 아직 받는 중이면 여기도 말한다 — 지도 배지와 **같은 규칙**이다(한쪽에만 걸면 모바일이 조용히 예외). */
-  document.getElementById("ms-n").innerHTML = '이 화면 안 <b>' + rows.length.toLocaleString() + '</b>건'
-    + (SRC_PENDING.size ? ' <span class="hjauto">· 불러오는 중</span>' : '');
+  document.getElementById("ms-n").innerHTML = '이 화면 안 <b onclick="explainTip(event,\'sheet\')">' + rows.length.toLocaleString() + '</b>건'
+    + (SRC_PENDING.size ? ' <span class="hjauto">· 불러오는 중</span>' : '');   // 탭하면 건수 설명(모바일은 호버가 없다 · countExplain 한 자)
   /* 활성 필터 개수 = **기본과 달라진 축의 수**. 접힌 상태에서도 뭐가 걸려 있는지 보인다. */
   const nf = (CAT_KEYS.length - CAT_KEYS.filter(c => filter.cat.has(c)).length)
     + (PHASES.length - PHASES.filter(p => filter.phase.has(p)).length)
@@ -10631,7 +10652,7 @@ function renderList() {
   const wkMov = wk.filter(s => movBasis(s) !== "observed").length, wkObs = wk.length - wkMov;
   document.getElementById("l-count").innerHTML =
     /* ★ 시안 실물: 「**412** 건」 — 숫자만 크고 굵게(모노), 단위는 작게. 나머지 설명은 뒤로. */
-    `<span class="bignum">${rows.length.toLocaleString()}</span><span class="bigunit">건</span>`
+    `<span class="bignum" onmouseenter="explainTip(event,'list',${q ? "'검색어 「" + q.replace(/[\\'"<>]/g, "") + "」 일치'" : "null"})" onmouseleave="explainHide()">${rows.length.toLocaleString()}</span><span class="bigunit">건</span>`
     /* ⚠ 뒤에 달려 있던 긴 설명은 **뺐다**(시안 목업엔 「N 건」뿐이다). 지운 게 아니라 자리가 있다:
          유형별 건수 → 바로 위 표현 필터 칩 · 이번 주 움직임/신규 확인 → 업데이트 탭이 전담.
          같은 말을 두 곳에서 하면 정작 표가 밀린다. */
@@ -10688,6 +10709,153 @@ function allSignalsFlat() {
    정비 준공·해산분 475 + 소수). 같은 질문에 자가 둘이면 반드시 갈린다(regionVisible 통합과 같은
    사고 클래스). 제외분은 숨기지 않고 개수로 밝힌다(숨은 필터 금지). */
 function livePool() { return allSignalsFlat().filter(s => !isStaleFinished(s)); }
+/* ★★ 건수 설명 — 화면의 모든 건수는 **이 함수 하나**로 「어떤 자로 센 수인지」를 말한다 (2026-09-06 세션102 · 핸드오프 선2 ·
+   알렉스 「흐름 325 · 오늘 26 · 독 28 다 제각각」「이거 뭐지」 10회).
+   같은 풀에서 단계별로 좁혀 간 깔때기 = 전체(좌표 있는 신호) → 완공 1년 규칙(livePool) → 지역(regionVisible) → 조회조건(visible)
+   → [이 화면 안(_viewPool) · 움직임 날짜 · 시군구 관계]. 자는 전부 실제 렌더가 쓰는 그 함수다 — 설명이 따로 세면 설명이 갈린다.
+   건수 자리 여섯(도크 헤더 · 목록 · 업데이트 칸 · 시군 피드 · 지도 배지 · 모바일 시트)이 `explainTip`으로 이 함수를 부른다 —
+   게이트 = html_check.count_explain_check(다른 함수를 쓰면 막는다). 값은 가리킬 때 계산한다(렌더마다 7천 건을 네 번 거르지 않는다). */
+function countExplain(scope, extra) {
+  const all = allSignalsFlat(), live = livePool();
+  const reg = live.filter(s => regionVisible(s)), cond = reg.filter(visible);
+  const f = n => n.toLocaleString();
+  const parts = [`전체(좌표 있는 신호) ${f(all.length)}`, `완공 1년 규칙 통과 ${f(live.length)}`,
+                 `지역(${regionLabel() || "전국"}) ${f(reg.length)}`, `조회조건(분류·단계·등급·성격) ${f(cond.length)}`];
+  if (scope === "view" || scope === "sheet") parts.push(`이 화면 안 ${f((window._viewPool || []).length)}`);
+  else if (scope === "flow") parts.push(`움직임 날짜 있음 ${f(cond.filter(s => s.last_movement).length)}` + (extra ? ` → ${extra}` : ""));
+  else if (scope === "sgg") parts.push(extra || "시군구 관계(소재·반경권)는 지역축 대신 경계로 판정");
+  else if (extra) parts.push(extra);
+  return `<b>이 숫자는 어떻게 센 것인가</b><br>` + parts.join(" → ")
+    + (SRC_PENDING.size ? `<br>· 아직 받는 중(${[...SRC_PENDING].join("·")}) — 다 오면 바뀐다` : "");
+}
+/* 건수 설명 말풍선 — 지도 말풍선(showTip)은 지도 초기화 클로저 안이라 목록·시트·도크에서 못 부른다 → 자기 요소(#xtip) 하나.
+   호버는 떼면 닫히고(explainHide), 탭(모바일 시트)은 6초 뒤 스스로 닫힌다. */
+let _xtipTimer = 0;
+function explainTip(ev, scope, extra) {
+  try {
+    let el = document.getElementById("xtip");
+    if (!el) { el = document.createElement("div"); el.id = "xtip"; document.body.appendChild(el); }
+    el.innerHTML = countExplain(scope, extra); el.style.display = "block";
+    const x = Math.min((ev && ev.clientX || 20) + 12, innerWidth - el.offsetWidth - 8), y = Math.min((ev && ev.clientY || 20) + 14, innerHeight - el.offsetHeight - 8);
+    el.style.left = Math.max(8, x) + "px"; el.style.top = Math.max(8, y) + "px";
+    clearTimeout(_xtipTimer);
+    if (ev && ev.type === "click") _xtipTimer = setTimeout(explainHide, 6000);
+  } catch (e) {}
+}
+function explainHide() { const el = document.getElementById("xtip"); if (el) el.style.display = "none"; }
+
+/* ★★ 페이지 자가검사 (2026-09-06 세션102 · 핸드오프 선1 · 「왜 안 보이냐·카운팅 0·끄면 선이 남는다·호재수 제각각」 9회).
+   화면의 불변식을 **화면 자신이** 잰다 — 술어는 전부 실제 렌더가 쓰는 그 함수(visible·isStaleFinished·dockCounts·allSignalsFlat)다.
+   ① 도크 총계 = 조회조건 통과 수(= 목록 건수 · 검색어 없을 때)  ② 지도 무손실: 이 화면 안 pool = 도넛 건수합 + 붙은 낱개(PROCEDURE_화면품질 §4-F) · pool ⊂ 조회조건
+   ③ 점 stale ⇔ 선 stale: 선 항목의 stale이 원본 신호·피처의 isStaleFinished와 같다 · 그려진 선은 stale이 아니다
+   ④ 켜진 선은 전부 표시 술어를 만족(도로선/철도선 토글 · 단계 · 성격 · 등급) — 축을 끄면 그 축 선 0
+   ⑤ 단지 건수 풀 = 전체 풀(signalsNearPoint 캐시 길이 = allSignalsFlat)  ⑥ 첫 화면 막힌 시간(__perf · 문턱 없음 · 비교용)
+   콘솔 `__selfcheck()` 또는 관리자 화면 → `index.html?selfcheck=1`(다 받은 뒤 자동 실행 · 결과 판). 게이트 = html_check.selfcheck_check.
+   ⚠ 받는 중(SRC_PENDING)이면 ✗에 그 사실을 붙인다 — 미완성 상태를 결함으로 읽지 않게. */
+function __selfcheck() {
+  const rows = [], row = (name, ok, detail) => rows.push({ 항목: name, 결과: ok ? "✓" : "✗", 상세: detail || "" });
+  const pending = SRC_PENDING.size ? [...SRC_PENDING].join("·") : "";
+  try {
+    const cond = allSignalsFlat().filter(visible).length, dock = dockCounts().total;
+    row("① 도크 총계 = 조회조건 통과 수", dock === cond, `도크 ${dock.toLocaleString()} · 조회조건 ${cond.toLocaleString()}`);
+    const q = (document.getElementById("l-q") || {}).value || "";
+    const listN = document.querySelector("#l-count .bignum");
+    if (VIEW_MODE === "list" && !q && listN)
+      row("① 목록 건수 = 도크 총계", +listN.textContent.replace(/,/g, "") === dock, `목록 ${listN.textContent} · 도크 ${dock.toLocaleString()}`);
+  } catch (e) { row("① 건수", false, "예외 " + e.message); }
+  try {
+    const vp = window._viewPool || [], D = window._dbg || {};
+    if (D.map && typeof D.hjDots !== "undefined") {
+      const dots = (D.hjDots || []).filter(m => m && m.getMap && m.getMap()).length;
+      const vis = el => el.getClientRects().length > 0;
+      const donut = [...document.querySelectorAll(".cl-badge")].filter(vis)
+        .map(el => +((el.textContent.trim().match(/\d+/) || [0])[0])).reduce((a, b) => a + b, 0);
+      row("② 지도 무손실(pool = 도넛합 + 낱개)", dots + donut === vp.length, `pool ${vp.length} · 도넛합 ${donut} · 낱개 ${dots}`);
+    } else row("② 지도 무손실", true, "지도 미생성(목록·흐름 뷰) — 건너뜀");
+    const notVis = vp.filter(s => !(aptFocus ? ((visible(s) || aptFocus.has(s)) && !isStaleFinished(s)) : visible(s))).length;
+    row("② 이 화면 안 pool ⊂ 조회조건", notVis === 0, notVis ? `조회조건 밖 ${notVis}` : `${vp.length}건 전부 조회조건 안`);
+  } catch (e) { row("② 지도", false, "예외 " + e.message); }
+  try {
+    const objs = (window._dbg && window._dbg.railLineObjs) || [];
+    let staleMis = 0, shownStale = 0, axisMis = 0, on = 0;
+    const phaseFiltering = filter.phase.size < PHASES.length;
+    for (const o of objs) {
+      const want = o._s ? isStaleFinished(o._s) : o._p ? isStaleFinishedProps(o._p) : o.stale;
+      if (want !== o.stale) staleMis++;
+      if (!o._sig || o._sig === "off") continue;
+      on++;
+      if (o.stale) shownStale++;
+      const okAxis = (o.isRoad ? filter.lines.has("도로선") : filter.lines.has("철도선"))
+        && (!phaseFiltering || filter.phase.has(o.ph)) && (!o.nt || filter.nature.has(o.nt)) && filter.lvl.has(levelOf(o));
+      if (!okAxis) axisMis++;
+    }
+    row("③ 점 stale ⇔ 선 stale", staleMis === 0 && shownStale === 0, `선 항목 ${objs.length} · 원본과 불일치 ${staleMis} · 그려진 stale ${shownStale}`);
+    row("④ 켜진 선은 전부 표시 술어 만족(축 끄면 그 축 선 0)", axisMis === 0,
+        `켜진 선 ${on} · 술어 위반 ${axisMis} · 도로선 ${filter.lines.has("도로선") ? "on" : "off"} · 철도선 ${filter.lines.has("철도선") ? "on" : "off"}`);
+  } catch (e) { row("③④ 선", false, "예외 " + e.message); }
+  try {
+    signalsNearPoint([127, 37], true);   // 캐시를 지금 세대로 맞춘 뒤 잰다
+    const all = allSignalsFlat().length;
+    row("⑤ 단지 건수 풀 = 전체 풀", _nearPool.length === all, `근처 풀 ${_nearPool.length.toLocaleString()} · 전체 ${all.toLocaleString()}`);
+  } catch (e) { row("⑤ 단지 풀", false, "예외 " + e.message); }
+  try {
+    const p = window.__perf ? window.__perf() : null;
+    const fr = p && p.marks.find(m => m.mark === "boot:first-render");
+    row("⑥ 첫 화면 막힌 시간(비교용 · 문턱 없음)", !!fr,
+        p ? `막힘 ${p.blocked}ms · longtask ${p.longtasks.length}건 · 첫 렌더 ${fr ? fr.at + "ms" : "표식 없음"}` : "__perf 없음");
+  } catch (e) { row("⑥ 성능", false, "예외 " + e.message); }
+  if (pending) rows.forEach(r => { if (r.결과 === "✗") r.상세 += ` (아직 받는 중: ${pending} — 다 받은 뒤 다시)`; });
+  const bad = rows.filter(r => r.결과 === "✗").length;
+  try { console.table(rows); } catch (e) {}
+  console.log(bad ? `❌ 자가검사 ✗ ${bad}/${rows.length}` : `✅ 자가검사 ${rows.length}/${rows.length} 통과`);
+  return { ok: !bad, rows, pending };
+}
+window.__selfcheck = __selfcheck;
+/* `?selfcheck=1` — 관리자 화면의 버튼 하나. 무거운 소스가 다 온 뒤(SRC_PENDING 0) 1.5초 두고 돌려 결과 판을 띄운다. */
+function bootSelfcheck() {
+  if (new URLSearchParams(location.search).get("selfcheck") !== "1") return;
+  const el = document.createElement("div"); el.id = "selfcheck"; el.innerHTML = "<b>자가검사</b> — 데이터 받는 중…"; document.body.appendChild(el);
+  const tick = () => {
+    if (SRC_PENDING.size || !mapApi) return setTimeout(tick, 500);
+    setTimeout(() => {
+      const r = __selfcheck();
+      el.innerHTML = `<b>${r.ok ? "✅ 자가검사 통과" : "❌ 자가검사 ✗ " + r.rows.filter(x => x.결과 === "✗").length}</b><span class="x" onclick="this.parentNode.remove()">✕</span>`
+        + r.rows.map(x => `<div class="${x.결과 === "✓" ? "ok" : "bad"}">${x.결과} ${x.항목}<small>${x.상세}</small></div>`).join("")
+        + `<small>다시: 콘솔 __selfcheck() · 절차 PROCEDURE_화면품질 §3</small>`;
+    }, 1500);
+  };
+  tick();
+}
+
+/* ★ 「이 지역 결손」 절 (2026-09-06 세션102 · 핸드오프 선3 · 알렉스 「왜 여기 도로·호재가 없냐」 8회).
+   화면은 좌표 있는 신호만 싣는다(HEAVY_SRC 필터) — 그래서 「없다」의 이유는 브라우저에 없다. 빌드가 `region_gaps.py`로 시군별
+   집계(원천 = geo_basis·geom_hold의 기계 접두 · screen_facts_probe --gaps와 같은 자)를 region_gaps.json에 두고 여기서 읽는다.
+   없으면 없다고 적는다(P2) — 지어내지 않는다. 게이트 = html_check.region_gaps_check · qa_check.check_region_gaps_alive. */
+let _GAPS = null, _gapsReq = null;
+function loadRegionGaps() {
+  if (_GAPS) return Promise.resolve(_GAPS);
+  if (!_gapsReq) _gapsReq = fetch("region_gaps.json" + cbOf("region_gaps.json")).then(r => r.ok ? r.json() : null)
+    .then(d => (_GAPS = d || { by: {} })).catch(() => (_GAPS = { by: {} }));
+  return _gapsReq;
+}
+function gapsHtml(g, sdg) {
+  const kv = o => Object.entries(o || {}).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ${v}`).join(" · ");
+  const sum = o => Object.values(o || {}).reduce((a, b) => a + b, 0);
+  if (!g && !sdg) return `<div class="gaps"><b>이 지역 결손</b> — 집계 없음(위치 대기·조인 보류가 0이거나 region_gaps.json 미배포)</div>`;
+  const nNo = sum((g || {}).nogeo), nHold = sum((g || {}).hold);
+  return `<div class="gaps"><b>이 지역 결손</b> — 화면에 못 실은 것(좌표·선형 없음). 사유는 데이터의 기계 표식 그대로.
+    <div>위치 대기 <b class="mono">${nNo}</b>${nNo ? ` <small>${kv(g.nogeo)}</small>` : ""}</div>
+    <div>선형(조인) 보류 <b class="mono">${nHold}</b>${nHold ? ` <small>${kv(g.hold)}</small>` : ""}</div>
+    ${sdg && sdg.line_pending ? `<div>원장 노선 선형 미확보·근사(시도 단위) <b class="mono">${sdg.line_pending}</b></div>` : ""}
+    ${sdg && (sdg.nogeo_nosg || sdg.hold_nosg) ? `<div>시군 미상(시도 본청 고시 등 · 시도 단위) 위치 대기 <b class="mono">${sdg.nogeo_nosg || 0}</b> · 조인 보류 <b class="mono">${sdg.hold_nosg || 0}</b></div>` : ""}
+    <div><small>마지막 고시 등재 ${(g && g.last_enroll) || "—"} · 집계 ${(_GAPS && _GAPS.ran) || "?"}</small></div></div>`;
+}
+function renderRegionGaps(p, disp) {
+  const slot = document.createElement("div"); slot.id = "gaps"; slot.innerHTML = `<div class="gaps"><small>결손 집계 읽는 중…</small></div>`;
+  const anchor = p.querySelector(".ps"); if (anchor) anchor.insertAdjacentElement("afterend", slot); else p.appendChild(slot);
+  loadRegionGaps().then(d => { if (!slot.isConnected) return;
+    slot.innerHTML = gapsHtml((d.by || {})[disp], (d.by_sd || {})[String(disp).split(" ")[0]]); });
+}
 function undetReason(s) {
   const c = catOf(s);
   // 판정기가 남긴 실제 사유(lvl_basis)가 있으면 그걸 쓴다 — 종전엔 41,518세대 신도시 딱지(의도적
@@ -10933,8 +11101,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "b12da04dd8", "adverse_facilities.json": "970cc9b782", "apartments_all.json": "77de39cb26", "arch_signals.json": "ba052c58ac", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "775f34a936", "dart_signals.json": "1e2a409b35", "dps_signals.json": "5c3a069018", "eum_backfill_progress.json": "709d109169", "eum_enroll.json": "2ad21207b7", "eum_signals.json": "6608f1f878", "eum_usage.json": "073d0f99f0", "hospital_signals.json": "4b7e994860", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "8669abd04d", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "050497b0de", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "b8c17f819c", "mega_signals.json": "baad8c8b5d", "methodology.html": "5d9c0b4aed", "park_signals.json": "3b9ab7b6bd", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "0065b7c03a", "rail_reference.html": "f2cebdb566", "rail_signals.json": "3f8e1528e1", "regions.json": "5d52225be0", "report.html": "fdc5364d66", "retail_signals.json": "bf392bbbb4", "road_signals.json": "f412d61187", "school_signals.json": "43c7914615", "settings.html": "1ca2007f59", "sfz_signals.json": "a8b722784e", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "9de3ab9838", "signals.json": "94f5712a9f", "signals_auto.json": "03dff2eeba", "signals_jeongbi_all.json": "e7880306a3", "source_status.html": "b91b92d53d", "thresholds.json": "cca4518e26", "upis_facility_geom.json": "77cc84c2a1", "upis_on_road.json": "ba3d5c9417", "weekly.html": "164e5a1794", "weekly_index.json": "e762fd0c84"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260906e");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "70358feaaf", "adverse_facilities.json": "970cc9b782", "apartments_all.json": "77de39cb26", "arch_signals.json": "e67fb03d01", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "fb05f272c0", "corridor_diff.json": "788376579f", "dart_signals.json": "1e2a409b35", "dps_signals.json": "096ff119a3", "eum_backfill_progress.json": "709d109169", "eum_enroll.json": "2ad21207b7", "eum_signals.json": "f22394af69", "eum_usage.json": "073d0f99f0", "hospital_signals.json": "4b7e994860", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "37d9a915af", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "050497b0de", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "b8c17f819c", "mega_signals.json": "baad8c8b5d", "methodology.html": "5d9c0b4aed", "park_signals.json": "3b9ab7b6bd", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "9f91627783", "rail_reference.html": "f2cebdb566", "rail_signals.json": "3f8e1528e1", "region_gaps.json": "6fbb039321", "regions.json": "5d52225be0", "report.html": "fdc5364d66", "retail_signals.json": "bf392bbbb4", "road_signals.json": "a18bf30204", "school_signals.json": "43c7914615", "settings.html": "1ca2007f59", "sfz_signals.json": "a8b722784e", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "9de3ab9838", "signals.json": "94f5712a9f", "signals_auto.json": "03dff2eeba", "signals_jeongbi_all.json": "9ec615466f", "source_status.html": "b91b92d53d", "thresholds.json": "cca4518e26", "upis_facility_geom.json": "77cc84c2a1", "upis_on_road.json": "47f9e24205", "weekly.html": "164e5a1794", "weekly_index.json": "e762fd0c84"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260906f");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
@@ -11148,6 +11316,18 @@ function initOpsMode() {
   const VIEWS = ["map", "list", "flow", "undet"];   // setView가 실제로 처리하는 값
   const v = new URLSearchParams(location.search).get("view");
   if (v && VIEWS.includes(v) && typeof setView === "function") setView(v);
+  /* ★ 신호 딥링크 `?sig=<id 또는 제목>` (2026-09-06 세션102 · 관리자 화면의 회랑 검수 목록(corridor_diff.json)이 지도로 바로 연다).
+     무거운 소스가 다 온 뒤까지 찾는다 — 못 찾으면 조용히 홈(없는 것을 있다고 하지 않는다). */
+  const sigId = new URLSearchParams(location.search).get("sig");
+  if (sigId) {
+    const find = () => {
+      const s = allSignalsFlat().find(x => String(x.id) === sigId || x.official_name === sigId || x.name === sigId || sigTitle(x) === sigId);
+      if (s) { try { showSignal(s, true); } catch (e) {} }
+      else if (SRC_PENDING.size) setTimeout(find, 400);
+    };
+    setTimeout(find, 300);
+  }
+  bootSelfcheck();   // `?selfcheck=1` — 관리자 화면 버튼(다 받은 뒤 자가검사 · 결과 판)
 }
 
 /* ══════════ 법정동 경계 시도별 지연 로드 (전국 확장 2026-07-17) ══════════

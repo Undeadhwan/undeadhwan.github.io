@@ -120,6 +120,10 @@
       <span>등급 기준에 안 맞아 미정으로 남은 호재. <b>목록이 바로 열립니다.</b></span></a>
     <a class="card" href="index.html?ops=1" target="_blank"><b>🧰 운영 모드로 사이트 열기</b>
       <span>헤더에 운영 칩(기준 설정·대장·주간 변경)이 켜진 채로 지도를 엽니다. 이 브라우저에만 기억되고 <code>?ops=0</code>으로 끕니다.</span></a>
+    <!-- 페이지 자가검사(2026-09-06 세션102 · 핸드오프 선1) — 화면의 불변식(도크=목록=지도 · 점/선 stale · 축 끄면 선 0 · 단지 풀 · 막힌 시간)을
+         화면 자신이 잰다. 버튼 하나 = `?selfcheck=1`(다 받은 뒤 자동 실행 · 결과 판). 배포 뒤 8777에서 돌리는 것이 절차(PROCEDURE_화면품질 §3). -->
+    <a class="card" href="index.html?selfcheck=1" target="_blank"><b>🧪 페이지 자가검사</b>
+      <span>도크 건수 = 목록 = 지도 · 점/선 1년 규칙 · 축 끄면 그 축 선 0 · 단지 건수 풀 · 첫 화면 막힌 시간. 사이트를 열고 다 받은 뒤 결과 판이 뜹니다(콘솔 <code>__selfcheck()</code>).</span></a>
     <!-- 기준 저장소(원격) 이력 — 토큰은 **여기서 받지 않는다.** 그 토큰은 settings.html이
          저장할 때 쓰는 것이고 같은 오리진의 localStorage라 여기서도 읽힌다. 입력칸을 하나 더
          두면 같은 값을 두 곳에서 관리하게 된다(§간결한 프로세스 — 정보를 추가하지 않는 분할). -->
@@ -155,9 +159,21 @@
 
   <!-- 상태 파일 — 화면이 아니라 **기계가 읽는 정본**이다. 위 「마지막 실행」이 이 파일들을 요약하지만,
        원문을 직접 볼 입구도 있어야 요약이 틀렸을 때 잡는다(요약은 투영이지 정본이 아니다). -->
+  <!-- 회랑 검수 목록(2026-09-06 세션102 · 핸드오프 선4) — 빌드가 직전 배포(자동 백업 커밋) 대비 새·바뀐·사라진 회랑을 corridor_diff.json에 남긴다.
+       월요일마다 여기서 지도 딥링크(?sig=)로 열어 카카오 배경지도에 겹쳐 본다(CLAUDE.md 「좌표·선형을 고쳤으면 배경지도와 겹쳐 본다」).
+       읍면동 밖 = 제목이 지목한 읍면동 경계 밖에 회랑 대표점이 있는 것(남의 도로를 물었을 수 있다 · 부채). 값은 파일이 정본, 여기서는 읽기만. -->
+  <h2>새·바뀐 회랑 검수 <small>직전 배포 대비 · 카카오 배경지도로 걷는다</small></h2>
+  <div class="runbox" id="corrbox">corridor_diff.json 읽는 중…</div>
+
+  <!-- 시군별 결손 표(2026-09-06 세션102 · 핸드오프 선3) — 「왜 여기 호재가 없냐」의 답. 사이트의 시군 피드가 같은 파일(region_gaps.json)을 읽는다. -->
+  <h2>시군별 결손 <small>위치 대기 · 조인 보류 — 화면에 못 실은 것</small></h2>
+  <div class="runbox" id="gapsbox">region_gaps.json 읽는 중…</div>
+
   <h2>상태 파일 <small>기계가 읽는 정본 — 위 요약의 원문</small></h2>
   <div class="pills">
     <a href="build_status.json" target="_blank">build_status.json</a>
+    <a href="corridor_diff.json" target="_blank">corridor_diff.json</a>
+    <a href="region_gaps.json" target="_blank">region_gaps.json</a>
     <a href="qa_debt_open.json" target="_blank">qa_debt_open.json</a>
     <a href="eum_backfill_progress.json" target="_blank">eum_backfill_progress.json</a>
     <a href="eum_enroll.json" target="_blank">eum_enroll.json</a>
@@ -348,6 +364,46 @@
     h += `<div style="margin-top:8px">🧩 ${bits.join(" · ")}</div>`;
   }
   box.innerHTML = h;
+})();
+</script>
+
+<script>
+/* 회랑 검수 목록 + 시군별 결손 표 (2026-09-06 세션102 · 핸드오프 선3·선4) — 두 파일이 정본이고 이 화면은 읽기만 한다.
+   행은 지도 딥링크(index.html?sig=<id>)로 연다 — 검수는 카카오 배경지도에 겹쳐 보는 것이다(같은 이름의 도로 위에 있나 · 갈고리·역주행). */
+(async () => {
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const get = async f => { try { const r = await fetch(f + "?t=" + Date.now()); return r.ok ? await r.json() : null; } catch (e) { return null; } };
+  const [cd, rg] = await Promise.all([get("corridor_diff.json"), get("region_gaps.json")]);
+  const cb = document.getElementById("corrbox"), gb = document.getElementById("gapsbox");
+  if (cb) {
+    if (!cd) cb.textContent = "corridor_diff.json을 읽지 못했습니다(빌드가 corridor_diff.py를 아직 안 돌렸거나 미배포).";
+    else {
+      const c = cd.counts || {};
+      const row = (x, extra) => `<li><a href="${esc(x.link)}" target="_blank">${esc(x.title || x.key)}</a> <span class="k">${esc([x.sd, x.sg].filter(Boolean).join(" "))} · ${x.km}km${extra ? " · " + extra : ""}</span></li>`;
+      const sec = (t, arr, f) => arr && arr.length ? `<div style="margin-top:6px"><b>${t} ${arr.length}</b><ul>${arr.slice(0, 40).map(f).join("")}</ul>${arr.length > 40 ? `<span class="k">외 ${arr.length - 40}건 — 파일에서</span>` : ""}</div>` : "";
+      cb.className = "runbox " + ((c.lost || c.emd) ? "debt" : "ok");
+      cb.innerHTML = `<b class="big">${cd.ran || "?"}</b> <span class="k">· 기준 ${esc(cd.since || "없음")} · 지금 회랑 ${(c.now || 0).toLocaleString()} · 신규 ${c.new || 0} · 형상 변경 ${c.changed || 0} · 소실 ${c.lost || 0} · 읍면동 밖 ${c.emd || 0}</span>`
+        + sec("🆕 신규 회랑", cd.new, x => row(x, esc((x.src || "").slice(0, 60))))
+        + sec("✏️ 형상 변경", cd.changed, x => row(x, `종전 ${x.km_before}km · 대표점 이동 ${x.shift_km ?? "?"}km`))
+        + sec("🕳 소실", cd.lost, x => row(x, `사유: ${esc(x.reason || "")}`))
+        + sec("📍 제목 읍면동 밖(부채 · 남의 도로를 물었을 수 있다)", cd.emd, x => `<li><a href="${esc(x.link)}" target="_blank">${esc(x.title)}</a> <span class="k">${esc(x.emd)} 경계에서 ${x.km}km</span></li>`)
+        + ((c.new || c.changed || c.lost || c.emd) ? "" : `<div class="k" style="margin-top:6px">이번 빌드에서 바뀐 회랑 없음.</div>`);
+    }
+  }
+  if (gb) {
+    if (!rg) gb.textContent = "region_gaps.json을 읽지 못했습니다(빌드가 region_gaps.py를 아직 안 돌렸거나 미배포).";
+    else {
+      const t = rg.totals || {};
+      const sum = o => Object.values(o || {}).reduce((a, b) => a + b, 0);
+      const rows = Object.entries(rg.by || {}).map(([k, g]) => [k, sum(g.nogeo), sum(g.hold), g.last_enroll, g]).sort((a, b) => (b[1] + b[2]) - (a[1] + a[2]));
+      const kv = o => Object.entries(o || {}).slice(0, 3).map(([k, v]) => `${esc(k)} ${v}`).join(" · ");
+      gb.className = "runbox " + (t.nogeo || t.hold ? "debt" : "ok");
+      gb.innerHTML = `<b class="big">${rg.ran || "?"}</b> <span class="k">· 결손 있는 시군 ${t.regions_with_gaps || 0}/${t.regions || 0} · 위치 대기 ${(t.nogeo || 0).toLocaleString()} · 조인 보류 ${(t.hold || 0).toLocaleString()} · 원장 노선 선형 미확보·근사 ${t.line_pending || 0}</span>`
+        + `<table style="margin-top:8px;border-collapse:collapse;font-size:12.5px;width:100%"><tr><th style="text-align:left">시군</th><th>위치 대기</th><th>조인 보류</th><th>마지막 등재</th><th style="text-align:left">사유(상위)</th></tr>`
+        + rows.slice(0, 40).map(([k, n1, n2, le, g]) => `<tr><td>${esc(k)}</td><td style="text-align:right">${n1}</td><td style="text-align:right">${n2}</td><td>${esc(le || "—")}</td><td class="k">${kv(g.nogeo)}${n1 && n2 ? " · " : ""}${kv(g.hold)}</td></tr>`).join("")
+        + `</table>` + (rows.length > 40 ? `<span class="k">외 ${rows.length - 40}개 시군 — 파일에서 · 사이트 시군 피드가 같은 값을 말한다</span>` : "");
+    }
+  }
 })();
 </script>
 </body>
