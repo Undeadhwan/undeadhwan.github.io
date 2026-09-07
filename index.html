@@ -496,7 +496,7 @@
        구조상 불가라 크기·굵기만 맞추고 숫자 정렬은 `tabular-nums`로 보완한다. */
   #dk-hh-slot select { width:100%; box-sizing:border-box; font-size:13px !important; font-weight:400 !important;
     font-variant-numeric:tabular-nums; }
-  #apt-hh { font-size:14.5px; font-weight:600; padding:8px 12px; border:1px solid #d9dee8; border-radius:9px;
+  #apt-hh { font-size:14.5px; font-weight:600; padding:6px 12px; border:1px solid #d9dee8; border-radius:9px;
     background:#fff; color:#1a2233; cursor:pointer; }
   .regionbar select { font-size:14.5px; font-weight:600; padding:8px 11px; border:1px solid #d9dee8; border-radius:9px; background:#fff; color:#1a2233; cursor:pointer; min-width:94px; }
   .regionbar select:focus { outline:none; border-color:var(--accent); }
@@ -1570,7 +1570,7 @@
      되어, 스크롤하는 동안 「지금 몇 건을 보고 있나」와 「초기화」가 화면에서 사라졌다.
      동작은 그대로 두고 **길 잃는 것만** 막는다(아코디언으로 강제로 접지 않는다 — 두 축을 나란히
      비교하며 보는 사용을 없애게 된다). 스크롤 컨테이너가 #dock 자신이라 sticky가 그대로 먹는다. */
-  #dock .dk-h { display:flex; align-items:baseline; gap:8px; padding:13px 14px 10px;
+  #dock .dk-h { display:flex; align-items:baseline; gap:8px; padding:8px 14px 7px;
     position:sticky; top:0; z-index:3; background:#fff; border-bottom:1px solid var(--line); }
   /* ☠ **긴 지역명이 헤더를 무너뜨렸다** (2026-08-12 사용자 제보 — 「전남광주통합특별시」).
      종전엔 지역명·건수·버튼이 한 덩어리 텍스트라 폭이 모자라면 **아무 데서나** 줄이 바뀌었다:
@@ -1602,7 +1602,7 @@
   #dock .cat { border-top:1px solid var(--line); }
   /* ★ 시안 실물: 대분류는 **박스**다 — 둥근 사각 + 좌측 3px 유형색 바 + 유형색 아주 연한 배경.
      꺼진 분류는 흰 배경 + 흐린 글씨로 빠진다. 종전엔 그냥 한 줄이라 축이 안 읽혔다. */
-  #dock .cat { margin:0 12px 7px; }
+  #dock .cat { margin:0 12px 5px; }
   /* ★ 시안 실물 값: 테두리 = 유형색 35% · 배경 = 유형색 7% · radius 6 · padding 8/10.
      좌측 3px 바가 아니라 **테두리 전체가 유형색**이다(연하게). */
   /* ★ 대분류 머리는 **머문다** (2026-08-14 시안 §03 갱신): *"여러 개를 동시에 펼칠 수 있고
@@ -1616,7 +1616,7 @@
      ☠ 종전엔 네 줄이 **모두 유형색 바탕**이었다 — 바탕이 「선택됨」이 아니라 **유형을 되풀이**해
        (색 점이 이미 하는 일) 켜짐/꺼짐이 갈리지 않았다. 기본 상태를 조용하게 두고 **끈 줄만**
        눈에 띄게 한다. 색은 11px 점 하나가 전담한다(한 채널 한 사실). */
-  #dock .cat-h { display:flex; align-items:center; gap:9px; padding:8px 10px; cursor:pointer;
+  #dock .cat-h { display:flex; align-items:center; gap:9px; padding:5px 10px; cursor:pointer;
     position:sticky; top:var(--dkh, 44px); z-index:2;
     border:1px solid var(--line); border-radius:6px; background:#fff; }
   #dock .cat-h:hover { border-color:var(--line2); }
@@ -1686,12 +1686,14 @@
      ☠ 2026-08-19에 체크박스로 바꿨던 것이 **오독**이었다 — 목업에는 체크박스가 없다.
      시안값: 세그 칸 `flex:1 · padding 7px 0 · radius 6 · gap 6` · 켜짐 = 검정 배경 + 흰 글자/링.
              알약 `radius 14 · padding 6px 11px · gap 6 · 12px` · 켜짐 = 검정 배경 + 흰 글자/아이콘. */
-  #dock .sgrow { display:flex; gap:6px; }
+  #dock .sgrow { display:flex; gap:5px; }
   /* ★ 켜진 칩 = **흰 바탕 + 잉크 테두리** · 꺼진 것만 옅게 (시안 §15-06).
      ☠ 종전엔 켜짐이 검정 채움이라 **전부 켜진 기본 상태에서 검은 사각 5개**가 줄지어 서 있었다
        — 기본이 시끄러우면 「무엇을 껐나」가 안 보인다(§15-05 유형 줄과 같은 원칙). */
-  #dock .sgbtn { flex:1; display:flex; flex-direction:column; align-items:center; gap:5px;
-    padding:7px 0; border:1.5px solid var(--ink); border-radius:6px; background:#fff;
+  /* ⚠ 세로 여백만 줄인다 (2026-09-07 도크 밀도) — 글자 크기와 **아이콘 채널**(등급=크기 · 단계=두께)은
+     시안 값 그대로다. 그 둘은 정보를 나르는 채널이라 줄이면 뜻이 바뀐다. */
+  #dock .sgbtn { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
+    padding:5px 0; border:1.5px solid var(--ink); border-radius:6px; background:#fff;
     color:var(--ink); font-size:12px; font-weight:700; cursor:pointer; line-height:1; }
   /* 시안 목업 글자 크기: 등급 12px · 「없음」 11px · 단계 11.5px */
   #dock .sgbtn[data-k="미정"] { font-size:11px; }
@@ -1699,7 +1701,7 @@
   #dock .sgbtn.off { border:1px dashed var(--line2); color:var(--ink3); font-weight:600; background:var(--panel); }
   /* 공사 성격 칩 — 텍스트만(아이콘 채널은 등급·단계가 쓴다). 8칩이라 줄바꿈 허용. */
   #dock .ntrow { flex-wrap:wrap; }
-  #dock .ntrow .sgbtn { flex:0 0 auto; min-width:44px; padding:5px 8px; font-size:11px; }
+  #dock .ntrow .sgbtn { flex:0 0 auto; min-width:44px; padding:4px 8px; font-size:11px; }
   #dock .sgbtn:hover { border-color:var(--ink3); }
   /* 두께는 **2px 고정** — 크기만 등급을 말한다(두께는 단계 칩의 축이다) */
   #dock .sgi { box-sizing:border-box; border:2px solid currentColor; flex:none; }
@@ -1738,28 +1740,33 @@
   #dock .sub .n { margin-left:auto; color:var(--ink3); font-size:var(--fs-s); font-variant-numeric:tabular-nums; }
   #dock .sub.off { color:var(--ink3); }
   /* 표시 옵션(어떻게 보나: 노선 선형) = 스위치 — 체크박스와 문법부터 다르게 (DESIGN.md §3) */
-  #dock .opts { margin-top:0; padding-top:16px; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:11px; }
+  /* ★ 표시 옵션은 **2열**로 접는다 (2026-09-07) — 세 줄이 154px를 먹어 조회조건이 넘쳤다.
+     ⚠ 문법은 그대로 미니 스위치다(DESIGN.md §3 — 필터=체크박스 · 옵션=스위치. 자리만 바꾼다). */
+  #dock .opts { margin-top:0; padding-top:9px; border-top:1px solid var(--line);
+    display:grid; grid-template-columns:1fr 1fr; gap:4px 8px; }
   /* ⚠ **행 전체가 과녁인데 그렇게 안 보였다** (2026-08-11 사용자 "토글이 작아서 클릭이 좀 애매").
      실측 행 높이 **23px** — 손가락 최소치의 절반이고, hover 배경이 없어 「여기를 눌러도 된다」는
      신호도 없었다. 스위치만 키우면 다시 스위치를 겨냥하게 된다 → **행을 키우고 행을 밝힌다.**
      좌우 -6px 상쇄로 글자 정렬은 그대로 두고 과녁만 넓힌다(삼각형과 같은 수법). */
   /* ★ 시안 실물: 라벨 13px ink2 · 토글 **34×19 · 켜짐 = 교통색**(선형은 교통 축이라 그 색이 곧 뜻이다) ·
      노브 15px. 종전 검정 토글은 「잉크=켜짐」 규칙만 따르고 **무엇을 켜는지**를 말하지 않았다. */
-  #dock .optrow { display:flex; align-items:center; justify-content:space-between; gap:10px;
-    padding:6px; margin:0 -6px; border-radius:var(--r-s); cursor:pointer; font-size:13px; color:var(--ink2); }
+  #dock .optrow { display:flex; align-items:center; justify-content:space-between; gap:6px;
+    padding:4px 6px; margin:0 -6px; border-radius:var(--r-s); cursor:pointer; font-size:var(--fs-s); color:var(--ink2); }
   #dock .optrow:hover { color:var(--ink); background:var(--panel); }
-  #dock .optrow .sw { width:34px; height:19px; border-radius:10px; background:var(--line2); position:relative; transition:.15s; flex-shrink:0; }
-  #dock .optrow .sw::after { content:""; position:absolute; top:2px; left:2px; width:15px; height:15px; border-radius:50%; background:#fff; transition:.15s; }
+  #dock .optrow .sw { width:30px; height:17px; border-radius:9px; background:var(--line2); position:relative; transition:.15s; flex-shrink:0; }
+  #dock .optrow .sw::after { content:""; position:absolute; top:2px; left:2px; width:13px; height:13px; border-radius:50%; background:#fff; transition:.15s; }
   #dock .optrow.on .sw { background:var(--c-traffic); }
-  #dock .optrow.on .sw::after { left:17px; }
+  #dock .optrow.on .sw::after { left:15px; }
   /* 정제 축(단계·등급) — 세그 칩: 켜짐=잉크 채움, 꺼짐=외곽선 */
-  #dock .axis { border-top:1px solid var(--line); padding:11px 14px; }
+  /* ★ 축 블록 여백 — 축이 늘어(공사 성격) 도크가 넘치자 **정보를 빼지 않고 밀도만** 올렸다
+     (2026-09-07 알렉스 실측 요청 · 뷰포트 860px에서 넘침 210px). 값은 여기 하나에서만 바꾼다. */
+  #dock .axis { border-top:1px solid var(--line); padding:6px 14px; }
   /* ★ 시안 §03 실물 — 축 제목은 **mono 캡션**(11px · letter-spacing .08em · ink3)이고,
      「전체 선택」은 테두리 없는 **액센트 텍스트**로 그 줄 **오른쪽 끝**에 선다.
      종전엔 제목이 13.5px 굵은 검정이고 전체 선택이 회색 테두리 버튼이라 둘 다 무거웠다. */
   #dock .axis .t { display:flex; align-items:center; justify-content:space-between; gap:6px;
     font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11px; letter-spacing:.08em;
-    font-weight:400; color:var(--ink3); margin-bottom:7px; }   /* 시안 목업 400 */
+    font-weight:400; color:var(--ink3); margin-bottom:5px; }   /* 시안 목업 400 */
   #dock .axis .t small { color:var(--ink3); }
   #dock .dk-allcat { border:0; background:none; padding:0; cursor:pointer;
     font:600 12px/1 'Gothic A1','Apple SD Gothic Neo',sans-serif; letter-spacing:0; color:var(--accent); }
@@ -1815,9 +1822,14 @@
   /* 등급 없음 = 마름모(2026-08-12) — 지도와 같은 문법. 점선 원으로 둔 동안은 계획 단계와 구분이 안 됐다.
      원 = 등급이 있는 것 · 마름모 = 등급 축 밖. 후광(좌표 근사)은 원이니 둘이 섞이지 않는다. */
   /* 선형 토글 라벨 앞 선 아이콘 — 토글이 범례를 겸하게 한다(지도: 실선=철도 · 점선=도로) */
-  #dock .optrow i.ln { width:20px; height:0; border-top:2.5px solid var(--c-traffic); flex-shrink:0; margin-right:8px; }
+  #dock .optrow i.ln { width:14px; height:0; border-top:2.5px solid var(--c-traffic); flex-shrink:0; margin-right:5px; }
   #dock .optrow i.ln.dashed { border-top-style:dashed; }
-  #dock .dk-foot { padding:11px 14px 0; font-size:var(--fs-s); color:var(--ink3); line-height:1.6; }
+  #dock .dk-foot { padding:6px 14px 0; font-size:var(--fs-s); color:var(--ink3); line-height:1.4; }
+  /* 표기 규칙은 **접는다** — 빼는 게 아니라 접는 문법(조각 목록·고시 이력과 같다 · P2 정보는 한 번의 클릭 안에). */
+  #dock .dk-foot details.dkmore > summary { cursor:pointer; list-style:none; color:var(--ink3); }
+  #dock .dk-foot details.dkmore > summary::-webkit-details-marker { display:none; }
+  #dock .dk-foot details.dkmore > summary::after { content:" ▾"; }
+  #dock .dk-foot details.dkmore[open] > summary::after { content:" ▴"; }
   #dock .dk-foot a { color:var(--ink3); }
   /* 고지 문구 — 모바일에서 푸터를 숨기는 대신 여기로(항상 렌더되지만 데스크톱에선 푸터와 중복 표시라 숨김) */
   #dock .dk-legal { margin-top:7px; padding-top:6px; border-top:1px dashed var(--line); font-size:11.5px; }
@@ -4323,6 +4335,19 @@ function regionLabel() {
   if (filter.region) { const [sd, ...rest] = filter.region.split(" "); return `${long(sd)} ${rest.join(" ")}${dong}`.trim(); }
   return filter.sd ? long(filter.sd) + dong : "";
 }
+/* ★ **도크 머리 전용 짧은 라벨** (2026-09-07 알렉스 「강서구 선택하면 서울시 강… 이렇게 글씨가 잘린다」).
+   도크 폭은 272px이고 머리줄은 `[지역명] 호재 [건수]`라, 「서울특별시 강서구」가 들어가면 말줄임이 걸려
+   **시군구 이름이 잘린다** — 정작 사용자가 고른 축이 안 보인다(2026-08-12에 「긴 이름 하나만 말줄임」으로
+   고쳤던 자리인데, 잘리는 쪽이 시도가 아니라 **시군구**라 뜻이 뒤집혔다).
+   ⇒ 시군구·읍면동을 고르면 **시도는 생략**한다 — 바로 위 지역 드롭다운이 「서울특별시 › 강서구」로
+     이미 말하고 있어 사라지는 사실이 없다(P2). 시도만 고른 상태에서는 시도명이 그 축이므로 그대로 쓴다.
+   ⚠ `regionLabel()`은 다른 다섯 곳(모바일 칩·목록 머리·건수 설명)이 쓰므로 **건드리지 않는다** — 여기만 짧게. */
+function regionLabelShort() {
+  const full = regionLabel();
+  if (!full) return "";
+  const parts = full.split(" ");
+  return parts.length > 1 ? parts.slice(1).join(" ") : full;
+}
 function regionVisible(s, skipDong) {
   if (filter.region || filter.sd) {
     /* ★ 다중 귀속 신호(도로 노선 — sd:null)는 **_sggs(좌표 귀속)**로 판정한다 (2026-08-10).
@@ -4898,6 +4923,54 @@ function selectDong(dong) {
     else if (nav.sg) regionGo(`${nav.sd} ${nav.sg}`);
   } else if (nav.sg) regionGo(`${nav.sd} ${nav.sg}`);
 }
+/* ★★ **구 경계는 그 구의 법정동을 합쳐서 만든다** (2026-09-07 알렉스 「동별 선택은 정확한데 구를 고르면 굉장히 러프해」).
+   화면이 쓰는 `sgg_all.geojson`은 극단적으로 단순화돼 있다 — 실측(2026-09-07): 서울 **강서구가 정점 13개**
+   (전국 9,842점). 같은 강서구의 법정동 13개는 **정점 614개**를 이미 갖고 있다.
+   ☠ 알렉스는 2026-08-19에도 같은 지적을 했고(「같은 구로구인데 왜 이리 정확도가 떨어지냐」) 그때 정밀본
+     `sgg_precise.geojson`(강서구 217점)을 만들었지만 **파이썬 판정 전용**이다 — 6.2MB라 배포하지 않는다는
+     지침이 같은 날 함께 있었다(첫 렌더). 그래서 화면만 러프한 채로 남았다.
+   ⇒ **전송을 늘리지 않고** 같은 정확도를 얻는다: 동 폴리곤은 지역을 고르면 어차피 받는다(`loadBdongFor`).
+     그 동들의 변 중 **한 번만 나타나는 변**이 구의 외곽이다(공유 변은 정확히 두 번 나타난다).
+     실측 강서구: 변 450 중 내부 공유 150 · 외곽 300 · **3회 이상 0** — 동 경계 정점이 완전히 일치한다.
+   ⚠ 동이 아직 안 왔거나(지연 로드) 법정동이 구를 못 가르는 **일반구**(고양시덕양구 등 37개 — 법정동이
+     「고양시」까지만 갖는다)는 종전 `SGG_GEO` 폴백이다. 그래서 **폴백 결과는 캐시하지 않는다** — 동이
+     도착하면 다음 호출이 정밀본으로 올라간다(`loadBdongFor`가 캐시를 비운다). */
+function sggRingsFromDong(sd, sg) {
+  const fs = (DONG_GEO?.features || []).filter(f => (f.properties.sido || "서울") === sd && f.properties.sgg === sg);
+  if (!fs.length) return [];
+  const cnt = new Map(), P = 1e7;
+  const key = p => Math.round(p[0] * P) + "," + Math.round(p[1] * P);
+  for (const f of fs) for (const r of ringsOf(f)) for (let i = 1; i < r.length; i++) {
+    const a = key(r[i - 1]), b = key(r[i]);
+    if (a === b) continue;
+    const k = a < b ? a + "|" + b : b + "|" + a;
+    cnt.set(k, (cnt.get(k) || 0) + 1);
+  }
+  /* 외곽 변만 남겨 끝점으로 잇는다 — 링이 여럿일 수 있다(섬·비연속 구역). */
+  const adj = new Map(), pt = new Map();
+  for (const f of fs) for (const r of ringsOf(f)) for (let i = 1; i < r.length; i++) {
+    const a = key(r[i - 1]), b = key(r[i]);
+    if (a === b) continue;
+    const k = a < b ? a + "|" + b : b + "|" + a;
+    if (cnt.get(k) !== 1) continue;
+    pt.set(a, r[i - 1]); pt.set(b, r[i]);
+    if (!adj.has(a)) adj.set(a, []); if (!adj.has(b)) adj.set(b, []);
+    adj.get(a).push(b); adj.get(b).push(a);
+  }
+  const used = new Set(), out = [];
+  const ek = (a, b) => (a < b ? a + "|" + b : b + "|" + a);
+  for (const start of adj.keys()) {
+    let cur = start, ring = [pt.get(start)], guard = 0;
+    while (guard++ < 200000) {
+      const nxt = (adj.get(cur) || []).find(n => !used.has(ek(cur, n)));
+      if (!nxt) break;
+      used.add(ek(cur, nxt)); ring.push(pt.get(nxt)); cur = nxt;
+      if (cur === start) break;
+    }
+    if (ring.length >= 4) out.push(ring);
+  }
+  return out;
+}
 /* 시군구로 지도 이동 — **렌더러와 무관한 공용 경로**. 경계 링에서 코너 4점을 뽑아 mapFit에 준다.
    (종전 `window._sggBounds`는 Leaflet 전용이라 카카오에서 아무 일도 안 했다.) */
 function sggRingsShared(disp) {
@@ -4905,12 +4978,14 @@ function sggRingsShared(disp) {
   if (c[disp]) return c[disp];
   const [sd, ...rest] = String(disp || "").split(" ");
   const sg = rest.join(" ");
+  const fine = sggRingsFromDong(sd, sg);
+  if (fine.length) return (c[disp] = fine);      // 동 합집합 = 동 수준 정확도(전송 0)
   const out = [];
   for (const f of (SGG_GEO?.features || [])) {
     if (f.properties.sido !== sd || sggDisplayName(f.properties.name) !== sg) continue;
     ringsOf(f).forEach(r => out.push(r));
   }
-  return (c[disp] = out);
+  return out;                                    // ⚠ 폴백은 캐시하지 않는다 — 동이 오면 정밀해진다
 }
 function regionGo(disp) {
   const rings = sggRingsShared(disp);
@@ -6756,7 +6831,7 @@ function renderDock() {
            스트리밍(streamHeavy) 도입으로 무거운 소스 넷이 첫 화면 뒤에 도착하는데, 그동안 이 숫자가
            올라간다. 지도 배지·모바일 시트에는 「불러오는 중」을 걸어 두고 **여기만 빠뜨렸다** —
            §규칙이 한쪽에만 걸린다의 그 형태다. 틀린 숫자를 잠깐 보여주느니 받는 중이라고 말한다(P2). -->
-      <b>${regionLabel() ? `<span class="rg" title="${regionLabel()}">${regionLabel()}</span>` : ""}<span
+      <b>${regionLabel() ? `<span class="rg" title="${regionLabel()}">${regionLabelShort()}</span>` : ""}<span
         class="fx">호재 <span class="cnt" onmouseenter="explainTip(event,'dock')" onmouseleave="explainHide()">${SRC_PENDING.size ? '<span class="loading">···</span>' : C.total.toLocaleString()}</span></span></b>
       
 
@@ -6812,7 +6887,7 @@ function renderDock() {
     <!-- ☠ 「겹친 호재는 +N으로 묶임」이라 적혀 있었다 — +N 알약은 2026-08-13에 **유형 도넛**으로
          바뀌었는데(시안 §01) 문구만 남아 화면이 없는 부품을 가리켰다. 부품을 바꾸면 그 부품을
          설명하는 글도 같이 바뀐다(PROCEDURE_화면품질 — 규칙·이름은 언제나 쌍으로 존재한다). -->
-    <div class="dk-foot">위치 근사는 마커를 <b>가리키거나 선택</b>할 때 후광으로 · 겹친 호재는 <b>유형 도넛</b>으로 묶임<br>
+    <div class="dk-foot"><details class="dkmore"><summary>표기 규칙</summary>위치 근사는 마커를 <b>가리키거나 선택</b>할 때 후광으로 · 겹친 호재는 <b>유형 도넛</b>으로 묶임</details>
       <a href="methodology.html" target="_blank">데이터 · 방법론</a>
       <div class="dk-legal">투자 권유 아님 · 모든 신호는 미확정 — 사실(단계·날짜·거리)만 표시하며 매수/매도 판단은 다루지 않습니다.</div></div>`;
   /* sticky 대분류 머리가 **어디에 머무는지**를 헤더에서 잰다(시안 §03). 헤더는 지역명 길이에 따라
@@ -11101,8 +11176,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "70358feaaf", "adverse_facilities.json": "76177d21fb", "apartments_all.json": "327ae1add8", "arch_signals.json": "1218302224", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "a05d9cf3cf", "corridor_diff.json": "2b75af21f7", "dart_signals.json": "1e2a409b35", "dps_signals.json": "c623c9ffde", "eum_backfill_progress.json": "709d109169", "eum_enroll.json": "3abf2b2e5e", "eum_signals.json": "f37901403c", "eum_usage.json": "ff09a5e024", "hospital_signals.json": "fdb40388cc", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "743872973a", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "7837a16baa", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "76db16eb10", "mega_signals.json": "c2ad17c9a2", "methodology.html": "5d9c0b4aed", "park_signals.json": "b42c3cb5cb", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "ff3871c479", "rail_reference.html": "a4efcb42a7", "rail_signals.json": "3f8e1528e1", "region_gaps.json": "fb8d5ae3fb", "regions.json": "5d52225be0", "report.html": "698ea74bb1", "retail_signals.json": "27e11f9faa", "road_signals.json": "a9d8436c89", "school_signals.json": "06d4ca7515", "settings.html": "1ca2007f59", "sfz_signals.json": "c5c8313a81", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "e1ae542bd4", "signals.json": "94f5712a9f", "signals_auto.json": "e179769140", "signals_jeongbi_all.json": "2d3e482044", "source_status.html": "b1ec96bc3a", "thresholds.json": "cca4518e26", "upis_facility_geom.json": "d801b92269", "upis_on_road.json": "bb06ad993f", "weekly.html": "0b0c1e6141", "weekly_index.json": "454d9d0f3d"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260907d");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "70358feaaf", "adverse_facilities.json": "76177d21fb", "apartments_all.json": "327ae1add8", "arch_signals.json": "1218302224", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "949f683301", "corridor_diff.json": "5115068e19", "dart_signals.json": "1e2a409b35", "dps_signals.json": "c623c9ffde", "eum_backfill_progress.json": "709d109169", "eum_enroll.json": "3abf2b2e5e", "eum_signals.json": "f37901403c", "eum_usage.json": "ff09a5e024", "hospital_signals.json": "fdb40388cc", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "743872973a", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "7837a16baa", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "76db16eb10", "mega_signals.json": "c2ad17c9a2", "methodology.html": "5d9c0b4aed", "park_signals.json": "b42c3cb5cb", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "9ccc989c72", "rail_reference.html": "a4efcb42a7", "rail_signals.json": "3f8e1528e1", "region_gaps.json": "e10bdb17c0", "regions.json": "5d52225be0", "report.html": "698ea74bb1", "retail_signals.json": "27e11f9faa", "road_signals.json": "22e10fcfc0", "school_signals.json": "06d4ca7515", "settings.html": "1ca2007f59", "sfz_signals.json": "c5c8313a81", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "e1ae542bd4", "signals.json": "94f5712a9f", "signals_auto.json": "e179769140", "signals_jeongbi_all.json": "2d3e482044", "source_status.html": "b1ec96bc3a", "thresholds.json": "cca4518e26", "upis_facility_geom.json": "d801b92269", "upis_on_road.json": "c6f19d6ae0", "weekly.html": "0b0c1e6141", "weekly_index.json": "454d9d0f3d"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260907e");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
@@ -11355,6 +11430,7 @@ function loadBdongFor(sd) {
         performance.mark("bdong:" + sd + ":start");   // 계측 — 도착 처리 비용(head의 __perf)
         DONG_GEO = { type: "FeatureCollection", features: DONG_GEO.features.concat(d.features) };
         bdongLoaded.add(sd);
+        window._sggRingC = {};   // 구 경계는 동 합집합에서 온다 — 동이 왔으니 러프 폴백 캐시를 버린다(2026-09-07)
         if (typeof syncRegionBar === "function") syncRegionBar();   // 드롭다운 읍면동 채움
         window._dbg && window._dbg.applyLOD && window._dbg.applyLOD();
         performance.mark("bdong:" + sd + ":end");
