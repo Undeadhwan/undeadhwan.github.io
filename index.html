@@ -3018,7 +3018,9 @@ function costRow(s) {
 function natureRow(s) {
   /* 공사 성격 (2026-09-02 알렉스 — 「신설인가 확장인가가 중요」). 근거(어느 규칙이 정했나)를
      같이 적는다 — 집행추정은 추정임이 근거문에 이미 들어 있다(P2: 사실은 표시, 추정은 구분). */
-  if (!s.work_nature || s.work_nature === "미상") return "";
+  if (!s.work_nature) return "";
+  // 미상이라도 사유가 기계 접두(서류변경·폐지·개통대조)면 그 사실을 적는다 (2026-09-07 — 「고시 종류는 성격이 아니다」를 화면이 말한다)
+  if (s.work_nature === "미상" && !/^(서류변경|폐지|개통대조):/.test(String(s.work_nature_basis || ""))) return "";
   const why = s.work_nature_basis ? `<span class="hmhint">${esc(String(s.work_nature_basis))}</span>` : "";
   /* 값은 머리 칩(natureChip)이 말한다 — 칩이 있으면 이 행은 **근거만** 적는다(값을 두 번 쓰지 않는다 · 2026-09-06 알렉스
      「공사성격도 상단에 · 중복 제거」). 칩이 없는 신호(성격 필드가 도로 밖에 붙은 것)는 종전대로 값+근거. */
@@ -3026,14 +3028,18 @@ function natureRow(s) {
   return `<div class="kv"><b>공사 성격</b> ${esc(String(s.work_nature))} ${why}</div>`;
 }
 /* ★ 공사 성격은 **머리 칩**이다 (2026-09-06 알렉스 「등급·유형·영향거리가 상단에 있는데 공사성격도 그쪽에 — 중요한 정보인데
-   찾기 어렵다」). 등급·단계·영향 칩 다음 네 번째. 값(work_nature)을 그대로 적고, 값이 미상인데 근거가 「개통대조」(기계 접두 ·
-   natureGroupOf 「기존도로」)면 「기존 도로 위」라고 적는다 — 그것도 사실이다. 칩은 **도로 신호에만**(natureGroupOf가 도로 밖엔 null).
-   색은 없다 — 색은 유형·경고만 담당한다(DESIGN §1). 이 칩이 있으면 아래 「공사 성격」 행은 근거만 적는다(natureRow). */
+   찾기 어렵다」). 등급·단계·영향 칩 다음 네 번째. 값(work_nature)을 그대로 적고, 값이 미상인데 근거가 「개통대조」(기계 접두)면
+   「기존 도로 위」라고 적는다 — 그것도 사실이다(그 신호는 관찰 게이트라 기본 뷰엔 없고 목록·관리자에서 열린다). 칩은 **교통 신호에만**
+   (natureGroupOf가 교통 밖엔 null · 2026-09-07 세션106 도로→교통 전체). 색은 없다 — 색은 유형·경고만 담당한다(DESIGN §1).
+   이 칩이 있으면 아래 「공사 성격」 행은 근거만 적는다(natureRow). */
 function natureChip(s) {
   const g = natureGroupOf(s);
-  if (!g || g === "미상") return "";
-  const v = g === "기존도로" ? "기존 도로 위" : String(s.work_nature);
-  return `<span class="dchip nt" title="공사 성격 — ${esc(NATURE_HINT[g] || "")}">${esc(v)}</span>`;
+  if (!g) return "";
+  const onRoad = /^개통대조:/.test(String(s.work_nature_basis || ""));   // 기계 접두 — 개통 도로 위 시설(성격은 원문 확인 전)
+  if (g === "미상" && !onRoad) return "";
+  const v = onRoad ? "기존 도로 위" : String(s.work_nature);
+  const hint = onRoad ? "개통 도로 위 시설의 실시계획 — 무엇을 바꾸는지는 원문 확인 전(호재 판별 대기)" : (NATURE_HINT[g] || "");
+  return `<span class="dchip nt" title="공사 성격 — ${esc(hint)}">${esc(v)}</span>`;
 }
 function corridorRow(s) {
   /* ★ 회랑이 **없는** 이유도 사실이다 (2026-09-01 · `geom_hold` 1,468건이 참조 0곳이었다).
@@ -3822,6 +3828,8 @@ function buildRailSignals() {
     .map(f => ({
     _rail: true, title: f.properties.line && f.properties.line !== f.properties.name ? `${f.properties.name} (${f.properties.line})` : f.properties.name,
     line: f.properties.line, cat: "교통", sub: "철도", lvl: f.properties.lvl || lvlByLine[f.properties.line] || "B",
+    // 공사 성격(2026-09-07 세션106 교통 전체) — 노선 상속값(build_rail_v2) · 어댑터 함정 예방(안 실으면 철도만 축 밖으로 샌다)
+    work_nature: f.properties.work_nature, work_nature_basis: f.properties.work_nature_basis, work_nature_group: f.properties.work_nature_group,
     // ☠ `lvl_basis`(등급 근거)가 빠져 **교통 카드만 등급 근거가 빈칸**이었다(2026-08-06 전수조사).
     //   데이터엔 도로 230건·철도 160건이 있는데 어댑터가 안 실어 `gradeBasisHtml`이 ""를 냈다 —
     //   세션33에서 「등급을 사업비로」 바꾼 그 근거가 화면에 도달한 적이 없다(어댑터 함정 7호).
@@ -3910,7 +3918,7 @@ function buildRoadSignals() {
     const p = f.properties;
     if (p.kind === "station") {   // IC·JC 점
       ROAD_SIG.push({ _road: true, title: p.name, cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "A",
-      work_nature: p.work_nature, work_nature_basis: p.work_nature_basis,
+      work_nature: p.work_nature, work_nature_basis: p.work_nature_basis, work_nature_group: p.work_nature_group,
         lvl_basis: p.lvl_basis, gate: p.gate, gate_basis: p.gate_basis,   // 등급 근거·게이트 — 카드가 읽는다(어댑터 함정 7호)
         template_type: "도로", current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
         src_tier: p.src_tier, ic_loc: p.loc, ic_status: p.ic_status, ic_note: p.ic_note, pt_type: p.pt_type, geo_prec: p.geo_prec, geo_approx: !!p.geo_approx, geo_basis: p.geo_basis || null, milestones: p.milestones,
@@ -3951,7 +3959,7 @@ function buildRoadSignals() {
     // 표시명 = 공식 사업명 우선(OSM 이름은 선형 매칭용일 뿐 — 공식 SSOT 사상 2026-07-17)
     ROAD_SIG.push({ _road: true, _has_solid: !!dp.solid.length, title: p.official_name || `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "C",
       lvl_basis: p.lvl_basis, gate: p.gate, gate_basis: p.gate_basis,   // 등급 근거·게이트 — 카드가 읽는다(어댑터 함정 7호)
-      work_nature: p.work_nature, work_nature_basis: p.work_nature_basis,   // 공사 성격(2026-09-02 알렉스) — 어댑터 함정 예방
+      work_nature: p.work_nature, work_nature_basis: p.work_nature_basis, work_nature_group: p.work_nature_group,   // 공사 성격(2026-09-02 알렉스) — 어댑터 함정 예방
       template_type: "도로", current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
       status: "활성", confirmed: !!p.confirmed, sd: null, road_kind: roadKindOf(p), src_tier: p.src_tier,   // 소재 시도=_sggs(다중 귀속)
       owner: p.owner, osm_name: p.name, line: p.name, geom_src: p.geom_src, geom_status: p.geom_status || null, milestones: p.milestones,   // line=노선 하이라이트 키
@@ -4098,7 +4106,11 @@ function sggDisplayName(name) {
 /* ★ 축은 값이 아니라 **그룹**이다 (2026-09-05 세션97 · 알렉스 「저렇게 나누는 게 맞나? 미상이 매우 많다」). 실측 eum 도로 3,261건:
    신설 656 · 확장 818 · 미상 1,726 · 나머지 다섯 값 61건(2%) — 여덟 칩 중 다섯이 빈 칩이었고, 「미상」엔 근거 없음(1,178)과
    **개통 도로 위라 추정을 철회한 것**(548)이 섞여 있었다. 독자의 질문은 「이 길이 새로 생기나」다. 값(work_nature)은 사실이라 그대로,
-   필터는 다섯 그룹. 아래 표는 work_nature.GROUPS의 **사본** — html_check.nature_groups_parity_check가 둘을 대조한다. */
+   필터는 그룹. ★ 2026-09-07 세션106(알렉스 B안): 축을 **교통 전체**로 넓히며 그룹은 **셋**(신설 · 확장·개량 · 미상)이 됐다 —
+   「기존도로」·「변경·폐지」는 호재의 성격이 아니라 없앴다(알렉스 「호재로 보기 어렵다」): 개통 도로 위 미상은 관찰 게이트(지도 기본 뷰 미표시 ·
+   원문이 성격을 밝히면 자동 복귀), 폐지 고시는 status 종결(1년 무산 표식 뒤 숨김), 서류변경은 미상의 사유. 철도 값(연장·복선·전철화·
+   고속·급행화·지하화·직결·연결·역신설·기존선)은 독자의 질문으로 갈랐다 — 연장·직결·역신설은 그 구간에 없던 선로·역이라 신설.
+   아래 표는 work_nature.GROUPS의 **사본** — html_check.nature_groups_parity_check가 둘을 대조한다. */
 /* ★ 시설 번호 문법 — 파이썬 upis_facility_geom.RX_ROAD/RX_ROAD_CONT의 **사본**(html_check.fac_rx_parity_check가 규식 둘을 대조하고 node로
    FAC_CASES를 facIdsOf에 댄다 · 2026-09-05 세션98·99). 3군 = 호 전체 문자열(「1-7」 3단 · 「하6」 한글 지선) — 앞 두 수만 읽으면 밀양 중로2-1-7과
    2-1-19가 같은 시설로 세어진다. 병렬 나열(「중로 1-2·2-17」「고산 중로3-3,3-5호선」)의 후속 항은 앞 항의 위계를 물려받는다 — 머리 바로 뒤에서만(sticky). */
@@ -4108,17 +4120,18 @@ const facIdsOf = t => { const s = String(t || ""), out = [], rx = new RegExp(FAC
   while ((m = rx.exec(s))) { out.push(m[1] + m[2] + "-" + m[3]); cx.lastIndex = rx.lastIndex; let k;
     while ((k = cx.exec(s))) out.push(m[1] + k[1] + "-" + k[2]); }
   return out; };
-const NATURE_GROUPS = {"신설": ["신설", "우회", "접속"], "확장·개량": ["확장", "개량"], "기존도로": [], "변경·폐지": ["서류변경", "폐지"], "미상": ["미상"]};
+const NATURE_GROUPS = {"신설": ["신설", "우회", "접속", "연장", "직결·연결", "역신설"], "확장·개량": ["확장", "개량", "복선·전철화", "고속·급행화", "지하화", "기존선"], "미상": ["미상"]};
 const NATURE_KEYS = Object.keys(NATURE_GROUPS);
-const NATURE_HINT = { "신설": "없던 길(우회도로·연결로 포함)", "확장·개량": "있는 길을 넓히거나 고침", "기존도로": "개통 도로 위 시설의 변경·부대 — 무엇을 바꾸는지는 원문 확인 전", "변경·폐지": "기간 연장·정정·폐지 고시", "미상": "성격 근거 없음" };
-/* ★ 공사 성격 축은 **도로 신호에만** 걸린다 (2026-09-06 알렉스 「도로만 공사 성격이 해당하는 거잖아?」 — 실측: 토지이음 재도출이
-   성격 필드를 도로 밖 321건(복합단지 240 · 주거개발 68 · 인프라 7 …)에도 붙였고, 그중 278건이 「미상」이라 도크의 「도로만」
-   축에서 미상 칩을 끄면 산단·택지 신호가 **조용히 사라졌다**. 라벨(도로만)과 판정이 달랐다. 판정은 구조로: 원장 노선(_road ·
-   피처는 mode=road) · 교통 도로 세부(IC 진출입·도로변 접근·옛 이름 「도로」). 값 자체는 데이터에 그대로 둔다(사실). */
-const NATURE_SUBS = new Set(["IC 진출입", "도로변 접근", "도로"]);
-const isRoadNature = s => !!(s._road || s.mode === "road" || NATURE_SUBS.has(s.sub));
-const natureGroupOf = s => { if (!s || !s.work_nature || !isRoadNature(s)) return null; if (s.work_nature_group) return s.work_nature_group;
-  if (s.work_nature === "미상" && /^개통대조/.test(String(s.work_nature_basis || ""))) return "기존도로";   // 빌드 전 폴백 — 기계 접두만 본다
+const NATURE_HINT = { "신설": "없던 길·선(우회도로·연결로·노선 연장·역 신설 포함)", "확장·개량": "있는 길·선을 넓히거나 고침(복선화·전철화·고속화·지하화 · 기존 선로에 새 운행 포함)", "미상": "성격 근거 없음(서류변경 고시만 관측된 것 포함)" };
+/* ★ 공사 성격 축은 **교통 신호 전체**에 걸린다 (2026-09-06 「도로만」 → 2026-09-07 세션106 알렉스 B안). 철도 노선·역(build_rail_v2가 원장
+   사람 판정 > 사업명 성격어 > 역 구성으로 채우고 역은 노선 상속) · 도로 노선·IC 점(원장 노선과 같은 props_for · IC 점은 노선 상속 — 종전엔
+   점에 필드가 없어 「신설」을 끄면 선은 사라지고 점은 남았다) · 토지이음 도로·환승 · 건축허가 환승·터미널(신축=신설·증축=확장).
+   판정은 구조로 — 피처 층(_road·_rail·mode=road·kind line/station) 또는 대분류 교통(NATURE_CAT = work_nature.NATURE_CAT의 사본 · html_check 대조).
+   교통 밖 신호에 붙은 성격 필드는 데이터 쪽 재도출이 걷고(strip_fields · qa_check 계약) 화면은 읽지 않는다. */
+const NATURE_CAT = "교통";
+const isTransitNature = s => !!(s && (s._road || s._rail || s.mode === "road"
+  || ((s.kind === "line" || s.kind === "station") && (s.linekind || s.line)) || catOf(s) === NATURE_CAT));
+const natureGroupOf = s => { if (!s || !s.work_nature || !isTransitNature(s)) return null; if (s.work_nature_group) return s.work_nature_group;
   for (const [g, ks] of Object.entries(NATURE_GROUPS)) if (ks.includes(s.work_nature)) return g; return "미상"; };
 const filter = {
   cat: new Set(CAT_KEYS),   // '기타'는 안전망(0건) — 필터 축에서 제외(v1.8)
@@ -4128,8 +4141,8 @@ const filter = {
   scale: new Set(["광역", "지구", "근린"]),
   phase: new Set(PHASES),   // 조회축 = 4단계 백본(계획/인가/착공/준공·개통). 정체·무산은 필터 아닌 항상표시 표식
   lvl: new Set(GRADES_DISP),   // 등급 조회축(A/B/C/미정) — 지도 원·카드·집계 전 화면 일관(호재 중심 개편 2026-07-16)
-  // 공사 성격 조회축(신설/확장/…) — work_nature **있는 신호만** 거른다(철도·건축 등 미보유 신호는
-  // 항상 통과 — 안 그러면 「미상」을 끄는 순간 성격 개념이 없는 층 전체가 사라진다 · P2).
+  // 공사 성격 조회축(신설/확장·개량/미상) — work_nature **있는 교통 신호만** 거른다(교통 밖 유형·필드 없는 신호는
+  // 항상 통과 — 안 그러면 「미상」을 끄는 순간 성격 개념이 없는 층 전체가 사라진다 · P2). 2026-09-07부터 철도·환승도 축 안이다.
   nature: new Set(NATURE_KEYS),
   // 노선 선형 표시(철도선/도로선) — 신호·집계는 불변, 지도 위 선만 on/off (호재 원 집중용, localStorage 유지)
   // 「노선명 배지」도 여기 담는다 — 선과 같은 **표시 옵션** 축이다(신호·집계 불변).
@@ -4340,7 +4353,7 @@ const natureVisible = s => { const g = natureGroupOf(s); return !g || filter.nat
 const visibleNoRegion = s => catVisible(s)
   && filter.phase.has(phaseOf(s))                // 4단계 백본 조회축(전체해제는 단계를 비우지 않음 → 유지)
   && filter.lvl.has(levelOf(s))                  // 등급 조회축(A/B/C/미정)
-  && natureVisible(s)                            // 공사 성격 조회축(2026-09-02) — 도로류만 구속
+  && natureVisible(s)                            // 공사 성격 조회축(2026-09-02 · 2026-09-07 교통 전체) — 교통 신호만 구속
   && !isStaleFinished(s);   // 끝난 신호(종료 후 1년 초과)는 지도·목록·집계 전부에서 숨김(사용자 2026-07-21)
 const visible = s => visibleNoRegion(s)
   && regionVisible(s);                           // 지역 조회축(시도 › 시군구 › 읍면동) — 아래 참조
@@ -5983,7 +5996,7 @@ function renderDetail(s) {
         <span class="dchip ph${phaseSolid(s) || dropped ? "" : " ph-plan"}" style="${phaseSolid(s) && !dropped ? `background:${colorOf(s)}` : `color:${colorOf(s)}`}">${PHASE_LABEL[ph] || ph}</span>
         <span class="dchip">${s.area_shape ? (s.area_m2 ? `지구 ${(s.area_m2 / 1e6).toFixed(1)}km²` : "면적 미상")
           : `영향 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km`}</span>
-        ${natureChip(s)}<!-- 공사 성격 = 네 번째 칩(도로만 · 2026-09-06 알렉스) — 값은 여기, 근거는 아래 「성격 근거」 행 -->
+        ${natureChip(s)}<!-- 공사 성격 = 네 번째 칩(교통 · 2026-09-06 알렉스 · 2026-09-07 전체) — 값은 여기, 근거는 아래 「성격 근거」 행 -->
         ${s.gate === "계획안" ? '<span class="badge-draft">계획(안) — 승인 전</span>' : ""}
         ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}</div>
       ${s.gate === "계획안" ? `<div class="kv" style="color:#b3651e"><b>계획(안)</b> 승인 전 법정계획(안) 단계 — 노선·정거장 위치는 변경될 수 있습니다${s.gate_basis ? ` · ${s.gate_basis}` : ""}</div>` : ""}
@@ -6629,7 +6642,7 @@ function dockCounts() {
      ※ 종전 주석은 「도크 집계는 고른 지역의 재고이고 동은 그 아래 층」이라 적었는데, 그 설계는
        총계에는 적용되지 않아 **한 함수 안에서 두 규칙**이 돌고 있었다. 규칙은 하나여야 한다. */
   // 풀은 livePool 하나에서 온다 — 등급 없음 목록과 같은 자(2026-08-18 SSOT 통합, 함수 주석 참조)
-  const stageLvl = s => filter.phase.has(phaseOf(s)) && filter.lvl.has(levelOf(s));
+  const stageLvl = s => filter.phase.has(phaseOf(s)) && filter.lvl.has(levelOf(s)) && natureVisible(s);   // ★ 성격 축도 패싯이다(2026-09-07 발각 — 「신설」을 끄면 총계만 줄고 유형 건수는 그대로였다)
   const pool = livePool().filter(regionVisible);
   const cat = {}, sub = {}, lvl = {};
   pool.forEach(s => {
@@ -6637,7 +6650,7 @@ function dockCounts() {
       const c = catOf(s); if (c) cat[c] = (cat[c] || 0) + 1;
       const sb = SUB_KEYS[catOf(s)] ? subIdOf(s) : subOf(s); if (sb) sub[sb] = (sub[sb] || 0) + 1;
     }
-    if (catVisible(s) && filter.phase.has(phaseOf(s))) {
+    if (catVisible(s) && filter.phase.has(phaseOf(s)) && natureVisible(s)) {
       const l = levelOf(s); if (l) lvl[l] = (lvl[l] || 0) + 1;
     }
   });
@@ -6857,7 +6870,7 @@ function renderDock() {
   const nt = k => {
     const on = filter.nature.has(k);
     return `<button type="button" class="sgbtn ntb${on ? "" : " off"}" data-tog="nature" data-k="${k}"
-      title="${k} — ${NATURE_HINT[k] || ""}. 이 성격의 도로 신호만 켜고 끄기(성격 정보가 없는 층(철도 등)은 영향 없음)"><span>${k}</span></button>`;
+      title="${k} — ${NATURE_HINT[k] || ""}. 이 성격의 교통 신호(철도·도로·환승)만 켜고 끄기(교통 밖 유형은 영향 없음)"><span>${k}</span></button>`;
   };
   const ph = p => {
     const on = filter.phase.has(p), i = PHASE_IDX[p] ?? 0;
@@ -6926,8 +6939,8 @@ function renderDock() {
       <div class="sgrow pgrow">${PHASES.map(ph).join("")}</div>
     </div>
     <div class="axis">
-      <!-- 공사 성격 (2026-09-02 알렉스) — 도로류 한정 축. 근거는 카드의 「공사 성격」 행이 말한다. -->
-      <div class="t">공사 성격 <span class="hmhint">도로만</span></div>
+      <!-- 공사 성격 (2026-09-02 알렉스 · 2026-09-07 교통 전체) — 교통 신호 축. 근거는 카드의 「성격 근거」 행이 말한다. -->
+      <div class="t">공사 성격 <span class="hmhint">교통</span></div>
       <div class="sgrow ntrow">${NATURE_KEYS.map(nt).join("")}</div>
     </div>
     <!-- ★ 아파트 세대수 — **단계 아래 · 레이어 위** (2026-08-16 갱신 시안 §03: *"지역 → 유형 →
@@ -8807,6 +8820,7 @@ function railToSignal(p, cen) {
     // "역 1개만 영향범위가 보이는" 화면이 된다(2026-08-04 사용자 — GTX D 중점이 신림 부근이라
     // 신림역 영향원처럼 보였다). 노선 클릭은 선 하이라이트만(showSignal이 이 플래그로 원 생략).
     _rail: true, _line: true, title: p.full || p.name, line: p.name, cat: "교통", sub: "철도",
+    work_nature_group: p.work_nature_group, work_nature: p.work_nature, work_nature_basis: p.work_nature_basis,   // 공사 성격(2026-09-07 교통 전체)
     lvl: p.lvl || railLevelOf(p.full || p.name, p.linekind),   // 파이프라인 판정(grade.rail_level) 우선, 없으면 폴백
     lvl_basis: p.lvl_basis, gate: p.gate, gate_basis: p.gate_basis,
     template_type: "철도", current_stage: p.status, phase: p.phase, status: p.drop ? "종결" : "활성", confirmed: p.confirmed,
@@ -11252,8 +11266,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "70358feaaf", "adverse_facilities.json": "76177d21fb", "apartments_all.json": "327ae1add8", "arch_signals.json": "1218302224", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "b64d7fcc2f", "corridor_diff.json": "2e6971206f", "dart_signals.json": "1e2a409b35", "dps_signals.json": "c623c9ffde", "eum_backfill_progress.json": "a3ae1d38f0", "eum_enroll.json": "3abf2b2e5e", "eum_signals.json": "688c22e411", "eum_usage.json": "8dfd89bc81", "hospital_signals.json": "fdb40388cc", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "743872973a", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "7837a16baa", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "76db16eb10", "mega_signals.json": "c2ad17c9a2", "methodology.html": "5d9c0b4aed", "park_signals.json": "8e18cd1161", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "7770c20fd7", "rail_reference.html": "a4efcb42a7", "rail_signals.json": "3b8443b161", "region_gaps.json": "fc36565d01", "regions.json": "5d52225be0", "report.html": "698ea74bb1", "retail_signals.json": "27e11f9faa", "road_signals.json": "ac09cba98e", "school_signals.json": "01de536bce", "settings.html": "1ca2007f59", "sfz_signals.json": "c5c8313a81", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "e1ae542bd4", "signals.json": "94f5712a9f", "signals_auto.json": "e179769140", "signals_jeongbi_all.json": "bfa221662f", "source_status.html": "237e5e9e62", "thresholds.json": "cca4518e26", "upis_facility_geom.json": "d801b92269", "upis_on_road.json": "19783650fb", "weekly.html": "79c1ab8eba", "weekly_index.json": "454d9d0f3d"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260907l");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "70358feaaf", "adverse_facilities.json": "76177d21fb", "apartments_all.json": "327ae1add8", "arch_signals.json": "bf4e08e051", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "df417cd7b8", "corridor_diff.json": "455443ed37", "dart_signals.json": "1e2a409b35", "dps_signals.json": "c623c9ffde", "eum_backfill_progress.json": "a3ae1d38f0", "eum_enroll.json": "3abf2b2e5e", "eum_signals.json": "1386e47411", "eum_usage.json": "8dfd89bc81", "hospital_signals.json": "fdb40388cc", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "743872973a", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "7837a16baa", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "76db16eb10", "mega_signals.json": "c2ad17c9a2", "methodology.html": "3b8dd7c6e1", "park_signals.json": "8e18cd1161", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "002506d79b", "rail_reference.html": "a4efcb42a7", "rail_signals.json": "4b55c2025e", "region_gaps.json": "de123adfd6", "regions.json": "5d52225be0", "report.html": "698ea74bb1", "retail_signals.json": "27e11f9faa", "road_signals.json": "99967fb46a", "school_signals.json": "01de536bce", "settings.html": "1ca2007f59", "sfz_signals.json": "c5c8313a81", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "e1ae542bd4", "signals.json": "fdb33b4f3a", "signals_auto.json": "e179769140", "signals_jeongbi_all.json": "bfa221662f", "source_status.html": "237e5e9e62", "thresholds.json": "cca4518e26", "upis_facility_geom.json": "d801b92269", "upis_on_road.json": "73ddfa599a", "weekly.html": "79c1ab8eba", "weekly_index.json": "454d9d0f3d"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260907m");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
@@ -11567,7 +11581,7 @@ const HEAVY_SRC = [
      ⚠ 등재분 대부분은 좌표가 아직 없다(UPIS 조인·소급이 채운다). 화면은 `geometry` 없는 신호를
        버리므로 지금은 조용하지만, 회랑이 붙는 만큼 매일 늘어난다 — 무거워지는 쪽이 확정된 자리다. */
   ["도시계획고시", () => true, "eum_signals.json", { signals: [] }, d => {
-    EUM_SIG = ((d && d.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden)
+    EUM_SIG = ((d && d.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden && s.gate !== "관찰")   // 관찰 = 개통 도로 위 미상(호재 판별 대기 · 2026-09-07 알렉스) — rail·UPIS와 같은 게이트
       .map(s => Object.assign({ _eum: true, confirmed: false, status: "활성" }, s));   // 승격·교차중복 억제(어댑터 함정 — 2026-07-27)
     }],
 ];
