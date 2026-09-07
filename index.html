@@ -4178,10 +4178,39 @@ const viewH = () => document.documentElement.clientHeight || window.innerHeight;
 /* ── 지도 공용 헬퍼 (2026-07-29 전수 감사 A — Leaflet 전용 API 무가드 호출 6곳이 카카오에서
    크래시하던 클래스의 원천 해결). 전역 함수는 window._map을 직접 부르지 말고 이것만 쓴다.
    html_check가 전역 스코프의 직접 호출을 게이트한다. */
-function mapGo(lat, lon, zLeaflet) {
+function mapGo(lat, lon, zLeaflet, opt) {
   if (!window._map) return;
-  if (window._map.setView) window._map.setView([lat, lon], zLeaflet);
-  else { window._map.setLevel(Math.max(1, 18 - zLeaflet)); window._map.setCenter(new kakao.maps.LatLng(lat, lon)); }
+  const M = window._map;
+  /* ★ 부드럽게 간다 (2026-09-07 알렉스 「호재 선택하면 갑자기 뿅 이동하는 게 아니고 부드럽게」).
+     · Leaflet = flyTo · 카카오 = panTo는 **이동 거리가 화면보다 크면 애니메이션 없이 점프**하므로(공식 문서) 목표가 화면 안에
+       들어올 때까지 축소(애니메이션) → panTo → 목표를 고정한 채 확대(setLevel anchor). 두 렌더러가 같은 문법(카카오↔Leaflet 쌍).
+     · 숨은 탭·크기 못 잼·`opt.instant`는 즉시 — 숨은 탭에선 애니메이션이 안 돈다(2026-09-05 실측 · 메모리). */
+  const smooth = !(opt && opt.instant) && !document.hidden;
+  if (M.setView) {
+    if (smooth && M.flyTo) M.flyTo([lat, lon], zLeaflet, { duration: .7 }); else M.setView([lat, lon], zLeaflet);
+    return;
+  }
+  const K = kakao.maps, lv = Math.max(1, 18 - zLeaflet), tgt = new K.LatLng(lat, lon);
+  const jump = () => { M.setLevel(lv); M.setCenter(tgt); };
+  if (!smooth) return jump();
+  try {
+    const cur = M.getLevel(), b = M.getBounds(), sw = b.getSouthWest(), ne = b.getNorthEast(), c = M.getCenter();
+    const spanLat = ne.getLat() - sw.getLat(), spanLng = ne.getLng() - sw.getLng();
+    if (!(spanLat > 0 && spanLng > 0)) return jump();
+    // 지금 화면 단위 거리 → 축소 뒤엔 레벨당 절반. 화면의 0.8 안이면 panTo가 애니메이션한다.
+    const base = Math.max(cur, lv);
+    let ratio = Math.max(Math.abs(lat - c.getLat()) / spanLat, Math.abs(lon - c.getLng()) / spanLng) / Math.pow(2, base - cur);
+    const lvOut = Math.min(13, base + (ratio > .8 ? Math.ceil(Math.log2(ratio / .8)) : 0));
+    // 단계는 `idle`(애니메이션 종료)로 잇고, idle이 안 오는 경우(이미 그 자리 · 숨은 탭에서 rAF 정지)는 시간 상한으로 넘어간다.
+    const after = (fn, ms) => { let done = false; const h = () => { if (done) return; done = true; K.event.removeListener(M, "idle", h); fn(); };
+      K.event.addListener(M, "idle", h); setTimeout(h, ms); };
+    const settle = () => { const c2 = M.getCenter();   // 마지막 보정 — 애니메이션이 중간에 멈췄어도(숨은 탭) 끝 상태는 목표다
+      if (Math.abs(c2.getLat() - lat) > 1e-4 || Math.abs(c2.getLng() - lon) > 1e-4) M.setCenter(tgt); if (M.getLevel() !== lv) M.setLevel(lv); };
+    const zoomIn = () => { if (M.getLevel() !== lv) { M.setLevel(lv, { animate: { duration: 320 }, anchor: tgt }); after(settle, 900); } else settle(); };
+    const pan = () => { M.panTo(tgt); after(zoomIn, 900); };
+    if (lvOut !== cur) { M.setLevel(lvOut, { animate: { duration: 260 } }); after(pan, 700); }
+    else pan();
+  } catch (e) { jump(); }
 }
 function mapFit(lls, padPx) {   // lls = [[lat,lon],...] 또는 경계객체({_southWest,_northEast})
   if (!window._map || !lls) return;
@@ -4216,7 +4245,7 @@ function mapCenterOn(lat, lon, minZ) {
   const z = isK ? 18 - M.getLevel() : M.getZoom();
   if (minZ != null && z < minZ) mapGo(lat, lon, minZ);
   const mapEl = document.getElementById("map"), mr = mapEl ? mapEl.getBoundingClientRect() : null;
-  if (!mr || !mr.width || !mr.height) { mapGo(lat, lon, Math.max(z, minZ || 0)); return; }   // 크기를 못 재면(숨은 탭·레이아웃 전) 즉시 중앙으로
+  if (!mr || !mr.width || !mr.height) { mapGo(lat, lon, Math.max(z, minZ || 0), { instant: true }); return; }   // 크기를 못 재면(숨은 탭·레이아웃 전) 즉시 중앙으로
   let x0 = 0;
   const p = document.getElementById("panel");
   if (p && p.style.display !== "none" && !isMobileView()) {
@@ -4235,7 +4264,7 @@ function mapCenterOn(lat, lon, minZ) {
     const pt = M.latLngToContainerPoint([lat, lon]); dx = pt.x - cx; dy = pt.y - cy;
     const c = M.containerPointToLatLng([mr.width / 2 + dx, mr.height / 2 + dy]); tgt = [c.lat, c.lng];
   }
-  if (document.hidden) mapGo(tgt[0], tgt[1], isK ? 18 - M.getLevel() : M.getZoom());
+  if (document.hidden) mapGo(tgt[0], tgt[1], isK ? 18 - M.getLevel() : M.getZoom(), { instant: true });
   else if (isK) M.panBy(dx, dy);
   else M.panBy([dx, dy]);
 }
@@ -5389,9 +5418,7 @@ function renderApt(a) {
            **등급 열 머리 클릭**으로 옮겼다. 기능은 남고 중복만 사라진다. -->
     <!-- 시점 슬라이더 제거(2026-08-14 사장님) — 시안 §07 목업에 없다. 단지 상세의 질문은
          「무엇이 얼마나 가까운가」라 시점 축은 이 화면의 일이 아니다(업데이트 탭이 시간을 전담). -->
-    <div id="list"></div>
-    <div class="note" style="border-top:1px dashed var(--line);margin-top:8px;padding-top:8px;font-size:11px;color:var(--muted)">
-      단지 정보=공동주택 관리정보 공공데이터(세대수 등 사실). 좌표=도로명주소 지오코딩(도로 수준 근사, 건물단위 아님). 거리는 사실이며 '수혜'는 표시하지 않음(P1)</div>`;
+    <div id="list"></div>`;   // 하단 「단지 정보=공동주택 관리정보…」 안내 문구는 뺐다(2026-09-07 알렉스 「그 문구 제거해」 · 출처·근사 표기는 데이터·방법론 페이지가 말한다)
   p.querySelector("#cmpAdd").onclick = () => toggleCompare(a);
   { const ss = p.querySelector("#apt-sort");
     if (ss) ss.onchange = () => { panelSort = ss.value; try { localStorage.setItem("hojae_apt_sort", panelSort); } catch (e) {} if (panelListRender) panelListRender(); }; }
@@ -8150,8 +8177,9 @@ function initLeaflet() {
     if (!ringsXY || !ringsXY.length) return;
     const st = !(opt && opt.stroke === false);
     const latlngs = ringsXY.map(r => r.map(([x, y]) => [y, x]));
-    hlLayer = L.polygon(latlngs, { pane: "cand", color: "#5b3fd4", weight: st ? 2.5 : 1, opacity: st ? .95 : 0,
-      fillColor: "#5b3fd4", fillOpacity: st ? .12 : .22, interactive: false }).addTo(map);
+    /* 테두리 = 진한 잉크 3.5px (2026-09-07 알렉스 「지역 선택시 이런식으로 테두리 넣어줘 · 원래 있었는데 없어진듯」 — 종전 보라 2.5px은 배경지도 위에서 안 읽혔다). 카카오 분기와 같은 값. */
+    hlLayer = L.polygon(latlngs, { pane: "cand", color: "#151618", weight: st ? 3.5 : 1, opacity: st ? .9 : 0,
+      fillColor: "#5b3fd4", fillOpacity: st ? .10 : .22, interactive: false }).addTo(map);
   };
 
   let badges = [], pins = [];
@@ -10473,7 +10501,7 @@ function initKakao() {
     const st = !(opt && opt.stroke === false);   // 채움만 = 시도(구 링을 나란히 그린다 · 테두리를 그리면 구 경계가 내부 선이 된다)
     /* ⚠ **두께 0으로 두지 않는다** — 채움만 쓸 때도 `strokeWeight:1 · strokeOpacity:0`이다(2026-09-07 실측).
        그리고 테두리가 없으면 경계가 색 전환뿐이라 **채움을 조금 진하게** 해야 범위가 읽힌다(.12 → .22). */
-    ringsXY.forEach(r => hlPolys.push(new K.Polygon({ map, path: r.map(([x, y]) => LL(x, y)), strokeWeight: st ? 2.5 : 1, strokeColor: "#5b3fd4", strokeOpacity: st ? .95 : 0, fillColor: "#5b3fd4", fillOpacity: st ? .12 : .22, zIndex: 6 }))); };
+    ringsXY.forEach(r => hlPolys.push(new K.Polygon({ map, path: r.map(([x, y]) => LL(x, y)), strokeWeight: st ? 3.5 : 1, strokeColor: "#151618", strokeOpacity: st ? .9 : 0, fillColor: "#5b3fd4", fillOpacity: st ? .10 : .22, zIndex: 6 }))); };
   const sggRingsFn = () => { if (window._sggRings) return window._sggRings; const m = {}; SGG_GEO.features.forEach(f => { const disp = f.properties.sido + " " + sggDisplayName(f.properties.name); ringsOf(f).forEach(r => (m[disp] = m[disp] || []).push(r)); }); return (window._sggRings = m); };
   mapApi = { refreshPins, panTo: ll => map.panTo(LL(ll[0], ll[1])), showRadius, showRadiusMany, clearRadius, showAptAnchor, highlightRings, clearHighlight, clearAptMarker, emphasizePin, sggRings: sggRingsFn, highlightRoute, clearRoute, hideTip, closeAptPop };   // viewFilter 제거(2026-07-27) — 소비처 없는 죽은 API였다
   performance.mark("map:ready");   // 카카오 지도 API가 준비된 시점(계측 — head의 __perf)
@@ -11224,8 +11252,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "70358feaaf", "adverse_facilities.json": "76177d21fb", "apartments_all.json": "327ae1add8", "arch_signals.json": "1218302224", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "da14e1c552", "corridor_diff.json": "eda4d01a43", "dart_signals.json": "1e2a409b35", "dps_signals.json": "c623c9ffde", "eum_backfill_progress.json": "a3ae1d38f0", "eum_enroll.json": "3abf2b2e5e", "eum_signals.json": "afef528b02", "eum_usage.json": "8dfd89bc81", "hospital_signals.json": "fdb40388cc", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "743872973a", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "7837a16baa", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "76db16eb10", "mega_signals.json": "c2ad17c9a2", "methodology.html": "5d9c0b4aed", "park_signals.json": "b42c3cb5cb", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "1fd34b417c", "rail_reference.html": "a4efcb42a7", "rail_signals.json": "3f8e1528e1", "region_gaps.json": "06237777cf", "regions.json": "5d52225be0", "report.html": "698ea74bb1", "retail_signals.json": "27e11f9faa", "road_signals.json": "1f39342fb4", "school_signals.json": "06d4ca7515", "settings.html": "1ca2007f59", "sfz_signals.json": "c5c8313a81", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "e1ae542bd4", "signals.json": "94f5712a9f", "signals_auto.json": "e179769140", "signals_jeongbi_all.json": "2d3e482044", "source_status.html": "237e5e9e62", "thresholds.json": "cca4518e26", "upis_facility_geom.json": "d801b92269", "upis_on_road.json": "650596b379", "weekly.html": "51a3915519", "weekly_index.json": "454d9d0f3d"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260907j");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "70358feaaf", "adverse_facilities.json": "76177d21fb", "apartments_all.json": "327ae1add8", "arch_signals.json": "1218302224", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "d1e2f274ac", "corridor_diff.json": "8a81fdd92f", "dart_signals.json": "1e2a409b35", "dps_signals.json": "c623c9ffde", "eum_backfill_progress.json": "a3ae1d38f0", "eum_enroll.json": "3abf2b2e5e", "eum_signals.json": "afef528b02", "eum_usage.json": "8dfd89bc81", "hospital_signals.json": "fdb40388cc", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "743872973a", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "1f4c39d7b5", "logipark_signals.json": "7837a16baa", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "76db16eb10", "mega_signals.json": "c2ad17c9a2", "methodology.html": "5d9c0b4aed", "park_signals.json": "b42c3cb5cb", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "fe8fe2d638", "rail_reference.html": "a4efcb42a7", "rail_signals.json": "3f8e1528e1", "region_gaps.json": "bf0ee9bfaf", "regions.json": "5d52225be0", "report.html": "698ea74bb1", "retail_signals.json": "27e11f9faa", "road_signals.json": "3a2f39c538", "school_signals.json": "06d4ca7515", "settings.html": "1ca2007f59", "sfz_signals.json": "c5c8313a81", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "e1ae542bd4", "signals.json": "94f5712a9f", "signals_auto.json": "e179769140", "signals_jeongbi_all.json": "2d3e482044", "source_status.html": "237e5e9e62", "thresholds.json": "cca4518e26", "upis_facility_geom.json": "d801b92269", "upis_on_road.json": "8ec05299b0", "weekly.html": "51a3915519", "weekly_index.json": "454d9d0f3d"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260907k");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
