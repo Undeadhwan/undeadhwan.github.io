@@ -598,6 +598,14 @@
      카드·상세와 같은 함수 aptCount). 라벨 LOD와 같은 문턱(카카오 APT_LV=4 ↔ Leaflet APT_ZOOM=14)에서만 28px+숫자, 그보다 멀면 19px 무숫자.
      0건은 회색(--muted)·무숫자 — 「0」이 수백 개 찍히면 소음이고 회색이 「살펴볼 것 없음」을 말한다. 두 자리까지, 100 이상은 99+.
      큰 아이콘은 문(door) 없는 몸통 — 숫자가 문 구멍 위에 걸치면 배경이 비쳐 못 읽는다. 게이트 = html_check.apt_pop_rules_check ⑤. */
+  /* ★ 터치 기기 히트 영역 = 그림과 무관하게 ≥ 40px (2026-09-08 세션107 · 알렉스 「아파트 클릭이 잘 안 된다」). 19px 집 아이콘은 손가락으로
+     조준이 안 된다 — 호재 핀은 이미 투명 여백 44px(hojaeMarkerImage HIT)인데 아파트 점만 그림 크기였다(규칙이 한쪽에만). 그림은 그대로,
+     가상요소가 투명 여백을 맡는다(kakao CustomOverlay는 content 요소의 히트 영역이 곧 클릭 영역). */
+  @media (hover: none) {
+    .apt-dot { position:relative; }
+    .apt-dot::before { content:""; position:absolute; left:-11px; top:-11px; right:-11px; bottom:-11px; }
+    .apt-dot.big::before { left:-6px; top:-6px; right:-6px; bottom:-6px; }
+  }
   .apt-dot.big { width:32px; height:32px; position:relative; }   /* 28→32 (2026-09-05 알렉스 「숫자가 너무 타이트」) · 큰 집은 지붕 짧고 몸통 큰 형태(APT_D_SOLID) */
   .apt-dot.big path { stroke-width:2; }
   .apt-dot b { display:none; }
@@ -3755,6 +3763,21 @@ function gateObs(src) {
   GATE_OBS[src] = 0;
   return s => { if ((s.properties || s).gate === "관찰") { GATE_OBS[src]++; return false; } return true; };
 }
+/* ★★ 손이 움직이는 동안은 무거운 일을 미룬다 (2026-09-08 세션107 · 알렉스 「모바일 속도가 너무 느리더라. 아파트 클릭도 잘 안 되고 버벅거려」).
+   실측(데스크톱 · 폰은 3~5배): renderAll 335ms · 선 예열 tick 최대 75ms · 지도 예열 458ms 한 덩어리. 폰에선 이것들이 손가락 사이에 끼어들어
+   탭이 씹힌다. iOS Safari엔 requestIdleCallback이 없어 종전 폴백(setTimeout 800 · 상수 8ms)은 「한가한지」를 안 보고 돌았다.
+   ⇒ 마지막 입력 시각 하나(`_lastTouch`)를 전 화면이 공유하고, `whenQuiet(fn, ms)`가 「ms 동안 입력 없음」 뒤에만 부른다(rIC가 있으면 그 안에서).
+   선 예열(_prebuildIdle)·모바일 지도 예열(srcArrive)이 이 자를 쓴다. 게이트 = html_check.mobile_touch_check. */
+let _lastTouch = 0;
+["touchstart", "touchmove", "pointerdown", "wheel", "scroll", "keydown"].forEach(ev =>
+  addEventListener(ev, () => { _lastTouch = performance.now(); }, { passive: true, capture: true }));
+function whenQuiet(fn, quiet = 1200) {
+  const tick = () => {
+    if (performance.now() - _lastTouch < quiet) { setTimeout(tick, quiet); return; }
+    if (window.requestIdleCallback) requestIdleCallback(() => fn(), { timeout: quiet * 2 }); else setTimeout(fn, 0);
+  };
+  setTimeout(tick, quiet);
+}
 /* DART(신규시설투자·유형자산양수) → 일자리 후보 신호 어댑트. 위치=회사 소재지 근사(§ 후보층, confirmed:false) */
 function buildDartSignals() {   // DART 전자공시 = 법정 공시 → official_report
   DART_SIG = (DART || []).filter(s => s.geometry && s.geometry.coordinates).map(s => ({
@@ -4533,6 +4556,8 @@ function pointInRing(px, py, ring) {
   return inside;
 }
 function ringCentroid(r) { let x = 0, y = 0; r.forEach(([a, b]) => { x += a; y += b; }); return [x / r.length, y / r.length]; }
+// 동 피처의 대표점은 한 번만 센다 — 종전엔 팬·줌마다 1,214개 링을 다시 합산했다(2026-09-08 세션107 실측 동 층 둘 합 35ms/idle · 폰은 몇 배). 두 렌더러 공용.
+const dongCen = f => f._cen || (f._cen = ringCentroid(ringsOf(f)[0]));
 /* 신호의 영향권 기준점들: 본체 좌표 + 접근점(수혜는 점에서 발생, §3.1).
    도로 이원 관리: 전용도로(고속·고속화·지하화)는 IC 점만 영향권 — IC는 별도 점 신호가 버퍼 주체라 선 신호는 빈 배열(집계 제외).
    일반도로는 선 샘플점 전체(회랑 버퍼). */
@@ -6727,6 +6752,10 @@ function dockCounts() {
      ⇒ 도크 집계는 **지도와 같은 자**를 쓴다(동까지 적용). 자기 축만 빼는 facet 규칙은 그대로.
      ※ 종전 주석은 「도크 집계는 고른 지역의 재고이고 동은 그 아래 층」이라 적었는데, 그 설계는
        총계에는 적용되지 않아 **한 함수 안에서 두 규칙**이 돌고 있었다. 규칙은 하나여야 한다. */
+  // ★ 한 렌더 사이클에 한 번만 센다 (2026-09-08 세션107 · 알렉스 폰 제보) — renderAxis·renderDock이 각자 불러 8천 건 패싯을 **두 번**(데스크톱 60ms씩) 돌렸다.
+  //   키 = 신호 세대 + 렌더 세대 + 조회조건 서명 + 지역(같은 입력이면 같은 답 · 필터·지역이 바뀌면 renderAll이 세대를 올린다).
+  const _dk = SIG_VER + "|" + (typeof _relEpoch !== "undefined" ? _relEpoch : 0) + "|" + filterSig() + "|" + (typeof regionLabel === "function" ? regionLabel() : "");
+  if (_dockMemo && _dockMemo.k === _dk) return _dockMemo.v;
   // 풀은 livePool 하나에서 온다 — 등급 없음 목록과 같은 자(2026-08-18 SSOT 통합, 함수 주석 참조)
   const stageLvl = s => filter.phase.has(phaseOf(s)) && filter.lvl.has(levelOf(s)) && natureVisible(s);   // ★ 성격 축도 패싯이다(2026-09-07 발각 — 「신설」을 끄면 총계만 줄고 유형 건수는 그대로였다)
   const pool = livePool().filter(regionVisible);
@@ -6740,7 +6769,14 @@ function dockCounts() {
       const l = levelOf(s); if (l) lvl[l] = (lvl[l] || 0) + 1;
     }
   });
-  return { cat, sub, lvl, total: pool.filter(visible).length };
+  const _dv = { cat, sub, lvl, total: pool.filter(visible).length };
+  _dockMemo = { k: _dk, v: _dv };
+  return _dv;
+}
+let _dockMemo = null;
+/* 조회조건 서명 — 도크 패싯 메모 키의 재료. 축(Set)은 정렬해 잇고, 그 밖의 값은 문자열로. 새 축이 생겨도 열거를 고칠 일이 없다(filter 객체를 그대로 훑는다). */
+function filterSig() {
+  return Object.keys(filter).map(k => { const v = filter[k]; return k + "=" + (v instanceof Set ? [...v].sort().join("·") : (v && typeof v === "object" ? JSON.stringify(v) : String(v))); }).join(";");
 }
 /* ══ 세부유형 플라이아웃 (2026-08-19 시안 §15-04) ═══════════════════════════════════
    ★ 열림 = **고정(핀) ∪ 호버**. 핀은 ▶(chev)로 켜고 `dockOpen`에 저장되던 그 상태 그대로다 —
@@ -7316,10 +7352,11 @@ function movDeltaHtml(s) {
        그 신호의 색은 유형이다. 회색→유형색의 대비가 **어느 쪽이 지금인지**를 말한다. */
     + `<em class="arw">→</em><span class="phcell now" style="color:${colorOf(s)}"><b>${dot(d.to)}${phaseLabel(d.to)}</b></span></span>`;
 }
-function flowRows() {
-  return allSignalsFlat().filter(visible)
-    .filter(s => s.last_movement && weeksAgo(s.last_movement) !== null)
-    .sort((a, b) => String(b.last_movement).localeCompare(String(a.last_movement)));
+function flowRows(sorted = true) {
+  const rows = allSignalsFlat().filter(visible)
+    .filter(s => s.last_movement && weeksAgo(s.last_movement) !== null);
+  // 건수만 필요한 호출(탭 배지)은 정렬을 건너뛴다 — 8천 건 문자열 정렬이 렌더마다 수십 ms였다(2026-09-08 세션107 · 모집단·자는 그대로)
+  return sorted ? rows.sort((a, b) => String(b.last_movement).localeCompare(String(a.last_movement))) : rows;
 }
 function renderFlow() {
   const host = document.getElementById("flowv");
@@ -7995,10 +8032,14 @@ function initTabbar() {
    쓴다(`flowRows` + source + isToday). 종전엔 배지만 `weeksAgo===0`(≤3.5일)이라 **화면 어디에도
    없는 숫자**를 말했다(2026-08-11 사용자 제보 — 흐름 325 · 오늘 26 · 배지 28).
    뜻도 적어 둔다: 숫자만 있는 배지는 무엇의 개수인지 물을 수밖에 없다(P2 — 사실은 표시). */
+let _tabMemo = null;
 function updateTabbar() {
   const el = document.getElementById("tb-mv");
   if (!el) return;
-  const n = dedupeMov(flowRows().filter(s => movBasis(s) === "source" && isToday(s.last_movement))).length;
+  // 세대별 메모 — renderAll마다 8천 건을 다시 걸렀다(데스크톱 102ms · 2026-09-08 세션107). 모집단·자는 종전 그대로(flowRows + source + isToday), 정렬만 뺀다.
+  const _tk = SIG_VER + "|" + (typeof _relEpoch !== "undefined" ? _relEpoch : 0) + "|" + filterSig() + "|" + (typeof regionLabel === "function" ? regionLabel() : "");
+  if (!_tabMemo || _tabMemo.k !== _tk) _tabMemo = { k: _tk, n: dedupeMov(flowRows(false).filter(s => movBasis(s) === "source" && isToday(s.last_movement))).length };
+  const n = _tabMemo.n;
   el.textContent = n ? n : "";
   el.title = n ? `오늘 문서상 움직인 신호 ${n}건 — 흐름 탭의 「오늘」과 같은 수` : "";
   el.style.display = n ? "" : "none";
@@ -8582,7 +8623,7 @@ function initLeaflet() {
       return { x: q.x, y: q.y, w: 30, h: 30 };
     });
     for (const f of DONG_GEO.features) {
-      const c = ringCentroid(ringsOf(f)[0]);
+      const c = dongCen(f);   // 카카오판과 같은 캐시(2026-09-08 세션107 — 규칙은 양쪽에)
       if (!bd.contains([c[1], c[0]])) continue;
       const pt = map.latLngToContainerPoint([c[1], c[0]]);
       if (collides(placed, pt, 46, 20)) continue;
@@ -9217,9 +9258,12 @@ function initKakao() {
   // 동 경계: 폴리곤을 feature에 1회 캐시(_kpolys) — 줌/이동마다 파괴·재생성하지 않고 setMap 토글만(줌 버벅임 해소)
   const renderDongPoly = () => {
     const on = map.getLevel() <= DONG_LV; const b = on ? map.getBounds() : null;
+    // 바운즈는 숫자로(renderHojae와 같은 이유 — 피처마다 LatLng를 만들어 SDK에 넘기지 않는다) · 대표점은 dongCen 캐시(2026-09-08 세션107)
+    const _sw = b && b.getSouthWest(), _ne = b && b.getNorthEast();
+    const _bw = _sw ? _sw.getLng() : 0, _bs = _sw ? _sw.getLat() : 0, _be = _ne ? _ne.getLng() : 0, _bn = _ne ? _ne.getLat() : 0;
     for (const f of DONG_GEO.features) {
-      const c = ringCentroid(ringsOf(f)[0]);
-      const vis = on && b.contain(LL(c[0], c[1]));
+      const c = dongCen(f);
+      const vis = on && c[0] >= _bw && c[0] <= _be && c[1] >= _bs && c[1] <= _bn;
       if (vis && !f._kpolys) f._kpolys = ringsOf(f).map(r => new K.Polygon({ path: r.map(([x, y]) => LL(x, y)), strokeWeight: 1, strokeColor: "#888", strokeOpacity: .45, strokeStyle: "solid", fillColor: "#fff", fillOpacity: 0, zIndex: 1 }));
       if (f._kpolys) f._kpolys.forEach(pg => pg.setMap(vis ? map : null));
     }
@@ -9653,7 +9697,8 @@ function initKakao() {
     if (map.getLevel() <= DONG_LV) {
       const b = map.getBounds(); const placed = [];
       hjShown.forEach(s => { const c = s.geometry.coordinates; const q = toPt(c[0], c[1]); placed.push({ x: q.x, y: q.y, w: 30, h: 30 }); });
-      for (const f of DONG_GEO.features) { const c = ringCentroid(ringsOf(f)[0]); if (!b.contain(LL(c[0], c[1]))) continue;
+      const _sw = b.getSouthWest(), _ne = b.getNorthEast(), _bw = _sw.getLng(), _bs = _sw.getLat(), _be = _ne.getLng(), _bn = _ne.getLat();   // 숫자 바운즈 + dongCen 캐시(2026-09-08 세션107)
+      for (const f of DONG_GEO.features) { const c = dongCen(f); if (c[0] < _bw || c[0] > _be || c[1] < _bs || c[1] > _bn) continue;
         const pt = toPt(c[0], c[1]); if (collides(placed, pt, 46, 20)) continue; placed.push({ x: pt.x, y: pt.y }); if (placed.length > 120) break;
         if (!f._klbl) {
           const elx = document.createElement("div"); elx.className = "dong-lbl"; elx.textContent = dongName(f); elx.style.cursor = "pointer";
@@ -10007,9 +10052,13 @@ function initKakao() {
   const _prebuildIdle = () => {
     if (_pbHandle || !railLineObjs) return;
     // ⚠ timeout을 두지 않는다 — 두면 「한가하지 않아도」 2초 뒤 강제 실행되어 손가락 움직임 중에 끼어든다.
+    /* ★ 폴백(iOS Safari — rIC 없음)도 **진짜 예산**을 잰다 (2026-09-08 세션107 · 알렉스 폰 「버벅·탭 씹힘」). 종전 `timeRemaining: () => 8`은 상수라
+       「6 미만이면 멈춤」이 영영 안 걸려 50ms마다 40건씩 통째로 만들었다(데스크톱 최악 tick 75ms · 폰 몇 배). 지금은 시작 시각 기준 8ms 예산 +
+       손이 움직인 직후(_lastTouch 600ms · 팬 중)는 이번 tick을 건너뛴다 — 예열은 워밍업이지 필수가 아니다(보이는 선은 renderRail이 즉시 만든다). */
     const ric = window.requestIdleCallback ? (cb => window.requestIdleCallback(cb))
-                                           : (cb => setTimeout(() => cb({ timeRemaining: () => 8 }), 50));
+                                           : (cb => setTimeout(() => { const t0 = performance.now(); cb({ timeRemaining: () => Math.max(0, 8 - (performance.now() - t0)) }); }, 120));
     const step = dl => { _pbHandle = 0; let n = 0, left = false;
+      if (_panning || performance.now() - _lastTouch < 600) { _pbHandle = ric(step); return; }   // 손이 움직이는 중 — 다음 한가한 때로
       for (const o of railLineObjs) {
         if (o.built) continue;
         if (n && dl.timeRemaining() < 6) { left = true; break; }
@@ -11366,8 +11415,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "70358feaaf", "adverse_facilities.json": "d4328f88f3", "apartments_all.json": "12825b113d", "arch_signals.json": "af37f29e75", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "2cb6a12f40", "corridor_diff.json": "0068dc18e5", "dart_signals.json": "f85d8a3943", "dps_signals.json": "276fe8fab7", "eum_backfill_progress.json": "53d1dbdc7d", "eum_enroll.json": "ec9915d1db", "eum_signals.json": "7af09525b5", "eum_usage.json": "0686755acb", "hospital_signals.json": "057fccfa0d", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "83e2835f4e", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "f38f48f073", "logipark_signals.json": "2bb56c0975", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "aa4a10349b", "mega_signals.json": "035b8e4d61", "methodology.html": "cc61f533c6", "park_signals.json": "e6d63d6709", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "3e842c6a3a", "rail_reference.html": "a4efcb42a7", "rail_signals.json": "4b55c2025e", "region_gaps.json": "a785ac5311", "regions.json": "c2e6b9f075", "report.html": "1077762c9f", "retail_signals.json": "6af94e8ebb", "road_signals.json": "81c8240be0", "school_signals.json": "15f1936e8e", "settings.html": "1ca2007f59", "sfz_signals.json": "3e2b19f374", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "1a47448eb3", "signals.json": "28d4a8383d", "signals_auto.json": "c64843caec", "signals_jeongbi_all.json": "5ef774ba1b", "source_status.html": "b6b6823929", "thresholds.json": "18534ba3e4", "upis_facility_geom.json": "b54a2440f9", "upis_on_road.json": "06860fc357", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260908i");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "70358feaaf", "adverse_facilities.json": "d4328f88f3", "apartments_all.json": "12825b113d", "arch_signals.json": "af37f29e75", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "afcaf63852", "corridor_diff.json": "010fd818ac", "dart_signals.json": "f85d8a3943", "dps_signals.json": "276fe8fab7", "eum_backfill_progress.json": "53d1dbdc7d", "eum_enroll.json": "ec9915d1db", "eum_signals.json": "7af09525b5", "eum_usage.json": "0686755acb", "hospital_signals.json": "057fccfa0d", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "83e2835f4e", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "f38f48f073", "logipark_signals.json": "2bb56c0975", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "aa4a10349b", "mega_signals.json": "035b8e4d61", "methodology.html": "cc61f533c6", "park_signals.json": "e6d63d6709", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "0b6c2398bb", "rail_reference.html": "a4efcb42a7", "rail_signals.json": "4b55c2025e", "region_gaps.json": "4f5e83b761", "regions.json": "c2e6b9f075", "report.html": "1077762c9f", "retail_signals.json": "6af94e8ebb", "road_signals.json": "9c53cb7fbe", "school_signals.json": "15f1936e8e", "settings.html": "1ca2007f59", "sfz_signals.json": "3e2b19f374", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "1a47448eb3", "signals.json": "28d4a8383d", "signals_auto.json": "c64843caec", "signals_jeongbi_all.json": "5ef774ba1b", "source_status.html": "b6b6823929", "thresholds.json": "18534ba3e4", "upis_facility_geom.json": "b54a2440f9", "upis_on_road.json": "09d242b7b0", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260908j");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
@@ -11391,8 +11440,9 @@ function srcArrive(name) {
     if (typeof renderAll === "function") renderAll();
     performance.mark("stream:render");   // 무거운 소스 합류 뒤 다시 그린 시점(계측 — head의 __perf)
     // 지도를 미룬 경우(모바일 내 주변) — 다 받았으면 한가할 때 만들어 둔다(탭을 누르면 바로 보이게)
+    // ★ 손이 멈춘 뒤에만 (2026-09-08 세션107) — 종전 폴백(iOS Safari · 800ms 타이머)은 사용자가 「내 주변」 목록을 누르는 순간에 지도 초기화 458ms(데스크톱 · 폰은 몇 배)를 끼워 넣었다
     if (!SRC_PENDING.size && typeof ensureMapBooted === "function")
-      (window.requestIdleCallback || (f => setTimeout(f, 800)))(() => ensureMapBooted());
+      whenQuiet(() => ensureMapBooted(), 1500);
   }, 80);
 }
 /* 확정 신호 ↔ 자동 도로 병합(승격) — 도로가 **늦게 도착하므로 함수로 뺀다**.
