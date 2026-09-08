@@ -213,6 +213,17 @@
          값이 없으면(비콘이 아직 안 돈 첫 방문) 그냥 안 붙는다 — 뷰어가 그 사실을 화면에서 말한다. */
       const mine = (localStorage.getItem("hojae_vid") || "").trim();
       lnk.href = W + "?t=" + encodeURIComponent(t) + (mine ? "&me=" + encodeURIComponent(mine) : "");
+      /* ★★ **관리자 화면을 연 브라우저 = 본인** — 자동 이름표 (2026-09-08 세션107 · 알렉스 「내가 아닌 사람인지만 정확히 알자 · 회사에서 쓴 건지 동료인지 같은 IP인데」).
+         IP는 사무실 회선을 동료와 같이 쓰므로 「본인」의 자가 못 된다(실측: 동료 둘을 본인 추정으로 가려 방문자 1). 이 화면은 토큰을 가진 알렉스만 여니,
+         **연 브라우저의 방문자 코드를 D1 이름표 「본인」으로 등록**한다 — 회사 PC·폰·집 맥 어디서든 admin을 한 번 열면 그 브라우저가 본인이 된다. 동료는 열 일이
+         없어 자동으로 「본인 아님」. 하루 한 번만 보낸다(같은 값 반복 저장 방지). 워커 `/label`(토큰) · 뷰어 「내 접속 제외」가 이 이름표를 뺀다. */
+      try {
+        const stampK = "hojae_admin_selflabel", today = new Date().toISOString().slice(0, 10);
+        if (mine && localStorage.getItem(stampK) !== today + "|" + mine) {
+          fetch(W + "label?t=" + encodeURIComponent(t), { method: "POST", body: JSON.stringify({ vid: mine, label: "본인", note: "관리자 화면을 연 브라우저 — 자동 등록 " + today }) })
+            .then(r => { if (r.ok) localStorage.setItem(stampK, today + "|" + mine); }).catch(() => {});
+        }
+      } catch (e) { /* 이름표 등록 실패는 화면을 막지 않는다 */ }
       lnk.classList.remove("off");
       $("tokmsg").innerHTML = '<span class="ok">토큰 저장됨</span> — 아래 「접속 기록」이 열립니다.'
         + (mine ? ' 내 방문자 ID <code>' + mine.slice(0, 8) + '…</code>는 <b>제외</b>하고 보여줍니다.'
