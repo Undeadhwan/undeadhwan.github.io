@@ -735,6 +735,15 @@
   details.factsheet > summary::-webkit-details-marker { display:none; }
   details.factsheet > summary::after { content:" ▾"; color:var(--ink3); }
   details.factsheet[open] > summary::after { content:" ▴"; }
+  .mb-hist { text-decoration:none; color:inherit; }
+  .mb-hist .mb-when { font-size:11px; color:var(--ink3); }
+  /* 근거 층(2026-09-08 세션108) — 접힌 details. summary 한 줄에 한계 요약(ptier)을 든다 */
+  details.evidence { margin-top:10px; border-top:1px dashed var(--line); padding-top:6px; }
+  details.evidence > summary { cursor:pointer; list-style:none; user-select:none; font-size:12px; color:var(--ink3); display:flex; align-items:center; gap:6px; }
+  details.evidence > summary::-webkit-details-marker { display:none; }
+  details.evidence > summary::after { content:"▾"; margin-left:auto; }
+  details.evidence[open] > summary::after { content:"▴"; }
+  details.evidence > .evbody { margin-top:6px; }
   .rulefold { margin-top:8px; border-top:1px dashed var(--line); padding-top:6px; }
   .rulefold > summary { cursor:pointer; font-size:11.5px; color:var(--ink3); list-style:none; user-select:none; }
   .rulefold > summary::-webkit-details-marker { display:none; }
@@ -3450,6 +3459,45 @@ const LVL_BASIS_TEXT = {
   "스냅숏폴백": "종전 등급 유지 — 원장에 사업비가 없어 금액 눈금 미적용",
 };
 const lvlBasisText = v => LVL_BASIS_TEXT[v] || v;
+/* ══ 상세 카드 두 층 (2026-09-08 세션108 · 알렉스 「상세 카드에 사용자 관점에서 불필요한 내용이 너무 많어 — 위치정확도, 근거 아래쪽에 링크를 열면 어쩌구 저꺼구 등. 정리가 필요해」)
+   사용자 층(항상) = 이름·유형·칩·신선도·트랙·다음 관찰·등급 근거·대지위치·블록·영향권·접근점·효력·사업비·구간·기존 도로·근거 링크·소속 지구·증축·비고.
+   근거 층(접힘 · `details.evidence`) = 단계 근거·위치 정확도 블록(또는 선형 정확도·범위)·고시 종류·성격 근거·통합 흡수·날짜 근거·위치 근거·
+   시설·지점 특성·원본 팩트시트·링크 여는 법·건물명 근거·시설명 미확보 설명. **빼는 게 아니라 접는다** — 검증하려는 사람에게는 전부 남는다(P2·P5).
+   ⚠ 한계는 접어도 **한 줄은 보인다**: summary가 `precSummary`(◇ ±50m 지번 기준 / 선형 근사·공식)를 든다 — 시안 §06 「한계는 눈에 보이게」를
+     문단이 아니라 요약으로 지킨다. 게이트 = html_check.card_layers_check. DESIGN.md 「상세 카드 두 층」 행. */
+function precSummary(s) {
+  if (isLineSig(s)) return (s.approx || s.geo_approx) ? "선형 근사" : "공식 선형";
+  const v = GEO_PREC[s.geo_prec];
+  return `◇ ${precTier(s.geo_prec)} ${v ? v.t : (s.geo_approx || s.approx ? "근사" : "등급 미상")}`;
+}
+function linkHowTo(s) {
+  const u0 = (s.sources || [])[0] || "";
+  if (/hub\.go\.kr|eais\.go\.kr/.test(u0)) return hubHowTo(s);
+  const nm = esc(String(s.title || s.n || "").split(" (")[0]);
+  if (/data\.gg\.go\.kr/.test(u0)) return `<div class="note" style="margin-top:3px">※ 링크를 열면 <b>「일반 정비 사업 추진 현황」 데이터셋</b>이 바로 열립니다(Sheet 탭). 표에서 <b>${nm}</b> 로 찾으세요.<br>원본 수치는 위 팩트시트에 있어 안 가셔도 됩니다. 경기도 분기 갱신이라 최신 변동은 늦을 수 있습니다.</div>`;
+  if (/cleanup\.seoul|gg\.go\.kr/.test(u0)) return `<div class="note" style="margin-top:3px">※ 링크를 열면 <b>정비몽땅</b>이 열립니다. <b>고시정보 &gt; 사업장 목록</b>에서 사업장명 칸에 <b>${nm}</b> 를 넣고 검색 → 결과 줄 오른쪽 <b>[사업장]</b> 버튼을 누르면 조합 홈페이지의 <b>사업개요</b>(세대수·연면적·용적률)가 나옵니다.<br>원본 수치는 위 팩트시트에 있어 안 가셔도 됩니다.</div>`;
+  return "";
+}
+function evidenceFold(s) {
+  const rows = [
+    s.gate_basis && s.gate !== "계획안" ? `<div class="kv"><b>단계 근거</b> ${esc(String(s.gate_basis))}</div>` : "",
+    /* ★ 위치 정확도는 **별도 블록**(시안 §06 슬롯 7) — 라벨–값 행에 섞으면 한계라는 사실이 묻힌다(2026-08-20 대조). 접힘 안에서도 블록이다. */
+    isLineSig(s) ? lineGeomRow(s) : `<div class="precblk"><div class="ph">위치 정확도</div>${precNote(s)}${
+      stUndet(s) ? `<div class="gbasis"><b>${s.st_status}</b> — 명칭·위치 미확정</div>` : ""}${
+      s.pt_type === "road_ic" ? `<div class="gbasis">도로 IC(철도역 아님)</div>` : ""}</div>`,
+    s.geom_status && !lineCoverRow(s) ? `<div class="kv"><b>선형 범위</b> ${esc(String(s.geom_status)).replace(/\*\*/g, "")}</div>` : "",
+    gosiKindRow(s), natureRow(s), mergedRoadRow(s), movementRow(s), posConfRow(s),   // 성격 근거는 집행 상태에서 파생되므로 선형·구간 다음에(2026-09-06 읽는 순서)
+    SUB_CAVEAT[subOf(s)] ? `<div class="kv"><b>시설 특성</b> <span class="hmhint">${SUB_CAVEAT[subOf(s)]}</span></div>` : "",
+    s.pt_type === "road_ic" && s.ic_note ? `<div class="kv"><b>지점 특성</b> ${s.ic_note.replace(/\*\*/g, "")}</div>` : "",
+    s.__factsheet || "",
+    linkHowTo(s),
+    s.nm_basis ? `<div class="kv"><b>건물명 근거</b> ${s.nm_basis}</div>` : "",
+    s.name_status === "미확보" ? `<div class="kv"><b>시설명</b> <span class="hmhint">미확보 — 허가 원본에 고유 명칭이 없어 <b>동·지번으로 표시</b>합니다. 건축물대장은 <b>준공 후에 생성</b>되므로 인가·착공 단계에선 공식 명칭이 없을 수 있습니다. <b>사업의 존재</b>는 허가·착공 일자(위 팩트시트)가 근거이며, 이름을 임의로 지어내지 않습니다.</span></div>` : "",
+  ].filter(Boolean);
+  delete s.__factsheet;
+  if (!rows.length) return "";
+  return `<details class="evidence"><summary>근거 · 정확도 자세히 <i class="ptier">${precSummary(s)}</i></summary><div class="evbody">${rows.join("")}</div></details>`;
+}
 function gradeBasisHtml(s) {
   const c = catOf(s);
   // 접힌 사업이면 **합계**가 그 사업의 규모다(개별 블록 값이 아니라).
@@ -6149,13 +6197,12 @@ function renderDetail(s) {
       <!-- 「단계 근거」 — 등급 근거와 **한 쌍**이다(시안 §13 라벨–값 행: 등급 근거 / 단계 근거).
            데이터(gate_basis)는 어댑터가 이미 나르고 있었는데 화면엔 「계획(안)」일 때만 나왔다 —
            나머지 단계에선 「왜 이 단계인가」를 화면이 말하지 않았다(등급 근거와 같은 사고, 반대쪽). -->
-      ${s.gate_basis && s.gate !== "계획안" ? `<div class="kv"><b>단계 근거</b> ${esc(String(s.gate_basis))}</div>` : ""}
       ${s.addr ? `<div class="kv"><b>대지위치</b> ${s.addr} <span class="copyaddr" onclick="copyAddr(this,'${s.addr.replace(/'/g, "\\'")}')" title="주소 복사">📋</span></div>` : ""}
       ${s.group_n ? `<div class="kv kvblock"><b>한 사업 · ${s.group_n}개 블록</b> 합계 연면적 ${(s.group_area_m2 || 0).toLocaleString()}㎡
         <span class="note">— 블록별 허가가 따로 나와 지도엔 대표 1개로 접어 표시합니다(개별 사실은 아래 그대로).</span>
         <div class="fs-grid" style="margin-top:6px">${s.group_members.map(m =>
           `<span>${m.block || "-"}</span><b>${(m.area_m2 || 0).toLocaleString()}㎡${m.lvl ? ` · ${m.lvl}급` : ""}</b>`).join("")}</div></div>` : ""}
-      ${s._arch ? `<details class="factsheet"><summary class="fs-h">원본 팩트시트 — 허가 원본 사실 (건축HUB API 수신값 그대로)</summary>
+      ${(() => { const __fs = s._arch ? `<details class="factsheet"><summary class="fs-h">원본 팩트시트 — 허가 원본 사실 (건축HUB API 수신값 그대로)</summary>
         <div class="fs-grid">
           <span>건축구분</span><b>${s.arch_gb || "-"}</b>
           <span>주용도</span><b>${s.purp || "-"}</b>
@@ -6172,7 +6219,7 @@ function renderDetail(s) {
           ${s.road_addr ? `<span>도로명주소</span><b class="full">${esc(String(s.road_addr))}</b>` : ""}
           ${s.pk ? `<span>관리번호</span><b class="mono num full">${esc(String(s.pk))}</b>` : ""}
         </div>
-        </details>` : ""}
+        </details>` : ""; s.__factsheet = __fs; return ""; })()}
       ${s._road && (s.access_points || []).length ? (s.road_kind === "전용"
         ? `<div class="kv"><b>영향권</b> ${(s.ic_points || []).length
             ? `진출입 IC ${s.ic_points.length}개소 반경 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km (전용도로 — 선 자체는 영향권 미산정)`
@@ -6187,17 +6234,8 @@ function renderDetail(s) {
         <span class="hmhint">— 진출입은 되지만 이 사업으로 새로 생기는 지점이 아닙니다(기존 도로를 따라가는 확장·지하화). 영향권에 세지 않습니다</span></div>` : ""}
       ${(s.unverified_points || []).length ? `<div class="kv"><b>근거 미확인</b> ${s.unverified_points.map(u => u.name).join(" · ")}
         <span class="hmhint">— 공식 원문에서 이름을 못 찾았습니다. 지우지 않고 표시하되 호재로 세지 않습니다</span></div>` : ""}
-      ${s.geom_status && !lineCoverRow(s) ? `<div class="kv"><b>선형 범위</b> ${esc(String(s.geom_status)).replace(/\*\*/g, "")}</div>` : ""}
       ${s.side_effects?.length ? `<div class="kv"><b>역효과 표기</b> ${s.side_effects.join(", ")}</div>` : ""}
-      ${SUB_CAVEAT[subOf(s)] ? `<div class="kv"><b>시설 특성</b> <span class="hmhint">${SUB_CAVEAT[subOf(s)]}</span></div>` : ""}
-      ${s.pt_type === "road_ic" && s.ic_note ? `<div class="kv"><b>지점 특성</b> ${s.ic_note.replace(/\*\*/g, "")}</div>` : ""}
-      <!-- ★ **위치 정확도는 라벨–값 행이 아니라 별도 블록**이다 (시안 §06 슬롯 7 「위치 정확도 **경고**」:
-           *"한계는 눈에 보이게 — 마름모 아이콘과 함께 별도 블록으로 세웁니다"*).
-           kv 행에 섞으면 「사업비·확인일」과 같은 무게로 읽혀 **한계라는 사실이 묻힌다**(2026-08-20 대조). -->
-      ${isLineSig(s) ? lineGeomRow(s) : `<div class="precblk"><div class="ph">위치 정확도</div>${precNote(s)}${
-        stUndet(s) ? `<div class="gbasis"><b>${s.st_status}</b> — 명칭·위치 미확정</div>` : ""}${
-        s.pt_type === "road_ic" ? `<div class="gbasis">도로 IC(철도역 아님)</div>` : ""}</div>`}
-      ${gosiEffectRow(s)}${gosiKindRow(s)}${dartRow(s)}${costRow(s)}${corridorRow(s)}${natureRow(s)}${roadExistsRow(s)}${mergedRoadRow(s)}${movementRow(s)}${posConfRow(s)}<!-- 성격 근거는 집행 상태에서 파생되므로 선형·구간·집행 다음에(2026-09-06 읽는 순서) -->
+      ${gosiEffectRow(s)}${dartRow(s)}${costRow(s)}${corridorRow(s)}${roadExistsRow(s)}<!-- 사용자 층: 효력·사업비·구간·기존 도로 사실. 근거·정확도 행은 아래 근거 층(evidenceFold)으로(2026-09-08 세션108) -->
       <!-- ☠ 「반경 Nkm 내 단지」 목록을 **지웠다** (2026-08-19 시안 「구현 3단계」 ⑨).
            *"호재를 보는 화면에서 단지 목록은 다른 질문입니다."* — 이 카드가 답하는 질문은
            「이 호재가 무엇이고 어디까지 왔나」다. 단지는 아파트 화면(미리보기·상세)의 축이고,
@@ -6223,13 +6261,11 @@ function renderDetail(s) {
           : (s.sources.length === 1 && s.src_name ? esc(String(s.src_name).split("—")[0].trim()) + " 원문" : `원문 ${i + 1}`);
         return `<a href="${u}" target="_blank"${nq ? ' title="이 링크는 검색 조건을 직접 넣어야 해당 건이 보입니다 — 딥링크가 제공되지 않습니다"' : ""}>${lbl}</a>`;
       }).join(" · ") || "원문 링크 없음"}</span>${
-        s.src_tier === "osm" ? ' · <b>진행단계·명칭은 공식 확인 전</b>(선형만 OSM 참고)' : ""}${
-        /hub\.go\.kr|eais\.go\.kr/.test((s.sources || [])[0] || "") ? hubHowTo(s) : /data\.gg\.go\.kr/.test((s.sources || [])[0] || "") ? `<div class="note" style="margin-top:3px">※ 링크를 열면 <b>「일반 정비 사업 추진 현황」 데이터셋</b>이 바로 열립니다(Sheet 탭). 표에서 <b>${esc(String(s.title || s.n || "").split(" (")[0])}</b> 로 찾으세요.<br>원본 수치는 위 팩트시트에 있어 안 가셔도 됩니다. 경기도 분기 갱신이라 최신 변동은 늦을 수 있습니다.</div>` : /cleanup\.seoul|gg\.go\.kr/.test((s.sources || [])[0] || "") ? `<div class="note" style="margin-top:3px">※ 링크를 열면 <b>정비몽땅</b>이 열립니다. <b>고시정보 &gt; 사업장 목록</b>에서 사업장명 칸에 <b>${esc(String(s.title || s.n || "").split(" (")[0])}</b> 를 넣고 검색 → 결과 줄 오른쪽 <b>[사업장]</b> 버튼을 누르면 조합 홈페이지의 <b>사업개요</b>(세대수·연면적·용적률)가 나옵니다.<br>원본 수치는 위 팩트시트에 있어 안 가셔도 됩니다.</div>` : ""}</div>`}
+        s.src_tier === "osm" ? ' · <b>진행단계·명칭은 공식 확인 전</b>(선형만 OSM 참고)' : ""}</div>`}
       ${s.master_ref ? `<div class="kv"><b>소속 지구</b> ${s.master_ref.title} <span class="hmhint">— 지구 마스터에 속한 개별 사업(경계 기반 병합)</span></div>` : ""}
       ${s.ext_basis ? `<div class="kv"><b>증축 규모</b> ${s.ext_basis}</div>` : ""}
-      ${s.nm_basis ? `<div class="kv"><b>건물명 근거</b> ${s.nm_basis}</div>` : ""}
-      ${s.name_status === "미확보" ? `<div class="kv"><b>시설명</b> <span class="hmhint">미확보 — 허가 원본에 고유 명칭이 없어 <b>동·지번으로 표시</b>합니다. 건축물대장은 <b>준공 후에 생성</b>되므로 인가·착공 단계에선 공식 명칭이 없을 수 있습니다. <b>사업의 존재</b>는 허가·착공 일자(위 팩트시트)가 근거이며, 이름을 임의로 지어내지 않습니다.</span></div>` : ""}
       ${noteRow(s)}
+      ${evidenceFold(s)}
       <div class="rulerow"><details class="rulefold"><summary>표기 규칙 · 영향 반경 기준</summary><div class="note">완료=날짜(사실) · 미래=목표/미정 · 진척률(%) 없음 · 영향 반경은 유형 기준표 가안</div></details><a class="ruledoc" href="methodology.html" target="_blank" rel="noopener">기준 전문 ▾</a></div>
     </div>`;
 }
@@ -7977,6 +8013,13 @@ async function pushSub() {
     return await reg.pushManager.getSubscription();
   } catch (e) { return null; }
 }
+/* 권한이 안 켜진 이유를 **상태로** 말한다 (2026-09-08 세션108 · 알렉스 「알림 권한이 빠져있다는데 이건 또 무슨 소리인지」).
+   `denied` = 이 사이트 알림을 브라우저가 **차단**한 상태(전에 「차단」을 눌렀거나 브라우저 정책) · `default` = 허용 창에 답이 없었거나
+   창이 조용히 숨겨진 상태(크롬의 「조용한 알림」은 주소창 종 아이콘 안에 숨긴다). 둘의 처방이 다르다 — 한 문장으로 뭉개면 사용자가 무엇을 눌러야 하는지 모른다. */
+function pushPermText(perm) {
+  if (perm === "denied") return "이 사이트의 알림이 브라우저에서 <b>차단</b>돼 있습니다 — 주소창 자물쇠(사이트 설정) → 알림 → <b>허용</b>으로 바꾼 뒤 다시 눌러 주세요.";
+  return "알림 허용 창에 답이 없어 켜지지 않았습니다 — 다시 누르고 <b>허용</b>을 고르세요(크롬은 주소창의 종 아이콘 안에 숨기기도 합니다).";
+}
 function pushWatchPayload() { return mbWatch.filter(w => w.on).map(w => ({ id: w.id, kind: w.kind, label: w.label, lat: w.lat, lon: w.lon })); }
 function urlB64ToU8(s) { const p = "=".repeat((4 - s.length % 4) % 4); const b = atob((s + p).replace(/-/g, "+").replace(/_/g, "/")); return Uint8Array.from(b, c => c.charCodeAt(0)); }
 async function pushSync() {   // 구독 중이면 지켜보는 목록을 워커에 다시 보낸다 — 구독이 없으면 아무것도 안 한다(권한을 먼저 묻지 않는다)
@@ -7990,7 +8033,7 @@ async function pushEnable() {
   if (!pushSupported()) { mbToast(pushIosNeedsInstall() ? "아이폰은 <b>공유 → 홈 화면에 추가</b>한 뒤 그 아이콘으로 열어야 알림을 켤 수 있습니다." : "이 브라우저는 알림을 지원하지 않습니다."); return false; }
   let perm = Notification.permission;
   if (perm !== "granted") { try { perm = await Notification.requestPermission(); } catch (e) { perm = "denied"; } }
-  if (perm !== "granted") { mbToast("알림 권한이 꺼져 있습니다 — 브라우저 설정에서 hojaemap.kr 알림을 허용해 주세요."); return false; }
+  if (perm !== "granted") { mbToast(pushPermText(perm)); return false; }
   try {
     // 등록은 여기서 **직접** 한다(부트 등록이 늦거나 막혔어도) — 그리고 ready에 시한(10s)을 둔다: 영영 기다리는 버튼은 죽은 버튼이다
     await navigator.serviceWorker.register("sw.js");
@@ -8040,7 +8083,8 @@ function renderMore() {
     + `<div class="mb-fbrow"><span id="fbmsg" class="mb-note"></span><button class="mb-btn" data-act="fbsend">보내기</button></div></div>`;
   /* 알림 상태는 비동기(구독 조회) — 먼저 뼈대를 그리고 채운다. 문장은 사실만: 지원 안 함 / 홈 화면 필요 / 권한 거부 / 켜짐(N개 지켜봄) / 꺼짐. */
   const al = `<div class="mb-secttl" style="margin-top:18px"><b>알림</b><span>새 신호가 잡히면 아침에 한 번</span></div><div id="pushbox" class="mb-wl"><span class="tx"><b>확인 중…</b></span></div>`
-    + `<p class="mb-note">지켜보는 <b>단지</b>는 그 신호의 영향 반경 안일 때, <b>사업</b>은 그 사업이, <b>지역</b>은 그 시군구 안 신호가 새로 잡힐 때 알립니다. 문서상 움직임만 알리고 관측일은 「새로 확인」으로 부릅니다. 하루 한 번(새벽) · 같은 신호는 한 번만.</p>`;
+    + `<p class="mb-note">지켜보는 <b>단지</b>는 그 신호의 영향 반경 안일 때, <b>사업</b>은 그 사업이, <b>지역</b>은 그 시군구 안 신호가 새로 잡힐 때 알립니다. 문서상 움직임만 알리고 관측일은 「새로 확인」으로 부릅니다. 하루 한 번(새벽) · 같은 신호는 한 번만.</p>`
+    + `<div class="mb-secttl" style="margin-top:12px"><b>최근 알림</b><span>이 기기가 받은 것</span></div><div id="pushhist"><p class="mb-note">확인 중…</p></div>`;
   host.innerHTML = `<div class="mb-secttl"><b>지켜보는 것</b><span>${mbWatch.length}</span></div>${wl}` + al
     + `<div class="mb-secttl" style="margin-top:18px"><b>등록한 자리</b></div>${pl}`
     + `<p class="mb-note">지켜보는 것·자리는 <b>이 기기 안</b>에 저장되고, 알림을 켜면 지켜보는 목록만 알림 서버에 갑니다(좌표·이름 · 위치 권한 아님).</p>` + fb;
@@ -8048,10 +8092,18 @@ function renderMore() {
     const box = document.getElementById("pushbox"); if (!box) return;
     const on = !!sub, n = mbWatch.filter(w => w.on).length;
     const state = !pushSupported() ? (pushIosNeedsInstall() ? "아이폰은 <b>공유 → 홈 화면에 추가</b>한 뒤 그 아이콘으로 열면 켤 수 있습니다" : "이 브라우저는 알림을 지원하지 않습니다")
-      : Notification.permission === "denied" ? "알림 권한이 꺼져 있습니다 — 브라우저 설정에서 허용해 주세요"
-      : on ? `<b>켜짐</b> — 지켜보는 ${n}개` : (n ? `꺼짐 — 지켜보는 ${n}개가 있습니다` : "꺼짐 — 먼저 지도·단지에서 ★·🔔로 지켜볼 것을 고르세요");
+      : Notification.permission === "denied" ? "이 사이트 알림이 브라우저에서 <b>차단</b>돼 있습니다 — 주소창 자물쇠(사이트 설정) → 알림 → 허용"
+      : on ? `<b>켜짐</b> — 지켜보는 ${n}개 · 알림은 이 기기의 <b>브라우저(OS) 알림</b>으로 옵니다` : (n ? `꺼짐 — 지켜보는 ${n}개가 있습니다` : "꺼짐 — 먼저 지도·단지에서 ★·🔔로 지켜볼 것을 고르세요");
     box.innerHTML = `<span class="tx"><b>${on ? "🔔" : "🔕"}</b><i>${state}</i></span>` + (pushSupported() && Notification.permission !== "denied"
       ? `<button class="mb-btn" data-act="${on ? "pushoff" : "pushon"}">${on ? "알림 끄기" : "알림 켜기"}</button>` : "");
+    /* ★ 최근 알림 (2026-09-08 세션108 · 알렉스 「알림 이력은 어디서 보는거야」) — 워커 `push_log`를 이 기기의 endpoint로 읽는다(GET /sent?e= · 토큰 없음 · /what과 같은 계약).
+       OS 알림센터는 지워지지만 여기는 남는다. 구독이 없으면 목록도 없다(기기별 이력이라). */
+    const hist = document.getElementById("pushhist"); if (!hist) return;
+    if (!sub) { hist.innerHTML = `<p class="mb-note">알림을 켜면 이 기기가 받은 알림이 여기에 쌓입니다.</p>`; return; }
+    fetch(PUSH_W + "/sent?e=" + encodeURIComponent(sub.endpoint), { cache: "no-store" }).then(r => r.ok ? r.json() : []).then(rows => {
+      if (!Array.isArray(rows) || !rows.length) { hist.innerHTML = `<p class="mb-note">아직 받은 알림이 없습니다 — 판정은 매일 새벽(05:30)에 한 번, 지켜보는 곳에 <b>새 신호</b>가 잡힐 때만 보냅니다.</p>`; return; }
+      hist.innerHTML = rows.slice(0, 30).map(r => `<a class="mb-wl mb-hist" href="${esc(String(r.url || "https://hojaemap.kr/"))}"><span class="tx"><b>${esc(String(r.title || ""))}</b><i>${esc(String(r.body || ""))}</i><i class="mb-when">${esc(String(r.ts || "").slice(0, 16).replace("T", " "))}</i></span></a>`).join("");
+    }).catch(() => { hist.innerHTML = `<p class="mb-note">알림 이력을 불러오지 못했습니다.</p>`; });
   });
 }
 /* 한 줄 의견 보내기 — 접속 기록 워커 /fb (우리 오리진만 받는다 · 비콘과 같은 속도 제한). 같은 기기에서 5분에 한 번(연타 방지 · 워커도 막지만 화면이 먼저 말한다). */
@@ -8230,10 +8282,16 @@ function mapCtlBottom() {
        그래서 지도 높이의 **45%로 잘라 둔다**: 시트가 반 넘게 열리면 지도는 어차피 가려진다.
      ⚠ 모바일 하단 시트는 **`#msheet`**다(`#panel`은 상세 시트라 평소 `display:none`). 실측으로 확인할 것 —
        이름을 짐작하고 넣었다가 「넣었는데 그대로」가 되는 자리다. */
+  /* ★ **버튼 기둥과 가로로 겹치는 것만** 장애물이다 (2026-09-08 세션108 · 알렉스 「호재 선택하니 위성이랑 현위치 버튼이 왜 위쪽으로 올라가니」).
+     데스크톱의 `#panel`은 **왼쪽 카드**(left:290 · width:470)라 오른쪽 아래 버튼을 가리지 않는데, 높이만 재서 지도 45%까지 버튼을 밀어 올렸다.
+     모바일 `#panel`·`#msheet`는 좌우 전폭 시트라 여전히 잡힌다 — 판정은 이름이 아니라 **기둥(지도 오른쪽 가장자리 72px)과의 가로 겹침**(구조 조건). */
+  const mr = el.getBoundingClientRect();
   ["footer", "#tabbar", "#msheet", "#panel"].forEach(sel => {
     const e = document.querySelector(sel);
     if (!e || !e.offsetHeight || getComputedStyle(e).display === "none") return;
-    over = Math.max(over, mb - e.getBoundingClientRect().top);
+    const r = e.getBoundingClientRect();
+    if (r.right < mr.right - 72 || r.left > mr.right) return;   // 버튼 기둥 밖 — 가리지 않는다
+    over = Math.max(over, mb - r.top);
   });
   const cap = el.getBoundingClientRect().height * 0.45;
   return Math.max(12, Math.round(Math.min(over, cap)) + 12);
@@ -11553,8 +11611,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "4772f789c5", "adverse_facilities.json": "d4328f88f3", "apartments_all.json": "12825b113d", "arch_signals.json": "af37f29e75", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "2d10e605d5", "corridor_diff.json": "926c5d2ab0", "dart_signals.json": "f85d8a3943", "dps_signals.json": "276fe8fab7", "eum_backfill_progress.json": "53d1dbdc7d", "eum_enroll.json": "ec9915d1db", "eum_signals.json": "7af09525b5", "eum_usage.json": "0686755acb", "hospital_signals.json": "057fccfa0d", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "83e2835f4e", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "f38f48f073", "logipark_signals.json": "2bb56c0975", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "aa4a10349b", "mega_signals.json": "035b8e4d61", "methodology.html": "000c42b899", "park_signals.json": "e6d63d6709", "push_feed.json": "cbed0d2c65", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "7aa9ccf688", "rail_reference.html": "a4efcb42a7", "rail_signals.json": "4b55c2025e", "region_gaps.json": "4423ee1a32", "regions.json": "c2e6b9f075", "report.html": "1077762c9f", "retail_signals.json": "6af94e8ebb", "road_signals.json": "bfa3f911c2", "school_signals.json": "15f1936e8e", "settings.html": "1ca2007f59", "sfz_signals.json": "3e2b19f374", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "1a47448eb3", "signals.json": "28d4a8383d", "signals_auto.json": "c64843caec", "signals_jeongbi_all.json": "5ef774ba1b", "source_status.html": "b6b6823929", "sw.js": "bd80e753e7", "thresholds.json": "18534ba3e4", "upis_facility_geom.json": "b54a2440f9", "upis_on_road.json": "c3d6ac0fe7", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260908o");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "4772f789c5", "adverse_facilities.json": "d4328f88f3", "apartments_all.json": "12825b113d", "arch_signals.json": "df2a577ef1", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "f998607f5c", "corridor_diff.json": "b20b70e74a", "dart_signals.json": "f85d8a3943", "dps_signals.json": "276fe8fab7", "eum_backfill_progress.json": "53d1dbdc7d", "eum_enroll.json": "ec9915d1db", "eum_signals.json": "7af09525b5", "eum_usage.json": "0686755acb", "hospital_signals.json": "057fccfa0d", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "83e2835f4e", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "f38f48f073", "logipark_signals.json": "2bb56c0975", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "aa4a10349b", "mega_signals.json": "035b8e4d61", "methodology.html": "3c4773a484", "park_signals.json": "e6d63d6709", "push_feed.json": "d97ecabfec", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "e3a7236879", "rail_reference.html": "a8a627d75e", "rail_signals.json": "4b55c2025e", "region_gaps.json": "46267a303f", "regions.json": "c2e6b9f075", "report.html": "1077762c9f", "retail_signals.json": "6af94e8ebb", "road_signals.json": "3375926479", "school_signals.json": "15f1936e8e", "settings.html": "1ca2007f59", "sfz_signals.json": "3e2b19f374", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "1a47448eb3", "signals.json": "28d4a8383d", "signals_auto.json": "c64843caec", "signals_jeongbi_all.json": "5ef774ba1b", "source_status.html": "b6b6823929", "sw.js": "bd80e753e7", "thresholds.json": "18534ba3e4", "upis_facility_geom.json": "b54a2440f9", "upis_on_road.json": "beb395df53", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260908p");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
