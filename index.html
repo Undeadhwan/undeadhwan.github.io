@@ -3784,6 +3784,25 @@ function whenQuiet(fn, quiet = 1200) {
   };
   setTimeout(tick, quiet);
 }
+/* ★ 본 지역 비콘 (2026-09-08 세션107 · 알렉스 「강서구도 알 수 있어? 서울-구까지 구분 표시」). IP로는 구가 안 나온다(클라우드플레어는 서울이면 Seoul까지) —
+   대신 지도가 멈출 때 **화면 중심의 시군구**를 한 방울 보낸다(「어디서 왔나」가 아니라 「어디를 보나」 · 접속 기록 뷰어 「본 지역별」). 지역마다 30분에 한 번 ·
+   좌표는 보내지 않는다(시군구 이름만 · 자는 mbSggAt = 화면의 시군구 판정과 같은 함수) · 실패는 조용히. 두 렌더러의 applyLOD가 같은 함수를 부른다(규칙은 양쪽에). */
+const _viewSent = new Map();
+function viewBeacon(region) {
+  try {
+    if (!region) return;
+    const now = Date.now(), last = _viewSent.get(region) || 0;
+    if (now - last < 30 * 60 * 1000) return;
+    _viewSent.set(region, now);
+    const body = JSON.stringify({ v: localStorage.getItem("hojae_vid") || "", r: region });
+    const url = "https://hojaemap-visits.obey82.workers.dev/v";
+    if (navigator.sendBeacon) navigator.sendBeacon(url, new Blob([body], { type: "text/plain" }));
+    else fetch(url, { method: "POST", body, keepalive: true, mode: "no-cors" }).catch(() => {});
+  } catch (e) { /* 비콘 실패가 화면을 건드리면 안 된다 */ }
+}
+function viewBeaconFromCenter(lat, lon) {
+  try { if (typeof mbSggAt !== "function" || !isFinite(lat) || !isFinite(lon)) return; const g = mbSggAt(lat, lon); if (g && g.sd && g.sg) viewBeacon(g.sd + " " + g.sg); } catch (e) {}
+}
 /* DART(신규시설투자·유형자산양수) → 일자리 후보 신호 어댑트. 위치=회사 소재지 근사(§ 후보층, confirmed:false) */
 function buildDartSignals() {   // DART 전자공시 = 법정 공시 → official_report
   DART_SIG = (DART || []).filter(s => s.geometry && s.geometry.coordinates).map(s => ({
@@ -8821,6 +8840,7 @@ function initLeaflet() {
   };
   const applyLOD = () => {
     const z = map.getZoom();
+    try { const c = map.getCenter(); viewBeaconFromCenter(c.lat, c.lng); } catch (e) {}   // 본 지역 비콘(2026-09-08 · 카카오판과 같은 함수)
     if (z >= DONG_ZOOM) { if (!map.hasLayer(dongLayer)) map.addLayer(dongLayer); }   // 동 경계 폴리곤 문맥
     else { if (map.hasLayer(dongLayer)) map.removeLayer(dongLayer); }
     renderJeongbiPoly();   // 정비구역 경계 폴리곤(고시 사실) — jbDrawnRings 채워짐
@@ -10468,7 +10488,8 @@ function initKakao() {
                 ["masterArea", () => renderMasterArea()], ["hojae", () => renderHojae()],
                 ["dongLabels", () => renderDongLabels()], ["sdPills", () => renderSdPills()],
                 ["aptDots", () => renderAptDots()], ["rail", () => renderRail()], ["bdong", () => loadBdong()]];
-  const applyLOD = () => { hideTip(); for (let i = 0; i < _LOD.length; i++) _LOD[i][1](); };
+  const applyLOD = () => { hideTip(); for (let i = 0; i < _LOD.length; i++) _LOD[i][1]();
+    try { const c = map.getCenter(); viewBeaconFromCenter(c.getLat(), c.getLng()); } catch (e) {} };   // 본 지역 비콘(2026-09-08 · Leaflet과 같은 함수)
   /* ★★ **팬 중에는 다시 그리지 않는다** (2026-08-14 사장님 *"천천히 이동하면 계속 호재원들이 새로
      갱신되네. 매우 잦은 빈도로 … 비효율적이야"*).
      실측(2026-08-14, 카카오 8777): **짧은 드래그 한 번에 `idle`이 4회** 발화했고 그때마다 이 아홉 층을
@@ -11532,8 +11553,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "4772f789c5", "adverse_facilities.json": "d4328f88f3", "apartments_all.json": "12825b113d", "arch_signals.json": "af37f29e75", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "f16d4b9156", "corridor_diff.json": "70dfc02857", "dart_signals.json": "f85d8a3943", "dps_signals.json": "276fe8fab7", "eum_backfill_progress.json": "53d1dbdc7d", "eum_enroll.json": "ec9915d1db", "eum_signals.json": "7af09525b5", "eum_usage.json": "0686755acb", "hospital_signals.json": "057fccfa0d", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "83e2835f4e", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "f38f48f073", "logipark_signals.json": "2bb56c0975", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "aa4a10349b", "mega_signals.json": "035b8e4d61", "methodology.html": "000c42b899", "park_signals.json": "e6d63d6709", "push_feed.json": "419a0e5ade", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "1ba122589b", "rail_reference.html": "a4efcb42a7", "rail_signals.json": "4b55c2025e", "region_gaps.json": "5b6b3a65fd", "regions.json": "c2e6b9f075", "report.html": "1077762c9f", "retail_signals.json": "6af94e8ebb", "road_signals.json": "2567efe8c8", "school_signals.json": "15f1936e8e", "settings.html": "1ca2007f59", "sfz_signals.json": "3e2b19f374", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "1a47448eb3", "signals.json": "28d4a8383d", "signals_auto.json": "c64843caec", "signals_jeongbi_all.json": "5ef774ba1b", "source_status.html": "b6b6823929", "sw.js": "bd80e753e7", "thresholds.json": "18534ba3e4", "upis_facility_geom.json": "b54a2440f9", "upis_on_road.json": "03772124b2", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260908n");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "4772f789c5", "adverse_facilities.json": "d4328f88f3", "apartments_all.json": "12825b113d", "arch_signals.json": "af37f29e75", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "2d10e605d5", "corridor_diff.json": "926c5d2ab0", "dart_signals.json": "f85d8a3943", "dps_signals.json": "276fe8fab7", "eum_backfill_progress.json": "53d1dbdc7d", "eum_enroll.json": "ec9915d1db", "eum_signals.json": "7af09525b5", "eum_usage.json": "0686755acb", "hospital_signals.json": "057fccfa0d", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "83e2835f4e", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "f38f48f073", "logipark_signals.json": "2bb56c0975", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "aa4a10349b", "mega_signals.json": "035b8e4d61", "methodology.html": "000c42b899", "park_signals.json": "e6d63d6709", "push_feed.json": "cbed0d2c65", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "7aa9ccf688", "rail_reference.html": "a4efcb42a7", "rail_signals.json": "4b55c2025e", "region_gaps.json": "4423ee1a32", "regions.json": "c2e6b9f075", "report.html": "1077762c9f", "retail_signals.json": "6af94e8ebb", "road_signals.json": "bfa3f911c2", "school_signals.json": "15f1936e8e", "settings.html": "1ca2007f59", "sfz_signals.json": "3e2b19f374", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "1a47448eb3", "signals.json": "28d4a8383d", "signals_auto.json": "c64843caec", "signals_jeongbi_all.json": "5ef774ba1b", "source_status.html": "b6b6823929", "sw.js": "bd80e753e7", "thresholds.json": "18534ba3e4", "upis_facility_geom.json": "b54a2440f9", "upis_on_road.json": "c3d6ac0fe7", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260908o");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
