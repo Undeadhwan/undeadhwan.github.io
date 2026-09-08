@@ -2183,6 +2183,12 @@
     display:flex; flex-direction:column; gap:7px; align-items:center; margin:8px 0; }
   .mb-empty b { font-size:14.5px; }
   .mb-empty span { font-size:12.5px; color:var(--ink3); line-height:1.55; }
+  /* 한 줄 의견 칸(더보기 · 2026-09-08 세션107) — 입력 둘(지역·의견)과 보내기 한 줄. 색·크기는 토큰만. */
+  .mb-fb { display:flex; flex-direction:column; gap:8px; }
+  .mb-fb .mb-in, .mb-fb textarea { font:inherit; font-size:13.5px; padding:9px 11px; border:1px solid var(--line2); border-radius:var(--r-s); background:var(--bg); color:var(--ink); width:100%; }
+  .mb-fb textarea { resize:vertical; min-height:64px; line-height:1.45; }
+  .mb-fbrow { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .mb-fbrow .mb-note { margin:0; flex:1; }
   .mb-btn { font:inherit; font-size:13px; font-weight:600; padding:9px 16px; border-radius:var(--r-s);
     border:1px solid var(--line2); background:var(--bg); color:var(--ink2); cursor:pointer; text-decoration:none; display:inline-block; }
   .mb-btn.pri { background:var(--ink); border-color:var(--ink); color:#fff; }
@@ -5524,7 +5530,8 @@ function renderApt(a) {
   p.innerHTML = `
     <div class="phead"><div class="pt">${a.n}</div><div class="closex" onclick="closePanel()">✕</div></div>
     <div class="ps">${a.sg} ${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + " 세대" : ""}
-      <span class="cmpAdd ${inCmp ? "in" : ""}" id="cmpAdd">${inCmp ? "✓ 비교함" : "비교 담기"}</span></div>
+      <span class="cmpAdd ${inCmp ? "in" : ""}" id="cmpAdd">${inCmp ? "✓ 비교함" : "비교 담기"}</span>
+      <span class="cmpAdd ${mbWatchHas("apt:" + a.n + "|" + a.dong) ? "in" : ""}" id="aptWatch" title="이 단지 주변에 새 신호가 잡히면 아침에 한 번 알립니다">${mbWatchHas("apt:" + a.n + "|" + a.dong) ? "🔔 알림 중" : "🔔 알림"}</span></div>
     <!-- 유형 칩만 남겨 필터로 쓴다 (시안 §07 「등급 요약은 중복 · 유형 칩만 남겨 필터로」) -->
     <div class="pcats">${(() => { const m = {}; near.forEach(x => { const c = catOf(x.s); m[c] = (m[c] || 0) + 1; });
       return `<b>${near.length}</b>건 ` + CAT_KEYS.filter(c => m[c]).map(c =>
@@ -5544,6 +5551,7 @@ function renderApt(a) {
          「무엇이 얼마나 가까운가」라 시점 축은 이 화면의 일이 아니다(업데이트 탭이 시간을 전담). -->
     <div id="list"></div>`;   // 하단 「단지 정보=공동주택 관리정보…」 안내 문구는 뺐다(2026-09-07 알렉스 「그 문구 제거해」 · 출처·근사 표기는 데이터·방법론 페이지가 말한다)
   p.querySelector("#cmpAdd").onclick = () => toggleCompare(a);
+  { const w = p.querySelector("#aptWatch"); if (w) w.onclick = () => mbWatchApt(a); }   // 단지 알림(2026-09-08 세션107)
   { const ss = p.querySelector("#apt-sort");
     if (ss) ss.onchange = () => { panelSort = ss.value; try { localStorage.setItem("hojae_apt_sort", panelSort); } catch (e) {} if (panelListRender) panelListRender(); }; }
   p.querySelectorAll("[data-pcat]").forEach(b => b.onclick = () => {
@@ -7771,9 +7779,12 @@ function mbAct(act) {
   if (cmd === "pin") { mbCloseSheet(); setView("map"); mbToast("지도를 **길게 눌러** 그 자리를 기준점으로 삼습니다"); return; }
   if (cmd === "r") { mbNearR = arg === "sgg" ? "sgg" : Number(arg); mbSave(MB_KEY.near, mbNearR); mbNearWidened = null; renderNear(); return; }
   if (cmd === "route") { mbNearR = "route"; renderNear(); return; }
-  if (cmd === "wtoggle") { const w = mbWatch.find(x => x.id === arg); if (w) { w.on = !w.on; mbSave(MB_KEY.watch, mbWatch); renderMore(); } return; }
-  if (cmd === "wdel") { mbWatch = mbWatch.filter(x => x.id !== arg); mbSave(MB_KEY.watch, mbWatch); renderMore(); return; }
+  if (cmd === "wtoggle") { const w = mbWatch.find(x => x.id === arg); if (w) { w.on = !w.on; mbWatchChanged(); renderMore(); } return; }
+  if (cmd === "wdel") { mbWatch = mbWatch.filter(x => x.id !== arg); mbWatchChanged(); renderMore(); return; }
   if (cmd === "watchhere") return mbWatchHere();
+  if (cmd === "fbsend") return mbSendFeedback();   // 한 줄 의견(2026-09-08 세션107)
+  if (cmd === "pushon") return pushEnable().then(() => renderMore());    // 알림 켜기(웹 푸시 · 2026-09-08 세션107)
+  if (cmd === "pushoff") return pushDisable().then(() => renderMore());
   if (cmd === "report") return mbReport();
   if (cmd === "close") return mbCloseSheet();
 }
@@ -7915,7 +7926,7 @@ function mbWatchHere() {
   if (!id) { mbToast("이 자리의 시군구를 찾지 못했습니다."); return; }
   if (mbWatchHas(id)) { mbWatch = mbWatch.filter(w => w.id !== id); mbToast("지켜보기를 껐습니다."); }
   else { mbWatch.push({ id, kind: "sgg", label: id.split(":")[1], on: true }); mbToast("지켜봅니다 — <b>이번 주</b>의 「내 지역」에 모입니다."); }
-  mbSave(MB_KEY.watch, mbWatch);
+  mbWatchChanged();
   if (VIEW_MODE === "near") renderNear();
 }
 /* 신호 하나 지켜보기 — 상세에서 부른다(문맥 진입) */
@@ -7923,16 +7934,64 @@ function mbWatchSignal(s) {
   const id = "sig:" + (s.id || sigTitle(s));
   if (mbWatchHas(id)) mbWatch = mbWatch.filter(w => w.id !== id);
   else mbWatch.push({ id, kind: "sig", label: sigTitle(s), on: true });
-  mbSave(MB_KEY.watch, mbWatch);
+  mbWatchChanged();
   mbToast(mbWatchHas(id) ? "지켜봅니다." : "지켜보기를 껐습니다.");
   return mbWatchHas(id);
 }
 
+/* ══ 알림(웹 푸시) — 지켜보는 단지·사업·지역에 새 신호가 잡히면 아침에 한 번 (2026-09-08 세션107 · 알렉스 「단지 알림 구독까지 만들어」) ══
+   ■ 무엇이 어디에: 켜는 곳은 문맥(단지 상세 「🔔 알림」 · ★), 관리는 더보기 「알림」 한 곳(설계 ③과 같다). 지켜보는 목록(mbWatch)이 곧 구독 내용이다 —
+     바뀔 때마다 접속 기록 워커 `/sub`로 통째 다시 보낸다(`pushSync`). 판정·전송은 워커 cron(새벽) · 화면은 sw.js가 알림을 띄운다.
+   ■ 저장·판정의 자는 하나: 「단지 주변」 = 그 신호의 영향 반경(getRadius와 같은 표 thresholds.json · push_feed.py가 radius_m으로 싣는다).
+   ■ 아이폰은 홈 화면에 추가한 뒤 그 아이콘으로 열어야 켜진다(iOS 16.4+ · 화면이 그렇게 말한다 · P2). 정본 = visitlog/README.md 「웹 푸시」 · 게이트 = html_check.push_check. */
+const VAPID_PUBLIC = "BF4l-SWw_jHW2Jh1vu46JPjrXHSenq_8MMpT_sv-20fu69wjtYfiOIeRIptbtVIZeU9ELr6STgiyBSWDQJETEMo";   // 공개키(비밀키는 워커 secret VAPID_PRIVATE)
+const PUSH_W = "https://hojaemap-visits.obey82.workers.dev";
+function pushSupported() { return "serviceWorker" in navigator && "PushManager" in window && "Notification" in window; }
+function pushIosNeedsInstall() { return /iPhone|iPad|iPod/.test(navigator.userAgent) && !window.navigator.standalone; }
+async function pushSub() { try { if (!pushSupported()) return null; const reg = await navigator.serviceWorker.ready; return await reg.pushManager.getSubscription(); } catch (e) { return null; } }
+function pushWatchPayload() { return mbWatch.filter(w => w.on).map(w => ({ id: w.id, kind: w.kind, label: w.label, lat: w.lat, lon: w.lon })); }
+function urlB64ToU8(s) { const p = "=".repeat((4 - s.length % 4) % 4); const b = atob((s + p).replace(/-/g, "+").replace(/_/g, "/")); return Uint8Array.from(b, c => c.charCodeAt(0)); }
+async function pushSync() {   // 구독 중이면 지켜보는 목록을 워커에 다시 보낸다 — 구독이 없으면 아무것도 안 한다(권한을 먼저 묻지 않는다)
+  const sub = await pushSub(); if (!sub) return false;
+  let v = ""; try { v = localStorage.getItem("hojae_vid") || ""; } catch (e) {}
+  const j = sub.toJSON();
+  try { await fetch(PUSH_W + "/sub", { method: "POST", body: JSON.stringify({ endpoint: j.endpoint, keys: j.keys, v, watch: pushWatchPayload(), ua: navigator.userAgent.slice(0, 120) }) }); } catch (e) { return false; }
+  return true;
+}
+async function pushEnable() {
+  if (!pushSupported()) { mbToast(pushIosNeedsInstall() ? "아이폰은 <b>공유 → 홈 화면에 추가</b>한 뒤 그 아이콘으로 열어야 알림을 켤 수 있습니다." : "이 브라우저는 알림을 지원하지 않습니다."); return false; }
+  let perm = Notification.permission;
+  if (perm !== "granted") { try { perm = await Notification.requestPermission(); } catch (e) { perm = "denied"; } }
+  if (perm !== "granted") { mbToast("알림 권한이 꺼져 있습니다 — 브라우저 설정에서 hojaemap.kr 알림을 허용해 주세요."); return false; }
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlB64ToU8(VAPID_PUBLIC) });
+  } catch (e) { mbToast("알림 등록에 실패했습니다(" + (e && e.message || e) + ")"); return false; }
+  await pushSync();
+  mbToast("알림을 켰습니다 — 지켜보는 <b>단지·사업·지역</b>에 새 신호가 잡히면 아침에 한 번 알립니다.");
+  return true;
+}
+async function pushDisable() {
+  const sub = await pushSub();
+  if (sub) { try { await fetch(PUSH_W + "/unsub", { method: "POST", body: JSON.stringify({ endpoint: sub.endpoint }) }); } catch (e) {} try { await sub.unsubscribe(); } catch (e) {} }
+  mbToast("알림을 껐습니다.");
+}
+function mbWatchChanged() { mbSave(MB_KEY["watch"], mbWatch); pushSync(); }   // 지켜보는 목록의 저장 창구 — 구독 중이면 워커에도 같은 목록
+/* 단지 하나 지켜보기 — 단지 상세에서 부른다(문맥 진입). 처음이면 알림 켜기까지 이어진다. */
+function mbWatchApt(a) {
+  const id = "apt:" + a.n + "|" + a.dong;
+  if (mbWatchHas(id)) { mbWatch = mbWatch.filter(w => w.id !== id); mbToast("이 단지 알림을 껐습니다."); }
+  else { mbWatch.push({ id, kind: "apt", label: a.n, lat: a.lat, lon: a.lon, on: true }); mbToast("지켜봅니다 — <b>이 단지 주변</b>에 새 신호가 잡히면 알립니다."); }
+  mbWatchChanged();
+  if (view.mode === "apt") renderPanel();
+  if (mbWatchHas(id)) pushSub().then(s => { if (!s) pushEnable().then(() => { if (view.mode === "apt") renderPanel(); }); });
+}
 /* ── 더보기 (지켜보는 것 관리 · 등록한 자리) ───────────────────────────── */
 function renderMore() {
   const host = document.getElementById("morev"); if (!host) return;
   const wl = mbWatch.length ? mbWatch.map(w =>
-      `<div class="mb-wl"><span class="tx"><b>${w.label}</b><i>${w.kind === "sgg" ? "시군구" : "사업"}</i></span>`
+      `<div class="mb-wl"><span class="tx"><b>${w.label}</b><i>${w.kind === "sgg" ? "시군구" : w.kind === "apt" ? "단지 주변" : "사업"}</i></span>`
       + `<button class="mb-sw${w.on ? "" : " off"}" data-act="wtoggle:${w.id}" aria-label="알림 켜기/끄기"></button>`
       + `<button class="mb-x" data-act="wdel:${w.id}" aria-label="삭제">✕</button></div>`).join("")
     : `<div class="mb-empty"><b>아직 지켜보는 것이 없습니다.</b><span>지도·목록에서 <b>★</b>를 누르면 여기에 모입니다.</span></div>`;
@@ -7941,11 +8000,43 @@ function renderMore() {
     return `<div class="mb-wl"><span class="tx"><b>${MB_ICON[k]} ${nm}</b><i>${p ? (p.label || "등록됨") : "미등록"}</i></span>`
       + `<button class="mb-btn" data-act="find:${k}">${p ? "주소로 다시 지정" : "주소로 등록"}</button></div>`;
   }).join("");
-  host.innerHTML = `<div class="mb-secttl"><b>지켜보는 것</b><span>${mbWatch.length}</span></div>${wl}`
-    + `<p class="mb-note">알림(푸시)은 <b>준비 중</b>입니다 — 지금은 「이번 주」의 <b>내 지역</b>에 모아 보여 드립니다. `
-    + `문서상 움직임만 알리고, 관측일은 「새로 확인」으로 이름부터 다르게 부릅니다.</p>`
+  /* ★ 한 줄 의견 (2026-09-08 세션107 · 알렉스 「내가 어떻게 피드백을 받아야 할까」). 설문 링크보다 응답률이 높고, **어느 지역을 보던 사람의 말인가**가
+     붙어야 의견이 데이터가 된다 — 지역 칸은 화면이 아는 값(고른 지역 · 기준점 시군구)으로 채워 두고 고쳐 쓸 수 있게 둔다. 접속 기록 워커에
+     저장(POST /fb · 300자 · 이 기기 vid 동반) — 운영자는 접속 기록 뷰어 「한 줄 의견」 표에서 본다. 게이트 = html_check.feedback_check. */
+  const _fbRegion = (typeof regionLabel === "function" && regionLabel()) || (() => { const a = mbAnchorPoint && mbAnchorPoint(); const g = a && mbSggAt(a.lat, a.lon); return g ? `${g.sd} ${g.sg}` : ""; })();
+  const fb = `<div class="mb-secttl" style="margin-top:18px"><b>한 줄 의견</b><span>운영자에게 바로 갑니다</span></div>`
+    + `<div class="mb-fb"><input id="fbregion" class="mb-in" maxlength="60" placeholder="어느 지역을 보셨나요" value="${esc(_fbRegion)}">`
+    + `<textarea id="fbtext" maxlength="300" rows="3" placeholder="예) 우리 동네 ○○ 고시가 안 보여요 · 이런 알림이면 다시 올 것 같아요"></textarea>`
+    + `<div class="mb-fbrow"><span id="fbmsg" class="mb-note"></span><button class="mb-btn" data-act="fbsend">보내기</button></div></div>`;
+  /* 알림 상태는 비동기(구독 조회) — 먼저 뼈대를 그리고 채운다. 문장은 사실만: 지원 안 함 / 홈 화면 필요 / 권한 거부 / 켜짐(N개 지켜봄) / 꺼짐. */
+  const al = `<div class="mb-secttl" style="margin-top:18px"><b>알림</b><span>새 신호가 잡히면 아침에 한 번</span></div><div id="pushbox" class="mb-wl"><span class="tx"><b>확인 중…</b></span></div>`
+    + `<p class="mb-note">지켜보는 <b>단지</b>는 그 신호의 영향 반경 안일 때, <b>사업</b>은 그 사업이, <b>지역</b>은 그 시군구 안 신호가 새로 잡힐 때 알립니다. 문서상 움직임만 알리고 관측일은 「새로 확인」으로 부릅니다. 하루 한 번(새벽) · 같은 신호는 한 번만.</p>`;
+  host.innerHTML = `<div class="mb-secttl"><b>지켜보는 것</b><span>${mbWatch.length}</span></div>${wl}` + al
     + `<div class="mb-secttl" style="margin-top:18px"><b>등록한 자리</b></div>${pl}`
-    + `<p class="mb-note">전부 <b>이 기기 안에만</b> 저장됩니다.</p>`;
+    + `<p class="mb-note">지켜보는 것·자리는 <b>이 기기 안</b>에 저장되고, 알림을 켜면 지켜보는 목록만 알림 서버에 갑니다(좌표·이름 · 위치 권한 아님).</p>` + fb;
+  pushSub().then(sub => {
+    const box = document.getElementById("pushbox"); if (!box) return;
+    const on = !!sub, n = mbWatch.filter(w => w.on).length;
+    const state = !pushSupported() ? (pushIosNeedsInstall() ? "아이폰은 <b>공유 → 홈 화면에 추가</b>한 뒤 그 아이콘으로 열면 켤 수 있습니다" : "이 브라우저는 알림을 지원하지 않습니다")
+      : Notification.permission === "denied" ? "알림 권한이 꺼져 있습니다 — 브라우저 설정에서 허용해 주세요"
+      : on ? `<b>켜짐</b> — 지켜보는 ${n}개` : (n ? `꺼짐 — 지켜보는 ${n}개가 있습니다` : "꺼짐 — 먼저 지도·단지에서 ★·🔔로 지켜볼 것을 고르세요");
+    box.innerHTML = `<span class="tx"><b>${on ? "🔔" : "🔕"}</b><i>${state}</i></span>` + (pushSupported() && Notification.permission !== "denied"
+      ? `<button class="mb-btn" data-act="${on ? "pushoff" : "pushon"}">${on ? "알림 끄기" : "알림 켜기"}</button>` : "");
+  });
+}
+/* 한 줄 의견 보내기 — 접속 기록 워커 /fb (우리 오리진만 받는다 · 비콘과 같은 속도 제한). 같은 기기에서 5분에 한 번(연타 방지 · 워커도 막지만 화면이 먼저 말한다). */
+function mbSendFeedback() {
+  const ta = document.getElementById("fbtext"), rg = document.getElementById("fbregion"), msg = document.getElementById("fbmsg");
+  const text = (ta && ta.value || "").trim();
+  if (!text) { if (msg) msg.textContent = "의견을 적어 주세요."; return; }
+  let last = 0; try { last = +(localStorage.getItem("hojae_fb_last") || 0); } catch (e) {}
+  if (Date.now() - last < 5 * 60 * 1000) { if (msg) msg.textContent = "방금 보내셨습니다 — 잠시 뒤에 다시 보낼 수 있어요."; return; }
+  let v = ""; try { v = localStorage.getItem("hojae_vid") || ""; } catch (e) {}
+  if (msg) msg.textContent = "보내는 중…";
+  fetch("https://hojaemap-visits.obey82.workers.dev/fb", { method: "POST", body: JSON.stringify({ v, text, region: (rg && rg.value || "").trim(), p: location.pathname + location.search }) })
+    .then(r => r.ok ? r.json() : Promise.reject(new Error(String(r.status))))
+    .then(() => { try { localStorage.setItem("hojae_fb_last", String(Date.now())); } catch (e) {} if (ta) ta.value = ""; if (msg) msg.innerHTML = "<b>고맙습니다.</b> 운영자가 읽습니다."; })
+    .catch(e => { if (msg) msg.textContent = "보내지 못했습니다(" + e.message + ") — 잠시 뒤 다시 시도해 주세요."; });
 }
 
 /* ── C. 이번 주 — 내 지역 층 (Q4) ────────────────────────────────────── */
@@ -11430,8 +11521,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "70358feaaf", "adverse_facilities.json": "d4328f88f3", "apartments_all.json": "12825b113d", "arch_signals.json": "af37f29e75", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "52cbbd4689", "corridor_diff.json": "d25879bd05", "dart_signals.json": "f85d8a3943", "dps_signals.json": "276fe8fab7", "eum_backfill_progress.json": "53d1dbdc7d", "eum_enroll.json": "ec9915d1db", "eum_signals.json": "7af09525b5", "eum_usage.json": "0686755acb", "hospital_signals.json": "057fccfa0d", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "83e2835f4e", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "f38f48f073", "logipark_signals.json": "2bb56c0975", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "aa4a10349b", "mega_signals.json": "035b8e4d61", "methodology.html": "cc61f533c6", "park_signals.json": "e6d63d6709", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "fe5187fd8c", "rail_reference.html": "a4efcb42a7", "rail_signals.json": "4b55c2025e", "region_gaps.json": "be452ff8e3", "regions.json": "c2e6b9f075", "report.html": "1077762c9f", "retail_signals.json": "6af94e8ebb", "road_signals.json": "3b324f97e6", "school_signals.json": "15f1936e8e", "settings.html": "1ca2007f59", "sfz_signals.json": "3e2b19f374", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "1a47448eb3", "signals.json": "28d4a8383d", "signals_auto.json": "c64843caec", "signals_jeongbi_all.json": "5ef774ba1b", "source_status.html": "b6b6823929", "thresholds.json": "18534ba3e4", "upis_facility_geom.json": "b54a2440f9", "upis_on_road.json": "e691425d5e", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260908k");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "70358feaaf", "adverse_facilities.json": "d4328f88f3", "apartments_all.json": "12825b113d", "arch_signals.json": "af37f29e75", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "6357017901", "corridor_diff.json": "805c2ee384", "dart_signals.json": "f85d8a3943", "dps_signals.json": "276fe8fab7", "eum_backfill_progress.json": "53d1dbdc7d", "eum_enroll.json": "ec9915d1db", "eum_signals.json": "7af09525b5", "eum_usage.json": "0686755acb", "hospital_signals.json": "057fccfa0d", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "83e2835f4e", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "f38f48f073", "logipark_signals.json": "2bb56c0975", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "aa4a10349b", "mega_signals.json": "035b8e4d61", "methodology.html": "000c42b899", "park_signals.json": "e6d63d6709", "push_feed.json": "a9f5a19255", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "3f9f1f0892", "rail_reference.html": "a4efcb42a7", "rail_signals.json": "4b55c2025e", "region_gaps.json": "4bbda47ccf", "regions.json": "c2e6b9f075", "report.html": "1077762c9f", "retail_signals.json": "6af94e8ebb", "road_signals.json": "fc587cbe43", "school_signals.json": "15f1936e8e", "settings.html": "1ca2007f59", "sfz_signals.json": "3e2b19f374", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "1a47448eb3", "signals.json": "28d4a8383d", "signals_auto.json": "c64843caec", "signals_jeongbi_all.json": "5ef774ba1b", "source_status.html": "b6b6823929", "sw.js": "bd80e753e7", "thresholds.json": "18534ba3e4", "upis_facility_geom.json": "b54a2440f9", "upis_on_road.json": "0980ecf529", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260908l");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
@@ -11657,6 +11748,8 @@ function initOpsMode() {
     };
     setTimeout(find, 300);
   }
+  // 서비스워커 = 푸시 알림 전용(sw.js · fetch 핸들러 없음 — 캐시·오프라인을 건드리지 않는다 · 2026-09-08 세션107). 등록 실패는 조용히(알림 없는 사이트로 돈다).
+  try { if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {}); } catch (e) {}
   bootSelfcheck();   // `?selfcheck=1` — 관리자 화면 버튼(다 받은 뒤 자가검사 · 결과 판)
 }
 
