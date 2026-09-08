@@ -5076,12 +5076,59 @@ function sggRingsShared(disp) {
   }
   return out;                                    // ⚠ 폴백은 캐시하지 않는다 — 동이 오면 정밀해진다
 }
+/* ★ 시도 **외곽선** (2026-09-08 알렉스 「서울시 선택했을 때 테두리 넣어달랬는데 적용이 안 됐네」 · 「구를 합쳐 시 테두리를 그릴 때 안에 선이 남던 현상의 극복이 어려운가」).
+   union은 09-07에 무너졌다(동 폴리곤 정점 불일치 → 잔재가 주 링에 엮임). 대신 **변 단위 판정** — 구 링(sggRingsFromDong · 각각 깨끗한 1링)의 변마다:
+     ① 중점에서 법선 양쪽 40m를 찔러 한쪽만 구 안이어야 하고(안쪽 변은 양쪽이 다 구 안)
+     ② 바깥쪽 400m도 어느 구 안이 아니어야 하며(구 접점의 틈·좁은 강 띠 = 잔재 제거)
+     ③ 바깥 방향으로 0.2km 간격 6km까지 살펴 **다른 시도의 거친 폴리곤(SGG_GEO)에 닿거나 자기 시도 거친 폴리곤 밖으로 나가면** 외곽이다 —
+        시 안에 남은 넓은 빈 띠(목동 안양천 일대 8.4km · 동 폴리곤이 덮지 않는 자리)는 어느 방향으로도 시를 못 벗어나므로 안쪽으로 걸러진다.
+   실측 2026-09-08(서울 · 8777): 단순 변 소거 195km(안쪽 잔여 15km) → ①② 183km(잔여 8.4km 안양천) → ①②③ 170km(잔여 0 · 잃는 경계는 과천·구리·하남 오목한 자리
+   약 5km · 22ms) · 경기 1,079km 716ms. 거리 문턱(거친 링에서 N km)은 경기에서 골짜기가 없어 버렸다(서울만 1.5→3.4km 골짜기). 자로 잰다 — 눈대중 금지(09-07 교훈).
+   외곽 변을 링 순서대로 이어 폴리라인으로 긋는다(구 접점 몇 m 어긋남은 시도 줌에서 안 보인다). 시도마다 한 번 계산해 캐시(_sidoOutC). */
+function sidoOutline(sd) {
+  const c = (window._sidoOutC = window._sidoOutC || {});
+  if (c[sd]) return c[sd];
+  const names = [...new Set((DONG_GEO?.features || []).filter(f => (f.properties.sido || "서울") === sd).map(f => f.properties.sgg).filter(Boolean))];
+  const rings = names.flatMap(nm => sggRingsFromDong(sd, nm));
+  if (!rings.length) return [];
+  const pip = (p, r) => { let c2 = false; for (let i = 0, j = r.length - 1; i < r.length; j = i++) {
+    const xi = r[i][0], yi = r[i][1], xj = r[j][0], yj = r[j][1];
+    if ((yi > p[1]) !== (yj > p[1]) && p[0] < (xj - xi) * (p[1] - yi) / ((yj - yi) || 1e-12) + xi) c2 = !c2; } return c2; };
+  const mkIn = rs => { const bb = rs.map(r => { let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+      for (const [x, y] of r) { if (x < x0) x0 = x; if (y < y0) y0 = y; if (x > x1) x1 = x; if (y > y1) y1 = y; } return [x0, y0, x1, y1]; });
+    return p => { for (let i = 0; i < rs.length; i++) { const b = bb[i];
+      if (p[0] < b[0] || p[0] > b[2] || p[1] < b[1] || p[1] > b[3]) continue; if (pip(p, rs[i])) return true; } return false; }; };
+  const inFine = mkIn(rings);
+  const inOther = mkIn((SGG_GEO?.features || []).filter(f => f.properties.sido !== sd).flatMap(f => ringsOf(f)));   // 다른 시도의 거친 폴리곤
+  const inOwn = mkIn((SGG_GEO?.features || []).filter(f => f.properties.sido === sd).flatMap(f => ringsOf(f)));     // 자기 시도의 거친 폴리곤
+  const EPS = 0.04, FAR = 0.4, RMAX = 6.0, STEP = 0.2;   // km
+  const out = [];
+  for (const r of rings) {
+    let run = null;
+    for (let i = 1; i < r.length; i++) {
+      const a = r[i - 1], b = r[i];
+      const dx = (b[0] - a[0]) * 88.8, dy = (b[1] - a[1]) * 111.0, L = Math.hypot(dx, dy) || 1e-9;
+      const ux = -dy / L, uy = dx / L, m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      const P = k => [m[0] + ux * k / 88.8, m[1] + uy * k / 111.0];
+      const s1 = inFine(P(EPS)), s2 = inFine(P(-EPS));
+      let outer = false;
+      if (s1 !== s2) {
+        const sgn = s1 ? -1 : 1;                           // 바깥쪽
+        if (!inFine(P(sgn * FAR)))
+          for (let k = STEP; k <= RMAX + 1e-9; k += STEP) { const q = P(sgn * k); if (inOther(q) || !inOwn(q)) { outer = true; break; } }
+      }
+      if (outer) { if (!run) { run = [a]; out.push(run); } run.push(b); } else run = null;
+    }
+  }
+  return (c[sd] = out);
+}
 function regionGo(disp) {
   const rings = sggRingsShared(disp);
   if (!rings.length) return false;               // 그렸는지 돌려준다 — 시도 경로가 폴백(중심 이동)을 고를 수 있게
   mapFit(rings.flat().map(([x, y]) => [y, x]), 30);
-  // 시도(시군구가 없는 표기)는 **채움만** — 구 링을 나란히 그리므로 테두리를 그리면 구 경계가 내부 선이 된다
-  mapApi?.highlightRings?.(rings, String(disp || "").includes(" ") ? undefined : { stroke: false });
+  // 시도(시군구가 없는 표기)는 채움은 구 링을 나란히(테두리를 그리면 구 경계가 내부 선) + **외곽선은 변 판정으로 따로**(sidoOutline · 2026-09-08)
+  const isSd = !String(disp || "").includes(" ");
+  mapApi?.highlightRings?.(rings, isSd ? { stroke: false, outline: sidoOutline(String(disp || "").split(" ")[0]) } : undefined);
   return true;
 }
 /* 지도/배지 클릭으로 진입 시 드롭다운 값 동기화 */
@@ -8189,8 +8236,8 @@ function initLeaflet() {
     });
   });
   // 선택 경계 강조 레이어 (호갱노노식: 선택한 동/구만 표시)
-  let hlLayer = null;
-  const clearHighlight = () => { if (hlLayer) { map.removeLayer(hlLayer); hlLayer = null; } };
+  let hlLayer = null, hlOutline = null;
+  const clearHighlight = () => { if (hlLayer) { map.removeLayer(hlLayer); hlLayer = null; } if (hlOutline) { map.removeLayer(hlOutline); hlOutline = null; } };
   /* opt.stroke === false = **채움만**(2026-09-07) — 시도는 시군구 링을 나란히 그리므로 테두리를 그리면
      구 경계가 내부 선으로 보인다. 테두리를 안 그리면 인접 채움이 하나로 이어져 범위만 남는다. */
   const highlightRings = (ringsXY, opt) => {
@@ -8201,6 +8248,9 @@ function initLeaflet() {
     /* 테두리 = 진한 잉크 3.5px (2026-09-07 알렉스 「지역 선택시 이런식으로 테두리 넣어줘 · 원래 있었는데 없어진듯」 — 종전 보라 2.5px은 배경지도 위에서 안 읽혔다). 카카오 분기와 같은 값. */
     hlLayer = L.polygon(latlngs, { pane: "cand", color: "#151618", weight: st ? 3.5 : 1, opacity: st ? .9 : 0,
       fillColor: "#5b3fd4", fillOpacity: st ? .10 : .22, interactive: false }).addTo(map);
+    // 시도 외곽선(opt.outline · 폴리라인 묶음 · 2026-09-08) — 채움과 같은 잉크 3.5px. 카카오판과 같은 값.
+    if (opt && opt.outline && opt.outline.length)
+      hlOutline = L.polyline(opt.outline.map(l => l.map(([x, y]) => [y, x])), { pane: "cand", color: "#151618", weight: 3.5, opacity: .9, interactive: false }).addTo(map);
   };
 
   let badges = [], pins = [];
@@ -10523,7 +10573,11 @@ function initKakao() {
     const st = !(opt && opt.stroke === false);   // 채움만 = 시도(구 링을 나란히 그린다 · 테두리를 그리면 구 경계가 내부 선이 된다)
     /* ⚠ **두께 0으로 두지 않는다** — 채움만 쓸 때도 `strokeWeight:1 · strokeOpacity:0`이다(2026-09-07 실측).
        그리고 테두리가 없으면 경계가 색 전환뿐이라 **채움을 조금 진하게** 해야 범위가 읽힌다(.12 → .22). */
-    ringsXY.forEach(r => hlPolys.push(new K.Polygon({ map, path: r.map(([x, y]) => LL(x, y)), strokeWeight: st ? 3.5 : 1, strokeColor: "#151618", strokeOpacity: st ? .9 : 0, fillColor: "#5b3fd4", fillOpacity: st ? .10 : .22, zIndex: 6 }))); };
+    ringsXY.forEach(r => hlPolys.push(new K.Polygon({ map, path: r.map(([x, y]) => LL(x, y)), strokeWeight: st ? 3.5 : 1, strokeColor: "#151618", strokeOpacity: st ? .9 : 0, fillColor: "#5b3fd4", fillOpacity: st ? .10 : .22, zIndex: 6 })));
+    // 시도 외곽선(opt.outline · 2026-09-08) — Leaflet판과 같은 값(잉크 3.5px .9). hlPolys에 넣어 clearHighlight가 같이 걷는다.
+    // ☠ 첫 판은 이 두 줄을 화살표 함수 닫힘(`}))); };`) **바깥**에 넣어 `opt` ReferenceError로 카카오 지도 초기화가 통째로 죽었다 — 구문 검사는 통과했다(실행에서만 죽는 형태 · 2026-09-08 로컬 실측).
+    if (opt && opt.outline) opt.outline.forEach(l => hlPolys.push(new K.Polyline({ map, path: l.map(([x, y]) => LL(x, y)), strokeWeight: 3.5, strokeColor: "#151618", strokeOpacity: .9, zIndex: 8 })));
+  };
   const sggRingsFn = () => { if (window._sggRings) return window._sggRings; const m = {}; SGG_GEO.features.forEach(f => { const disp = f.properties.sido + " " + sggDisplayName(f.properties.name); ringsOf(f).forEach(r => (m[disp] = m[disp] || []).push(r)); }); return (window._sggRings = m); };
   mapApi = { refreshPins, panTo: ll => map.panTo(LL(ll[0], ll[1])), showRadius, showRadiusMany, clearRadius, showAptAnchor, highlightRings, clearHighlight, clearAptMarker, emphasizePin, sggRings: sggRingsFn, highlightRoute, clearRoute, hideTip, closeAptPop };   // viewFilter 제거(2026-07-27) — 소비처 없는 죽은 API였다
   performance.mark("map:ready");   // 카카오 지도 API가 준비된 시점(계측 — head의 __perf)
@@ -11274,8 +11328,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "70358feaaf", "adverse_facilities.json": "d4328f88f3", "apartments_all.json": "12825b113d", "arch_signals.json": "af37f29e75", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "55fdce5d4e", "corridor_diff.json": "283d27a242", "dart_signals.json": "b7d56ca648", "dps_signals.json": "e6109f9a81", "eum_backfill_progress.json": "a3ae1d38f0", "eum_enroll.json": "ec9915d1db", "eum_signals.json": "876ba733cf", "eum_usage.json": "8b3962dcf6", "hospital_signals.json": "057fccfa0d", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "83e2835f4e", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "f38f48f073", "logipark_signals.json": "2bb56c0975", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "aa4a10349b", "mega_signals.json": "035b8e4d61", "methodology.html": "b7e2a66ac7", "park_signals.json": "e6d63d6709", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "a59b3df1d3", "rail_reference.html": "a4efcb42a7", "rail_signals.json": "4b55c2025e", "region_gaps.json": "c5f509f168", "regions.json": "c2e6b9f075", "report.html": "1077762c9f", "retail_signals.json": "6af94e8ebb", "road_signals.json": "bce32ab532", "school_signals.json": "15f1936e8e", "settings.html": "1ca2007f59", "sfz_signals.json": "3e2b19f374", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "1a47448eb3", "signals.json": "28d4a8383d", "signals_auto.json": "c64843caec", "signals_jeongbi_all.json": "c8fdfe9383", "source_status.html": "cdb1193753", "thresholds.json": "cca4518e26", "upis_facility_geom.json": "b54a2440f9", "upis_on_road.json": "dd375998c6", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260908d");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "70358feaaf", "adverse_facilities.json": "d4328f88f3", "apartments_all.json": "12825b113d", "arch_signals.json": "af37f29e75", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "1ccd159453", "corridor_diff.json": "482f27796a", "dart_signals.json": "f85d8a3943", "dps_signals.json": "276fe8fab7", "eum_backfill_progress.json": "a3ae1d38f0", "eum_enroll.json": "ec9915d1db", "eum_signals.json": "199c0a72dc", "eum_usage.json": "8b3962dcf6", "hospital_signals.json": "057fccfa0d", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "83e2835f4e", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "f38f48f073", "logipark_signals.json": "2bb56c0975", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "aa4a10349b", "mega_signals.json": "035b8e4d61", "methodology.html": "245847283e", "park_signals.json": "e6d63d6709", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "d6e408ee87", "rail_reference.html": "a4efcb42a7", "rail_signals.json": "4b55c2025e", "region_gaps.json": "d8e8a8bf9c", "regions.json": "c2e6b9f075", "report.html": "1077762c9f", "retail_signals.json": "6af94e8ebb", "road_signals.json": "b8f6c5d358", "school_signals.json": "15f1936e8e", "settings.html": "1ca2007f59", "sfz_signals.json": "3e2b19f374", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "1a47448eb3", "signals.json": "28d4a8383d", "signals_auto.json": "c64843caec", "signals_jeongbi_all.json": "c8fdfe9383", "source_status.html": "cdb1193753", "thresholds.json": "cca4518e26", "upis_facility_geom.json": "b54a2440f9", "upis_on_road.json": "0e45be3508", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260908e");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
