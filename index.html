@@ -33,7 +33,8 @@
     const blocked = LT.reduce((a, e) => a + e.ms, 0);
     console.table(paint.concat(marks)); console.table(LT);
     console.log(`막힌 시간 합계 ${blocked}ms · longtask ${LT.length}건`);
-    return { paint, marks, longtasks: LT, blocked };
+    if (window.__pan && window.__pan.length) console.table(window.__pan);
+    return { paint, marks, longtasks: LT, blocked, pan: window.__pan || [] };
   };
 })();
 </script>
@@ -2942,8 +2943,6 @@ function roadExistsRow(s) {
   const r = s.road_exists;
   if (!r || typeof r.share !== "number") return "";
   const pct = Math.round(r.share * 100);
-  const when = r.date ? ` · ${esc(String(r.date))} 대조` : "";
-  const src = r.src ? esc(String(r.src)) : "국토부 표준노드링크";
   if (r.name && r.share >= 0.9)
     return `<div class="kv"><b>기존 도로 위</b> 「${esc(String(r.name))}」${r.rank ? `(${esc(String(r.rank))})` : ""}`
          + `<span class="hmhint">무엇을 바꾸는지는 원문 확인 전</span></div>`;
@@ -3502,6 +3501,9 @@ function evidenceFold(s) {
     s.geom_status && !lineCoverRow(s) ? `<div class="kv"><b>선형 범위</b> ${esc(String(s.geom_status)).replace(/\*\*/g, "")}</div>` : "",
     corridorSrcRow(s), execRow(s, true),
     s._road && s.ic_note && s.pt_type !== "road_ic" ? `<div class="kv"><b>IC 비고</b> ${esc(String(s.ic_note)).replace(/\*\*/g, "")}</div>` : "",
+    /* 표준노드 접속부의 본선 거리(2026-09-09 세션108 감사 — 필드는 실렸는데 화면이 안 읽었다): node_hold = 본선 밖이라 선을 이 점으로 당기지 않은 지점 */
+    s.node_hold ? `<div class="kv"><b>본선 거리</b> ${Number.isFinite(s.node_line_m) ? `${s.node_line_m}m` : "미측정"} — 본선(표준노드 차도) 밖이라 선을 이 지점으로 당기지 않았습니다<span class="hmhint">${esc(String(s.node_hold))} · 지도의 선은 본선 위라 이 지점에서 더 떨어져 보일 수 있습니다</span></div>`
+      : (Number.isFinite(s.node_line_m) ? `<div class="kv"><b>본선 거리</b> ${s.node_line_m}m<span class="hmhint">표준노드 본선 접속부 — 선이 이 지점을 지납니다</span></div>` : ""),
     gosiKindRow(s), natureRow(s), mergedRoadRow(s), movementRow(s), posConfRow(s),   // 성격 근거는 집행 상태에서 파생되므로 선형·구간 다음에(2026-09-06 읽는 순서)
     SUB_CAVEAT[subOf(s)] ? `<div class="kv"><b>시설 특성</b> <span class="hmhint">${SUB_CAVEAT[subOf(s)]}</span></div>` : "",
     s.pt_type === "road_ic" && s.ic_note ? `<div class="kv"><b>지점 특성</b> ${s.ic_note.replace(/\*\*/g, "")}</div>` : "",
@@ -4049,7 +4051,7 @@ function buildRoadSignals() {
     const p = f.properties;
     if (p.kind === "station") {   // IC·JC 점
       if (p.gate === "관찰") { GATE_OBS["도로 IC"]++; continue; }   // 노선·역과 같은 게이트 · 거른 수는 건수 설명이 말한다
-      ROAD_SIG.push({ _road: true, title: p.name, cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "A",
+      ROAD_SIG.push({ _road: true, title: p.name, cat: "교통", sub: roadSubOf(p), node_line_m: p.node_line_m, node_hold: p.node_hold,   // 표준노드 본선 거리·보류(2026-09-09 감사 — 화이트리스트 어댑터라 안 실으면 카드 행이 죽는다 · 어댑터 함정) node_line_m: p.node_line_m, node_hold: p.node_hold,   // 표준노드 본선 거리·보류(2026-09-09 감사 — 화이트리스트 어댑터라 안 실으면 카드 행이 죽는다 · 어댑터 함정) lvl: p.lvl || "A",
       work_nature: p.work_nature, work_nature_basis: p.work_nature_basis, work_nature_group: p.work_nature_group,
         lvl_basis: p.lvl_basis, gate: p.gate, gate_basis: p.gate_basis,   // 등급 근거·게이트 — 카드가 읽는다(어댑터 함정 7호)
         template_type: "도로", current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
@@ -7654,7 +7656,7 @@ function renderFlow() {
    ■ 자를 새로 만들지 않는다 — 거리는 `distToApt`, 정렬은 `sortSignals`, 행은 `listTable`,
      표시 조건은 `visible` 하나를 그대로 쓴다(같은 질문에 자가 둘이면 반드시 갈린다).
 */
-const MB_KEY = { anchor: "hojae_anchor", places: "hojae_places", watch: "hojae_watch", near: "hojae_nearR" };
+const MB_KEY = { anchor: "hojae_anchor", places: "hojae_places", watch: "hojae_watch", near: "hojae_nearR", inbox: "hojae_inbox" };   // localStorage 키 등록처는 여기 하나(2026-09-09 감사)
 const NEAR_STEPS = [1, 3, 10];        // km — 「시군구」는 별도 모드(반경이 아니다)
 const NEAR_DEFAULT = 3;
 const ROUTE_BUFFER_KM = 2;            // F안 회랑 폭(편도) — 경로탐색이 아니라 두 점 사이 버퍼다
@@ -8084,7 +8086,7 @@ function mbWatchApt(a) {
    재료 = 빌드가 매일 내는 `push_feed.json`(최근 관측 + 90일 고시 · 좌표 · 영향 반경)을 지켜보는 목록(mbWatch)과 대조한다 — 판정은 워커 `pushMatch`의 **거울**
    (`inboxMatch` · 단지 = 영향 반경 안 · 사업 = 제목·키 · 시군구 = 「시도 시군」). 웹 푸시는 「사이트를 안 열어도 받기」 **선택지**로 내려간다(pushEnable).
    ⚠ 로그인은 제품 결정(기기별 알림함 → 계정이 생기면 그 목록을 계정에 붙인다). 정본 = DESIGN 「알림함」 행 · visitlog/README 「웹 푸시」 이력 행 · 게이트 html_check.push_check ⑦. */
-const INBOX_KEY = "hojae_inbox";
+const INBOX_KEY = MB_KEY.inbox;
 let _inbox = mbLoad(INBOX_KEY, { items: [], read: {} });      // items: 최근 200(먼저 본 것이 위) · read: {키|지켜보는 것: 날짜}
 let _feedP = null;
 function feedItems() {
@@ -8175,7 +8177,7 @@ function renderMore() {
     const box = document.getElementById("pushbox"); if (!box) return;
     const on = !!sub, n = mbWatch.filter(w => w.on).length;
     const state = !pushSupported() ? (pushIosNeedsInstall() ? "아이폰은 <b>공유 → 홈 화면에 추가</b>한 뒤 그 아이콘으로 열면 켤 수 있습니다" : "이 브라우저는 폰·브라우저 알림을 지원하지 않습니다")
-      : Notification.permission === "denied" ? "이 브라우저가 hojaemap.kr 알림을 <b>차단</b> 중 — 주소창 자물쇠 → 알림 → 허용하면 켤 수 있습니다"
+      : Notification.permission === "denied" ? pushPermText("denied")   // 권한 문구의 자는 pushPermText 하나(2026-09-09 감사 — 인라인 사본 제거)
       : on ? `<b>켜짐</b> — 지켜보는 ${n}개 · 새벽에 한 번` : "꺼짐";
     box.innerHTML = `<span class="tx"><b>${on ? "📲" : "📴"} 폰·브라우저 알림</b><i>${state}</i></span>` + (pushSupported() && Notification.permission !== "denied"
       ? `<button class="mb-btn" data-act="${on ? "pushoff" : "pushon"}">${on ? "끄기" : "켜기"}</button>` : "");
@@ -9424,6 +9426,26 @@ function initKakao() {
      ⚠ 이 깃발은 `dragstart/dragend`가 세운다(아래 applyLOD 가드와 **같은 깃발 하나**를 쓴다 —
        두 벌을 만들면 한쪽만 켜지는 순간이 생긴다). */
   let _panning = false;
+  /* ★ 팬이 끝난 직후의 click은 클릭이 아니다 (2026-09-09 알렉스 「좌클릭 드래그로 화면을 옮길 때 특정 아파트나 호재가 선택되어 걸리적거려」).
+     오버레이는 지도와 함께 움직이므로 점 위에서 누르고 끌어 **같은 점 위에서 떼면** 브라우저가 click을 만든다(mousedown·mouseup 대상이 같다).
+     dragThru는 자기 이동량으로 가르지만 tapThru(아파트 점·미리보기·동 라벨)와 카카오 Marker(호재 원)는 못 갈랐다 — 규칙이 한쪽에만.
+     ⇒ 팬 감지기(_endPan)가 놓는 순간 시각을 찍고, click 쪽은 그 뒤 PAN_CLICK_MS 안이면 무시한다(자 하나 · 양쪽에). 게이트 = html_check.mobile_touch_check ⑧. */
+  let _panEndAt = 0;
+  const PAN_CLICK_MS = 300;
+  const _clickEndsPan = () => performance.now() - _panEndAt < PAN_CLICK_MS;
+  /* 팬·줌 프레임 프로파일러(2026-09-09 알렉스 「화면이 좀 더 부드러웠으면」) — 부드러움은 느낌이 아니라 **프레임 시간**으로 잰다.
+     팬(_panning)·줌(zoom_start~idle) 동안 rAF 간격을 모아 p50/p90/max·33ms 초과 수를 `__perf().pan`에 남긴다(최근 20회). 비용 = 배열 하나. */
+  const _fr = { on: false, t: [], last: 0, kind: "" };
+  const _frTick = t => { if (!_fr.on) return; if (_fr.last) _fr.t.push(t - _fr.last); _fr.last = t; requestAnimationFrame(_frTick); };
+  const _frStart = kind => { if (_fr.on) return; _fr.on = true; _fr.t = []; _fr.last = 0; _fr.kind = kind; _fr.at = performance.now(); requestAnimationFrame(_frTick); };
+  const _frStop = () => {
+    if (!_fr.on) return; _fr.on = false;
+    const f = _fr.t.slice(1); if (!f.length) return;
+    const so = [...f].sort((a, b) => a - b), pct = q => Math.round(so[Math.min(so.length - 1, Math.floor(so.length * q))]);
+    (window.__pan = window.__pan || []).push({ kind: _fr.kind, at: Math.round(_fr.at), ms: Math.round(performance.now() - _fr.at), frames: f.length,
+      p50: pct(.5), p90: pct(.9), max: Math.round(so[so.length - 1]), over33: f.filter(v => v > 33).length });
+    if (window.__pan.length > 20) window.__pan.shift();
+  };
   const showTip = (html, ev, bare) => { if (_panning) return; tip.innerHTML = html; tip.style.display = "block";
     const dark = bare === "dark";
     tip.style.padding = bare ? "0" : "6px 9px";
@@ -9523,7 +9545,7 @@ function initKakao() {
     el.addEventListener("touchstart", e => { const t = e.changedTouches[0]; sx = t.clientX; sy = t.clientY; moved = false; }, { passive: true });
     el.addEventListener("touchmove", e => { const t = e.changedTouches[0]; if (Math.abs(t.clientX - sx) + Math.abs(t.clientY - sy) > TAP_SLOP) moved = true; }, { passive: true });
     el.addEventListener("touchend", e => { if (moved) return; lastTap = Date.now(); _ovClickTs = lastTap; onTap(e); }, { passive: true });
-    el.addEventListener("click", e => { e.stopPropagation(); if (Date.now() - lastTap < 1000) return; _ovClickTs = Date.now(); onTap(e); });   // 합성 click 무시 창 1s(느린 기기 여유 · 두 번째 탭은 touchend가 맡으므로 손해 없음)
+    el.addEventListener("click", e => { e.stopPropagation(); if (Date.now() - lastTap < 1000) return; if (_clickEndsPan()) return; _ovClickTs = Date.now(); onTap(e); });   // 팬 끝의 click은 무시   // 합성 click 무시 창 1s(느린 기기 여유 · 두 번째 탭은 touchend가 맡으므로 손해 없음)
   };
   // 동 경계: 폴리곤을 feature에 1회 캐시(_kpolys) — 줌/이동마다 파괴·재생성하지 않고 setMap 토글만(줌 버벅임 해소)
   const renderDongPoly = () => {
@@ -9927,7 +9949,7 @@ function initKakao() {
           K.event.addListener(mk, "mouseover", () => { const q = toPt(x, y); const rc = mapEl.getBoundingClientRect(); showTip(hjHtml(s), { clientX: rc.left + q.x, clientY: rc.top + q.y }, true);
             if (isApprox(s)) { _haloHover = s; _reimage(s); } });   // §14-3 — 가리킨 것 하나만
           K.event.addListener(mk, "mouseout", () => { hideTip(); if (_haloHover === s) { _haloHover = null; _reimage(s); } });
-          K.event.addListener(mk, "click", () => { hideTip(); showSignal(s, false); });
+          K.event.addListener(mk, "click", () => { if (_clickEndsPan()) return; hideTip(); showSignal(s, false); });   // 팬 끝의 click은 무시(2026-09-09)
           s._kmk = mk; s._kmkKey = key;
         } else if (s._kmkKey !== key) { s._kmk.setImage(hojaeMarkerImage(t.col, tr, t.bw, t.ph, t.fillOp, t.alpha, haloOn(s), t.shape)); s._kmkKey = key; }
         // 노선 격리 중엔 호재 원을 **숨긴다**(2026-08-04 사용자 "호재별 원표시도 없애" — 흐림→제거.
@@ -10651,7 +10673,7 @@ function initKakao() {
     _lodReq = requestAnimationFrame(_run);
     _lodTO = setTimeout(_run, 400);
   };
-  K.event.addListener(map, "idle", applyLODSoon);
+  K.event.addListener(map, "idle", () => { if (_fr.on && _fr.kind === "zoom") _frStop(); applyLODSoon(); });
   /* ☠☠ **카카오 `dragstart/dragend`에 기대면 안 된다** (2026-08-14 2차 — 사장님 *"커서 끌어서
      움직이면 호재들이 재잘재잘 업데이트 되는건 여전해"*).
      1차에서 이 두 이벤트로 가드를 걸었는데 **계측값이 0이었다** — 이 경로에서 아예 발화하지 않는다.
@@ -10662,19 +10684,46 @@ function initKakao() {
        클릭 한 번마다 전체 재렌더가 붙는다. **움직였을 때만** 팬으로 친다(문턱 3px). */
   const PAN_SLOP = 3;              // 이 이하의 흔들림은 클릭이지 드래그가 아니다
   let _armed = null;               // pointerdown 지점(있으면 버튼을 누르고 있는 중)
-  mapEl.addEventListener("pointerdown", e => { _armed = { x: e.clientX, y: e.clientY }; }, true);
+  /* ★ 관성 팬 (2026-09-09 알렉스 「화면이 좀 더 부드러웠으면 — 아이폰 화면처럼」). 카카오 SDK v3에는 관성이 없다(2026-09-09 실측 — 프로토타입 소스 97KB에
+     inertia·momentum·kinetic·decelerat 0회 · 드래그를 놓으면 그 자리에 멎는다). 손을 뗄 때의 속도(최근 MOM_WIN_MS의 포인터 이동)를 재서
+     한 번의 `map.panBy`(카카오 자체 애니메이션 · rAF는 SDK 몫)로 그 방향으로 MOM_TAU_MS만큼 더 밀어 준다 — 손가락·마우스 둘 다, 우리 dragThru 이동도 같은 자.
+     ⚠ 두 손가락(핀치)이었으면 안 민다 · 느린 드래그(MOM_MIN_V 미만)는 안 민다 · 계수는 `_dbg.panStats()`가 센다(momentum·lastV). 정본 = DESIGN 「지도 조작」 행. */
+  const MOM_WIN_MS = 90, MOM_MIN_V = 0.35, MOM_TAU_MS = 260, MOM_MAX_PX = 600;   // px/ms · 밀어 주는 시간상수 · 한 번에 미는 상한
+  const _trail = [];               // [{t,x,y}] 최근 포인터 자취(팬 중)
+  let _ptrs = 0, _momN = 0, _lastV = 0, _momWhy = "";
+  mapEl.addEventListener("pointerdown", e => { _ptrs++; _armed = { x: e.clientX, y: e.clientY }; _trail.length = 0; _trail.push({ t: performance.now(), x: e.clientX, y: e.clientY }); }, true);
   window.addEventListener("pointermove", e => {
-    if (!_armed || _panning) return;
+    if (!_armed) return;
+    if (_panning) { _trail.push({ t: performance.now(), x: e.clientX, y: e.clientY }); if (_trail.length > 12) _trail.shift(); return; }
     if (Math.abs(e.clientX - _armed.x) > PAN_SLOP || Math.abs(e.clientY - _armed.y) > PAN_SLOP) {
-      _panning = true; hideTip();     // 여기서부터가 팬이다 — 그리지도, 말풍선을 띄우지도 않는다
+      _panning = true; hideTip(); _frStart("pan");     // 여기서부터가 팬이다 — 그리지도, 말풍선을 띄우지도 않는다
+      _trail.push({ t: performance.now(), x: e.clientX, y: e.clientY });   // 첫 이동점도 자취에(속도 창이 비지 않게)
     }
   }, true);
+  const _momentum = () => {        // 놓는 순간 한 번 — 속도가 있으면 그 방향으로 카카오 애니메이션 한 번
+    if (_ptrs > 1 || _trail.length < 2) { _momWhy = _ptrs > 1 ? "두손가락" : "자취없음"; return false; }
+    const now = performance.now(), last = _trail[_trail.length - 1];
+    if (now - last.t > MOM_WIN_MS) { _momWhy = "멈춘뒤놓음"; return false; }   // 멈춘 뒤 놓았다 — 관성 없음
+    let i = _trail.length - 1; while (i > 0 && last.t - _trail[i - 1].t < MOM_WIN_MS) i--;
+    const a = _trail[i], dt = Math.max(1, last.t - a.t);
+    const vx = (last.x - a.x) / dt, vy = (last.y - a.y) / dt, v = Math.hypot(vx, vy);
+    _lastV = Math.round(v * 100) / 100;
+    if (v < MOM_MIN_V) { _momWhy = "느림"; return false; }
+    _momWhy = "관성";
+    const k = Math.min(1, MOM_MAX_PX / (v * MOM_TAU_MS));
+    try { map.panBy(-vx * MOM_TAU_MS * k, -vy * MOM_TAU_MS * k); _momN++; } catch (e) { return false; }
+    return true;
+  };
   /* ⚠ **깃발이 켜진 채 남으면 지도가 영영 안 그려진다** — 「켜는 곳과 끄는 곳이 갈리면 반드시 한쪽이
      남는다」(이 저장소의 반복 사고). 손을 떼는 경로를 **전부** 받는다: 지도 밖에서 놓아도, 탭이
      바뀌어도, 브라우저가 포인터를 회수해도 끝은 끝이다. 캡처 단계로 먼저 받는다. */
-  const _endPan = () => {
+  const _endPan = e => {
     _armed = null;
-    if (_panning) { _panning = false; applyLODSoon(); }   // 놓는 순간 딱 한 번 다시 그린다
+    const wasPan = _panning;
+    if (_panning) { _panning = false; _panEndAt = performance.now(); _frStop(); }
+    if (wasPan && e && (e.type === "pointerup" || e.type === "mouseup")) _momentum();   // 손을 뗀 그 이벤트에서만(blur·cancel엔 안 민다)
+    if (e && (e.type === "pointerup" || e.type === "pointercancel")) _ptrs = Math.max(0, _ptrs - 1);
+    if (wasPan) applyLODSoon();   // 놓는 순간 딱 한 번 다시 그린다 · 직후 click은 무시(_clickEndsPan) · 관성 뒤 idle이 한 번 더 그린다
   };
   ["pointerup", "pointercancel", "mouseup", "touchend", "touchcancel", "blur"]
     .forEach(ev => window.addEventListener(ev, _endPan, true));
@@ -10683,7 +10732,7 @@ function initKakao() {
   // 애니메이션 동안 우리 오버레이 **전부**를 잠깐 내리고 idle의 applyLOD가 복귀시킨다(네이버지도 방식 —
   // 저가치만 내려선 부족하다는 사용자 확인 2026-07-21). 선택 상태(핀·반경·노선 하이라이트)만 유지.
   K.event.addListener(map, "zoom_start", () => {
-    hideTip();
+    hideTip(); _frStart("zoom");
     if (railLineObjs) railLineObjs.forEach(o => { o._sig = ""; o.objs.forEach(l => l.setMap(null)); (o.objsLo || []).forEach(l => l.setMap(null)); (o.builtObjs || []).forEach(l => l.setMap(null)); o.hits.forEach(l => l.setMap(null)); });   // `_sig` 초기화 필수 — 안 지우면 줌 뒤 선이 안 돌아온다(renderRail 주석)
     hjShown.forEach(s => s._kmk && s._kmk.setMap(null));
     for (const f of DONG_GEO.features) if (f._kpolys) f._kpolys.forEach(pg => pg.setMap(null));
@@ -10742,7 +10791,7 @@ function initKakao() {
   };
   window._dbg = { applyLOD, renderHojae, renderDongLabels, map, selfTest,
     // 팬 가드가 실제로 걸리는가 — 「안 그리는 것」이 정상이라 화면엔 표시가 없다. 세어서 확인한다.
-    panStats: () => ({ 요청: _lodAsk, 실제그림: _lodRun, 팬중건너뜀: _lodSkip, 지금팬중: _panning }),
+    panStats: () => ({ 요청: _lodAsk, 실제그림: _lodRun, 팬중건너뜀: _lodSkip, 지금팬중: _panning , 관성: _momN, 마지막속도: _lastV , 포인터: _ptrs, 자취: _trail.length, 자취간격ms: _trail.length ? Math.round(performance.now() - _trail[_trail.length - 1].t) : null, 관성사유: _momWhy }),
     // 층별 소요(ms) — 반복 n회 중앙값. 팬·줌이 굼뜰 때 **어느 층인지 먼저 재고** 고칠 것.
     lodProfile: (n = 7) => Object.fromEntries(_LOD.map(([nm, f]) => {
       const a = []; for (let i = 0; i < n; i++) { const t = performance.now(); f(); a.push(performance.now() - t); }
@@ -11686,8 +11735,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "4772f789c5", "adverse_facilities.json": "cff8899750", "apartments_all.json": "5b1718e05d", "arch_signals.json": "b38d91ef7e", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "d40c364e8b", "corridor_diff.json": "2f331ecddd", "dart_signals.json": "0e213b730c", "dps_signals.json": "456f1da6a3", "eum_backfill_progress.json": "53d1dbdc7d", "eum_enroll.json": "0783bb22e4", "eum_signals.json": "479a9d1e76", "eum_usage.json": "736f9e3c3c", "hospital_signals.json": "93e2d086c8", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "8047ac0478", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "f38f48f073", "logipark_signals.json": "7518d02981", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "d5b26f20c1", "mega_signals.json": "4539c26ae6", "methodology.html": "ced1a8b30a", "park_signals.json": "3a12f837a0", "push_feed.json": "5bde342806", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "46bf601345", "rail_reference.html": "a8a627d75e", "rail_signals.json": "4b55c2025e", "region_gaps.json": "39a2826a51", "regions.json": "c2e6b9f075", "report.html": "dea426b993", "retail_signals.json": "c79c5714db", "road_signals.json": "2dcb159bd6", "school_signals.json": "f5606a3feb", "settings.html": "1ca2007f59", "sfz_signals.json": "fba2135838", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "de1ffc8500", "signals.json": "28d4a8383d", "signals_auto.json": "88c7af2aa6", "signals_jeongbi_all.json": "6422887fa8", "source_status.html": "29941684a8", "sw.js": "bd80e753e7", "thresholds.json": "18534ba3e4", "upis_facility_geom.json": "ff1858be0e", "upis_on_road.json": "5742d44598", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260909a");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "4772f789c5", "adverse_facilities.json": "cff8899750", "apartments_all.json": "5b1718e05d", "arch_signals.json": "a306c6a6de", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "34c8241927", "corridor_diff.json": "ac955e85f1", "dart_signals.json": "a0569662b3", "dps_signals.json": "c52641e69d", "eum_backfill_progress.json": "53d1dbdc7d", "eum_enroll.json": "0783bb22e4", "eum_signals.json": "479a9d1e76", "eum_usage.json": "736f9e3c3c", "hospital_signals.json": "93e2d086c8", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "8047ac0478", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "f38f48f073", "logipark_signals.json": "7518d02981", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "d5b26f20c1", "mega_signals.json": "4539c26ae6", "methodology.html": "ced1a8b30a", "park_signals.json": "3a12f837a0", "push_feed.json": "0e798e67ad", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "03373740a8", "rail_reference.html": "a8a627d75e", "rail_signals.json": "4b55c2025e", "region_gaps.json": "b576415ada", "regions.json": "c2e6b9f075", "report.html": "dea426b993", "retail_signals.json": "c79c5714db", "road_signals.json": "4a2f4d2a73", "school_signals.json": "f5606a3feb", "settings.html": "1ca2007f59", "sfz_signals.json": "fba2135838", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "de1ffc8500", "signals.json": "28d4a8383d", "signals_auto.json": "88c7af2aa6", "signals_jeongbi_all.json": "7b127f1fc9", "source_status.html": "29941684a8", "sw.js": "bd80e753e7", "thresholds.json": "18534ba3e4", "upis_facility_geom.json": "ff1858be0e", "upis_on_road.json": "3c7034526e", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260909b");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
