@@ -525,7 +525,7 @@ B·A·C·S로 되살아났다). 봉인은 QA <code>[연면적모순]</code> <b>�
 자원순환시설이 <b>'강동구청장'</b>(직위)이 되고 문화시설이 '순천시청'이 됐다. 지자체가 발주한 시설은
 그 지자체 청사가 아니다. 개인명은 개인정보라 애초에 쓰지 않는다. <b>애매하면 놓치는 쪽</b>을 택한다 —
 틀린 이름보다 '미확보'가 정직하다.</p>
-<p class="note"><b>블록으로 쪼개진 한 사업의 등급은 합계 연면적으로 잰다</b>(2026-09-08). 같은 사업지구·같은 이름(블록 번호만 다름)·1km 안 조각을 대표 1핀으로 접을 때(<code>block_merge</code>) 대표의 등급은 가장 큰 조각이 아니라 <b>조각 합계</b>로 다시 잰다(<code>block_merge.group_grade</code> — 눈금은 그대로 <code>thresholds.json</code>). 카드의 등급 근거가 「N블록 합계 연면적」을 말하는데 등급만 조각 것이면 근거와 판정이 갈린다(가양동 CJ공장부지 3블록 75.8만㎡가 A — S 눈금 40만). 종전 등급은 <code>lvl_block_from</code>에 남는다. 게이트 <code>check_block_group_grade</code>.</p>
+<p class="note"><b>블록으로 쪼개진 한 사업의 등급은 합계 연면적으로 잰다</b>(2026-09-08). 같은 사업지구·같은 이름(블록 번호만 다름)·1km 안 조각을 대표 1핀으로 접을 때(<code>block_merge</code>) 대표의 등급은 가장 큰 조각이 아니라 <b>조각 합계</b>로 다시 잰다(<code>block_merge.group_grade</code> — 눈금은 그대로 <code>thresholds.json</code>). 카드의 등급 근거가 「N블록 합계 연면적」을 말하는데 등급만 조각 것이면 근거와 판정이 갈린다(2026-09-08 실측: 가양동 CJ공장부지 3블록 75.8만㎡가 A였다 — 눈금은 <code>thresholds.json</code>이 정본이고 기준 설정에서 바뀐다). 종전 등급은 <code>lvl_block_from</code>에 남는다. 게이트 <code>check_block_group_grade</code>.</p>
 <p class="note"><b>블록 지정자는 시설명이 아니다.</b> <code>고덕일반산업단지 A2 블럭 (…50차 신축허가사항변경)</code>이
 고유명으로 통과해 <b>이름 보강 대상에서 아예 빠져</b> 있었고 '미확보' 배지조차 붙지 않았다 —
 화면은 "이름을 안다"고 믿고 있었다. <code>is_generic_name</code>은 괄호 허가이력·블록토큰·산단 접미어·
