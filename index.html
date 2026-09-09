@@ -8092,7 +8092,9 @@ const INBOX_KEY = MB_KEY.inbox;
 let _inbox = mbLoad(INBOX_KEY, { items: [], read: {} });      // items: 최근 200(먼저 본 것이 위) · read: {키|지켜보는 것: 날짜}
 let _feedP = null;
 function feedItems() {
-  if (!_feedP) _feedP = fetch("push_feed.json", { cache: "no-store" }).then(r => r.ok ? r.json() : { items: [] }).then(d => d.items || []).catch(() => []);
+  if (!_feedP) _feedP = fetch("push_feed.json", { cache: "no-store" }).then(r => r.ok ? r.json() : { items: [] })
+    .then(d => { const a = d.items || []; window.__feedN = a.length; return a; })   // 자가검사 ⑦이 재료 도달을 읽는다(2026-09-09)
+    .catch(() => { window.__feedN = 0; return []; });
   return _feedP;
 }
 function inboxMatch(items, watch) {   // 워커 pushMatch의 거울 — 세 종류의 판정을 같은 식으로
@@ -11444,6 +11446,15 @@ function __selfcheck() {
     row("⑥ 첫 화면 막힌 시간(비교용 · 문턱 없음)", !!fr,
         p ? `막힘 ${p.blocked}ms · longtask ${p.longtasks.length}건 · 첫 렌더 ${fr ? fr.at + "ms" : "표식 없음"}` : "__perf 없음");
   } catch (e) { row("⑥ 성능", false, "예외 " + e.message); }
+  try {
+    /* ⑦ 알림함(2026-09-09) — 「배지가 왜 0이야 · 알림이 왜 안 와」에 화면이 스스로 답한다(「반복 질문은 화면이 스스로 답하게」).
+       술어는 실제 렌더의 그 값 그대로(mbWatch · _inbox · inboxUnread) · 지켜보는 것이 0이면 재료를 안 받는 것이 **정상**이라 ✓. */
+    const _on = mbWatch.filter(w => w.on).length, _n = _inbox.items.length, _un = inboxUnread();
+    const _fed = window.__feedN;
+    row("⑦ 알림함 — 지켜보는 것 · 쌓인 알림", _on === 0 || _fed !== 0,
+        _on === 0 ? "지켜보는 것 0 — 재료를 받지 않는다(정상)"
+                  : `지켜봄 ${_on} · 알림 ${_n}(안 읽음 ${_un}) · 재료 ${_fed === undefined ? "아직" : _fed + "건"}`);
+  } catch (e) { row("⑦ 알림함", false, "예외 " + e.message); }
   if (pending) rows.forEach(r => { if (r.결과 === "✗") r.상세 += ` (아직 받는 중: ${pending} — 다 받은 뒤 다시)`; });
   const bad = rows.filter(r => r.결과 === "✗").length;
   try { console.table(rows); } catch (e) {}
@@ -11741,8 +11752,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "4772f789c5", "adverse_facilities.json": "cff8899750", "apartments_all.json": "5b1718e05d", "arch_signals.json": "a306c6a6de", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "079bd9dc6e", "corridor_diff.json": "7fc3e6800a", "dart_signals.json": "a0569662b3", "dps_signals.json": "c52641e69d", "eum_backfill_progress.json": "3c0c4dc819", "eum_enroll.json": "0783bb22e4", "eum_signals.json": "7b174d0c99", "eum_usage.json": "9abb843942", "hospital_signals.json": "93e2d086c8", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "8047ac0478", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "f38f48f073", "logipark_signals.json": "7518d02981", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "d5b26f20c1", "mega_signals.json": "4539c26ae6", "methodology.html": "ced1a8b30a", "park_signals.json": "3a12f837a0", "push_feed.json": "689cb160e1", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "622431791d", "rail_reference.html": "a8a627d75e", "rail_signals.json": "4b55c2025e", "region_gaps.json": "a9d1e8e01c", "regions.json": "c2e6b9f075", "report.html": "dea426b993", "retail_signals.json": "c79c5714db", "road_signals.json": "25979f7cbe", "school_signals.json": "f5606a3feb", "settings.html": "1ca2007f59", "sfz_signals.json": "fba2135838", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "de1ffc8500", "signals.json": "28d4a8383d", "signals_auto.json": "88c7af2aa6", "signals_jeongbi_all.json": "7b127f1fc9", "source_status.html": "9ededcc26b", "sw.js": "bd80e753e7", "thresholds.json": "18534ba3e4", "upis_facility_geom.json": "ff1858be0e", "upis_on_road.json": "efd5ffd9a6", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260909d");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "4772f789c5", "adverse_facilities.json": "cff8899750", "apartments_all.json": "5b1718e05d", "arch_signals.json": "a306c6a6de", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "cc820be0e0", "corridor_diff.json": "fd101e93c1", "dart_signals.json": "a0569662b3", "dps_signals.json": "c52641e69d", "eum_backfill_progress.json": "3c0c4dc819", "eum_enroll.json": "0783bb22e4", "eum_signals.json": "7b174d0c99", "eum_usage.json": "9abb843942", "hospital_signals.json": "93e2d086c8", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "8047ac0478", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "f38f48f073", "logipark_signals.json": "7518d02981", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "d5b26f20c1", "mega_signals.json": "4539c26ae6", "methodology.html": "ced1a8b30a", "park_signals.json": "3a12f837a0", "push_feed.json": "cda428d42e", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "43d0e0c4e1", "rail_reference.html": "a8a627d75e", "rail_signals.json": "4b55c2025e", "region_gaps.json": "58e0da37be", "regions.json": "c2e6b9f075", "report.html": "dea426b993", "retail_signals.json": "c79c5714db", "road_signals.json": "25979f7cbe", "school_signals.json": "f5606a3feb", "settings.html": "1ca2007f59", "sfz_signals.json": "fba2135838", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "de1ffc8500", "signals.json": "28d4a8383d", "signals_auto.json": "88c7af2aa6", "signals_jeongbi_all.json": "7b127f1fc9", "source_status.html": "9ededcc26b", "sw.js": "bd80e753e7", "thresholds.json": "18534ba3e4", "upis_facility_geom.json": "ff1858be0e", "upis_on_road.json": "23414638b9", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260909e");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
