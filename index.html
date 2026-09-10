@@ -611,6 +611,13 @@
   .apt-dot.sel { filter:drop-shadow(0 0 4px rgba(0,0,0,.42)); }
   .apt-dot.sel path { fill:var(--apt2); stroke-width:2.1; }
   .apt-dot.lf { transform:translate(-50%,-50%); }   /* Leaflet divIcon은 좌상단 앵커 — 중심 보정 */
+  /* ══ 현위치 점 (2026-09-10 알렉스 「현위치 모드인 경우 호갱노노처럼 빨간 점으로 표시해주자」) ══
+     ⚠ 색이 아니라 **형태**가 분류 마커와 가른다 — 호재 마커는 링(도넛)·등급 크기이고 이건 **꽉 찬 점 + 흰 링**이다.
+       분류색 교통(#b9003d)과도 다른 값을 쓴다(그 색은 분류가 쓰는 채널이다 · DESIGN §1).
+     ⚠ 클릭을 먹지 않는다 — 지도 위 표시일 뿐 대상이 아니다. */
+  .gpsdot { width:14px; height:14px; border-radius:50%; background:#ea3323;
+    box-shadow:0 0 0 3px #fff, 0 1px 4px rgba(0,0,0,.35); pointer-events:none; }
+  .gpsdot.lf { transform:translate(-50%,-50%); }   /* Leaflet divIcon은 좌상단 앵커 — 중심 보정(.apt-dot과 같은 문법) */
   /* ★ 아이콘 안 건수 (2026-09-05 알렉스 「호갱노노처럼 집 아이콘을 키우고 총 호재 건수만 넣어 클릭」).
      CLAUDE.md §7 「전 단지 상시 배지 전시」의 **명시적 예외**(알렉스 확정) — 등급·점수가 아니라 반경 내 호재 **개수**(P3 · 조회조건 무관 ·
      카드·상세와 같은 함수 aptCount). 라벨 LOD와 같은 문턱(카카오 APT_LV=4 ↔ Leaflet APT_ZOOM=14)에서만 28px+숫자, 그보다 멀면 19px 무숫자.
@@ -4423,6 +4430,69 @@ const viewH = () => document.documentElement.clientHeight || window.innerHeight;
 /* ── 지도 공용 헬퍼 (2026-07-29 전수 감사 A — Leaflet 전용 API 무가드 호출 6곳이 카카오에서
    크래시하던 클래스의 원천 해결). 전역 함수는 window._map을 직접 부르지 말고 이것만 쓴다.
    html_check가 전역 스코프의 직접 호출을 게이트한다. */
+/* ══ 위치 요청 창구 하나 — **필요할 때만 브라우저에 묻는다** (2026-09-10 알렉스 「호갱노노는 현위치
+   허용 안 물어보는데 왜 호재맵은 계속 물어보는거야」) ═══════════════════════════════════════════
+   ⚠ 먼저 사실: **권한 팝업은 브라우저가 띄우는 것이라 사이트가 끌 수 없다.** 한 번 「허용」이 저장되면
+     다시 안 뜨고, 「이번만 허용」·시크릿·사이트 데이터 삭제면 매번 뜬다 — 그건 우리 쪽에서 못 막는다.
+   ⇒ **우리 몫은 「필요 이상으로 묻지 않는 것」**이고 셋을 한다:
+     ① 권한 상태를 먼저 본다(`navigator.permissions`) — **거부** 상태면 아예 요청하지 않고 안내만 한다
+        (종전엔 헛되이 호출해 브라우저를 한 번 더 건드렸다).
+     ② **세션에서 한 번 얻으면 재사용**한다 — 두 번째 클릭부터는 브라우저를 건드리지 않는다
+        (종전 `maximumAge:60000`은 1분만 지나면 다시 잡으러 갔다).
+     ③ 새로 잡는 것은 **사용자가 다시 누를 때**만(`fresh`).
+   ☠ 저장하지 않는다(세션 한정) — 「지난번 자리」는 지금 위치가 아니다(P2). */
+const GEO_OPT = { enableHighAccuracy: false, timeout: 8000, maximumAge: 600000 };
+async function geoState() {
+  try {
+    if (!navigator.permissions || !navigator.permissions.query) return "unknown";
+    return (await navigator.permissions.query({ name: "geolocation" })).state;   // granted·prompt·denied
+  } catch (e) { return "unknown"; }
+}
+/* 위치 하나를 가져온다 — (좌표, 사유). 이미 아는 자리가 있으면 **묻지 않는다**. */
+async function getMyLoc(opt) {
+  if (!navigator.geolocation) return [null, "이 브라우저는 위치 기능을 지원하지 않습니다."];
+  if (_myLoc && !(opt && opt.fresh)) return [_myLoc, null];
+  if (await geoState() === "denied")
+    return [null, "위치 권한이 거부돼 있습니다. 주소창의 자물쇠에서 「위치」를 허용해 주세요."];
+  return await new Promise(res => navigator.geolocation.getCurrentPosition(pos => {
+    const { latitude: la, longitude: ln } = pos.coords;
+    if (la < KOREA_BB.s || la > KOREA_BB.n || ln < KOREA_BB.w || ln > KOREA_BB.e) {
+      res([null, "현재 위치가 국내 범위 밖입니다. 호재맵은 국내 신호만 다룹니다."]); return;
+    }
+    setMyLoc(la, ln); res([{ lat: la, lon: ln }, null]);
+  }, err => res([null, err && err.code === 1
+      ? "위치 권한이 거부돼 있습니다. 주소창의 자물쇠에서 「위치」를 허용해 주세요."
+      : err && err.code === 3 ? "위치를 확인하는 데 시간이 너무 걸립니다. 잠시 후 다시 눌러 주세요."
+      : "일시적으로 내 위치를 확인할 수 없습니다."]), GEO_OPT));
+}
+/* ══ 현위치 점 — **자 하나**가 두 렌더러를 다 그린다 (2026-09-10 알렉스 「호갱노노처럼 빨간 점으로」) ══
+   ☠ 이 저장소가 반복해 밟은 형태가 「규칙이 한쪽에만」이다 — 카카오에만 그리면 Leaflet 폴백에서
+     조용히 사라진다. 그리는 자를 하나로 두고 렌더러 분기는 그 안에서만 한다(게이트가 배선을 본다).
+   ⚠ **저장하지 않는다**(세션 한정) — 「지난번에 있던 자리」는 지금 위치가 아니다. 저장하면 화면이
+     낡은 위치를 사실처럼 말하게 된다(P2). 새로고침하면 다시 눌러야 하는 것이 정직하다. */
+let _myLoc = null, _myLocOv = null;
+function setMyLoc(lat, lon) {
+  _myLoc = (typeof lat === "number" && typeof lon === "number") ? { lat, lon } : null;
+  renderMyLoc();
+}
+function renderMyLoc() {
+  const M = window._map;
+  if (!M) return;
+  if (_myLocOv) {   // 먼저 걷는다 — 옮기는 것이 아니라 다시 그린다(두 렌더러의 API가 다르다)
+    try { if (M.setView) M.removeLayer(_myLocOv); else _myLocOv.setMap(null); } catch (e) {}
+    _myLocOv = null;
+  }
+  if (!_myLoc) return;
+  if (M.setView) {   // Leaflet
+    _myLocOv = L.marker([_myLoc.lat, _myLoc.lon], { interactive: false, zIndexOffset: 900,
+      icon: L.divIcon({ className: "", html: '<div class="gpsdot lf"></div>', iconSize: null }) }).addTo(M);
+  } else {           // 카카오
+    const d = document.createElement("div"); d.className = "gpsdot";
+    _myLocOv = new kakao.maps.CustomOverlay({ position: new kakao.maps.LatLng(_myLoc.lat, _myLoc.lon),
+      content: d, zIndex: 30, yAnchor: .5, xAnchor: .5 });
+    _myLocOv.setMap(M);
+  }
+}
 function mapGo(lat, lon, zLeaflet, opt) {
   if (!window._map) return;
   const M = window._map;
@@ -7998,19 +8068,12 @@ function mbToast(t) {
   clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove("on"), 4200);
 }
 
-function mbUseGps() {
-  if (!navigator.geolocation) { mbToast("이 브라우저는 위치 기능을 지원하지 않습니다."); return; }
-  mbToast("현재 위치를 확인하는 중…");
-  navigator.geolocation.getCurrentPosition(pos => {
-    const { latitude: la, longitude: ln } = pos.coords;
-    if (la < KOREA_BB.s || la > KOREA_BB.n || ln < KOREA_BB.w || ln > KOREA_BB.e) {
-      mbToast("현재 위치가 국내 범위 밖입니다. 호재맵은 국내 신호만 다룹니다."); return;
-    }
-    mbSetAnchorAt("gps", la, ln, "현재 위치");
-  }, err => {
-    mbToast(err && err.code === 1 ? "위치 권한이 거부돼 있습니다. 주소창의 자물쇠에서 「위치」를 허용해 주세요."
-      : "일시적으로 내 위치를 확인할 수 없습니다.");
-  }, { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 });
+async function mbUseGps() {
+  if (!_myLoc) mbToast("현재 위치를 확인하는 중…");
+  const [p, why] = await getMyLoc();      // 창구 하나 — 아는 자리가 있으면 브라우저를 안 건드린다
+  if (!p) { mbToast(why); return; }
+  setMyLoc(p.lat, p.lon);
+  mbSetAnchorAt("gps", p.lat, p.lon, "현재 위치");
 }
 
 /* 집·직장 등록 = **지금 기준점(또는 지도 중심)을 그 이름으로 저장**한다.
@@ -8579,24 +8642,14 @@ function mylocMount() {
     msg.textContent = t; msg.style.display = "";
     clearTimeout(msg._t); msg._t = setTimeout(() => { msg.style.display = "none"; }, 6000);
   };
-  btn.onclick = () => {
-    if (!navigator.geolocation) { say("이 브라우저는 위치 기능을 지원하지 않습니다."); return; }
+  btn.onclick = async () => {
     btn.disabled = true; btn.classList.add("busy"); msg.style.display = "none";
-    const done = () => { btn.disabled = false; btn.classList.remove("busy"); };
-    navigator.geolocation.getCurrentPosition(pos => {
-      done();
-      const { latitude: la, longitude: ln } = pos.coords;
-      // ⚠ 국외면 **가지 않는다** — 지도가 대양으로 날아가는 대신 사실을 말한다(한반도 클램프와 같은 뜻).
-      if (la < KOREA_BB.s || la > KOREA_BB.n || ln < KOREA_BB.w || ln > KOREA_BB.e) {
-        say("현재 위치가 국내 범위 밖입니다. 호재맵은 국내 신호만 다룹니다."); return;
-      }
-      mapGo(la, ln, MYLOC_ZOOM);
-    }, err => {
-      done();
-      say(err && err.code === 1 ? "위치 권한이 거부돼 있습니다. 브라우저 주소창의 자물쇠에서 「위치」를 허용해 주세요."
-        : err && err.code === 3 ? "위치를 확인하는 데 시간이 너무 걸립니다. 잠시 후 다시 눌러 주세요."
-        : "일시적으로 내 위치를 확인할 수 없습니다.");
-    }, { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 });
+    // ⚠ 국외면 **가지 않는다** — 지도가 대양으로 날아가는 대신 사실을 말한다(창구가 그 판정을 한다).
+    const [p, why] = await getMyLoc();   // 창구 하나 — 아는 자리가 있으면 브라우저를 안 건드린다
+    btn.disabled = false; btn.classList.remove("busy");
+    if (!p) { say(why); return; }
+    setMyLoc(p.lat, p.lon);              // 현위치 점(2026-09-10 알렉스 「호갱노노처럼 빨간 점으로」)
+    mapGo(p.lat, p.lon, MYLOC_ZOOM);
   };
   el.appendChild(btn); el.appendChild(msg);
   window._mapCtlPlacers.push(place);
@@ -11893,8 +11946,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "4772f789c5", "adverse_facilities.json": "834c8acaae", "apartments_all.json": "c77ade9d15", "arch_signals.json": "c3ab940f7f", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "83a5bff90b", "corridor_diff.json": "0cf53986e3", "dart_signals.json": "90067b621d", "dps_signals.json": "f5afb790f1", "eum_backfill_progress.json": "9678df57af", "eum_enroll.json": "b9abdba088", "eum_signals.json": "923a0b29d3", "eum_usage.json": "fee5135fd6", "hospital_signals.json": "afc0e348d9", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "c016d48cf5", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "3262b25993", "logipark_signals.json": "9062b8f910", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "ef5d633514", "mega_signals.json": "b3d9c745d4", "methodology.html": "b5eda2f530", "park_signals.json": "8dfced7564", "privacy.html": "328298f753", "push_feed.json": "9a484b09e4", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "2c7b5fec36", "rail_reference.html": "6362291c57", "rail_signals.json": "315d9a9619", "region_gaps.json": "6b3e3e678a", "regions.json": "6bdbe80410", "report.html": "271653859d", "retail_signals.json": "e21eb5d26a", "road_signals.json": "0bb453b5ab", "school_signals.json": "eb616c986a", "settings.html": "1ca2007f59", "sfz_signals.json": "dcdaa755a3", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "bca878891a", "signals.json": "3f3409fd49", "signals_auto.json": "007df4f416", "signals_jeongbi_all.json": "e098e54556", "source_status.html": "e6ec94f54b", "sw.js": "bd80e753e7", "thresholds.json": "cf37048dda", "upis_facility_geom.json": "09db72f806", "upis_on_road.json": "f17c69f854", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260910e");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "4772f789c5", "adverse_facilities.json": "834c8acaae", "apartments_all.json": "c77ade9d15", "arch_signals.json": "c3ab940f7f", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "0a8835d205", "corridor_diff.json": "a2f5c7caa5", "dart_signals.json": "90067b621d", "dps_signals.json": "f5afb790f1", "eum_backfill_progress.json": "9678df57af", "eum_enroll.json": "b9abdba088", "eum_signals.json": "923a0b29d3", "eum_usage.json": "fee5135fd6", "hospital_signals.json": "afc0e348d9", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "c016d48cf5", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "3262b25993", "logipark_signals.json": "9062b8f910", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "ef5d633514", "mega_signals.json": "b3d9c745d4", "methodology.html": "b5eda2f530", "park_signals.json": "8dfced7564", "privacy.html": "328298f753", "push_feed.json": "3a72620a57", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "4e6f55b5c9", "rail_reference.html": "6362291c57", "rail_signals.json": "315d9a9619", "region_gaps.json": "79b99dd394", "regions.json": "6bdbe80410", "report.html": "271653859d", "retail_signals.json": "e21eb5d26a", "road_signals.json": "a4c79394ee", "school_signals.json": "eb616c986a", "settings.html": "1ca2007f59", "sfz_signals.json": "dcdaa755a3", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "bca878891a", "signals.json": "3f3409fd49", "signals_auto.json": "007df4f416", "signals_jeongbi_all.json": "e098e54556", "source_status.html": "e6ec94f54b", "sw.js": "bd80e753e7", "thresholds.json": "cf37048dda", "upis_facility_geom.json": "09db72f806", "upis_on_road.json": "b0c05ee4d9", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260910f");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
