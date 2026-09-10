@@ -370,7 +370,10 @@
     if (ur) {
       const con = (ur.contradict || []).length;
       bits.push(`개통 대조 <b>${(ur.on_road ?? 0).toLocaleString()}건</b> 기존 도로 위`
-              + `<span class="k">(표시 보류 ${ur.muted ?? 0} · 성격어↔개통 모순 ${con} · 미측정 ${ur.unmeasured ?? 0} · ${ur.ran || "?"})</span>`);
+              + `<span class="k">(표시 보류 ${ur.muted ?? 0} · 성격어↔개통 모순 ${con} · 미측정 ${ur.unmeasured ?? 0}`
+              /* ★ **못 잼 ≠ 안 겹침** (2026-09-10 세션111) — 링크 0건은 「겹치지 않는다」가 아니라 조회가 빈 결과를
+                 준 것일 수 있다. 다음 --go가 다시 묻지만(자가 치유) **줄지 않으면 조회가 아니라 자를 의심한다**. */
+              + `${ur.unmeasured_links ? " · 못 잼(링크 0건) " + ur.unmeasured_links : ""} · ${ur.ran || "?"})</span>`);
     }
     h += `<div style="margin-top:8px">🧩 ${bits.join(" · ")}</div>`;
   }
