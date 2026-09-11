@@ -1,1 +1,118 @@
-{"last_run":"2026-09-12 03:37","result":"성공","build":"20260912a","fetch":true,"deploy":true,"duration_s":5860,"changes":{"add":184,"rem":23,"merged":3,"opened":0,"trans":2,"done":0},"timing":[{"cmd":"python3 dart_fetch.py","s":670.5},{"cmd":"python3 jeongbi_fetch.py","s":584.1},{"cmd":"python3 juso_verify.py","s":541.4},{"cmd":"python3 local_gosi_discover.py --sweep --apply","s":478.7},{"cmd":"python3 road_gosi_discover.py --body --apply","s":341.5},{"cmd":"python3 g2b_design_fetch.py --days 27 --apply","s":300.1},{"cmd":"python3 build_road_ic.py","s":279.8},{"cmd":"python3 collect_1yr.py","s":264.2},{"cmd":"python3 road_bid_fetch.py --days 30","s":249.2},{"cmd":"python3 dps_fetch.py","s":229.9},{"cmd":"python3 upis_road_centerline.py --apply","s":214.7},{"cmd":"python3 collect_capital.py","s":136.0},{"cmd":"python3 build_rail_v2.py --osm","s":118.8},{"cmd":"python3 eum_gosi.py","s":103.1},{"cmd":"python3 arch_fetch.py --enrich-names","s":97.6},{"cmd":"python3 rocm_gosi.py --targets --apply --recent","s":83.9},{"cmd":"python3 road_gosi.py --index","s":78.6},{"cmd":"python3 qa_check.py","s":75.3},{"cmd":"python3 build_road.py","s":73.0},{"cmd":"python3 road_gosi_geom.py --apply","s":72.0},{"cmd":"python3 seoul_sibo.py --index","s":69.0},{"cmd":"python3 bldrgst_enrich.py","s":62.7},{"cmd":"python3 block_gosi.py","s":58.9},{"cmd":"python3 road_endpoint_link.py --go --n 250","s":48.2},{"cmd":"python3 geom_despike.py --apply","s":39.3}]}
+{
+ "last_run": "2026-09-12 03:37",
+ "result": "성공",
+ "build": "20260912a",
+ "fetch": true,
+ "deploy": true,
+ "duration_s": 5860,
+ "changes": {
+  "add": 184,
+  "rem": 23,
+  "merged": 3,
+  "opened": 0,
+  "trans": 2,
+  "done": 0
+ },
+ "timing": [
+  {
+   "cmd": "python3 dart_fetch.py",
+   "s": 670.5
+  },
+  {
+   "cmd": "python3 jeongbi_fetch.py",
+   "s": 584.1
+  },
+  {
+   "cmd": "python3 juso_verify.py",
+   "s": 541.4
+  },
+  {
+   "cmd": "python3 local_gosi_discover.py --sweep --apply",
+   "s": 478.7
+  },
+  {
+   "cmd": "python3 road_gosi_discover.py --body --apply",
+   "s": 341.5
+  },
+  {
+   "cmd": "python3 g2b_design_fetch.py --days 27 --apply",
+   "s": 300.1
+  },
+  {
+   "cmd": "python3 build_road_ic.py",
+   "s": 279.8
+  },
+  {
+   "cmd": "python3 collect_1yr.py",
+   "s": 264.2
+  },
+  {
+   "cmd": "python3 road_bid_fetch.py --days 30",
+   "s": 249.2
+  },
+  {
+   "cmd": "python3 dps_fetch.py",
+   "s": 229.9
+  },
+  {
+   "cmd": "python3 upis_road_centerline.py --apply",
+   "s": 214.7
+  },
+  {
+   "cmd": "python3 collect_capital.py",
+   "s": 136.0
+  },
+  {
+   "cmd": "python3 build_rail_v2.py --osm",
+   "s": 118.8
+  },
+  {
+   "cmd": "python3 eum_gosi.py",
+   "s": 103.1
+  },
+  {
+   "cmd": "python3 arch_fetch.py --enrich-names",
+   "s": 97.6
+  },
+  {
+   "cmd": "python3 rocm_gosi.py --targets --apply --recent",
+   "s": 83.9
+  },
+  {
+   "cmd": "python3 road_gosi.py --index",
+   "s": 78.6
+  },
+  {
+   "cmd": "python3 qa_check.py",
+   "s": 75.3
+  },
+  {
+   "cmd": "python3 build_road.py",
+   "s": 73.0
+  },
+  {
+   "cmd": "python3 road_gosi_geom.py --apply",
+   "s": 72.0
+  },
+  {
+   "cmd": "python3 seoul_sibo.py --index",
+   "s": 69.0
+  },
+  {
+   "cmd": "python3 bldrgst_enrich.py",
+   "s": 62.7
+  },
+  {
+   "cmd": "python3 block_gosi.py",
+   "s": 58.9
+  },
+  {
+   "cmd": "python3 road_endpoint_link.py --go --n 250",
+   "s": 48.2
+  },
+  {
+   "cmd": "python3 geom_despike.py --apply",
+   "s": 39.3
+  }
+ ]
+}
