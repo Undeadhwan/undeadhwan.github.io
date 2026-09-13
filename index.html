@@ -3659,7 +3659,7 @@ const lvlBasisText = v => LVL_BASIS_TEXT[v] || v;
 /* ══ 상세 카드 두 층 (2026-09-08 세션108 · 알렉스 「상세 카드에 사용자 관점에서 불필요한 내용이 너무 많어 — 위치정확도, 근거 아래쪽에 링크를 열면 어쩌구 저꺼구 등. 정리가 필요해」)
    사용자 층(항상) = 이름·유형·칩·신선도·트랙·다음 관찰·등급 근거·대지위치·블록·영향권·접근점·효력·사업비·구간·기존 도로·근거 링크·소속 지구·증축·비고.
    근거 층(접힘 · `details.evidence`) = 단계 근거·위치 정확도 블록(또는 선형 정확도·범위)·고시 종류·성격 근거·통합 흡수·날짜 근거·위치 근거·
-   시설·지점 특성·원본 팩트시트·링크 여는 법·건물명 근거·시설명 미확보 설명. **빼는 게 아니라 접는다** — 검증하려는 사람에게는 전부 남는다(P2·P5).
+   시설·지점 특성·원본 팩트시트·건축물대장(`registryRow` · 2026-09-13)·링크 여는 법·건물명 근거·시설명 미확보 설명. **빼는 게 아니라 접는다** — 검증하려는 사람에게는 전부 남는다(P2·P5).
    ⚠ 한계는 접어도 **한 줄은 보인다**: summary가 `precSummary`(◇ ±50m 지번 기준 / 선형 근사·공식)를 든다 — 시안 §06 「한계는 눈에 보이게」를
      문단이 아니라 요약으로 지킨다. 게이트 = html_check.card_layers_check. DESIGN.md 「상세 카드 두 층」 행. */
 function precSummary(s) {
@@ -3676,6 +3676,32 @@ function linkHowTo(s) {
   if (/data\.gg\.go\.kr/.test(u0)) return `<div class="note" style="margin-top:3px">※ 링크를 열면 <b>「일반 정비 사업 추진 현황」 데이터셋</b>이 바로 열립니다(Sheet 탭). 표에서 <b>${nm}</b> 로 찾으세요.<br>원본 수치는 위 팩트시트에 있어 안 가셔도 됩니다. 경기도 분기 갱신이라 최신 변동은 늦을 수 있습니다.</div>`;
   if (/cleanup\.seoul|gg\.go\.kr/.test(u0)) return `<div class="note" style="margin-top:3px">※ 링크를 열면 <b>정비몽땅</b>이 열립니다. <b>고시정보 &gt; 사업장 목록</b>에서 사업장명 칸에 <b>${nm}</b> 를 넣고 검색 → 결과 줄 오른쪽 <b>[사업장]</b> 버튼을 누르면 조합 홈페이지의 <b>사업개요</b>(세대수·연면적·용적률)가 나옵니다.<br>원본 수치는 위 팩트시트에 있어 안 가셔도 됩니다.</div>`;
   return "";
+}
+/* ★ 건축물대장 (2026-09-13 세션115 · 알렉스 「넣어야지」) — `bldrgst_enrich`가 준공 신호에 붙인 **대장 표제부**(준공된 건물의 등록 사실).
+   필드는 2026-07-19부터 실렸는데 화면 참조가 0이었다(field_reach 한 단 아래가 처음 보여줌 · 154건). 원본 팩트시트는 **허가 시점 계획값**이라
+   둘이 다를 수 있다 — 다르면 허가값을 옆에 적는다(판단하지 않고 병기 · P2). 근거 층인 이유: 이미 지어진 건물의 사실이라 「곧 바뀔 신호」가 아니다.
+   ⚠ 어댑터(`buildArchSignals`)가 `bldrgst`를 옮겨야 화면에 온다(어댑터 함정). 게이트 = html_check.registry_row_check */
+function registryRow(s) {
+  const r = s.bldrgst;
+  // ★ 짝이 판정된 기록만 보인다(`match` · bldrgst_enrich.pick_register — 같은 허가일의 표제부). 종전 기록은 `rows[0]`이라
+  //   남의 건물(허가 전 사용승인)·여러 동 중 한 동이 64/154건이었다(2026-09-13 실측) — 판정 없는 기록은 거짓일 수 있어 안 보인다.
+  if (!r || !["단일", "동합계", "부분", "면적미상"].includes(r.match)) return "";
+  // 버림으로 맞춘다 — 허가 연면적(`area_m2`)은 커넥터가 소수점을 버린 값이라 반올림하면 4,513.82 ↔ 4,513이 「다름」으로 뜬다(2026-09-13 실측)
+  const area = Math.trunc(Number(r.tot_area) || 0), permitArea = Math.trunc(Number(s.area_m2) || 0);
+  const areaHint = r.match === "동합계" ? `${r.dong_n}개 동 합계`
+    : r.match === "부분" ? `허가 연면적 ${permitArea.toLocaleString()}㎡ 중 등록된 ${r.dong_n}개 동`
+    : r.match === "면적미상" ? `${r.dong_n}개 동` : "";
+  const purpDiff = r.main_purps && s.purp && r.main_purps !== s.purp;
+  return `<details class="factsheet"><summary class="fs-h">건축물대장 — ${r.match === "부분" ? "일부 동이 등록된" : "준공된"} 건물의 등록 사실 (${esc(String(r.src || "국토부 건축HUB 건축물대장 표제부"))})</summary>
+    <div class="fs-grid">
+      ${r.bld_nm ? `<span>건물명</span><b>${esc(String(r.bld_nm))}</b>` : ""}
+      ${r.main_purps ? `<span>주용도</span><b>${esc(String(r.main_purps))}${purpDiff ? ` <span class="hmhint">허가 ${esc(String(s.purp))}</span>` : ""}</b>` : ""}
+      ${area ? `<span>연면적</span><b class="num">${area.toLocaleString()}㎡${areaHint ? ` <span class="hmhint">${areaHint}</span>` : ""}</b>` : ""}
+      ${r.use_apr_day ? `<span>${r.dong_n > 1 ? "사용승인일(마지막 동)" : "사용승인일"}</span><b>${fmtDay(r.use_apr_day)}</b>` : ""}
+      ${Number(r.hhld_cnt) > 0 ? `<span>세대수</span><b class="num">${Number(r.hhld_cnt).toLocaleString()}</b>` : ""}
+      ${Number(r.ho_cnt) > 0 ? `<span>호수</span><b class="num">${Number(r.ho_cnt).toLocaleString()}</b>` : ""}
+      ${r.road_addr ? `<span>도로명주소</span><b class="full">${esc(String(r.road_addr))}</b>` : ""}
+    </div></details>`;
 }
 function evidenceFold(s) {
   const rows = [
@@ -3695,6 +3721,7 @@ function evidenceFold(s) {
     SUB_CAVEAT[subOf(s)] ? `<div class="kv"><b>시설 특성</b> <span class="hmhint">${SUB_CAVEAT[subOf(s)]}</span></div>` : "",
     s.pt_type === "road_ic" && s.ic_note ? `<div class="kv"><b>지점 특성</b> ${s.ic_note.replace(/\*\*/g, "")}</div>` : "",
     s.__factsheet || "",
+    registryRow(s),   // 건축물대장 — 허가값(팩트시트) 다음에 준공 뒤 등록 사실(2026-09-13 세션115)
     linkHowTo(s),
     s.nm_basis ? `<div class="kv"><b>건물명 근거</b> ${s.nm_basis}</div>` : "",
     s.name_status === "미확보" ? `<div class="kv"><b>시설명</b> <span class="hmhint">미확보 — 허가 원본에 고유 명칭이 없어 <b>동·지번으로 표시</b>합니다. 건축물대장은 <b>준공 후에 생성</b>되므로 인가·착공 단계에선 공식 명칭이 없을 수 있습니다. <b>사업의 존재</b>는 허가·착공 일자(위 팩트시트)가 근거이며, 이름을 임의로 지어내지 않습니다.</span></div>` : "",
@@ -4099,6 +4126,7 @@ function buildArchSignals() {
     plat_area: s.plat_area || null, vlrat: s.vlrat || null, jiyuk: s.jiyuk || null,
     road_addr: s.road_addr || null, block: s.block || null,
     hhld_cnt: s.hhld_cnt || 0, ho_cnt: s.ho_cnt || 0,
+    bldrgst: s.bldrgst || null,   // 건축물대장 표제부(준공 뒤 등록 사실 · 근거 층 registryRow) — 2026-09-13 세션115: 154건이 실렸는데 어댑터가 안 옮겨 화면 참조 0이었다
     // 생애주기 이력(lifecycle.py가 부착) — 어댑터가 필드를 골라 복사하므로 명시하지 않으면 화면까지 안 온다(2026-07-18)
     stage_history: s.stage_history || null, first_seen: s.first_seen || null, pk: s.pk || null,
     // 블록 조각 접기(block_merge) — **여기 안 적으면 화면까지 안 온다**(위 주석과 같은 함정을
@@ -12034,8 +12062,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "deeed85d09", "adverse_facilities.json": "960206d766", "apartments_all.json": "ca09ad7671", "arch_signals.json": "b89db9a374", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "599080e72d", "corridor_diff.json": "188cf33c2c", "dart_signals.json": "fd96fa3e7c", "dps_signals.json": "b3168ba469", "eum_backfill_progress.json": "c84d4f465e", "eum_enroll.json": "3c0e606ed9", "eum_signals.json": "b8e3240180", "eum_usage.json": "eb0d49bbb7", "hospital_signals.json": "3514590b41", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "d14449cf3b", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "3262b25993", "logipark_signals.json": "92bf3e5e17", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "00ded0fdc8", "mega_signals.json": "ff04c37b5a", "methodology.html": "b5eda2f530", "park_signals.json": "e541d0163e", "privacy.html": "328298f753", "push_feed.json": "6b0bfe0056", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "6325353a80", "rail_reference.html": "653896c3da", "rail_signals.json": "315d9a9619", "region_gaps.json": "75c8a94866", "regions.json": "6bdbe80410", "report.html": "85ee8bc04c", "retail_signals.json": "093601560e", "road_signals.json": "1b18b67c8f", "school_signals.json": "51626cd2b2", "settings.html": "1ca2007f59", "sfz_signals.json": "f000dc9dbe", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "2aef03e366", "signals.json": "3f3409fd49", "signals_auto.json": "80a08acec2", "signals_jeongbi_all.json": "f6cc6b06a4", "source_status.html": "8424afabcc", "sw.js": "bd80e753e7", "thresholds.json": "cf37048dda", "upis_facility_geom.json": "95b0a79f3e", "upis_on_road.json": "3993050fe5", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260913g");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "deeed85d09", "adverse_facilities.json": "960206d766", "apartments_all.json": "ca09ad7671", "arch_signals.json": "7c7f6d2ce6", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "44974a38e2", "corridor_diff.json": "741b0f00b4", "dart_signals.json": "fd96fa3e7c", "dps_signals.json": "b3168ba469", "eum_backfill_progress.json": "c84d4f465e", "eum_enroll.json": "3c0e606ed9", "eum_signals.json": "a10c032fdb", "eum_usage.json": "eb0d49bbb7", "hospital_signals.json": "3514590b41", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "d14449cf3b", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "3262b25993", "logipark_signals.json": "92bf3e5e17", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "00ded0fdc8", "mega_signals.json": "ff04c37b5a", "methodology.html": "b5eda2f530", "park_signals.json": "e541d0163e", "privacy.html": "328298f753", "push_feed.json": "420f6e0ca1", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "6a573a1a81", "rail_reference.html": "653896c3da", "rail_signals.json": "315d9a9619", "region_gaps.json": "9b9961261e", "regions.json": "6bdbe80410", "report.html": "85ee8bc04c", "retail_signals.json": "093601560e", "road_signals.json": "6ac6e439a3", "school_signals.json": "51626cd2b2", "settings.html": "1ca2007f59", "sfz_signals.json": "f000dc9dbe", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "2aef03e366", "signals.json": "3f3409fd49", "signals_auto.json": "80a08acec2", "signals_jeongbi_all.json": "f6cc6b06a4", "source_status.html": "198be05b62", "sw.js": "bd80e753e7", "thresholds.json": "cf37048dda", "upis_facility_geom.json": "95b0a79f3e", "upis_on_road.json": "51ca930233", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260913h");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
