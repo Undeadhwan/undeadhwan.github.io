@@ -79,6 +79,14 @@
      ⇒ 판정은 선택자 열거가 아니라 **본문 그릇 표식**(`.pagebody`) — 새 탭이 생겨도 표식만 붙이면 따라온다
        (게이트 `html_check.body_scrollbar_check`가 `setView`의 뷰와 대조한다). 짧은 영역은 지시대로 계속 감춘다.
      ⚠ 새 색을 만들지 않는다 — 손잡이는 `--line2`, 트랙은 투명. */
+  /* ★ 쪽 이동(2026-09-13) — 새 색 없음: 면 `#fff` · 테두리 `--line2` · 글자 `--ink2`, 눌림/비활성은 `--ink3`.
+     칩(`.chip`) 문법을 그대로 쓰되 셋이 한 덩어리라 `inline-flex`. */
+  .lpager { display:inline-flex; align-items:center; gap:10px; }
+  .lpager .lpg { font:inherit; font-size:12.5px; font-weight:600; color:var(--ink2); background:#fff;
+    border:1px solid var(--line2); border-radius:999px; padding:6px 13px; cursor:pointer; }
+  .lpager .lpg:hover:not(:disabled) { border-color:var(--ink3); color:var(--ink); }
+  .lpager .lpg:disabled { color:var(--line2); border-color:var(--line); cursor:default; }
+  .lpager .lpn { font-size:12.5px; color:var(--ink3); font-variant-numeric:tabular-nums; }
   .pagebody { scrollbar-width:thin; scrollbar-color:var(--line2) transparent; -ms-overflow-style:auto; }
   .pagebody::-webkit-scrollbar { width:10px; height:10px; display:block; }
   .pagebody::-webkit-scrollbar-track { background:transparent; }
@@ -11364,17 +11372,22 @@ function setView(mode) {
    지도는 '어디'에 강하고 목록은 '무엇이 최근에 움직였나'에 강하다. 우리는 신호 추적 미디어라
    시간축이 핵심인데 지도엔 시간축이 없다 — 그 축을 담당하는 화면.
    원칙: ① 표시 조건은 도크 하나(visible)를 그대로 쓴다 ② 등급·단계 표기는 지도 문법 재사용(`ringOf`) ③ 정렬만 목록 고유. */
+/* ★★ **목록은 쪽으로 나눈다 — 무한 스크롤 폐기** (2026-09-13 알렉스 「스크롤바가 내리다 보면 다시 늘어가서 불편하네?」).
+   시안 §04는 「페이지 버튼 없이 스크롤로 이어붙인다」였는데, 그 문법은 **막대를 쓸 수 없게 만든다**:
+   60행씩 붙일 때마다 총 높이가 늘어 막대 비율이 18.7% → 9% → 5.7%로 계속 줄고 위치가 뒤로 밀린다
+   (2026-09-13 실측). ☠ 대안 둘을 재고 **둘 다 기각**했다 — 남은 몫만큼 자리를 비워 두면 예약 높이가
+   **47만px**이라 막대가 **1px**이 되고(총 높이도 15.7% 늘었다), 전량 렌더는 **1,233ms · DOM 10만 노드**에
+   역시 47만px다. **7,230건을 한 스크롤에 담는 한 막대는 어떤 방식으로도 쓸모가 없다** — 그래서 나눈다.
+   ⇒ 한 쪽 `LIST_PAGE`행 · 머리가 「N / M쪽」을 말하고 쪽을 옮기면 맨 위로. 막대는 **항상 한 쪽 분량**이다. */
 const LIST_PAGE = 60;
-let listShown = LIST_PAGE, listReady = false;
-let _listHasMore = false, _listBusy = false;   // 무한 스크롤 상태(시안 §04)
+let listPage = 1, listReady = false;           // 1-based 쪽 번호
 function initList() {
   if (!listReady) {
     listReady = true;
-    document.getElementById("l-sort").onchange = () => { listShown = LIST_PAGE; renderList(); };
-    document.getElementById("l-q").oninput = () => { clearTimeout(window._lq); window._lq = setTimeout(() => { listShown = LIST_PAGE; renderList(); }, 200); };
-    document.getElementById("l-more").onclick = () => { listShown += LIST_PAGE; renderList(); };
+    document.getElementById("l-sort").onchange = () => { listPage = 1; renderList(); };
+    document.getElementById("l-q").oninput = () => { clearTimeout(window._lq); window._lq = setTimeout(() => { listPage = 1; renderList(); }, 200); };
   }
-  listShown = LIST_PAGE;
+  listPage = 1;
   renderList();
 }
 /* 선택 단지 기준 거리 — 없으면 null(거리순은 그때 선택 불가) */
@@ -11588,8 +11601,9 @@ function renderList() {
        전체의 비율이 아니다(실측 2026-09-13: 7,230건 중 60건인데 막대는 20% — 「5분의 1쯤 왔나」로 읽힌다).
        그래서 「지금 N건 그림」을 한 줄로 적는다 — 전량을 그리면(업데이트 탭처럼) 이 줄은 저절로 사라진다.
        ⚠ 이 문장은 **모르는 것을 지어내지 않는다**: 막대는 그린 것 안에서의 위치, 숫자가 전체 중 몫이다(P2). */
-    + (rows.length > listShown
-        ? ` <span class="lvsub lvpage">지금 <span class="mono">${Math.min(listShown, rows.length).toLocaleString()}</span>건 그림 — 내리면 더 붙습니다</span>`
+    /* 쪽 표기 — 한 쪽뿐이면 적지 않는다(없는 축을 만들지 않는다) */
+    + (rows.length > LIST_PAGE
+        ? ` <span class="lvsub lvpage"><span class="mono">${listPage}</span> / <span class="mono">${Math.ceil(rows.length / LIST_PAGE)}</span>쪽</span>`
         : "");
   /* ★★ **카드 → 고정 열 표** (2026-08-13 시안 §04).
      *"목록의 일은 「비교」입니다. 카드로 쌓으면 한 화면에 6건밖에 안 들어가고 값이 세로로 흩어져
@@ -11604,32 +11618,28 @@ function renderList() {
   if (!rows.length) {
     el.innerHTML = `<div class="pickhint" style="padding:24px">표시 조건에 맞는 호재 없음 — 왼쪽 조건을 풀면 나타납니다.</div>`;
   } else {
-    el.appendChild(listTable(rows.slice(0, listShown), apt, sort));
+    el.appendChild(listTable(rows.slice((listPage - 1) * LIST_PAGE, listPage * LIST_PAGE), apt, sort));
   }
-  /* 무한 스크롤 (시안 §04: 「페이지 버튼 없이 스크롤로 계속 이어붙입니다 — 총 건수는 이미 상단에」).
-     ☠ 처음엔 IntersectionObserver로 짰다가 **두 번 조용히 실패**했다: ① root가 뷰포트 기본값이라
-       자체 스크롤을 갖는 `#listv`를 못 봤고 ② root를 고친 뒤에도 감시 대상(숨긴 버튼의 부모)이
-       **높이 0**이라 발화하지 않았다. 스크롤 위치를 직접 재면 두 함정이 다 사라진다 —
-       「최고의 프로세스는 간결한 프로세스」.
-     ⚠ 버튼은 **감춘 폴백**으로 남긴다. 스크롤 계산이 어긋나도 목록이 잘린 채 멈추지는 않는다. */
-  /* ⚠ **버튼을 감추지 않는다** — 시안은 「페이지 버튼 없이」이지만 스크롤 적재를 **아직 검증하지
-     못했다**(2026-08-13). 에이전트 브라우저 창이 숨겨진 상태라 `innerHeight`·요소 높이가 전부 0으로
-     읽혀 스크롤 시험이 성립하지 않았다(한때 `#listv` 높이 151px를 레이아웃 결함으로 오진했는데,
-     스크린샷은 정상 전체 높이였다 — **계측 오류였다**).
-     검증 못 한 것을 「된다」로 두면 목록이 60건에서 잘린 채 멈출 수 있다. 그건 시안이 막으려던
-     정보 손실보다 나쁘다. ⇒ 실제 브라우저에서 스크롤 적재를 확인한 뒤 버튼을 내린다. */
-  const more = document.getElementById("l-more");
-  _listHasMore = rows.length > listShown;
-  more.style.display = _listHasMore ? "inline-block" : "none";
-  const lvEl = document.getElementById("listv");
-  if (!lvEl._infBound) {
-    lvEl._infBound = true;
-    lvEl.addEventListener("scroll", () => {
-      if (!_listHasMore || _listBusy) return;
-      if (lvEl.scrollTop + lvEl.clientHeight < lvEl.scrollHeight - 400) return;
-      _listBusy = true; listShown += LIST_PAGE; renderList(); _listBusy = false;
-    }, { passive: true });
-  }
+  /* ★ 쪽 이동 — 「이전 / N / M / 다음」. 쪽을 옮기면 **맨 위로** 돌아간다(같은 자리에 남으면 어디인지 모른다).
+     ⚠ 버튼은 `#l-more` 자리를 그대로 쓴다 — 새 그릇을 만들지 않는다. */
+  const pages = Math.max(1, Math.ceil(rows.length / LIST_PAGE));
+  if (listPage > pages) listPage = pages;
+  const nav = document.getElementById("l-more");
+  nav.style.display = pages > 1 ? "inline-flex" : "none";
+  nav.className = "lpager";
+  nav.innerHTML = pages > 1
+    ? `<button class="lpg" ${listPage <= 1 ? "disabled" : ""} data-go="${listPage - 1}">‹ 이전</button>`
+      + `<span class="lpn"><span class="mono">${listPage}</span> / <span class="mono">${pages}</span></span>`
+      + `<button class="lpg" ${listPage >= pages ? "disabled" : ""} data-go="${listPage + 1}">다음 ›</button>`
+    : "";
+  nav.querySelectorAll("button[data-go]").forEach(b => {
+    b.onclick = () => {
+      const g = +b.dataset.go;
+      if (g < 1 || g > pages) return;
+      listPage = g; renderList();
+      document.getElementById("listv").scrollTop = 0;
+    };
+  });
 }
 /* ══════════ 등급 없음(미정) 목록 ══════════ */
 // 모든 신호 통합 후 등급 없음(levelOf==="미정")만 — 결측 사유 표기. 사용자가 보고 소스·기준 보완.
@@ -12048,8 +12058,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "deeed85d09", "adverse_facilities.json": "960206d766", "apartments_all.json": "ca09ad7671", "arch_signals.json": "b89db9a374", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "580cd39309", "corridor_diff.json": "c71c50f84d", "dart_signals.json": "fd96fa3e7c", "dps_signals.json": "b3168ba469", "eum_backfill_progress.json": "045d054f7f", "eum_enroll.json": "3c0e606ed9", "eum_signals.json": "200a5e2b10", "eum_usage.json": "1204e49ca9", "hospital_signals.json": "3514590b41", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "d14449cf3b", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "3262b25993", "logipark_signals.json": "92bf3e5e17", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "00ded0fdc8", "mega_signals.json": "ff04c37b5a", "methodology.html": "b5eda2f530", "park_signals.json": "e541d0163e", "privacy.html": "328298f753", "push_feed.json": "bba1ba56df", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "ca0890415d", "rail_reference.html": "653896c3da", "rail_signals.json": "315d9a9619", "region_gaps.json": "63280d7bf2", "regions.json": "6bdbe80410", "report.html": "85ee8bc04c", "retail_signals.json": "093601560e", "road_signals.json": "8fd0f3e5a2", "school_signals.json": "51626cd2b2", "settings.html": "1ca2007f59", "sfz_signals.json": "f000dc9dbe", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "2aef03e366", "signals.json": "3f3409fd49", "signals_auto.json": "80a08acec2", "signals_jeongbi_all.json": "f6cc6b06a4", "source_status.html": "bf7f16df8b", "sw.js": "bd80e753e7", "thresholds.json": "cf37048dda", "upis_facility_geom.json": "95b0a79f3e", "upis_on_road.json": "784c9a6529", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260913c");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "deeed85d09", "adverse_facilities.json": "960206d766", "apartments_all.json": "ca09ad7671", "arch_signals.json": "b89db9a374", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "8a418da584", "corridor_diff.json": "b6ebbb7b17", "dart_signals.json": "fd96fa3e7c", "dps_signals.json": "b3168ba469", "eum_backfill_progress.json": "045d054f7f", "eum_enroll.json": "3c0e606ed9", "eum_signals.json": "200a5e2b10", "eum_usage.json": "1204e49ca9", "hospital_signals.json": "3514590b41", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "d14449cf3b", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "3262b25993", "logipark_signals.json": "92bf3e5e17", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "00ded0fdc8", "mega_signals.json": "ff04c37b5a", "methodology.html": "b5eda2f530", "park_signals.json": "e541d0163e", "privacy.html": "328298f753", "push_feed.json": "e8bf0af3e2", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "2a5b2f3893", "rail_reference.html": "653896c3da", "rail_signals.json": "315d9a9619", "region_gaps.json": "9fc200bf87", "regions.json": "6bdbe80410", "report.html": "85ee8bc04c", "retail_signals.json": "093601560e", "road_signals.json": "c616453df5", "school_signals.json": "51626cd2b2", "settings.html": "1ca2007f59", "sfz_signals.json": "f000dc9dbe", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "2aef03e366", "signals.json": "3f3409fd49", "signals_auto.json": "80a08acec2", "signals_jeongbi_all.json": "f6cc6b06a4", "source_status.html": "bf7f16df8b", "sw.js": "bd80e753e7", "thresholds.json": "cf37048dda", "upis_facility_geom.json": "95b0a79f3e", "upis_on_road.json": "cebef135d2", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260913d");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
