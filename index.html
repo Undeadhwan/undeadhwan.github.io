@@ -10041,7 +10041,10 @@ function initKakao() {
            「경계가 안 보인다」로 읽혔다 — 비교 대상이 없으니 눈금 원만 덩그러니 남는다.
          ⚠ 관련 판정 기준은 그대로다(그 호재의 영향 반경이 이 단지를 포함하는가) — `aptFocus`와
            `dimOpacity`가 같은 자를 쓴다. 다만 그 자가 **표시 여부**가 아니라 **명암**을 정한다. */
-      .filter(s => aptFocus ? (visible(s) || aptFocus.has(s)) && !isStaleFinished(s) : visible(s))
+      /* ★ **싼 판정을 먼저** (2026-09-13 세션115 · 알렉스 「화면 작동시 부드럽고 빠르게」). 세 필터는 모두 순수 판정이라 순서를 바꿔도
+         결과 집합이 같다 — 종전엔 신호 8천 건 전부에 `visible`(분류·단계·등급·성격·완공 1년·지역)을 먼저 돌리고 화면 범위는 마지막에 쟀다.
+         팬이 멎을 때마다 도는 자리라 폰(CPU×4) 조작 CPU 1·2위가 `visible`·`visibleNoRegion`이었다(`perf_probe.mjs`). 숫자 사각형 비교를 앞으로. */
+      .filter(s => { const c = s.geometry.coordinates; return c[0] >= _bw && c[0] <= _be && c[1] >= _bs && c[1] <= _bn; })
       // 망형(전철·도로): 광역 뷰(lv≥9=4km)엔 선만, **도시 뷰(lv≤8=2km)부터 역·IC**.
       // 2026-07-22엔 lv≤7이었는데 실측 결과 **기준이 뒤집혀 있었다**(2026-07-23 사용자 제보):
       // lv8에서 B급 정비구역 65개는 보이는데 **S급 GTX 역은 0개**였다 — 등급 LOD와 역·IC LOD가
@@ -10057,7 +10060,7 @@ function initKakao() {
         if (s.pt_type === "road_ic") return !filter.lines.has("도로선");
         return true;
       })
-      .filter(s => { const c = s.geometry.coordinates; return c[0] >= _bw && c[0] <= _be && c[1] >= _bs && c[1] <= _bn; });
+      .filter(s => aptFocus ? (visible(s) || aptFocus.has(s)) && !isStaleFinished(s) : visible(s));   // 가장 비싼 판정은 범위·줌을 통과한 것에만(위 주석)
     /* ★★ **무손실 축약** (2026-08-13 리디자인 시안 §01 — 시안 맨 앞의 「전제」다).
        *"조회조건에 걸린 호재는 하나도 숨기지 않습니다 … 등급이나 줌 레벨을 이유로 조회 결과에서
        빠지는 항목은 없습니다."*
@@ -11452,7 +11455,8 @@ function listTable(rows, apt, sort) {
    「필터 탭 ↔ 목록 탭」 왕복이 사라진다(그게 원래 문제였다).
    ★ 필터 상태·핸들러는 도크와 **하나**다(`data-tog` + `bindFilterClicks`). 모양만 칩으로 갈린다. */
 let _msDet = "peek";
-function msSet(d) { _msDet = d; const el = document.getElementById("msheet"); if (el) el.dataset.det = d; }
+function msSet(d) { _msDet = d; const el = document.getElementById("msheet"); if (el) el.dataset.det = d;
+  if (d !== "peek" && typeof _msDirty !== "undefined" && _msDirty) renderSheet(); }   // 접힌 동안 미룬 목록을 펼칠 때 그린다(renderSheet 주석 · 2026-09-13)
 function initSheet() {
   const sh = document.getElementById("msheet"); if (!sh || sh._init) return;
   sh._init = true;
@@ -11510,15 +11514,24 @@ function msListInto(box, rows, apt, cap) {
   box.querySelectorAll(".ms-item").forEach(el =>
     el.addEventListener("click", () => showSignal(rows[+el.dataset.i], true)));
 }
+/* ★ **안 보이는 시트는 그리지 않는다 · 접힌 시트는 건수만 센다** (2026-09-13 세션115 · 알렉스 「화면 작동시 부드럽고 빠르게」).
+   시트는 CSS가 `max-width:768px`에서만 보이는데(데스크톱은 display:none) renderAll·팬 끝마다 **8천 건을 정렬**하고 목록 HTML을 지었다.
+   실측(`perf_probe.mjs` 폰 CPU×4 · 라이브 20260913i): 부트 CPU 2위·조작 CPU 5위가 이 정렬이었다. 접힘(peek)에선 목록이 화면 밖이다.
+   ⇒ 데스크톱이면 표식만 남기고 돌아간다 · 접힘이면 건수·칩까지만 · 펼치거나(msSet) 폭이 모바일로 바뀌면(아래 리스너) 미룬 것을 그린다.
+   판정 조건은 CSS와 **같은 문자열**이다 — 둘이 갈리면 보이는 시트가 안 그려진다. */
+const MS_MQ = "(max-width: 768px)";
+let _msDirty = false;
 function renderSheet() {
   const sh = document.getElementById("msheet"); if (!sh) return;
+  if (!matchMedia(MS_MQ).matches) { _msDirty = true; return; }
   initSheet();
   const sortEl = document.getElementById("ms-sort");
   /* ★ 시트가 세는 것은 **이 화면 안**이다(갱신 시안 §11) — 지도 위에 떠 있는 시트가
      지도에 없는 것까지 세면 「보이는 것」과 「적힌 수」가 갈린다. 뷰포트 pool은 지도가 만든다. */
   const vp = window._viewPool;
-  const rows = sortSignals(vp && vp.length ? vp.filter(visible) : allSignalsFlat().filter(visible),
-                           sortEl ? sortEl.value : "level", null);
+  const _pool = vp && vp.length ? vp.filter(visible) : allSignalsFlat().filter(visible);
+  const _peek = _msDet === "peek";
+  const rows = _peek ? _pool : sortSignals(_pool, sortEl ? sortEl.value : "level", null);   // 접힘은 건수만 쓴다 — 정렬은 펼칠 때
   /* 아직 받는 중이면 여기도 말한다 — 지도 배지와 **같은 규칙**이다(한쪽에만 걸면 모바일이 조용히 예외). */
   document.getElementById("ms-n").innerHTML = '이 화면 안 <b onclick="explainTip(event,\'sheet\')">' + rows.length.toLocaleString() + '</b>건'
     + (SRC_PENDING.size ? ' <span class="hjauto">· 불러오는 중</span>' : '');   // 탭하면 건수 설명(모바일은 호버가 없다 · countExplain 한 자)
@@ -11563,6 +11576,8 @@ function renderSheet() {
      ☠ 그리고 `slice(0, 120)`이 **말없이 잘라 냈다** — 머리에는 「5,212건」이라 적어 놓고
        목록은 120건에서 끝났다(화면이 사실을 말하지 않는 자리 · 「no silent caps」).
        ⇒ 목록 탭과 같은 문법으로 **적재량을 말하고** 더 보기를 둔다. */
+  if (_peek) { _msDirty = true; return; }   // 접힘 — 목록은 화면 밖이다(펼치면 msSet이 다시 부른다 · 위 주석)
+  _msDirty = false;
   const apt = listAnchorApt();
   const box = document.getElementById("ms-list");
   const show = Math.min(rows.length, _msShown);
@@ -11576,21 +11591,37 @@ function renderSheet() {
   const mb = document.getElementById("ms-more");
   if (mb) mb.addEventListener("click", e => { e.stopPropagation(); _msShown += MS_PAGE; renderSheet(); });
 }
+/* 폭이 모바일로 바뀌면 미룬 시트를 그린다 — 데스크톱에선 renderSheet가 표식만 남기고 돌아가므로(위 주석 · 2026-09-13 세션115) */
+try { matchMedia(MS_MQ).addEventListener("change", e => { if (e.matches && _msDirty) renderSheet(); }); } catch (e) {}
 /* ══ 정렬 규칙은 **한 곳**이다 — 목록 탭과 모바일 시트가 같은 함수를 부른다 ══
    두 화면이 같은 축을 다르게 정렬하면 같은 데이터가 다른 순서로 보인다(사본이 갈라지는 형태).
    · 문서상 움직임순: 원문 날짜를 가진 신호가 먼저, 관측일뿐인 신호는 **숨기지 않고** 뒤로
      (숨기면 그건 필터다 — 필터는 도크 하나뿐이라는 원칙을 지킨다).
    · 등급순의 미판정은 뒤로 — 등급 축 밖이라 S~C 사이에 끼울 자리가 없다. */
+/* ★ **정렬 키는 한 번만 잰다** (2026-09-13 세션115 · 알렉스 「화면 작동시 부드럽고 빠르게」 · `perf_probe.mjs` 실측).
+   종전 비교 함수는 비교마다 `levelOf`·`movBasis`·`distToApt`를 다시 부르고 `localeCompare`를 새로 돌렸다 — 8천 건 정렬이면
+   비교가 ~10만 번이다. 폰(CPU×4) 부트 CPU 2위·조작 CPU 5위가 이 비교 함수였다(모바일 시트가 renderAll마다 전량을 정렬).
+   ⇒ 원소마다 키를 한 번 계산해 두고 정렬한다(결과 순서는 종전과 같다 — 같은 키 · 같은 비교 · 안정 정렬).
+   `Intl.Collator`는 인자 없는 `localeCompare`와 **같은 기본 로케일 규칙**이고, 한 개를 재사용한다(localeCompare는 호출마다 콜레이터를 만든다). */
+const _sortColl = new Intl.Collator();
 function sortSignals(pool, sort, apt) {
-  const rec = s => s.last_movement || "";
-  const lvR = s => { const i = ["S", "A", "B", "C"].indexOf(levelOf(s)); return i < 0 ? 9 : i; };
-  return pool.slice().sort(
-    sort === "moved" ? ((a, b) => (movBasis(a) === "observed") - (movBasis(b) === "observed") || rec(b).localeCompare(rec(a)))
-    : sort === "level" ? ((a, b) => lvR(a) - lvR(b) || rec(b).localeCompare(rec(a)))
-    : sort === "phase" ? ((a, b) => PHASE_IDX[phaseOf(a)] - PHASE_IDX[phaseOf(b)] || rec(b).localeCompare(rec(a)))
-    : sort === "dist" ? ((a, b) => distToApt(a, apt) - distToApt(b, apt))
-    : ((a, b) => rec(b).localeCompare(rec(a))));
+  const keyed = pool.map((s, i) => ({ s, i, rec: s.last_movement || "",
+    k: sort === "moved" ? (movBasis(s) === "observed" ? 1 : 0)
+     : sort === "level" ? (i => i < 0 ? 9 : i)(["S", "A", "B", "C"].indexOf(levelOf(s)))
+     : sort === "phase" ? PHASE_IDX[phaseOf(s)]
+     : sort === "dist" ? distToApt(s, apt) : 0 }));
+  const byRec = (a, b) => _sortColl.compare(b.rec, a.rec);
+  keyed.sort(sort === "dist" ? ((a, b) => a.k - b.k)
+    : sort === "moved" || sort === "level" || sort === "phase" ? ((a, b) => a.k - b.k || byRec(a, b))
+    : byRec);
+  return keyed.map(x => x.s);
 }
+/* ★ **연이어 붙일 때 같은 조회 결과를 다시 만들지 않는다** (2026-09-13 세션115 · 알렉스 「화면 작동시 부드럽고 빠르게」).
+   스크롤로 300행을 더 붙일 때마다 8천 건 필터·정렬을 다시 하고 표를 **처음부터**(600·900·1,200행…) 지었다 — 붙일수록 느려진다.
+   실측(`perf_probe.mjs` 폰 CPU×4 · 라이브 20260913i): 목록 스크롤 중 longtask 334ms(최대 195ms).
+   ⇒ 조회 결과(`rows`)는 **입력 서명이 같을 때만** 재사용하고(신호 세대 · 렌더 세대 · 조회조건 · 지역 · 검색어 · 정렬 · 기준 단지 — 도크 패싯 메모와 같은 재료),
+     표는 이미 그린 행 뒤에 **새 행만** 붙인다. 서명이 하나라도 다르면 종전과 똑같이 처음부터 짓는다. */
+let _listCache = null;
 function renderList() {
   const sortSel = document.getElementById("l-sort");
   const apt = listAnchorApt();
@@ -11600,9 +11631,12 @@ function renderList() {
   dOpt.textContent = apt ? `거리순 (${apt.n} 기준)` : "거리순 (단지 선택 시)";
   if (!apt && sortSel.value === "dist") sortSel.value = "level";   // 기본과 같은 축으로 되돌린다(2026-08-11 기본이 등급순으로 바뀜)
   const q = document.getElementById("l-q").value.trim();
-  const pool = allSignalsFlat().filter(visible).filter(s => !q || (sigTitle(s) || "").includes(q) || `${s.sd || ""} ${s.sg || ""} ${s.dong || ""}`.includes(q));
   const sort = sortSel.value;
-  const rows = sortSignals(pool, sort, apt);
+  const _lk = [SIG_VER, typeof _relEpoch !== "undefined" ? _relEpoch : 0, filterSig(), regionLabel(), q, sort,
+               apt ? `${apt.n}|${apt.lat}|${apt.lon}` : ""].join("§");
+  const _hit = !!(_listCache && _listCache.key === _lk);
+  const rows = _hit ? _listCache.rows
+    : sortSignals(allSignalsFlat().filter(visible).filter(s => !q || (sigTitle(s) || "").includes(q) || `${s.sd || ""} ${s.sg || ""} ${s.dong || ""}`.includes(q)), sort, apt);
   const byCat = {}; rows.forEach(s => { const c = catOf(s); byCat[c] = (byCat[c] || 0) + 1; });
   // 이번 주 집계도 출처를 가른다 — 섞으면 "이번 주 2,588건 움직임"이라는 거짓 headline이 된다(P2).
   const wk = rows.filter(s => inWeek(s.last_movement));
@@ -11627,12 +11661,19 @@ function renderList() {
        여기서 새로 정하면 지도와 목록이 갈라진다(이 저장소가 반복해 밟은 「규칙이 한쪽에만」).
      ★ 근거를 제목 아래로 — 등급 근거·출처를 부제로 **항상** 노출한다(펼치지 않아도 「왜 A인지」가 보인다). */
   const el = document.getElementById("l-list");
-  el.innerHTML = "";
-  if (!rows.length) {
-    el.innerHTML = `<div class="pickhint" style="padding:24px">표시 조건에 맞는 호재 없음 — 왼쪽 조건을 풀면 나타납니다.</div>`;
+  const _tb = el.querySelector("table.ltab > tbody");
+  if (_hit && rows.length && _tb && _listCache.shown < listShown && _tb.rows.length === _listCache.shown) {
+    // 연이어 붙이기 — 같은 조회 결과면 **새 행만** 붙인다(행은 같은 빌더가 짓는다 · 위 주석)
+    _tb.append(...listTable(rows.slice(_listCache.shown, listShown), apt, sort).tBodies[0].rows);
   } else {
-    el.appendChild(listTable(rows.slice(0, listShown), apt, sort));
+    el.innerHTML = "";
+    if (!rows.length) {
+      el.innerHTML = `<div class="pickhint" style="padding:24px">표시 조건에 맞는 호재 없음 — 왼쪽 조건을 풀면 나타납니다.</div>`;
+    } else {
+      el.appendChild(listTable(rows.slice(0, listShown), apt, sort));
+    }
   }
+  _listCache = { key: _lk, rows, shown: Math.min(listShown, rows.length) };
   /* 연이어 붙이기 — 스크롤이 **표 끝 400px 안**에 오면 다음 `LIST_PAGE`행. 버튼(`#l-more`)은 폴백으로 남긴다
      (스크롤 이벤트가 안 오는 환경에서도 목록이 잘린 채 멈추지 않게). */
   const more = document.getElementById("l-more");
@@ -12065,8 +12106,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "deeed85d09", "adverse_facilities.json": "960206d766", "apartments_all.json": "ca09ad7671", "arch_signals.json": "ff1040a26c", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "584354fbb8", "corridor_diff.json": "317548432b", "dart_signals.json": "fd96fa3e7c", "dps_signals.json": "b3168ba469", "eum_backfill_progress.json": "c84d4f465e", "eum_enroll.json": "3c0e606ed9", "eum_signals.json": "a10c032fdb", "eum_usage.json": "eb0d49bbb7", "hospital_signals.json": "3514590b41", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "d14449cf3b", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "3262b25993", "logipark_signals.json": "92bf3e5e17", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "00ded0fdc8", "mega_signals.json": "ff04c37b5a", "methodology.html": "b5eda2f530", "park_signals.json": "e541d0163e", "privacy.html": "328298f753", "push_feed.json": "bfafafff34", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "beace6eb80", "rail_reference.html": "653896c3da", "rail_signals.json": "315d9a9619", "region_gaps.json": "36e3d7aac7", "regions.json": "6bdbe80410", "report.html": "85ee8bc04c", "retail_signals.json": "093601560e", "road_signals.json": "aa00155daf", "school_signals.json": "51626cd2b2", "settings.html": "1ca2007f59", "sfz_signals.json": "f000dc9dbe", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "2aef03e366", "signals.json": "3f3409fd49", "signals_auto.json": "80a08acec2", "signals_jeongbi_all.json": "f6cc6b06a4", "source_status.html": "198be05b62", "sw.js": "bd80e753e7", "thresholds.json": "cf37048dda", "upis_facility_geom.json": "95b0a79f3e", "upis_on_road.json": "ca356c3759", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260913i");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "deeed85d09", "adverse_facilities.json": "960206d766", "apartments_all.json": "ca09ad7671", "arch_signals.json": "ff1040a26c", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "b1dec54b03", "corridor_diff.json": "fc00e7f2e4", "dart_signals.json": "fd96fa3e7c", "dps_signals.json": "b3168ba469", "eum_backfill_progress.json": "c84d4f465e", "eum_enroll.json": "3c0e606ed9", "eum_signals.json": "a10c032fdb", "eum_usage.json": "eb0d49bbb7", "hospital_signals.json": "3514590b41", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "d14449cf3b", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "3262b25993", "logipark_signals.json": "92bf3e5e17", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "00ded0fdc8", "mega_signals.json": "ff04c37b5a", "methodology.html": "b5eda2f530", "park_signals.json": "e541d0163e", "privacy.html": "328298f753", "push_feed.json": "0dedca51f4", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "ca0c83188c", "rail_reference.html": "653896c3da", "rail_signals.json": "315d9a9619", "region_gaps.json": "4883a1f2c5", "regions.json": "6bdbe80410", "report.html": "85ee8bc04c", "retail_signals.json": "093601560e", "road_signals.json": "fc210a3d38", "school_signals.json": "51626cd2b2", "settings.html": "1ca2007f59", "sfz_signals.json": "f000dc9dbe", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "2aef03e366", "signals.json": "3f3409fd49", "signals_auto.json": "80a08acec2", "signals_jeongbi_all.json": "f6cc6b06a4", "source_status.html": "198be05b62", "sw.js": "bd80e753e7", "thresholds.json": "cf37048dda", "upis_facility_geom.json": "95b0a79f3e", "upis_on_road.json": "351e21d02e", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260913j");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
