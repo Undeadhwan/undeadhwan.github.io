@@ -329,6 +329,21 @@ function diffPaths() {
   return out;
 }
 function diffCount() { return diffPaths().length; }
+/* 바꾼 값의 **경로+값 목록** — 원격 저장 본문에 `_patch`로 동봉한다(2026-09-13 세션116 · 핸드오프 할 일 1).
+   ☠ 통째 CFG만 보내면 「원격 값 불러오기」로 옛 원격본을 바탕 삼은 저장이 그 뒤 코드가 더한 절·어휘를 지운다(09-13 v11 실측 — 두 절 누락 · 옛 인가 어휘).
+   반영기(thresholds_pull.merge_remote)는 이 목록이 있으면 **그 경로만** 파일에 놓는다. 자는 diffPaths와 같은 걷기(경로 문자열 ↔ 경로 배열). */
+function diffChanges() {
+  const out = [];
+  const walk = (a, b, p) => {
+    for (const k of Object.keys(a || {})) {
+      if (k.startsWith("_")) continue;
+      if (typeof a[k] === "object" && a[k] !== null && !Array.isArray(a[k])) walk(a[k], b?.[k], p.concat(k));
+      else if (JSON.stringify(a[k]) !== JSON.stringify(b?.[k])) out.push({ path: p.concat(k), value: a[k] });
+    }
+  };
+  walk(CFG, ORIG, []);
+  return out;
+}
 
 /* ① 로컬 저장 서버 — thresholds.json에 **바로 쓰고** 라이브 배포까지 한다.
    실패 사유(구조 검증 반려 등)를 삼키지 않는다 — 그대로 던져 위에서 말하게 한다. */
@@ -356,9 +371,12 @@ async function saveRemote() {
      저장소가 IP·UA는 스스로 남긴다. ⚠ ORIG를 갈아치우기 **전에** 계산해야 한다. */
   const d = diffPaths();
   const note = `${d.length}개 변경: ${d.slice(0, 5).join(", ")}${d.length > 5 ? ` 외 ${d.length - 5}개` : ""}`;
+  // 본문 = CFG 전체(창구 검증용) + `_patch`(바꾼 키만 · 반영기는 이것만 파일에 놓는다) — 바탕 버전은 파일의 `_원격_반영`(ORIG)이 말한다
+  const body = Object.assign(Object.fromEntries(Object.entries(CFG).filter(([k]) => k !== "_patch")),
+    { _patch: { base: ((ORIG && ORIG[PULL_MARK]) || {}).버전 || 0, changes: diffChanges() } });
   const r = await fetch(api("/save?note=" + encodeURIComponent(note)), { method: "POST",
     headers: { "Content-Type": "application/json", "X-Admin-Token": tok },
-    body: JSON.stringify(CFG, null, 2) });
+    body: JSON.stringify(body, null, 2) });
   let j = null;
   try { j = await r.json(); } catch (e) { /* 본문이 JSON이 아니면 아래 상태코드로 말한다 */ }
   if (r.status === 401) {
@@ -554,7 +572,12 @@ async function checkPending() {
     j = await r.json();
   } catch (e) { return; }
   if (!j || !j.version || !j.data) return;   // 저장된 게 없으면(version 0) 말할 것도 없다
-  if (JSON.stringify(canon(j.data)) === JSON.stringify(canon(CFG))) return;
+  /* ★ 원격이 **파일보다 새로울 때만** 말한다 (2026-09-13 세션116). 종전엔 값이 다르기만 하면 떴다 — 원격이 파일보다 **오래돼도**(파일은 코드로도 진화한다)
+     「아직 안 가져갔다」고 말했고, 「원격 값 불러오기」가 그 옛 본문으로 CFG를 통째 바꿔 그 위에서 저장한 v11이 두 절을 잃었다. 자 = 원격 version ↔ 파일 `_원격_반영.버전`. */
+  const taken = ((CFG && CFG[PULL_MARK]) || {}).버전 || 0;
+  if (!(j.version > taken)) return;
+  const pc = (j.data._patch && Array.isArray(j.data._patch.changes)) ? j.data._patch.changes : null;
+  if (!pc && JSON.stringify(canon(j.data)) === JSON.stringify(canon(CFG))) return;
   let p = document.getElementById("pend");
   if (!p) {
     p = document.createElement("div"); p.id = "pend"; p.className = "warn";
@@ -567,8 +590,14 @@ async function checkPending() {
       이대로 저장하면 그 값을 덮어씁니다.
       <button id="pendload" style="margin-left:8px">원격 값 불러오기</button>`;
   p.querySelector("#pendload").onclick = () => {
-    // ORIG(=파일)는 그대로 두고 CFG만 바꾼다 — 그러면 **무엇이 다른지**가 파란 칸으로 보인다
-    CFG = j.data; render();
+    // ORIG(=파일)는 그대로 두고 CFG만 바꾼다 — 그러면 **무엇이 다른지**가 파란 칸으로 보인다.
+    // ★ 통째로 바꾸지 않는다(2026-09-13): 저장본의 `_patch.changes`(바꾼 키만)를 파일 위에 얹고, 그것이 없는 옛 저장본은 값만 deep merge(파일에만 있는 절은 남긴다).
+    const next = structuredClone(ORIG);
+    const setPath = (o, path, v) => { let c = o; for (const k of path.slice(0, -1)) { if (typeof c[k] !== "object" || c[k] === null) c[k] = {}; c = c[k]; } c[path[path.length - 1]] = v; };
+    const merge = (base, over) => { for (const [k, v] of Object.entries(over || {})) { if (k.startsWith("_")) continue;
+      if (v && typeof v === "object" && !Array.isArray(v) && base[k] && typeof base[k] === "object" && !Array.isArray(base[k])) merge(base[k], v); else base[k] = v; } };
+    if (pc) pc.forEach(ch => { if (Array.isArray(ch.path) && ch.path.length) setPath(next, ch.path, ch.value); }); else merge(next, j.data);
+    CFG = next; render();
     p.innerHTML = `<b>원격 값을 불러왔습니다</b> — 버전 ${esc(j.version)}. 파란 칸이
       <code>thresholds.json</code>과 다른 값입니다(아직 저장하지 않았습니다).`;
   };
