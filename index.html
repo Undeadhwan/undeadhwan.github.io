@@ -72,6 +72,19 @@
        새 스크롤 영역을 만들 때마다 한 줄씩 빠뜨리는 구조라 전역으로 올린다(사본을 만들지 않는다). */
   * { scrollbar-width:none; -ms-overflow-style:none; }
   *::-webkit-scrollbar { width:0; height:0; display:none; }
+  /* ★★ **긴 본문은 예외 — 막대가 정보다** (2026-09-13 알렉스 「목록페이지에 스크롤바가 없네 · 업데이트 페이지도 마찬가지」).
+     위 지시(2026-08-13)가 지운 자리는 **도크·지도 축 칩·칩줄·모바일 시트 행** 넷으로 전부 **짧은** 영역이었는데,
+     전역(`*`)으로 올리면서 **탭 본문 둘까지** 삼켰다. 실측 2026-09-13(뷰포트 711px): 업데이트 7,888px(11.1배) ·
+     목록 3,502→11,733px(내릴수록 늚). 짧은 영역에서 막대는 장식이지만 **이만큼 긴 본문에서는 위치·분량 정보**다.
+     ⇒ 판정은 선택자 열거가 아니라 **본문 그릇 표식**(`.pagebody`) — 새 탭이 생겨도 표식만 붙이면 따라온다
+       (게이트 `html_check.body_scrollbar_check`가 `setView`의 뷰와 대조한다). 짧은 영역은 지시대로 계속 감춘다.
+     ⚠ 새 색을 만들지 않는다 — 손잡이는 `--line2`, 트랙은 투명. */
+  .pagebody { scrollbar-width:thin; scrollbar-color:var(--line2) transparent; -ms-overflow-style:auto; }
+  .pagebody::-webkit-scrollbar { width:10px; height:10px; display:block; }
+  .pagebody::-webkit-scrollbar-track { background:transparent; }
+  .pagebody::-webkit-scrollbar-thumb { background:var(--line2); border-radius:6px;
+    border:3px solid transparent; background-clip:padding-box; }
+  .pagebody:hover::-webkit-scrollbar-thumb { background:var(--ink3); background-clip:padding-box; }
   /* 헤더 여백에서 **글자 선택 커서(I-beam)**가 떠 「커서가 보인다」로 읽혔다(2026-08-14 사장님).
      검색창처럼 정말 글자를 넣는 곳은 자기 커서를 갖는다. */
   header { cursor:default; }
@@ -2124,9 +2137,9 @@
   <div id="maxis"></div>
   <!-- 흐름 모드 — 목록과 **같은 #wrap 안**에 둔다. 밖에 두면 지도가 숨어도 #wrap이 높이를 그대로
        차지해 화면 위쪽에 빈 칸이 남는다(2026-08-09 실측 530px). 표시 조건도 도크를 공유한다. -->
-  <div id="flowv" style="display:none;"></div>
+  <div id="flowv" class="pagebody" style="display:none;"></div>
   <!-- 목록 모드: 지도와 **같은 도크(표시 조건)** 안에 산다. 필터를 두 벌 만들지 않는다(2026-07-30). -->
-  <div id="listv">
+  <div id="listv" class="pagebody">
     <div class="lvhead">
       <!-- ★ 두 뷰가 답하는 질문을 **화면에 적는다** (2026-08-11 사용자 "흐름이랑 목록이랑 차이가
            뭔지 좀 애매해"). 애매했던 실제 이유는 **목록 기본 정렬이 최근순**이라 순서가 흐름과
@@ -11569,7 +11582,15 @@ function renderList() {
     /* ⚠ 뒤에 달려 있던 긴 설명은 **뺐다**(시안 목업엔 「N 건」뿐이다). 지운 게 아니라 자리가 있다:
          유형별 건수 → 바로 위 표현 필터 칩 · 이번 주 움직임/신규 확인 → 업데이트 탭이 전담.
          같은 말을 두 곳에서 하면 정작 표가 밀린다. */
-    + ` <span class="lvsub">${regionLabel() || "전 지역"}</span>`;
+    + ` <span class="lvsub">${regionLabel() || "전 지역"}</span>`
+    /* ★ **막대만으로는 거짓이 된다 — 그린 몫을 함께 적는다** (2026-09-13 알렉스 「스크롤바가 없네」의 짝).
+       목록은 `LIST_PAGE`(60)씩 점진 렌더라, 스크롤바를 켜면 막대 길이가 **그려진 것**의 비율이지
+       전체의 비율이 아니다(실측 2026-09-13: 7,230건 중 60건인데 막대는 20% — 「5분의 1쯤 왔나」로 읽힌다).
+       그래서 「지금 N건 그림」을 한 줄로 적는다 — 전량을 그리면(업데이트 탭처럼) 이 줄은 저절로 사라진다.
+       ⚠ 이 문장은 **모르는 것을 지어내지 않는다**: 막대는 그린 것 안에서의 위치, 숫자가 전체 중 몫이다(P2). */
+    + (rows.length > listShown
+        ? ` <span class="lvsub lvpage">지금 <span class="mono">${Math.min(listShown, rows.length).toLocaleString()}</span>건 그림 — 내리면 더 붙습니다</span>`
+        : "");
   /* ★★ **카드 → 고정 열 표** (2026-08-13 시안 §04).
      *"목록의 일은 「비교」입니다. 카드로 쌓으면 한 화면에 6건밖에 안 들어가고 값이 세로로 흩어져
      비교가 안 됩니다. 고정 열을 가진 표로 바꾸면 한 화면에 20건이 들어오고 등급·거리·확인일을
@@ -12027,8 +12048,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "deeed85d09", "adverse_facilities.json": "960206d766", "apartments_all.json": "ca09ad7671", "arch_signals.json": "b89db9a374", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "d4c7b0853a", "corridor_diff.json": "f346ec6f05", "dart_signals.json": "fd96fa3e7c", "dps_signals.json": "b3168ba469", "eum_backfill_progress.json": "045d054f7f", "eum_enroll.json": "3c0e606ed9", "eum_signals.json": "200a5e2b10", "eum_usage.json": "1204e49ca9", "hospital_signals.json": "3514590b41", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "d14449cf3b", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "3262b25993", "logipark_signals.json": "92bf3e5e17", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "00ded0fdc8", "mega_signals.json": "ff04c37b5a", "methodology.html": "b5eda2f530", "park_signals.json": "e541d0163e", "privacy.html": "328298f753", "push_feed.json": "0d5e084cdc", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "ca56ffeb3c", "rail_reference.html": "653896c3da", "rail_signals.json": "315d9a9619", "region_gaps.json": "b45eab8f5d", "regions.json": "6bdbe80410", "report.html": "85ee8bc04c", "retail_signals.json": "093601560e", "road_signals.json": "3d743bda75", "school_signals.json": "51626cd2b2", "settings.html": "1ca2007f59", "sfz_signals.json": "f000dc9dbe", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "2aef03e366", "signals.json": "3f3409fd49", "signals_auto.json": "80a08acec2", "signals_jeongbi_all.json": "f6cc6b06a4", "source_status.html": "bf7f16df8b", "sw.js": "bd80e753e7", "thresholds.json": "cf37048dda", "upis_facility_geom.json": "95b0a79f3e", "upis_on_road.json": "c703b38b0b", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260913b");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "deeed85d09", "adverse_facilities.json": "960206d766", "apartments_all.json": "ca09ad7671", "arch_signals.json": "b89db9a374", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "580cd39309", "corridor_diff.json": "c71c50f84d", "dart_signals.json": "fd96fa3e7c", "dps_signals.json": "b3168ba469", "eum_backfill_progress.json": "045d054f7f", "eum_enroll.json": "3c0e606ed9", "eum_signals.json": "200a5e2b10", "eum_usage.json": "1204e49ca9", "hospital_signals.json": "3514590b41", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "d14449cf3b", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "3262b25993", "logipark_signals.json": "92bf3e5e17", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "00ded0fdc8", "mega_signals.json": "ff04c37b5a", "methodology.html": "b5eda2f530", "park_signals.json": "e541d0163e", "privacy.html": "328298f753", "push_feed.json": "bba1ba56df", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "ca0890415d", "rail_reference.html": "653896c3da", "rail_signals.json": "315d9a9619", "region_gaps.json": "63280d7bf2", "regions.json": "6bdbe80410", "report.html": "85ee8bc04c", "retail_signals.json": "093601560e", "road_signals.json": "8fd0f3e5a2", "school_signals.json": "51626cd2b2", "settings.html": "1ca2007f59", "sfz_signals.json": "f000dc9dbe", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "2aef03e366", "signals.json": "3f3409fd49", "signals_auto.json": "80a08acec2", "signals_jeongbi_all.json": "f6cc6b06a4", "source_status.html": "bf7f16df8b", "sw.js": "bd80e753e7", "thresholds.json": "cf37048dda", "upis_facility_geom.json": "95b0a79f3e", "upis_on_road.json": "784c9a6529", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260913c");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
