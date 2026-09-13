@@ -4669,13 +4669,54 @@ function mapFit(lls, padPx) {   // lls = [[lat,lon],...] 또는 경계객체({_s
    「가운데」는 컨테이너 중심이 아니라 **상세 판이 가리지 않은 영역**의 중심이다 — 데스크톱 판은 지도 왼쪽에
    떠 있어(#panel absolute) 컨테이너 중심에 두면 눈에는 왼쪽으로 치우친다. 모바일 상세는 전면(page)이라 판을
    빼지 않는다(닫으면 지도 가운데다). 두 렌더러 다 panBy(px) — 둘 다 애니메이션이고 줌을 건드리지 않는다. */
+/* ★★ **선택 이동은 줌을 바꾸지 않고 미끄러진다 — 가깝든 멀든 같다** (2026-09-13 세션115 · 알렉스 「가깝던 멀던 동일하게 줌바뀜없이 그냥 이동. 안되?」).
+   ☠ 종전: 호재 선택(sigGoTo·검색)은 `mapGo(…, 14)` — 목표가 화면 밖이면 줌아웃→panTo→줌인 3단(카카오 panTo는 화면보다 먼 이동을
+     애니메이션 없이 순간이동한다)에 도착 줌 레벨 4 고정 · 단지 선택은 `panBy`(줌 유지 · 먼 곳은 역시 순간이동). 같은 목록 안에서
+     **거리에 따라 이동 문법이 갈렸다**(알렉스 「어느 곳은 그냥 이동하고 어디는 줌다운>이동>줌업?」).
+   ⇒ 프레임마다 **중심만** 옮긴다(rAF · ease-in-out · 줌 불변). 시간은 화면 단위 거리로 늘리되 상한을 둔다(먼 곳도 짧게 끝낸다 ·
+     지나가는 타일은 흐릴 수 있다 — 줌아웃 없이 먼 거리를 가는 대가). 이동 중엔 지도 층을 다시 그리지 않는다(`window._mapGliding` —
+     카카오 applyLODSoon·Leaflet moveend가 비켜 간다) · 끝에서 한 번 그린다. 손으로 지도를 잡거나 새 이동이 오면 멈춘다(`_mapGlideStop`).
+   ⚠ 숨은 탭은 즉시(rAF가 멎는다 · 2026-09-05 실측) · **도중에 숨어 rAF가 멎어도 표식은 시간 상한에서 반드시 푼다** —
+     켜는 곳과 끄는 곳이 갈리면 한쪽이 남고, 남으면 지도가 영영 다시 안 그려진다. 두 렌더러 한 함수. */
+let _glideRaf = 0;
+function mapGlide(lat, lon) {
+  const M = window._map; if (!M) return;
+  const isK = typeof M.getLevel === "function";
+  const set = (la, lo) => { if (isK) M.setCenter(new kakao.maps.LatLng(la, lo)); else M.setView([la, lo], M.getZoom(), { animate: false }); };
+  const redraw = () => { try { window._dbg && window._dbg.applyLOD && window._dbg.applyLOD(); } catch (e) {} };
+  // 앞선 미끄러짐을 멈추고 새 목표로 — **그리지 않는다**(곧 다시 움직인다 · 연속 선택마다 지도 층 전체를 다시 그려 상세 열기 최대 프레임이 233→450ms가 됐다 · 2026-09-13 perf_probe)
+  if (window._mapGlideStop) window._mapGlideStop(false);
+  if (document.hidden) { set(lat, lon); return; }
+  const c0 = M.getCenter(), la0 = isK ? c0.getLat() : c0.lat, lo0 = isK ? c0.getLng() : c0.lng;
+  let span = 1;   // 화면 단위 거리(가로·세로 중 큰 쪽)
+  try {
+    const b = M.getBounds();
+    const [s, w, n, e] = isK ? [b.getSouthWest().getLat(), b.getSouthWest().getLng(), b.getNorthEast().getLat(), b.getNorthEast().getLng()]
+                             : [b.getSouth(), b.getWest(), b.getNorth(), b.getEast()];
+    span = Math.max(Math.abs(lat - la0) / (n - s), Math.abs(lon - lo0) / (e - w));
+  } catch (e) {}
+  if (!isFinite(span)) span = 1;
+  const dur = Math.min(650, 280 + 120 * span), t0 = performance.now();
+  const ease = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+  const done = () => { if (_glideRaf) cancelAnimationFrame(_glideRaf); _glideRaf = 0; window._mapGliding = false; window._mapGlideStop = null; };
+  window._mapGliding = true;
+  window._mapGlideStop = (paint = true) => { done(); if (paint) redraw(); };   // 손으로 잡음·안전판 = 그린다 · 새 이동이 멈춤 = 안 그린다(false)
+  const step = now => {
+    const x = Math.min(1, (now - t0) / dur), k = ease(x);
+    set(la0 + (lat - la0) * k, lo0 + (lon - lo0) * k);
+    if (x < 1) _glideRaf = requestAnimationFrame(step);
+    else { done(); redraw(); }
+  };
+  _glideRaf = requestAnimationFrame(step);
+  setTimeout(() => { if (window._mapGliding && performance.now() - t0 >= dur) { set(lat, lon); window._mapGlideStop && window._mapGlideStop(); } }, dur + 400);   // rAF가 멎은 경우의 안전판
+}
 function mapCenterOn(lat, lon, minZ) {
   const M = window._map; if (!M) return;
   const isK = typeof M.getLevel === "function";   // 렌더러 판별은 카카오 전용 getLevel의 **존재**로(호출 아님 — 양쪽 분기가 아래 함께 있다)
-  /* 전국·광역처럼 **너무 먼 줌**에서 고르면 그 층이 보이는 줌까지 들어간다(minZ · Leaflet z 기준) — 줌아웃은 없다.
-     가까이 있을 땐 줌을 손대지 않는다. */
+  /* 전국·광역처럼 **너무 먼 줌**에서 **단지를 검색해** 고르면 아파트 층이 보이는 줌까지 들어간다(minZ · Leaflet z 기준) — 줌아웃은 없다.
+     호재 선택은 minZ를 주지 않는다 — 줌을 손대지 않는다(2026-09-13 알렉스). 들어간 경우엔 그 이동으로 끝낸다(두 이동이 겹치지 않게). */
   const z = isK ? 18 - M.getLevel() : M.getZoom();
-  if (minZ != null && z < minZ) mapGo(lat, lon, minZ);
+  if (minZ != null && z < minZ) return mapGo(lat, lon, minZ);
   const mapEl = document.getElementById("map"), mr = mapEl ? mapEl.getBoundingClientRect() : null;
   if (!mr || !mr.width || !mr.height) { mapGo(lat, lon, Math.max(z, minZ || 0), { instant: true }); return; }   // 크기를 못 재면(숨은 탭·레이아웃 전) 즉시 중앙으로
   let x0 = 0;
@@ -4696,9 +4737,7 @@ function mapCenterOn(lat, lon, minZ) {
     const pt = M.latLngToContainerPoint([lat, lon]); dx = pt.x - cx; dy = pt.y - cy;
     const c = M.containerPointToLatLng([mr.width / 2 + dx, mr.height / 2 + dy]); tgt = [c.lat, c.lng];
   }
-  if (document.hidden) mapGo(tgt[0], tgt[1], isK ? 18 - M.getLevel() : M.getZoom(), { instant: true });
-  else if (isK) M.panBy(dx, dy);
-  else M.panBy([dx, dy]);
+  mapGlide(tgt[0], tgt[1]);   // 줌 불변 미끄러짐 — 가깝든 멀든 같다 · 숨은 탭은 그 안에서 즉시(위 mapGlide 주석 · 2026-09-13)
 }
 function mapRelayout() {
   if (!window._map) return;
@@ -6986,7 +7025,7 @@ function sigGoTo(s) {
   _mapView = null;   // 일부러 옮기는 이동 — 복원이 이걸 되돌리면 안 된다(§mapViewRestore)
   const pts = signalPoints(s);
   const arr = pts.length ? pts : (s._road ? roadLinePoints(s) : []);
-  if (arr.length && window._map) return mapGo(arr[0].coord[1], arr[0].coord[0], 14);
+  if (arr.length && window._map) return mapCenterOn(arr[0].coord[1], arr[0].coord[0]);   // 줌 불변 미끄러짐(2026-09-13 알렉스 「가깝던 멀던 동일하게 줌바뀜없이」 · 종전 mapGo(…, 14) 3단)
   if (s._pan) s._pan();      // 좌표를 만들지 못하는 신호(폴리곤 딱지 등)는 종전 경로로
 }
 function showSignal(s, pan) {
@@ -9302,7 +9341,8 @@ function initLeaflet() {
     if (typeof renderRail === "function") renderRail();
     if (z >= DONG_ZOOM) loadBdongVisible();   // 동 라벨이 필요한 줌부터 화면에 걸친 시도 경계 로드(전국 분할)
   };
-  map.on("zoomend moveend", applyLOD);
+  map.on("zoomend moveend", () => { if (window._mapGliding) return; applyLOD(); });   // 선택 이동(mapGlide)은 프레임마다 moveend를 낸다 — 끝에서 한 번 그린다(카카오 applyLODSoon과 같은 규칙 · 2026-09-13)
+  map.on("dragstart", () => { window._mapGlideStop && window._mapGlideStop(); });       // 손으로 잡으면 멈춘다(카카오 pointerdown과 같은 규칙)
   map.on("moveend", () => { try { updateCenterLabel(); } catch (e) {} });
   setTimeout(() => { try { updateCenterLabel(); } catch (e) {} }, 600);
   // 지도 여백(타일)만 클릭 → 선택 해제 + 반경 원 제거.
@@ -10982,7 +11022,7 @@ function initKakao() {
   let _lodReq = 0, _lodAsk = 0, _lodRun = 0, _lodSkip = 0, _lodTO = 0;
   const applyLODSoon = () => {
     _lodAsk++;
-    if (_panning) { _lodSkip++; return; }
+    if (_panning || window._mapGliding) { _lodSkip++; return; }   // 선택 이동(mapGlide) 중도 건너뛴다 — 끝에서 한 번 그린다(2026-09-13)
     if (_lodReq) return;
     /* ☠ rAF **하나에만** 걸면 안 된다 (2026-09-01 실측 — 알렉스 「확대 수준에 따라 어떤 경로는
        보이고 안 보이고」). 문서가 hidden(창 가림·절전·백그라운드)이면 rAF가 멎는데, zoom_start는
@@ -11014,7 +11054,8 @@ function initKakao() {
   const MOM_WIN_MS = 40, MOM_MIN_V = 0.8, MOM_TAU_MS = 160, MOM_MAX_PX = 320;   // px/ms · 밀어 주는 시간상수 · 한 번에 미는 상한
   const _trail = [];               // [{t,x,y}] 최근 포인터 자취(팬 중)
   let _ptrs = 0, _momN = 0, _lastV = 0, _momWhy = "";
-  mapEl.addEventListener("pointerdown", e => { _ptrs++; _armed = { x: e.clientX, y: e.clientY }; _trail.length = 0; _trail.push({ t: performance.now(), x: e.clientX, y: e.clientY }); }, true);
+  mapEl.addEventListener("pointerdown", e => { window._mapGlideStop && window._mapGlideStop();   // 손으로 잡으면 선택 이동(mapGlide)을 멈춘다(2026-09-13)
+    _ptrs++; _armed = { x: e.clientX, y: e.clientY }; _trail.length = 0; _trail.push({ t: performance.now(), x: e.clientX, y: e.clientY }); }, true);
   window.addEventListener("pointermove", e => {
     if (!_armed) return;
     if (_panning) { _trail.push({ t: performance.now(), x: e.clientX, y: e.clientY }); if (_trail.length > 12) _trail.shift(); return; }
@@ -12024,7 +12065,7 @@ function srchResults(qRaw) {
 function srchGoSignal(s) {
   const pts = signalPoints(s).length ? signalPoints(s) : (s._road ? roadLinePoints(s) : []);   // 전용도로=선형 폴백(이동용)
   if (pts.length && window._map)
-    mapGo(pts[0].coord[1], pts[0].coord[0], 14);
+    mapCenterOn(pts[0].coord[1], pts[0].coord[0]);   // 줌 불변 미끄러짐 — 목록·단지 카드의 호재 선택(sigGoTo)과 같은 이동(2026-09-13 알렉스)
   showSignal(s);   // 상세 패널 + 영향 반경 (좌표 미확정 신호는 패널만)
 }
 let srchItems = [], srchIdx = -1;
@@ -12106,8 +12147,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "deeed85d09", "adverse_facilities.json": "960206d766", "apartments_all.json": "ca09ad7671", "arch_signals.json": "ff1040a26c", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "eea92fad31", "corridor_diff.json": "be751ed3dc", "dart_signals.json": "fd96fa3e7c", "dps_signals.json": "b3168ba469", "eum_backfill_progress.json": "c84d4f465e", "eum_enroll.json": "3c0e606ed9", "eum_signals.json": "a10c032fdb", "eum_usage.json": "eb0d49bbb7", "hospital_signals.json": "3514590b41", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "0e1e8e6ada", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "3262b25993", "logipark_signals.json": "92bf3e5e17", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "00ded0fdc8", "mega_signals.json": "ff04c37b5a", "methodology.html": "b5eda2f530", "park_signals.json": "e541d0163e", "privacy.html": "328298f753", "push_feed.json": "35162520a2", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "2dd83e232b", "rail_reference.html": "653896c3da", "rail_signals.json": "315d9a9619", "region_gaps.json": "8dbf212e98", "regions.json": "6bdbe80410", "report.html": "85ee8bc04c", "retail_signals.json": "093601560e", "road_signals.json": "3d743bda75", "school_signals.json": "51626cd2b2", "settings.html": "1ca2007f59", "sfz_signals.json": "f000dc9dbe", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "2aef03e366", "signals.json": "3f3409fd49", "signals_auto.json": "80a08acec2", "signals_jeongbi_all.json": "f6cc6b06a4", "source_status.html": "671befc87c", "sw.js": "bd80e753e7", "thresholds.json": "cf37048dda", "upis_facility_geom.json": "95b0a79f3e", "upis_on_road.json": "1229f40246", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260913k");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "deeed85d09", "adverse_facilities.json": "960206d766", "apartments_all.json": "ca09ad7671", "arch_signals.json": "ff1040a26c", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "da7f38ee5d", "corridor_diff.json": "5ef2401b7b", "dart_signals.json": "fd96fa3e7c", "dps_signals.json": "b3168ba469", "eum_backfill_progress.json": "c84d4f465e", "eum_enroll.json": "3c0e606ed9", "eum_signals.json": "a10c032fdb", "eum_usage.json": "eb0d49bbb7", "hospital_signals.json": "3514590b41", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "0e1e8e6ada", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "3262b25993", "logipark_signals.json": "92bf3e5e17", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "00ded0fdc8", "mega_signals.json": "ff04c37b5a", "methodology.html": "b5eda2f530", "park_signals.json": "e541d0163e", "privacy.html": "328298f753", "push_feed.json": "3ee1cf6e4d", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "eb6c23c786", "rail_reference.html": "653896c3da", "rail_signals.json": "315d9a9619", "region_gaps.json": "d0f6931826", "regions.json": "6bdbe80410", "report.html": "85ee8bc04c", "retail_signals.json": "093601560e", "road_signals.json": "1b18b67c8f", "school_signals.json": "51626cd2b2", "settings.html": "1ca2007f59", "sfz_signals.json": "f000dc9dbe", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "2aef03e366", "signals.json": "3f3409fd49", "signals_auto.json": "80a08acec2", "signals_jeongbi_all.json": "f6cc6b06a4", "source_status.html": "671befc87c", "sw.js": "bd80e753e7", "thresholds.json": "cf37048dda", "upis_facility_geom.json": "95b0a79f3e", "upis_on_road.json": "a8a8931513", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260913l");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
