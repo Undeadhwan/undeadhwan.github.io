@@ -118,7 +118,7 @@
   /* ★ 숫자·날짜는 **모노스페이스**다 (시안 §06 「숫자와 날짜는 모노스페이스로 데이터임을 표시」).
      시안은 이 폰트를 171곳에 쓴다 — 건수·연장·날짜·코드가 문장과 섞이지 않게 하는 장치다. */
   .mono, .lt-d, .rowtab .lt-d, .hj-count, .cl-badge, .cmpsum .cv b, .pcats b,
-  .ltab .lt-lv, .dchip, .fseg .n, .lvtag { font-family:'IBM Plex Mono',ui-monospace,monospace; }
+  .ltab .lt-lvc, .dchip, .fseg .n, .lvtag { font-family:'IBM Plex Mono',ui-monospace,monospace; }
   header { display:flex; align-items:center; gap:14px; padding:10px 16px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
   header .logo { font-weight:800; font-size:17px; letter-spacing:-.3px; }
   header .logo small { font-weight:400; color:var(--muted); font-size:11px; margin-left:4px; }
@@ -351,8 +351,16 @@
   .ltab .lt-ph { color:var(--ink2); white-space:nowrap; }
   .ltab .lt-d { font-variant-numeric:tabular-nums; color:var(--ink2); white-space:nowrap; }
   /* 등급 = 링(지도와 같은 축). 테두리 색 = 유형, 두께 = 단계 — 값은 hjStyle에서 온다. */
-  .ltab .lt-lv { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px;
-    border-radius:50%; border-style:solid; font-size:11px; font-weight:700; color:var(--ink); }
+  /* ★ **등급 칸 = 나머지 다섯 자리와 같은 부품**(2026-09-13 알렉스 「등급에 따라 눈에 딱 들어오지는 않어」).
+     ☠ 종전 `.lt-lv`는 **22px 고정 원 + 안에 글자**라 크기 채널을 안 썼고, 등급은 테두리 두께가 말한다고
+       적혀 있었는데 그 값이 `2.6×BW_GRADE` = **2.60/2.39/2.16/1.95px**였다 — 인접 등급 차이 **0.2px**는
+       사람이 못 읽는다(말한다고 적혀 있는데 말하지 않는 채널). 지도는 같은 등급을 34↔16px로 말한다.
+     ⇒ 지도·도크·툴팁·비교표·검색과 같은 `.lvcell`(링 + 글자) 하나로. 크기가 훑기를, 글자가 확인을 맡는다.
+     ⚠ 링은 **고정 슬롯**(`.sl` 17px = HJR.S) 안에서 크기만 달라진다 — 비교 밴드가 배운 것과 같은 이유로
+       슬롯이 없으면 글자가 행마다 어긋나 계단처럼 보인다. 두께는 **균일**(죽은 0.2px 차등 제거). */
+  .ltab .lt-lvc { width:58px; }
+  .ltab .lt-lvc .lvcell { gap:7px; }
+  .ltab .lt-lvc .sl { display:inline-flex; align-items:center; justify-content:center; width:17px; flex:none; }
   /* 4점 트랙 (시안 §07) — 건당 60px 트랙 대신 6px 점 4개 */
   /* ★ 시안 실물: 4점 트랙은 **채운 점**이다(빈 링이 아니다) — 미도래만 흐린 점. */
   .rowtab .lt-ph { font-size:12px; line-height:1.3; }
@@ -472,7 +480,7 @@
   .phcell i.ph0 { border-style:dashed; }
   .phcell i.ph2 { border-width:3px; }
   .phcell i.ph3 { border-width:3px; background:radial-gradient(circle, var(--ink2) 0 2.2px, transparent 2.4px); }
-  .ltab .lt-lv.nolv { width:15px; height:15px; border-radius:2px; transform:rotate(45deg); }   /* 등급 없음 = 마름모(지도와 동일) */
+
   .regionbar { display:flex; gap:7px; align-items:center; flex-wrap:wrap; position:relative; }
   /* 조회 범위 칩 + 3열 동시 팝오버 (시안 §03·§04) — 드롭다운 3개가 먹던 가로폭을 칩 하나로 줄인다. */
   .rchip { display:inline-flex; align-items:center; gap:7px; font-size:14.5px; font-weight:600;
@@ -2600,6 +2608,11 @@ const LVL_RANK = { S: 0, A: 1, B: 2, C: 3, "미정": 4 };
    ⚠ 미정(마름모)은 시안 swatch가 14px 정사각형을 45° 돌린 것이라 반대각선 ≈9.9다 —
      C(8)보다 크게 두어야 형태가 작아 보이지 않는다. */
 const HJR = { S: 17, A: 13, B: 10, C: 8, "미정": 7 };   // 지름 34·26·20·16 · 미정 마름모 14 — 전부 시안 §02 견본값
+/* ★ **인라인 등급 링의 지름은 이 자 하나** (2026-09-13) — 같은 식이 네 곳에 사본으로 있었다
+   (표·비교 밴드·요약·툴팁) — 그리고 **넷이 도크와 다른 눈금**이었다: 도크 세그는 순수 `HJR`(17/13/10/8)을
+   쓰는데 사본들은 바닥값 9(C가 8→9)와 미정 11을 얹어, 같은 등급이 자리마다 다른 크기로 그려졌다
+   (2026-09-13 실측 · 알렉스 「등급에 따라 눈에 딱 들어오지는 않어」를 재다 발각). 눈금은 **HJR 하나**다. */
+const lvSize = lv => HJR[lv] || HJR["미정"];   // 바닥값·예외 없음 — 눈금은 HJR 하나다
 /* 두께 = 단계 · 등급 크기에 비례 축소 (시안 §02: 착공 기준 S 4px → C 3px) */
 /* 계획 · 확정(인가) · 착공 · 완공 — **시안 §02 견본값**(26px A등급 기준: 2 / 2.5 / 4 / 4+코어).
    ★ 2026-08-20: 점선이 **계획으로 환원**(rev2 §14-3 정정)되면서 계획·확정은 **선 종류**가 가르므로
@@ -5813,7 +5826,11 @@ function sigRowTable(arr, opt = {}) {
          바로 옆에 **단계 컬럼이 따로 있다** — 같은 사실을 두 문법으로 말한 것이다.
          지도에서는 라벨을 놓을 자리가 없어 두께가 단계를 말하는 게 맞지만, **컬럼이 있는 표에서는
          중복**이다. ⇒ 표에서는 두께 = **등급만**(BW_GRADE). 지도 문법은 그대로 둔다. */
-      `<td class="c"><span class="lt-lv${lv === "미정" ? " nolv" : ""}" style="border-color:${t.col};border-width:${(2.6 * (BW_GRADE[lv] || 0.75)).toFixed(1)}px">${lv === "미정" ? "" : lv}</span></td>`
+      /* 등급 = 공용 부품 `.lvcell`(링 + 글자) — 지도·도크·툴팁·비교표·검색과 한 문법(2026-09-13).
+         크기는 `HJR`에서만 온다(사본 없음) · 색은 유형색 · 두께는 균일(단계는 옆 칸이 이미 말한다). */
+      `<td class="lt-lvc"><span class="lvcell"><span class="sl"><i class="lvring${lv === "미정" ? " dia" : ""}"`
+      + ` style="border-color:${t.col};width:${lvSize(lv)}px;height:${lvSize(lv)}px"></i></span>`
+      + `${lv === "미정" ? "" : lv}</span></td>`
       + `<td class="lt-nm"><i class="lt-bar" style="background:${t.col}"></i>`
       + `<span class="lt-t">${sigTitle(s)}</span>`
       + `<span class="lt-sub">${catOf(s)}${subLabel(s)}${sub ? " · " + sub : ""}</span></td>`
@@ -6176,7 +6193,7 @@ const cmpDist = d => d < 1000 ? Math.round(d) + "m" : (d / 1000).toFixed(1) + "k
    링은 행 왼쪽에 따로 서고 등급 글자가 그 옆에 붙는다(시안 §04·§08 실물 — 링 안에 넣지 않는다). */
 function cmpItemHtml(r) {
   const t = ringOf(r.s), lv = t.lv;
-  const sz = lv === "미정" ? 11 : Math.max(9, HJR[lv] || 9);
+  const sz = lvSize(lv);
   return `<div class="cmpitem"><span class="lvcell"><i class="lvring${lv === "미정" ? " dia" : ""}"`
     + ` style="border-color:${t.col};border-width:${Math.max(1.5, t.bw * .7).toFixed(1)}px;width:${sz}px;height:${sz}px"></i>`
     + `${lv === "미정" ? "" : lv}</span>`
@@ -6261,7 +6278,7 @@ function cmpSummaryHtml(cols) {
      ⚠ 미판정은 막대를 그리지 않는다 — 규모 등급(S~C)과 **다른 축**이라 같은 눈금에 얹으면
        「가장 낮은 등급」으로 읽힌다(시안도 이 행만 숫자로 둔다). */
   const rows = shown.map(g => {
-    const sz = g === "미정" ? 11 : Math.max(9, HJR[g] || 9);
+    const sz = lvSize(g);
     const lab = `<div class="rl g"><span class="lvcell"><i class="lvring${g === "미정" ? " dia" : ""}"`
       + ` style="border-color:var(--ink2);width:${sz}px;height:${sz}px"></i>`
       + `${g === "미정" ? LEVEL_NAME["미정"] : g + "등급"}</span></div>`;
@@ -6351,7 +6368,7 @@ function regionHeadHtml(rel, opt = {}) {
   if (!tot) return `<div class="rgnhead"><div class="pickhint" style="padding:12px 4px">영향권 호재 없음</div></div>`;
   const shown = GRADES_DISP.filter(g => opt.dense ? m[g].total : (g !== "S" || m.S.total));
   const chips = shown.map(g => {
-    const n = m[g].total, sz = g === "미정" ? 11 : Math.max(9, HJR[g] || 9);
+    const n = m[g].total, sz = lvSize(g);
     return `<button type="button" class="gchip${n ? "" : " z"}" data-grade="${g}"${n ? "" : " disabled"}`
       + ` title="${n ? "누르면 이 등급만 — 다시 누르면 전체" : "이 지역에 없음"}">`
       + `<i class="lvring${g === "미정" ? " dia" : ""}" style="width:${sz}px;height:${sz}px"></i>`
@@ -6746,7 +6763,7 @@ function clusterTipHtml(g) {
   const foot = '<span class="f">클릭해 펼치기</span>';
   if (g.length < CLUSTER_SUMMARY_MIN) {
     return '<div class="hjdark">' + g.map(s => {
-      const t = ringOf(s), lv = t.lv, sz = lv === "미정" ? 11 : Math.max(9, HJR[lv] || 9);
+      const t = ringOf(s), lv = t.lv, sz = lvSize(lv);
       return '<span class="r"><i class="lvring' + (lv === "미정" ? " dia" : "") + '" style="width:' + sz + 'px;height:' + sz
         + 'px;border-color:color-mix(in srgb, ' + t.col + ' 55%, #fff)"></i>'
         + '<b class="g">' + (lv === "미정" ? "?" : lv) + '</b>'
@@ -9919,7 +9936,7 @@ function initKakao() {
     + (o.foot ? '<div class="hjt-foot">' + o.foot + '</div>' : "")
     + '</div></div>';
   const hjHtml = s => { const t = hjStyle(s), lv = t.lvl;
-    const sz = lv === "미정" ? 11 : Math.max(9, HJR[lv] || 9);
+    const sz = lvSize(lv);
     const ph = phaseOf(s), pIdx = PHASE_IDX[ph] ?? 0;
     /* 근거 줄 = **소스 단계 원문 + 비고**(상세의 「비고」와 같은 필드 조합). 날짜가 여기 있다.
        ⚠ `nextWatch()`를 쓰지 않는다 — 그건 `<div class="nextwatch">`를 통째로 돌려주므로
@@ -11376,7 +11393,7 @@ function listTable(rows, apt, sort) {
         + `<td class="lt-cat">${catOf(s)}${subLabel(s)}</td>`
         /* ★ 시안 실물: 등급은 **링 옆에 글자**(링 안이 아니다) · 단계는 **아이콘 + 글자**로
            지도 문법을 그대로 재사용한다 — 「행이 곧 마커」가 그 뜻이다. */
-        + `<td class="c"><span class="lvcell"><i class="lvring${lv === "미정" ? " dia" : ""}" style="border-color:${t.col};width:${lv === "미정" ? 11 : Math.max(9, HJR[lv] || 9)}px;height:${lv === "미정" ? 11 : Math.max(9, HJR[lv] || 9)}px"></i>${lv === "미정" ? LEVEL_NAME["미정"] : lv}</span></td>`
+        + `<td class="c"><span class="lvcell"><i class="lvring${lv === "미정" ? " dia" : ""}" style="border-color:${t.col};width:${lvSize(lv)}px;height:${lvSize(lv)}px"></i>${lv === "미정" ? LEVEL_NAME["미정"] : lv}</span></td>`
         + `<td class="c lt-ph"><span class="phcell"><i class="ph${t.ph}"></i>${PHASE_LABEL[phaseOf(s)] || phaseOf(s)}</span></td>`
         + `<td class="lt-loc">${loc || "위치 미상"}${d !== null && isFinite(d) ? ` · ${d < 1000 ? Math.round(d) + "m" : (d / 1000).toFixed(1) + "km"}` : ""}</td>`
         + `<td class="c lt-d">${fmtDay(s.last_movement) || "—"}</td>`;
@@ -11968,7 +11985,7 @@ function initSearch() {
       const el = document.createElement("div"); el.className = "srchitem" + (it.kind === "sig" ? " sig" : "");
       // 호재만 왼쪽에 등급 링 — 지도·목록과 **같은 문법**(크기=등급, 색=유형). 링 지름은 HJR에서 온다.
       const ring = it.kind === "sig"
-        ? (() => { const sz = it.lvl === "미정" ? 11 : Math.max(9, HJR[it.lvl] || 9);
+        ? (() => { const sz = lvSize(it.lvl);
             return `<i class="srchring${it.lvl === "미정" ? " dia" : ""}" style="width:${sz}px;height:${sz}px;border-color:${it.color}"></i>`; })()
         : "";
       el.innerHTML = `${ring}<span class="srchmain">${srchHi(it.name, qRaw)}</span><span class="srchsub">${it.sub}</span>`
@@ -12010,8 +12027,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "deeed85d09", "adverse_facilities.json": "960206d766", "apartments_all.json": "ca09ad7671", "arch_signals.json": "24f77ec9a3", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "95cb2f6af1", "corridor_diff.json": "632f6aa23a", "dart_signals.json": "57c7df632b", "dps_signals.json": "d9a89d5ebf", "eum_backfill_progress.json": "045d054f7f", "eum_enroll.json": "3c0e606ed9", "eum_signals.json": "200a5e2b10", "eum_usage.json": "1204e49ca9", "hospital_signals.json": "3514590b41", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "d14449cf3b", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "3262b25993", "logipark_signals.json": "92bf3e5e17", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "00ded0fdc8", "mega_signals.json": "ff04c37b5a", "methodology.html": "b5eda2f530", "park_signals.json": "e541d0163e", "privacy.html": "328298f753", "push_feed.json": "f4836f2d85", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "e2a7993f83", "rail_reference.html": "653896c3da", "rail_signals.json": "315d9a9619", "region_gaps.json": "a371623b96", "regions.json": "6bdbe80410", "report.html": "85ee8bc04c", "retail_signals.json": "093601560e", "road_signals.json": "e519630ae5", "school_signals.json": "51626cd2b2", "settings.html": "1ca2007f59", "sfz_signals.json": "f000dc9dbe", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "2aef03e366", "signals.json": "3f3409fd49", "signals_auto.json": "80a08acec2", "signals_jeongbi_all.json": "9bc8ce45b0", "source_status.html": "bf7f16df8b", "sw.js": "bd80e753e7", "thresholds.json": "cf37048dda", "upis_facility_geom.json": "95b0a79f3e", "upis_on_road.json": "d94b563552", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260913a");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "deeed85d09", "adverse_facilities.json": "960206d766", "apartments_all.json": "ca09ad7671", "arch_signals.json": "b89db9a374", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "d4c7b0853a", "corridor_diff.json": "f346ec6f05", "dart_signals.json": "fd96fa3e7c", "dps_signals.json": "b3168ba469", "eum_backfill_progress.json": "045d054f7f", "eum_enroll.json": "3c0e606ed9", "eum_signals.json": "200a5e2b10", "eum_usage.json": "1204e49ca9", "hospital_signals.json": "3514590b41", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "d14449cf3b", "jeongbi_poly_seoul.json": "2e04013626", "jobs_signals.json": "3262b25993", "logipark_signals.json": "92bf3e5e17", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "00ded0fdc8", "mega_signals.json": "ff04c37b5a", "methodology.html": "b5eda2f530", "park_signals.json": "e541d0163e", "privacy.html": "328298f753", "push_feed.json": "0d5e084cdc", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "ca56ffeb3c", "rail_reference.html": "653896c3da", "rail_signals.json": "315d9a9619", "region_gaps.json": "b45eab8f5d", "regions.json": "6bdbe80410", "report.html": "85ee8bc04c", "retail_signals.json": "093601560e", "road_signals.json": "3d743bda75", "school_signals.json": "51626cd2b2", "settings.html": "1ca2007f59", "sfz_signals.json": "f000dc9dbe", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "2aef03e366", "signals.json": "3f3409fd49", "signals_auto.json": "80a08acec2", "signals_jeongbi_all.json": "f6cc6b06a4", "source_status.html": "bf7f16df8b", "sw.js": "bd80e753e7", "thresholds.json": "cf37048dda", "upis_facility_geom.json": "95b0a79f3e", "upis_on_road.json": "c703b38b0b", "weekly.html": "36dcc7cf8e", "weekly_index.json": "454d9d0f3d"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260913b");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
