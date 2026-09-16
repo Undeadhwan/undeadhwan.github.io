@@ -4075,6 +4075,15 @@ function gateObs(src) {
   GATE_OBS[src] = 0;
   return s => { if ((s.properties || s).gate === "관찰") { GATE_OBS[src]++; return false; } return true; };
 }
+/* ★ 위치 미확정으로 화면 밖에 둔 신호 수 — 소스별 (2026-09-16 세션119 · `field_reach.py`가 `map_hidden_reason` 참조 0곳으로 잡았다).
+   `map_hidden`은 **어댑터가 풀에서 아예 뺀다** — 그래서 지도에도 목록·검색·건수에도 없는데 화면이 그 사실을 한 마디도 안 했다
+   (「화면이 침묵하면 맞는 데이터도 틀려 보인다」 C23). 사유는 데이터가 이미 안다(`map_hidden_reason` — 같은 지점 겹침·블록 접힘).
+   자는 관찰 게이트와 같은 꼴이다 — **거르는 그 필터가 센다**(따로 세면 갈린다). 게이트 = html_check.count_explain_check. */
+const MAP_HIDDEN = {};
+function mapHidden(src) {
+  MAP_HIDDEN[src] = 0;
+  return s => { if ((s.properties || s).map_hidden) { MAP_HIDDEN[src]++; return false; } return true; };
+}
 /* ★★ 손이 움직이는 동안은 무거운 일을 미룬다 (2026-09-08 세션107 · 알렉스 「모바일 속도가 너무 느리더라. 아파트 클릭도 잘 안 되고 버벅거려」).
    실측(데스크톱 · 폰은 3~5배): renderAll 335ms · 선 예열 tick 최대 75ms · 지도 예열 458ms 한 덩어리. 폰에선 이것들이 손가락 사이에 끼어들어
    탭이 씹힌다. iOS Safari엔 requestIdleCallback이 없어 종전 폴백(setTimeout 800 · 상수 8ms)은 「한가한지」를 안 보고 돌았다.
@@ -11838,8 +11847,12 @@ function countExplain(scope, extra) {
   // ★ 관찰 게이트(판별 대기)는 깔때기 **앞**에서 빠진 것이라 「전체」에도 없다 — 소스별 수를 한 줄로 말한다(자 = 어댑터 필터 gateObs · 2026-09-08 세션107 핸드오프 할 일 4).
   const obsN = Object.values(GATE_OBS).reduce((a, b) => a + b, 0);
   const obsS = Object.entries(GATE_OBS).filter(([, n]) => n).map(([k, n]) => `${k} ${f(n)}`).join(" · ");
+  // ★ 위치 미확정(map_hidden)도 깔때기 **앞**에서 빠진다 — 지도에도 목록에도 없으니 수를 말하지 않으면 없는 것이 된다(2026-09-16 세션119).
+  const hidN = Object.values(MAP_HIDDEN).reduce((a, b) => a + b, 0);
+  const hidS = Object.entries(MAP_HIDDEN).filter(([, n]) => n).map(([k, n]) => `${k} ${f(n)}`).join(" · ");
   return `<b>이 숫자는 어떻게 센 것인가</b><br>` + parts.join(" → ")
     + `<br>· 판별 대기(관찰 게이트 · 화면 밖) ${f(obsN)}건${obsS ? ` — ${obsS}` : ""} — 개통 도로 위 성격 미상·절차 진입 전(원문이 밝히면 자동 복귀)`
+    + `<br>· 위치 미확정(화면 밖) ${f(hidN)}건${hidS ? ` — ${hidS}` : ""} — 같은 지점에 여러 사업이 겹쳐 어느 것인지 못 가른다(좌표가 좁혀지면 자동 복귀)`
     + (SRC_PENDING.size ? `<br>· 아직 받는 중(${[...SRC_PENDING].join("·")}) — 다 오면 바뀐다` : "");
 }
 /* 건수 설명 말풍선 — 지도 말풍선(showTip)은 지도 초기화 클로저 안이라 목록·시트·도크에서 못 부른다 → 자기 요소(#xtip) 하나.
@@ -12081,11 +12094,47 @@ function srchHi(name, qRaw) {
   }
   return out;
 }
+/* ★★ **주소 검색** — 도로명·지번 (2026-09-16 세션119 · 알렉스 「주소검색이 아파트만 되네? 도로명 지번주소 검색 다 되야해」).
+   자는 **카카오 지오코더**다(SDK를 `libraries=services`로 이미 싣고 있다 · 키·도메인 등록 그대로라 새 키가 필요 없다).
+   ☠ 브이월드는 쓸 수 없었다(2026-09-16 실측) — 브라우저 직접 호출은 CORS로 막히고, 워커로 감싸면 브이월드가
+     502·520을 준다(해외·데이터센터 IP로 보인다). 앱은 카카오 JS SDK가 없으므로 **워커 `/addr`**(juso 주소검색)을 쓴다.
+   · 결과는 검색 목록 **맨 위** 「주소」 무리로 — 고르면 그 좌표로 지도를 옮긴다(선택 없음 · 점을 찍지 않는다).
+   · 비동기라 `srchResults`는 **이미 받아 둔 것만** 읽는다(질의가 같을 때). 도착하면 다시 그린다. */
+let ADDR_HITS = { q: "", items: [] };
+let _addrTimer = 0, _addrSeq = 0;
+function addrSearch(q, done) {
+  clearTimeout(_addrTimer);
+  if (!q || q.length < 3 || !/[0-9]/.test(q)) { ADDR_HITS = { q, items: [] }; return; }   // 번지 없는 질의는 동·시군구 무리가 이미 답한다
+  const seq = ++_addrSeq;
+  _addrTimer = setTimeout(() => {
+    try {
+      const G = window.kakao?.maps?.services?.Geocoder;
+      if (!G) { ADDR_HITS = { q, items: [], why: "지오코더 미로드" }; return; }
+      new G().addressSearch(q, (res, st) => {
+        if (seq !== _addrSeq) return;                       // 뒤늦게 온 옛 질의의 답은 버린다
+        const ok = st === window.kakao.maps.services.Status.OK;
+        ADDR_HITS = { q, items: ok ? (res || []).slice(0, 5) : [] };
+        done && done();
+      });
+    } catch (e) { ADDR_HITS = { q, items: [], why: String(e) }; }
+  }, 250);
+}
 function srchResults(qRaw) {
   const q = srchNorm(qRaw);
   const parts = srchParts(qRaw);
   if (!q || !parts.length) return [];
   const out = [];
+  // 주소(도로명·지번) — 비동기로 받아 둔 것이 이 질의의 답일 때만(P2 — 옛 질의의 답을 섞지 않는다)
+  if (ADDR_HITS.q === qRaw) {
+    for (const a of ADDR_HITS.items) {
+      const lat = Number(a.y), lon = Number(a.x);
+      if (!isFinite(lat) || !isFinite(lon)) continue;
+      const road = a.road_address?.address_name || "";
+      const jibun = a.address?.address_name || a.address_name || "";
+      out.push({ kind: "addr", name: road || jibun, sub: road && jibun ? jibun : "주소",
+                 run: () => { mapCenterOn(lat, lon, 6); } });
+    }
+  }
   // 접두 일치 우선 → 붙어 있는 부분일치 → 조각이 흩어진 것. **덩어리로 맞는 쪽이 언제나 위**다.
   const rank = name => { const n = srchNorm(name); return n.startsWith(q) ? 0 : n.includes(q) ? 1 : 2; };
   /* ★ 행 = **이름 · 부가정보 · 값** 세 칸이다 (2026-08-14 시안 §04 갱신).
@@ -12151,7 +12200,7 @@ let srchItems = [], srchIdx = -1;
 function initSearch() {
   const inp = document.getElementById("srch-in"), panel = document.getElementById("srch-panel");
   if (!inp || !panel) return;
-  const HEAD = { dong: "동 (법정동)", sgg: "시군구", apt: "아파트", line: "노선 (철도·도로)", sig: "호재 신호" };
+  const HEAD = { addr: "주소 (도로명·지번)", dong: "동 (법정동)", sgg: "시군구", apt: "아파트", line: "노선 (철도·도로)", sig: "호재 신호" };
   const close = () => { panel.style.display = "none"; srchIdx = -1; };
   const pick = i => { const it = srchItems[i]; if (!it) return; inp.value = it.name; close(); inp.blur(); it.run(); };
   const move = d => {
@@ -12162,10 +12211,11 @@ function initSearch() {
   };
   const render = () => {
     const qRaw = inp.value.trim();
+    if (ADDR_HITS.q !== qRaw) addrSearch(qRaw, render);      // 주소는 비동기 — 도착하면 이 함수가 다시 그린다
     srchItems = srchResults(qRaw); srchIdx = -1;
     if (!qRaw) return close();
     if (!srchItems.length) {
-      panel.innerHTML = `<div class="srchempty">검색 결과 없음 — 동·시군구·아파트·호재 이름으로 검색됩니다</div>`;
+      panel.innerHTML = `<div class="srchempty">검색 결과 없음 — 주소(도로명·지번)·동·시군구·아파트·호재 이름으로 검색됩니다</div>`;
       panel.style.display = "block"; return;
     }
     panel.innerHTML = "";
@@ -12226,8 +12276,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "deeed85d09", "adverse_facilities.json": "812c80f9a3", "apartments_all.json": "c84191fa57", "arch_signals.json": "487791c611", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "7a1db2823f", "corridor_diff.json": "ca7dae1c7c", "dart_signals.json": "fd96fa3e7c", "dps_signals.json": "bbc0b47a1b", "eum_backfill_progress.json": "0a76e75f7d", "eum_enroll.json": "c78f0defc0", "eum_signals.json": "98ca454ad5", "eum_usage.json": "f1c4e800a7", "hospital_signals.json": "622b205a3c", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "460f3d98eb", "jeongbi_poly_seoul.json": "2e04013626", "jigu_school_signals.json": "5d56a30058", "jobs_signals.json": "3262b25993", "logipark_signals.json": "0ed9be53e0", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "527fdf92c5", "mega_signals.json": "a674e42bfe", "methodology.html": "8f12d6a0fa", "park_signals.json": "12a44efa7b", "privacy.html": "328298f753", "push_feed.json": "167c82fe9c", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "20e42d2dd0", "rail_reference.html": "4c4180e8ea", "rail_signals.json": "f6a3412e48", "region_gaps.json": "2d0e71f656", "regions.json": "6bdbe80410", "report.html": "3a5ca6f09d", "retail_signals.json": "3c59266077", "road_signals.json": "e399158732", "school_signals.json": "92f6dfe833", "settings.html": "d825ba6ca1", "sfz_signals.json": "831e583956", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "e88c5ed268", "signals.json": "3f3409fd49", "signals_auto.json": "1bef8921b6", "signals_jeongbi_all.json": "51a2fc8591", "source_status.html": "28a183c189", "sw.js": "bd80e753e7", "thresholds.json": "a243f8c582", "upis_facility_geom.json": "75b577ee8b", "upis_on_road.json": "caf3409504", "weekly.html": "663f9c6983", "weekly_index.json": "471d939b2f"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260916b");
+window.FHASH = {"DATA_STANDARD.md": "5dd7f72173", "admin.html": "deeed85d09", "adverse_facilities.json": "812c80f9a3", "apartments_all.json": "c84191fa57", "arch_signals.json": "d17504eff9", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "ab6444d9cb", "corridor_diff.json": "99db034031", "dart_signals.json": "fd96fa3e7c", "dps_signals.json": "bbc0b47a1b", "eum_backfill_progress.json": "4fcddecc55", "eum_enroll.json": "c78f0defc0", "eum_signals.json": "537f48af58", "eum_usage.json": "65b21afce9", "hospital_signals.json": "622b205a3c", "icon-180.png": "53527fbc7a", "icon-192.png": "2e0dd6d50d", "icon-512.png": "ab8e664c30", "indpark_signals.json": "5423b61b8b", "jeongbi_poly_seoul.json": "2e04013626", "jigu_school_signals.json": "0393bab718", "jobs_signals.json": "3262b25993", "logipark_signals.json": "0ed9be53e0", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "527fdf92c5", "mega_signals.json": "a674e42bfe", "methodology.html": "8f12d6a0fa", "park_signals.json": "737c000ec3", "privacy.html": "328298f753", "push_feed.json": "bb0286d4dc", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "53147cedf5", "rail_reference.html": "4c4180e8ea", "rail_signals.json": "f6a3412e48", "region_gaps.json": "b94e059a75", "regions.json": "6bdbe80410", "report.html": "3a5ca6f09d", "retail_signals.json": "3c59266077", "road_signals.json": "d6150caeaf", "school_signals.json": "961476dad0", "settings.html": "d825ba6ca1", "sfz_signals.json": "831e583956", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "e88c5ed268", "signals.json": "3f3409fd49", "signals_auto.json": "1bef8921b6", "signals_jeongbi_all.json": "51a2fc8591", "source_status.html": "28a183c189", "sw.js": "bd80e753e7", "thresholds.json": "a243f8c582", "upis_facility_geom.json": "75b577ee8b", "upis_on_road.json": "be49f81a55", "weekly.html": "663f9c6983", "weekly_index.json": "471d939b2f"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260916c");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
@@ -12308,7 +12358,7 @@ function mergeRoadRefs() {
     gj("mega_signals.json").catch(() => ({ signals: [] })),           // 관보 고시 원문 파싱 — 대장에 아직 없는 신규 지구(2026-07-22)
     gj("adverse_facilities.json").catch(() => ({ features: [] }))     // 역효과(UQ158 환경기초) — 지도 미표시, 아파트 카드 병기 전용(②안, 2026-07-30)
   ]);
-  DART = ((dartData && dartData.signals) || []).filter(s => !s.superseded_by && !s.map_hidden);   // 승격 중복 제외
+  DART = ((dartData && dartData.signals) || []).filter(s => !s.superseded_by).filter(mapHidden("기업 공시"));   // 승격 중복 제외
   buildDartSignals();   // DART → 일자리 후보 신호(호재 카운팅 포함)
   // 전국 건축인허가 = 서울·수도권 + 지방12 + 전남광주 (지역별 분할 수집 → 병합. 지역-무관 원칙: 파일만 추가)
   // 수도권(경기·인천) 파일 누락 교정(2026-07-18) — 종전엔 로드 목록에 없어 서울 파일에 섞인 분만 우연히 보였다
@@ -12324,39 +12374,39 @@ function mergeRoadRefs() {
     .map(f => Object.assign({ _coord: f.geometry && f.geometry.coordinates }, f.properties))
     .filter(s => s._coord);
   // 공공건축 설계공모(2026-07-18) — 계획 단계 후보. 건축HUB 인허가가 놓치는 공공건축·중형(1만㎡ 미만)을 보완.
-  DPS_SIG = ((dpsData && dpsData.signals) || []).filter(s => !s.superseded_by && !s.map_hidden).map(s => Object.assign({
+  DPS_SIG = ((dpsData && dpsData.signals) || []).filter(s => !s.superseded_by).filter(mapHidden("개발행위")).map(s => Object.assign({
     _dps: true, template_type: "공공시설", confirmed: false, status: s.status || "활성"
   }, s));
   // SH 공급계획(2026-07-30) — 공급 전 신축만(매입형·본청약 완료 제외). 좌표=지구 대표점(jigu 근사).
-  SH_SIG = ((shData && shData.signals) || []).filter(s => !s.superseded_by && !s.map_hidden).map(s => Object.assign({
+  SH_SIG = ((shData && shData.signals) || []).filter(s => !s.superseded_by).filter(mapHidden("SH 공고")).map(s => Object.assign({
     _sh: true, template_type: "주거개발", confirmed: false, status: s.status || "활성"
   }, s));
   // S급 지구 마스터(2026-07-22) — 택지정보 지구 대장. 좌표=지구 필지 평균(geo_prec=jigu, 근사).
   // 조각(건축·공모·DART)은 master_ref로 소속만 기록 — 지도에는 둘 다 표시(집계 접기는 추후 별도 논의).
-  MASTER_SIG = ((masterData && masterData.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden).map(s => Object.assign({
+  MASTER_SIG = ((masterData && masterData.signals) || []).filter(s => s.geometry && !s.superseded_by).filter(mapHidden("마스터플랜")).map(s => Object.assign({
     _master: true, confirmed: false, status: "활성"
   }, s));
   // 대형 일자리 S(용산·잠실·북항 등) — official_jobs.json 공식지식. S 점 호재(원)로 표시.
-  JOBS_SIG = ((jobsData && jobsData.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden).map(s => Object.assign({
+  JOBS_SIG = ((jobsData && jobsData.signals) || []).filter(s => s.geometry && !s.superseded_by).filter(mapHidden("일자리")).map(s => Object.assign({
     _jobs: true, confirmed: false
   }, s, { status: s.status_override || "활성" }))    // status_override=정체 고정(새만금공항 계쟁 등, P5)
   // 산업단지 delta(KICOX 현황통계, 2026-08-10) — 같은 표준 스키마라 JOBS_SIG에 합류(어댑터 함정을
   // 늘리지 않는다: allSignalsFlat·집계·필터가 이미 JOBS_SIG를 순회한다). 계보는 _indpark로 구분.
-  .concat(((indparkData && indparkData.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden).map(s => Object.assign({
+  .concat(((indparkData && indparkData.signals) || []).filter(s => s.geometry && !s.superseded_by).filter(mapHidden("산업단지")).map(s => Object.assign({
     _jobs: true, _indpark: true, confirmed: false, status: "활성"
   }, s)))
   // 물류단지 delta(NLIC 현황, 2026-08-10) — 같은 합류 문법. 계보는 _logipark.
-  .concat(((logiparkData && logiparkData.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden).map(s => Object.assign({
+  .concat(((logiparkData && logiparkData.signals) || []).filter(s => s.geometry && !s.superseded_by).filter(mapHidden("물류단지")).map(s => Object.assign({
     _jobs: true, _logipark: true, confirmed: false, status: "활성"
   }, s)))
   // 특구 지정 고시(도심융합, 2026-08-11) — 같은 합류 문법. 계보는 _sfz.
-  .concat(((sfzData && sfzData.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden).map(s => Object.assign({
+  .concat(((sfzData && sfzData.signals) || []).filter(s => s.geometry && !s.superseded_by).filter(mapHidden("경제자유구역")).map(s => Object.assign({
     _jobs: true, _sfz: true, confirmed: false, status: "활성"
   }, s)));
   // 관보 고시 원문 신호(2026-07-22) — 택지정보 대장에 **아직 없는** 신규 지구(서리풀1·2·구리토평2·
   // 오산세교3·제주화북2·인천로봇랜드 등). 좌표는 고시 붙임의 편입필지 평균(geo_prec=jigu).
   // 등급은 없다 — 지정 고시에 사업비·세대수가 없어 미정이 정직하다(딱지 미등급 규칙과 동일).
-  MEGA_SIG = ((megaData && megaData.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden).map(s => Object.assign({
+  MEGA_SIG = ((megaData && megaData.signals) || []).filter(s => s.geometry && !s.superseded_by).filter(mapHidden("대형 사업")).map(s => Object.assign({
     _mega: true, confirmed: false, status: "활성"
   }, s));
   // dedupJobByArea() 비활성(2026-07-16): DART 위치가 본사-근사라 거리(250m) 기반 면적-우선 dedup이
@@ -12534,7 +12584,7 @@ const HEAVY_SRC = [
     ROADF = (d && d.features) || []; buildRoadSignals();              // 노선(다점)·IC(점)
     mergeRoadRefs(); }],                                              // ★ 도착 후 승격 병합(이중 카운트 방지)
   ["건축", () => true, "arch_signals.json", { signals: [] }, d => {
-    ARCH = ((d && d.signals) || []).filter(x => !x.superseded_by && !x.map_hidden);
+    ARCH = ((d && d.signals) || []).filter(x => !x.superseded_by).filter(mapHidden("건축허가"));
     buildArchSignals(); }],                                           // 확정층 승격분 제외(핀 중복 방지)
   ["정비", () => JEONGBI_LICENSED, "signals_jeongbi_all.json", { cands: [] }, d => {
     JEONGBI = (d && d.cands) || []; buildJeongbiSignals(); }],
@@ -12546,7 +12596,7 @@ const HEAVY_SRC = [
      ⚠ 등재분 대부분은 좌표가 아직 없다(UPIS 조인·소급이 채운다). 화면은 `geometry` 없는 신호를
        버리므로 지금은 조용하지만, 회랑이 붙는 만큼 매일 늘어난다 — 무거워지는 쪽이 확정된 자리다. */
   ["도시계획고시", () => true, "eum_signals.json", { signals: [] }, d => {
-    EUM_SIG = ((d && d.signals) || []).filter(s => s.geometry && !s.superseded_by && !s.map_hidden).filter(gateObs("도시계획고시"))   // 관찰 = 개통 도로 위 미상(호재 판별 대기 · 2026-09-07 알렉스) — rail·UPIS와 같은 게이트 · 거른 수는 GATE_OBS(건수 설명)
+    EUM_SIG = ((d && d.signals) || []).filter(s => s.geometry && !s.superseded_by).filter(mapHidden("도시계획고시")).filter(gateObs("도시계획고시"))   // 관찰 = 개통 도로 위 미상(호재 판별 대기 · 2026-09-07 알렉스) — rail·UPIS와 같은 게이트 · 거른 수는 GATE_OBS(건수 설명)
       .map(s => Object.assign({ _eum: true, confirmed: false, status: "활성" }, s));   // 승격·교차중복 억제(어댑터 함정 — 2026-07-27)
     }],
 ];
