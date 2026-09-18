@@ -1,7 +1,1 @@
-{
- "last_run": "2026-09-18 02:59",
- "result": "실패",
- "build": "20260917r",
- "exit_code": 1,
- "kind": "daily"
-}
+{"last_run":"2026-09-18 16:18","result":"성공","build":"20260918a","fetch":false,"deploy":true,"duration_s":533,"changes":{"add":365,"rem":239,"merged":4,"opened":0,"trans":30,"done":0},"timing":[{"cmd":"python3 qa_check.py","s":102.9},{"cmd":"python3 road_gosi_geom.py --apply","s":73.7},{"cmd":"python3 geom_despike.py --apply","s":40.3},{"cmd":"python3 line_sea_audit.py --gate","s":35.0},{"cmd":"python3 rail_route_cut.py --apply","s":32.5},{"cmd":"python3 weekly_issue.py","s":28.5},{"cmd":"python3 lifecycle.py","s":22.6},{"cmd":"python3 geo_precision.py","s":21.2},{"cmd":"python3 road_map_ic.py --apply","s":16.9},{"cmd":"python3 geom_regression_audit.py --gate","s":14.4},{"cmd":"python3 upis_facility_geom.py --hold-apply --go","s":6.5},{"cmd":"python3 app_bundle.py --out app --gate","s":6.3},{"cmd":"python3 upis_facility_geom.py --sgg-prune","s":5.7},{"cmd":"python3 html_check.py index.html methodology.html settings.html report.html rail_reference.html admin.html weekly.html source_status.html privacy.html","s":5.3},{"cmd":"python3 road_centerline.py --locate --apply","s":5.1},{"cmd":"python3 road_gosi.py","s":5.0},{"cmd":"python3 road_gosi_ic.py --apply","s":5.0},{"cmd":"python3 upis_fetch.py --derive","s":4.7},{"cmd":"node web_view_dump.mjs","s":4.7},{"cmd":"python3 eum_gosi.py --merge-road","s":4.4},{"cmd":"python3 geo_resolve.py","s":4.1},{"cmd":"python3 eum_gosi.py --reexec","s":3.8},{"cmd":"python3 road_gosi_history.py --apply","s":3.7},{"cmd":"python3 build_mega.py","s":3.6},{"cmd":"python3 eum_gosi.py --reclass","s":3.6}],"failed":[]}
