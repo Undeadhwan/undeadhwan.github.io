@@ -2576,6 +2576,12 @@ const CAT_SUB = { "교통": "철도 / IC 진출입 / 도로변 접근 / 환승·
 // · 인프라=보라(도시 기초·안정·세련) · 주거개발=초록(자연·가정·성장). 값은 DESIGN.md §2 토큰과 1:1.
 // 종전 배치(교통 파랑/인프라 초록/주거개발 자주)는 적록색약에서 인프라↔주거개발 색차 ΔE 2.6(=같은 색)이었다 → 현재 최소 33.4.
 const CAT_COLOR = { "교통": "#b9003d", "일자리": "#2b4ea7", "인프라": "#b25ec5", "주거개발": "#38853e", "기타": "#6e6e73" };   // DESIGN.md §2와 1:1 (2026-08-12 명도 계단)
+/* 가리킴 강조 고리 = **무채(잉크)** — 유형색·등급 크기·단계 두께 어느 채널도 빌리지 않는다(DESIGN 「목록 행 가리킴 강조」).
+   단지 선택 마커(무채 검정)와 같은 「선택 = 무채」 문법 · 새 색 없이 `--ink` 토큰(2026-09-21 알렉스). */
+const PIN_EMPH = {
+  shadow: "0 0 0 3px #fff, 0 0 0 6px var(--ink), 0 2px 8px rgba(0,0,0,.35)",
+  ink: () => (getComputedStyle(document.documentElement).getPropertyValue("--ink") || "").trim() || "#151618",
+};
 /* 레벨 pill: 분류색 강도로 등급화 (A=진한 채움/B=중간 채움/C=연한). A급이 확 띔 */
 const CAT_TINT = { "교통": ["#fde6e2", "#9c0014"], "일자리": ["#eae9fe", "#0044ad"], "인프라": ["#f4e6fc", "#56247d"], "주거개발": ["#dbf0e4", "#015738"], "기타": ["#ececf0", "#55555a"] };
 const CAT_MID = { "교통": "#de6254", "일자리": "#7f8df9", "인프라": "#875ea3", "주거개발": "#67b18c", "기타": "#a2a7b5" };
@@ -9496,6 +9502,7 @@ function initLeaflet() {
   };
   const refreshPins = () => {
     pins.forEach(m => map.removeLayer(m)); pins = [];
+    clearEmph();   // 가리킴 고리는 핀과 함께 산다
     clearLines();
     applyLOD();
     const act = activeSignals();   // 선택 시에만 호재 핀 표시(§7 온디맨드). 홈·시군구=빈 배열
@@ -9528,11 +9535,22 @@ function initLeaflet() {
       });
     });
   };
+  /* 가리킴 강조 — 카카오판과 같은 문법(`PIN_EMPH`): 유형색 테두리는 그대로, 바깥에 흰 틈 + 잉크 고리 두 겹.
+     circleMarker는 box-shadow가 없어 고리를 따로 얹는다(클릭을 먹지 않는다 · 핀을 다시 그리면 같이 걷는다). */
+  let _emphRings = [];
+  const clearEmph = () => { _emphRings.forEach(c => map.removeLayer(c)); _emphRings = []; };
   const emphasizePin = s => {
+    clearEmph();
     pins.forEach(m => {
       const on = s && m._sig === s;   // 객체 동일성 — 어댑트 신호는 id가 없어 _sid 비교 시 전부 매칭되던 버그 수정
-      m.setStyle({ radius: on ? m._baseR + 5 : m._baseR, color: on ? "#5b3fd4" : (m._col || "#12263f"), weight: on ? 4 : 3 });
-      if (on) m.bringToFront();
+      const R = on ? m._baseR + 4 : m._baseR;
+      m.setStyle({ radius: R });
+      if (on) {
+        const ll = m.getLatLng();
+        _emphRings.push(L.circleMarker(ll, { radius: R + 3, color: "#fff", weight: 3, fill: false, interactive: false }).addTo(map));
+        _emphRings.push(L.circleMarker(ll, { radius: R + 5.5, color: PIN_EMPH.ink(), weight: 3, fill: false, interactive: false }).addTo(map));
+        m.bringToFront();
+      }
     });
   };
   let circles = [];
@@ -11292,8 +11310,11 @@ function initKakao() {
         const label = p.name ? sg.title + " — " + p.name + (p.cand ? " (후보)" : "") : sg.title;
         d.addEventListener("mouseenter", e => showTip(label, e)); d.addEventListener("mousemove", e => showTip(label, e)); d.addEventListener("mouseleave", hideTip); d.addEventListener("click", e => { e.stopPropagation(); showSignal(sg, false); });
         const ov = new K.CustomOverlay({ map, position: LL(x, y), content: d, zIndex: 20, yAnchor: .5, xAnchor: .5 }); ov._sig = sg; ov._el = d; ov._baseR = r; ov._col = col; if (k === 0) sg._pan = () => { if (mapTargetOk(y, x, "_pan")) map.panTo(LL(x, y)); }; pins.push(ov); }); }); };   // 이동 창구 가드(2026-09-13 전수)
-  const emphasizePin = s => { pins.forEach(ov => { const on = s && ov._sig === s; const r = on ? ov._baseR + 5 : ov._baseR, dia = r * 2;
-    ov._el.style.width = ov._el.style.height = dia + "px"; ov._el.style.borderColor = on ? "#5b3fd4" : (ov._col || "#12263f"); ov._el.style.borderWidth = on ? "4px" : "3px"; ov.setZIndex(on ? 30 : 20); }); };
+  /* 가리킴 강조 = **유형색은 그대로 · 바깥 무채 고리**(`PIN_EMPH` · DESIGN 「목록 행 가리킴 강조」 · 두 렌더러 같은 문법).
+     ☠ 2026-09-21 알렉스 「선택된 호재가 파란 원이라 교통 호재랑 헷갈린다」 — 종전엔 테두리를 #5b3fd4로 **바꿔 칠해**
+       색 채널(유형)을 빌렸다: 교통 마커가 일자리 파랑처럼 읽혔다. 테두리(유형색·실선/점선)는 건드리지 않는다. */
+  const emphasizePin = s => { pins.forEach(ov => { const on = s && ov._sig === s; const r = on ? ov._baseR + 4 : ov._baseR, dia = r * 2;
+    ov._el.style.width = ov._el.style.height = dia + "px"; ov._el.style.boxShadow = on ? PIN_EMPH.shadow : ""; ov.setZIndex(on ? 30 : 20); }); };
   const addRadius = s => { const col = colorOf(s);
     if (s._road && s.access_points) { if (s.road_kind === "전용") { (s.ic_points || []).forEach(ap => circles.push(new K.Circle({ map, center: LL(ap.coordinates[0], ap.coordinates[1]), radius: getRadius(s), strokeWeight: 1.5, strokeColor: col, strokeOpacity: .85, fillColor: col, fillOpacity: .14, zIndex: 5 }))); return; }
       // 회랑 = **그려진 선의 버퍼**. 보간 구간(선이 연한 점선인 자리)은 회랑도 연하게 — 선과 강약을 맞춘다.
@@ -12297,8 +12318,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "deeed85d09", "adverse_facilities.json": "56b9d8bd1c", "apartments_all.json": "5c4f847a00", "arch_signals.json": "4d931e55eb", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "167b4cf913", "corridor_diff.json": "40ab04e520", "dart_signals.json": "0babd31cc0", "dps_signals.json": "2256540ddb", "eum_backfill_progress.json": "792c6bd062", "eum_enroll.json": "c59f94b49c", "eum_signals.json": "7c2e595b28", "eum_usage.json": "bc34e69379", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "hospital_signals.json": "e95189072e", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "7d1f28dc4b", "jeongbi_poly_seoul.json": "48ad1d52e7", "jigu_school_signals.json": "7a930c399e", "jobs_signals.json": "0d724eb218", "logipark_signals.json": "1dc738927d", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "4e6b13e057", "mega_signals.json": "3a74e03058", "methodology.html": "7cbda3828c", "park_signals.json": "4b31df273f", "privacy.html": "69e3fa690b", "push_feed.json": "ae6cca81d2", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "8db65e8b60", "rail_reference.html": "ba18cefd38", "rail_signals.json": "b69b382ee0", "region_gaps.json": "9ea40aab12", "regions.json": "b7c757393f", "report.html": "0d76eb6fbf", "retail_signals.json": "002c1bbfcf", "road_signals.json": "004cbcf4fa", "school_signals.json": "3ad19cf4fe", "settings.html": "d825ba6ca1", "sfz_signals.json": "30685a6a88", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "6520d22432", "signals.json": "3f3409fd49", "signals_auto.json": "adea45ceea", "signals_jeongbi_all.json": "8b75e3627c", "source_status.html": "341223c403", "sw.js": "bd80e753e7", "thresholds.json": "ebb6cb9bf4", "upis_facility_geom.json": "d210c46495", "upis_on_road.json": "e5458e9c35", "weekly.html": "7559a5c7be", "weekly_index.json": "6ba06f590e"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260921j");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "deeed85d09", "adverse_facilities.json": "56b9d8bd1c", "apartments_all.json": "5c4f847a00", "arch_signals.json": "4d931e55eb", "bdong/index.json": "a958be2e70", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "bcd0ace7d9", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "016d795aff", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "603aaf2a79", "corridor_diff.json": "131c3420f8", "dart_signals.json": "0babd31cc0", "dps_signals.json": "2256540ddb", "eum_backfill_progress.json": "792c6bd062", "eum_enroll.json": "c59f94b49c", "eum_signals.json": "7c2e595b28", "eum_usage.json": "bc34e69379", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "hospital_signals.json": "e95189072e", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "7d1f28dc4b", "jeongbi_poly_seoul.json": "48ad1d52e7", "jigu_school_signals.json": "ac97084acc", "jobs_signals.json": "0d724eb218", "logipark_signals.json": "1dc738927d", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "4e6b13e057", "mega_signals.json": "3a74e03058", "methodology.html": "7cbda3828c", "park_signals.json": "4b31df273f", "privacy.html": "69e3fa690b", "push_feed.json": "556dd81ef2", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "a4a691fcc7", "rail_reference.html": "ced2d7d1b9", "rail_signals.json": "b69b382ee0", "region_gaps.json": "6b275c697e", "regions.json": "b7c757393f", "report.html": "0d76eb6fbf", "retail_signals.json": "002c1bbfcf", "road_signals.json": "d1c735920d", "school_signals.json": "7ca60405bd", "settings.html": "d825ba6ca1", "sfz_signals.json": "30685a6a88", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "6520d22432", "signals.json": "3f3409fd49", "signals_auto.json": "adea45ceea", "signals_jeongbi_all.json": "8b75e3627c", "source_status.html": "341223c403", "sw.js": "bd80e753e7", "thresholds.json": "ebb6cb9bf4", "upis_facility_geom.json": "d210c46495", "upis_on_road.json": "571ceef6ed", "weekly.html": "d1416887ad", "weekly_index.json": "6ba06f590e"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260921k");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
