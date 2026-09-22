@@ -412,7 +412,9 @@
       const rows = Object.entries(rg.by || {}).map(([k, g]) => [k, sum(g.nogeo), sum(g.hold), g.last_enroll, g]).sort((a, b) => (b[1] + b[2]) - (a[1] + a[2]));
       const kv = o => Object.entries(o || {}).slice(0, 3).map(([k, v]) => `${esc(k)} ${v}`).join(" · ");
       gb.className = "runbox " + (t.nogeo || t.hold ? "debt" : "ok");
-      gb.innerHTML = `<b class="big">${rg.ran || "?"}</b> <span class="k">· 결손 있는 시군 ${t.regions_with_gaps || 0}/${t.regions || 0} · 위치 대기 ${(t.nogeo || 0).toLocaleString()} · 조인 보류 ${(t.hold || 0).toLocaleString()} · 원장 노선 선형 미확보·근사 ${t.line_pending || 0}</span>`
+      gb.innerHTML = `<b class="big">${rg.ran || "?"}</b> <span class="k">· 결손 있는 시군 ${t.regions_with_gaps || 0}/${t.regions || 0} · 위치 대기 ${(t.nogeo || 0).toLocaleString()} · 조인 보류 ${(t.hold || 0).toLocaleString()} · 원장 노선 선형 미확보·근사 ${t.line_pending || 0} · 지역 미상 ${t.nosd || 0}</span>`
+        // 지역도 좌표도 없는 신호(2026-09-22 세션128) — 아래 시군 표에도 사이트 시군 피드에도 없다. 원천·사유별로 여기서만 말한다.
+        + (t.nosd ? `<div class="k" style="margin-top:4px">지역 미상 ${t.nosd}건 — 지역도 좌표도 없어 어느 지역 피드에도 안 보인다: ${kv(rg.nosd)}</div>` : "")
         + `<table style="margin-top:8px;border-collapse:collapse;font-size:12.5px;width:100%"><tr><th style="text-align:left">시군</th><th>위치 대기</th><th>조인 보류</th><th>마지막 등재</th><th style="text-align:left">사유(상위)</th></tr>`
         + rows.slice(0, 40).map(([k, n1, n2, le, g]) => `<tr><td>${esc(k)}</td><td style="text-align:right">${n1}</td><td style="text-align:right">${n2}</td><td>${esc(le || "—")}</td><td class="k">${kv(g.nogeo)}${n1 && n2 ? " · " : ""}${kv(g.hold)}</td></tr>`).join("")
         + `</table>` + (rows.length > 40 ? `<span class="k">외 ${rows.length - 40}개 시군 — 파일에서 · 사이트 시군 피드가 같은 값을 말한다</span>` : "");
