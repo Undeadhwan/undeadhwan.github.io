@@ -2985,7 +2985,39 @@ const BUILT_LINE = { col: "#8a93a3", w: 2, op: .6 };   // 회색 = 「호재 아
      ③ 속 채움 `in`(확정 .18 · 계획 .14). 계획 도로는 **테두리만 끊기고 속 틴트는 이어진다**(시안의 핵심).
    ⚠ 도로가 철도보다 두꺼우므로 **철도를 위에** 그린다(zIndex) · 줌아웃 밴드는 세 두께를 **한 비율**로 줄인다(시안 규칙 4).
    값의 정본은 여기 하나다 — 렌더 자리(카카오 상시·하이라이트 · Leaflet 상시·하이라이트)가 이 상수를 읽는다. */
-const ROAD_LINE = { out: 11, in: 7, fill: .18, fillPlan: .14, mask: "#ffffff", lo: .5, hl: 1.45, eum: .55, dash: "6 6" };
+const ROAD_LINE = { in: 7, edge: 2, offPx: 4.1, fill: .18, fillPlan: .14, lo: .5, hl: 1.45, eum: .55, dash: "6 6", style: "shortdash" };   // 속 7 · 테두리 2 · 두 줄 오프셋 4.1px(2026-09-23 실측으로 빈 폭 7px = 시안) · 밴드·하이라이트·회랑 배율
+/* 철도 = 채운 한 줄(시안 1a 스펙 표: width 5 · 계획은 같은 굵기의 원형 점선). 케이싱은 시안에 없는 우리 가독 장치라 **가산값**으로 둔다.
+   ☠ 값을 여기 두는 이유: 종전엔 렌더 자리에 3/3.6·5.6/6이 박혀 있어 도로(시안 값)와 **무게가 뒤집힌 것**을 아무도 못 봤다(2026-09-23). */
+const RAIL_W = { fix: 5, plan: 5, cas: 2.6 };
+
+/* ★★ **속 빈 도로의 테두리는 「두 줄」로 실제로 그린다** (2026-09-23 · 시안 README가 권한 `line-gap-width` 방식의 수동 구현).
+   ☠ 마스크 방식(바깥 11px 대시 + 바탕색 7px 덮기)은 카카오에서 두 가지가 시안과 다르다 — ① 대시가 **선 굵기에 비례**해
+     토막이 시안(6px)보다 훨씬 길고 ② 선 끝을 각지게(butt) 못 해 토막이 **둥근 알약**이 된다(2026-09-23 알렉스 「시안과 다르지 않냐」).
+   두 줄을 직접 그리면 각 줄이 2px이라 대시 토막이 시안 비율에 가까워지고, 배경색 마스크도 필요 없다(녹지·물 위에서 흰 띠가 뜨지 않는다).
+   ⚠ 카카오는 화면 px이 아니라 **지도 좌표**로 그린다 — 줌이 바뀌면 두 줄 간격이 변하므로 **레벨이 바뀔 때 다시 만든다**
+     (보이는 도로만 · `applyLOD`). 해상도는 카카오 표준 `0.25 × 2^(lv-1)` m/px. */
+const MPP = lv => 0.25 * Math.pow(2, lv - 1);            // 카카오 레벨 → m/px
+
+function offsetSeg(seg, dm) {
+  /* 좌표열을 법선 방향으로 `dm`미터 평행 이동 — 정점에서는 앞뒤 구간 법선의 평균을 쓴다(꺾임에서 벌어지지 않게).
+     거리 자는 화면에 하나(`M_PER_DEG_LAT`·`mPerDegLng`)를 쓴다. */
+  const n = seg.length, out = [];
+  const nx = [], ny = [];
+  for (let i = 1; i < n; i++) {
+    const mLat = M_PER_DEG_LAT, mLng = mPerDegLng((seg[i - 1][1] + seg[i][1]) / 2);
+    const dx = (seg[i][0] - seg[i - 1][0]) * mLng, dy = (seg[i][1] - seg[i - 1][1]) * mLat;
+    const L = Math.hypot(dx, dy) || 1;
+    nx.push(-dy / L); ny.push(dx / L);
+  }
+  for (let i = 0; i < n; i++) {
+    const a = Math.max(0, Math.min(nx.length - 1, i - 1)), b = Math.max(0, Math.min(nx.length - 1, i));
+    let ux = (nx[a] + nx[b]) / 2, uy = (ny[a] + ny[b]) / 2;
+    const L = Math.hypot(ux, uy) || 1; ux /= L; uy /= L;
+    const mLat = M_PER_DEG_LAT, mLng = mPerDegLng(seg[i][1]);
+    out.push([seg[i][0] + ux * dm / mLng, seg[i][1] + uy * dm / mLat]);
+  }
+  return out;
+}
 function corridorSplit(s) {
   const c = s && s.corridor;
   if (!c) return null;
@@ -9444,14 +9476,14 @@ function initLeaflet() {
       const segs = f.geometry.type === "MultiLineString" ? f.geometry.coordinates : [f.geometry.coordinates];
       for (const seg of segs) {
         const ll = seg.map(([x, y]) => [y, x]);
-        if (isRoad) {   // 속이 빈 도로(시안 1a) — 카카오판과 **같은 상수**를 읽는다(폴백이라고 다른 문법이 되면 한쪽이 낡는다)
-          const sc = ROAD_LINE.lo;   // 폴백은 선이 전반적으로 얇다 — 세 두께를 한 비율로 줄인다
-          _railObjs.push(L.polyline(ll, { pane: "rail", color: col, weight: ROAD_LINE.out * sc, opacity: .85,
-            dashArray: dashed ? ROAD_LINE.dash : null, interactive: false }).addTo(map));
-          _railObjs.push(L.polyline(ll, { pane: "rail", color: ROAD_LINE.mask, weight: ROAD_LINE.in * sc,
-            opacity: 1, interactive: false }).addTo(map));
+        if (isRoad) {   // 속이 빈 도로(시안 1a) — 카카오판과 **같은 자**(offsetSeg)·**같은 상수**를 쓴다
+          const sc = ROAD_LINE.lo, mpp = MPP(Math.max(1, 18 - map.getZoom()));   // Leaflet 줌 → 카카오 레벨 환산
           _railObjs.push(L.polyline(ll, { pane: "rail", color: col, weight: ROAD_LINE.in * sc,
             opacity: dashed ? ROAD_LINE.fillPlan : ROAD_LINE.fill, interactive: false }).addTo(map));
+          for (const sign of [1, -1])
+            _railObjs.push(L.polyline(offsetSeg(seg, ROAD_LINE.offPx * sc * mpp * sign).map(([x, y]) => [y, x]),
+              { pane: "rail", color: col, weight: ROAD_LINE.edge * sc, opacity: .9,
+                dashArray: dashed ? ROAD_LINE.dash : null, interactive: false }).addTo(map));
         }
         const pl = L.polyline(ll, { pane: "rail", color: col, weight: isRoad ? 0.01 : 2.6, opacity: isRoad ? 0 : .85,
           dashArray: dashed ? "7 5" : null });   // 도로는 위 3겹이 그린다 — 이 선은 클릭 과녁으로만 남는다
@@ -9658,12 +9690,14 @@ function initLeaflet() {
       const ll = drawnParts(p, f.geometry).solid.map(seg => seg.map(([x, y]) => [y, x]));   // 정의는 drawnParts 하나
       // 흰 글로우 케이싱 + 본선 굵게 — 색은 분류색 유지(표식 문법 v1.7), 미확정 선형은 점선 유지(§7)
       const _dash = !["착공", "준공"].some(k => (p.phase || "").startsWith(k));
-      if (p.mode === "road") {   // 속이 빈 도로(시안 1a) — 세 층 같은 상수
-        routeHl.push(L.polyline(ll, { pane: "sig", color: col, weight: ROAD_LINE.out, opacity: 1,
-          dashArray: _dash ? ROAD_LINE.dash : null, interactive: false }).addTo(map));
-        routeHl.push(L.polyline(ll, { pane: "sig", color: ROAD_LINE.mask, weight: ROAD_LINE.in, opacity: 1, interactive: false }).addTo(map));
-        routeHl.push(L.polyline(ll, { pane: "sig", color: col, weight: ROAD_LINE.in,
+      if (p.mode === "road") {   // 속이 빈 도로(시안 1a) — 세 층 같은 자·같은 상수
+        const _mpp = MPP(Math.max(1, 18 - map.getZoom()));
+        routeHl.push(L.polyline(ll, { pane: "sig", color: col, weight: ROAD_LINE.in * ROAD_LINE.hl,
           opacity: _dash ? ROAD_LINE.fillPlan : ROAD_LINE.fill, interactive: false }).addTo(map));
+        for (const sign of [1, -1])
+          routeHl.push(L.polyline(offsetSeg(seg, ROAD_LINE.offPx * ROAD_LINE.hl * _mpp * sign).map(([x, y]) => [y, x]),
+            { pane: "sig", color: col, weight: ROAD_LINE.edge * ROAD_LINE.hl, opacity: 1,
+              dashArray: _dash ? ROAD_LINE.dash : null, interactive: false }).addTo(map));
       } else {
       routeHl.push(L.polyline(ll, { pane: "sig", color: "#fff", weight: 11, opacity: .85, interactive: false }).addTo(map));
       routeHl.push(L.polyline(ll, { pane: "sig", color: col, weight: 5.5, opacity: .95,
@@ -9880,17 +9914,30 @@ function initKakao() {
   const LL = (lng, lat) => new K.LatLng(lat, lng);   // [lng,lat] → LatLng
   /* 속이 빈 도로(시안 1a)를 그리는 **자는 하나** — 카카오 상시·하이라이트가 같이 쓴다(층마다 값을 다시 적지 않는다).
      `k` = 그 층의 투명도 배율(보간 「연하게」를 세 겹에 같은 비율로) · `sc` = 두께 배율(줌아웃 밴드·하이라이트) · `z` = 바닥 zIndex. */
-  const hollowRoad = (path, col, dashed, k, sc, z, onMap) => {
-    const base = onMap ? { map, path } : { path };
-    return [
-      new K.Polyline(Object.assign({}, base, { strokeColor: col, strokeWeight: ROAD_LINE.out * sc,
-        strokeOpacity: k, strokeStyle: dashed ? "dash" : "solid", zIndex: z })),
-      new K.Polyline(Object.assign({}, base, { strokeColor: ROAD_LINE.mask, strokeWeight: ROAD_LINE.in * sc,
-        strokeOpacity: 1, strokeStyle: "solid", zIndex: z })),                       // 마스크 = 지도 바탕색 · 항상 실선
-      new K.Polyline(Object.assign({}, base, { strokeColor: col, strokeWeight: ROAD_LINE.in * sc,
-        strokeOpacity: (dashed ? ROAD_LINE.fillPlan : ROAD_LINE.fill) * k, strokeStyle: "solid", zIndex: z })),
-    ];
+  /* 속 빈 도로 — **속 채움(중심선)**과 **테두리 두 줄**을 나눠 만든다(시안 1a · `line-gap-width` 수동 구현).
+     속 채움은 px 굵기라 줌과 무관하고, 테두리는 지도 좌표 오프셋이라 **레벨이 바뀌면 다시 만든다**(`roadEdges`). */
+  const hollowFill = (path, col, dashed, k, sc, z, onMap) =>
+    new K.Polyline(Object.assign(onMap ? { map, path } : { path }, { strokeColor: col, strokeWeight: ROAD_LINE.in * sc,
+      strokeOpacity: (dashed ? ROAD_LINE.fillPlan : ROAD_LINE.fill) * k, strokeStyle: "solid", zIndex: z }));
+  const roadEdges = (segs, col, dashed, k, sc, z, lv, onMap) => {
+    /* 두 줄 **중심 간 거리**의 절반 = (속 7 + 테두리 2)/2 — 그래야 빈 폭이 시안의 7px, 전체가 11px이 된다
+       (2026-09-23 실측: 오프셋을 in/2로 두면 테두리 두께가 안쪽을 먹어 빈 폭이 5px로 좁았다). */
+    const dm = ROAD_LINE.offPx * sc * MPP(lv);
+    const out = [];
+    for (const seg of segs || []) {
+      if (!seg || seg.length < 2) continue;
+      for (const sign of [1, -1]) {
+        const path = offsetSeg(seg, dm * sign).map(([x, y]) => LL(x, y));
+        out.push(new K.Polyline(Object.assign(onMap ? { map, path } : { path },
+          { strokeColor: col, strokeWeight: ROAD_LINE.edge * sc, strokeOpacity: k,
+            strokeStyle: dashed ? ROAD_LINE.style : "solid", zIndex: z })));
+      }
+    }
+    return out;
   };
+  const hollowRoad = (path, col, dashed, k, sc, z, onMap) =>          // 하이라이트·선택처럼 **레벨 고정**으로 한 번 그리는 자리
+    [hollowFill(path, col, dashed, k, sc, z, onMap)]
+      .concat(roadEdges(path.map(p => p.map ? p.map(q => [q.getLng(), q.getLat()]) : p), col, dashed, k, sc, z, map.getLevel(), onMap));
   const el = document.getElementById("map"); el.style.position = "relative";
   /* 무손실 보증 배지 — 지도 좌하단 (시안 §01). 클릭을 먹지 않도록 pointer-events 없음.
      ⚠ `#map`은 **푸터 아래까지 뻗어 있다**(실측: map.bottom 735 · 뷰포트 720 · 푸터 top 690).
@@ -10735,6 +10782,8 @@ function initKakao() {
         };
         solid.forEach(seg => _mkSeg(seg, false));
         (p.geom_bridges || []).forEach(seg => _mkSeg(seg, true));   // 스타일은 _mkSeg 한 곳(간축본 동시 생성)
+        if (isRoad)   // 테두리 두 줄의 재료 — 좌표 그대로 둔다(레벨마다 오프셋을 다시 계산해야 한다 · 시안 1a)
+          o.road = { segs: solid.concat(p.geom_bridges || []), col, dashed, k: subdued ? .5 : 1, z: 1 };
         for (const b of buckets.values()) {
           for (const [paths, arr] of [[b.hi, objs], [b.lo, objsLo]]) {
             if (!paths.length) continue;
@@ -10742,15 +10791,20 @@ function initKakao() {
             //   흰 케이싱은 촘촘한 기본지도 위에서 선을 끊어 주는 장치인데(2026-07-30), 전국 뷰에서는
             //   배경이 성글어 역할이 거의 없으면서 **폴리라인 수를 정확히 2배**로 만든다.
             //   노선이 사라지는 게 아니라 후광만 접는 것이라 「줌아웃엔 선만」 규칙과 충돌하지 않는다.
-            if (isRoad) {   // 속이 빈 도로(시안 1a) — 흰 케이싱은 **마스크가 그 역할**이라 걷는다
-              hollowRoad(paths, col, dashed, Math.min(1, b.mo / .8), arr === objsLo ? ROAD_LINE.lo : 1, 1, false)
-                .forEach(o => arr.push(o));
+            if (isRoad) {
+              /* 속이 빈 도로(시안 1a) — **속 채움만** 여기서(px 굵기라 줌과 무관) · 테두리 두 줄은 지도 좌표 오프셋이라
+                 `applyLOD`가 레벨마다 다시 만든다(줌이 바뀌면 두 줄 간격이 변한다). 흰 케이싱은 쓰지 않는다. */
+              arr.push(hollowFill(paths, col, dashed, Math.min(1, b.mo / .8), arr === objsLo ? ROAD_LINE.lo : 1, 1, false));
             } else {
-              const _cas = new K.Polyline({ path: paths, strokeColor: "#ffffff", strokeWeight: dashed ? 6 : 5.6,
+              /* 철도 = **채운 한 줄 5px**(시안 1a 스펙 표) — 종전 3/3.6은 도로 테두리 잉크(2+2)보다 가벼워
+                 **무게가 뒤집혔다**(시안은 철도가 도로보다 무겁다 · 2026-09-23 알렉스 「시안과 다르지 않냐」의 실체).
+                 흰 케이싱은 우리 지도(카카오 타일) 가독 장치라 남기되 새 굵기에 맞춰 같이 키운다. */
+              const _rw = dashed ? RAIL_W.plan : RAIL_W.fix;
+              const _cas = new K.Polyline({ path: paths, strokeColor: "#ffffff", strokeWeight: _rw + RAIL_W.cas,
                 strokeOpacity: b.so, strokeStyle: "solid", zIndex: 2 });
               _cas._casing = true;
               arr.push(_cas);
-              arr.push(new K.Polyline({ path: paths, strokeColor: col, strokeWeight: dashed ? 3.6 : 3,
+              arr.push(new K.Polyline({ path: paths, strokeColor: col, strokeWeight: _rw,
                 strokeOpacity: b.mo, strokeStyle: dashed ? "shortdot" : "solid", zIndex: 3 }));
             }
           }
@@ -10968,6 +11022,18 @@ function initKakao() {
          ⚠ zoom_start가 오버레이를 직접 내리므로 **거기서 `_sig`를 지운다** — 안 지우면
            「이미 켜져 있음」으로 착각해 줌 뒤에 선이 안 돌아온다(상태 캐시의 전형적 사고). */
       if (show && !o.built) { o.built = true; o.build(o); }   // ★ 지연 생성 — 처음 보이는 순간에만(buildRailLines 주석)
+      /* ★★ **속 빈 도로의 테두리 두 줄은 레벨마다 다시 만든다** (2026-09-23 시안 1a · `line-gap-width` 수동 구현).
+         카카오는 지도 좌표로 그리므로 줌이 바뀌면 두 줄 간격(화면 7px)이 어긋난다 — **보이는 도로만** 다시 만든다.
+         지연 생성·컬링이 이미 있어 대상은 화면 안 노선뿐이다(성능은 `node perf_probe.mjs`가 잰다). */
+      if (show && o.road) {
+        const _elv = map.getLevel(), _esc = _lo ? ROAD_LINE.lo : 1;
+        if (o._edgeLv !== _elv || o._edgeSc !== _esc) {
+          (o.edgeObjs || []).forEach(l => l.setMap(null));
+          o.edgeObjs = roadEdges(o.road.segs, o.road.col, o.road.dashed, o.road.k, _esc, o.road.z, _elv, false);
+          o.edgeObjs.forEach(l => l.setMap(map));
+          o._edgeLv = _elv; o._edgeSc = _esc;
+        }
+      } else if (o.edgeObjs) { o.edgeObjs.forEach(l => l.setMap(null)); o.edgeObjs = null; o._edgeLv = null; }
       const _sig = show ? (_lo ? "lo" : "hi") + (_noCasing ? "-nc" : "") : "off";
       if (o._sig !== _sig) {
         o._sig = _sig;
@@ -12387,8 +12453,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_facilities.json": "cc9f50ea3b", "apartments_all.json": "e94c37978f", "arch_signals.json": "fc1ef17d8f", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "85e9d1acf3", "corridor_diff.json": "1fea604c0c", "dart_signals.json": "d23d1f7deb", "dps_signals.json": "ecc583b70c", "eum_backfill_progress.json": "ad6cf7ef47", "eum_enroll.json": "f69199df47", "eum_signals.json": "274afce2a6", "eum_usage.json": "463006da73", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "5221a6e4b7", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "8f0dcf253d", "jeongbi_poly_seoul.json": "48ad1d52e7", "jigu_school_signals.json": "cacb5573c0", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "b7fc3cf961", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "6c5e10e74d", "mega_signals.json": "603fc309ff", "methodology.html": "8e611731b0", "park_signals.json": "e8c657e380", "privacy.html": "217d09c9a3", "push_feed.json": "b4789ddc8c", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "2f8dab8b16", "rail_reference.html": "ced2d7d1b9", "rail_signals.json": "8051b456f4", "region_gaps.json": "61c12fd1f0", "regions.json": "b7c757393f", "report.html": "5813de9366", "retail_signals.json": "eb91edc434", "road_signals.json": "d304c31cc4", "robots.txt": "2312aa6291", "school_signals.json": "c2ad0535f5", "settings.html": "d825ba6ca1", "sfz_signals.json": "77728a491a", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "de65a86c5d", "signals.json": "3f3409fd49", "signals_auto.json": "a7f53ed869", "signals_jeongbi_all.json": "d72d2b54c4", "sitemap.xml": "229766ffcc", "source_status.html": "358af825d1", "sw.js": "bd80e753e7", "thresholds.json": "ebb6cb9bf4", "upis_facility_geom.json": "281e6727f6", "upis_on_road.json": "e4c3619b46", "weekly.html": "f40a039121", "weekly_index.json": "6ba06f590e"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260923c");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_facilities.json": "cc9f50ea3b", "apartments_all.json": "e94c37978f", "arch_signals.json": "fc1ef17d8f", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "a64d4f70c6", "corridor_diff.json": "63692e422e", "dart_signals.json": "d23d1f7deb", "dps_signals.json": "ecc583b70c", "eum_backfill_progress.json": "ad6cf7ef47", "eum_enroll.json": "f69199df47", "eum_signals.json": "274afce2a6", "eum_usage.json": "463006da73", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "5221a6e4b7", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "8f0dcf253d", "jeongbi_poly_seoul.json": "48ad1d52e7", "jigu_school_signals.json": "cacb5573c0", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "b7fc3cf961", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "6c5e10e74d", "mega_signals.json": "603fc309ff", "methodology.html": "8e611731b0", "park_signals.json": "e8c657e380", "privacy.html": "217d09c9a3", "push_feed.json": "637b39c94f", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "e75da1b5fb", "rail_reference.html": "ced2d7d1b9", "rail_signals.json": "8051b456f4", "region_gaps.json": "7890466ed3", "regions.json": "b7c757393f", "report.html": "5813de9366", "retail_signals.json": "eb91edc434", "road_signals.json": "b53be79967", "robots.txt": "2312aa6291", "school_signals.json": "c2ad0535f5", "settings.html": "d825ba6ca1", "sfz_signals.json": "77728a491a", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "de65a86c5d", "signals.json": "3f3409fd49", "signals_auto.json": "a7f53ed869", "signals_jeongbi_all.json": "d72d2b54c4", "sitemap.xml": "229766ffcc", "source_status.html": "358af825d1", "sw.js": "bd80e753e7", "thresholds.json": "ebb6cb9bf4", "upis_facility_geom.json": "281e6727f6", "upis_on_road.json": "0cd5fc24ee", "weekly.html": "f40a039121", "weekly_index.json": "6ba06f590e"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260923d");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
