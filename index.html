@@ -882,8 +882,8 @@
      단지를 잘못 고를 여지도 있습니다."*
      ⇒ ① 칩은 **흰 알약 두 줄**(이름 / 동 · 세대수) — 잘린 이름 대신 비교표 머리와 같은 표기.
         ② ✕는 **칩을 누른 뒤에만** 나온다(상시 노출은 칩 폭을 먹어 이름을 자른다).
-        ③ 점선 「＋ 단지 담기」가 아직 담을 수 있음을 말하고, 상한에 닿으면 사라진다.
-        ④ 「전체 비우기」 하나 — 가장 흔한 취소가 ✕ n번이었다. 되돌리기 5초. */
+        ③ ~~점선 「＋ 단지 담기」~~ **뺐다**(2026-09-24 알렉스 「+단지담기 제거」 — 누를 수 없는 자리표시였다 · 담기는 단지 판 「비교 담기」 한 곳).
+        ④ 「전체 비우기」 하나 — 가장 흔한 취소가 ✕ n번이었다. ~~되돌리기 5초~~ **뺐다**(2026-09-24 알렉스 「비교창 닫고 나면 뜨는 두번째 배지 없애」 — 비우면 막대가 곧바로 사라진다). */
   .cmpbar .cchip { background:#f7f7f8; color:#1a1a1a; border-radius:16px; padding:7px 13px; display:flex; align-items:center;
                    gap:8px; white-space:nowrap; flex-shrink:0; cursor:pointer; }
   .cmpbar .cchip .ct { display:flex; flex-direction:column; gap:1px; }
@@ -894,19 +894,12 @@
                       align-items:center; justify-content:center; font-size:12px; flex:none; }
   .cmpbar .cchip.open { box-shadow:0 0 0 1.5px #c9cbd2 inset; }
   .cmpbar .cchip.open .x { display:flex; }
-  .cmpbar .cadd { display:flex; align-items:center; gap:6px; border:1px dashed #6b6d75; border-radius:16px; padding:8px 13px;
-                  font-size:12.5px; color:#b9bbc2; white-space:nowrap; flex-shrink:0; }
   .cmpbar .csep { width:1px; height:22px; background:#3a3c42; flex:none; }
   .cmpbar .cclr { font-size:12.5px; font-weight:600; color:#c6c8ce; padding:8px 10px; cursor:pointer; white-space:nowrap; flex:none; }
   .cmpbar .cclr:hover { color:#fff; }
   .cmpbar .cgo { background:#fff; color:#1a1a1a; font-weight:700; border-radius:16px; padding:9px 17px; cursor:pointer; font-size:14.5px; white-space:nowrap; flex-shrink:0; }
   .cmpbar .cgo .n { font-family:'IBM Plex Mono',ui-monospace,monospace; }
   .cmpbar .cgo.dim { opacity:.4; pointer-events:none; }
-  /* 전체 비우기 직후 5초 — 「되돌리기」가 **같은 자리**에 선다(시안 §08) */
-  .cmpbar.undo { padding:11px 16px; gap:12px; }
-  .cmpbar .cundo { font-size:13px; color:#e6e7ea; white-space:nowrap; }
-  .cmpbar .cundo b { color:#fff; }
-  .cmpbar .cundogo { background:#fff; color:#1a1a1a; font-weight:700; border-radius:14px; padding:7px 14px; cursor:pointer; font-size:13px; white-space:nowrap; }
   .cmpAdd { display:inline-block; font-size:11px; font-weight:700; border:1.5px solid #1a1a1a; border-radius:8px; padding:3px 9px; cursor:pointer; background:#fff; color:#1a1a1a; }
   .cmpAdd.in { background:#1a1a1a; color:#fff; }
   /* ⚠ `.rmpanel`은 width:min(460px,92vw)로 **폭이 고정**돼 있다 — max-width만 키우면 아무 일도
@@ -1138,10 +1131,13 @@
   /* 시도 집계 알약 — 전국 줌에서만. 앞 숫자=재고(신호 수), 뒤 숫자=변화(이번 주 문서상 움직임).
      변화만 색을 갖는다(우리는 delta 매체) — 0이면 아예 안 붙인다(없는 걸 강조하지 않는다). */
   .sd-pill { background:rgba(255,255,255,.96); border:1.5px solid var(--navy); border-radius:999px;
-             padding:3px 10px; font-size:var(--fs-s); color:var(--ink); white-space:nowrap; cursor:pointer;
+             padding:3px 4px 3px 10px; font-size:var(--fs-s); color:var(--ink); white-space:nowrap; cursor:pointer;
              box-shadow:0 2px 8px rgba(25,35,60,.16); font-variant-numeric:tabular-nums; }
   .sd-pill b { font-weight:700; margin-right:3px; }
-  .sd-pill .mv { color:var(--c-traffic); font-weight:700; margin-left:5px; }
+  /* 숫자 칩 = 앱 지역 알약과 같은 문법(흰 알약 + 이름 + 짙은 숫자 칩 · 2026-09-25) — 노선 이름표(흰 알약·글자만)와 한눈에 갈린다 */
+  .sd-pill .n { font-style:normal; display:inline-block; min-width:20px; padding:0 6px; margin-left:3px; border-radius:9px;
+                background:var(--navy); color:#fff; font-weight:700; text-align:center; line-height:18px; }
+  .sd-pill .mv { color:var(--c-traffic); font-weight:700; margin:0 4px 0 5px; }
   /* 겹친 호재(같은 지점 중첩) 개수 배지 — 클릭 시 목록 펼침(범례와 1:1). 중립 남색·흰 글자 */
   /* 겹침 배지 — 지도 위 요소는 밝게(2026-07-30). 종전 네이비 채움+짙은 그림자는 호재 원보다
      무거워 보여 조연이 주인공을 눌렀다(P4). 흰 알약 + 얇은 잉크 테두리로 무게를 낮춘다. */
@@ -3182,6 +3178,41 @@ function ringOf(s) {
      말해야 한다(이 저장소의 반복 사고: 규칙이 한쪽에만 걸린다). */
 const SD_PILL_LV = 12;                 // 카카오 level ≥ 12 = 전국 (Leaflet z ≤ 6)
 const SD_PILL_ZOOM = 18 - SD_PILL_LV;  // 두 렌더러가 **같은 경계**를 쓰도록 하나에서 도출한다
+/* ★ 시군구 합계 알약 (2026-09-25 알렉스 「모바일의 경우 구별 호재건수를 보여주고 있는데, 웹의 경우도 줌을 아웃하면 마찬가지로 구에 대한 종합 건수 정도를」) —
+   시도 알약과 **같은 부품·같은 규칙**을 한 층 아래(시군구 줌)에 둔다: 점을 치우지 않는다(얹는 층) · 숫자 = 그 시군구에 **지금 조회조건으로 보이는** 신호
+   (`signalsInSgg` — 지역 피드가 세는 그 목록 · 앱 알약 @pill-filtered와 같은 뜻) · 0건은 안 붙인다 · 누르면 그 시군구(`showSgg`) · 비키기는 자기 시군구 경계 안에서만.
+   구간 = 카카오 level SGG_PILL_LV ~ SD_PILL_LV−1(Leaflet 같은 경계를 하나에서 도출) — 동·읍면 줌(≤ DONG_LV 6)과 시도 알약(≥ 12) 사이. */
+const SGG_PILL_LV = 7;
+const SGG_PILL_ZOOM = 18 - SGG_PILL_LV;
+function sggAggregates(inView) {
+  if ((!SGG_SIG || SGG_SIG_V !== SIG_VER) && !buildSggIndex()) return [];
+  if (!window._sggPillBase) {   // 시군구 → 이름·경계 bbox·가장 큰 고리의 중심(한 번만)
+    const m = new Map();
+    for (const b of sggBoxes()) {
+      const disp = `${b.sd} ${sggDisplayName(b.f.properties.name)}`;
+      let big = null, ba = -1;
+      for (const r of ringsOf(b.f)) {
+        let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+        for (const [x, y] of r) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+        const a = (x1 - x0) * (y1 - y0); if (a > ba) { ba = a; big = r; }
+      }
+      const e = m.get(disp);
+      if (!e) m.set(disp, { disp, sd: b.sd, label: disp.split(" ").slice(1).join(" "), box: [b.x0, b.y0, b.x1, b.y1], ring: big, area: ba });
+      else { e.box = [Math.min(e.box[0], b.x0), Math.min(e.box[1], b.y0), Math.max(e.box[2], b.x1), Math.max(e.box[3], b.y1)]; if (ba > e.area) { e.ring = big; e.area = ba; } }
+    }
+    for (const e of m.values()) { const c = e.ring ? ringCentroid(e.ring) : [(e.box[0] + e.box[2]) / 2, (e.box[1] + e.box[3]) / 2]; e.lon = c[0]; e.lat = c[1]; }
+    window._sggPillBase = [...m.values()];
+  }
+  const out = [];
+  for (const e of window._sggPillBase) {
+    if (!inView(e)) continue;
+    const sigs = signalsInSgg(e.disp); if (!sigs.length) continue;
+    const mv = new Set();
+    sigs.forEach(s => { if (movBasis(s) === "source" && inWeek(s.last_movement)) mv.add(movKey(s)); });
+    out.push({ disp: e.disp, sd: e.sd, label: e.label, n: sigs.length, moved: mv.size, lon: e.lon, lat: e.lat, box: e.box });
+  }
+  return out.sort((a, b) => b.n - a.n);   // 큰 것부터 자리를 잡는다(시도 알약과 같은 규칙)
+}
 /* 신호의 대표점 — 선형(도로·철도)은 **중간 정점**을 쓴다. 점 하나로 대표할 수 없는 노선이지만
    집계·귀속에는 양 끝보다 중점이 덜 틀린다(지도에 그리는 선은 이것과 무관하다). */
 function sigRepPoint(s) {
@@ -3262,7 +3293,7 @@ function sdCentroids() {
   return (window._sdCen = out);
 }
 function sdPillHtml(a) {
-  return `<b>${a.sd}</b> ${a.n.toLocaleString()}`
+  return `<b>${a.label || a.sd}</b><i class="n">${a.n.toLocaleString()}</i>`   // label = 시군구 알약(같은 부품)
     + (a.moved ? `<span class="mv">+${a.moved}</span>` : "");
 }
 /* 겹치면 **비켜 놓는다**(안 그리는 게 아니라). 동 라벨은 수백 개라 버리는 게 맞지만 시도는 17개뿐이고,
@@ -3270,7 +3301,7 @@ function sdPillHtml(a) {
      서울 알약과 붙기 때문이다(경기가 서울을 감싼다). 두 번째로 큰 시도가 사라지는 건 결손이다.
    위아래로 26px씩 밀어 자리를 찾고, 끝내 못 찾을 때만 뺀다. 반환값은 **화면 좌표**라 렌더러가
    역투영해 앵커로 쓴다(두 렌더러가 같은 배치 규칙을 쓰게 하는 유일한 방법). */
-function sdPillPlace(list, projectLL, w = 92, h = 26) {
+function sdPillPlace(list, projectLL, w = 92, h = 26, boxOf = null) {   // boxOf = 비킬 울타리(시군구 알약은 자기 시군구 bbox · 기본 = 시도 bbox)
   const placed = [], out = [], box = sdBBoxes();
   const hits = (x, y) => placed.some(q => Math.abs(q.x - x) < w && Math.abs(q.y - y) < h);
   for (const a of list) {
@@ -3280,7 +3311,7 @@ function sdPillPlace(list, projectLL, w = 92, h = 26) {
        라벨이 자기 시도 밖으로 나간다 — 실측 2026-08-09: 74px 가로 이동이 울산 알약을 동해로,
        경북을 일본 쪽으로 보냈다. 지도가 거짓말하는 것이다(§4.1). 시도 bbox를 화면으로 투영해
        그 안쪽만 후보로 삼고, 자리를 못 찾으면 미는 대신 **뺀다**(P5: 지어내지 않는다). */
-    const bb = box[a.sd];
+    const bb = boxOf ? boxOf(a) : box[a.sd];
     let lim = null;
     if (bb) {
       const q1 = projectLL([bb[0], bb[1]]), q2 = projectLL([bb[2], bb[3]]);
@@ -6437,6 +6468,7 @@ function aptsNearSignal(s, cap) {
 }
 /* ══════════ 시군구 단위 분류 신호 (확정+정비+철도) — 수도권 전역 카운팅 ══════════ */
 let SGG_SIG = null;
+let SGG_SIG_V = -1;   // 이 색인을 만든 신호 세대(SIG_VER) — 무거운 소스가 뒤에 도착하면 다시 만든다(2026-09-25 · 첫 화면에 알약이 먼저 색인을 만들어 뒤 소스가 영영 빠졌다)
 /* 시군구 링 보장 — **렌더러 무관 일원화** (2026-08-10). 종전엔 Leaflet 경로만 rings+bounds를 만들고
    카카오 경로는 rings만 지연 생성(bounds 없음)이라, ensureRailSgg의 「둘 다 필수」 관문이 카카오에서
    **항상 false** → 좌표 귀속 인덱스(SGG_SIG·_sggs)가 카카오 화면에서 영영 안 만들어졌다.
@@ -6487,7 +6519,7 @@ function ensureRailSgg() {
 }
 function buildSggIndex() {
   if (!ensureRailSgg()) return false;
-  SGG_SIG = {};
+  SGG_SIG = {}; SGG_SIG_V = SIG_VER;
   const add = (disp, s) => { if (disp) (SGG_SIG[disp] || (SGG_SIG[disp] = [])).push(s); };
   // ★ 컬렉션 정본은 allSignalsFlat 하나다 (2026-08-10 — 동 패널과 같은 날 같은 수리).
   //   종전 수동 5종 목록이라 MASTER·JOBS·MEGA·EUM·UPIS·DPS·SH **7개 컬렉션이 시군구 집계**
@@ -6497,9 +6529,10 @@ function buildSggIndex() {
   // 도로: 노선이 여러 시군구를 지나므로 샘플점이 걸치는 모든 시군구에 1회씩 귀속
   // (귀속은 선형 사실 기준 roadLinePoints — 전용도로도 "지나는 지역" 목록엔 뜨되, 반경 집계는 signalPoints=IC만)
   const roadAll = ROAD_SIG.concat(SIGNALS.filter(s => s._road));
-  if (roadAll.length && roadAll[0]._sggs === undefined) {
+  if (roadAll.some(s => s._sggs === undefined)) {   // 신호마다 본다(종전 첫 원소만 — 뒤에 도착한 도로가 귀속을 못 받을 수 있었다)
     const entries = Object.entries(window._sggRings);
     roadAll.forEach(s => {
+      if (s._sggs !== undefined) return;
       const hit = new Set();
       for (const p of roadLinePoints(s)) {
         for (const [disp, rings] of entries) {
@@ -6515,7 +6548,7 @@ function buildSggIndex() {
   return true;
 }
 function signalsInSgg(disp) {
-  if (!SGG_SIG) buildSggIndex();
+  if (!SGG_SIG || SGG_SIG_V !== SIG_VER) buildSggIndex();
   return ((SGG_SIG && SGG_SIG[disp]) || []).filter(visible);
 }
 function showApt(a) {
@@ -6531,7 +6564,7 @@ function showApt(a) {
        이력: 2026-08-11 「아파트를 화면 중앙에」(대칭 상자 mapFit — 바운딩박스 중심이 호재 쪽으로 밀리던 것을 고침)
        → 그 상자가 반경 1~4km 호재까지 담느라 **매번 줌아웃**됐다. 중앙 규칙은 그대로 살리고 줌만 손대지 않는다
        (헬퍼 mapCenterOn — 데스크톱은 상세 판이 가린 폭을 뺀 가운데). */
-    mapCenterOn(a.lat, a.lon, 13);   // 13 = 아파트 아이콘이 보이는 줌(카카오 APT_ICON_LV 5 = 18-5) — 전국 줌에서 검색해 골라도 그 층까지는 들어간다
+    mapCenterOn(a.lat, a.lon, 14);   // 14 = 아파트 아이콘이 보이는 줌(카카오 APT_ICON_LV 4 = 18-4 · 2026-09-24 작은 집 제거) — 전국 줌에서 검색해 골라도 그 층까지는 들어간다
     mapApi?.showAptAnchor?.(a);
   }
   mapApi?.clearRoute?.();    // 단지 화면엔 노선 베일이 없다 — 어느 경로로 오든(2026-09-05 · closePanel과 쌍)
@@ -6825,41 +6858,18 @@ function toggleCompare(a) {
 /* ══ 비교 담기 바 (2026-08-14 시안 §08) ═══════════════════════════════════════
    칩은 **스크롤 영역 안에**, 「비교하기」는 **밖에** — 종전엔 둘이 같은 flex 자식이라 칩 3개부터
    버튼이 화면 밖으로 밀려 누를 수가 없었다(2026-08-04 실기기 375px). 이 구조는 유지한다.
-   ⚠ 「전체 비우기」의 되돌리기는 **담았던 배열을 그대로 들고 있는 것**이지 다시 계산하는 게
-     아니다 — 담은 순서·구성이 그대로 돌아와야 취소가 취소다. */
+   ★ 2026-09-24 알렉스 — 「＋ 단지 담기」 자리표시와 「전체 비우기」 뒤 되돌리기 막대를 뺐다(「비교창 닫고 나면 뜨는 두번째 배지 없애」) · 비우면 막대가 곧바로 사라진다. */
 let cmpOpenChip = -1;          // ✕를 내보인 칩(시안: 누른 칩 하나만) — 인덱스, -1=없음
-let cmpUndo = null;            // 전체 비우기 되돌리기용 보관 배열
-let cmpUndoTimer = null;
-const CMP_UNDO_MS = 5000;      // 시안 §08 「지운 직후 되돌리기를 5초간 같은 자리에」
 function cmpClearAll() {
   if (!compareSet.length) return;
-  cmpUndo = compareSet.slice(); cmpOpenChip = -1;
+  cmpOpenChip = -1;
   compareSet.length = 0;
-  clearTimeout(cmpUndoTimer);
-  cmpUndoTimer = setTimeout(() => { cmpUndo = null; renderCompareBar(); }, CMP_UNDO_MS);
-  renderCompareBar();
-  if (view.mode === "apt") renderPanel();
-}
-function cmpUndoClear() {
-  if (!cmpUndo) return;
-  clearTimeout(cmpUndoTimer);
-  compareSet.push(...cmpUndo); cmpUndo = null;
   renderCompareBar();
   if (view.mode === "apt") renderPanel();
 }
 function renderCompareBar() {
   const bar = document.getElementById("cmpBar");
-  if (!compareSet.length) {
-    // 비운 직후 5초는 **같은 자리**가 되돌리기를 들고 있는다(시안 §08). 그 뒤엔 바 자체가 사라진다.
-    if (cmpUndo) {
-      bar.className = "cmpbar undo";
-      bar.innerHTML = `<span class="cundo">비교 목록을 비웠습니다 — <b>${cmpUndo.length}</b>개</span>`
-        + `<span class="cundogo" id="cundo">되돌리기</span>`;
-      bar.querySelector("#cundo").onclick = cmpUndoClear;
-      return;
-    }
-    bar.className = ""; bar.innerHTML = ""; return;
-  }
+  if (!compareSet.length) { bar.className = ""; bar.innerHTML = ""; return; }   // 비우면 곧바로 사라진다(되돌리기 막대 없음 · 2026-09-24)
   bar.className = "cmpbar";
   /* 칩 = 이름 + 「동 · 세대수」 두 줄. 잘린 이름 대신 **비교 표 머리와 같은 표기**로 구분한다
      (시안 §08 — 같은 이름 단지도 이걸로 갈린다). */
@@ -6870,8 +6880,6 @@ function renderCompareBar() {
         + `<span class="ct"><span class="cn">${esc(a.n)}</span>`
         + `<span class="cs">${esc(a.dong || "")}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : ""}</span></span>`
         + `<span class="x" data-x="${i}">✕</span></span>`).join("")
-    // 담을 자리를 보여준다 — 상한에 닿으면 사라져 「왜 안 담기지」를 묻지 않게 된다(시안 §08)
-    + (compareSet.length < CMP_MAX ? `<span class="cadd">＋ 단지 담기</span>` : "")
     + `</span>`
     + `<span class="csep"></span><span class="cclr" id="cclr">전체 비우기</span>`
     + `<span class="cgo ${compareSet.length < 2 ? "dim" : ""}" id="cgo">비교하기 <span class="n">${compareSet.length}</span></span>`;
@@ -7408,7 +7416,7 @@ function renderSggFeed(disp) {
     /* "없다"와 "걸러졌다"를 구분한다(2026-07-30 사용자 제보 — 인천 미추홀구에 37건이 있는데
        표시 조건을 대부분 꺼둔 상태라 '호재 없음'만 떴다. 화면이 사실과 다르게 읽힌다). */
     if (!rel.length) {
-      if (!SGG_SIG) buildSggIndex();
+      if (!SGG_SIG || SGG_SIG_V !== SIG_VER) buildSggIndex();
       const total = ((SGG_SIG && SGG_SIG[disp]) || []).length;
       list.innerHTML = total
         ? `<div class="pickhint">표시 조건에 맞는 호재 없음 — 조건을 풀면 <b>${total}건</b>
@@ -7744,6 +7752,10 @@ function sigGoTo(s) {
 }
 function showSignal(s, pan) {
   if (view.mode !== "detail") returnView = view;   // 신호 클릭 직전 뷰(동/구/단지) 기억
+  /* ★ 아파트 옆 2겹 판은 **그 단지 목록에 든 호재**만 (2026-09-24 알렉스 「아파트 상세 띄워놓고 해당 아파트와 관련없는 호재를 선택한 경우는
+     아파트 닫고 호재만 띄우도록」). 종전엔 직전 화면이 아파트면 지도에서 누른 **무관한** 호재도 아파트 옆에 붙었다(twoLayer = returnView.mode === "apt").
+     목록 = 단지 판이 쓰는 그 목록(aptNear — 반경 안 · 조회조건 무관). 무관하면 되돌아갈 아파트도 없다(판 하나 · ‹ 없음). */
+  if (returnView && returnView.mode === "apt" && returnView.apt && !aptNear(returnView.apt).some(x => x.s === s || (x.s.id && x.s.id === s.id))) returnView = null;   // 목록 항목 = {s, dist, within}
   _haloSel = s;                                    // §14-3 — 선택한 것 하나만 후광
   view = { mode: "detail", signal: s }; renderPanel();
   mapApi?.refreshPins?.();
@@ -10058,7 +10070,7 @@ function initLeaflet() {
     }
   };
   const APT_ZOOM = 14;   // 이 줌 이상 = 아파트 마커(동 박스 대신). 호갱노노식 LOD 사다리 최하단
-  const APT_ICON_ZOOM = 13;   // 집 아이콘만 한 단계 일찍(2026-07-29 사용자 "이 줌에서도 보이게") — 라벨·등급 LOD는 불변
+  const APT_ICON_ZOOM = 14;   // 집 아이콘 = 건수 붙는 큰 아이콘 줌(APT_ZOOM)부터만 — 카카오 층 APT_ICON_LV = APT_LV와 같은 규칙(2026-09-24 알렉스 「작은 집 제거 · 깔끔하게」)
   let aptDots = [];
   const clearAptDots = () => { aptDots.forEach(m => map.removeLayer(m)); aptDots = []; };
   // 아파트 집모양 마커: 확대 시 뷰포트 내 단지. 신호 있는 단지만 호재 건수 표시(§7 절충, A안), 0건=흐린 점.
@@ -10269,6 +10281,20 @@ function initLeaflet() {
       sdMarkers.push(m);
     });
   };
+  let sggPillMarkers = [];
+  const renderSggPills = () => {   // 시군구 합계 알약 — 카카오판과 같은 규칙(sggAggregates·SGG_PILL 경계 공용)
+    sggPillMarkers.forEach(m => map.removeLayer(m)); sggPillMarkers = [];
+    const z = map.getZoom(); if (z <= SD_PILL_ZOOM || z > SGG_PILL_ZOOM) return;
+    const bd = map.getBounds();
+    const keep = sdPillPlace(sggAggregates(e => bd.contains([e.lat, e.lon])), ll => map.latLngToContainerPoint([ll[1], ll[0]]), 92, 26, a => a.box);
+    keep.forEach(({ a, x, y }) => {
+      const ll = map.containerPointToLatLng([x, y]);
+      const m = L.marker(ll, { pane: "badge",
+        icon: L.divIcon({ className: "", html: `<div class="sd-pill" title="${a.disp} 신호 ${a.n.toLocaleString()}건 · 이번 주 문서상 움직임 ${a.moved}건 — 누르면 이 시군구">${sdPillHtml(a)}</div>`, iconSize: null }) }).addTo(map);
+      m.on("click", () => showSgg(a.disp));
+      sggPillMarkers.push(m);
+    });
+  };
   /* ── 폴백 파리티 복원(2026-08-11 사용자 제보 "필터 바꾸면 호재원이 싹 사라진다") ──
      카카오 이관(07-21) 때 Leaflet판 호재 원·노선이 유실돼, SDK가 막힌 사용자는 **빈 지도**를
      봤다(배너만 남음). 최소 파리티: 원(색=분류·크기=등급·점선=단계·클릭=카드)·노선(점선=계획).
@@ -10356,6 +10382,7 @@ function initLeaflet() {
     if (typeof renderHojae === "function") renderHojae(); else _lfDegraded();
     renderDongLabels();                                   // z12+ 동 이름 라벨 — 호재 원과 겹치면 회피
     renderSdPills();                                      // 전국 줌(z≤6) 시도 집계 알약 — 카카오판과 같은 규칙
+    renderSggPills();                                     // 시군구 줌(z 7~11) 시군구 합계 알약 — 같은 부품(2026-09-25)
     if (z >= APT_ICON_ZOOM) renderAptDots(); else clearAptDots();   // z14+ 아파트 집 아이콘
     if (typeof renderRail === "function") renderRail();
     if (z >= DONG_ZOOM) loadBdongVisible();   // 동 라벨이 필요한 줌부터 화면에 걸친 시도 경계 로드(전국 분할)
@@ -10824,7 +10851,9 @@ function initKakao() {
   baseMapMount();        // 지도↔위성 — **카카오에만** 붙는다(폴백엔 위성 타일이 없다 · 함수 주석 참조)
   mbBindLongPress(map);  // D안 「여기 뭐야?」 — 모바일 롱프레스 = 데스크톱 우클릭(같은 이벤트 하나)
   // 줌 슬라이더 제거(2026-07-23 사용자 요청) — 스크롤·핀치 줌으로 대체
-  const DONG_LV = 6, APT_LV = 4, APT_ICON_LV = 5;   // 집 아이콘만 lv5부터(2026-07-29) — 라벨·등급 LOD(APT_LV)는 불변
+  // ★ 집 아이콘 = 건수 붙는 큰 아이콘 줌(APT_LV)부터만 (2026-09-24 알렉스 「호갱노노처럼 저 줌업 사이즈에서는 집 아이콘을 안 보여주는 게 나을 거 같애 ·
+  //   작은 집들(호재건수 없는) 그거를 저 줌업 상태에서는 제거하자 깔끔하게」) — 종전 lv5의 작은 집(건수 없음 · 2026-07-29 「이 줌에서도 보이게」)을 걷었다.
+  const DONG_LV = 6, APT_LV = 4, APT_ICON_LV = APT_LV;
   const lodGrades = lv => lv <= APT_LV ? ["S", "A", "B", "C", "미정"] : lv <= 6 ? ["S", "A", "B", "C"] : lv <= 8 ? ["S", "A", "B"] : lv <= 9 ? ["S", "A"] : ["S"];   // 수도권-와이드(lv10+)=S만(GTX 부각, 2026-07-22 사용자 "GTX가 S로 보여야") · B·C는 lv6/8부터
   const mapEl = el;
   let tip = document.getElementById("_ktip");
@@ -11453,6 +11482,24 @@ function initKakao() {
       elx.addEventListener("click", e => { e.stopPropagation(); mapGo(a.lat, a.lon, 9); });
       const ov = new K.CustomOverlay({ position: pos, content: elx, zIndex: 12, yAnchor: .5, xAnchor: .5 });
       ov.setMap(map); sdOvs.push(ov);
+    });
+  };
+  /* 시군구 합계 알약 — 시도 알약과 같은 부품·같은 규칙 한 층 아래(sggAggregates · 2026-09-25 알렉스). */
+  let sggOvs = [];
+  const renderSggPills = () => {
+    sggOvs.forEach(o => o.setMap(null)); sggOvs = [];
+    const lv = map.getLevel(); if (lv < SGG_PILL_LV || lv >= SD_PILL_LV) return;
+    const b = map.getBounds();
+    const prj = map.getProjection && map.getProjection();
+    const keep = sdPillPlace(sggAggregates(e => b.contain(LL(e.lon, e.lat))), ll => toPt(ll[0], ll[1]), 92, 26, a => a.box);
+    keep.forEach(({ a, x, y }) => {
+      let pos = LL(a.lon, a.lat);
+      try { if (prj) pos = prj.coordsFromContainerPoint(new K.Point(x, y)); } catch (e) {}
+      const elx = document.createElement("div"); elx.className = "sd-pill"; elx.innerHTML = sdPillHtml(a);
+      elx.title = `${a.disp} 신호 ${a.n.toLocaleString()}건 · 이번 주 문서상 움직임 ${a.moved}건 — 누르면 이 시군구`;
+      elx.addEventListener("click", e => { e.stopPropagation(); showSgg(a.disp); });
+      const ov = new K.CustomOverlay({ position: pos, content: elx, zIndex: 12, yAnchor: .5, xAnchor: .5 });
+      ov.setMap(map); sggOvs.push(ov);
     });
   };
 
@@ -12103,7 +12150,7 @@ function initKakao() {
        비싼지 추측하게 되고, 그러면 엉뚱한 데를 고친다(실측: 컬링 뒤에도 applyLOD가 300ms대였다). */
   const _LOD = [["dongPoly", () => renderDongPoly()], ["jeongbiPoly", () => renderJeongbiPoly()],
                 ["masterArea", () => renderMasterArea()], ["hojae", () => renderHojae()],
-                ["dongLabels", () => renderDongLabels()], ["sdPills", () => renderSdPills()],
+                ["dongLabels", () => renderDongLabels()], ["sdPills", () => renderSdPills()], ["sggPills", () => renderSggPills()],
                 ["aptDots", () => renderAptDots()], ["rail", () => renderRail()], ["bdong", () => loadBdong()]];
   const applyLOD = () => { hideTip(); for (let i = 0; i < _LOD.length; i++) _LOD[i][1]();
     try { const c = map.getCenter(); viewBeaconFromCenter(c.getLat(), c.getLng()); } catch (e) {} };   // 본 지역 비콘(2026-09-08 · Leaflet과 같은 함수)
@@ -13394,8 +13441,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_facilities.json": "38dc46cdea", "apartments_all.json": "2981364a1b", "arch_signals.json": "67ac553c2a", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "4ac092017f", "corridor_diff.json": "30c2a60b9c", "dart_signals.json": "7e6cbced78", "dps_signals.json": "3b381e4438", "eum_backfill_progress.json": "2daa25c0e7", "eum_enroll.json": "844bcf90b5", "eum_signals.json": "710058153f", "eum_usage.json": "ce7812612f", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "fff4010c6e", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "5d78d28018", "jeongbi_poly_seoul.json": "48ad1d52e7", "jigu_school_signals.json": "e17a04918f", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "244dc7d7bc", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "60938fcd67", "mega_signals.json": "b7014fc3bb", "methodology.html": "8e611731b0", "park_signals.json": "b41a7918c5", "privacy.html": "217d09c9a3", "push_feed.json": "6b8fd0b0b1", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "1e0a84e691", "rail_reference.html": "2bdd33e915", "rail_signals.json": "cb0ba3a85e", "region_gaps.json": "7473f99846", "regions.json": "b7c757393f", "report.html": "d25155ac58", "retail_signals.json": "4538081e4c", "road_signals.json": "555c5083b5", "robots.txt": "2312aa6291", "school_signals.json": "685e858b4d", "settings.html": "d825ba6ca1", "sfz_signals.json": "30bff56409", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "80dc01203f", "signals.json": "3f3409fd49", "signals_auto.json": "221a6356c1", "signals_jeongbi_all.json": "7fcb79a969", "sitemap.xml": "65eb53a400", "source_status.html": "690fd83443", "sw.js": "bd80e753e7", "thresholds.json": "ebb6cb9bf4", "upis_facility_geom.json": "56b8263e76", "upis_on_road.json": "ba696b0745", "weekly.html": "f40a039121", "weekly_index.json": "6ba06f590e"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260924l");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_facilities.json": "01600e15e5", "apartments_all.json": "2981364a1b", "arch_signals.json": "67ac553c2a", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "1e71724c75", "corridor_diff.json": "c063bf542c", "dart_signals.json": "7e6cbced78", "dps_signals.json": "3b381e4438", "eum_backfill_progress.json": "2daa25c0e7", "eum_enroll.json": "844bcf90b5", "eum_signals.json": "6698e8318f", "eum_usage.json": "1f47f13b17", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "488dae3067", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "072038b610", "jeongbi_poly_seoul.json": "48ad1d52e7", "jigu_school_signals.json": "6441f39777", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "3d5d928f20", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "149a6ed93b", "mega_signals.json": "997fdfefee", "methodology.html": "8e611731b0", "park_signals.json": "77ab373b7a", "privacy.html": "217d09c9a3", "push_feed.json": "7b96fb5c44", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "5042ceb12a", "rail_reference.html": "2bdd33e915", "rail_signals.json": "cb0ba3a85e", "region_gaps.json": "8181765acf", "regions.json": "b7c757393f", "report.html": "d25155ac58", "retail_signals.json": "5fb3b2bf2d", "road_signals.json": "18aca8d819", "robots.txt": "2312aa6291", "school_signals.json": "d85db8f243", "settings.html": "d825ba6ca1", "sfz_signals.json": "ca276d4ce5", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "80dc01203f", "signals.json": "3f3409fd49", "signals_auto.json": "685843fa08", "signals_jeongbi_all.json": "7fcb79a969", "sitemap.xml": "b26d6b0bae", "source_status.html": "b719452598", "sw.js": "bd80e753e7", "thresholds.json": "ebb6cb9bf4", "upis_facility_geom.json": "56b8263e76", "upis_on_road.json": "c75e00d1d4", "weekly.html": "f40a039121", "weekly_index.json": "6ba06f590e"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260925a");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
