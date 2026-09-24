@@ -1254,8 +1254,10 @@
      상세 = 아이콘 클릭이며 카드 **본문 클릭도 같은 문**이다(호갱노노 문법 · 선택지 없음). 비교 담기는 상세 판 한 곳.
      터치 기기(`NO_HOVER` = hover:none)는 호버 카드를 건너뛰고 탭 = 상세.
      게이트 = html_check.apt_pop_rules_check(두 렌더러 · 상세보기·비교 버튼 0 · 본문 클릭 배선 · NO_HOVER 가드). DESIGN.md 「단지 미리보기 카드」 행. */
-  .apt-pop .apt-pop-body { cursor:pointer; border-radius:12px; }
-  .apt-pop .apt-pop-body:hover { background:var(--panel); }
+  /* ★★ 카드는 **보여주기만** — 커서를 받지 않는다 (2026-09-24 알렉스 「배지에 커서대면 어두워지자나? 없애자 · 미리보기 성격으로만 · 호갱노노처럼 가볍게」·「돌부리에 걸리는 느낌」).
+     종전(2026-09-05 3안)엔 본문 클릭 = 상세라 카드가 커서를 받았다 — 지도를 훑던 커서가 아이콘 위로 뜬 카드에 걸려 멈추고(호버 배경 `--panel`로 어두워짐)
+     카드 밑 다른 아이콘·지도를 못 짚었다. 상세 = 아이콘 클릭 하나. 두 렌더러 공용(카카오 오버레이 · Leaflet 팝업) · 게이트 apt_pop_rules_check ②. */
+  .apt-pop, .leaflet-popup.apt-pop-wrap, .leaflet-popup.apt-pop-wrap * { pointer-events:none !important; }
   /* ★ 위치 정확도 = **별도 블록**(시안 §06 슬롯 7). 라벨–값 열에서 빼내 「한계」임을 형태로 말한다.
      새 색을 만들지 않는다 — 기존 토큰(--panel·--line·--ink2)만 쓴다(DESIGN.md §1). */
   .precblk { border:1px solid var(--line); border-left:3px solid var(--line2); border-radius:var(--r-s);
@@ -1281,18 +1283,8 @@
      죽은 클래스는 다음 사람에게 살아 있는 것으로 읽힌다. */
   /* ★ 시안 실물: 카드 **맨 위에 유형색 4px 바**, 이름 왼쪽에 **큰 원형 마커**(36px) */
   #panel .detail { position:relative; }
-  /* ☠ **바가 제목 글씨를 관통했다** (2026-08-14 사장님 지적). `position:absolute; top:0`이라
-     패널 스크롤·헤더 sticky와 무관하게 카드 맨 위에 붙었는데, 「선택한 호재」 줄이 sticky로
-     그 위를 덮으면서 바가 **제목 높이**로 내려앉았다. 흐름 안 블록으로 되돌린다 —
-     시안 실물도 바는 카드 최상단에 **자기 줄**을 갖는다. */
-  .dbar { display:block; height:4px; border-radius:2px; margin:2px 0 10px; }
-  .dhead { display:flex; align-items:center; gap:12px; margin:0 0 4px; }
-  .dhead h2 { font-size:19px; font-weight:800; line-height:1.28; letter-spacing:-.01em; word-break:keep-all; min-width:0; }
-  .dmk { width:34px; height:34px; border-radius:50%; flex:none; box-shadow:0 1px 4px rgba(0,0,0,.22); }
   .detail h2 { font-size:19px; font-weight:800; letter-spacing:-.01em; margin:0; }
-  /* 상세 슬롯 1·2 (시안 §06) — 이름 아래 「유형 · 세부 · 소재지」, 그 아래 칩 3개. */
-  .dsub { font-size:12.5px; color:var(--ink2); margin:0 0 9px; line-height:1.45; }
-  .dchips { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:0 0 11px; }
+  /* (2026-09-24) 옛 폰 상세 카드 전용 규칙(.dbar·.dhead·.dmk·.dsub·.dchips·.rulerow)은 폰도 상세 v2(.dv2)로 옮기며 걷었다 — 만드는 코드가 없다 */
   /* ★ 시안 실물: 칩 셋 중 **단계만 유형색 채움 + 흰 글씨**이고 나머지는 연회색 면이다.
      테두리 칩 셋을 나란히 두면 무엇이 중심인지 안 보인다 — 단계가 이 카드의 머리기사다. */
   .dchip { font-size:12px; line-height:1.6; padding:3px 10px; border-radius:7px;
@@ -1330,9 +1322,6 @@
      ② 고친 뒤엔 값 머리의 칩(`±1km`)·배지(`기관 발표`)가 라벨 위로 **겹쳤다**.
      ⇒ 내어쓰기는 바깥 블록에만 필요하므로 **안쪽 전부** 되돌린다(조각이 몇 개든 안전하다). */
   .kv * { text-indent:0; }
-  /* 시안 §06 하단은 **두 자리**다 — 좌: 접히는 표기 규칙 · 우: 기준 전문(별도 문서로) */
-  .rulerow { display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
-  .rulerow .ruledoc { flex:none; font-size:12px; font-weight:600; color:var(--accent); text-decoration:none; }
   /* 반경 내 단지 — 이름 왼쪽 · 거리 오른쪽(시안 §03 실물). 라벨-값 내어쓰기 밖에 두는 블록이라 kvblock */
   .kv.kvapt { padding-left:0; text-indent:0; }
   .kv .aptnear { margin:5px 0 2px 92px; display:flex; flex-direction:column; gap:3px; }
@@ -2065,10 +2054,20 @@
     header, #chipbar, #panel, #listv, #flowv, #undet, #hjlegend, #layerstack, #zoomstack, .hj-count, #cmpModal .rmpanel, footer {
       --ink:var(--t); --ink2:var(--t2); --ink3:var(--m); --muted:var(--m); --line:var(--b); --line2:var(--b2);
       --panel:var(--s); --bg:var(--pg); --accent:var(--ac);
+      /* ★ 글자색도 같이 묶는다 (2026-09-24 알렉스 「아래쪽은 음영은 어두운데 텍스트도 검정 계열이라 안 보여」) — `body { color:var(--ink) }`는 body에서
+         #151618로 **계산된 값이 상속**되므로 토큰만 다시 묶으면 글자색을 따로 안 적은 요소(등급 없음 목록 행·비교 목록 머리)가 어두운 판 위에서 검정으로 남았다
+         (contrast_probe 실측: 등급 없음 목록 제목 200건 대비 1.03). */
+      color:var(--ink);
       font-family:var(--ff2); -webkit-font-smoothing:auto; -moz-osx-font-smoothing:auto;
     }
     body { background:var(--pg); }
     #wrap { flex:1 1 auto; }
+    /* ★ 판 안에 **직접 적은 흰 바탕**을 판 토큰으로 (2026-09-24 알렉스 「위쪽에 텍스트 색상은 회색이라 흐려서 안 보이고」 — 비교 창 요약 표 `.cmpsum{background:#fff}`·
+       판 `.rmpanel{background:#fff}` 위에 다시 묶인 밝은 글자가 올라가 대비 1.2~1.6 · contrast_probe 실측). 새 색 없음 — 크롬 v2 토큰만. */
+    #cmpModal .rmpanel { background:var(--pp); border:1px solid var(--b); color:var(--ink); }
+    #panel .msdate, #panel2 .msdate { color:var(--ink); }   /* 단계 날짜 — 남색 #12263f를 직접 적어 어두운 판에서 대비 1.15(2026-09-24 contrast_probe) · 목표·정체 색은 더 구체적인 선택자가 지킨다 */
+    #cmpModal .cmpsum { background:var(--s); }
+    #cmpModal .cmpsort select, #undet .rawctl select, #undet .rawctl input { background:var(--s); color:var(--ink); border-color:var(--b2); }
     /* 헤더 = 지도 위 부유 층(자리만 잡고 클릭은 자식이 받는다) */
     header { position:absolute; left:0; right:0; top:0; z-index:1300; height:0; padding:0; border:0; gap:0;
       display:block; pointer-events:none; background:none; }
@@ -2449,7 +2448,7 @@
     #listv .ltab .lt-cat .ltdot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; vertical-align:1px; }
     #listv .ltab .lt-cat span { color:var(--m) !important; }
     #listv .ltab .lt-loc { color:var(--t); white-space:normal; }
-    #listv .ltab .lt-loc.unk { color:var(--m); opacity:.45; font-size:13.5px; }
+    #listv .ltab .lt-loc.unk { color:var(--m); font-size:13.5px; }   /* 종전 opacity .45 = 대비 2.35(2026-09-24 contrast_probe) — 「미상」은 흐린 잉크(--m)만으로 말한다 */
     #listv .ltab .lt-d { color:var(--m); font-size:14.5px; }
     #listv .ltab tbody tr:hover { background:var(--s); }
     #listv .lvside { flex:0 1 340px; min-width:260px; position:sticky; top:0; display:flex; flex-direction:column; gap:8px; }
@@ -2488,7 +2487,7 @@
     #flowv .fv2 .fseg::before { content:""; display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; vertical-align:1px; background:var(--t); }
     #flowv .fv2 .fseg[data-kind="chg"]::before { background:var(--ac); } .fv2 .fseg[data-kind="up"]::before { background:#d4a63a; } .fv2 .fseg[data-kind="undet"]::before { background:var(--m); }
     #flowv .fv2 .fseg .n { display:block; margin-top:4px; font-size:22px; font-weight:500; color:var(--t); font-family:var(--ff2); font-variant-numeric:tabular-nums; }
-    #flowv .fv2 .fseg.z { opacity:.55; } .fv2 .fseg.z .n { color:var(--m); }
+    #flowv .fv2 .fseg.z { opacity:.8; } .fv2 .fseg.z .n { color:var(--m); }   /* 0건 칸 — 종전 .55 = 대비 2.88(2026-09-24 contrast_probe) */
     #flowv .fv2 .fseg.on { border-color:var(--ac); background:none; box-shadow:none; }
     #flowv .fv2 .fseg:hover, #flowv .fv2 .fall:hover { filter:brightness(1.12); }
     #flowv .fv2 .flinks { font-size:13.5px; color:var(--ac3); padding:4px 2px; }
@@ -2507,6 +2506,7 @@
       border:1px solid var(--b2); color:var(--m); background:none; font-weight:400; }
     #flowv .fv2 .mvk.new { background:var(--t); color:var(--pg); border-color:var(--t); }
     #flowv .fv2 .mvk.chg { border-color:var(--ac); color:var(--t); }
+    #flowv .fv2 .mvk.chg.back { background:none; border-color:var(--stall); }   /* 역행 — 밝은 면(#fdf8ec) 위에 밝은 글자가 남았다(대비 1.14 · 2026-09-24 contrast_probe) · 정체색은 테두리로 */
     #flowv .fv2 .fnm { display:flex; flex-direction:column; gap:3px; min-width:0; }
     #flowv .fv2 .fnm b { font-size:14.5px; font-weight:500; color:var(--t); }
     #flowv .fv2 .fsub { font-size:13px; color:var(--m); }
@@ -2774,6 +2774,9 @@
   .rawctl input { flex:1; min-width:180px; }
   .rrow { border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin-bottom:8px; }
   .rrow .rt { font-size:13.5px; font-weight:600; }
+  /* 유형 표기 = 색 점 + 잉크 글자(웹 범례 `.cat i`와 같은 문법) — 유형색 **글자**는 밝은 바탕용 진한 색이라 어두운 판에서 안 읽혔다(대비 2.3~3.9 · 2026-09-24 contrast_probe) */
+  .catdot { font-weight:700; white-space:nowrap; }
+  .catdot i { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; vertical-align:1px; }
   .rrow .rm { font-size:11.5px; color:var(--muted); margin-top:3px; }
   .rrow .rm b { color:var(--ink); font-weight:600; }
   .rrow a { color:var(--accent); text-decoration:none; font-size:11.5px; }
@@ -6362,10 +6365,13 @@ function buildTree() { syncRegionBar(); }   // 트리 제거 → 지역 드롭�
    (무거운 소스가 합류하면 같은 단지의 건수가 달라진다 · srcArrive가 +1). APTS 자체가 갈리면(apartments_all 도착) 객체가 새것이라 캐시도 새것. */
 let SIG_VER = 0;
 const APT_D_DOOR = "M12 3.2 3.5 10.6V21h6.2v-5.6h4.6V21h6.2V10.6Z", APT_D_SOLID = "M12 2.5 2.5 10.5V22h19V10.5Z";   // 큰 집 = 지붕 8·몸통 11.5(시안 비율) — 숫자가 몸통 안에 여유 있게
-function aptCount(a) {
-  if (a._cntv !== SIG_VER) { a._cnt = signalsNearPoint([a.lon, a.lat], true).length; a._cntv = SIG_VER; }
-  return a._cnt;
+/* 단지 반경 안 호재 목록 — 아이콘 건수(aptCount)와 미리보기 카드가 **같은 목록**을 쓴다(캐시 세대 SIG_VER).
+   종전 카드는 커서를 댈 때마다 signalsNearPoint를 **다시** 돌렸다(Leaflet판은 한 번 여는 데 두 번) — 커서가 단지를 지날 때마다 계산이 끼었다(2026-09-24 알렉스 「돌부리에 걸리는 느낌」). */
+function aptNear(a) {
+  if (a._nearv !== SIG_VER) { a._near = signalsNearPoint([a.lon, a.lat], true); a._nearv = SIG_VER; }
+  return a._near;
 }
+function aptCount(a) { return aptNear(a).length; }
 const aptDotLabel = n => (n > 99 ? "99+" : String(n));
 /* ★ 호버 카드는 아이콘 **위에 붙되 덮지 않는다** (2026-09-05 알렉스 「호갱노노처럼 아이콘 위에 붙지만 가리지는 않게」).
    종전 카카오 `top = pt.y - 3`·Leaflet `offset -6`은 아이콘 **중심** 기준이라 위 절반을 덮었다(아이콘이 32px가 되며 더 드러남).
@@ -10083,32 +10089,19 @@ function initLeaflet() {
       // ⚠ **all=true 필수** — 단지 반경 내 호재 개수는 **사실**이라 조회조건과 무관해야 한다
       //   (2026-07-29 확정 "비교는 필터와 무관해야"가 팝업엔 적용돼 있지 않았다).
       //   실측 사고: 등급 S만 켠 상태에서 같은 단지가 팝업 **0건** / 비교 **6건**으로 갈렸다.
-      const near = () => signalsNearPoint([a.lon, a.lat], true);   // 팝업 열 때만 계산(렌더 비용 절감)
       const sub = `${a.sg} ${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : " · 세대수 미상"}${a.built ? " · 준공 " + a.built : ""}`;
-      // hover 팝업: 마커 벗어나 빈 공간 가면 닫힘(300ms 유예 — 그 사이 팝업 위로 이동하면 유지 → 비교담기 클릭 가능).
-      // 위치 = 아이콘 바로 위 중앙. 호재 건수는 열 때만 계산.
+      // hover 카드 = 보여주기만(커서를 받지 않는다 · 2026-09-24) — 마커를 벗어나면 곧바로 닫힌다 · 위치 = 아이콘 바로 위 중앙 · 목록 = aptNear 캐시(아이콘 건수와 같은 자)
       m.on("mouseover", () => {
         if (NO_HOVER) return;   // 터치 = 탭이 곧바로 상세(아래 click) · 카카오 층과 같은 규칙(2026-09-05)
+        const near = aptNear(a);
         const pop = `<div class="apt-pop"><div class="apt-pop-body"><div class="apt-pop-nm">${a.n}</div><div class="apt-pop-sub">${sub}</div>`
-          + `<div class="apt-pop-cnt"><b>${near().length}</b><span>건</span></div>`
-          + catBarHtml(near())
+          + `<div class="apt-pop-cnt"><b>${near.length}</b><span>건</span></div>`
+          + catBarHtml(near)
           + `</div></div>`;   // 미리보기만 — 비교 담기는 상세 판(#cmpAdd) 한 곳(2026-09-05 알렉스)
         const me = m.getElement(); const halfW = me ? Math.round(me.offsetWidth / 2) : 0;
         const pu = L.popup({ className: "apt-pop-wrap", closeButton: false, autoPan: false, offset: [halfW, -Math.round(aptPopOffsetY(me))] })   // 아이콘 위 · 덮지 않음(카카오 층과 같은 헬퍼)
           .setLatLng([a.lat, a.lon]).setContent(pop).openOn(map);
-        const el = pu.getElement();
-        // 본문 클릭 = 상세(마커 클릭과 같은 문 · 2026-09-05 3안) — 카카오 층과 같은 부품
-        const body = el && el.querySelector(".apt-pop-body");
-        if (body) L.DomEvent.on(body, "click", e => {
-          L.DomEvent.stop(e); if (map._popup === pu) map.closePopup(pu);
-          treeState.selKey = `apt|${a.n}|${a.dong}`; buildTree(); showApt(a);
-        });
-        let overPopup = false;
-        if (el) {
-          L.DomEvent.on(el, "mouseenter", () => overPopup = true);
-          L.DomEvent.on(el, "mouseleave", () => { overPopup = false; if (map._popup === pu) map.closePopup(pu); });
-        }
-        m.once("mouseout", () => setTimeout(() => { if (!overPopup && map._popup === pu) map.closePopup(pu); }, 300));
+        m.once("mouseout", () => { if (map._popup === pu) map.closePopup(pu); });
       });
       m.on("click", () => { treeState.selKey = `apt|${a.n}|${a.dong}`; buildTree(); showApt(a); });
       aptDots.push(m);
@@ -12050,16 +12043,12 @@ function initKakao() {
   const renderMasterArea = () => {};
 
   // 아파트 마커 + hover 팝업(비교담기)
-  let aptDots = [], aptPop = null, aptPopTimer = null;
+  let aptDots = [], aptPop = null;
   const closeAptPop = () => { if (aptPop) { aptPop.remove(); aptPop = null; } };
-  const openAptPop = (a, sub, pt, dotEl) => { closeAptPop(); const near = signalsNearPoint([a.lon, a.lat], true);   // all=true — 단지 사실은 조회조건 무관(Leaflet판 주석 참조) · dotEl = 아이콘 요소(카드를 그 위에 띄운다)
-    aptPop = document.createElement("div"); aptPop.style.cssText = "position:absolute;z-index:50;transform:translate(-50%,-100%);pointer-events:auto"; aptPop.style.left = pt.x + "px"; aptPop.style.top = (pt.y - aptPopOffsetY(dotEl)) + "px";
+  const openAptPop = (a, sub, pt, dotEl) => { closeAptPop(); const near = aptNear(a);   // all=true 목록(단지 사실은 조회조건 무관) · 아이콘 건수와 같은 캐시 · dotEl = 아이콘 요소(카드를 그 위에 띄운다)
+    aptPop = document.createElement("div"); aptPop.style.cssText = "position:absolute;z-index:50;transform:translate(-50%,-100%);pointer-events:none"; aptPop.style.left = pt.x + "px"; aptPop.style.top = (pt.y - aptPopOffsetY(dotEl)) + "px";
     aptPop.innerHTML = '<div class="apt-pop"><div class="apt-pop-body"><div class="apt-pop-nm">' + a.n + '</div><div class="apt-pop-sub">' + sub + '</div><div class="apt-pop-cnt"><b>' + near.length + '</b><span>건</span></div>' + catBarHtml(near) + '</div></div>';   // 미리보기만 — 비교 담기는 상세 판(#cmpAdd) 한 곳(2026-09-05 알렉스)
-    mapEl.appendChild(aptPop);
-    // 본문 클릭 = 상세(아이콘 클릭과 같은 문 · 2026-09-05 3안). 「상세보기」 버튼은 없다 — 같은 일을 두 번 묻지 않는다.
-    const body = aptPop.querySelector(".apt-pop-body");
-    if (body) tapThru(body, () => { closeAptPop(); treeState.selKey = "apt|" + a.n + "|" + a.dong; buildTree(); showApt(a); });   // 아이콘과 같은 탭 문법(2026-09-08 세션107)
-    aptPop.addEventListener("mouseenter", () => { if (aptPopTimer) clearTimeout(aptPopTimer); }); aptPop.addEventListener("mouseleave", () => closeAptPop()); };
+    mapEl.appendChild(aptPop); };   // 보여주기만 — 커서를 받지 않고(pointer-events:none) 상세는 아이콘 클릭 하나(2026-09-24)
   // 아파트 점: 단지 객체에 1회 캐시(_kdot) — setMap 토글 + 선택 상태만 className 갱신
   let aptShown = new Set();
   const renderAptDots = () => {
@@ -12074,8 +12063,8 @@ function initKakao() {
           const d = document.createElement("div");   // 집모양 SVG(apt-dot, 2026-07-21) + 건수 <b>(2026-09-05)
           d.innerHTML = '<svg viewBox="0 0 24 24"><path d="' + APT_D_DOOR + '"/></svg><b></b>';
           const sub = a.sg + " " + a.dong + (a.hh ? " · " + a.hh.toLocaleString() + "세대" : " · 세대수 미상") + (a.built ? " · 준공 " + a.built : "");
-          d.addEventListener("mouseenter", () => { if (NO_HOVER) return; if (aptPopTimer) clearTimeout(aptPopTimer); openAptPop(a, sub, toPt(a.lon, a.lat), d); });   // 터치 = 탭이 곧바로 상세(아래 click)
-          d.addEventListener("mouseleave", () => { aptPopTimer = setTimeout(closeAptPop, 300); });
+          d.addEventListener("mouseenter", () => { if (NO_HOVER) return; openAptPop(a, sub, toPt(a.lon, a.lat), d); });   // 터치 = 탭이 곧바로 상세(아래 click)
+          d.addEventListener("mouseleave", closeAptPop);   // 카드는 커서를 받지 않으므로 유예가 필요 없다 — 아이콘을 벗어나면 곧바로 닫힌다
           tapThru(d, () => { treeState.selKey = "apt|" + a.n + "|" + a.dong; buildTree(); showApt(a); });   // 터치는 touchend에서 · 지도 click 이중 발화 무시(2026-09-08 세션107)
           a._kdot = new K.CustomOverlay({ position: LL(a.lon, a.lat), content: d, zIndex: 8, yAnchor: .5, xAnchor: .5 });
         }
@@ -13176,12 +13165,12 @@ function renderUndet(more) {
   document.getElementById("u-count").innerHTML =
     `<b>${rows.length.toLocaleString()}건</b> 등급 없음 (전체 신호 ${total.toLocaleString()}건 중 등급 없음 ${undet.toLocaleString()}건`
     + (staleN ? ` · <span title="완공·종결·해산 후 1년이 지났거나 완료일 미상인 신호 — 지도와 같은 기준으로 제외(2026-07-21 규칙)">오래된 완공 ${staleN.toLocaleString()}건 제외</span>` : "") + `) — `
-    + CAT_KEYS.filter(c => byCat[c]).map(c => `<span style="color:${CAT_COLOR[c]};font-weight:700">${c} ${byCat[c]}</span>`).join(" · ");
+    + CAT_KEYS.filter(c => byCat[c]).map(c => `<span class="catdot"><i style="background:${CAT_COLOR[c]}"></i>${c} ${byCat[c]}</span>`).join(" · ");   // 색 = 점만(어두운 판 위 유형색 글자는 대비 2.3 · 2026-09-24)
   document.getElementById("u-list").innerHTML = rows.slice(0, window._undetShown).map(s => {
     const loc = [s.sd, s.sg, s.dong].filter(Boolean).join(" ");
     const src = (s.sources || [])[0];
     return `<div class="rrow">
-      <div class="rt"><span style="color:${CAT_COLOR[catOf(s)]};font-weight:700">● ${catOf(s)}</span> · ${s.title || "(제목 없음)"}</div>
+      <div class="rt"><span class="catdot"><i style="background:${CAT_COLOR[catOf(s)]}"></i>${catOf(s)}</span> · ${s.title || "(제목 없음)"}</div>
       <div class="rm">${loc || "위치 미상"} · <b style="color:#a08a5a">등급 없음 사유: ${undetReason(s)}</b>${src ? ` · <a href="${src}" target="_blank">원문</a>` : ""}</div>
     </div>`;
   }).join("") || `<div class="pickhint" style="padding:20px">해당 조건의 등급 없는 호재 없음</div>`;
@@ -13405,8 +13394,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_facilities.json": "38dc46cdea", "apartments_all.json": "2981364a1b", "arch_signals.json": "67ac553c2a", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "6b02e80523", "corridor_diff.json": "a20272a9f4", "dart_signals.json": "7e6cbced78", "dps_signals.json": "3b381e4438", "eum_backfill_progress.json": "2daa25c0e7", "eum_enroll.json": "844bcf90b5", "eum_signals.json": "710058153f", "eum_usage.json": "ce7812612f", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "fff4010c6e", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "5d78d28018", "jeongbi_poly_seoul.json": "48ad1d52e7", "jigu_school_signals.json": "e17a04918f", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "244dc7d7bc", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "60938fcd67", "mega_signals.json": "b7014fc3bb", "methodology.html": "8e611731b0", "park_signals.json": "b41a7918c5", "privacy.html": "217d09c9a3", "push_feed.json": "54ba67456c", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "5d6ec4ebb0", "rail_reference.html": "2bdd33e915", "rail_signals.json": "cb0ba3a85e", "region_gaps.json": "210dbf3b42", "regions.json": "b7c757393f", "report.html": "d25155ac58", "retail_signals.json": "4538081e4c", "road_signals.json": "fcd41b5129", "robots.txt": "2312aa6291", "school_signals.json": "685e858b4d", "settings.html": "d825ba6ca1", "sfz_signals.json": "30bff56409", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "80dc01203f", "signals.json": "3f3409fd49", "signals_auto.json": "221a6356c1", "signals_jeongbi_all.json": "7fcb79a969", "sitemap.xml": "65eb53a400", "source_status.html": "690fd83443", "sw.js": "bd80e753e7", "thresholds.json": "ebb6cb9bf4", "upis_facility_geom.json": "56b8263e76", "upis_on_road.json": "e952291308", "weekly.html": "f40a039121", "weekly_index.json": "6ba06f590e"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260924k");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_facilities.json": "38dc46cdea", "apartments_all.json": "2981364a1b", "arch_signals.json": "67ac553c2a", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "4ac092017f", "corridor_diff.json": "30c2a60b9c", "dart_signals.json": "7e6cbced78", "dps_signals.json": "3b381e4438", "eum_backfill_progress.json": "2daa25c0e7", "eum_enroll.json": "844bcf90b5", "eum_signals.json": "710058153f", "eum_usage.json": "ce7812612f", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "fff4010c6e", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "5d78d28018", "jeongbi_poly_seoul.json": "48ad1d52e7", "jigu_school_signals.json": "e17a04918f", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "244dc7d7bc", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "60938fcd67", "mega_signals.json": "b7014fc3bb", "methodology.html": "8e611731b0", "park_signals.json": "b41a7918c5", "privacy.html": "217d09c9a3", "push_feed.json": "6b8fd0b0b1", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "1e0a84e691", "rail_reference.html": "2bdd33e915", "rail_signals.json": "cb0ba3a85e", "region_gaps.json": "7473f99846", "regions.json": "b7c757393f", "report.html": "d25155ac58", "retail_signals.json": "4538081e4c", "road_signals.json": "555c5083b5", "robots.txt": "2312aa6291", "school_signals.json": "685e858b4d", "settings.html": "d825ba6ca1", "sfz_signals.json": "30bff56409", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "80dc01203f", "signals.json": "3f3409fd49", "signals_auto.json": "221a6356c1", "signals_jeongbi_all.json": "7fcb79a969", "sitemap.xml": "65eb53a400", "source_status.html": "690fd83443", "sw.js": "bd80e753e7", "thresholds.json": "ebb6cb9bf4", "upis_facility_geom.json": "56b8263e76", "upis_on_road.json": "ba696b0745", "weekly.html": "f40a039121", "weekly_index.json": "6ba06f590e"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260924l");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
