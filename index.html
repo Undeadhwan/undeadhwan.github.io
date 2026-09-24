@@ -729,6 +729,33 @@
   /* ★ 켜짐 = **잉크 채움**(DESIGN §1-2 「상태는 색이 아니라 채움으로」 · 2026-09-24 알렉스 「모바일에서 지적편집도·위성 구분」) — 종전엔 켜지면 글자만 「지도」로 바뀌어
      지금 무엇이 켜졌는지 버튼이 말하지 않았다. 이제 글자는 레이어 이름 그대로(위성·지적)이고 켜짐은 채움이 말한다. 둘은 **따로** 켜진다(지적은 위성 위에도 얹힌다). */
   .mapbase.on, .mapcad.on { color:#fff; background:var(--ink); border-color:var(--ink); }
+  /* ★ 폰 「레이어」 버튼 + 판 (2026-09-24 · 모바일 검토 표 ①⑦) — 데스크톱 레이어 스택(철도·도로·노선명·묶음·위성·지적)과 **같은 항목·같은 핸들러**를
+     작은 판 하나에 모은다(`mountLayerStack(box)` · `paintLayerStack`이 두 곳을 같이 칠한다) + 범례 한 줄(`paintLegend` 한 벌). 위성·지적 개별 버튼은 폰에서 숨긴다
+     (동작의 정본은 그대로 — 판의 위성은 `.mapbase`를 누른다). 데스크톱은 우측 스택이 있으므로 이 버튼·판을 쓰지 않는다. */
+  .maplayer { position:absolute; right:12px; z-index:5; height:36px; min-width:52px; padding:0 11px; display:none; align-items:center; justify-content:center;
+    gap:5px; cursor:pointer; background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:8px; box-shadow:0 1px 6px rgba(0,0,0,.10);
+    color:var(--ink2); font-family:inherit; font-size:12px; font-weight:600; line-height:1; letter-spacing:-.01em; }
+  .maplayer.on { color:#fff; background:var(--ink); border-color:var(--ink); }
+  .maplayer svg { width:15px; height:15px; display:block; }
+  #mlayers { position:absolute; right:12px; z-index:6; width:236px; padding:10px; border-radius:10px; background:#fff; border:1px solid var(--line);
+    box-shadow:0 4px 16px rgba(0,0,0,.14); color:var(--ink); }
+  #mlayers[hidden] { display:none; }
+  #mlayers .mly-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+  #mlayers .ly { display:flex; flex-direction:column; align-items:center; gap:3px; padding:8px 0 6px; border-radius:8px; cursor:pointer;
+    background:var(--bg); border:1px solid var(--line); color:var(--ink2); font-family:inherit; font-size:12px; }
+  #mlayers .ly { --ly-hole:var(--bg); }
+  #mlayers .ly.on { background:var(--ink); border-color:var(--ink); color:#fff; }
+  #mlayers .ly.on { --ly-hole:var(--ink); }
+  #mlayers .mly-legend { --ly-hole:var(--bg); }
+  #mlayers .ly[hidden] { display:none; }
+  #mlayers .ly svg { width:20px; height:20px; display:block; }
+  #mlayers .mly-legend { display:flex; flex-wrap:wrap; gap:6px 12px; align-items:center; margin-top:10px; padding-top:8px; border-top:1px solid var(--line);
+    font-size:12px; color:var(--ink2); }
+  #mlayers .mly-legend > span { display:flex; align-items:center; gap:4px; }
+  #mlayers .mly-legend > span.cat.off { opacity:.4; text-decoration:line-through; }
+  #mlayers .mly-legend i { width:8px; height:8px; border-radius:50%; display:inline-block; }
+  #mlayers .mly-legend .sep, #mlayers .mly-legend .rule { display:none; }
+  @media (max-width:768px) { .mapbase, .mapcad { display:none !important; } .maplayer { display:flex; } }
   .mapbase svg, .mapcad svg { width:15px; height:15px; display:block; }
   /* ★ **데이터 출처 표시** (2026-09-09 세션109 · 알렉스 「지도에 노출해 · 거슬리지 않게 최대한 심플하게」).
      공공데이터는 대부분 **출처표시**가 이용 조건이고(공공누리 전 유형 공통 · 브이월드 약관도 같다),
@@ -1523,6 +1550,8 @@
   #msheet .mc .n { color:var(--ink2); font-variant-numeric:tabular-nums; }
   #msheet .mc.off { color:var(--ink3); border-color:var(--line); }
   #msheet .mc.off i { background:none !important; border:1.3px solid currentColor; }
+  #msheet .mc.op { border-color:var(--ink); color:var(--ink); }   /* 유형 줄 — 세부유형이 펼쳐진 분류 */
+  #msheet .ms-sub { padding-top:2px; }
   /* 좁은 폭에서는 열을 줄인다 — 6열은 375px에서 잘려 오히려 못 읽는다.
      소재지·확인일을 접고 호재명·유형·등급·단계만 남긴다(유형 색 바는 그대로라 지도 문법은 유지). */
   /* (모바일 시트의 6열 표 숨김 규칙 2줄은 2026-08-13에 지웠다 — 시트 목록이 `.ms-item` 2줄 행으로
@@ -2197,7 +2226,7 @@
     #zoomstack .zz span { display:flex; align-items:center; justify-content:center; height:40px; cursor:pointer; }
     #zoomstack .zz span + span { border-top:1px solid var(--b); }
     #zoomstack .zz span:hover, #zoomstack .zb:hover { filter:brightness(1.12); }
-    .myloc, .mapbase, .mapcad { display:none !important; }   /* 현위치 = 우하 스택 · 위성·지적 = 레이어 스택(같은 동작을 부른다) */
+    .myloc, .mapbase, .mapcad, .maplayer, #mlayers { display:none !important; }   /* 현위치 = 우하 스택 · 위성·지적 = 레이어 스택(같은 동작을 부른다) */
     .mylocmsg { right:64px; bottom:16px !important; top:auto !important; background:var(--pp); color:var(--t); border-color:var(--b); }
     .mapsrc { right:64px; bottom:2px; }
     body.kcr #zoomstack { bottom:34px; } body.kcr .mapsrc { right:64px; bottom:22px; } body.kcr .mylocmsg { bottom:34px !important; }
@@ -2231,6 +2260,10 @@
     body.vm-flow #layerstack, body.vm-flow #zoomstack, body.vm-flow #hjlegend, body.vm-flow #hjrules,
     body.vm-undet #layerstack, body.vm-undet #zoomstack, body.vm-undet #hjlegend, body.vm-undet #hjrules,
     body.vm-flow #chipbar, body.vm-undet #chipbar { display:none; }
+  }
+  /* ★ 호재 상세(.dv2)는 **데스크톱·폰 공용**이다 (2026-09-24 · 알렉스 「추천대로」 모바일 검토 표 ④) — 규칙은 v2 토큰 이름(--t·--m·--s·--ac…)으로 적고,
+     폰은 아래 `max-width:768px` 블록이 그 이름을 **밝은 DESIGN 토큰**으로 다시 묶는다(규칙 사본을 두지 않는다 · 모양만 바뀌고 사실 행은 같다). */
+  @media all {
     /* ── 호재 상세 팝업(.dv2) — 시안 값 그대로 ── */
     #panel .detail.dv2 { animation:none; color:var(--t); font-size:14px; }
     .dv2 .dtop { display:flex; flex-direction:column; gap:10px; padding:16px 20px; }
@@ -2317,6 +2350,20 @@
     .dv2 .dfoot .rulefold > summary::-webkit-details-marker { display:none; }
     .dv2 .dfoot .note { color:var(--m); border-top:0; font-size:12.5px; }
     .dv2 .dfoot .ruledoc { margin-left:auto; font-size:12.5px; color:var(--ac3); font-weight:400; white-space:nowrap; }
+  }
+  @media (max-width:768px) {
+    /* 폰 상세 = v2 본문 · 밝은 토큰(DESIGN §2) — v2가 어둡게 박아 둔 값(단계 점·초안 배지·바닥 선)만 여기서 밝게 */
+    .dv2 { --t:var(--ink); --t2:var(--ink2); --m:var(--ink3); --s:var(--panel); --pg:var(--bg); --b:var(--line); --b2:var(--line2);
+      --ac:var(--accent); --ac2:var(--accent); --ac3:var(--accent); }
+    #panel .detail.dv2 { padding-bottom:24px; }
+    .dv2 .stp i { border-color:var(--line2); background:var(--bg); }
+    .dv2 .stp.cur i { box-shadow:0 0 0 4px var(--panel); }
+    .dv2 .badge-draft { background:#fff3cd; color:#856404; }
+    .dv2 .dfoot { border-top-color:var(--line); }
+    .dv2 .dk .dback { display:none; }   /* 폰은 화면 위 「‹ 뒤로」가 이미 있다(두 개면 어느 것이 무엇인지 흐려진다) */
+    .dv2 .dk .dx { width:36px; height:36px; margin-right:-8px; font-size:22px; display:flex; align-items:center; justify-content:center; }
+  }
+  @media (min-width:769px) {
     /* ── 좌측 팝업의 다른 화면(아파트·묶음·동·구) — 시안 「아파트 팝업」 값 ── */
     #panel > .phead { display:flex; align-items:center; gap:8px; padding:12px 14px 0; margin:0; position:static; background:none; border:0; }
     #panel > .phead .phl { display:flex; align-items:center; gap:8px; min-width:0; flex:1; }
@@ -7172,7 +7219,7 @@ function archFactsheet(s) {
    사업 단계 스텝퍼 + 현재 고시 카드 → (교통) 노선 지점 → 키-값 표 → 관련 목록 → 푸터.
    ★ 사실 행은 **버리지 않는다** — 종전 카드의 행(대지위치·영향권·효력·사업비·구간·근거·비고·근거 층)은 키-값 표에 그대로 선다(P2·P5).
      단계 이력 전체는 스텝퍼 아래 접힘으로 남긴다(`msTrack` 한 벌).
-   ⚠ 데스크톱만 — 모바일은 `renderDetail`(종전 카드)이 그린다(시안 범위 밖). */
+   ★ 폰도 이것을 그린다(2026-09-24 · 모바일 검토 표 ④ — 모양만 밝은 토큰 · `renderDetail`). */
 const PH4 = ["계획", "인가", "착공", "준공·개통"];
 function msPhaseIdx(m) { const p = m.phase === "준공" ? "준공·개통" : m.phase; return PHASE_IDX[p] ?? -1; }
 function ymDot(d) { const m = String(d || "").match(/^(\d{4})[-.]?(\d{2})?/); return m ? m[1] + (m[2] ? "." + m[2] : "") : ""; }
@@ -7288,105 +7335,11 @@ function renderDetailV2(s, host) {
 }
 
 function renderDetail(s) {
-  if (isDesk()) { s.__factsheet = archFactsheet(s); return renderDetailV2(s); }   // 웹 크롬 v2 — 데스크톱 상세 팝업
-  const p = document.getElementById("panel");
-  const ph = phaseOf(s);
-  const pIdx = PHASE_IDX[ph];
-  const tr = trackOf(s);
-  const dropped = s.status === "종결";
-  // 지점 칩 바(철도·도로 공통). 칩이 뜨면 같은 이름을 다시 나열하는 접근점·분기점 텍스트 행은 접는다
-  // — 같은 사실을 두 층이 말하면 반드시 어긋난다(간결 원칙). 칩이 없을 때만 텍스트 행이 폴백.
-  const lb = lineBar(s);
-  p.innerHTML = `
-    <!-- 「선택한 호재」 — 이 카드가 **무엇인지**부터 말한다(시안 §06 실물). 종전엔 빈 칸이라
-         옆 패널(동·단지·겹침)과 같은 자리에서 무엇을 보고 있는지 구분되지 않았다. -->
-    ${pheadHtml("")}   <!-- 「선택한 호재」 이름표는 2026-09-14 알렉스 「그 텍스트는 빼」로 뺐다 — 머리는 ‹·✕뿐, 이름이 첫 줄 -->
-    <div class="detail">
-      <!-- ★ 슬롯 1·2 (2026-08-13 시안 §06) — **이름이 첫 줄**이다.
-           종전엔 유형·등급·근거·영향반경이 한 문장으로 제목 **위**를 차지해, 정작 이름이
-           세 번째로 읽혔다. 이름 → 「유형 · 세부 · 소재지」 → 칩 3개(등급·단계·영향) 순으로 세운다.
-           ⚠ 정직성 배지(착공 전·계획(안)·무산·종결)는 시안 그림엔 없지만 **버리지 않는다** —
-             P2·P5가 요구하는 표기이고, 시안은 그 축을 다루지 않았을 뿐이다. 칩 줄에 함께 둔다. -->
-      <div class="dbar" style="background:${colorOf(s)}"></div>
-      <div class="dhead"><i class="dmk" style="background:${colorOf(s)}"></i><h2>${sigTitle(s)}</h2></div>
-      <div class="dsub"><span style="color:${colorOf(s)};font-weight:700">● ${catOf(s)}${subLabel(s)}</span>${(() => {
-        const pl = placeText(s); return pl ? " · " + pl : ""; })()}</div>
-      <div class="dchips">
-        ${s.area_shape && levelOf(s) === "미정" ? "" : `<span class="dchip lv">${levelOf(s) === "미정" ? LEVEL_NAME["미정"] : levelOf(s) + "등급"}</span>`}<!-- 딱지도 등급을 가지면 칩을 단다(2026-08-17 딱지 등급 부여 — 지도 원은 A인데 카드만 무등급이면 쌍이 갈린다). 미등급 딱지만 칩 생략(면적 칩이 규모를 말한다) -->
-
-        <span class="dchip ph${phaseSolid(s) || dropped ? "" : " ph-plan"}" style="${phaseSolid(s) && !dropped ? `background:${colorOf(s)}` : `color:${colorOf(s)}`}">${PHASE_LABEL[ph] || ph}</span>
-        <span class="dchip">${s.area_shape ? (s.area_m2 ? `지구 ${(s.area_m2 / 1e6).toFixed(1)}km²` : "면적 미상")
-          : `영향 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km`}</span>
-        ${natureChip(s)}<!-- 공사 성격 = 네 번째 칩(교통 · 2026-09-06 알렉스 · 2026-09-07 전체) — 값은 여기, 근거는 아래 「성격 근거」 행 -->
-        ${s.gate === "계획안" ? '<span class="badge-draft">계획(안) — 승인 전</span>' : ""}
-        ${dropped ? '<span class="badge-drop">무산·종결</span>' : ""}</div>
-      ${s.gate === "계획안" ? `<div class="kv" style="color:#b3651e"><b>계획(안)</b> 승인 전 — 위치·노선 변경 가능${s.gate_basis ? ` · ${s.gate_basis}` : ""}</div>` : ""}
-      ${freshness(s)}
-      ${lb}
-      ${msTrack(s)}
-      ${nextWatch(s)}
-      <!-- 슬롯 5 「핵심 수치(라벨–값)」의 첫 행 — 등급 근거 (시안 §06).
-           종전엔 제목 **위** 한 문장에 섞여 있어 「왜 이 등급인지」가 라벨 없이 흘렀다. -->
-      ${(() => { const g = gradeBasisHtml(s).replace(/\s*·\s*$/, "").trim();
-        return g ? `<div class="kv"><b>등급 근거</b> ${g}</div>` : ""; })()}
-      <!-- 「단계 근거」 — 등급 근거와 **한 쌍**이다(시안 §13 라벨–값 행: 등급 근거 / 단계 근거).
-           데이터(gate_basis)는 어댑터가 이미 나르고 있었는데 화면엔 「계획(안)」일 때만 나왔다 —
-           나머지 단계에선 「왜 이 단계인가」를 화면이 말하지 않았다(등급 근거와 같은 사고, 반대쪽). -->
-      ${s.addr ? `<div class="kv"><b>대지위치</b> ${s.addr} <span class="copyaddr" onclick="copyAddr(this,'${s.addr.replace(/'/g, "\\'")}')" title="주소 복사">📋</span></div>` : ""}
-      ${s.group_n ? `<div class="kv kvblock"><b>블록 ${s.group_n}개</b> 합계 ${(s.group_area_m2 || 0).toLocaleString()}㎡
-        <div class="fs-grid" style="margin-top:6px">${s.group_members.map(m =>
-          `<span>${m.block || "-"}</span><b>${(m.area_m2 || 0).toLocaleString()}㎡${m.lvl ? ` · ${m.lvl}급` : ""}</b>`).join("")}</div></div>` : ""}
-      ${(() => { s.__factsheet = archFactsheet(s); return ""; })()}
-      ${s._road && (s.access_points || []).length ? (s.road_kind === "전용"
-        ? `<div class="kv"><b>영향권</b> ${(s.ic_points || []).length
-            ? `IC ${s.ic_points.length}곳 · 반경 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km`
-            : `<b>IC 위치 미확정</b> · ${s.phase === "계획" || s.phase === "인가" ? "착공 전" : "확인 중"}`}${s.access_note ? ` · ${s.access_note}` : ""}</div>`
-        : `<div class="kv"><b>영향권</b> 노선 양측 ${(getRadius(s) / 1000).toFixed(1).replace(".0", "")}km${s.access_note ? ` · ${s.access_note}` : ""}</div>`) : ""}
-      ${!lb && (s.access_points || []).filter(a => a.name).concat(s.ic_points || []).length ? `<div class="kv"><b>접근점</b> ${
-        (s.access_points || []).filter(a => a.name).concat(s.ic_points || []).map(a =>
-        `${a.name}${a.coordinates ? "" : " (좌표 미확보)"}`).join(" · ")}</div>` : ""}
-      ${!lb && (s.jc_points || []).length ? `<div class="kv"><b>분기점(JC)</b> ${s.jc_points.map(j => j.name).join(" · ")}
-        <span class="hmhint">— 진출입 없음</span></div>` : ""}
-      ${!lb && (s.existing_ic_points || []).length ? `<div class="kv"><b>기존 IC</b> ${s.existing_ic_points.map(j => j.name).join(" · ")}
-        <span class="hmhint">— 이 사업으로 새로 생기는 지점 아님</span></div>` : ""}
-      ${(s.unverified_points || []).length ? `<div class="kv"><b>근거 미확인</b> ${s.unverified_points.map(u => u.name).join(" · ")}
-        <span class="hmhint">— 공식 원문에서 못 찾음</span></div>` : ""}
-      ${s.side_effects?.length ? `<div class="kv"><b>역효과 표기</b> ${s.side_effects.join(", ")}</div>` : ""}
-      ${gosiEffectRow(s)}${dartRow(s)}${costRow(s)}${corridorRow(s)}${roadExistsRow(s)}<!-- 사용자 층: 효력·사업비·구간·기존 도로 사실. 근거·정확도 행은 아래 근거 층(evidenceFold)으로(2026-09-08 세션108) -->
-      <!-- ☠ 「반경 Nkm 내 단지」 목록을 **지웠다** (2026-08-19 시안 「구현 3단계」 ⑨).
-           *"호재를 보는 화면에서 단지 목록은 다른 질문입니다."* — 이 카드가 답하는 질문은
-           「이 호재가 무엇이고 어디까지 왔나」다. 단지는 아파트 화면(미리보기·상세)의 축이고,
-           거기엔 기준점(선택한 단지)이 있어 거리가 정의된다. 여기엔 기준점이 없다.
-           ⚠ aptsNearSignal()은 아파트 화면이 계속 쓰므로 함수는 남긴다(죽은 건 이 자리뿐).
-           ⚠ 이 주석은 **템플릿 리터럴 안**이다 — 백틱을 쓰면 문자열이 끊겨 화면이 백지가 된다
-             (2026-08-19 실측: 여기 백틱 하나로 html_check가 구문 오류를 냈다). -->
-      ${gosiHistory(s) || `<div class="kv"><b>근거</b> ${srcBadge(s)} <span class="src">${(s.sources || []).map((u, i) => {
-        // 링크 전수조사(2026-07-30, link_audit.py)에서 참조 1,216건(72%)이 **조회조건 없는 메인**으로
-        // 드러났다 — 링크는 살아 있는데 그 신호를 찾을 수 없어 "정보가 무의미"하게 느껴진다(사용자 지적).
-        // GET 파라미터 딥링크는 실측 불가(건축HUB는 파라미터를 줘도 응답이 동일) → **라벨에 조회 방법을 박는다.**
-        // ★ 2026-08-18 메커니즘 확정(사장님 "여전히 암것도 안나와" 재제보): 기본개요 화면의 검색 그리드는
-        //   bimatrix(i-AUD) BI **iframe**(idx-bi-matrix.do?rCode=…)이고 컨트롤 ID가 세션 생성 GUID다 —
-        //   URL 파라미터로 필터를 채우는 길이 **구조적으로 없다**. 딥링크 재시도는 낭비(시도 대장 성격의 기록).
-        //   ⇒ 원문 수치는 팩트시트가 전부 보여주고, 라벨이 「빈 검색화면」을 미리 말한다(P2 — 화면이 사실을).
-        const NEEDQ = [[/hub\.go\.kr\/portal\/opn/, "건축HUB"], [/hub\.go\.kr\/portal\/dps/, "건축HUB 설계공모"],
-                       [/jigu\.go\.kr/, "택지정보"]];   // 조회법은 근거 층(linkHowTo) · title 속성이 「검색 조건 직접 입력」을 말한다(2026-09-08 문구 간소화)
-        const nq = NEEDQ.find(([re_]) => re_.test(u));
-        /* ★ 이름 없는 링크는 **데이터가 아는 이름**으로 부른다 (2026-08-14 시안 §13 「기재부 고시 ·
-           예타 결과 →」). 종전 폴백이 `원문 1`이라, `src_name`에 「기획재정부 재정사업평가위」가
-           있는데도 화면은 「원문 1」이라고만 했다 — 어느 기관 것인지 눌러야 알 수 있었다. */
-        const lbl = nq ? nq[1] : /hub\.go\.kr/.test(u) ? "건축HUB 열람" : /eais\.go\.kr/.test(u) ? "세움터" : /opendart\.fss/.test(u) ? "DART 공시" : /g2b|nara/.test(u) ? "나라장터 공고" : /cleanup\.seoul/.test(u) ? "정비몽땅" : /gg\.go\.kr/.test(u) ? "경기 정비현황" : /data\.go\.kr/.test(u) ? "공공데이터포털"
-          : (s.sources.length === 1 && s.src_name ? esc(String(s.src_name).split("—")[0].trim()) + " 원문" : `원문 ${i + 1}`);
-        return `<a href="${u}" target="_blank"${nq ? ' title="이 링크는 검색 조건을 직접 넣어야 해당 건이 보입니다 — 딥링크가 제공되지 않습니다"' : ""}>${lbl}</a>`;
-      }).join(" · ") || "원문 링크 없음"}</span>${
-        s.src_tier === "osm" ? ' · <b>진행단계·명칭은 공식 확인 전</b>(선형만 OSM 참고)' : ""}</div>`}
-      ${s.master_ref ? `<div class="kv"><b>소속 지구</b> ${s.master_ref.title}</div>` : ""}
-      ${s.ext_basis ? `<div class="kv"><b>증축 규모</b> ${s.ext_basis}</div>` : ""}
-      ${noteRow(s)}
-      ${evidenceFold(s)}
-      <div class="rulerow"><details class="rulefold"><summary>표기 규칙 · 영향 반경 기준</summary><div class="note">완료=날짜(사실) · 미래=목표/미정 · 진척률(%) 없음 · 영향 반경은 유형 기준표 가안</div></details><a class="ruledoc" href="methodology.html" target="_blank" rel="noopener">기준 전문 ▾</a></div>
-    </div>`;
+  /* ★ 데스크톱·폰 모두 v2 상세(2026-09-24 · 알렉스 「추천대로」 모바일 검토 표 ④⑤) — 폰은 종전 카드를 따로 그렸는데 사실 행은 v2가 전부 담고(위 renderDetailV2 머리 주석)
+     공유 버튼·단계 스텝퍼·관련 목록은 v2에만 있었다. 두 벌이면 한쪽만 고쳐진다 → 한 벌. 폰 모양은 CSS가 밝은 토큰으로 묶는다(`.dv2` max-width 블록). */
+  s.__factsheet = archFactsheet(s);
+  return renderDetailV2(s);
 }
-
 /* ══════════ 시군구 피드 (지도에서 구/시 클릭) ══════════ */
 function showSgg(disp) {
   view = { mode: "sgg", sgg: disp };
@@ -8578,7 +8531,7 @@ function sizeHeader() {
 /* ── 우측 레이어 스택 — 철도 · 도로 · 노선명 · 묶음 · 위성 · 지적 ── */
 const LAYER_SVG = {
   rail: '<svg viewBox="0 0 22 22" fill="none"><path d="M2 14C7 12 12 8 20 8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>',
-  road: '<svg viewBox="0 0 22 22" fill="none"><path d="M2 14C7 12 12 8 20 8" stroke="currentColor" stroke-width="5"/><path d="M2 14C7 12 12 8 20 8" stroke="#161826" stroke-width="2.6"/></svg>',
+  road: '<svg viewBox="0 0 22 22" fill="none"><path d="M2 14C7 12 12 8 20 8" stroke="currentColor" stroke-width="5"/><path d="M2 14C7 12 12 8 20 8" style="stroke:var(--ly-hole,#161826)" stroke-width="2.6"/></svg>',
   label: '<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="16" height="8" rx="2"/></svg>',
   cluster: '<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="5"/><circle cx="11" cy="11" r="8.5" stroke-dasharray="2 3"/></svg>',
   sat: '<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7.5"/><path d="M3.5 11h15M11 3.5c3 2.5 3 12.5 0 15M11 3.5c-3 2.5-3 12.5 0 15"/></svg>',
@@ -8592,8 +8545,8 @@ function cadApply() {
   if (cadOn()) m.addOverlayMapTypeId(kakao.maps.MapTypeId.USE_DISTRICT);
   document.body.classList.toggle("cad", cadOn());
 }
-function mountLayerStack() {
-  const box = document.getElementById("layerstack"); if (!box) return;
+function mountLayerStack(box = document.getElementById("layerstack")) {   // 호스트 = 데스크톱 우측 스택 · 폰 레이어 판(`layerBtnMount`) — 항목·핸들러 한 벌
+  if (!box) return;
   const items = [["rail", "철도", "lines", "철도선"], ["road", "도로", "lines", "도로선"], ["label", "노선명", "lines", "노선명"],
     ["cluster", "묶음", "cluster"], ["sat", "위성", "sat"], ["cad", "지적", "cad"]];
   box.innerHTML = items.map(([k, nm, ax, lk]) => `<button type="button" class="ly" data-ly="${k}"${ax === "lines" ? ` data-tog="lines" data-k="${lk}"` : ""}>${LAYER_SVG[k]}<span>${nm}</span></button>`).join("");
@@ -8609,11 +8562,10 @@ function mountLayerStack() {
   paintLayerStack();
 }
 function paintLayerStack() {
-  const box = document.getElementById("layerstack"); if (!box) return;
   const kakaoOn = !!window._kmap;
   const on = { rail: filter.lines.has("철도선"), road: filter.lines.has("도로선"), label: filter.lines.has("노선명"),
     cluster: clusterOn(), sat: typeof baseMapGet === "function" && baseMapGet() === "sat", cad: cadOn() };
-  box.querySelectorAll("[data-ly]").forEach(b => {
+  document.querySelectorAll("#layerstack [data-ly], #mlayers [data-ly]").forEach(b => {   // 두 호스트를 같은 상태로
     const k = b.dataset.ly;
     b.classList.toggle("on", !!on[k]);
     b.setAttribute("aria-pressed", on[k] ? "true" : "false");
@@ -8655,14 +8607,16 @@ function mountLegend() {
   paintLegend();
 }
 function paintLegend() {
-  const lg = document.getElementById("hjlegend"); if (!lg) return;
+  const hosts = [document.getElementById("hjlegend"), document.querySelector("#mlayers .mly-legend")].filter(Boolean);
+  if (!hosts.length) return;
   const C = CAT_COLOR["교통"];
-  lg.innerHTML = CAT_KEYS.map(c => `<span class="cat${filter.cat.has(c) ? "" : " off"}"><i style="background:${CAT_COLOR[c]}"></i>${c}</span>`).join("")
+  const html = CAT_KEYS.map(c => `<span class="cat${filter.cat.has(c) ? "" : " off"}"><i style="background:${CAT_COLOR[c]}"></i>${c}</span>`).join("")
     + '<span class="sep"></span>'
     + `<span><svg width="26" height="8"><path d="M1 4H25" stroke="${C}" stroke-width="3" stroke-linecap="round"/></svg>철도</span>`
-    + `<span><svg width="26" height="8"><path d="M1 4H25" stroke="${C}" stroke-width="7"/><path d="M1 4H25" stroke="#161826" stroke-width="4"/><path d="M1 4H25" stroke="${C}" stroke-opacity=".25" stroke-width="4"/></svg>도로</span>`
+    + `<span><svg width="26" height="8"><path d="M1 4H25" stroke="${C}" stroke-width="7"/><path d="M1 4H25" style="stroke:var(--ly-hole,#161826)" stroke-width="4"/><path d="M1 4H25" stroke="${C}" stroke-opacity=".25" stroke-width="4"/></svg>도로</span>`
     + `<span><svg width="26" height="8"><path d="M1 4H25" stroke="${C}" stroke-width="3" stroke-linecap="round" stroke-dasharray="0.1 5.5"/></svg>계획</span>`
     + '<span class="rule" role="button">표기 규칙</span>';
+  hosts.forEach(h => { h.innerHTML = html; });
 }
 /* 화면 상태를 body 표식으로 — 크롬 부품의 보임/숨김은 CSS가 이 표식 하나로 가른다 */
 function chromeView(mode) {
@@ -9817,6 +9771,31 @@ function cadMount() {
   el.appendChild(btn); paint(); place(); window.addEventListener("resize", place);
   window._cadPaint = paint;
 }
+/* ★ 폰 「레이어」 버튼 + 판 (2026-09-24 · 알렉스 「추천대로」 모바일 검토 표 ①⑦) — 종전엔 폰에서 철도·도로 선·노선명·묶음을 **끌 방법이 없었다**
+   (도크 시트 진입이 탭바 도입 뒤 사라짐). 데스크톱 우측 레이어 스택과 **같은 항목·같은 핸들러**(`mountLayerStack(box)`)를 판 하나에 담고,
+   범례 한 줄을 같은 함수(`paintLegend`)가 칠한다. 자리 = 「내 위치」 위(위성 버튼이 있던 자리 · 위성·지적 개별 버튼은 폰 CSS가 숨긴다).
+   두 렌더러 공용 — Leaflet 폴백에선 위성·지적 항목만 `paintLayerStack`이 숨긴다(못 하는 버튼을 두지 않는다 · P2). */
+function layerBtnMount() {
+  const el = document.getElementById("map");
+  if (!el || el.querySelector(".maplayer")) return;              // 멱등 — mylocMount와 같은 규약
+  const btn = document.createElement("button");
+  btn.className = "maplayer"; btn.type = "button";
+  btn.setAttribute("aria-label", "지도 레이어"); btn.setAttribute("aria-expanded", "false");
+  btn.innerHTML = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M8 2.5l5.5 3L8 8.5 2.5 5.5z"/><path d="M2.5 8.2L8 11.2l5.5-3M2.5 10.9L8 13.9l5.5-3"/></svg><span>레이어</span>';
+  const pan = document.createElement("div");
+  pan.id = "mlayers"; pan.hidden = true;
+  pan.innerHTML = '<div class="mly-grid"></div><div class="mly-legend"></div>';
+  const open = on => { pan.hidden = !on; btn.classList.toggle("on", on); btn.setAttribute("aria-expanded", on ? "true" : "false"); if (on) { paintLayerStack(); paintLegend(); } };
+  btn.onclick = e => { e.stopPropagation(); open(pan.hidden); };
+  /* 판 밖(지도 포함)을 누르면 닫힌다 — 칩 팝오버와 같은 판정(composedPath · 다시 칠해져 떨어진 요소도 경로엔 남는다) */
+  document.addEventListener("click", e => { if (!pan.hidden && !e.composedPath().includes(pan) && !e.composedPath().includes(btn)) open(false); });
+  const place = () => { const b = mapCtlBottom() + 44; btn.style.bottom = b + "px"; pan.style.bottom = (b + 44) + "px"; };
+  window._mapCtlPlacers.push(place);
+  el.appendChild(btn); el.appendChild(pan);
+  mountLayerStack(pan.querySelector(".mly-grid"));               // 데스크톱 스택과 같은 항목·핸들러
+  paintLegend(); place(); window.addEventListener("resize", place);
+  watchMapCtlObstacles();
+}
 function mylocMount() {
   const el = document.getElementById("map");
   if (!el || el.querySelector(".myloc")) return;                 // 멱등 — 두 초기화가 다 불러도 하나만
@@ -9902,6 +9881,7 @@ function initLeaflet() {
              (_lvL && _lvL.lv >= 1 && _lvL.lv <= 13) ? Math.max(6, 18 - _lvL.lv) : 10);   // 수도권 전역 · 줌 슬라이더 제거(2026-07-23) · 한반도 밖 이탈 방지(2026-08-10 — 카카오판 클램프와 쌍)
   window._map = map;   // 디버그·검증용
   mylocMount();        // 「내 위치」 버튼 — 카카오 경로와 **같은 함수**
+  layerBtnMount();     // 폰 「레이어」 버튼 + 판 — 두 렌더러 공용(모바일 검토 표 ①⑦)
   mapSrcMount();       // 데이터 출처 한 줄(라이선스 조건 · 두 렌더러 공통)
   // 마지막 본 자리 기억 — 카카오의 `idle`과 같은 자리(레벨은 카카오 문법으로 환산해 **한 형식**으로 저장)
   map.on("moveend zoomend", () => {
@@ -10844,6 +10824,7 @@ function initKakao() {
   });
   window._map = map; window._kmap = map; map.setMaxLevel(13);
   mylocMount();          // 「내 위치」 버튼 — 렌더러 무관(두 초기화가 같은 함수를 부른다)
+  layerBtnMount();       // 폰 「레이어」 버튼 + 판 — 〃(데스크톱은 CSS가 숨긴다 · 우측 스택이 같은 항목)
   mapSrcMount();         // 데이터 출처 한 줄 — 〃(한쪽에만 걸면 반대쪽이 조용히 예외가 된다)
   cadApply(); setTimeout(paintLayerStack, 0);   // 웹 크롬 v2 — 지적편집도 복원 · 위성·지적 버튼은 카카오에서만
   cadMount();            // 지적편집도(모바일 버튼 · 데스크톱은 레이어 스택) — 위성과 같이 카카오에만
@@ -12479,18 +12460,12 @@ function initKakao() {
     const st = !(opt && opt.stroke === false);   // 채움만 = 시도(구 링을 나란히 그린다 · 테두리를 그리면 구 경계가 내부 선이 된다)
     /* ⚠ **두께 0으로 두지 않는다** — 채움만 쓸 때도 `strokeWeight:1 · strokeOpacity:0`이다(2026-09-07 실측).
        그리고 테두리가 없으면 경계가 색 전환뿐이라 **채움을 조금 진하게** 해야 범위가 읽힌다(.12 → .22). */
-    /* ★ 웹 크롬 v2(데스크톱 · 시안 「지역」): 선택 지역 **외곽선 #4f6ee8 3px + 바깥 22% 어둡게**(구멍 뚫린 가림막 한 장). 모바일은 종전 채움 그대로. */
-    if (isDesk()) {
-      const W = [[118, 28], [136, 28], [136, 46], [118, 46]].map(([x, y]) => LL(x, y));
-      hlPolys.push(new K.Polygon({ map, path: [W].concat(ringsXY.map(r => r.map(([x, y]) => LL(x, y)))), strokeWeight: 0, strokeOpacity: 0, fillColor: "#161826", fillOpacity: .22, zIndex: 5 }));
-      if (st) ringsXY.forEach(r => hlPolys.push(new K.Polygon({ map, path: r.map(([x, y]) => LL(x, y)), strokeWeight: 3, strokeColor: "#4f6ee8", strokeOpacity: 1, fillOpacity: 0, zIndex: 7 })));
-      if (opt && opt.outline) opt.outline.forEach(l => hlPolys.push(new K.Polyline({ map, path: l.map(([x, y]) => LL(x, y)), strokeWeight: 3, strokeColor: "#4f6ee8", strokeOpacity: 1, zIndex: 8 })));
-      return;
-    }
-    ringsXY.forEach(r => hlPolys.push(new K.Polygon({ map, path: r.map(([x, y]) => LL(x, y)), strokeWeight: st ? 3.5 : 1, strokeColor: "#2563eb", strokeOpacity: st ? .9 : 0, fillColor: "#2563eb", fillOpacity: st ? .10 : .22, zIndex: 6 })));
-    // 시도 외곽선(opt.outline · 2026-09-08) — Leaflet판과 같은 값(잉크 3.5px .9). hlPolys에 넣어 clearHighlight가 같이 걷는다.
-    // ☠ 첫 판은 이 두 줄을 화살표 함수 닫힘(`}))); };`) **바깥**에 넣어 `opt` ReferenceError로 카카오 지도 초기화가 통째로 죽었다 — 구문 검사는 통과했다(실행에서만 죽는 형태 · 2026-09-08 로컬 실측).
-    if (opt && opt.outline) opt.outline.forEach(l => hlPolys.push(new K.Polyline({ map, path: l.map(([x, y]) => LL(x, y)), strokeWeight: 3.5, strokeColor: "#2563eb", strokeOpacity: .9, zIndex: 8 })));
+    /* ★ 선택 지역 = **외곽선 #4f6ee8 3px + 바깥 22% 어둡게**(구멍 뚫린 가림막 한 장 · 웹 크롬 v2 시안 「지역」).
+       폰도 같다(2026-09-24 · 알렉스 「추천대로」 모바일 검토 표 ⑥ — 종전 폰은 파란 채움 .10/.22 · 두 벌이면 한쪽만 고쳐진다). */
+    const W = [[118, 28], [136, 28], [136, 46], [118, 46]].map(([x, y]) => LL(x, y));
+    hlPolys.push(new K.Polygon({ map, path: [W].concat(ringsXY.map(r => r.map(([x, y]) => LL(x, y)))), strokeWeight: 0, strokeOpacity: 0, fillColor: "#161826", fillOpacity: .22, zIndex: 5 }));
+    if (st) ringsXY.forEach(r => hlPolys.push(new K.Polygon({ map, path: r.map(([x, y]) => LL(x, y)), strokeWeight: 3, strokeColor: "#4f6ee8", strokeOpacity: 1, fillOpacity: 0, zIndex: 7 })));
+    if (opt && opt.outline) opt.outline.forEach(l => hlPolys.push(new K.Polyline({ map, path: l.map(([x, y]) => LL(x, y)), strokeWeight: 3, strokeColor: "#4f6ee8", strokeOpacity: 1, zIndex: 8 })));
   };
   const sggRingsFn = () => { if (window._sggRings) return window._sggRings; const m = {}; SGG_GEO.features.forEach(f => { const disp = f.properties.sido + " " + sggDisplayName(f.properties.name); ringsOf(f).forEach(r => (m[disp] = m[disp] || []).push(r)); }); return (window._sggRings = m); };
   mapApi = { refreshPins, panTo: ll => { if (mapTargetOk(ll[1], ll[0], "panTo")) map.panTo(LL(ll[0], ll[1])); }, showRadius, showRadiusMany, clearRadius, showAptAnchor, highlightRings, clearHighlight, clearAptMarker, emphasizePin, sggRings: sggRingsFn, highlightRoute, clearRoute, hideTip, closeAptPop };   // viewFilter 제거(2026-07-27) — 소비처 없는 죽은 API였다
@@ -12655,6 +12630,10 @@ function initSheet() {
   const sh = document.getElementById("msheet"); if (!sh || sh._init) return;
   sh._init = true;
   bindFilterClicks(sh);                       // 도크와 같은 배선 — 사본 없음
+  sh.addEventListener("click", e => {         // 「유형」 줄 = 세부유형 펼치기만(켜고 끄기는 data-tog가 한다)
+    const b = e.target.closest("[data-msub]"); if (!b) return;
+    _msSubCat = _msSubCat === b.dataset.msub ? null : b.dataset.msub; renderSheet();
+  });
   /* 시트는 **탭바 위**에 앉는다. 높이를 박으면 낡으므로 탭바에서 잰다(창 크기 변경도 따라온다).
      ⚠ 이걸 안 하면 시트가 탭바에 통째로 가려 화면에서 사라진다(2026-08-13 실측 — z-index로는
        해결되지 않는다. 겹치지 않게 자리를 비켜야 한다). */
@@ -12715,6 +12694,7 @@ function msListInto(box, rows, apt, cap) {
    판정 조건은 CSS와 **같은 문자열**이다 — 둘이 갈리면 보이는 시트가 안 그려진다. */
 const MS_MQ = "(max-width: 768px)";
 let _msDirty = false;
+let _msSubCat = null;   // 시트 「유형」 줄에서 세부유형을 펼친 분류(세션 상태 — 저장하지 않는다)
 function renderSheet() {
   const sh = document.getElementById("msheet"); if (!sh) return;
   if (!matchMedia(MS_MQ).matches) { _msDirty = true; return; }
@@ -12756,12 +12736,25 @@ function renderSheet() {
      선택하는게 없는데 필요해"*). 데스크톱은 도크 슬롯의 `#apt-hh` 셀렉트가 담당하고 그 onchange는 지도 초기화
      (렌더러 두 갈래)가 건다. 시트는 **그 셀렉트의 option에서 칩을 도출**하고, 클릭은 셀렉트 값을 바꿔 change를
      쏜다(bindFilterClicks `hh`) — 상태도 핸들러도 하나다(사본 금지). 지도가 아직 안 떠서 option이 비었으면 행도 없다. */
+  /* ★ 성격·유형 줄 (2026-09-24 · 알렉스 「추천대로」 모바일 검토 표 ②③) — 폰엔 공사 성격 필터가 **없었고**, 유형은 지도 위 축 칩(대분류 켜고 끄기)뿐이라
+     세부유형을 고를 수 없었다. 데스크톱 칩 줄 「성격」·「유형 ›」과 **같은 data 속성**(data-tog="nature"·"sub" · data-suball/subnone)을 달아
+     같은 핸들러(`bindFilterClicks`)가 받는다 — 판정 사본 없음. 유형 칩은 **펼치기만** 한다(대분류 켜고 끄기는 지도 위 축 칩 한 곳 · 두 벌 금지 주석 위). */
+  const C = dockCounts();
+  const ntRow = NATURE_KEYS.map(k => chip("nature", k, k === "미상" ? "성격 미상" : k, "", filter.nature.has(k))).join("");
+  const tyRow = CAT_KEYS.map(c => `<button class="mc${_msSubCat === c ? " op" : ""}${chipCatState(c, C) === "off" ? " off" : ""}" data-msub="${c}">`
+    + `<i style="background:${CAT_COLOR[c]}"></i>${c}<span class="n">${_msSubCat === c ? "▾" : "›"}</span></button>`).join("");
+  const subRow = _msSubCat ? (SUB_KEYS[_msSubCat] || []).filter(sk => C.sub[subId(_msSubCat, sk)] || 0)
+    .map(sk => { const id = subId(_msSubCat, sk); return chip("sub", id, subDisp(sk), "", filter.sub.has(id), C.sub[id] || 0); }).join("")
+    + `<button class="mc" data-suball="${_msSubCat}">전체</button><button class="mc" data-subnone="${_msSubCat}">해제</button>` : "";
   const hhSel = window._aptHhEl || document.getElementById("apt-hh");
   const hhRow = hhSel && hhSel.options.length
     ? [...hhSel.options].map(o => chip("hh", o.value, o.text.replace(/^아파트\s*/, ""), "", o.value === hhSel.value)).join("") : "";
   document.getElementById("ms-filters").innerHTML =
     `<div class="ms-row"><span class="lb">등급</span>${lvRow}</div>`
     + `<div class="ms-row"><span class="lb">단계</span>${phRow}</div>`
+    + `<div class="ms-row"><span class="lb">성격</span>${ntRow}</div>`
+    + `<div class="ms-row"><span class="lb">유형</span>${tyRow}</div>`
+    + (subRow ? `<div class="ms-row ms-sub"><span class="lb">${_msSubCat}</span>${subRow}</div>` : "")
     + (hhRow ? `<div class="ms-row"><span class="lb">아파트</span>${hhRow}</div>` : "");
   /* ══ 목록 = **2줄 행**(시안 §11) ═══════════════════════════════════════════════
      ☠ 종전엔 목록 탭의 6열 표(`listTable`)를 그대로 넣었다. 375px에서는 소재지·확인일이
@@ -13412,8 +13405,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_facilities.json": "38dc46cdea", "apartments_all.json": "2981364a1b", "arch_signals.json": "67ac553c2a", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "00fb605923", "corridor_diff.json": "ba605a7336", "dart_signals.json": "7e6cbced78", "dps_signals.json": "3b381e4438", "eum_backfill_progress.json": "2daa25c0e7", "eum_enroll.json": "844bcf90b5", "eum_signals.json": "1622da3e48", "eum_usage.json": "ce7812612f", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "fff4010c6e", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "5d78d28018", "jeongbi_poly_seoul.json": "48ad1d52e7", "jigu_school_signals.json": "e17a04918f", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "244dc7d7bc", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "60938fcd67", "mega_signals.json": "b7014fc3bb", "methodology.html": "8e611731b0", "park_signals.json": "b41a7918c5", "privacy.html": "217d09c9a3", "push_feed.json": "53e65a7444", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "febbbf0006", "rail_reference.html": "2bdd33e915", "rail_signals.json": "34f2352477", "region_gaps.json": "e44fd1d9e7", "regions.json": "b7c757393f", "report.html": "d25155ac58", "retail_signals.json": "4538081e4c", "road_signals.json": "35415f68e6", "robots.txt": "2312aa6291", "school_signals.json": "685e858b4d", "settings.html": "d825ba6ca1", "sfz_signals.json": "30bff56409", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "80dc01203f", "signals.json": "3f3409fd49", "signals_auto.json": "221a6356c1", "signals_jeongbi_all.json": "7fcb79a969", "sitemap.xml": "65eb53a400", "source_status.html": "690fd83443", "sw.js": "bd80e753e7", "thresholds.json": "ebb6cb9bf4", "upis_facility_geom.json": "56b8263e76", "upis_on_road.json": "566399adf2", "weekly.html": "f40a039121", "weekly_index.json": "6ba06f590e"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260924j");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_facilities.json": "38dc46cdea", "apartments_all.json": "2981364a1b", "arch_signals.json": "67ac553c2a", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "6b02e80523", "corridor_diff.json": "a20272a9f4", "dart_signals.json": "7e6cbced78", "dps_signals.json": "3b381e4438", "eum_backfill_progress.json": "2daa25c0e7", "eum_enroll.json": "844bcf90b5", "eum_signals.json": "710058153f", "eum_usage.json": "ce7812612f", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "fff4010c6e", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "5d78d28018", "jeongbi_poly_seoul.json": "48ad1d52e7", "jigu_school_signals.json": "e17a04918f", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "244dc7d7bc", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "60938fcd67", "mega_signals.json": "b7014fc3bb", "methodology.html": "8e611731b0", "park_signals.json": "b41a7918c5", "privacy.html": "217d09c9a3", "push_feed.json": "54ba67456c", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "5d6ec4ebb0", "rail_reference.html": "2bdd33e915", "rail_signals.json": "cb0ba3a85e", "region_gaps.json": "210dbf3b42", "regions.json": "b7c757393f", "report.html": "d25155ac58", "retail_signals.json": "4538081e4c", "road_signals.json": "fcd41b5129", "robots.txt": "2312aa6291", "school_signals.json": "685e858b4d", "settings.html": "d825ba6ca1", "sfz_signals.json": "30bff56409", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "80dc01203f", "signals.json": "3f3409fd49", "signals_auto.json": "221a6356c1", "signals_jeongbi_all.json": "7fcb79a969", "sitemap.xml": "65eb53a400", "source_status.html": "690fd83443", "sw.js": "bd80e753e7", "thresholds.json": "ebb6cb9bf4", "upis_facility_geom.json": "56b8263e76", "upis_on_road.json": "e952291308", "weekly.html": "f40a039121", "weekly_index.json": "6ba06f590e"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260924k");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
