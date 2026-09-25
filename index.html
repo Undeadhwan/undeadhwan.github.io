@@ -72,6 +72,7 @@
        거의 무채)보다 차갑고 밝았다. 「색감이 다르다」의 뿌리가 여기다.
        시안 환산값: 제목 #151618 · 본문 #4b4d53 · 흐림 #6f7178 · 선 #dddee1 · 면 #edeef2 */
     --ink:#151618; --muted:#6f7178; --line:#dddee1; --bg:#fff;
+    --c-ref:#3e465c;   /* 참고층(호재 아님 — 겹침층 「시설」 마커 · 2026-09-25) — DESIGN §2 */
     --navy:#12263f; --stall:#b8860b; --accent:#2563eb;   /* 액센트(링크·활성) — 일자리 파랑과 같은 값을 공유한다 */
     /* ── DESIGN.md §2 캐노니컬 토큰 (SSOT — 새 색·크기 임의 추가 금지) ── */
     --ink2:#4b4d53; --ink3:#6f7178; --line2:#d6d7db; --panel:#edeef2;
@@ -1378,7 +1379,68 @@
   #flowv .fgh b { font-size:15.5px; }
   #flowv .fgh .n { font-size:var(--fs-s); color:var(--ink3); font-variant-numeric:tabular-nums; }
   #flowv .fgh .why { font-size:var(--fs-s); color:var(--ink3); }
+  /* ── 겹침층 「시설」(환경기초·장사 · 호재 아님 · 2026-09-25 · DESIGN 「겹침층 시설」 행) ── */
+  .facmk { position:relative; width:16px; height:16px; display:grid; place-items:center; cursor:pointer; }
+  .facmk0 { display:block; width:10px; height:10px; background:var(--c-ref); transform:rotate(45deg); border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.35); }
+  .facleg .facmk0 { display:inline-block; width:8px; height:8px; margin-right:6px; vertical-align:0; }
+  .facdi { background:none; border:0; }
+  .facmk .faccard { display:none; position:absolute; left:14px; top:-6px; z-index:4; width:230px; background:#fff; color:#151618; border-radius:10px; padding:10px 12px;
+    box-shadow:0 0 0 1.5px var(--c-ref), 0 8px 24px rgba(0,0,0,.25); font-size:12.5px; line-height:1.45; cursor:default; flex-direction:column; gap:3px; white-space:normal; }
+  .facmk.open .faccard { display:flex; }
+  .faccard b { font-size:13.5px; font-weight:600; } .faccard span { color:#4b4d53; } .faccard em { font-style:normal; color:#6f7178; font-size:12px; margin-top:2px; }
+  /* ── 목록 「지역별」 보기 (2026-09-25 · DESIGN 「목록 지역별」 행) ── */
+  /* 목록 머리 조작(보기 전환·이름 검색)의 **기본 규칙** — 종전엔 데스크톱 v2 블록(#listv …)에만 있어 폰에서 돋보기 SVG가 148×148로 그려졌다(2026-09-25 라이브 실측) */
+  .lvctl { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  .lvq { display:flex; align-items:center; gap:8px; height:34px; flex:1 1 140px; min-width:0; padding:0 12px; border-radius:var(--r-s); border:1px solid var(--line); color:var(--ink3); }
+  .lvq svg { width:14px; height:14px; flex:none; }
+  .lvq input, .lvq input[type="search"] { border:0; box-shadow:none; background:none; font:inherit; font-size:var(--fs); min-width:0; width:100%; outline:none; color:var(--ink); padding:0; height:auto; }
+  #listv.rgmode .lvsort { display:none; }   /* 지역별 보기에서 호재 정렬 셀렉트는 뜻이 없다(열 머리가 정렬) */
+  .lvmode { display:flex; gap:2px; padding:3px; border-radius:var(--r-s); background:var(--panel); }
+  .lvmode button { font:inherit; font-size:var(--fs-s); border:0; background:none; color:var(--ink2); padding:5px 11px; border-radius:6px; cursor:pointer; }
+  .lvmode button.on { background:var(--bg); color:var(--ink); font-weight:600; box-shadow:0 1px 2px rgba(0,0,0,.08); }
+  .rgv { display:flex; gap:20px; align-items:flex-start; }
+  .rgv .rgmain { flex:1 1 auto; min-width:0; display:flex; flex-direction:column; gap:8px; }
+  .rgnote { font-size:var(--fs-s); color:var(--ink3); line-height:1.5; }
+  .rgtab { width:100%; border-collapse:collapse; font-size:var(--fs-s); font-variant-numeric:tabular-nums; }
+  .rgtab th { font-weight:500; color:var(--ink3); text-align:right; padding:6px 6px; border-bottom:1px solid var(--line2); white-space:nowrap; cursor:pointer; }
+  .rgtab th:first-child, .rgtab td:first-child { text-align:left; }
+  .rgtab th.on { color:var(--ink); } .rgtab th .dir { font-style:normal; font-size:11px; margin-left:3px; }
+  .rgtab td { text-align:right; padding:7px 6px; border-bottom:1px solid var(--line); color:var(--ink2); }
+  .rgtab td.rgn { color:var(--ink); font-weight:500; }
+  .rgtab td.z { color:var(--ink3); opacity:.5; }
+  .rgtab tbody tr { cursor:pointer; } .rgtab tbody tr:hover td { background:var(--panel); } .rgtab tr.sel td { background:var(--panel); }
+  .rgtab .ltdot { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:4px; vertical-align:1px; }
+  .rgbar { display:flex; width:100%; min-width:120px; height:8px; border-radius:4px; overflow:hidden; background:var(--line); }
+  .rgbar i, .rgkey i { display:block; height:100%; }
+  .rgkey { display:inline-flex; align-items:center; gap:4px; } .rgkey i { width:9px; height:9px; border-radius:2px; margin-left:6px; }
+  .p0 { background:#50535f; } .p1 { background:#7b7e8c; } .p2 { background:#aaacb7; } .p3 { background:#d9dae0; }   /* 단계 = 회색 계단(좋고 나쁨을 색으로 말하지 않는다) */
+  .rgpane { flex:0 0 380px; border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; display:flex; flex-direction:column; gap:10px; }   /* 자체 스크롤 없음 — 목록 본문(.pagebody)과 함께 흐른다 */
+  .rgph2 { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; } .rgph2 b { font-size:17px; font-weight:600; } .rgph2 span { color:var(--ink3); font-size:var(--fs-s); }
+  .rgchips { display:flex; flex-wrap:wrap; gap:6px; } .rgchips span { font-size:var(--fs-s); padding:3px 9px; border-radius:var(--r-s); background:var(--panel); }
+  .rgchips .ltdot { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:5px; vertical-align:1px; }
+  .rglist { display:flex; flex-direction:column; }
+  .rgrow { display:grid; grid-template-columns:28px minmax(0,1fr); gap:10px; align-items:center; padding:8px 2px; border-bottom:1px solid var(--line); cursor:pointer; }
+  .rgrow:hover { background:var(--panel); }
+  .rgring { width:26px; height:26px; border-radius:50%; border:2.5px solid; display:grid; place-items:center; font-size:12px; font-weight:600; background:#fff; color:#151618; }
+  .rgtt { display:flex; flex-direction:column; min-width:0; } .rgtt b { font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .rgtt span { color:var(--ink3); font-size:12.5px; }
+  .rgfoot { color:var(--ink3); font-size:var(--fs-s); display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+  .rgnarrow { font:inherit; font-size:var(--fs-s); border:0; background:none; color:var(--accent); cursor:pointer; padding:2px 0; }
+  .rgpe { color:var(--ink3); font-size:var(--fs-s); padding:12px 2px; }
   #flowv .fempty { font-size:var(--fs-s); color:var(--ink3); padding:6px 0 2px; }
+  /* 빈 결과 카드·폰 조건 줄 (2026-09-25 · DESIGN 「업데이트 조회조건」 행) */
+  #flowv .fecard { border:1px solid var(--line); border-radius:var(--r); padding:18px 20px; display:flex; flex-direction:column; gap:10px; background:var(--bg); margin:4px 0 12px; }
+  #flowv .fecond { display:flex; flex-wrap:wrap; gap:6px; }
+  #flowv .fecond span { font-size:var(--fs-s); padding:3px 9px; border-radius:var(--r-s); background:var(--panel); color:var(--ink2); }
+  #flowv .feh { font-size:16px; font-weight:600; color:var(--ink); }
+  #flowv .fep { font-size:var(--fs); color:var(--ink2); line-height:1.55; }
+  #flowv .feacts { display:flex; flex-wrap:wrap; gap:8px; }
+  #flowv .feact { font:inherit; font-size:var(--fs-s); padding:7px 12px; border-radius:var(--r-s); border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer; }
+  #flowv .feact em { font-style:normal; color:var(--accent); font-variant-numeric:tabular-nums; margin-left:4px; }
+  #flowv .feact.rst { color:var(--accent); }
+  #flowv .fcondm { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:0 0 10px; font-size:var(--fs-s); }
+  #flowv .fcondm .k { color:var(--ink3); }
+  #flowv .fcondm .c { padding:3px 9px; border-radius:999px; background:var(--panel); color:var(--ink); }
+  #flowv .fcondm .fereset { font:inherit; border:0; background:none; color:var(--accent); cursor:pointer; padding:3px 4px; }
   /* ── 업데이트 뷰: 조회 막대(종류·기간) + 건별 일자 열 (2026-08-12) ───────────────── */
   /* ★ 기간은 **위 한 줄**, 요약 4칸은 **그 아래 큰 숫자**(2026-08-13 갱신 시안 §05 실물).
      종전엔 둘이 한 줄에 섞여 요약 숫자가 칩 안 작은 글씨였다 — *"무엇이 바뀌었는지가 본론"*인
@@ -2254,7 +2316,9 @@
     body.vm-list #layerstack, body.vm-list #zoomstack, body.vm-list #hjlegend, body.vm-list #hjrules,
     body.vm-flow #layerstack, body.vm-flow #zoomstack, body.vm-flow #hjlegend, body.vm-flow #hjrules,
     body.vm-undet #layerstack, body.vm-undet #zoomstack, body.vm-undet #hjlegend, body.vm-undet #hjrules,
-    body.vm-flow #chipbar, body.vm-undet #chipbar { display:none; }
+    body.vm-undet #chipbar { display:none; }
+    /* 업데이트 화면에도 칩 줄을 세운다(2026-09-25 알렉스 — 조건이 걸려 있는데 안 보이면 숨은 필터 · 시안 showChips의 「업데이트에선 숨김」을 바꾼 결정) · 아파트 칩은 지도 전용 */
+    body.vm-flow #chipbar .cbw-apt { display:none; }
   }
   /* ★ 호재 상세(.dv2)는 **데스크톱·폰 공용**이다 (2026-09-24 · 알렉스 「추천대로」 모바일 검토 표 ④) — 규칙은 v2 토큰 이름(--t·--m·--s·--ac…)으로 적고,
      폰은 아래 `max-width:768px` 블록이 그 이름을 **밝은 DESIGN 토큰**으로 다시 묶는다(규칙 사본을 두지 않는다 · 모양만 바뀌고 사실 행은 같다). */
@@ -2426,6 +2490,26 @@
     #listv .lvq input { border:0; background:none; color:var(--t); font-size:14px; padding:0; min-width:0; width:100%; outline:none; font-family:var(--ff2); }
     #listv .lvq input::placeholder { color:var(--m); }
     #listv #l-list { max-width:none; margin:0; }
+    /* 목록 「지역별」 — v2 다크 */
+    #listv .lvmode { background:rgba(255,255,255,.06); }
+    #listv .lvmode button { color:var(--m); font-family:var(--ff2); font-size:13.5px; height:28px; padding:0 12px; }
+    #listv .lvmode button.on { background:var(--s); color:var(--t); font-weight:500; box-shadow:none; }
+    #listv .rgnote { color:var(--m); }
+    #listv .rgtab th { background:var(--s); color:var(--m); border:0; height:36px; font-size:13px; font-weight:400; }
+    #listv .rgtab th:first-child { border-radius:8px 0 0 8px; padding-left:14px; } #listv .rgtab th:last-child { border-radius:0 8px 8px 0; padding-right:14px; }
+    #listv .rgtab th.on { color:var(--t); }
+    #listv .rgtab td { color:var(--t2); border-bottom:1px solid rgba(255,255,255,.06); font-size:14px; padding:9px 8px; }
+    #listv .rgtab td:first-child { padding-left:14px; } #listv .rgtab td:last-child { padding-right:14px; }
+    #listv .rgtab td.rgn { color:var(--t); }
+    #listv .rgtab td.z { color:var(--m); opacity:.45; }
+    #listv .rgtab tbody tr:hover td, #listv .rgtab tr.sel td { background:var(--s); }
+    #listv .rgbar { background:rgba(255,255,255,.06); }
+    #listv .rgkey { color:var(--m); }
+    #listv .rgpane { background:var(--p); border:0; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.18); color:var(--t); }
+    #listv .rgph2 span, #listv .rgnote, #listv .rgfoot, #listv .rgpe, #listv .rgtt span { color:var(--m); }
+    #listv .rgchips span { background:var(--s); color:var(--t2); }
+    #listv .rgrow { border-bottom:1px solid rgba(255,255,255,.06); } #listv .rgrow:hover { background:var(--s); }
+    #listv .rgnarrow { color:var(--ac3); font-family:var(--ff2); }
     #listv .ltab { table-layout:fixed; border-collapse:separate; border-spacing:0; width:100%; }
     #listv .ltab thead th { height:40px; font-size:13px; background:var(--s); color:var(--m); cursor:pointer; padding:0 12px 0 0; text-align:left; white-space:nowrap; }
     #listv .ltab thead th:first-child { border-radius:8px 0 0 8px; padding-left:16px; }
@@ -2460,7 +2544,7 @@
     .pglegal a { color:var(--ac3); }
     #listv .chip#l-more { background:var(--s); color:var(--t); border-color:var(--b); }
     /* ── 업데이트(전체 화면) — 시안 「업데이트」 ── */
-    #flowv { padding:76px 40px 0 !important; background:var(--pg); color:var(--t); }
+    #flowv { padding:116px 40px 0 !important; background:var(--pg); color:var(--t); }   /* 칩 줄(68+36) 아래 — 2026-09-25 */
     #flowv .fwrap.fv2 { width:100%; max-width:1300px; margin:0 auto; display:flex; flex-wrap:wrap; gap:32px 40px; align-items:flex-start; padding:0 0 60px; }
     #flowv .fv2 .fleft { display:flex; flex-direction:column; gap:12px; flex:0 1 300px; min-width:240px; }
     #flowv .fv2 .fright { display:flex; flex-direction:column; flex:1 1 480px; min-width:0; }
@@ -2489,6 +2573,9 @@
     #flowv .fv2 .flinks { font-size:13.5px; color:var(--ac3); padding:4px 2px; }
     #flowv .fv2 .flinks a { color:var(--ac3); text-decoration:none; }
     #flowv .fv2 .fempty { color:var(--m); }
+    #flowv .fv2 .fecard { background:var(--s); border-color:transparent; }
+    #flowv .fv2 .fecard .fecond span, #flowv .fv2 .feact { background:var(--pg); color:var(--t2); border-color:var(--b); }
+    #flowv .fv2 .feh { color:var(--t); } #flowv .fv2 .fep { color:var(--t2); } #flowv .fv2 .feact em { color:var(--ac3); } #flowv .fv2 .feact.rst { color:var(--ac3); }
     #flowv .fv2 .fg { display:flex; flex-direction:column; }
     #flowv .fv2 .fday { display:flex; gap:10px; align-items:baseline; padding:0 0 10px; margin:0; border-bottom:1px solid rgba(255,255,255,.1); font-size:14px; white-space:nowrap; background:none; }
     #flowv .fv2 .fday:not(:first-child) { margin-top:22px; }
@@ -2705,6 +2792,7 @@
                 <option value="loc">소재지순</option>
               </select>
             </label>
+            <div class="lvmode" id="l-mode" role="tablist" aria-label="목록 보기"><button data-lmode="sig" class="on" role="tab">호재 목록</button><button data-lmode="region" role="tab">지역별</button></div>
             <div class="lvq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg><input id="l-q" type="search" placeholder="이름 검색"></div>
           </div>
         </div>
@@ -2943,7 +3031,7 @@ const MB_KEY = { anchor: "hojae_anchor", places: "hojae_places", watch: "hojae_w
                  vid: "hojae_vid", lines: "hojae_lines", linesV2: "hojae_lines_v2", legendOff: "hojae_legend_off",
                  aptHh: "hojae_apt_hh", ops: "hojae_ops", fbLast: "hojae_fb_last", aptSort: "hojae_apt_sort",
                  lastview: "hojae_lastview", dockOpen: "hojae_dock_open", basemap: "hojae_basemap", radii: "hojae_radii4",
-                 cad: "hojae_cad", cluster: "hojae_cluster" };   // 지적편집도·묶음 레이어(웹 크롬 v2 · 2026-09-24)
+                 cad: "hojae_cad", cluster: "hojae_cluster", fac: "hojae_fac" };   // fac = 겹침층 「시설」(환경기초·장사 · 2026-09-25 · 기본 끔)   // 지적편집도·묶음 레이어(웹 크롬 v2 · 2026-09-24)
 /* ☠ **손으로 적은 날짜는 반드시 낡는다** (2026-08-11 사용자 제보 "흐름 325건 오늘26건 독에는 28건.
    다 제각각이야"의 뿌리). 여기 `new Date("2026-07-13")`이 박혀 있었고 실제 날짜는 8-11이었다 —
    **29일 어긋난 자**로 「오늘」·「이번 주」·「정체 N개월」을 전부 재고 있었다. 그래서 흐름의
@@ -6672,7 +6760,7 @@ function renderApt(a) {
   const advDist = d => d < 1000 ? Math.round(d) + "m" : (d / 1000).toFixed(1) + "km";
   const advHtml = adv.length ? `<div class="advfacts">⚠ 반경 ${ADVERSE_RKM}km 내 역효과 시설 결정 ${adv.length}건 —
       ${adv.slice(0, 3).map(x => `${(x.f.title || "").replace(/ \([^)]*㎡\)$/, "")} <b>${advDist(x.dist)}</b>`).join(" · ")}${adv.length > 3 ? ` 외 ${adv.length - 3}건` : ""}
-      <div class="advnote">폐기물·하수 등 환경기초시설 도시계획 결정(최근 고시 기준·미완공, 지도 미표시). 존재·거리 사실만 — 영향 판단 아님</div></div>` : "";
+      <div class="advnote">폐기물·하수 등 환경기초시설과 화장·봉안·묘지 등 장사시설의 도시계획 결정(최근 고시 기준·미완공 · 지도는 레이어 「시설」). 존재·거리 사실만 — 영향 판단 아님</div></div>` : "";
   p.innerHTML = `
     ${pheadHtml(`<div class="pt">${a.n}</div>`)}
     <div class="ps">${a.sg} ${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + " 세대" : ""}
@@ -7098,7 +7186,7 @@ function renderCompareBody() {
   const body = `<div id="cmpWrap" style="--nc:${cols.length}">
     ${cmpSummaryHtml(cols)}
     <div class="cmpnote">개수·거리·단계 사실만 나열합니다 — 가중치 합산·순위·추천·'수혜' 판단 없음. 세대수는 단지 식별 표기일 뿐 비교 축이 아닙니다.<br>
-      거리는 단지 좌표(도로 수준 근사) 기준.${cmpHasRef(cols) ? `<br>참고 = 정체 신호 · 역효과 시설(${ADVERSE_RKM}km 내 환경기초시설 결정·미완공) — 존재·거리 사실만, 영향 판단 아님.` : ""}</div>
+      거리는 단지 좌표(도로 수준 근사) 기준.${cmpHasRef(cols) ? `<br>참고 = 정체 신호 · 역효과 시설(${ADVERSE_RKM}km 내 환경기초·장사시설 결정·미완공) — 존재·거리 사실만, 영향 판단 아님.` : ""}</div>
     ${cmpBandsHtml(cols)}
   </div>`;
   document.getElementById("cmpBody").innerHTML = body;
@@ -8495,7 +8583,7 @@ function renderChipbar() {
     <div class="cbw"><div class="cb${act(CHIP_OPEN === "nature", ntOn.length !== NATURE_KEYS.length)}" data-chip="nature">성격 <span class="v">${lab(NATURE_KEYS, ntOn.map(ntName), " · ")}</span> ${cv}</div>
       ${CHIP_OPEN === "nature" ? `<div class="pop pad6" data-pop="nature" style="width:220px">
         ${NATURE_KEYS.map(k => `<div class="prow${filter.nature.has(k) ? " on" : ""}" data-tog="nature" data-k="${k}" title="${NATURE_HINT[k] || ""}">${CB_BOX}${ntName(k)}</div>`).join("")}</div>` : ""}</div>
-    <div class="cbw"><div class="cb${act(CHIP_OPEN === "apt", hhCur !== "500")}" data-chip="apt">아파트 <span class="v">${hhLab}</span> ${cv}</div>
+    <div class="cbw cbw-apt"><div class="cb${act(CHIP_OPEN === "apt", hhCur !== "500")}" data-chip="apt">아파트 <span class="v">${hhLab}</span> ${cv}</div>
       ${CHIP_OPEN === "apt" ? `<div class="pop pad6" data-pop="apt" style="width:220px">
         ${hhOpts.map(o => `<div class="prow${o.v === hhCur ? " on" : ""}" data-tog="hh" data-k="${o.v}"><span class="radio"></span>${o.t}</div>`).join("")}</div>` : ""}</div>
     <div class="cbrst" data-all="on"${filtersDirty() ? "" : " hidden"}>초기화</div>`;
@@ -8553,6 +8641,7 @@ const LAYER_SVG = {
   label: '<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="16" height="8" rx="2"/></svg>',
   cluster: '<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="5"/><circle cx="11" cy="11" r="8.5" stroke-dasharray="2 3"/></svg>',
   sat: '<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7.5"/><path d="M3.5 11h15M11 3.5c3 2.5 3 12.5 0 15M11 3.5c-3 2.5-3 12.5 0 15"/></svg>',
+  fac: '<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 3.5L18.5 11L11 18.5L3.5 11Z"/><path d="M11 8L14 11L11 14L8 11Z" fill="currentColor" stroke="none"/></svg>',
   cad: '<svg viewBox="0 0 22 22" fill="currentColor"><path d="M3 7a4 4 0 0 1 4-4h3v7H3z"/><path d="M11.5 3H15a4 4 0 0 1 4 4v3h-7.5z"/><path d="M3 11.5h7V19H7a4 4 0 0 1-4-4z"/><path d="M11.5 11.5H19V15a4 4 0 0 1-4 4h-3.5z"/></svg>',
 };
 const CAD_KEY = MB_KEY.cad;   // 지적편집도 on/off — 기기 저장(표시 옵션 · 신호·집계 불변)
@@ -8563,10 +8652,53 @@ function cadApply() {
   if (cadOn()) m.addOverlayMapTypeId(kakao.maps.MapTypeId.USE_DISTRICT);
   document.body.classList.toggle("cad", cadOn());
 }
+/* ══ 겹침층 「시설」 — 환경기초·장사시설(역효과 참조층) (2026-09-25 세션135 · 알렉스 제안 ③ 「악재 레이어: 혐오시설 입지…」) ══
+   ★ **호재가 아니다** — 2026-07-30 알렉스 확정(②안) 그대로 호재 풀·건수·유형·등급·생애주기 밖이다. 바뀐 것은 「지도 미표시」 하나 —
+     켜고 끄는 겹침층으로 보인다(기본 끔 · 위성·지적과 같은 자리). 이름은 법정 시설명(환경기초·장사)이다 — 「악재·혐오」는 판단 낱말이라 쓰지 않는다(P1 ·
+     「수혜」 금지와 같은 이유). 마커는 호재 링과 다른 **슬레이트 마름모**(--c-ref · 분류색 채널을 빌리지 않는다) · 누르면 사실 카드(시설명·세부·집행·면적·최근 고시).
+   전국 화면에선 숨긴다(카카오 레벨 > FAC_MAX_LV · Leaflet 줌 < FAC_MIN_Z) — 참고층이 호재 핀을 덮지 않게. 두 렌더러 한 몸(규칙이 한쪽에만 금지).
+   게이트 = html_check.fac_layer_check. */
+const FAC_MAX_LV = 11, FAC_MIN_Z = 8;
+let _facOv = [], _facBound = false, _facOpen = null;
+function facOn() { try { return localStorage.getItem(MB_KEY.fac) === "1"; } catch (e) { return false; } }
+function facCardHtml(f) {
+  const st = String(f.current_stage || "").split(" · ").pop();
+  const nm = String(f.title || "").replace(/\s*\([^)]*㎡\)\s*$/, "");
+  return `<div class="faccard"><b>${esc(nm)}</b><span>${esc(f.sub || "")} · 도시계획시설 결정 · ${esc(st || "집행 미상")}</span>`
+    + `<span>부지 ${Number(f.area_m2 || 0).toLocaleString()}㎡ · 최근 고시 ${esc(f.gosi || "일자 미상")}</span>`
+    + `<em>호재가 아닙니다 — 존재·위치 사실만 적습니다</em></div>`;
+}
+function facPaint() {
+  const km = window._kmap, lm = !km && window._map && window.L ? window._map : null;
+  _facOv.forEach(o => { try { if (o.setMap) o.setMap(null); else o.remove(); } catch (e) { console.warn("facPaint 걷기", e); } });
+  _facOv = []; _facOpen = null;
+  if (!facOn() || !ADVERSE.length || !(km || lm)) return;
+  const show = km ? km.getLevel() <= FAC_MAX_LV : lm.getZoom() >= FAC_MIN_Z;
+  if (!_facBound) {
+    _facBound = true;
+    if (km) kakao.maps.event.addListener(km, "zoom_changed", () => { if (facOn()) facPaint(); });
+    else lm.on("zoomend", () => { if (facOn()) facPaint(); });
+  }
+  if (!show) return;
+  ADVERSE.forEach(f => {
+    const el = document.createElement("div");
+    el.className = "facmk"; el.title = String(f.title || "");
+    el.innerHTML = `<i class="facmk0"></i>`;
+    el.addEventListener("click", ev => {
+      ev.stopPropagation();
+      if (_facOpen && _facOpen !== el) _facOpen.classList.remove("open");
+      if (!el.querySelector(".faccard")) el.insertAdjacentHTML("beforeend", facCardHtml(f));
+      el.classList.toggle("open"); _facOpen = el.classList.contains("open") ? el : null;
+    });
+    const [lon, lat] = f._coord;
+    if (km) { const ov = new kakao.maps.CustomOverlay({ position: new kakao.maps.LatLng(lat, lon), content: el, zIndex: 3, clickable: true }); ov.setMap(km); _facOv.push(ov); }
+    else { const mk = L.marker([lat, lon], { icon: L.divIcon({ className: "facdi", html: el, iconSize: [16, 16], iconAnchor: [8, 8] }) }).addTo(lm); _facOv.push(mk); }
+  });
+}
 function mountLayerStack(box = document.getElementById("layerstack")) {   // 호스트 = 데스크톱 우측 스택 · 폰 레이어 판(`layerBtnMount`) — 항목·핸들러 한 벌
   if (!box) return;
   const items = [["rail", "철도", "lines", "철도선"], ["road", "도로", "lines", "도로선"], ["label", "노선명", "lines", "노선명"],
-    ["cluster", "묶음", "cluster"], ["sat", "위성", "sat"], ["cad", "지적", "cad"]];
+    ["cluster", "묶음", "cluster"], ["sat", "위성", "sat"], ["cad", "지적", "cad"], ["fac", "시설", "fac"]];   // 시설 = 환경기초·장사시설 겹침(2026-09-25 · 호재 아님 · 기본 끔)
   box.innerHTML = items.map(([k, nm, ax, lk]) => `<button type="button" class="ly" data-ly="${k}"${ax === "lines" ? ` data-tog="lines" data-k="${lk}"` : ""}>${LAYER_SVG[k]}<span>${nm}</span></button>`).join("");
   bindFilterClicks(box);           // 철도·도로·노선명 = 도크의 「표시」 스위치와 같은 축(filter.lines)
   box.addEventListener("click", e => {
@@ -8575,6 +8707,7 @@ function mountLayerStack(box = document.getElementById("layerstack")) {   // 호
     if (k === "sat") document.querySelector("#map .mapbase")?.click();        // 베이스맵 전환 = 기존 버튼 하나(같은 동작)
     if (k === "cad") { try { localStorage.setItem(CAD_KEY, cadOn() ? "0" : "1"); } catch (e) {} cadApply(); window._cadPaint?.(); }
     if (k === "cluster") { try { localStorage.setItem(MB_KEY.cluster, clusterOn() ? "0" : "1"); } catch (e) {} if (mapApi) mapApi.refreshPins(); }
+    if (k === "fac") { try { localStorage.setItem(MB_KEY.fac, facOn() ? "0" : "1"); } catch (e) {} facPaint(); paintLegend(); }
     paintLayerStack();
   });
   paintLayerStack();
@@ -8582,7 +8715,7 @@ function mountLayerStack(box = document.getElementById("layerstack")) {   // 호
 function paintLayerStack() {
   const kakaoOn = !!window._kmap;
   const on = { rail: filter.lines.has("철도선"), road: filter.lines.has("도로선"), label: filter.lines.has("노선명"),
-    cluster: clusterOn(), sat: typeof baseMapGet === "function" && baseMapGet() === "sat", cad: cadOn() };
+    cluster: clusterOn(), sat: typeof baseMapGet === "function" && baseMapGet() === "sat", cad: cadOn(), fac: facOn() };
   document.querySelectorAll("#layerstack [data-ly], #mlayers [data-ly]").forEach(b => {   // 두 호스트를 같은 상태로
     const k = b.dataset.ly;
     b.classList.toggle("on", !!on[k]);
@@ -8633,6 +8766,7 @@ function paintLegend() {
     + `<span><svg width="26" height="8"><path d="M1 4H25" stroke="${C}" stroke-width="3" stroke-linecap="round"/></svg>철도</span>`
     + `<span><svg width="26" height="8"><path d="M1 4H25" stroke="${C}" stroke-width="7"/><path d="M1 4H25" style="stroke:var(--ly-hole,#161826)" stroke-width="4"/><path d="M1 4H25" stroke="${C}" stroke-opacity=".25" stroke-width="4"/></svg>도로</span>`
     + `<span><svg width="26" height="8"><path d="M1 4H25" stroke="${C}" stroke-width="3" stroke-linecap="round" stroke-dasharray="0.1 5.5"/></svg>계획</span>`
+    + (facOn() ? '<span class="facleg"><i class="facmk0"></i>환경·장사시설</span>' : "")
     + '<span class="rule" role="button">표기 규칙</span>';
   hosts.forEach(h => { h.innerHTML = html; });
 }
@@ -8775,9 +8909,89 @@ function flowRows(sorted = true) {
   // 건수만 필요한 호출(탭 배지)은 정렬을 건너뛴다 — 8천 건 문자열 정렬이 렌더마다 수십 ms였다(2026-09-08 세션107 · 모집단·자는 그대로)
   return sorted ? rows.sort((a, b) => String(b.last_movement).localeCompare(String(a.last_movement))) : rows;
 }
-function renderFlow() {
-  const host = document.getElementById("flowv");
-  if (!host) return;
+/* ★★ 업데이트 화면의 **조회조건** (2026-09-25 세션135 · 알렉스 「목록에서 서울 관악구 일자리를 고르고 업데이트로 넘어가면 아무것도 안 보인다 —
+   업데이트 페이지에서는 현재 선택된 조회조건이 안 보여진다」). 조건은 그대로 걸려 있는데 업데이트 화면만 칩 줄을 숨겨 **숨은 필터**였다(P2 ·
+   웹 크롬 v2 개편 때 사이드바가 하던 지역 표시가 사라진 자리). 처방 둘: ① 데스크톱은 칩 줄을 업데이트에도 세운다(지도·목록과 같은 부품) ·
+   폰은 조건 한 줄(`flowCondLine`) ② 빈 결과는 조건을 되읽고 넓히는 길을 **같은 자로 센 건수**와 함께 보인다(`flowEmptyHtml`). 게이트 = html_check.flow_cond_check. */
+/* 조건을 잠시 바꿔 센 뒤 **원래 조건으로** 되돌린다 — 빈 결과 안내의 「풀면 N건」 전용. Set은 사본을 끼워 바꾸고 원본 객체를 되돌려 놓는다
+   (다른 코드가 쥔 Set 참조가 갈리지 않게). 화면·저장소는 건드리지 않는다. */
+function withFilters(mut, fn) {
+  const K = ["cat", "sub", "phase", "lvl", "nature"], keep = {};
+  K.forEach(k => { keep[k] = filter[k]; filter[k] = new Set(filter[k]); });
+  const r0 = [filter.region, filter.sd, filter.dong];
+  try { mut(); return fn(); }
+  finally { K.forEach(k => { filter[k] = keep[k]; }); filter.region = r0[0]; filter.sd = r0[1]; filter.dong = r0[2]; }
+}
+/* 지금 걸린 조회조건 — 칩 줄과 같은 말(지역 = regionLabel · 유형 = chipCatState 라벨 규칙). 기본값인 축은 말하지 않는다. */
+function condParts() {
+  const out = [], reg = regionLabel();
+  if (reg) out.push(reg);
+  const C = dockCounts(), st = Object.fromEntries(CAT_KEYS.map(c => [c, chipCatState(c, C)]));
+  const onT = CAT_KEYS.filter(c => st[c] !== "off");
+  if (!CAT_KEYS.every(c => st[c] === "on")) out.push(!onT.length ? "유형 없음" : onT.length <= 2 ? onT.map(c => c + (st[c] === "part" ? "(일부)" : "")).join(" · ") : `유형 ${onT.length}`);
+  const ph = PHASES.filter(p => filter.phase.has(p)), lv = GRADES_DISP.filter(g => filter.lvl.has(g)), nt = NATURE_KEYS.filter(k => filter.nature.has(k));
+  if (ph.length !== PHASES.length) out.push("단계 " + (ph.map(phaseLabel).join("·") || "없음"));
+  if (lv.length !== GRADES_DISP.length) out.push("등급 " + (lv.join("·") || "없음"));
+  if (nt.length !== NATURE_KEYS.length) out.push("성격 " + (nt.join("·") || "없음"));
+  return out;
+}
+const _ro = w => { const c = String(w || "").charCodeAt(String(w || "").length - 1) - 0xAC00; const j = c >= 0 && c < 11172 ? c % 28 : 0; return j === 0 || j === 8 ? "로" : "으로"; };   // 조사 로/으로(ㄹ 받침은 「로」)
+function flowPeriodLabel() {
+  if (FLOW_CUSTOM) return `${FLOW_CUSTOM[0]} ~ ${FLOW_CUSTOM[1] || "오늘"}`;
+  const lb = (FLOW_PERIODS.find(p => p[0] === FLOW_MONTHS) || [0, FLOW_MONTHS + "개월"])[1];
+  return FLOW_MONTHS < 1 ? lb : "최근 " + lb;
+}
+/* 폰의 조건 한 줄 — 데스크톱은 칩 줄이 같은 말을 한다. 누르면 조회조건 시트(칩 줄이 없는 폰의 조건 자리). */
+function flowCondLine() {
+  const parts = condParts();
+  if (!parts.length) return "";
+  return `<div class="fcondm"><span class="k">조건</span>${parts.map(t => `<span class="c">${esc(t)}</span>`).join("")}<button class="fereset" data-fe="reset">초기화</button></div>`;
+}
+/* 빈 결과 — 조건을 되읽고, 넓히는 길마다 **flowCompute로 다시 센 건수**를 붙인다(0건인 길은 내지 않는다 · 누르면 그만큼 보인다). */
+function flowEmptyHtml() {
+  const parts = condParts(), per = flowPeriodLabel();
+  const tot = mut => withFilters(mut, () => flowCompute(FLOW_MONTHS, FLOW_CUSTOM).total);
+  const acts = [];
+  const C = dockCounts();
+  if (!CAT_KEYS.every(c => chipCatState(c, C) === "on"))
+    acts.push(["types", "유형 전체로 보기", tot(() => { CAT_KEYS.forEach(k => filter.cat.add(k)); ALL_SUBS.forEach(k => filter.sub.add(k)); })]);
+  if (filter.sd || filter.region || filter.dong) {
+    const sd = filter.sd || (filter.region || "").split(" ")[0] || "";
+    const up = filter.dong ? { sd, region: filter.region } : filter.region ? { sd, region: "" } : { sd: "", region: "" };
+    const name = up.region ? regionLabelOf(up.region) : up.sd ? (SIDO_LONG[up.sd] || up.sd) : "전국";
+    acts.push(["region", `${name}${_ro(name)} 넓히기`, tot(() => { filter.sd = up.sd; filter.region = up.region; filter.dong = ""; })]);
+  }
+  if (!(PHASES.every(k => filter.phase.has(k)) && GRADES_DISP.every(k => filter.lvl.has(k)) && NATURE_KEYS.every(k => filter.nature.has(k))))
+    acts.push(["other", "단계·등급·성격 조건 풀기", tot(() => { PHASES.forEach(k => filter.phase.add(k)); GRADES_DISP.forEach(k => filter.lvl.add(k)); NATURE_KEYS.forEach(k => filter.nature.add(k)); })]);
+  if (FLOW_CUSTOM || FLOW_MONTHS < 12) acts.push(["year", "기간 1년으로", flowCompute(12, null).total]);
+  const nAll = allSignalsFlat().filter(visible).length;   // 목록 탭 건수와 같은 자(renderList의 모집단)
+  const btns = acts.filter(a => a[2] > 0).map(([k, t, n]) => `<button class="feact" data-fe="${k}">${t} <em>${n.toLocaleString()}건</em></button>`).join("")
+    + (nAll ? `<button class="feact" data-fe="list">목록에서 ${nAll.toLocaleString()}건 보기 →</button>` : "")
+    + (filtersDirty() ? `<button class="feact rst" data-fe="reset">초기화</button>` : "");
+  return `<div class="fecard">`
+    + (parts.length ? `<div class="fecond">${parts.map(t => `<span>${esc(t)}</span>`).join("")}<span>${esc(per)}</span></div>` : "")
+    + `<div class="feh">${parts.length ? "이 조건에서 문서상 움직인 호재는 0건입니다" : "이 기간에 문서상 움직인 호재가 없습니다"}</div>`
+    + `<div class="fep">${nAll ? `조건에 맞는 호재 ${nAll.toLocaleString()}건은 목록·지도에 있습니다 — ${esc(per)} 안에 고시·허가 변화가 없었을 뿐입니다.` : "조건에 맞는 호재가 없습니다 — 조건을 풀어 보세요."}</div>`
+    + (btns ? `<div class="feacts">${btns}</div>` : "") + `</div>`;
+}
+/* 「시도 시군구」 키 → 화면 이름(regionLabel과 같은 규칙 — 시도는 정식명). */
+function regionLabelOf(region) { const [sd, ...rest] = String(region).split(" "); return `${SIDO_LONG[sd] || sd} ${rest.join(" ")}`.trim(); }
+function flowEmptyAct(k) {
+  if (k === "types") { CAT_KEYS.forEach(c => filter.cat.add(c)); ALL_SUBS.forEach(x => filter.sub.add(x)); renderAll(); return; }
+  if (k === "region") {
+    if (nav.dong) applyRegion(nav.sd, nav.sg, null); else if (nav.sg) applyRegion(nav.sd, null, null); else applyRegion(null, null, null);
+    try { syncRegionChip(); syncRegionBar(); } catch (e) { console.warn("flowEmptyAct 지역 칩 동기화", e); }
+    return;
+  }
+  if (k === "other") { PHASES.forEach(p => filter.phase.add(p)); GRADES_DISP.forEach(g => filter.lvl.add(g)); NATURE_KEYS.forEach(n => filter.nature.add(n)); renderAll(); return; }
+  if (k === "year") { FLOW_CUSTOM = null; FLOW_MONTHS = 12; renderFlow(); return; }
+  if (k === "list") { setView("list"); return; }
+  if (k === "reset") { resetFilters(); return; }
+}
+/* ★ 업데이트 셈의 자 **하나** (2026-09-25 세션135 · 알렉스 「업데이트 페이지에서는 현재 선택되어 있는 조회조건이 안 보인다」).
+   renderFlow와 빈 결과 안내(`flowEmptyHtml`)가 같이 쓴다 — 조건을 바꿔 다시 세는 안내가 다른 자를 쓰면 「풀면 N건」이
+   눌렀을 때 보이는 건수와 갈린다. M = 개월 창 · custom = 기간 지정([시작, 끝]) — 있으면 M은 무시한다. */
+function flowCompute(M, custom) {
   const rows = flowRows();
   // 노선 신호는 movKey로 노선당 1건 — 시도 알약·탭 배지와 같은 키(두 화면이 다른 숫자를 말하면 안 된다)
   const moved = dedupeMov(rows.filter(s => movBasis(s) === "source"));
@@ -8789,8 +9003,8 @@ function renderFlow() {
   /* 창 판정은 **여기 하나**다 — 고정 칸이든 기간 지정이든 같은 함수가 답한다. */
   const inWin = s => {
     const t = String(s.last_movement || "").slice(0, 10);
-    if (FLOW_CUSTOM) return !!t && t >= FLOW_CUSTOM[0] && (!FLOW_CUSTOM[1] || t <= FLOW_CUSTOM[1]);
-    const d = daysAgo(s.last_movement); return d >= 0 && d <= FLOW_MONTHS * 31;
+    if (custom) return !!t && t >= custom[0] && (!custom[1] || t <= custom[1]);
+    const d = daysAgo(s.last_movement); return d >= 0 && d <= M * 31;
   };
   /* ★ **단계가 안 움직여도 값이 바뀌면 업데이트다** (2026-08-12 사용자: "변경내용이 공사단계
      변화가 아닌 경우가 있을 수 있잖아"). 사업비·연장·목표 시점 변경은 `lifecycle`이 원장에
@@ -8798,12 +9012,28 @@ function renderFlow() {
      그쪽은 소스 원문 날짜(사실)이고 이쪽은 관측일이라, 한 이름으로 부르면 P2 위반이다.
      ⚠ 기록은 **다음 수집부터** 쌓인다(첫 실행은 기준선). 0건이면 칸을 아예 안 만든다. */
   const chgRows = allSignalsFlat().filter(visible)
-    .map(s => ({ s, c: fieldChangeList(s, FLOW_MONTHS * 31) })).filter(x => x.c.length)
+    .map(s => ({ s, c: fieldChangeList(s, M * 31) })).filter(x => x.c.length)
     .sort((a, b) => String(b.c[b.c.length - 1].date).localeCompare(String(a.c[a.c.length - 1].date)));
   const future = moved.filter(s => daysAgo(s.last_movement) < 0);
   const past = moved.filter(inWin);
   const nChg = past.filter(s => (movDelta(s) || {}).kind === "변동").length;
   const nNew = past.length - nChg;
+  return { rows, moved, seen, daysAgo, inWin, chgRows, future, past, nChg, nNew, total: past.length + chgRows.length };
+}
+function renderFlow() {
+  const host = document.getElementById("flowv");
+  if (!host) return;
+  const { moved, seen, daysAgo, inWin, chgRows, future, past, nChg, nNew } = flowCompute(FLOW_MONTHS, FLOW_CUSTOM);
+  /* ☠ 이 블록은 아래 `shown`보다 **앞**이어야 한다 (2026-09-25 세션135 · 헤드리스 재현) — 종전엔 `shown`이 뒤에서 선언되는 upRows·undetRows를
+     먼저 읽어 「등급 상향」·「등급 없음 해소」 칸을 누르면 ReferenceError(초기화 전 참조)로 업데이트 화면이 통째로 안 그려졌다.
+     게이트 = html_check.flow_cond_check(선언 위치). */
+  /* 등급 축 두 개 — `field_changes`의 등급 항목에서 도출한다.
+     ⚠ 값 변경 추적(WATCH)은 2026-08-12 도입이라 다음 주간 수집(첫 실행은 기준선)부터 쌓인다.
+       그때까지 0인 것은 결함이 아니라 **아직 관측 구간이 없는 것**이다 — 0으로 사실대로 적는다. */
+  const _lvlChg = x => (x.c || []).filter(c => /등급|lvl|level/i.test(String(c.label || c.field || "")));
+  const upRows = chgRows.filter(x => _lvlChg(x).some(c => String(c.from) !== String(c.to) && !/미정|없음/.test(String(c.to))));
+  const undetRows = chgRows.filter(x => _lvlChg(x).some(c => /미정|없음/.test(String(c.from)) && !/미정|없음/.test(String(c.to))));
+  const nUp = upRows.length, nUndet = undetRows.length;
   const fldSigs = chgRows.map(x => x.s).filter(s => !past.includes(s));
   const shown = FLOW_KIND === "all" ? past.concat(fldSigs)
     : FLOW_KIND === "up" ? upRows.map(x => x.s)
@@ -8814,13 +9044,6 @@ function renderFlow() {
   // 라벨 위 · 큰 숫자 아래(시안 실물). 종전엔 한 줄에 라벨+작은 숫자였다.
   const seg = (k, lb, n) => `<button class="fseg${FLOW_KIND === k ? " on" : ""}${n ? "" : " z"}" data-kind="${k}" onmouseenter="explainTip(event,'flow','${lb}(기간 창 안 · 노선당 1건) ${n.toLocaleString()}')" onmouseleave="explainHide()">${lb}<span class="n">${n.toLocaleString()}</span></button>`;
   const nFld = chgRows.length;
-  /* 등급 축 두 개 — `field_changes`의 등급 항목에서 도출한다.
-     ⚠ 값 변경 추적(WATCH)은 2026-08-12 도입이라 다음 주간 수집(첫 실행은 기준선)부터 쌓인다.
-       그때까지 0인 것은 결함이 아니라 **아직 관측 구간이 없는 것**이다 — 0으로 사실대로 적는다. */
-  const _lvlChg = x => (x.c || []).filter(c => /등급|lvl|level/i.test(String(c.label || c.field || "")));
-  const upRows = chgRows.filter(x => _lvlChg(x).some(c => String(c.from) !== String(c.to) && !/미정|없음/.test(String(c.to))));
-  const undetRows = chgRows.filter(x => _lvlChg(x).some(c => /미정|없음/.test(String(c.from)) && !/미정|없음/.test(String(c.to))));
-  const nUp = upRows.length, nUndet = undetRows.length;
   /* ★ 조회 축(전체·기간·변경 유형)의 자리 — **데스크톱은 사이드바 마운트(#dk-flow), 모바일은
      본문 머리** (2026-08-16 갱신 시안 §03·§05 "업데이트 탭의 축은 기간·변경 유형 — 자리는
      사이드바"). 마크업·핸들러는 아래 ctrlHtml **하나**고 마운트만 갈린다 — 두 벌이면 기간·종류
@@ -8862,10 +9085,10 @@ function renderFlow() {
   let html = `<div class="fwrap${_v2 ? " fv2" : ""}">
     <!-- 부제·요약줄을 뺐다 (2026-08-12 사용자 "제거"): 지역은 좌측 헤더가, 건수는 아래
          세그먼트가 이미 말한다 — 같은 말을 세 군데서 하면 정작 목록이 밀린다. -->
-    ` + (_v2 ? `<div class="fleft">${ctrlHtml}<div class="flinks"><a href="methodology.html" target="_blank" rel="noopener">표기 규칙 ▾</a> · <a href="methodology.html" target="_blank" rel="noopener">데이터 · 방법론</a></div></div><div class="fright">` : (_ctrlHost ? "" : ctrlHtml))
+    ` + (!_v2 ? flowCondLine() : "") + (_v2 ? `<div class="fleft">${ctrlHtml}<div class="flinks"><a href="methodology.html" target="_blank" rel="noopener">표기 규칙 ▾</a> · <a href="methodology.html" target="_blank" rel="noopener">데이터 · 방법론</a></div></div><div class="fright">` : (_ctrlHost ? "" : ctrlHtml))
     + (future.length ? `<div class="fempty" style="margin:2px 0 6px">※ ${future.length.toLocaleString()}건은 소스의 날짜가 <b>아직 오지 않은 날</b>(착공 예정일 등)이라 움직임으로 세지 않았습니다</div>` : "");
   html += shown.length ? `<div class="fg" data-g="main"></div>`
-    : `<div class="fempty">이 기간에 문서상 움직인 신호가 없습니다 — 기간을 넓혀 보세요</div>`;
+    : flowEmptyHtml();   // 조건을 되읽고 넓히는 길을 건수와 함께(2026-09-25 · 종전 「기간을 넓혀 보세요」 한 줄은 조건을 말하지 않았다)
   /* ★ 「우리가 처음 본 것」은 **접어 둔다**(사용자 확정). 사업이 움직인 게 아니라 우리 수집이
      처음 닿은 것이라 같은 목록에 섞으면 「무엇이 바뀌었나」가 묻힌다 — 그렇다고 지우면 새로
      발굴한 호재를 볼 자리가 없어진다. 닫아 두고 셈은 밝힌다(P2·P5). */
@@ -8939,6 +9162,7 @@ function renderFlow() {
   // 컨트롤 배선은 **실제 마운트**에서 찾는다 — 사이드바(#dk-flow)에 심었으면 host에는 없다.
   const _cb = _ctrlHost || host;
   _cb.querySelectorAll(".fseg, .fall").forEach(b => b.onclick = () => { FLOW_KIND = b.dataset.kind; renderFlow(); });
+  host.querySelectorAll("[data-fe]").forEach(b => b.onclick = () => flowEmptyAct(b.dataset.fe));   // 빈 결과 안내·폰 조건 줄(2026-09-25)
   const _go = _cb.querySelector("#f-cal-go");
   if (_go) _go.onclick = () => {
     const a = document.getElementById("f-cal-a").value, z = document.getElementById("f-cal-b").value;
@@ -9903,6 +10127,7 @@ function initLeaflet() {
     .setView([_lvL ? _lvL.lat : 37.556, _lvL ? _lvL.lng : 126.95],
              (_lvL && _lvL.lv >= 1 && _lvL.lv <= 13) ? Math.max(6, 18 - _lvL.lv) : 10);   // 수도권 전역 · 줌 슬라이더 제거(2026-07-23) · 한반도 밖 이탈 방지(2026-08-10 — 카카오판 클램프와 쌍)
   window._map = map;   // 디버그·검증용
+  setTimeout(() => { try { facPaint(); } catch (e) { console.warn("facPaint(Leaflet 생성 뒤)", e); } }, 0);   // 겹침층 「시설」 — 폴백 렌더러도 같은 몸
   mylocMount();        // 「내 위치」 버튼 — 카카오 경로와 **같은 함수**
   layerBtnMount();     // 폰 「레이어」 버튼 + 판 — 두 렌더러 공용(모바일 검토 표 ①⑦)
   mapSrcMount();       // 데이터 출처 한 줄(라이선스 조건 · 두 렌더러 공통)
@@ -10848,6 +11073,7 @@ function initKakao() {
     const c = map.getCenter(); lastViewSave(c.getLat(), c.getLng(), map.getLevel());
   });
   window._map = map; window._kmap = map; map.setMaxLevel(13);
+  setTimeout(() => { try { facPaint(); } catch (e) { console.warn("facPaint(카카오 생성 뒤)", e); } }, 0);   // 겹침층 「시설」 — 지도가 데이터보다 늦게 생겨도 켜진 층이 보이게
   mylocMount();          // 「내 위치」 버튼 — 렌더러 무관(두 초기화가 같은 함수를 부른다)
   layerBtnMount();       // 폰 「레이어」 버튼 + 판 — 〃(데스크톱은 CSS가 숨긴다 · 우측 스택이 같은 항목)
   mapSrcMount();         // 데이터 출처 한 줄 — 〃(한쪽에만 걸면 반대쪽이 조용히 예외가 된다)
@@ -12854,7 +13080,117 @@ function sortSignals(pool, sort, apt) {
    ⇒ 조회 결과(`rows`)는 **입력 서명이 같을 때만** 재사용하고(신호 세대 · 렌더 세대 · 조회조건 · 지역 · 검색어 · 정렬 · 기준 단지 — 도크 패싯 메모와 같은 재료),
      표는 이미 그린 행 뒤에 **새 행만** 붙인다. 서명이 하나라도 다르면 종전과 똑같이 처음부터 짓는다. */
 let _listCache = null;
+/* ══ 목록 「지역별」 보기 (2026-09-25 세션135 · 알렉스 제안 ② 「지역구별 호재 유형별·총 건수 · 클릭하면 우측에 그 호재」) ══
+   ★ **순위가 아니다** — §7 「동/단지 점수·등급」 금지. 건수 순위는 「호재 많은 동네 순위」로 읽히고, 건수 자체가 고시가 실리는 방식에 따라 쌓인다
+     (2026-09-25 실측 영등포구 142건 중 주거개발 105 ↔ 광진구 28). 기본은 행정 순서 · 열 머리로 정렬은 되지만 순번·메달·색 등급은 없다.
+   ★ 숫자는 **지도 알약과 같은 자** — 전국 범위 = `sdOf`(시도 알약 sdAggregates의 귀속) · 시도 범위 = `sggAggregates`·`signalsInSgg`(시군구 알약).
+     여러 시군구를 지나는 노선은 시군구마다 센다(알약과 같다) — 표 머리에 적는다(P2).
+   행: 시도 → 그 시도로 들어간다 · 시군구 → 데스크톱은 오른쪽 판(그 지역 호재 · 누르면 지도 상세) / 폰은 그 지역으로 좁혀 호재 목록.
+   단계 분포는 **회색 계단**만(색으로 좋고 나쁨을 말하지 않는다). 게이트 = html_check.region_view_check. */
+let LIST_MODE = "sig";                       // sig(호재 목록) | region(지역별)
+let REG_SORT = { k: "name", dir: 1 }, REG_SEL = null;
+function syncListMode() {
+  const m = document.getElementById("l-mode");
+  if (m) m.querySelectorAll("[data-lmode]").forEach(b => { const on = b.dataset.lmode === LIST_MODE; b.classList.toggle("on", on); b.setAttribute("aria-selected", on ? "true" : "false"); });
+  const q = document.getElementById("l-q");
+  if (q) q.placeholder = LIST_MODE === "region" ? "지역 이름" : "이름 검색";
+  document.getElementById("listv")?.classList.toggle("rgmode", LIST_MODE === "region");
+  if (m && !m._b) { m._b = true; m.addEventListener("click", e => {
+    const b = e.target.closest("[data-lmode]"); if (!b || b.dataset.lmode === LIST_MODE) return;
+    LIST_MODE = b.dataset.lmode; REG_SEL = null; listShown = LIST_PAGE; renderList();
+  }); }
+}
+function regionTally(key, label, sigs) {
+  const r = { key, label, n: sigs.length, c: {}, sa: 0, p: [0, 0, 0, 0], sigs };
+  sigs.forEach(s => {
+    const c = catOf(s); r.c[c] = (r.c[c] || 0) + 1;
+    const lv = levelOf(s); if (lv === "S" || lv === "A") r.sa++;
+    const i = PHASES.indexOf(phaseOf(s)); if (i >= 0) r.p[i]++;
+  });
+  return r;
+}
+function regionRows() {
+  if (!nav.sd) {
+    const by = new Map(); let unk = 0;
+    allSignalsFlat().filter(visible).forEach(s => { const k = sdOf(s); if (!k) { unk++; return; } if (!by.has(k)) by.set(k, []); by.get(k).push(s); });
+    const keys = SIDO_ORDER.filter(k => by.has(k)).concat([...by.keys()].filter(k => !SIDO_ORDER.includes(k)));
+    return { level: "sd", unk, rows: keys.map((k, i) => Object.assign(regionTally(k, SIDO_LONG[k] || k, by.get(k)), { ord: i })) };
+  }
+  const base = sggAggregates(e => e.sd === nav.sd);   // 시군구 알약과 같은 색인·이름(0건 시군구는 알약처럼 빠진다)
+  const rows = base.map(e => regionTally(e.disp, e.label, signalsInSgg(e.disp)))
+    .sort((a, b) => a.label.localeCompare(b.label, "ko")).map((r, i) => Object.assign(r, { ord: i }));
+  return { level: "sgg", unk: 0, rows, ready: !!(SGG_SIG && SGG_SIG_V === SIG_VER) };
+}
+function regionSorted(rows) {
+  const k = REG_SORT.k, val = r => k === "n" ? r.n : k === "sa" ? r.sa : k.startsWith("c:") ? (r.c[k.slice(2)] || 0) : 0;
+  return rows.slice().sort((a, b) => (k === "name" ? a.ord - b.ord : (val(b) - val(a)) || (a.ord - b.ord)) * REG_SORT.dir);
+}
+function regionPaneHtml(r) {
+  if (!r) return `<div class="rgpe">시군구를 누르면 그 지역 호재가 여기 섭니다.</div>`;
+  const ord = { S: 0, A: 1, B: 2, C: 3, "미정": 4 };
+  const sigs = r.sigs.slice().sort((a, b) => ((ord[levelOf(a)] ?? 5) - (ord[levelOf(b)] ?? 5)) || String(b.last_movement || "").localeCompare(String(a.last_movement || "")));
+  const top = sigs.slice(0, 40);
+  return `<div class="rgph2"><b>${esc(regionLabelOf(r.key))}</b><span>${r.n.toLocaleString()}건 · 지도 알약과 같은 수</span></div>`
+    + `<div class="rgchips">${CAT_KEYS.map(c => `<span><i class="ltdot" style="background:${CAT_COLOR[c]}"></i>${c} ${(r.c[c] || 0).toLocaleString()}</span>`).join("")}</div>`
+    + `<div class="rgnote">규모순(S·A 먼저) · 같은 규모 안에서는 최근 움직임순</div>`
+    + `<div class="rglist">${top.map((s, i) => `<div class="rgrow" data-rgsig="${i}"><span class="rgring" style="border-color:${colorOf(s)}">${levelOf(s) === "미정" ? "" : levelOf(s)}</span>`
+        + `<span class="rgtt"><b>${esc(sigTitle(s))}</b><span>${esc(catOf(s) + subLabel(s))} · ${esc(phaseLabel(phaseOf(s)))}${s.last_movement ? " · " + esc(String(s.last_movement).slice(0, 10)) : ""}</span></span></div>`).join("")}</div>`
+    + `<div class="rgfoot">${sigs.length > top.length ? `${sigs.length.toLocaleString()}건 중 ${top.length}건 · ` : ""}<button class="rgnarrow" data-rgnarrow="1">이 지역으로 좁혀 호재 목록 보기 →</button></div>`;
+}
+function renderRegionList() {
+  const R = regionRows(), desk = isDesk();
+  const q = (document.getElementById("l-q")?.value || "").trim();
+  const rows = regionSorted(R.rows).filter(r => !q || r.label.includes(q));
+  const total = allSignalsFlat().filter(visible).length;   // 호재 목록과 같은 모집단(머리 큰 수는 두 보기가 같은 말을 한다)
+  document.getElementById("l-count").innerHTML = `<span class="bignum">${total.toLocaleString()}</span><span class="lvsub">건 · ${regionLabel() || "전국"} · ${R.level === "sd" ? "시도" : "시군구"} ${R.rows.length}곳</span>`;
+  const more = document.getElementById("l-more"); if (more) more.style.display = "none";
+  _listHasMore = false;
+  const side = document.querySelector("#listv .lvside"); if (side) side.hidden = true;
+  if (REG_SEL && !R.rows.some(r => r.key === REG_SEL)) REG_SEL = null;
+  const cols = [["name", R.level === "sd" ? "시도" : "시군구"], ["n", "전체"]].concat(CAT_KEYS.map(c => ["c:" + c, c])).concat(desk ? [["sa", "규모 S·A"]] : []);
+  const th = cols.map(([k, t]) => `<th data-rgsort="${k}" class="${REG_SORT.k === k ? "on" : ""}">${k.startsWith("c:") ? `<i class="ltdot" style="background:${CAT_COLOR[t]}"></i>` : ""}${desk || !k.startsWith("c:") ? t : t.slice(0, 1)}<i class="dir">${REG_SORT.k === k ? (REG_SORT.dir > 0 ? "↓" : "↑") : ""}</i></th>`).join("")
+    + (desk ? `<th class="rgphh"><span class="rgkey"><i class="p0"></i>계획<i class="p1"></i>인가<i class="p2"></i>착공<i class="p3"></i>준공</span></th>` : "");
+  const tr = rows.map(r => {
+    const tot = r.p.reduce((a, b) => a + b, 0) || 1;
+    return `<tr data-rg="${esc(r.key)}" class="${REG_SEL === r.key ? "sel" : ""}"><td class="rgn">${esc(r.label)}${R.level === "sd" ? " ›" : ""}</td><td>${r.n.toLocaleString()}</td>`
+      + CAT_KEYS.map(c => `<td class="${r.c[c] ? "" : "z"}">${(r.c[c] || 0).toLocaleString()}</td>`).join("")
+      + (desk ? `<td class="${r.sa ? "" : "z"}">${r.sa.toLocaleString()}</td><td class="rgph"><span class="rgbar" title="계획 ${r.p[0]} · 인가 ${r.p[1]} · 착공 ${r.p[2]} · 준공 ${r.p[3]}">${r.p.map((v, i) => v ? `<i class="p${i}" style="width:${(v / tot * 100).toFixed(1)}%"></i>` : "").join("")}</span></td>` : "")
+      + `</tr>`;
+  }).join("");
+  const note = `순위가 아닙니다 — 건수는 고시·허가가 실리는 방식에 따라 지역마다 다르게 쌓입니다(규모 S·A는 사업 크기 분류). 지금 조회조건(유형·단계·등급·성격) 그대로 셉니다.`
+    + (R.level === "sgg" ? " 여러 시군구를 지나는 노선은 시군구마다 셉니다." : "")
+    + (R.unk ? ` 시도를 정할 수 없는 ${R.unk.toLocaleString()}건은 표에서 뺐습니다.` : "")
+    + (R.level === "sgg" && R.ready === false ? " 시군구 색인을 만드는 중입니다 — 잠시 뒤 채워집니다." : "");
+  const sel = R.rows.find(r => r.key === REG_SEL);
+  const el = document.getElementById("l-list");
+  el.innerHTML = `<div class="rgv${desk && R.level === "sgg" ? " two" : ""}"><div class="rgmain"><div class="rgnote">${note}</div>`
+    + (rows.length ? `<table class="rgtab"><thead><tr>${th}</tr></thead><tbody>${tr}</tbody></table>` : `<div class="pickhint" style="padding:24px">표시 조건에 맞는 지역이 없습니다.</div>`)
+    + `</div>` + (desk && R.level === "sgg" ? `<aside class="rgpane">${regionPaneHtml(sel)}</aside>` : "") + `</div>`;
+  el.onclick = e => {
+    const h = e.target.closest("th[data-rgsort]");
+    if (h) { const k = h.dataset.rgsort; if (REG_SORT.k === k) REG_SORT.dir = -REG_SORT.dir; else REG_SORT = { k, dir: 1 }; renderRegionList(); return; }
+    const sg = e.target.closest("[data-rgsig]");
+    if (sg && sel) { const ord = { S: 0, A: 1, B: 2, C: 3, "미정": 4 };
+      const s = sel.sigs.slice().sort((a, b) => ((ord[levelOf(a)] ?? 5) - (ord[levelOf(b)] ?? 5)) || String(b.last_movement || "").localeCompare(String(a.last_movement || "")))[+sg.dataset.rgsig];
+      if (s) { setView("map"); showSignal(s, true); } return; }
+    if (e.target.closest("[data-rgnarrow]") && sel) { regionNarrow(sel); return; }
+    const t = e.target.closest("tr[data-rg]"); if (!t) return;
+    const r = R.rows.find(x => x.key === t.dataset.rg); if (!r) return;
+    if (R.level === "sd") { selectSido(r.key); try { syncRegionChip(); } catch (e2) { console.warn("지역별 시도 칩 동기화", e2); } return; }
+    if (!desk) { regionNarrow(r); return; }
+    REG_SEL = r.key; renderRegionList();
+  };
+  renderListCrumb();
+}
+/* 시군구 행 → 그 지역으로 좁혀 「호재 목록」 보기(지역 칩·브레드크럼이 같이 따라온다 — 값은 selectSgg 한 벌). */
+function regionNarrow(r) {
+  LIST_MODE = "sig"; REG_SEL = null;
+  selectSgg(r.label);
+  try { syncRegionChip(); syncRegionBar(); } catch (e) { console.warn("지역별 좁히기 칩 동기화", e); }
+}
 function renderList() {
+  syncListMode();
+  if (LIST_MODE === "region") return renderRegionList();
   const sortSel = document.getElementById("l-sort");
   const apt = listAnchorApt();
   // 거리순은 기준 단지가 있을 때만 성립한다 — 없으면 고르지 못하게 막고(허상 정렬 금지) 최근순으로 되돌린다.
@@ -13446,8 +13782,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_facilities.json": "7124f6ce96", "apartments_all.json": "9a3ea9555c", "arch_signals.json": "0745d9f248", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "bae4da1b74", "corridor_diff.json": "61a5fa1620", "dart_signals.json": "17039711b7", "dps_signals.json": "37e23215d3", "eum_backfill_progress.json": "291fa70b54", "eum_enroll.json": "1db9bcb7c1", "eum_signals.json": "d82a7759a4", "eum_usage.json": "91a2549d5e", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "b09c5d0690", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "072038b610", "jeongbi_poly_seoul.json": "48ad1d52e7", "jigu_school_signals.json": "6441f39777", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "d298716da0", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "149a6ed93b", "mega_signals.json": "997fdfefee", "methodology.html": "8e611731b0", "park_signals.json": "0e823428a6", "privacy.html": "217d09c9a3", "push_feed.json": "8af793c91c", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "f9eadb2da9", "rail_reference.html": "2bdd33e915", "rail_signals.json": "cb0ba3a85e", "region_gaps.json": "a81edae210", "regions.json": "b7c757393f", "report.html": "db1404863f", "retail_signals.json": "3b0d9bec53", "road_signals.json": "7a80bf111a", "robots.txt": "2312aa6291", "school_signals.json": "110b2c3275", "settings.html": "d825ba6ca1", "sfz_signals.json": "ca276d4ce5", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "9183ec585d", "signals.json": "3f3409fd49", "signals_auto.json": "685843fa08", "signals_jeongbi_all.json": "44c82f51b1", "sitemap.xml": "b26d6b0bae", "source_status.html": "4a468cf19d", "sw.js": "bd80e753e7", "thresholds.json": "ebb6cb9bf4", "upis_facility_geom.json": "3150e03853", "upis_on_road.json": "dd274f1bac", "weekly.html": "f40a039121", "weekly_index.json": "6ba06f590e"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260925d");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_facilities.json": "dcefae4068", "adverse_funeral.json": "940df17403", "apartments_all.json": "9a3ea9555c", "arch_signals.json": "0745d9f248", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "a1382a9466", "corridor_diff.json": "3eef2d4b74", "dart_signals.json": "17039711b7", "dps_signals.json": "37e23215d3", "eum_backfill_progress.json": "291fa70b54", "eum_enroll.json": "1db9bcb7c1", "eum_signals.json": "f8deacd7e0", "eum_usage.json": "91a2549d5e", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "b09c5d0690", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "072038b610", "jeongbi_poly_seoul.json": "48ad1d52e7", "jigu_school_signals.json": "6441f39777", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "d298716da0", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "149a6ed93b", "mega_signals.json": "997fdfefee", "methodology.html": "56d77fd5cf", "park_signals.json": "0e823428a6", "privacy.html": "217d09c9a3", "push_feed.json": "7015a378c9", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "e02e9e5d4d", "rail_reference.html": "2bdd33e915", "rail_signals.json": "cb0ba3a85e", "region_gaps.json": "2e625610c4", "regions.json": "b7c757393f", "report.html": "db1404863f", "retail_signals.json": "3b0d9bec53", "road_signals.json": "ddd70a7aae", "robots.txt": "2312aa6291", "school_signals.json": "110b2c3275", "settings.html": "d825ba6ca1", "sfz_signals.json": "ca276d4ce5", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "9183ec585d", "signals.json": "3f3409fd49", "signals_auto.json": "685843fa08", "signals_jeongbi_all.json": "44c82f51b1", "sitemap.xml": "f27ac048e9", "source_status.html": "f2d5135374", "sw.js": "bd80e753e7", "thresholds.json": "ebb6cb9bf4", "upis_facility_geom.json": "3150e03853", "upis_on_road.json": "d41270197d", "weekly.html": "f40a039121", "weekly_index.json": "6ba06f590e"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260925e");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
@@ -13522,7 +13858,7 @@ function stampRk(file, d) {
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
   applyThresholds(await gj("thresholds.json").catch(() => null));
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
-  const [dong, sgg, main, macro, autoData, regions, dartData, parkData, hospData, retailData, schoolData, jiguSchoolData, dpsData, shData, masterData, jobsData, indparkData, logiparkData, sfzData, megaData, advData] = await Promise.all([
+  const [dong, sgg, main, macro, autoData, regions, dartData, parkData, hospData, retailData, schoolData, jiguSchoolData, dpsData, shData, masterData, jobsData, indparkData, logiparkData, sfzData, megaData, advData, funData] = await Promise.all([
     gj("bdong/서울.geojson"),      // 초기 = 서울 467동(§3.1 법정동). 나머지 15시도는 뷰포트·선택 시 지연 로드(bdong/index.json)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
@@ -13543,7 +13879,8 @@ function stampRk(file, d) {
     gj("logipark_signals.json").catch(() => ({ signals: [] })),       // 물류단지 delta(NLIC 현황 — 검증통과·건설중만, 2026-08-10)
     gj("sfz_signals.json").catch(() => ({ signals: [] })),            // 특구 지정 고시(도심융합 — 관보 원문, 2026-08-11)
     gj("mega_signals.json").catch(() => ({ signals: [] })),           // 관보 고시 원문 파싱 — 대장에 아직 없는 신규 지구(2026-07-22)
-    gj("adverse_facilities.json").catch(() => ({ features: [] }))     // 역효과(UQ158 환경기초) — 지도 미표시, 아파트 카드 병기 전용(②안, 2026-07-30)
+    gj("adverse_facilities.json").catch(() => ({ features: [] })),    // 역효과(UQ158 환경기초) — 아파트 카드 병기(②안, 2026-07-30) + 겹침층 「시설」(2026-09-25)
+    gj("adverse_funeral.json").catch(() => ({ features: [] }))        // 장사시설(UQ157 화장·봉안·묘지·자연장 — 2026-09-25 알렉스 제안 ③) — 같은 참조층
   ]);
   DART = ((dartData && dartData.signals) || []).filter(s => !s.superseded_by).filter(mapHidden("기업 공시")).filter(gateObs("기업 공시"));   // 승격 중복 제외
   buildDartSignals();   // DART → 일자리 후보 신호(호재 카운팅 포함)
@@ -13557,9 +13894,12 @@ function stampRk(file, d) {
     .filter(gateObs("도시계획시설"));   // 관찰 = 확장/개편 판별 대기(§0-1) — 지도 미표시, 승격은 gosi_confirm.json · 거른 수는 GATE_OBS(건수 설명)
   // 역효과(UQ158 환경기초 — 폐기물·하수 등, 2026-07-30 사용자 확정 ②안): **호재 풀에 넣지 않는다.**
   // 지도에도 그리지 않는다 — 아파트 카드·비교에서 "반경 내 N건" 사실 병기로만 쓴다(P5).
-  ADVERSE = ((advData && advData.features) || [])
+  // ★ 2026-09-25(알렉스 제안 ③ 「악재 레이어」): **여전히 호재 풀 밖**이다 — 건수·유형·등급·생애주기에 섞지 않는다. 대신 켜고 끄는 겹침층 「시설」(기본 끔)로
+  //   지도에 보인다(facPaint). 장사시설(UQ157)도 같은 층 · 같은 배열(아파트 카드 병기·비교 참고 밴드가 같이 따라온다 · 사본 없음).
+  ADVERSE = [advData, funData].flatMap(d => (d && d.features) || [])
     .map(f => Object.assign({ _coord: f.geometry && f.geometry.coordinates }, f.properties))
     .filter(s => s._coord);
+  facPaint();
   // 공공건축 설계공모(2026-07-18) — 계획 단계 후보. 건축HUB 인허가가 놓치는 공공건축·중형(1만㎡ 미만)을 보완.
   DPS_SIG = ((dpsData && dpsData.signals) || []).filter(s => !s.superseded_by).filter(mapHidden("개발행위")).filter(gateObs("설계공모")).map(s => Object.assign({
     _dps: true, template_type: "공공시설", confirmed: false, status: s.status || "활성"
