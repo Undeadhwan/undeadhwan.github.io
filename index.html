@@ -71,11 +71,12 @@
        종전 `#111827`·`#6b7280`·`#9ca3af`는 **푸른기 회색**이라 시안(oklch H=270, C=0.005~0.01의
        거의 무채)보다 차갑고 밝았다. 「색감이 다르다」의 뿌리가 여기다.
        시안 환산값: 제목 #151618 · 본문 #4b4d53 · 흐림 #6f7178 · 선 #dddee1 · 면 #edeef2 */
-    --ink:#151618; --muted:#6f7178; --line:#dddee1; --bg:#fff;
+    --ink:#151618; --muted:#63656c; --line:#dddee1; --bg:#fff;   /* --muted·--ink3 #6f7178 → #63656c(2026-09-26 · --panel 위 대비 4.2 → 5.0 · 알렉스 「진행해」 · DESIGN §2) */
     --c-ref:#3e465c;   /* 참고층(호재 아님 — 겹침층 「시설」 마커 · 2026-09-25) — DESIGN §2 */
     --navy:#12263f; --stall:#b8860b; --accent:#2563eb;   /* 액센트(링크·활성) — 일자리 파랑과 같은 값을 공유한다 */
+    --stall-ink:#8a6408; --accent-ink:#235edf;   /* **글자용 짝**(2026-09-26 · 밝은 면 위 글자 대비 4.5+ — 정체 금색 3.25 → 5.4 · 액센트 on --panel 4.46 → 4.85). 면·선·마커는 원색 그대로 · DESIGN §2 */
     /* ── DESIGN.md §2 캐노니컬 토큰 (SSOT — 새 색·크기 임의 추가 금지) ── */
-    --ink2:#4b4d53; --ink3:#6f7178; --line2:#d6d7db; --panel:#edeef2;
+    --ink2:#4b4d53; --ink3:#63656c; --line2:#d6d7db; --panel:#edeef2;
     --c-traffic:#b9003d; --c-job:#2b4ea7; --c-infra:#b25ec5; --c-house:#38853e;   /* 명도 계단 0.45/0.50/0.55/0.62 — 근거는 DESIGN.md §2 */
     --warn:#b45309;
     --apt:#273044; --apt2:#0f1522;   /* 아파트 아이콘 = 진회남색(무채 · 조연) · 눌림·선택은 --apt2. 2026-09-13 알렉스 「파란색이 일자리(--c-job) 파랑과 비슷해 헷갈린다 — 원래대로 검정 또는 짙은 회색」 → 2026-07-29 원색으로 복귀(09-08 「호갱노노 블루」 #4e52d3 폐기 — 유형색과 겹치는 색은 아이콘에 쓰지 않는다) */
@@ -960,7 +961,7 @@
                  padding:12px 14px 6px; background:var(--panel); border:1px solid var(--line); border-top:0; }
   .cmplisthead b { font-size:13px; }
   .cmplisthead .n { font-family:'IBM Plex Mono',ui-monospace,monospace; color:var(--ink2); }
-  .cmplisthead .tg { font-size:12px; font-weight:600; color:var(--accent); cursor:pointer; }
+  .cmplisthead .tg { font-size:12px; font-weight:600; color:var(--accent-ink); cursor:pointer; }
   .cmpbands { background:var(--panel); border:1px solid var(--line); border-top:0;
               border-radius:0 0 var(--r) var(--r); overflow:hidden; }
   .cmpband { align-items:start; padding:0 14px 14px; }
@@ -1055,7 +1056,7 @@
   .gbasis { color:var(--ink2); font-weight:600; }   /* 등급 근거 수치 = 사실 표기라 무채색(분류색 아님) */
   .gbasis.undet { color:#7b6c4a; font-weight:600; font-style:italic; }   /* 미정 베이지 — #a08a5a는 흰 바탕 대비 3.35(contrast_probe 2026-09-25) · 「유형 미상」(.subunk)과 같은 값 */
   .fresh { font-size:11px; color:var(--muted); }
-  .fresh.stall { color:var(--stall); font-weight:700; }
+  .fresh.stall { color:var(--stall-ink); font-weight:700; }
   /* 관측일 기반 표기 = 문서 날짜가 아님 → 점선(DESIGN §1-7: 실선=사실 / 점선=사실 아님) */
   .fresh.obs { border-bottom:1px dotted var(--line2); cursor:help; }
   .fresh.done { color:#2e8b57; font-weight:600; }
@@ -1438,8 +1439,8 @@
   #flowv .fep { font-size:var(--fs); color:var(--ink2); line-height:1.55; }
   #flowv .feacts { display:flex; flex-wrap:wrap; gap:8px; }
   #flowv .feact { font:inherit; font-size:var(--fs-s); padding:7px 12px; border-radius:var(--r-s); border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer; }
-  #flowv .feact em { font-style:normal; color:var(--accent); font-variant-numeric:tabular-nums; margin-left:4px; }
-  #flowv .feact.rst { color:var(--accent); }
+  #flowv .feact em { font-style:normal; color:var(--accent-ink); font-variant-numeric:tabular-nums; margin-left:4px; }
+  #flowv .feact.rst { color:var(--accent-ink); }
   #flowv .fcondm { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:0 0 10px; font-size:var(--fs-s); }
   #flowv .fcondm .k { color:var(--ink3); }
   #flowv .fcondm .c { padding:3px 9px; border-radius:999px; background:var(--panel); color:var(--ink); }
@@ -1513,7 +1514,7 @@
      ⚠ 역행(`.back`)만 정체색을 남긴다 — P5가 요구하는 사실이라 무채색에 섞으면 안 된다. */
   #flowv .mvk.new { color:#fff; background:var(--ink); }
   /* ⚠ 역행(`.back`)만 정체색을 남긴다 — P5가 요구하는 사실이라 무채색에 섞으면 안 된다 */
-  #flowv .mvk.chg.back { color:var(--stall); background:#fdf8ec; }
+  #flowv .mvk.chg.back { color:var(--stall-ink); background:#fdf8ec; }
   #flowv .mvk.seen { color:var(--ink3); background:var(--panel); }
   #flowv .fbody { flex:1 1 0; min-width:0; }
   @media (max-width: 768px) {
@@ -1542,7 +1543,7 @@
        P5는 *정체 신호를 정체로 표시*하라고 요구한다 — 인가→계획 역행은 무채색에 섞이면 안 되는
        사실이다. 정체 전용색(--stall)이 그 자리의 SSOT다. */
   .mvtag.chg { color:var(--ink2); }
-  .mvtag.chg.back { color:var(--stall); }
+  .mvtag.chg.back { color:var(--stall-ink); }
   .mvtag.new { color:var(--ink2); }
   /* ══ 하단 탭바(독) — 모바일 전용. 데스크톱은 헤더 칩이 같은 일을 한다(두 벌을 만들지 않는다) ══ */
   /* 문법(DESIGN §1): 무채색 뼈대 · 상태는 채움(굵기)으로. `env(safe-area-inset-bottom)` —
@@ -2114,7 +2115,7 @@
     /* 크롬 안에서는 잉크·선·면 토큰을 다크 값으로 다시 묶는다 — 안쪽 부품(상세·목록 행)이 토큰을 쓰는 한 따라온다 */
     header, #chipbar, #panel, #listv, #flowv, #undet, #hjlegend, #layerstack, #zoomstack, .hj-count, #cmpModal .rmpanel, footer {
       --ink:var(--t); --ink2:var(--t2); --ink3:var(--m); --muted:var(--m); --line:var(--b); --line2:var(--b2);
-      --panel:var(--s); --bg:var(--pg); --accent:var(--ac);
+      --panel:var(--s); --bg:var(--pg); --accent:var(--ac); --stall-ink:var(--stall); --accent-ink:var(--ac);
       /* ★ 글자색도 같이 묶는다 (2026-09-24 알렉스 「아래쪽은 음영은 어두운데 텍스트도 검정 계열이라 안 보여」) — `body { color:var(--ink) }`는 body에서
          #151618로 **계산된 값이 상속**되므로 토큰만 다시 묶으면 글자색을 따로 안 적은 요소(등급 없음 목록 행·비교 목록 머리)가 어두운 판 위에서 검정으로 남았다
          (contrast_probe 실측: 등급 없음 목록 제목 200건 대비 1.03). */
@@ -2263,7 +2264,7 @@
     #panel2 { position:absolute; left:464px; top:116px; width:440px; max-height:calc(100vh - 208px); overflow-y:auto; padding:0; border-radius:12px;
       background:var(--p); border:1px solid var(--b); box-shadow:0 12px 32px rgba(0,0,0,.22); color:var(--t); z-index:1200;
       scrollbar-gutter:stable; scrollbar-color:var(--b2) transparent; --ink:var(--t); --ink2:var(--t2); --ink3:var(--m); --muted:var(--m);
-      --line:var(--b); --line2:var(--b2); --panel:var(--s); --bg:var(--pg); --accent:var(--ac); font-family:var(--ff2); -webkit-font-smoothing:auto; }
+      --line:var(--b); --line2:var(--b2); --panel:var(--s); --bg:var(--pg); --accent:var(--ac); --stall-ink:var(--stall); --accent-ink:var(--ac); font-family:var(--ff2); -webkit-font-smoothing:auto; }
     #panel2 .detail.dv2 { animation:panelIn .24s cubic-bezier(.16,.84,.28,1) both; }
     .ltab tbody tr.sel { background:var(--s); box-shadow:inset 3px 0 0 var(--ac); }
     /* ── 우측 레이어 스택 ── */
@@ -2339,7 +2340,7 @@
     .dv2 h2 { margin:0; font-size:22px; font-weight:500; letter-spacing:-.01em; line-height:1.25; color:var(--t); word-break:keep-all; }
     .dv2 .dsum { font-size:14px; color:var(--m); line-height:1.5; }
     .dv2 .dsum .fresh { font-size:14px; color:var(--m); font-weight:400; background:none; padding:0; }
-    .dv2 .dsum .fresh.stall { color:var(--stall); }
+    .dv2 .dsum .fresh.stall { color:var(--stall-ink); }   /* 글자용 짝(2026-09-26) — v2 어두운 판에선 --stall로 다시 묶인다 */
     .dv2 .dsum .pl { font-size:13px; }
     .dv2 .badge-draft, .dv2 .badge-drop { font-size:12px; padding:1px 6px; border-radius:5px; margin-left:4px; vertical-align:1px; }
     .dv2 .badge-draft { background:rgba(180,83,9,.18); color:#f0b37a; }
@@ -3202,7 +3203,18 @@ const SUB_KEYS = { "교통": ["철도", "IC 진출입", "도로변 접근", "환
 const SUB_LABEL = { "철도": "철도 · 역", "IC 진출입": "도로 · IC", "도로변 접근": "도로 · 일반", "환승·터미널": "환승 · 터미널", "미상": "유형 미상" };
 const SUB_TITLE = { "IC 진출입": "고속도로·자동차전용도로 — IC(나들목)에서만 드나드는 도로 · 영향은 IC 점 반경",
                     "도로변 접근": "국도·지방도·시도·도시계획도로 — 길가에서 바로 드나드는 도로(고속도로 지하화 포함) · 영향은 길가 회랑" };
-const subDisp = sk => SUB_LABEL[sk] || sk;   // (subLabel은 다른 뜻으로 이미 있다 — 이름 충돌 실측 2026-09-08)
+const subDisp = sk => SUB_LABEL[sk] || sk;
+/* ★ 유형색을 **밝은 면 위 글자**로 쓸 때 — 흰 바탕 대비 4.5 이상이 되게 어둡게 (2026-09-26 알렉스 「진행해」 · 인프라 보라 #b25ec5 글자 대비 3.96 · contrast_probe).
+   면·선·마커의 유형색은 그대로다(색 채널 = 유형 · DESIGN §2) · 어두운 판(데스크톱 v2)은 원색이 이미 읽힌다(탐침 0건) → 원색 그대로. 값은 계산으로(표를 두지 않는다 — 유형색이 바뀌어도 따라온다). */
+function inkOn(hex) {
+  const lum = h => { const v = [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255).map(c => c <= .03928 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4); return .2126 * v[0] + .7152 * v[1] + .0722 * v[2]; };
+  if (!/^#[0-9a-f]{6}$/i.test(hex || "")) return hex;
+  let h = hex;
+  for (let k = 0; k < 12 && 1.05 / (lum(h) + .05) < 4.5; k++)
+    h = "#" + [1, 3, 5].map(i => Math.round(parseInt(h.slice(i, i + 2), 16) * .92).toString(16).padStart(2, "0")).join("");
+  return h;
+}
+const textColorOf = s => isDesk() ? colorOf(s) : inkOn(colorOf(s));   // 글자로 쓰는 유형색 — 폰(밝은 면)은 inkOn   // (subLabel은 다른 뜻으로 이미 있다 — 이름 충돌 실측 2026-09-08)
 const subId = (cat, sub) => cat + "|" + sub;
 const ALL_SUBS = CAT_KEYS.flatMap(c => (SUB_KEYS[c] || []).map(s => subId(c, s)));
 const CAT_SUB = { "교통": "철도 / IC 진출입 / 도로변 접근 / 환승·터미널 / 미상", "일자리": "오피스 / 지식산업센터 / 공장 / 데이터센터 / 복합단지", "인프라": "병원 / 공원·녹지 / 판매 / 문화·관광·체육 / 학교(특목) / 공공시설 / 공항 / 항만 / 기타시설", "주거개발": "재개발 / 재건축 / 주거환경개선 / 소규모정비 / 지역주택조합 / 택지·지구 / 공공임대" };
@@ -6812,9 +6824,9 @@ function renderApt(a) {
   // 역효과 병기(P5 — 2026-07-30 ②안): 지도 미표시 층. 거리·존재 사실만, 영향 판단 없음(P1).
   const adv = adverseNearPoint([a.lon, a.lat]);
   const advDist = d => d < 1000 ? Math.round(d) + "m" : (d / 1000).toFixed(1) + "km";
-  const advHtml = adv.length ? `<div class="advfacts">⚠ 반경 ${ADVERSE_RKM}km 내 환경·장사시설 ${adv.length}건 —
+  const advHtml = adv.length ? `<div class="advfacts">⚠ 반경 ${ADVERSE_RKM}km 내 환경·에너지·장사시설 ${adv.length}건 —
       ${adv.slice(0, 3).map(x => `${(x.f.title || "").replace(/ \([^)]*㎡\)$/, "")} <b>${advDist(x.dist)}</b>`).join(" · ")}${adv.length > 3 ? ` 외 ${adv.length - 3}건` : ""}
-      <div class="advnote">폐기물·하수 등 환경기초시설과 화장·봉안·묘지 등 장사시설 — 도시계획시설로 결정된 것(지은 것·계획 모두 · 지도는 레이어 「시설」). 존재·거리 사실만 — 영향 판단 아님</div></div>` : "";
+      <div class="advnote">폐기물·하수 등 환경기초시설, 열병합 등 집단에너지 사업장, 화장·봉안·묘지 등 장사시설 — 도시계획시설 결정과 기관 운영 목록(지은 것·계획 모두 · 지도는 레이어 「시설」). 존재·거리 사실만 — 영향 판단 아님</div></div>` : "";
   p.innerHTML = `
     ${pheadHtml(`<div class="pt">${a.n}</div>`)}
     <div class="ps">${a.sg} ${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + " 세대" : ""}
@@ -7240,7 +7252,7 @@ function renderCompareBody() {
   const body = `<div id="cmpWrap" style="--nc:${cols.length}">
     ${cmpSummaryHtml(cols)}
     <div class="cmpnote">개수·거리·단계 사실만 나열합니다 — 가중치 합산·순위·추천·'수혜' 판단 없음. 세대수는 단지 식별 표기일 뿐 비교 축이 아닙니다.<br>
-      거리는 단지 좌표(도로 수준 근사) 기준.${cmpHasRef(cols) ? `<br>참고 = 정체 신호 · 환경·장사시설(${ADVERSE_RKM}km 내 · 지은 것·계획 모두) — 존재·거리 사실만, 영향 판단 아님.` : ""}</div>
+      거리는 단지 좌표(도로 수준 근사) 기준.${cmpHasRef(cols) ? `<br>참고 = 정체 신호 · 환경·에너지·장사시설(${ADVERSE_RKM}km 내 · 지은 것·계획 모두) — 존재·거리 사실만, 영향 판단 아님.` : ""}</div>
     ${cmpBandsHtml(cols)}
   </div>`;
   document.getElementById("cmpBody").innerHTML = body;
@@ -8733,8 +8745,10 @@ const FAC_STATE_TXT = { "지어짐": "지어짐(집행완료)", "일부": "일�
 const facPlanned = f => f.fac_state === "계획" || f.fac_state === "일부";
 function facCardHtml(f) {
   const nm = String(f.title || "").replace(/\s*\([^)]*㎡\)\s*$/, "");
-  return `<div class="faccard"><b>${esc(nm)}</b><span>${esc(f.sub || "")} · 도시계획시설 · ${esc(FAC_STATE_TXT[f.fac_state] || FAC_STATE_TXT["미상"])}</span>`
-    + `<span>부지 ${Number(f.area_m2 || 0).toLocaleString()}㎡ · 최근 고시 ${esc(f.gosi || "일자 미상")}</span>`
+  const st = f.area_m2 ? (FAC_STATE_TXT[f.fac_state] || FAC_STATE_TXT["미상"]) : (f.fac_state === "지어짐" ? "운영 중(기관 목록)" : "운영 여부 미상(기관 목록)");   // 보강 층은 도시계획시설 결정이 아니라 기관 운영 목록이다
+  return `<div class="faccard"><b>${esc(nm)}</b><span>${esc(f.sub || "")} · ${f.area_m2 ? "도시계획시설 · " : ""}${esc(st)}</span>`
+    + (f.area_m2 ? `<span>부지 ${Number(f.area_m2).toLocaleString()}㎡ · 최근 고시 ${esc(f.gosi || "일자 미상")}</span>`
+        : `<span>${f.cap_m3d ? `처리용량 ${Number(f.cap_m3d).toLocaleString()}㎥/일 · ` : ""}${esc(f.src_name || "")}</span>`)   // 보강 층(기관 목록) — 부지·고시 대신 용량·출처(fac_extra)
     + `<em>호재가 아닙니다 — 존재·위치 사실만 적습니다</em></div>`;
 }
 function facPaint() {
@@ -8844,7 +8858,7 @@ function paintLegend() {
     + `<span><svg width="26" height="8"><path d="M1 4H25" stroke="${C}" stroke-width="3" stroke-linecap="round"/></svg>철도</span>`
     + `<span><svg width="26" height="8"><path d="M1 4H25" stroke="${C}" stroke-width="7"/><path d="M1 4H25" style="stroke:var(--ly-hole,#161826)" stroke-width="4"/><path d="M1 4H25" stroke="${C}" stroke-opacity=".25" stroke-width="4"/></svg>도로</span>`
     + `<span><svg width="26" height="8"><path d="M1 4H25" stroke="${C}" stroke-width="3" stroke-linecap="round" stroke-dasharray="0.1 5.5"/></svg>계획</span>`
-    + (facOn() ? '<span class="facleg"><i class="facmk0"></i>환경·장사시설 <i class="facmk0 plan"></i>계획·일부</span>' : "")
+    + (facOn() ? '<span class="facleg"><i class="facmk0"></i>환경·에너지·장사시설 <i class="facmk0 plan"></i>계획·일부</span>' : "")
     + '<span class="rule" role="button">표기 규칙</span>';
   hosts.forEach(h => { h.innerHTML = html; });
 }
@@ -8964,7 +8978,7 @@ function movDeltaHtml(s) {
   if (d.kind === "신규") {
     const p = phaseOf(s), lv = levelOf(s);
     return `<span class="mvtag new" title="새로 확인된 신호 — 지금 단계입니다">`
-      + `<span class="phcell now" style="color:${colorOf(s)}"><b>${lv === "미정" ? "" : lv + " · "}<i class="ph${PHASE_IDX[p] ?? 0}"></i>${phaseLabel(p)}</b></span></span>`;
+      + `<span class="phcell now" style="color:${textColorOf(s)}"><b>${lv === "미정" ? "" : lv + " · "}<i class="ph${PHASE_IDX[p] ?? 0}"></i>${phaseLabel(p)}</b></span></span>`;
   }
   const back = PHASE_IDX[d.to] < PHASE_IDX[d.from];   // 역행(인가→계획 등)은 정체·재추진 신호다(P5)
   /* ★ **전 → 후를 그림으로** (2026-08-13 시안 §05 머리기사):
@@ -8979,7 +8993,7 @@ function movDeltaHtml(s) {
     /* ★ **「후」는 유형색**(갱신 시안 §05 실물 · 사장님이 이 열에 표시) — 「전」은 회색.
        색 = 분류라는 전 화면 규칙 그대로다(§1-1): 바뀐 뒤의 상태가 곧 그 신호의 현재이고,
        그 신호의 색은 유형이다. 회색→유형색의 대비가 **어느 쪽이 지금인지**를 말한다. */
-    + `<em class="arw">→</em><span class="phcell now" style="color:${colorOf(s)}"><b>${dot(d.to)}${phaseLabel(d.to)}</b></span></span>`;
+    + `<em class="arw">→</em><span class="phcell now" style="color:${textColorOf(s)}"><b>${dot(d.to)}${phaseLabel(d.to)}</b></span></span>`;
 }
 function flowRows(sorted = true) {
   const rows = allSignalsFlat().filter(visible)
@@ -13911,8 +13925,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_facilities.json": "cc78a2a797", "adverse_funeral.json": "0cdfbee63b", "apartments_all.json": "143fa165b6", "arch_signals.json": "85d8866bc8", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "e5a77d3e29", "corridor_diff.json": "c6071a5354", "dart_signals.json": "8f59b6c6ce", "dps_signals.json": "a06a65fe72", "eum_backfill_progress.json": "291fa70b54", "eum_enroll.json": "3a0df34704", "eum_signals.json": "bc33d18a08", "eum_usage.json": "7a191be997", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "3d065e30bb", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "a50aaab0d0", "jeongbi_poly_seoul.json": "56be2d928c", "jigu_school_signals.json": "317311e780", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "4ed56ddbfd", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "c298a6dec2", "mega_signals.json": "fac3444833", "methodology.html": "50c187df70", "park_signals.json": "db6af674f1", "privacy.html": "217d09c9a3", "push_feed.json": "ad5016db45", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "d02d4c7a75", "rail_reference.html": "2bdd33e915", "rail_signals.json": "cb0ba3a85e", "region_gaps.json": "c0b6227494", "regions.json": "b7c757393f", "report.html": "5026ac648f", "retail_signals.json": "ebfc21447e", "road_signals.json": "11cd723e97", "robots.txt": "2312aa6291", "school_signals.json": "bb1e88e9ea", "settings.html": "d825ba6ca1", "sfz_signals.json": "f2a31418d5", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "27387827a9", "signals.json": "3f3409fd49", "signals_auto.json": "15c15f47d2", "signals_jeongbi_all.json": "b86603967a", "sitemap.xml": "5d21cdb4de", "source_status.html": "4981d25c3f", "sw.js": "bd80e753e7", "thresholds.json": "ebb6cb9bf4", "upis_facility_geom.json": "063c11b943", "upis_on_road.json": "976bc3a456", "weekly.html": "f40a039121", "weekly_index.json": "6ba06f590e"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260926b");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_extra.json": "c4bd6b27e6", "adverse_facilities.json": "cc78a2a797", "adverse_funeral.json": "0cdfbee63b", "apartments_all.json": "143fa165b6", "arch_signals.json": "4dd57757b5", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "7c4743fa53", "corridor_diff.json": "2a2a95e161", "dart_signals.json": "0a1410de68", "dps_signals.json": "c777eee0fb", "eum_backfill_progress.json": "291fa70b54", "eum_enroll.json": "3a0df34704", "eum_signals.json": "b169aa41fb", "eum_usage.json": "7a191be997", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "3d065e30bb", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "a50aaab0d0", "jeongbi_poly_seoul.json": "48ad1d52e7", "jigu_school_signals.json": "317311e780", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "4ed56ddbfd", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "c298a6dec2", "mega_signals.json": "fac3444833", "methodology.html": "20cf9e6702", "park_signals.json": "db6af674f1", "privacy.html": "217d09c9a3", "push_feed.json": "5ca360bfeb", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "9db290ba26", "rail_reference.html": "2bdd33e915", "rail_signals.json": "cb0ba3a85e", "region_gaps.json": "c47a138480", "regions.json": "b7c757393f", "report.html": "5026ac648f", "retail_signals.json": "ebfc21447e", "road_signals.json": "987ed64d28", "robots.txt": "2312aa6291", "school_signals.json": "bb1e88e9ea", "settings.html": "d825ba6ca1", "sfz_signals.json": "f2a31418d5", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "27387827a9", "signals.json": "3f3409fd49", "signals_auto.json": "15c15f47d2", "signals_jeongbi_all.json": "9b3e9420b3", "sitemap.xml": "1ee39182c8", "source_status.html": "4981d25c3f", "sw.js": "bd80e753e7", "thresholds.json": "08801182e5", "upis_facility_geom.json": "063c11b943", "upis_on_road.json": "14707a2cf4", "weekly.html": "4de5f1c665", "weekly_index.json": "6ba06f590e"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260926c");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
@@ -13987,7 +14001,7 @@ function stampRk(file, d) {
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
   applyThresholds(await gj("thresholds.json").catch(() => null));
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
-  const [dong, sgg, main, macro, autoData, regions, dartData, parkData, hospData, retailData, schoolData, jiguSchoolData, dpsData, shData, masterData, jobsData, indparkData, logiparkData, sfzData, megaData, advData, funData] = await Promise.all([
+  const [dong, sgg, main, macro, autoData, regions, dartData, parkData, hospData, retailData, schoolData, jiguSchoolData, dpsData, shData, masterData, jobsData, indparkData, logiparkData, sfzData, megaData, advData, funData, extData] = await Promise.all([
     gj("bdong/서울.geojson"),      // 초기 = 서울 467동(§3.1 법정동). 나머지 15시도는 뷰포트·선택 시 지연 로드(bdong/index.json)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
@@ -14009,7 +14023,8 @@ function stampRk(file, d) {
     gj("sfz_signals.json").catch(() => ({ signals: [] })),            // 특구 지정 고시(도심융합 — 관보 원문, 2026-08-11)
     gj("mega_signals.json").catch(() => ({ signals: [] })),           // 관보 고시 원문 파싱 — 대장에 아직 없는 신규 지구(2026-07-22)
     gj("adverse_facilities.json").catch(() => ({ features: [] })),    // 역효과(UQ158 환경기초) — 아파트 카드 병기(②안, 2026-07-30) + 겹침층 「시설」(2026-09-25)
-    gj("adverse_funeral.json").catch(() => ({ features: [] }))        // 장사시설(UQ157 화장·봉안·묘지·자연장 — 2026-09-25 알렉스 제안 ③) — 같은 참조층
+    gj("adverse_funeral.json").catch(() => ({ features: [] })),       // 장사시설(UQ157 화장·봉안·묘지·자연장 — 2026-09-25 알렉스 제안 ③) — 같은 참조층
+    gj("adverse_extra.json").catch(() => ({ features: [] }))          // 보강 — 도시계획시설 레이어에 없는 운영 시설(공공하수처리시설·집단에너지 사업장 기관 목록 · fac_extra.py · 2026-09-26 알렉스 「진행해」)
   ]);
   DART = ((dartData && dartData.signals) || []).filter(s => !s.superseded_by).filter(mapHidden("기업 공시")).filter(gateObs("기업 공시"));   // 승격 중복 제외
   buildDartSignals();   // DART → 일자리 후보 신호(호재 카운팅 포함)
@@ -14025,7 +14040,7 @@ function stampRk(file, d) {
   // 지도에도 그리지 않는다 — 아파트 카드·비교에서 "반경 내 N건" 사실 병기로만 쓴다(P5).
   // ★ 2026-09-25(알렉스 제안 ③ 「악재 레이어」): **여전히 호재 풀 밖**이다 — 건수·유형·등급·생애주기에 섞지 않는다. 대신 켜고 끄는 겹침층 「시설」(기본 끔)로
   //   지도에 보인다(facPaint). 장사시설(UQ157)도 같은 층 · 같은 배열(아파트 카드 병기·비교 참고 밴드가 같이 따라온다 · 사본 없음).
-  ADVERSE = [advData, funData].flatMap(d => (d && d.features) || [])
+  ADVERSE = [advData, funData, extData].flatMap(d => (d && d.features) || [])
     .map(f => Object.assign({ _coord: f.geometry && f.geometry.coordinates }, f.properties))
     .filter(s => s._coord);
   facPaint();
