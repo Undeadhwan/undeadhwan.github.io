@@ -1387,11 +1387,14 @@
   .facleg .facmk0 { display:inline-block; width:8px; height:8px; margin-right:6px; vertical-align:0; }
   .facmk0.plan { background:transparent; border:2.5px solid var(--c-ref); box-shadow:none; }   /* 계획·일부 = **흰 테두리 없는 윤곽선**(지도가 비쳐 보인다) — 지어짐(채움 + 흰 테두리)과 한눈에 갈리게(2026-09-26 알렉스 「준공인지 계획인지 구분이 잘 안 된다 · 계획은 흰 테두리를 없애」 · 종전 흰 속 마름모는 흰 테두리처럼 보였다) · 속 빈 = 호재 문법 「계획 = 속 빈 원」과 같은 뜻(2026-09-25 알렉스 「가」) */
   .facleg .facmk0.plan { margin-left:4px; }
+  .facmk0.up { box-shadow:0 0 0 2px var(--c-ref), 0 1px 3px rgba(0,0,0,.35); }   /* 운영 중 · 증설·변경 계획(환경영향평가) = 지어짐 마름모 + 바깥 윤곽(계획 윤곽을 겹친 모양 · 2026-09-26 알렉스 「마곡열병합 … 기존 시설의 업그레이드」) */
+  .faccard .facplan { font-weight:600; }   /* 증설·변경 계획 줄 — 색 채널은 쓰지 않는다(정체색 등과 뜻이 겹친다) */
   /* 범례는 원(`#hjlegend i`·`.mly-legend i`의 border-radius:50%)이 아니라 지도와 같은 **마름모**로 · 어두운 막대 위에선 참고층 슬레이트가 묻혀(2026-09-26 캡처 —
      계획 윤곽이 거의 안 보였다) 밝은 슬레이트(크롬 토큰 --m)로 같은 문법(지어짐 = 채움 + 흰 테두리 · 계획 = 흰색 없는 윤곽)을 그린다. */
   #hjlegend .facleg .facmk0, #mlayers .mly-legend .facleg .facmk0 { border-radius:0; }
   #hjlegend .facleg .facmk0 { background:var(--m); }
   #hjlegend .facleg .facmk0.plan { background:transparent; border-color:var(--m); border-width:2px; }
+  #hjlegend .facleg .facmk0.up { box-shadow:0 0 0 2px var(--m); }
   .facdi { background:none; border:0; }
   .facmk .faccard { display:none; position:absolute; left:14px; top:-6px; z-index:4; width:280px; background:#fff; color:#151618; border-radius:10px; padding:10px 12px;
     box-shadow:0 0 0 1.5px var(--c-ref), 0 8px 24px rgba(0,0,0,.25); font-size:12.5px; line-height:1.45; cursor:default; flex-direction:column; gap:3px; white-space:normal; }
@@ -8754,12 +8757,20 @@ function facLift(el, up) { const o = el && el._facOv; if (!o) return; try { if (
 /* ★ 지도 빈 곳을 누르면 고정된 카드가 닫힌다 (2026-09-26 알렉스 「그 상태에서 지도 공백 누르면 뱃지가 사라져야 하는데 안 사라짐」) — 폰은 마우스 올리기가 없어
    누르기(고정)가 유일한 여는 길이라 누르기는 남기고 닫는 길을 더한다. 두 렌더러의 지도 click이 부른다. */
 function facCloseOpen() { if (_facOpen) { _facOpen.classList.remove("open", "hov"); facLift(_facOpen, false); } _facOpen = null; }
+/* 환경영향평가 한 줄 — 단계 원문·일자·사업자(판단 낱말 없음 · P1) · 2026-09-26 계획 층 */
+const facEiaTxt = e => `환경영향평가 ${esc(e.step || "")} ${esc(e.date || "")}${e.company ? ` · 사업자 ${esc(e.company)}` : ""}`;
 function facCardHtml(f) {
   const nm = String(f.title || "").replace(/\s*\([^)]*㎡\)\s*$/, "");
+  if (f.eia) {   // 환경영향평가 협의 목록에서 온 계획(짝 없는 새 부지) — 계획 = 새 사업 · 미상 = 오래된 사업의 최근 변경 협의(이미 운영 중일 수 있다)
+    return `<div class="faccard"><b>${esc(nm)}</b><span>${esc(f.sub || "")} · ${f.fac_state === "계획" ? "계획(환경영향평가 진행)" : "운영 여부 미상 — 오래된 사업의 변경 협의"}</span>`
+      + `<span>${facEiaTxt(f.eia)}</span><span>${esc(f.src_name || "")}</span>`
+      + `<em>호재가 아닙니다 — 계획·위치 사실만 적습니다 · 건설 여부는 이 자료가 말하지 않습니다</em></div>`;
+  }
   const st = f.area_m2 ? (FAC_STATE_TXT[f.fac_state] || FAC_STATE_TXT["미상"]) : (f.fac_state === "지어짐" ? "운영 중(기관 목록)" : "운영 여부 미상(기관 목록)");   // 보강 층은 도시계획시설 결정이 아니라 기관 운영 목록이다
   return `<div class="faccard"><b>${esc(nm)}</b><span>${esc(f.sub || "")} · ${f.area_m2 ? "도시계획시설 · " : ""}${esc(st)}</span>`
     + (f.area_m2 ? `<span>부지 ${Number(f.area_m2).toLocaleString()}㎡ · 최근 고시 ${esc(f.gosi || "일자 미상")}</span>`
         : `<span>${f.cap_m3d ? `처리용량 ${Number(f.cap_m3d).toLocaleString()}㎥/일 · ` : ""}${esc(f.src_name || "")}</span>`)   // 보강 층(기관 목록) — 부지·고시 대신 용량·출처(fac_extra)
+    + (f._plans || []).map(pl => `<span class="facplan">증설·변경 계획 — 「${esc(pl.title || "")}」 · ${facEiaTxt(pl.eia || {})}</span>`).join("")   // 이 시설 자리의 환경영향평가 계획(fac_extra up_of)
     + `<em>호재가 아닙니다 — 존재·위치 사실만 적습니다</em></div>`;
 }
 function facPaint() {
@@ -8782,7 +8793,7 @@ function facPaint() {
   ADVERSE.forEach(f => {
     const el = document.createElement("div");
     el.className = "facmk";
-    el.innerHTML = `<i class="facmk0${facPlanned(f) ? " plan" : ""}"></i>`;
+    el.innerHTML = `<i class="facmk0${facPlanned(f) ? " plan" : f._plans ? " up" : ""}"></i>`;
     el.addEventListener("pointerenter", ev => { if (ev.pointerType !== "mouse") return; card(el, f); el.classList.add("hov"); lift(el, true); });
     el.addEventListener("pointerleave", ev => { if (ev.pointerType !== "mouse") return; el.classList.remove("hov"); if (!el.classList.contains("open")) lift(el, false); });
     el.addEventListener("click", ev => {
@@ -8868,7 +8879,7 @@ function paintLegend() {
     + `<span><svg width="26" height="8"><path d="M1 4H25" stroke="${C}" stroke-width="3" stroke-linecap="round"/></svg>철도</span>`
     + `<span><svg width="26" height="8"><path d="M1 4H25" stroke="${C}" stroke-width="7"/><path d="M1 4H25" style="stroke:var(--ly-hole,#161826)" stroke-width="4"/><path d="M1 4H25" stroke="${C}" stroke-opacity=".25" stroke-width="4"/></svg>도로</span>`
     + `<span><svg width="26" height="8"><path d="M1 4H25" stroke="${C}" stroke-width="3" stroke-linecap="round" stroke-dasharray="0.1 5.5"/></svg>계획</span>`
-    + (facOn() ? '<span class="facleg"><i class="facmk0"></i>환경·에너지·장사시설 <i class="facmk0 plan"></i>계획·일부</span>' : "")
+    + (facOn() ? '<span class="facleg"><i class="facmk0"></i>환경·에너지·장사시설 <i class="facmk0 plan"></i>계획·일부 <i class="facmk0 up"></i>증설 계획</span>' : "")
     + '<span class="rule" role="button">표기 규칙</span>';
   hosts.forEach(h => { h.innerHTML = html; });
 }
@@ -13946,8 +13957,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_extra.json": "c4bd6b27e6", "adverse_facilities.json": "cc78a2a797", "adverse_funeral.json": "0cdfbee63b", "apartments_all.json": "143fa165b6", "arch_signals.json": "4dd57757b5", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "acf1c92d91", "corridor_diff.json": "1f6b4a7cec", "dart_signals.json": "0a1410de68", "dps_signals.json": "c777eee0fb", "eum_backfill_progress.json": "291fa70b54", "eum_enroll.json": "3a0df34704", "eum_signals.json": "6dea4a8f91", "eum_usage.json": "7a191be997", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "3d065e30bb", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "a50aaab0d0", "jeongbi_poly_seoul.json": "48ad1d52e7", "jigu_school_signals.json": "317311e780", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "4ed56ddbfd", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "c298a6dec2", "mega_signals.json": "fac3444833", "methodology.html": "20cf9e6702", "park_signals.json": "db6af674f1", "privacy.html": "217d09c9a3", "push_feed.json": "f354a83b2c", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "b50f5b9fda", "rail_reference.html": "31828f7369", "rail_signals.json": "0e3f39aed4", "region_gaps.json": "f2fef6b8fc", "regions.json": "b7c757393f", "report.html": "5026ac648f", "retail_signals.json": "ebfc21447e", "road_signals.json": "cbbc0f73ab", "robots.txt": "2312aa6291", "school_signals.json": "bb1e88e9ea", "settings.html": "d825ba6ca1", "sfz_signals.json": "f2a31418d5", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "27387827a9", "signals.json": "3f3409fd49", "signals_auto.json": "15c15f47d2", "signals_jeongbi_all.json": "9b3e9420b3", "sitemap.xml": "1ee39182c8", "source_status.html": "4981d25c3f", "sw.js": "bd80e753e7", "thresholds.json": "08c98c9b6a", "upis_facility_geom.json": "063c11b943", "upis_on_road.json": "6aaa42624a", "weekly.html": "4de5f1c665", "weekly_index.json": "6ba06f590e"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260926e");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_extra.json": "cb8bf3f911", "adverse_facilities.json": "cc78a2a797", "adverse_funeral.json": "0cdfbee63b", "apartments_all.json": "143fa165b6", "arch_signals.json": "4dd57757b5", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "024f5e960b", "corridor_diff.json": "468acd0ad2", "dart_signals.json": "0a1410de68", "dps_signals.json": "c777eee0fb", "eum_backfill_progress.json": "291fa70b54", "eum_enroll.json": "3a0df34704", "eum_signals.json": "6dea4a8f91", "eum_usage.json": "7a191be997", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "3d065e30bb", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "a50aaab0d0", "jeongbi_poly_seoul.json": "48ad1d52e7", "jigu_school_signals.json": "317311e780", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "4ed56ddbfd", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "c298a6dec2", "mega_signals.json": "fac3444833", "methodology.html": "58e7fe0bf5", "park_signals.json": "db6af674f1", "privacy.html": "217d09c9a3", "push_feed.json": "3dfdf6983b", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "df76b37e50", "rail_reference.html": "31828f7369", "rail_signals.json": "635c9f7c63", "region_gaps.json": "d16a983f4f", "regions.json": "b7c757393f", "report.html": "5026ac648f", "retail_signals.json": "ebfc21447e", "road_signals.json": "7a80bf111a", "robots.txt": "2312aa6291", "school_signals.json": "bb1e88e9ea", "settings.html": "d825ba6ca1", "sfz_signals.json": "f2a31418d5", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "27387827a9", "signals.json": "3f3409fd49", "signals_auto.json": "15c15f47d2", "signals_jeongbi_all.json": "9b3e9420b3", "sitemap.xml": "1ee39182c8", "source_status.html": "4981d25c3f", "sw.js": "bd80e753e7", "thresholds.json": "08c98c9b6a", "upis_facility_geom.json": "063c11b943", "upis_on_road.json": "aa4d0dda47", "weekly.html": "4de5f1c665", "weekly_index.json": "6ba06f590e"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260926f");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
@@ -14064,6 +14075,12 @@ function stampRk(file, d) {
   ADVERSE = [advData, funData, extData].flatMap(d => (d && d.features) || [])
     .map(f => Object.assign({ _coord: f.geometry && f.geometry.coordinates }, f.properties))
     .filter(s => s._coord);
+  { /* ★ 기존 시설 자리의 환경영향평가 계획(fac_extra `up_of`)은 그 시설 마커에 접는다 — 같은 점에 마커 둘을 겹치지 않는다(2026-09-26 · 마곡 서남집단에너지 ↔ 서울에너지공사 마곡 사업장).
+       짝이 없으면(원천 파일이 바뀌어) 계획 피처가 그 자리에 스스로 그려진다. */
+    const _ck = c => c.map(v => Number(v).toFixed(5)).join(",");
+    const _at = new Map(ADVERSE.filter(f => !f.up_of).map(f => [_ck(f._coord), f]));
+    ADVERSE = ADVERSE.filter(f => { if (!f.up_of) return true; const t = _at.get(_ck(f.up_of)); if (!t) return true; (t._plans = t._plans || []).push(f); return false; });
+  }
   facPaint();
   // 공공건축 설계공모(2026-07-18) — 계획 단계 후보. 건축HUB 인허가가 놓치는 공공건축·중형(1만㎡ 미만)을 보완.
   DPS_SIG = ((dpsData && dpsData.signals) || []).filter(s => !s.superseded_by).filter(mapHidden("개발행위")).filter(gateObs("설계공모")).map(s => Object.assign({
