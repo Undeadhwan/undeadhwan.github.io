@@ -1385,8 +1385,13 @@
   .facmk { position:relative; width:16px; height:16px; display:grid; place-items:center; cursor:pointer; }
   .facmk0 { display:block; width:10px; height:10px; background:var(--c-ref); transform:rotate(45deg); border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.35); }
   .facleg .facmk0 { display:inline-block; width:8px; height:8px; margin-right:6px; vertical-align:0; }
-  .facmk0.plan { background:#fff; border-color:var(--c-ref); }   /* 계획·일부(미집행·부분집행) = 속 빈 마름모 — 호재 문법 「계획 = 속 빈 원」과 같은 뜻(2026-09-25 알렉스 「가」) */
+  .facmk0.plan { background:transparent; border:2.5px solid var(--c-ref); box-shadow:none; }   /* 계획·일부 = **흰 테두리 없는 윤곽선**(지도가 비쳐 보인다) — 지어짐(채움 + 흰 테두리)과 한눈에 갈리게(2026-09-26 알렉스 「준공인지 계획인지 구분이 잘 안 된다 · 계획은 흰 테두리를 없애」 · 종전 흰 속 마름모는 흰 테두리처럼 보였다) · 속 빈 = 호재 문법 「계획 = 속 빈 원」과 같은 뜻(2026-09-25 알렉스 「가」) */
   .facleg .facmk0.plan { margin-left:4px; }
+  /* 범례는 원(`#hjlegend i`·`.mly-legend i`의 border-radius:50%)이 아니라 지도와 같은 **마름모**로 · 어두운 막대 위에선 참고층 슬레이트가 묻혀(2026-09-26 캡처 —
+     계획 윤곽이 거의 안 보였다) 밝은 슬레이트(크롬 토큰 --m)로 같은 문법(지어짐 = 채움 + 흰 테두리 · 계획 = 흰색 없는 윤곽)을 그린다. */
+  #hjlegend .facleg .facmk0, #mlayers .mly-legend .facleg .facmk0 { border-radius:0; }
+  #hjlegend .facleg .facmk0 { background:var(--m); }
+  #hjlegend .facleg .facmk0.plan { background:transparent; border-color:var(--m); border-width:2px; }
   .facdi { background:none; border:0; }
   .facmk .faccard { display:none; position:absolute; left:14px; top:-6px; z-index:4; width:280px; background:#fff; color:#151618; border-radius:10px; padding:10px 12px;
     box-shadow:0 0 0 1.5px var(--c-ref), 0 8px 24px rgba(0,0,0,.25); font-size:12.5px; line-height:1.45; cursor:default; flex-direction:column; gap:3px; white-space:normal; }
@@ -8743,6 +8748,12 @@ function facOn() { try { return localStorage.getItem(MB_KEY.fac) === "1"; } catc
 /* 상태 = 원천 집행상태(upis_fetch FAC_STATE) — 지은 시설도 싣는다(2026-09-25 알렉스 「가」 · 서울은 원천이 집행상태를 전부 「기타」로 적어 미상). */
 const FAC_STATE_TXT = { "지어짐": "지어짐(집행완료)", "일부": "일부 지어짐(부분집행)", "계획": "계획(미집행)", "미상": "집행상태 미상(원천이 적지 않음)" };
 const facPlanned = f => f.fac_state === "계획" || f.fac_state === "일부";
+/* 카드가 떠 있는 동안 그 오버레이를 맨 위로(노선 이름표·묶음 원 위 · 2026-09-25) — 여닫는 곳이 여럿이라 전역 한 벌 */
+const FAC_Z = 3, FAC_Z_UP = 60;
+function facLift(el, up) { const o = el && el._facOv; if (!o) return; try { if (o.setZIndex) o.setZIndex(up ? FAC_Z_UP : FAC_Z); else if (o.setZIndexOffset) o.setZIndexOffset(up ? 10000 : 0); } catch (e) { console.warn("시설 카드 층 올리기", e); } }
+/* ★ 지도 빈 곳을 누르면 고정된 카드가 닫힌다 (2026-09-26 알렉스 「그 상태에서 지도 공백 누르면 뱃지가 사라져야 하는데 안 사라짐」) — 폰은 마우스 올리기가 없어
+   누르기(고정)가 유일한 여는 길이라 누르기는 남기고 닫는 길을 더한다. 두 렌더러의 지도 click이 부른다. */
+function facCloseOpen() { if (_facOpen) { _facOpen.classList.remove("open", "hov"); facLift(_facOpen, false); } _facOpen = null; }
 function facCardHtml(f) {
   const nm = String(f.title || "").replace(/\s*\([^)]*㎡\)\s*$/, "");
   const st = f.area_m2 ? (FAC_STATE_TXT[f.fac_state] || FAC_STATE_TXT["미상"]) : (f.fac_state === "지어짐" ? "운영 중(기관 목록)" : "운영 여부 미상(기관 목록)");   // 보강 층은 도시계획시설 결정이 아니라 기관 운영 목록이다
@@ -8766,8 +8777,7 @@ function facPaint() {
   /* ★ 카드가 **다른 표식 밑에 깔렸다** (2026-09-25 알렉스 「배지 내용이 가려진다」 — 노선 이름표·묶음 원이 카드 위로 올라왔다). 카드는 마커 오버레이 안에 살고
      그 오버레이는 z 3(호재 핀 밑 · 참고층이라)이라 카드도 그 층에 갇혔다 ⇒ 카드가 떠 있는 동안만 **그 오버레이를** 맨 위(FAC_Z_UP)로 올리고 닫으면 내린다.
      마우스를 올리면 미리보기(hov · 터치는 누름만 — 터치의 가짜 mouseenter가 누름과 겹쳐 토글이 꼬이지 않게 pointerType으로 가른다). */
-  const FAC_Z = 3, FAC_Z_UP = 60;
-  const lift = (el, up) => { const o = el._facOv; if (!o) return; try { if (o.setZIndex) o.setZIndex(up ? FAC_Z_UP : FAC_Z); else if (o.setZIndexOffset) o.setZIndexOffset(up ? 10000 : 0); } catch (e) { console.warn("시설 카드 층 올리기", e); } };
+  const lift = facLift;
   const card = (el, f) => { if (!el.querySelector(".faccard")) el.insertAdjacentHTML("beforeend", facCardHtml(f)); };
   ADVERSE.forEach(f => {
     const el = document.createElement("div");
@@ -10728,6 +10738,7 @@ function initLeaflet() {
   // 지도 여백(타일)만 클릭 → 선택 해제 + 반경 원 제거.
   // 피처(폴리곤·핀=path, 뱃지=marker-pane)는 자체 핸들러가 처리하므로 제외
   map.on("click", (e) => {
+    facCloseOpen();   // 시설 카드도 닫는다 — 카카오판과 같은 길(2026-09-26)
     const t = e.originalEvent && e.originalEvent.target;
     if (t && (t.tagName === "path" || t.closest?.(".leaflet-marker-pane"))) return;
     goHome();
@@ -12534,7 +12545,17 @@ function initKakao() {
     _lodReq = requestAnimationFrame(_run);
     _lodTO = setTimeout(_run, 400);
   };
-  K.event.addListener(map, "idle", () => { if (_fr.on && _fr.kind === "zoom") _frStop(); applyLODSoon(); });
+  /* ★★ **줌이 끝나는 그 순간(zoom_changed) 새 레벨로 바로 그린다** (2026-09-26 알렉스 「줌아웃하면 뱃지가 생겼다 사라지는 현상」).
+     카카오 SDK는 줌 애니메이션 동안 표식 층을 display:none으로 숨겼다가 **새 레벨에서 다시 보인다** — 그때 이전 레벨의 알약·노선 이름표가 그대로 있어
+     약 0.2초 보였다가(`applyLODSoon`이 rAF·타임아웃 뒤에 돈다) 걷혔다(2026-09-26 실측 레벨 9 → 10: 층이 보인 0.42초에 시군구 알약 50개 · 0.63초에 시도 알약 3개).
+     zoom_changed는 층이 보이는 그 틱에 온다 — 여기서 동기로 그리면 첫 그림이 새 레벨이다. 바로 뒤 idle의 같은 재그리기는 건너뛴다(두 번 그리지 않는다). */
+  let _zoomLodTs = 0;
+  K.event.addListener(map, "zoom_changed", () => {
+    try { applyLOD(); _zoomLodTs = performance.now(); } catch (e) { console.warn("zoom_changed 즉시 그리기", e); }
+  });
+  K.event.addListener(map, "idle", () => { if (_fr.on && _fr.kind === "zoom") _frStop();
+    if (performance.now() - _zoomLodTs < 150) return;   // 방금 zoom_changed가 그렸다(위 주석)
+    applyLODSoon(); });
   /* ☠☠ **카카오 `dragstart/dragend`에 기대면 안 된다** (2026-08-14 2차 — 사장님 *"커서 끌어서
      움직이면 호재들이 재잘재잘 업데이트 되는건 여전해"*).
      1차에서 이 두 이벤트로 가드를 걸었는데 **계측값이 0이었다** — 이 경로에서 아예 발화하지 않는다.
@@ -12612,7 +12633,7 @@ function initKakao() {
   setTimeout(() => { try { map.relayout(); applyLOD(); } catch (e) {} }, 300);
   try { new ResizeObserver(() => { try { map.relayout(); applyLOD(); } catch (e) {} }).observe(el); } catch (e) {}
   // 지도 빈 곳 클릭 = 홈 복귀. 단 선·폴리곤 클릭 직후의 이중 발화는 무시(상세가 열리자마자 닫히는 문제)
-  K.event.addListener(map, "click", () => { if (Date.now() - _ovClickTs < 400) return; hideTip(); goHome(); });
+  K.event.addListener(map, "click", () => { facCloseOpen(); if (Date.now() - _ovClickTs < 400) return; hideTip(); goHome(); });   // 시설 카드도 닫는다(2026-09-26)
   /* ★★ **진입 × 이탈 상태 원복 자체검사** (2026-08-11 사용자 승인 — 하루에 같은 형태의 버그가 2건).
      사고 클래스: 「뷰에 진입하며 건 상태축을 이탈할 때 안 푼다」. 지역축(`filter.region`)과
      포커스축(`aptFocus`)이 각각 한 번씩 터졌고, **둘 다 QA·html_check는 초록**이었다
@@ -13925,8 +13946,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_extra.json": "c4bd6b27e6", "adverse_facilities.json": "cc78a2a797", "adverse_funeral.json": "0cdfbee63b", "apartments_all.json": "143fa165b6", "arch_signals.json": "4dd57757b5", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "7c4743fa53", "corridor_diff.json": "2a2a95e161", "dart_signals.json": "0a1410de68", "dps_signals.json": "c777eee0fb", "eum_backfill_progress.json": "291fa70b54", "eum_enroll.json": "3a0df34704", "eum_signals.json": "b169aa41fb", "eum_usage.json": "7a191be997", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "3d065e30bb", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "a50aaab0d0", "jeongbi_poly_seoul.json": "48ad1d52e7", "jigu_school_signals.json": "317311e780", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "4ed56ddbfd", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "c298a6dec2", "mega_signals.json": "fac3444833", "methodology.html": "20cf9e6702", "park_signals.json": "db6af674f1", "privacy.html": "217d09c9a3", "push_feed.json": "5ca360bfeb", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "9db290ba26", "rail_reference.html": "2bdd33e915", "rail_signals.json": "cb0ba3a85e", "region_gaps.json": "c47a138480", "regions.json": "b7c757393f", "report.html": "5026ac648f", "retail_signals.json": "ebfc21447e", "road_signals.json": "987ed64d28", "robots.txt": "2312aa6291", "school_signals.json": "bb1e88e9ea", "settings.html": "d825ba6ca1", "sfz_signals.json": "f2a31418d5", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "27387827a9", "signals.json": "3f3409fd49", "signals_auto.json": "15c15f47d2", "signals_jeongbi_all.json": "9b3e9420b3", "sitemap.xml": "1ee39182c8", "source_status.html": "4981d25c3f", "sw.js": "bd80e753e7", "thresholds.json": "08801182e5", "upis_facility_geom.json": "063c11b943", "upis_on_road.json": "14707a2cf4", "weekly.html": "4de5f1c665", "weekly_index.json": "6ba06f590e"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260926c");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_extra.json": "c4bd6b27e6", "adverse_facilities.json": "cc78a2a797", "adverse_funeral.json": "0cdfbee63b", "apartments_all.json": "143fa165b6", "arch_signals.json": "4dd57757b5", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "cfaba56179", "corridor_diff.json": "5545944a83", "dart_signals.json": "0a1410de68", "dps_signals.json": "c777eee0fb", "eum_backfill_progress.json": "291fa70b54", "eum_enroll.json": "3a0df34704", "eum_signals.json": "6dea4a8f91", "eum_usage.json": "7a191be997", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "3d065e30bb", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "a50aaab0d0", "jeongbi_poly_seoul.json": "48ad1d52e7", "jigu_school_signals.json": "317311e780", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "4ed56ddbfd", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "c298a6dec2", "mega_signals.json": "fac3444833", "methodology.html": "20cf9e6702", "park_signals.json": "db6af674f1", "privacy.html": "217d09c9a3", "push_feed.json": "764d75c17c", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "480b5ca924", "rail_reference.html": "2bdd33e915", "rail_signals.json": "cb0ba3a85e", "region_gaps.json": "8988e94bf4", "regions.json": "b7c757393f", "report.html": "5026ac648f", "retail_signals.json": "ebfc21447e", "road_signals.json": "3dd6fdb774", "robots.txt": "2312aa6291", "school_signals.json": "bb1e88e9ea", "settings.html": "d825ba6ca1", "sfz_signals.json": "f2a31418d5", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "27387827a9", "signals.json": "3f3409fd49", "signals_auto.json": "15c15f47d2", "signals_jeongbi_all.json": "9b3e9420b3", "sitemap.xml": "1ee39182c8", "source_status.html": "4981d25c3f", "sw.js": "bd80e753e7", "thresholds.json": "08801182e5", "upis_facility_geom.json": "063c11b943", "upis_on_road.json": "aced8eb426", "weekly.html": "4de5f1c665", "weekly_index.json": "6ba06f590e"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260926d");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
