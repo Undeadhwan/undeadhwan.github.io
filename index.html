@@ -1008,11 +1008,15 @@
   /* ★ 닫기 ✕ · 이전 ‹ = **테두리 없는 아이콘**(2026-09-14 알렉스 「네이버부동산·아실은 테두리 원이 없고 깔끔 · X가 너무 눈에 안 띄어 · <는 힘없고 가운데 정렬도 안 된 듯」).
      글자(✕·‹)가 아니라 SVG 획(2.4px · 20px · 잉크색)이라 굵기·중심이 폰트에 흔들리지 않는다. 32px 과녁 · 호버는 옅은 면. 뜻은 그대로 — ‹ = 돌아갈 화면이 있을 때만 그리로(`closePanel`) · ✕ = 전부 닫고 홈(`panelClose`).
      모바일 전면 상세는 종전 「← 뒤로」 하나. 정본 = DESIGN 「패널 머리 ‹·✕」 행 */
-  .closex, .pback-d { flex-shrink:0; width:32px; height:32px; border:0; border-radius:8px; background:transparent; display:flex; align-items:center; justify-content:center;
+  /* ★ 2026-09-27 알렉스 「뒤로가기, 닫기 버튼이 너무 작어 · 호갱노노처럼 크고 시원시원하게 <, X 모양」 — 아이콘 26px · 과녁 40px(모바일 44).
+       ☠ 그 전에 v2 판 덮어쓰기(아래 `#panel > .phead`)가 이 값을 **16px · 흐린 색**으로 조용히 줄여 놓았다(규칙이 한쪽에만) — 이제 두 판이 같은 수를 쓰고
+       게이트 `html_check.phead_icon_size_check`가 모든 규칙의 크기 하한을 잰다. */
+  .closex, .pback-d { flex-shrink:0; width:40px; height:40px; border:0; border-radius:10px; background:transparent; display:flex; align-items:center; justify-content:center;
                       cursor:pointer; color:var(--ink); padding:0; margin:0; }
-  .closex svg, .pback-d svg { width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; display:block; }
+  .closex svg, .pback-d svg { width:26px; height:26px; fill:none; stroke:currentColor; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; display:block; }
   .closex:hover, .pback-d:hover { background:var(--panel); }
-  .pback-d { margin-left:-6px; }   /* 아이콘 몸통이 제목 왼쪽 선에 맞도록(과녁 여백만큼 당긴다) */
+  .pback-d { margin-left:-9px; }   /* 아이콘 몸통이 제목 왼쪽 선에 맞도록(과녁 여백만큼 당긴다) */
+  .closex { margin-right:-7px; }
   .phead .phl { display:flex; align-items:center; gap:6px; min-width:0; flex:1; }
   /* 반경 설정 모달 */
   #cmpModal { position:fixed; inset:0; z-index:3200; }
@@ -1440,15 +1444,15 @@
   .rgpe { color:var(--ink3); font-size:var(--fs-s); padding:12px 2px; }
   #flowv .fempty { font-size:var(--fs-s); color:var(--ink3); padding:6px 0 2px; }
   /* 빈 결과 카드·폰 조건 줄 (2026-09-25 · DESIGN 「업데이트 조회조건」 행) */
-  #flowv .fecard { border:1px solid var(--line); border-radius:var(--r); padding:18px 20px; display:flex; flex-direction:column; gap:10px; background:var(--bg); margin:4px 0 12px; }
-  #flowv .fecond { display:flex; flex-wrap:wrap; gap:6px; }
-  #flowv .fecond span { font-size:var(--fs-s); padding:3px 9px; border-radius:var(--r-s); background:var(--panel); color:var(--ink2); }
-  #flowv .feh { font-size:16px; font-weight:600; color:var(--ink); }
-  #flowv .fep { font-size:var(--fs); color:var(--ink2); line-height:1.55; }
-  #flowv .feacts { display:flex; flex-wrap:wrap; gap:8px; }
-  #flowv .feact { font:inherit; font-size:var(--fs-s); padding:7px 12px; border-radius:var(--r-s); border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer; }
-  #flowv .feact em { font-style:normal; color:var(--accent-ink); font-variant-numeric:tabular-nums; margin-left:4px; }
-  #flowv .feact.rst { color:var(--accent-ink); }
+  #flowv .fecard, #lpane .fecard { border:1px solid var(--line); border-radius:var(--r); padding:18px 20px; display:flex; flex-direction:column; gap:10px; background:var(--bg); margin:4px 0 12px; }
+  #flowv .fecond, #lpane .fecond { display:flex; flex-wrap:wrap; gap:6px; }
+  #flowv .fecond span, #lpane .fecond span { font-size:var(--fs-s); padding:3px 9px; border-radius:var(--r-s); background:var(--panel); color:var(--ink2); }
+  #flowv .feh, #lpane .feh { font-size:16px; font-weight:600; color:var(--ink); }
+  #flowv .fep, #lpane .fep { font-size:var(--fs); color:var(--ink2); line-height:1.55; }
+  #flowv .feacts, #lpane .feacts { display:flex; flex-wrap:wrap; gap:8px; }
+  #flowv .feact, #lpane .feact { font:inherit; font-size:var(--fs-s); padding:7px 12px; border-radius:var(--r-s); border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer; }
+  #flowv .feact em, #lpane .feact em { font-style:normal; color:var(--accent-ink); font-variant-numeric:tabular-nums; margin-left:4px; }
+  #flowv .feact.rst, #lpane .feact.rst { color:var(--accent-ink); }
   #flowv .fcondm { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:0 0 10px; font-size:var(--fs-s); }
   #flowv .fcondm .k { color:var(--ink3); }
   #flowv .fcondm .c { padding:3px 9px; border-radius:999px; background:var(--panel); color:var(--ink); }
@@ -1703,7 +1707,7 @@
     /* 손잡이는 **끌 수 있음을 보이는 유일한 표식**이라 단계가 낮을수록 또렷하게 */
     #panel[data-snap="peek"]::before, #panel[data-snap="half"]::before { background:#aeb6c4; }
     #panel .phead { position:sticky; top:-14px; background:#fff; padding:6px 0 8px; margin:-6px 0 0; z-index:2; }
-    #panel .closex, #panel .pback-d { width:40px; height:40px; }   /* 터치 과녁 확대 */
+    #panel .closex, #panel .pback-d { width:44px; height:44px; }   /* 터치 과녁 확대 */
     /* ★ **전면 상세** (2026-08-31) — 시트가 아니라 화면이다. 지도를 덮고, 나가는 길은 뒤로가기.
        손잡이(::before)는 지운다 — 끌 수 없는 것에 끌 수 있다는 표식을 두면 그게 거짓말이다. */
     #panel[data-snap="page"] { top:0; bottom:0; max-height:none; height:100dvh;
@@ -2117,7 +2121,8 @@
       --p:rgba(22,24,38,.985); --pp:rgba(22,24,38,.99);   /* 시안 .92·.96은 흐림(blur)을 전제한 값 — 흐림을 빼자 뒤 지도 글자가 또렷이 비쳤다(.92 = 약 20단계 · .97도 6단계 · 2026-09-24 픽셀 실측) → .985·.99 */ --b:rgba(255,255,255,.08); --b2:rgba(255,255,255,.14);
       --s:#232636; --pg:#161826; --t:#e9e9ed; --t2:#c9cad3; --m:#9a9db0;
       --ac:#9184d9; --ac2:#e7e5fe; --ac3:#d2cefd;
-      --shc:0 8px 24px rgba(0,0,0,.18); --shp:0 12px 32px rgba(0,0,0,.24);
+      --shc:0 0 0 1px #595d6c, 0 6px 18px rgba(0,0,0,.55); --shp:0 0 0 1px #595d6c, 0 12px 32px rgba(0,0,0,.55);
+      --st:#7dd3fc;   /* ★ 선택·적용 상태 = 하늘색 선·글자(2026-09-27 클로드 디자인 「필터 가시성 개선」 · 상태 표시에 보라를 쓰지 않는다 · 배경은 채우지 않는다) */
       --ff2:"Inter","Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
     }
     /* 크롬 안에서는 잉크·선·면 토큰을 다크 값으로 다시 묶는다 — 안쪽 부품(상세·목록 행)이 토큰을 쓰는 한 따라온다 */
@@ -2142,19 +2147,19 @@
     header { position:absolute; left:0; right:0; top:0; z-index:1300; height:0; padding:0; border:0; gap:0;
       display:block; pointer-events:none; background:none; }
     header > * { pointer-events:auto; }
-    header .logo { position:absolute; left:16px; top:16px; height:44px; display:flex; align-items:center; gap:10px;
-      padding:0 16px; border-radius:10px; background:var(--p);
-      border:1px solid var(--b); box-shadow:var(--shc); color:var(--t); font-size:16px; font-weight:500; letter-spacing:-.01em; }
-    header .logo::before { content:""; width:10px; height:10px; border-radius:3px; background:var(--ac); }
+    header .logo { position:absolute; left:16px; top:16px; height:48px; display:flex; align-items:center; gap:10px;
+      padding:0 18px 0 14px; border-radius:8px; background:var(--p);
+      border:0; box-shadow:var(--shc); color:var(--t); font-size:17px; font-weight:700; letter-spacing:-.01em; }
+    header .logo::before { content:""; width:12px; height:12px; border-radius:3px; background:var(--st); box-shadow:0 0 10px var(--st); }
     header .fresh { display:none !important; }   /* 데이터 시각은 좌하 상태 줄이 말한다(시안) */
-    header .srch { position:absolute; left:calc(16px + var(--logoW, 104px) + 8px); top:16px; width:360px; max-width:360px; flex:none; }
-    header .srch input { height:44px; padding:0 14px 0 40px; border-radius:10px !important; font-size:14px;
-      background:var(--p); border:1px solid var(--b);
+    header .srch { position:absolute; left:calc(16px + var(--logoW, 104px) + 10px); top:16px; width:380px; max-width:380px; flex:none; }
+    header .srch input { height:48px; padding:0 18px 0 48px; border-radius:8px !important; font-size:15px; font-weight:500;
+      background:var(--p); border:0;
       box-shadow:var(--shc); color:var(--t); font-family:var(--ff2); }
-    header .srch input::placeholder { color:var(--m); }
+    header .srch input::placeholder { color:#cfd3e5; }
     header .srch input:focus { border-color:var(--ac); box-shadow:var(--shc); }
-    header .srch .srchicon { z-index:1; left:14px; width:16px; height:16px; font-size:0; opacity:1; color:var(--m);
-      background:no-repeat center/16px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%239a9db0' stroke-width='1.6'%3E%3Ccircle cx='7' cy='7' r='4.5'/%3E%3Cpath d='M10.5 10.5L14 14'/%3E%3C/svg%3E"); }
+    header .srch .srchicon { z-index:1; left:18px; width:20px; height:20px; font-size:0; opacity:1; color:var(--t);
+      background:no-repeat center/20px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23e9e9ed' stroke-width='1.9'%3E%3Ccircle cx='7' cy='7' r='4.5'/%3E%3Cpath d='M10.5 10.5L14 14'/%3E%3C/svg%3E"); }
     header .srchpanel { background:var(--pp); border:1px solid var(--b); box-shadow:var(--shp); }
     header .srchhead { background:transparent; border-color:var(--b); color:var(--m); }
     header .srchitem + .srchitem { border-top-color:var(--b); }
@@ -2170,11 +2175,11 @@
     header #f-mode .chip.on { background:var(--s); color:var(--t); font-weight:400; box-shadow:none; }
     header #f-mode #v-flow::after { content:""; width:6px; height:6px; border-radius:50%; background:var(--ac); margin-left:6px; }
     header #f-pub { position:absolute; right:16px; top:16px; display:flex; gap:8px; }
-    header #f-pub .chip { display:flex; align-items:center; gap:8px; height:44px; padding:0 16px; border-radius:10px;
-      background:var(--p); border:1px solid var(--ac);
-      box-shadow:var(--shc); color:var(--ac2); font-size:14px; font-weight:400; }
-    header #f-pub .chip.wk::before { content:""; width:14px; height:14px; flex:none;
-      background:no-repeat center/14px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23e7e5fe' stroke-width='1.6'%3E%3Cpath d='M2 12L6 6l3 4 5-7'/%3E%3C/svg%3E"); }
+    header #f-pub .chip { display:flex; align-items:center; gap:10px; height:48px; padding:0 18px; border-radius:8px;
+      background:var(--p); border:1px solid #75798c;
+      box-shadow:var(--shc); color:var(--t); font-size:15px; font-weight:700; }
+    header #f-pub .chip.wk::before { content:""; width:20px; height:20px; flex:none;
+      background:no-repeat center/20px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%237dd3fc' stroke-width='1.9'%3E%3Cpath d='M2 12L6 6l3 4 5-7'/%3E%3C/svg%3E"); }
     header #f-pub .chip[hidden] { display:none; }
     header #f-pub .chip:hover, header .logo:hover { filter:brightness(1.12); }
     header #f-view { position:absolute; right:16px; top:68px; }
@@ -2183,27 +2188,30 @@
     header .opswitch { position:absolute; right:16px; top:-40px; }
     footer { display:none; }
     /* ── 필터 칩 줄 ── */
-    #chipbar { position:absolute; left:16px; top:68px; z-index:1250; display:flex; gap:6px; align-items:flex-start;
+    #chipbar { position:absolute; left:16px; top:76px; z-index:1250; display:flex; gap:8px; align-items:flex-start;
       flex-wrap:wrap; max-width:calc(100vw - 32px - 96px); color:var(--t); }
     #chipbar[hidden] { display:none; }
     #chipbar .cbw { position:relative; }
-    #chipbar .cb { display:flex; align-items:center; gap:8px; height:36px; padding:0 14px; border-radius:8px; cursor:pointer;
-      background:var(--p); border:1px solid var(--b); font-size:14px; color:var(--t); box-shadow:0 4px 14px rgba(0,0,0,.14);
-      font-family:var(--ff2); white-space:nowrap; }
-    #chipbar .cb:hover { filter:brightness(1.12); }
-    #chipbar .cb.act { border-color:var(--ac); }
-    #chipbar .cb .v { color:var(--ac2); }
-    #chipbar .cb .cv { color:var(--m); }
+    /* ★ 칩 = 44px · 15/700(2026-09-27 클로드 디자인) · **적용된 칩은 테두리 2px·글자만 하늘색**(바탕은 그대로 · 아실 방식) ·
+         글자 규칙은 renderChipbar(미적용 = 제목만 · 적용 = 값만 · 네이버부동산 방식) */
+    #chipbar .cb { display:flex; align-items:center; gap:8px; height:44px; padding:0 14px 0 16px; border-radius:8px; cursor:pointer;
+      background:var(--p); border:1px solid #3f424d; font-size:15px; font-weight:700; letter-spacing:-.01em; color:var(--t); box-shadow:var(--shc);
+      font-family:var(--ff2); white-space:nowrap; transition:filter .12s ease; }
+    #chipbar .cb:hover { filter:brightness(1.15); }
+    #chipbar .cb.act { border-color:var(--st); box-shadow:inset 0 0 0 1px var(--st), var(--shc); color:var(--st); }
+    #chipbar .cb .v { color:inherit; }
+    #chipbar .cb .cv { color:#cfd3e5; font-size:12px; }
+    #chipbar .cb.act .cv { color:var(--st); }
     #chipbar .cb .dots { display:flex; gap:3px; }
     #chipbar .cb .dots i, #chipbar .dt { width:8px; height:8px; border-radius:50%; display:inline-block; flex:none; }
     #chipbar .cb svg { width:14px; height:14px; flex:none; }
     /* 초기화 — 시안은 지도 위 글자 링크(#d2cefd)인데 밝은 타일에서 대비가 1.2:1이라 안 읽혔다(2026-09-24 실측) → 칩과 같은 어두운 면 위에 같은 글자색 */
-    #chipbar .cbrst { display:flex; align-items:center; height:36px; padding:0 12px; color:var(--ac3); font-size:14px; cursor:pointer;
-      border-radius:8px; background:var(--p); box-shadow:0 4px 14px rgba(0,0,0,.14); }
+    #chipbar .cbrst { display:flex; align-items:center; height:44px; padding:0 14px; color:var(--t); font-size:15px; font-weight:700; cursor:pointer;
+      border-radius:8px; background:var(--p); border:1px solid #75798c; box-shadow:var(--shc); }   /* 행동 버튼 = 흰 글자 + 회색 테두리(디자인 규칙) */
     #chipbar .cbrst:hover { filter:brightness(1.12); }
     #chipbar .cbrst[hidden] { display:none; }
     /* 팝오버 — 칩 아래 44px · 흐림 16 · 그림자 .24 */
-    #chipbar .pop { position:absolute; left:0; top:44px; z-index:5; border-radius:10px; background:var(--pp); border:1px solid var(--b); box-shadow:var(--shp); color:var(--t); }
+    #chipbar .pop { position:absolute; left:0; top:52px; z-index:5; border-radius:10px; background:var(--pp); border:1px solid var(--b); box-shadow:var(--shp); color:var(--t); }
     #chipbar .pop[hidden] { display:none; }
     #chipbar .pop.pad6 { padding:6px; }
     #chipbar .pop.pad12 { padding:12px; display:flex; flex-direction:column; gap:10px; }
@@ -2214,14 +2222,14 @@
     #chipbar .box { display:flex; align-items:center; justify-content:center; width:16px; height:16px; border-radius:4px; flex:none;
       border:1px solid rgba(255,255,255,.2); color:#fff; }
     #chipbar .box svg { width:10px; height:10px; display:none; }
-    #chipbar .on > .box, #chipbar .part > .box { background:var(--ac); border-color:var(--ac); }
+    #chipbar .on > .box, #chipbar .part > .box { background:var(--st); border-color:var(--st); color:#161826; }
     #chipbar .on > .box .ck, #chipbar .part > .box .pt { display:block; }
     #chipbar .radio { width:16px; height:16px; border-radius:50%; box-sizing:border-box; flex:none; border:1px solid rgba(255,255,255,.2); }
-    #chipbar .on > .radio { border:5px solid var(--ac); }
+    #chipbar .on > .radio { border:5px solid var(--st); }
     #chipbar .arr { display:flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:5px; font-size:15px;
       cursor:pointer; color:var(--m); }
     #chipbar .arr.op { background:var(--s); color:var(--t); }
-    #chipbar .pfoot { display:flex; justify-content:space-between; padding:8px 10px 4px; font-size:13px; color:var(--ac3); }
+    #chipbar .pfoot { display:flex; justify-content:space-between; padding:8px 10px 4px; font-size:13px; font-weight:600; color:#cfd3e5; }
     #chipbar .pfoot span { cursor:pointer; }
     #chipbar .fly { left:248px; width:250px; padding:6px; }
     #chipbar .flyh { display:flex; align-items:center; gap:8px; height:36px; padding:0 10px; font-size:14px; }
@@ -2230,31 +2238,34 @@
     #chipbar .hr { height:1px; margin:2px 10px 4px; background:var(--b); }
     #chipbar .segs { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; padding:4px; border-radius:8px; background:var(--s); }
     #chipbar .seg { display:flex; align-items:center; justify-content:center; height:30px; border-radius:6px; font-size:14px; cursor:pointer; color:var(--m); }
-    #chipbar .seg.on { background:var(--pg); color:var(--t); box-shadow:0 1px 3px rgba(0,0,0,.2); }
+    #chipbar .seg.on { background:var(--pg); color:var(--st); font-weight:700; box-shadow:inset 0 0 0 1px var(--st); }
     #chipbar .note { display:flex; gap:14px; font-size:13px; color:var(--m); padding:0 2px; line-height:1.5; }
     #chipbar .note span { display:flex; align-items:center; gap:6px; }
     #chipbar .pills { display:flex; gap:6px; }
     #chipbar .pill { display:flex; align-items:center; justify-content:center; width:44px; height:32px; border-radius:8px; font-size:14px;
       cursor:pointer; border:1px solid rgba(255,255,255,.1); color:var(--m); }
-    #chipbar .pill.on { border-color:var(--ac); color:var(--ac2); }
+    #chipbar .pill.on { border-color:var(--st); color:var(--st); font-weight:700; }
     /* 지역 칩 = 옛 #regionbar를 그대로 옮겨 입힌다(값·배선은 한 벌 — placeRegionBar) */
     #chipbar .regionbar { display:block; }
-    #chipbar .rchip { display:flex; align-items:center; gap:8px; height:36px; padding:0 14px; border-radius:8px; cursor:pointer;
-      background:var(--p); border:1px solid var(--b); font-size:14px; font-weight:400; color:var(--t); box-shadow:0 4px 14px rgba(0,0,0,.14);
+    #chipbar .rchip { display:flex; align-items:center; gap:8px; height:44px; padding:0 14px 0 14px; border-radius:8px; cursor:pointer;
+      background:var(--p); border:1px solid #3f424d; font-size:15px; font-weight:700; letter-spacing:-.01em; color:var(--t); box-shadow:var(--shc);
       max-width:none; font-family:var(--ff2); }
-    #chipbar .rchip::before { content:""; width:14px; height:14px; flex:none;
-      background:no-repeat center/14px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23e9e9ed' stroke-width='1.6'%3E%3Cpath d='M8 14.5s-4.5-4.2-4.5-7.5a4.5 4.5 0 0 1 9 0c0 3.3-4.5 7.5-4.5 7.5z'/%3E%3Ccircle cx='8' cy='7' r='1.6'/%3E%3C/svg%3E"); }
-    #chipbar .rchip:hover { filter:brightness(1.12); }
-    #chipbar .rchip[aria-expanded="true"], #chipbar .rchip.act { border-color:var(--ac); }
-    #chipbar .rchip .cv { color:var(--m); font-size:14px; }
-    #chipbar .rpop { top:44px; width:560px; grid-template-columns:1fr 1fr 1fr !important; border-radius:10px; background:var(--pp); border:1px solid var(--b); box-shadow:var(--shp); overflow:hidden; }
+    #chipbar .rchip::before { content:""; width:18px; height:18px; flex:none;
+      background:no-repeat center/18px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23e9e9ed' stroke-width='1.6'%3E%3Cpath d='M8 14.5s-4.5-4.2-4.5-7.5a4.5 4.5 0 0 1 9 0c0 3.3-4.5 7.5-4.5 7.5z'/%3E%3Ccircle cx='8' cy='7' r='1.6'/%3E%3C/svg%3E"); }
+    #chipbar .rchip:hover { filter:brightness(1.15); }
+    #chipbar .rchip[aria-expanded="true"] { border-color:#75798c; }
+    #chipbar .rchip.act { border-color:var(--st); box-shadow:inset 0 0 0 1px var(--st), var(--shc); color:var(--st); }
+    #chipbar .rchip.act::before { filter:brightness(0) saturate(100%) invert(84%) sepia(22%) saturate(1200%) hue-rotate(170deg); }   /* 핀 아이콘도 글자색(하늘) */
+    #chipbar .rchip .cv { color:#cfd3e5; font-size:12px; }
+    #chipbar .rchip.act .cv { color:var(--st); }
+    #chipbar .rpop { top:52px; width:560px; grid-template-columns:1fr 1fr 1fr !important; border-radius:10px; background:var(--pp); border:1px solid var(--b); box-shadow:var(--shp); overflow:hidden; }
     #chipbar .rpop .rcol, #chipbar .rpop .rcol[hidden] { display:flex; flex-direction:column; border-right:1px solid var(--b); }
     #chipbar .rpop .rcol:nth-child(3) { border-right:0; }
     #chipbar .rpop .rch { padding:12px 14px 8px; font-size:12.5px; font-weight:400; color:var(--m); background:none; border:0; }
     #chipbar .rpop .rlist { max-height:300px; padding:0 6px 6px; }
     #chipbar .rpop .ri { display:flex; align-items:center; height:36px; padding:0 10px; border-radius:7px; font-size:14px; color:var(--t); }
     #chipbar .rpop .ri:hover { background:var(--s); }
-    #chipbar .rpop .ri.on { background:var(--s); color:var(--ac2); font-weight:400; }
+    #chipbar .rpop .ri.on { background:var(--s); color:var(--st); font-weight:700; }
     #chipbar .rpop .rempty { color:var(--m); font-size:13px; }
     #chipbar .rpop .rfoot { gap:10px; justify-content:flex-start; padding:10px 14px; border-top:1px solid var(--b); background:none; font-size:14px; }
     #chipbar .rpop .rsel { font-size:14px; font-weight:400; color:var(--t); }
@@ -2265,60 +2276,137 @@
     /* ── 사이드바 기둥은 데스크톱에서 쓰지 않는다(조회는 칩 줄) ── */
     #dockcol { display:none !important; }
     /* ── 좌측 팝업(상세·아파트·묶음) ── */
-    #panel { left:16px; top:116px; width:440px; max-height:calc(100vh - 208px); padding:0; border-radius:12px;
+    #panel { left:16px; top:132px; width:440px; max-height:calc(100vh - 260px); padding:0; border-radius:12px;
       background:var(--p); border:1px solid var(--b);
       box-shadow:0 12px 32px rgba(0,0,0,.22); color:var(--t); z-index:1200; scrollbar-color:var(--b2) transparent; }
     #panel::-webkit-scrollbar-thumb { background:var(--b2); }
-    #panel2 { position:absolute; left:464px; top:116px; width:440px; max-height:calc(100vh - 208px); overflow-y:auto; padding:0; border-radius:12px;
+    #panel2 { position:absolute; left:464px; top:132px; width:440px; max-height:calc(100vh - 260px); overflow-y:auto; padding:0; border-radius:12px;
       background:var(--p); border:1px solid var(--b); box-shadow:0 12px 32px rgba(0,0,0,.22); color:var(--t); z-index:1200;
       scrollbar-gutter:stable; scrollbar-color:var(--b2) transparent; --ink:var(--t); --ink2:var(--t2); --ink3:var(--m); --muted:var(--m);
       --line:var(--b); --line2:var(--b2); --panel:var(--s); --bg:var(--pg); --accent:var(--ac); --stall-ink:var(--stall); --accent-ink:var(--ac); font-family:var(--ff2); -webkit-font-smoothing:auto; }
     #panel2 .detail.dv2 { animation:panelIn .24s cubic-bezier(.16,.84,.28,1) both; }
     .ltab tbody tr.sel { background:var(--s); box-shadow:inset 3px 0 0 var(--ac); }
+    /* ── 좌측 패널 3탭(2026-09-27 · DESIGN §6 「좌측 패널」) ── */
+    header #f-mode { display:none !important; }   /* 지도·목록·업데이트 전환 = 패널 탭(결정 5A — 전체 화면 목록·업데이트는 데스크톱에서 없앴다) */
+    #lpane { position:absolute; left:16px; top:132px; bottom:60px; width:420px; z-index:1190; display:flex; flex-direction:column; overflow:hidden;
+      border-radius:8px; background:var(--p); box-shadow:var(--shc); color:var(--t); font-family:var(--ff2);
+      --ink:var(--t); --ink2:var(--t2); --ink3:var(--m); --muted:var(--m); --line:var(--b); --line2:var(--b2); --panel:var(--s); --bg:var(--pg);
+      --accent:var(--st); --accent-ink:var(--st); }   /* 판 안 강조(빈 결과 카드의 건수·초기화) = 하늘 — 파랑 #235edf는 어두운 판에서 대비 2.67(2026-09-27 contrast_probe) */
+    #lpane[hidden], #lp-open[hidden] { display:none; }
+    body.lp-on #panel { left:444px; }
+    body.lp-on #panel2 { left:892px; }
+    body.lp-on #hjlegend, body.lp-on #hjrules { left:444px; }
+    #lpane .lp-tabs { display:flex; gap:4px; padding:8px 8px 0; align-items:center; }
+    #lpane [data-lptab] { flex:1; height:40px; border-radius:6px; border:1px solid transparent; background:none; color:#e4e7f5; font:600 15px/1 var(--ff2);
+      cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .12s ease; }
+    #lpane [data-lptab]:hover { background:#292b31; }
+    #lpane [data-lptab].on { border-color:var(--st); box-shadow:inset 0 0 0 1px var(--st); color:var(--st); font-weight:700; background:none; }
+    #lpane .lpdot { width:8px; height:8px; border-radius:50%; background:var(--st); box-shadow:0 0 8px var(--st); }
+    #lpane .lp-fold { flex:none; width:40px; height:40px; border:0; border-radius:6px; background:none; color:var(--t); cursor:pointer; display:flex; align-items:center; justify-content:center; }
+    #lpane .lp-fold:hover { background:#292b31; }
+    #lpane .lp-fold svg { width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; }
+    #lpane .lp-head { padding:12px 16px 10px; border-bottom:1px solid var(--b); display:flex; flex-direction:column; gap:8px; }
+    #lpane .lpn { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+    #lpane .lpn b { font-size:24px; font-weight:600; font-variant-numeric:tabular-nums; }
+    #lpane .lpn span { font-size:13px; color:var(--m); }
+    #lpane .lpctl { display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:12.5px; color:var(--m); }
+    #lpane .lpctl select { background:var(--s); color:var(--t); border:1px solid var(--b2); border-radius:6px; height:30px; padding:0 8px; font:600 13px var(--ff2); }
+    #lpane .lpcrumb { font-size:13px; color:var(--m); }
+    #lpane .lpcrumb a { color:var(--st); cursor:pointer; text-decoration:none; font-weight:600; }
+    #lp-body { flex:1; overflow-y:auto; padding:4px 8px 12px; scrollbar-color:var(--b2) transparent; }   /* 긴 본문 = .pagebody 표식(스크롤 분류 게이트는 #아이디로 짝짓는다) */
+    #lpane .lprow { display:grid; grid-template-columns:30px minmax(0,1fr) 62px; gap:10px; align-items:center; padding:9px 8px; border-radius:7px; cursor:pointer; }
+    #lpane .lprow:hover { background:#292b31; }
+    #lpane .lprow.sel { background:var(--s); box-shadow:inset 0 0 0 1px var(--st); }
+    #lpane .lpring { display:flex; align-items:center; justify-content:center; }
+    #lpane .lpring i { display:flex; align-items:center; justify-content:center; border:2.5px solid; border-radius:50%; box-sizing:border-box; font-style:normal; font-size:11px; font-weight:700; color:var(--t); }
+    #lpane .lpring i.dia { border-style:dashed; }
+    #lpane .lpt { min-width:0; display:flex; flex-direction:column; gap:2px; }
+    #lpane .lpt b { font-size:14px; font-weight:600; line-height:1.35; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    #lpane .lps { font-size:12px; color:var(--m); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:flex; align-items:center; gap:6px; }
+    #lpane .lps i { width:7px; height:7px; border-radius:50%; flex:none; }
+    #lpane .lpph { font-size:12px; color:var(--t2); text-align:right; line-height:1.35; font-variant-numeric:tabular-nums; }
+    #lpane .lpmore { text-align:center; color:var(--m); font-size:12.5px; padding:10px 0; }
+    #lpane .lpnote { font-size:12px; color:var(--m); line-height:1.55; padding:10px 8px 4px; }
+    #lpane .lprg { padding:10px 10px; border-radius:7px; cursor:pointer; display:flex; flex-direction:column; gap:6px; }
+    #lpane .lprg:hover { background:#292b31; }
+    #lpane .lprg.sel { background:var(--s); box-shadow:inset 0 0 0 1px var(--st); }
+    #lpane .lprg .l1 { display:flex; align-items:baseline; gap:10px; }
+    #lpane .lprg .l1 b { font-size:15px; font-weight:700; flex:1; min-width:0; }
+    #lpane .lprg .l1 .n { font-size:15px; font-weight:700; font-variant-numeric:tabular-nums; }
+    #lpane .lprg .l1 .sa { font-size:12px; color:var(--m); font-variant-numeric:tabular-nums; }
+    #lpane .lprg .l2 { display:flex; flex-wrap:wrap; gap:4px 12px; font-size:12.5px; color:var(--t2); font-variant-numeric:tabular-nums; }
+    #lpane .lprg .l2 span { display:flex; align-items:center; gap:5px; }
+    #lpane .lprg .l2 span.z { color:#8a8d9e; }   /* 0건 = 한 단계 흐리게(대비 4.5 이상 · 종전 불투명도 .45는 3.19) */
+    #lpane .lprg .l2 i { width:8px; height:8px; border-radius:50%; }
+    #lpane .lprg .l2 .hb { margin-left:auto; color:var(--m); }
+    #lpane .lprg .rgbar { display:flex; height:6px; border-radius:3px; overflow:hidden; background:var(--s); }
+    #lpane .lpkey { display:flex; gap:10px; font-size:12px; color:var(--m); align-items:center; flex-wrap:wrap; }
+    #lpane .lpkey i { width:10px; height:6px; border-radius:2px; display:inline-block; margin-right:4px; }
+    #lpane .lppills { display:flex; flex-wrap:wrap; gap:6px; }
+    #lpane .lppills button { height:30px; padding:0 12px; border-radius:6px; border:1px solid #3f424d; background:none; color:#e4e7f5; font:600 13px var(--ff2); cursor:pointer; }
+    #lpane .lppills button:hover { background:#292b31; }
+    #lpane .lppills button.on { border-color:var(--st); box-shadow:inset 0 0 0 1px var(--st); color:var(--st); font-weight:700; }
+    #lpane .lppills button b { font-weight:700; margin-left:4px; font-variant-numeric:tabular-nums; }
+    #lpane .lpday { font-size:12px; color:var(--m); padding:12px 8px 4px; font-weight:600; }
+    #lpane .lpbadge { font-size:11px; font-weight:700; padding:1px 6px; border-radius:4px; background:var(--s); color:var(--t2); margin-right:6px; flex:none; }
+    #lpane .lpbadge.new { background:#1f3a47; color:var(--st); }
+    #lpane .lpfold { display:flex; align-items:center; gap:8px; padding:9px 8px; border-radius:7px; cursor:pointer; font-size:13.5px; color:var(--t); }
+    #lpane .lpfold:hover { background:#292b31; }
+    #lpane .lpfold .n { color:var(--m); margin-left:auto; font-variant-numeric:tabular-nums; }
+    #lp-open { position:absolute; left:16px; top:132px; z-index:1190; height:44px; padding:0 16px; border-radius:8px; border:0; background:var(--p); box-shadow:var(--shc);
+      color:var(--t); font:700 15px var(--ff2); cursor:pointer; }
+    #lp-open:hover { background:#292b31; }
+    .lphov { width:34px; height:34px; border-radius:50%; box-shadow:0 0 0 3px #fff, 0 0 0 6px #151618, 0 2px 8px rgba(0,0,0,.35); pointer-events:none; }
     /* ── 우측 레이어 스택 ── */
-    #layerstack { position:absolute; right:16px; top:80px; z-index:1100; max-height:calc(100vh - 232px); overflow:auto;
-      display:flex; flex-direction:column; padding:4px; gap:2px; border-radius:10px; background:var(--p); border:1px solid var(--b); box-shadow:var(--shc); color:var(--m); }
-    #layerstack .ly { display:flex; flex-direction:column; align-items:center; gap:1px; width:52px; padding:5px 0; border-radius:7px;
-      cursor:pointer; color:var(--m); background:none; border:0; font-family:var(--ff2); }
-    #layerstack .ly:hover { filter:brightness(1.12); }
-    #layerstack .ly.on { background:var(--s); color:var(--t); }
-    #layerstack .ly svg { width:18px; height:18px; display:block; }
-    #layerstack .ly span { font-size:10.5px; line-height:1.4; }
+    /* ★ 레일 = 64px · 버튼 52px · **켬 = 하늘색 외곽선 + 하늘색 아이콘·글자 · 끔 = 회색**(2026-09-27 클로드 디자인 — 종전 켬/끔이 면 색 한 단계라 구분이 안 됐다) */
+    #layerstack { position:absolute; right:16px; top:76px; z-index:1100; max-height:calc(100vh - 76px - 72px - 44px - 128px); overflow:auto;
+      display:flex; flex-direction:column; padding:6px; gap:4px; border-radius:8px; background:var(--p); border:0; box-shadow:var(--shc); color:#9397ab; width:64px; box-sizing:border-box; }
+    #layerstack .ly { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; width:52px; height:52px; padding:0; border-radius:6px;
+      cursor:pointer; color:#9397ab; background:none; border:1px solid transparent; font-family:var(--ff2); flex:none; transition:background .12s ease; }
+    #layerstack .ly:hover { background:#292b31; }
+    #layerstack .ly.on { background:transparent; border-color:var(--st); color:var(--st); }
+    #layerstack .ly svg { width:22px; height:22px; display:block; }
+    #layerstack .ly.on svg { stroke-width:2.2; }
+    #layerstack .ly span { font-size:12px; font-weight:700; letter-spacing:-.01em; line-height:1.2; }
+    #layerstack .lysep { display:block; height:1px; margin:4px 6px; background:linear-gradient(90deg, transparent, #75798c, transparent); flex:none; }
     #layerstack .ly[hidden] { display:none; }
     /* ── 우하 현위치·줌 ── */
-    #zoomstack { position:absolute; right:16px; bottom:16px; z-index:1100; display:flex; flex-direction:column; gap:8px; color:var(--t); }
-    #zoomstack .zb, #zoomstack .zz { background:var(--p); border:1px solid var(--b); box-shadow:var(--shc); border-radius:10px; }
-    #zoomstack .zb { display:flex; align-items:center; justify-content:center; width:40px; height:40px; cursor:pointer; color:var(--t); padding:0; }
-    #zoomstack .zb svg { width:16px; height:16px; }
+    #zoomstack { position:absolute; right:16px; bottom:72px; z-index:1100; display:flex; flex-direction:column; gap:8px; color:var(--t); }
+    #zoomstack .zb, #zoomstack .zz { background:var(--p); border:0; box-shadow:var(--shc); border-radius:8px; }
+    #zoomstack .zb { display:flex; align-items:center; justify-content:center; width:48px; height:48px; cursor:pointer; color:var(--t); padding:0; }
+    #zoomstack .zb svg { width:22px; height:22px; }
     #zoomstack .zb.busy svg { animation:mylocSpin 1s linear infinite; }
-    #zoomstack .zz { display:flex; flex-direction:column; width:40px; font-size:18px; }
-    #zoomstack .zz span { display:flex; align-items:center; justify-content:center; height:40px; cursor:pointer; }
-    #zoomstack .zz span + span { border-top:1px solid var(--b); }
+    #zoomstack .zz { display:flex; flex-direction:column; width:48px; font-size:24px; font-weight:600; overflow:hidden; }
+    #zoomstack .zz span { display:flex; align-items:center; justify-content:center; height:48px; cursor:pointer; }
+    #zoomstack .zz span + span { border-top:1px solid #3f424d; }
     #zoomstack .zz span:hover, #zoomstack .zb:hover { filter:brightness(1.12); }
     .myloc, .mapbase, .mapcad, .maplayer, #mlayers { display:none !important; }   /* 현위치 = 우하 스택 · 위성·지적 = 레이어 스택(같은 동작을 부른다) */
     .mylocmsg { right:64px; bottom:16px !important; top:auto !important; background:var(--pp); color:var(--t); border-color:var(--b); }
     .mapsrc { right:64px; bottom:2px; }
-    body.kcr #zoomstack { bottom:34px; } body.kcr .mapsrc { right:64px; bottom:22px; } body.kcr .mylocmsg { bottom:34px !important; }
+    body.kcr #zoomstack { bottom:72px; } body.kcr .mapsrc { right:72px; bottom:22px; } body.kcr .mylocmsg { bottom:72px !important; }
     /* ── 좌하 범례 + 상태 줄 ── */
-    #hjlegend { position:absolute; left:16px; bottom:44px; z-index:1100; display:flex; gap:18px; align-items:center; height:36px; padding:0 14px;
-      max-width:calc(100% - 88px); overflow:hidden; white-space:nowrap; border-radius:9px; background:var(--p); border:1px solid var(--b); box-shadow:var(--shc); color:var(--m); font-size:13px; }
-    #hjlegend > span { display:flex; align-items:center; gap:6px; }
+    #hjlegend { position:absolute; left:16px; bottom:72px; z-index:1100; display:flex; gap:22px; align-items:center; height:48px; padding:0 20px;
+      max-width:calc(100% - 112px); overflow:hidden; white-space:nowrap; border-radius:8px; background:var(--p); border:0; box-shadow:var(--shc); color:var(--t);
+      font-size:15px; font-weight:700; letter-spacing:-.01em; }
+    #hjlegend > span { display:flex; align-items:center; gap:8px; }
     #hjlegend > span.cat { gap:5px; }
     #hjlegend > span.cat.off { opacity:.4; text-decoration:line-through; }
-    #hjlegend i { width:8px; height:8px; border-radius:50%; display:inline-block; flex:none; }
-    #hjlegend .sep { width:1px; height:14px; background:var(--b2); }
-    #hjlegend .rule { color:var(--ac3); cursor:pointer; position:relative; }
+    #hjlegend i { width:12px; height:12px; border-radius:50%; display:inline-block; flex:none; }
+    #hjlegend .sep { width:1px; height:22px; background:linear-gradient(180deg, transparent, #9397ab, transparent); }
+    #hjlegend .rule { display:flex; align-items:center; gap:6px; height:32px; padding:0 12px; border-radius:6px; border:1px solid #75798c; color:var(--t);
+      font-size:14px; font-weight:700; cursor:pointer; position:relative; }
+    #hjlegend .rule:hover { border-color:var(--st); color:var(--st); }
     #hjlegend svg { display:block; }
-    .hj-count { left:20px; bottom:16px !important; padding:0; background:none; border:0; box-shadow:none; border-radius:0; gap:10px;
-      font-size:13px; color:#4a4d5a; text-shadow:0 1px 0 rgba(255,255,255,.8), 0 0 3px #fff, 0 0 3px #fff; pointer-events:auto; font-family:var(--ff2); z-index:1100; }
-    .hj-count b { font-weight:500; color:#1d1f2a; }
-    .hj-count .hjsep { width:auto; height:auto; background:none; }
-    .hj-count .hjsep::before { content:"·"; }
-    .hj-count .hjauto { color:#4a4d5a; }
-    .hj-count .hjrr { color:var(--ac); cursor:pointer; }
-    body.sat .hj-count, body.sat .hj-count b, body.sat .hj-count .hjauto { color:#fff; text-shadow:0 1px 2px #000; }
+    /* ★ 상태 줄 = **지도 아래 전폭 44px 띠**(2026-09-27 클로드 디자인) — 지도(#map)가 그 위에서 끝나므로 카카오 로고·축척을 가리지 않는다(약관 · #wrap 아래 여백) */
+    #wrap { padding-bottom:44px; box-sizing:border-box; }
+    .hj-count { position:absolute; left:0; right:0; bottom:0 !important; height:44px; padding:0 20px; background:var(--pg); border:0; border-top:1px solid #3f424d;
+      box-shadow:none; border-radius:0; gap:18px; font-size:14px; font-weight:600; color:#e4e7f5; text-shadow:none; pointer-events:auto; font-family:var(--ff2); z-index:1100; }
+    .hj-count b { font-weight:700; color:var(--t); }
+    .hj-count .hjsep { width:4px; height:4px; border-radius:50%; background:#75798c; }
+    .hj-count .hjauto { color:#b2b6ca; }
+    .hj-count .hjrr { color:var(--st); cursor:pointer; }
     /* 표기 규칙 펼침 — 범례의 「표기 규칙」 */
-    #hjrules { position:absolute; left:16px; bottom:88px; z-index:1150; width:360px; padding:12px 14px; border-radius:10px; background:var(--pp); border:1px solid var(--b); box-shadow:var(--shp); color:var(--t);
+    #hjrules { position:absolute; left:16px; bottom:128px; z-index:1150; width:360px; padding:12px 14px; border-radius:10px; background:var(--pp); border:1px solid var(--b); box-shadow:var(--shp); color:var(--t);
       font-size:13px; line-height:1.6; font-family:var(--ff2); }
     #hjrules[hidden] { display:none; }
     #hjrules b { font-weight:500; }
@@ -2339,12 +2427,15 @@
     #panel .detail.dv2 { animation:none; color:var(--t); font-size:14px; }
     .dv2 .dtop { display:flex; flex-direction:column; gap:10px; padding:16px 20px; }
     .dv2 .dk { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--m); }
-    .dv2 .dk .dback { display:flex; align-items:center; justify-content:center; width:24px; height:24px; margin-left:-6px; border-radius:6px; cursor:pointer; font-size:16px; }
+    /* ‹·× = 패널 머리와 **같은 SVG 아이콘·같은 수**(2026-09-27 알렉스 「너무 작어 · 호갱노노처럼 크고 시원시원하게 <, X」 — 종전 글자 ‹ 16px · × 18px · 흐린 색) */
+    .dv2 .dk .dback, .dv2 .dk .dx { display:flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:10px; cursor:pointer; color:var(--t); flex:none; }
+    .dv2 .dk .dback { margin-left:-9px; }
+    .dv2 .dk .dback svg, .dv2 .dk .dx svg { width:26px; height:26px; fill:none; stroke:currentColor; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; display:block; }
     .dv2 .dk .dback:hover, .dv2 .relrow:hover { background:var(--s); }
     .dv2 .dk .dt { display:flex; align-items:center; gap:5px; color:var(--t); }
     .dv2 .dk .dt i { width:8px; height:8px; border-radius:50%; flex:none; }
-    .dv2 .dk .dx { margin-left:auto; font-size:18px; cursor:pointer; line-height:1; color:var(--m); }
-    .dv2 .dk .dx:hover { color:var(--t); }
+    .dv2 .dk .dx { margin-left:auto; margin-right:-7px; }
+    .dv2 .dk .dx:hover { background:var(--s); }
     .dv2 h2 { margin:0; font-size:22px; font-weight:500; letter-spacing:-.01em; line-height:1.25; color:var(--t); word-break:keep-all; }
     .dv2 .dsum { font-size:14px; color:var(--m); line-height:1.5; }
     .dv2 .dsum .fresh { font-size:14px; color:var(--m); font-weight:400; background:none; padding:0; }
@@ -2432,16 +2523,16 @@
     .dv2 .badge-draft { background:#fff3cd; color:#856404; }
     .dv2 .dfoot { border-top-color:var(--line); }
     .dv2 .dk .dback { display:none; }   /* 폰은 화면 위 「‹ 뒤로」가 이미 있다(두 개면 어느 것이 무엇인지 흐려진다) */
-    .dv2 .dk .dx { width:36px; height:36px; margin-right:-8px; font-size:22px; display:flex; align-items:center; justify-content:center; }
+    .dv2 .dk .dx { width:44px; height:44px; margin-right:-10px; }   /* 폰 터치 과녁(패널 머리와 같은 44) */
   }
   @media (min-width:769px) {
     /* ── 좌측 팝업의 다른 화면(아파트·묶음·동·구) — 시안 「아파트 팝업」 값 ── */
     #panel > .phead { display:flex; align-items:center; gap:8px; padding:12px 14px 0; margin:0; position:static; background:none; border:0; }
     #panel > .phead .phl { display:flex; align-items:center; gap:8px; min-width:0; flex:1; }
-    #panel > .phead .pback-d, #panel > .phead .closex { display:flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:7px;
-      cursor:pointer; color:var(--m); background:none; border:0; flex:none; }
+    #panel > .phead .pback-d, #panel > .phead .closex { display:flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:10px;
+      cursor:pointer; color:var(--t); background:none; border:0; flex:none; }
     #panel > .phead .pback-d:hover, #panel > .phead .closex:hover { background:var(--s); }
-    #panel > .phead .pback-d svg, #panel > .phead .closex svg { width:16px; height:16px; stroke:currentColor; }
+    #panel > .phead .pback-d svg, #panel > .phead .closex svg { width:26px; height:26px; stroke:currentColor; stroke-width:2.4; }   /* 기본 판과 같은 수(2026-09-27 — 종전 16px·흐린 색) */
     #panel > .phead .pt, #panel .pt { font-size:18px; font-weight:500; color:var(--t); margin:0; }
     #panel > .ps { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:6px 20px 14px; font-size:14px; color:var(--m); margin:0; }
     #panel .cmpAdd { font-size:13px; padding:3px 9px; border-radius:6px; border:1px solid var(--t); color:var(--t); background:none; cursor:pointer; font-weight:400; }
@@ -2775,6 +2866,14 @@
   <!-- ★ 둘째 판(웹 크롬 v2 · 2026-09-24 알렉스 「호갱노노처럼 2겹」) — 아파트 목록에서 고른 호재의 상세가 **아파트 판 오른쪽**에 뜬다(닫기 = 이 판만).
        데스크톱 + 「아파트에서 연 호재」일 때만 쓴다(`twoLayer`) — 지도·검색에서 바로 연 호재는 종전처럼 #panel 한 장. -->
   <aside id="panel2" class="pagebody" style="display:none"></aside>
+  <!-- ★ 좌측 패널 3탭(웹 데스크톱 · 2026-09-27 알렉스 결정 1~6 A) — 목록·지역별·업데이트가 지도를 덮는 전체 화면 대신 지도 왼쪽에 산다.
+       조회조건은 칩 줄 하나 · 호재 상세는 이 패널 오른쪽(#panel이 옆으로 비킨다) · 접으면 지도 전면. 채우는 것은 renderLpane. -->
+  <aside id="lpane" hidden aria-label="호재 목록">
+    <div class="lp-tabs" role="tablist"><button type="button" data-lptab="sig" role="tab">목록</button><button type="button" data-lptab="region" role="tab">지역별</button><button type="button" data-lptab="flow" role="tab">업데이트<i class="lpdot"></i></button><button type="button" class="lp-fold" aria-label="목록 접기" title="목록 접기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button></div>
+    <div class="lp-head" id="lp-head"></div>
+    <div class="lp-body pagebody" id="lp-body"></div>
+  </aside>
+  <button type="button" id="lp-open" hidden>목록 <b>›</b></button>
   <div id="map"></div>
   <!-- ★ 웹 크롬 v2 부유 부품 (2026-09-24 · DESIGN.md §6) — 칩 줄(지역 칩은 #regionbar가 옮겨 앉는다) · 레이어 · 현위치·줌 · 범례·표기 규칙.
        데스크톱만 보인다(모바일은 CSS가 숨긴다). 채우는 것은 initChrome/renderChipbar. -->
@@ -7478,9 +7577,9 @@ function renderDetailV2(s, host) {
       return `<a href="${u}" target="_blank" rel="noopener">${lbl} →</a>`; }).join(" · ") || "원문 링크 없음"}</span>${s.src_tier === "osm" ? ' · <b>진행단계·명칭은 공식 확인 전</b>' : ""}</div>`;
   p.innerHTML = `<div class="detail dv2">
     <div class="dtop">
-      <div class="dk">${two ? "" : `<span class="dback" role="button" aria-label="${hasBack ? "이전 화면으로" : "닫기"}" onclick="closePanel()">‹</span>`}
+      <div class="dk">${two ? "" : `<span class="dback" role="button" aria-label="${hasBack ? "이전 화면으로" : "닫기"}" onclick="closePanel()">${ICON_BACK}</span>`}
         <span class="dt"><i style="background:${col}"></i>${esc(kick)}</span><span>·</span><span>${lv === "미정" ? LEVEL_NAME["미정"] : "등급 " + lv}</span>
-        <span class="dx" role="button" aria-label="${two ? "상세 닫기" : "닫기"}" onclick="${two ? "closeLayer2()" : "panelClose()"}">×</span></div>
+        <span class="dx" role="button" aria-label="${two ? "상세 닫기" : "닫기"}" onclick="${two ? "closeLayer2()" : "panelClose()"}">${ICON_X}</span></div>
       <h2>${sigTitle(s)}</h2>
       <div class="dsum">${sum}${badges ? " " + badges : ""}${placeText(s) ? `<br><span class="pl">${esc(placeText(s))}</span>` : ""}</div>
       <div class="dbtns">${watch}<button type="button" class="dbtn" onclick="shareSig(this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6.5 9.5l3-3M5 11a2.5 2.5 0 0 1 0-3.5l1.5-1.5M11 5a2.5 2.5 0 0 1 0 3.5L9.5 10"/></svg><span>공유</span></button></div>
@@ -8223,6 +8322,7 @@ function initAxis() {
   renderAxis();
 }
 function renderDock() {
+  try { renderLpane(); } catch (e) { console.warn("좌측 패널", e); }   // 조회조건이 바뀌면 탭 내용도(칩 줄·도크와 같은 한 번)
   const dock = document.getElementById("dock");
   if (!dock) return;
   const C = dockCounts();
@@ -8626,7 +8726,9 @@ function renderChipbar() {
   /* ── 유형 ── */
   const st = Object.fromEntries(CAT_KEYS.map(c => [c, chipCatState(c, C)]));
   const onT = CAT_KEYS.filter(c => st[c] !== "off"), fullT = CAT_KEYS.every(c => st[c] === "on");
-  const typeLabel = fullT ? "유형 전체" : !onT.length ? "유형 없음" : onT.length <= 2 ? onT.join(" · ") : `유형 ${onT.length}`;
+  /* ★ 칩 글자 = **미적용이면 제목만 · 적용이면 값만**(2026-09-27 클로드 디자인 · 네이버부동산 방식) — 제목+값을 함께 쓰지 않는다 · 여럿은 「A, B」 또는 「A 외 N」 */
+  const chipSum = (arr, none) => !arr.length ? none : arr.length <= 2 ? arr.join(", ") : `${arr[0]} 외 ${arr.length - 1}`;
+  const typeLabel = fullT ? "유형" : chipSum(onT, "유형 없음");
   const dots = CAT_KEYS.map(c => `<i style="background:${CAT_COLOR[c]};${st[c] === "off" ? "opacity:.25;" : ""}"></i>`).join("");
   const typeRows = CAT_KEYS.map(c => `<div class="prow ${st[c]}" data-tog="cat" data-k="${c}">${CB_BOX}<i class="dt" style="background:${CAT_COLOR[c]}"></i>${c}
       <span class="n">${SRC_PENDING.size ? "·" : (C.cat[c] || 0).toLocaleString()}</span>
@@ -8656,26 +8758,35 @@ function renderChipbar() {
   const act = (open, dirty) => (open || dirty) ? " act" : "";
   const line = (dash) => `<svg width="22" height="8"><path d="M1 4H21" stroke="${CAT_COLOR["교통"]}" stroke-width="3" stroke-linecap="round"${dash ? ' stroke-dasharray="0.1 5.5"' : ""}/></svg>`;
   dyn.innerHTML = `
-    <div class="cbw"><div class="cb${act(CHIP_OPEN === "type", !fullT)}" data-chip="type"><span class="dots">${dots}</span>${typeLabel} ${cv}</div>
+    <div class="cbw"><div class="cb${act(false, !fullT)}" data-chip="type"><span class="dots">${dots}</span>${typeLabel} ${cv}</div>
       ${CHIP_OPEN === "type" ? `<div class="pop pad6" data-pop="type" style="width:240px">${typeRows}
         <div class="pfoot"><span data-allcat="on">전체 선택</span><span data-chnone="1">전체 해제</span></div></div>${fly}` : ""}</div>
-    <div class="cbw"><div class="cb${act(CHIP_OPEN === "stage", phOn.length !== PHASES.length)}" data-chip="stage">단계 <span class="v">${lab(PHASES, phOn.map(phaseLabel), " · ")}</span> ${cv}</div>
+    <div class="cbw"><div class="cb${act(false, phOn.length !== PHASES.length)}" data-chip="stage">${phOn.length === PHASES.length ? "단계" : `<span class="v">${chipSum(phOn.map(phaseLabel), "단계 없음")}</span>`} ${cv}</div>
       ${CHIP_OPEN === "stage" ? `<div class="pop pad12" data-pop="stage" style="width:300px">
         <div class="segs">${PHASES.map(p => `<div class="seg${filter.phase.has(p) ? " on" : ""}" data-tog="phase" data-k="${p}">${phaseLabel(p)}</div>`).join("")}</div>
         <div class="note"><span>${line(true)}계획 = 점선</span><span>${line(false)}확정 이후 = 실선</span></div></div>` : ""}</div>
-    <div class="cbw"><div class="cb${act(CHIP_OPEN === "grade", lvOn.length !== GRADES_DISP.length)}" data-chip="grade">등급 <span class="v">${lab(GRADES_DISP, lvOn.map(g => g === "미정" ? "없음" : g), " ")}</span> ${cv}</div>
+    <div class="cbw"><div class="cb${act(false, lvOn.length !== GRADES_DISP.length)}" data-chip="grade">${lvOn.length === GRADES_DISP.length ? "등급" : `<span class="v">${gradeChipLabel(lvOn)}</span>`} ${cv}</div>
       ${CHIP_OPEN === "grade" ? `<div class="pop pad12" data-pop="grade" style="width:280px">
         <div class="pills">${GRADES_DISP.map(g => `<div class="pill${filter.lvl.has(g) ? " on" : ""}" data-tog="lvl" data-k="${g}" title="${LEVEL_NAME[g]}">${g === "미정" ? "없음" : g}</div>`).join("")}</div>
         <div class="note">등급은 마커 안 문자로 표시됩니다. 해제한 등급은 지도에서 숨겨집니다.</div></div>` : ""}</div>
-    <div class="cbw"><div class="cb${act(CHIP_OPEN === "nature", ntOn.length !== NATURE_KEYS.length)}" data-chip="nature">성격 <span class="v">${lab(NATURE_KEYS, ntOn.map(ntName), " · ")}</span> ${cv}</div>
+    <div class="cbw"><div class="cb${act(false, ntOn.length !== NATURE_KEYS.length)}" data-chip="nature">${ntOn.length === NATURE_KEYS.length ? "성격" : `<span class="v">${chipSum(ntOn.map(ntName), "성격 없음")}</span>`} ${cv}</div>
       ${CHIP_OPEN === "nature" ? `<div class="pop pad6" data-pop="nature" style="width:220px">
         ${NATURE_KEYS.map(k => `<div class="prow${filter.nature.has(k) ? " on" : ""}" data-tog="nature" data-k="${k}" title="${NATURE_HINT[k] || ""}">${CB_BOX}${ntName(k)}</div>`).join("")}</div>` : ""}</div>
-    <div class="cbw cbw-apt"><div class="cb${act(CHIP_OPEN === "apt", hhCur !== "500")}" data-chip="apt">아파트 <span class="v">${hhLab}</span> ${cv}</div>
+    <div class="cbw cbw-apt"><div class="cb${act(false, hhCur !== "all")}" data-chip="apt">${hhCur === "all" ? "아파트" : `<span class="v">${hhLab}</span>`} ${cv}</div>
       ${CHIP_OPEN === "apt" ? `<div class="pop pad6" data-pop="apt" style="width:220px">
         ${hhOpts.map(o => `<div class="prow${o.v === hhCur ? " on" : ""}" data-tog="hh" data-k="${o.v}"><span class="radio"></span>${o.t}</div>`).join("")}</div>` : ""}</div>
     <div class="cbrst" data-all="on"${filtersDirty() ? "" : " hidden"}>초기화</div>`;
   const rc = document.getElementById("r-chip");
   if (rc) rc.classList.toggle("act", !!(filter.region || filter.sd));
+}
+/* 등급 칩 값 — 위에서부터 이어진 선택(S·A · S·A·B)은 「A등급 이상」, 그 밖은 나열(2026-09-27 클로드 디자인 예시 「A등급 이상」) */
+function gradeChipLabel(on) {
+  const ord = ["S", "A", "B", "C"], g = on.filter(x => x !== "미정");
+  if (!on.length) return "등급 없음";
+  if (on.length === 1 && on[0] === "미정") return "등급 없음만";
+  if (!on.includes("미정") && g.length >= 2 && g.every((x, i) => x === ord[i])) return `${g[g.length - 1]}등급 이상`;
+  const nm = on.map(x => x === "미정" ? "등급 없음" : x);
+  return nm.length <= 2 ? nm.join(", ") + (on.includes("미정") ? "" : "등급") : `${nm[0]} 외 ${nm.length - 1}`;
 }
 function initChrome() {
   const bar = document.getElementById("chipbar");
@@ -8813,7 +8924,8 @@ function mountLayerStack(box = document.getElementById("layerstack")) {   // 호
   if (!box) return;
   const items = [["rail", "철도", "lines", "철도선"], ["road", "도로", "lines", "도로선"], ["label", "노선명", "lines", "노선명"],
     ["cluster", "묶음", "cluster"], ["sat", "위성", "sat"], ["cad", "지적", "cad"], ["fac", "시설", "fac"]];   // 시설 = 환경기초·장사시설 겹침(2026-09-25 · 호재 아님 · 기본 끔)
-  box.innerHTML = items.map(([k, nm, ax, lk]) => `<button type="button" class="ly" data-ly="${k}"${ax === "lines" ? ` data-tog="lines" data-k="${lk}"` : ""}>${LAYER_SVG[k]}<span>${nm}</span></button>`).join("");
+  box.innerHTML = items.map(([k, nm, ax, lk]) => `<button type="button" class="ly" data-ly="${k}"${ax === "lines" ? ` data-tog="lines" data-k="${lk}"` : ""}>${LAYER_SVG[k]}<span>${nm}</span></button>`
+    + (k === "label" && box.id === "layerstack" ? '<i class="lysep" aria-hidden="true"></i>' : "")).join("");
   bindFilterClicks(box);           // 철도·도로·노선명 = 도크의 「표시」 스위치와 같은 축(filter.lines)
   box.addEventListener("click", e => {
     const b = e.target.closest("[data-ly]"); if (!b) return;
@@ -8875,13 +8987,13 @@ function paintLegend() {
   const hosts = [document.getElementById("hjlegend"), document.querySelector("#mlayers .mly-legend")].filter(Boolean);
   if (!hosts.length) return;
   const C = CAT_COLOR["교통"];
-  const html = CAT_KEYS.map(c => `<span class="cat${filter.cat.has(c) ? "" : " off"}"><i style="background:${CAT_COLOR[c]}"></i>${c}</span>`).join("")
+  const html = CAT_KEYS.map(c => `<span class="cat${filter.cat.has(c) ? "" : " off"}"><i style="background:${CAT_COLOR[c]};box-shadow:0 0 0 2px ${CAT_COLOR[c]}4d"></i>${c}</span>`).join("")
     + '<span class="sep"></span>'
     + `<span><svg width="26" height="8"><path d="M1 4H25" stroke="${C}" stroke-width="3" stroke-linecap="round"/></svg>철도</span>`
     + `<span><svg width="26" height="8"><path d="M1 4H25" stroke="${C}" stroke-width="7"/><path d="M1 4H25" style="stroke:var(--ly-hole,#161826)" stroke-width="4"/><path d="M1 4H25" stroke="${C}" stroke-opacity=".25" stroke-width="4"/></svg>도로</span>`
     + `<span><svg width="26" height="8"><path d="M1 4H25" stroke="${C}" stroke-width="3" stroke-linecap="round" stroke-dasharray="0.1 5.5"/></svg>계획</span>`
     + (facOn() ? '<span class="facleg"><i class="facmk0"></i>환경·에너지·장사시설 <i class="facmk0 plan"></i>계획·일부 <i class="facmk0 up"></i>증설 계획</span>' : "")
-    + '<span class="rule" role="button">표기 규칙</span>';
+    + '<span class="rule" role="button">표기 규칙 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3.5 8.5l5-5M4.5 3.5h4v4"/></svg></span>';
   hosts.forEach(h => { h.innerHTML = html; });
 }
 /* 화면 상태를 body 표식으로 — 크롬 부품의 보임/숨김은 CSS가 이 표식 하나로 가른다 */
@@ -9141,10 +9253,198 @@ function flowCompute(M, custom) {
   const nNew = past.length - nChg;
   return { rows, moved, seen, daysAgo, inWin, chgRows, future, past, nChg, nNew, total: past.length + chgRows.length };
 }
-function renderFlow() {
-  const host = document.getElementById("flowv");
-  if (!host) return;
-  const { moved, seen, daysAgo, inWin, chgRows, future, past, nChg, nNew } = flowCompute(FLOW_MONTHS, FLOW_CUSTOM);
+/* 업데이트 행 하나의 사실(날짜·종류·값 변경) — 전체 화면(폰)·좌측 패널 업데이트 탭 한 벌(2026-09-27 · renderFlow 안의 두 사본을 모았다) */
+function flowRowFacts(s, daysAgo, seen) {
+  const fc = fieldChangeList(s, FLOW_MONTHS * 31), d = movDelta(s);
+  const onlyFld = !!fc.length && (!s.last_movement || daysAgo(s.last_movement) > FLOW_MONTHS * 31);
+  const dt = String(onlyFld ? fc[fc.length - 1].date : (s.last_movement || ""));
+  const kind = onlyFld ? { c: "fld", t: "내용" } : seen ? { c: "seen", t: "확인" } : d && d.kind === "변동"
+    ? { c: "chg" + (PHASE_IDX[d.to] < PHASE_IDX[d.from] ? " back" : ""), t: isDesk() ? "단계 진행" : "변동" }
+    : { c: "new", t: "신규" };
+  return { fc, d, onlyFld, dt, kind };
+}
+/* ══════════ 좌측 패널 3탭 — 목록 · 지역별 · 업데이트 (웹 데스크톱 · 2026-09-27 알렉스 결정 1~6 전부 A) ══════════
+   ① 목록 = **지금 지도 안**(지도를 옮기면 따라온다) · 칩 줄에서 지역을 고르면 그 지역 전체에 고정(2A)
+   ② 행을 누르면 상세가 이 패널 **오른쪽**에 뜬다(#panel이 옆으로 비킨다 · 목록 유지 · 3A)
+   ③ 업데이트 탭이면 지도는 **기간 안에 바뀐 호재만 진하게**(dimOpacity · 4A) ④ 전체 화면 목록·업데이트는 데스크톱에서 없앴다(setView가 이 탭으로 보낸다 · 5A)
+   ⑤ 업데이트 행 = 0건 종류 숨김 · 쉬운 말(flowWhy) · 같은 날 같은 원천의 묶음 접기(6A) ⑥ 지역별 = 유형별 건수·규모 S·A·공사 중 정비 세대·단계 막대 **그대로**(알렉스 조건).
+   셈은 전부 기존 자(visible · regionRows · flowSets · flowRowFacts · sortSignals)를 부른다 — 이 패널은 표시만 한다(판정 사본 금지). 정본 = DESIGN §6 「좌측 패널」. */
+const LP_KEY = "hj_lp_v1", LP_PAGE = 150;
+var LP = null;
+function lpS() {
+  if (!LP) { try { LP = Object.assign({ tab: "sig", fold: false }, JSON.parse(localStorage.getItem(LP_KEY) || "{}")); } catch (e) { LP = { tab: "sig", fold: false }; } }
+  return LP;
+}
+function lpSave() { try { localStorage.setItem(LP_KEY, JSON.stringify({ tab: lpS().tab, fold: !!lpS().fold })); } catch (e) {} }
+let _lpShown = LP_PAGE, _lpKey = "", _lpRows = [], _lpSel = null, _lpIdleT = 0, _lpBound = false, _lpHovS = null, _lpHold = 0, LP_SORT = "level";
+const LP_FOLDS = new Set();
+function lpActive() { return isDesk() && VIEW_MODE === "map" && !lpS().fold; }
+function lpApply() {
+  const el = document.getElementById("lpane"), op = document.getElementById("lp-open"); if (!el) return;
+  const desk = isDesk() && VIEW_MODE === "map", on = desk && !lpS().fold;
+  el.hidden = !on; if (op) op.hidden = !(desk && lpS().fold);
+  document.body.classList.toggle("lp-on", on);
+  el.querySelectorAll("[data-lptab]").forEach(b => { const x = b.dataset.lptab === lpS().tab; b.classList.toggle("on", x); b.setAttribute("aria-selected", x ? "true" : "false"); });
+  let ff = null;
+  if (on && lpS().tab === "flow") { try { ff = new Set(flowSets().shown); } catch (e) { console.warn("업데이트 강조", e); } }
+  const was = window._flowFocus;
+  window._flowFocus = ff;
+  if (!!was !== !!ff || (was && ff && was.size !== ff.size)) mapApi?.refreshPins?.();
+}
+function renderLpane() {
+  lpApply();
+  if (!lpActive()) return;
+  lpBind();
+  const t = lpS().tab;
+  if (t === "region") return lpRegion();
+  if (t === "flow") return lpFlow();
+  return lpSig();
+}
+function lpOnIdle() {
+  if (!lpActive() || lpS().tab !== "sig" || regionLabel() || Date.now() < _lpHold) return;
+  clearTimeout(_lpIdleT); _lpIdleT = setTimeout(() => { try { lpSig(); } catch (e) { console.warn("좌측 패널 목록", e); } }, 180);
+}
+function lpPt(s) {   // 행이 「지도 안」인가의 자리 — 신호의 첫 표시점(마커와 같은 자리 · signalPoints) · 신호 판 번호마다 한 번
+  if (s._lpPtV !== SIG_VER) { const p = (signalPoints(s) || [])[0]; s._lpPt = p && p.coord ? p.coord : null; s._lpPtV = SIG_VER; }
+  return s._lpPt;
+}
+function lpRowHtml(s, i, extra) {
+  const t = ringOf(s), lv = t.lv, sz = Math.max(20, Math.min(28, lvSize(lv) + 6));   // 고리 안에 등급 글자(지도 마커와 같은 문법)
+  const loc = [s.sd, s.sg, s.dong].filter(Boolean).join(" ") || (s.ic_loc || "").split("·")[0].trim();
+  const sub = extra ? extra.sub : esc(catOf(s) + subLabel(s)) + (loc ? " · " + esc(loc) : "");
+  return `<div class="lprow${_lpSel === s ? " sel" : ""}" data-lpi="${i}"><span class="lpring"><i class="${lv === "미정" ? "dia" : ""}" style="border-color:${t.col};width:${sz}px;height:${sz}px" title="${lv === "미정" ? "등급 없음" : "등급 " + lv}">${lv === "미정" ? "" : lv}</i></span>`
+    + `<span class="lpt"><b>${extra && extra.badge ? extra.badge : ""}${sigTitle(s)}</b><span class="lps"><i style="background:${t.col}"></i>${sub}</span></span>`
+    + `<span class="lpph">${PHASE_LABEL[phaseOf(s)] || phaseOf(s)}<br>${extra && extra.date != null ? extra.date : String(fmtDay(s.last_movement) || "").replace(/^20(\d\d)-(\d\d)-(\d\d)$/, "$1.$2.$3")}</span></div>`;
+}
+function lpSig(more) {
+  const head = document.getElementById("lp-head"), body = document.getElementById("lp-body"); if (!head || !body) return;
+  const rg = regionLabel(), m = window._kmap;
+  let rows = allSignalsFlat().filter(visible), scope = rg || "전국";
+  if (!rg && m && m.getBounds) {
+    const b = m.getBounds(), sw = b.getSouthWest(), ne = b.getNorthEast(), x0 = sw.getLng(), y0 = sw.getLat(), x1 = ne.getLng(), y1 = ne.getLat();
+    rows = rows.filter(s => { const p = lpPt(s); return p && p[0] >= x0 && p[0] <= x1 && p[1] >= y0 && p[1] <= y1; });
+    scope = "지금 지도 안";
+  }
+  rows = sortSignals(rows, LP_SORT, null);
+  const key = [SIG_VER, filterSig(), rg, scope, LP_SORT, rows.length, rows[0] ? (rows[0].id || sigTitle(rows[0])) : ""].join("§");
+  if (key !== _lpKey) { _lpKey = key; if (!more) _lpShown = LP_PAGE; }
+  _lpRows = rows;
+  head.innerHTML = `<div class="lpn"><b>${rows.length.toLocaleString()}</b><span>건 · ${esc(scope)}</span></div>`
+    + `<div class="lpctl"><select id="lp-sort" aria-label="정렬">${[["level", "등급순"], ["recent", "최근 움직임순"], ["phase", "단계순"], ["name", "이름순"]].map(([v, t]) => `<option value="${v}"${v === LP_SORT ? " selected" : ""}>${t}</option>`).join("")}</select>`
+    + `<span>${rg ? "고른 지역 전체 — 칩 줄에서 지역을 풀면 지도 안으로" : "지도를 옮기면 목록이 따라옵니다 · 지역을 고르면 그 지역에 고정"}</span></div>`;
+  body.innerHTML = rows.length
+    ? rows.slice(0, _lpShown).map((s, i) => lpRowHtml(s, i)).join("") + (rows.length > _lpShown ? `<div class="lpmore">아래로 ${(rows.length - _lpShown).toLocaleString()}건 더 — 스크롤</div>` : "")
+    : `<div class="lpnote">${rg ? "이 지역에 표시 조건에 맞는 호재가 없습니다 — 칩 줄의 조건을 풀면 나타납니다." : "지금 지도 안에 표시 조건에 맞는 호재가 없습니다 — 지도를 넓히거나 칩 줄의 조건을 풀면 나타납니다."}</div>`;
+}
+function lpRegion() {
+  const head = document.getElementById("lp-head"), body = document.getElementById("lp-body"); if (!head || !body) return;
+  const R = regionRows(), rows = regionSorted(R.rows), total = allSignalsFlat().filter(visible).length;
+  _lpRows = [];
+  const crumb = R.level === "sd" ? "전국" : `<a data-lpact="nat">전국</a> › ${esc(SIDO_LONG[nav.sd] || nav.sd || "")}`;
+  head.innerHTML = `<div class="lpcrumb">${crumb}</div><div class="lpn"><b>${total.toLocaleString()}</b><span>건 · ${R.level === "sd" ? "시도" : "시군구"} ${R.rows.length}곳</span></div>`
+    + `<div class="lpctl"><select id="lp-rgsort" aria-label="정렬">${[["n", "전체순"], ["sa", "규모 S·A순"], ["hb", "공사 중 정비 세대순"], ["name", "이름순"]].map(([v, t]) => `<option value="${v}"${REG_SORT.k === v ? " selected" : ""}>${t}</option>`).join("")}</select>`
+    + `<span class="lpkey"><span><i class="p0"></i>계획</span><span><i class="p1"></i>인가</span><span><i class="p2"></i>착공</span><span><i class="p3"></i>준공</span></span></div>`;
+  body.innerHTML = rows.map(r => {
+    const tot = r.p.reduce((a, b) => a + b, 0) || 1;
+    return `<div class="lprg${REG_SEL === r.key ? " sel" : ""}" data-lprg="${esc(r.key)}"><div class="l1"><b>${esc(r.label)}${R.level === "sd" ? " ›" : ""}</b><span class="sa">규모 S·A ${r.sa.toLocaleString()}</span><span class="n">${r.n.toLocaleString()}</span></div>`
+      + `<div class="l2">${CAT_KEYS.map(c => `<span class="${r.c[c] ? "" : "z"}" title="${c}"><i style="background:${CAT_COLOR[c]}"></i>${(r.c[c] || 0).toLocaleString()}</span>`).join("")}`
+      + `<span class="hb" title="${r.hb ? `착공 단계 정비사업 ${r.hbN}곳의 계획 세대 합` : "착공 단계 정비사업 없음"}">공사 중 정비 ${r.hb.toLocaleString()}세대</span></div>`
+      + `<div class="rgbar" title="계획 ${r.p[0]} · 인가 ${r.p[1]} · 착공 ${r.p[2]} · 준공 ${r.p[3]}">${r.p.map((v, i) => v ? `<i class="p${i}" style="width:${(v / tot * 100).toFixed(1)}%"></i>` : "").join("")}</div></div>`;
+  }).join("")
+    + `<div class="lpnote">순위가 아닙니다 — 건수는 고시·허가가 실리는 방식에 따라 지역마다 다르게 쌓입니다(규모 S·A는 사업 크기 분류). 지금 조회조건 그대로 셉니다. `
+    + `공사 중 정비 세대 = 착공 단계 정비사업(재개발·재건축 등)의 계획 세대 합이고, 입주 시점은 소스에 없습니다(택지 지구는 넣지 않습니다).`
+    + (R.level === "sgg" ? " 여러 시군구를 지나는 노선은 시군구마다 셉니다." : "")
+    + (R.unk ? ` 시도를 정할 수 없는 ${R.unk.toLocaleString()}건은 뺐습니다.` : "")
+    + (R.level === "sgg" && R.ready === false ? " 시군구 색인을 만드는 중입니다 — 잠시 뒤 채워집니다." : "") + `</div>`;
+}
+function lpSrcFam(s) { return String(s.src_name || s.src_org || "").replace(/\s*[(（].*$/, "").split("—")[0].trim() || "원천 미상"; }
+function lpFlow() {
+  const head = document.getElementById("lp-head"), body = document.getElementById("lp-body"); if (!head || !body) return;
+  const F = flowSets();
+  const kinds = [["all", "전체", F.past.length + F.chgRows.length], ["new", "신규", F.nNew], ["chg", "단계 진행", F.nChg], ["up", "등급 상향", F.nUp], ["undet", "등급 없음 해소", F.nUndet]]
+    .filter(([k, , n]) => k === "all" || n || FLOW_KIND === k);   // 0건 종류는 숨긴다(6A) — 지금 고른 종류는 0이어도 남긴다(고른 것이 사라지면 길을 잃는다)
+  head.innerHTML = `<div class="lppills">${FLOW_PERIODS.map(([mo, lb]) => `<button type="button" data-lpper="${mo}" class="${!FLOW_CUSTOM && mo === FLOW_MONTHS ? "on" : ""}">${lb}</button>`).join("")}</div>`
+    + `<div class="lppills">${kinds.map(([k, lb, n]) => `<button type="button" data-lpkind="${k}" class="${FLOW_KIND === k ? "on" : ""}">${lb}<b>${n.toLocaleString()}</b></button>`).join("")}</div>`;
+  const WD = ["일", "월", "화", "수", "목", "금", "토"];
+  const days = new Map();
+  F.shown.forEach(sg => { const f = flowRowFacts(sg, F.daysAgo); const d = (f.dt || "").slice(0, 10) || "날짜 미상"; if (!days.has(d)) days.set(d, []); days.get(d).push({ s: sg, f }); });
+  _lpRows = [];
+  let html = "", n = 0;
+  for (const [d, items] of days) {
+    if (n >= _lpShown) break;
+    const t = new Date(d + "T00:00:00"), wd = isNaN(t) ? "" : WD[t.getDay()] + "요일";
+    html += `<div class="lpday">${d} ${wd} · ${items.length}건</div>`;
+    const fam = new Map();
+    items.forEach(x => { const k = x.f.kind.t + "|" + lpSrcFam(x.s); if (!fam.has(k)) fam.set(k, []); fam.get(k).push(x); });
+    for (const [k, xs] of fam) {
+      const fk = d + "|" + k, folded = xs.length >= 4 && !LP_FOLDS.has(fk);
+      if (xs.length >= 4) html += `<div class="lpfold" data-lpfold="${esc(fk)}"><span class="lpbadge${xs[0].f.kind.c === "new" ? " new" : ""}">${xs[0].f.kind.t}</span>${esc(lpSrcFam(xs[0].s))}${folded ? " 갱신" : ""}<span class="n">${xs.length}건 ${folded ? "▸" : "▾"}</span></div>`;
+      if (folded) continue;
+      xs.forEach(x => { const i = _lpRows.push(x.s) - 1; n++;
+        const why = flowWhy(x.s, x.f.fc);
+        html += lpRowHtml(x.s, i, { badge: `<span class="lpbadge${x.f.kind.c === "new" ? " new" : ""}">${x.f.kind.t}</span>`,
+          sub: esc(catOf(x.s) + subLabel(x.s)) + (why ? " · " + esc(why) : ""), date: "" }); });
+    }
+  }
+  const rest = F.shown.length - n;
+  body.innerHTML = F.shown.length ? html + (rest > 0 && n >= _lpShown ? `<div class="lpmore">아래로 더 — 스크롤</div>` : "")
+    : flowEmptyHtml();   // 빈 결과 = 조건을 되읽고 넓히는 길(건수 포함 · 폰 전체 화면과 같은 카드 · C42)
+}
+function lpBind() {
+  if (_lpBound) return; const el = document.getElementById("lpane"); if (!el) return; _lpBound = true;
+  el.addEventListener("click", e => {
+    const tb = e.target.closest("[data-lptab]");
+    if (tb) { lpS().tab = tb.dataset.lptab; lpSave(); _lpShown = LP_PAGE; const bd = document.getElementById("lp-body"); if (bd) bd.scrollTop = 0; renderLpane(); return; }
+    if (e.target.closest(".lp-fold")) { lpS().fold = true; lpSave(); lpApply(); mapApi?.hoverAt?.(null); return; }
+    const row = e.target.closest("[data-lpi]");
+    if (row) { const sg = _lpRows[+row.dataset.lpi]; if (!sg) return;
+      _lpSel = sg; _lpHold = Date.now() + 1500;   // 누른 행으로 지도가 옮겨 가도 목록이 그 자리에서 바뀌지 않게(잠깐)
+      el.querySelectorAll(".lprow.sel").forEach(x => x.classList.remove("sel")); row.classList.add("sel");
+      showSignal(sg, true); return; }
+    const rg = e.target.closest("[data-lprg]");
+    if (rg) { const R = regionRows(), r = R.rows.find(x => x.key === rg.dataset.lprg); if (!r) return;
+      if (R.level === "sd") { selectSido(r.key); try { syncRegionChip(); } catch (e2) { console.warn("지역별 시도 칩", e2); } }
+      else { regionNarrow(r); lpS().tab = "sig"; lpSave(); renderLpane(); }
+      return; }
+    if (e.target.closest('[data-lpact="nat"]')) { resetRegionOnly(); return; }
+    const per = e.target.closest("[data-lpper]");
+    if (per) { FLOW_CUSTOM = null; FLOW_MONTHS = +per.dataset.lpper; _lpShown = LP_PAGE; renderLpane(); return; }
+    const kd = e.target.closest("[data-lpkind]");
+    if (kd) { FLOW_KIND = kd.dataset.lpkind; _lpShown = LP_PAGE; renderLpane(); return; }
+    const fe = e.target.closest("[data-fe]");
+    if (fe) { flowEmptyAct(fe.dataset.fe); _lpShown = LP_PAGE; renderLpane(); return; }
+    const fd = e.target.closest("[data-lpfold]");
+    if (fd) { const k = fd.dataset.lpfold; if (LP_FOLDS.has(k)) LP_FOLDS.delete(k); else LP_FOLDS.add(k); lpFlow(); return; }
+  });
+  el.addEventListener("change", e => {
+    if (e.target.id === "lp-sort") { LP_SORT = e.target.value; _lpShown = LP_PAGE; lpSig(); }
+    if (e.target.id === "lp-rgsort") { REG_SORT = { k: e.target.value, dir: 1 }; lpRegion(); }
+  });
+  el.addEventListener("mouseover", e => { const row = e.target.closest("[data-lpi]"), sg = row ? _lpRows[+row.dataset.lpi] : null;
+    if (sg !== _lpHovS) { _lpHovS = sg; mapApi?.hoverAt?.(sg || null); } });
+  el.addEventListener("mouseleave", () => { _lpHovS = null; mapApi?.hoverAt?.(null); });
+  const bd = document.getElementById("lp-body");
+  bd.addEventListener("scroll", () => {
+    if (lpS().tab === "region" || bd.scrollTop + bd.clientHeight < bd.scrollHeight - 300) return;
+    const total = lpS().tab === "flow" ? (flowSets().shown.length) : _lpRows.length;
+    if (total <= _lpShown) return;
+    _lpShown += LP_PAGE; if (lpS().tab === "flow") lpFlow(); else lpSig(true);
+  }, { passive: true });
+  document.getElementById("lp-open")?.addEventListener("click", () => { lpS().fold = false; lpSave(); renderLpane(); });
+}
+/* 업데이트 행의 근거 한 줄 — 「왜 바뀌었나」 · 전체 화면·좌측 패널 한 벌. ★ 쉬운 말(2026-09-27 결정 6A): 필드 라벨 「소스 단계」는 「원천 단계」로, 값은 「」로 싼다 */
+function flowWhy(s, fc) {
+  const _lc = fc[fc.length - 1];
+  return fc.length
+    ? (_lc.field === "lvl" ? `등급 ${_lc.from === "미정" ? "없음" : _lc.from} → ${_lc.to === "미정" ? "없음" : _lc.to}`   // 등급은 전→후(2026-09-25)
+       : `${_lc.label === "소스 단계" ? "원천 단계" : (_lc.label || "값")} 「${_lc.to}」`)
+    : (s.current_stage && s.current_stage !== phaseOf(s) ? s.current_stage   // 원천 원문 그대로(토지이음은 고시번호 — 「단계」라 부르지 않는다)
+       : (s.stage_note || s.note || "").split("·")[0].trim() || (s.stage_checked ? "단계 확인 " + s.stage_checked : ""));
+}
+/* 업데이트 셈 한 벌 — 전체 화면(폰)·좌측 패널 업데이트 탭이 같이 쓴다(2026-09-27 · 사본 금지) */
+function flowSets() {
+  const F = flowCompute(FLOW_MONTHS, FLOW_CUSTOM);
+  const { chgRows, past } = F;
   /* ☠ 이 블록은 아래 `shown`보다 **앞**이어야 한다 (2026-09-25 세션135 · 헤드리스 재현) — 종전엔 `shown`이 뒤에서 선언되는 upRows·undetRows를
      먼저 읽어 「등급 상향」·「등급 없음 해소」 칸을 누르면 ReferenceError(초기화 전 참조)로 업데이트 화면이 통째로 안 그려졌다.
      게이트 = html_check.flow_cond_check(선언 위치). */
@@ -9165,6 +9465,12 @@ function renderFlow() {
     : FLOW_KIND === "fld" ? chgRows.map(x => x.s)
     : past.filter(s => (movDelta(s) || {}).kind === (FLOW_KIND === "chg" ? "변동" : "신규"));
   shown.sort((a, b) => String(b.last_movement).localeCompare(String(a.last_movement)));   // 최신순(사용자 확정)
+  return Object.assign({}, F, { upRows, undetRows, nUp, nUndet, shown });
+}
+function renderFlow() {
+  const host = document.getElementById("flowv");
+  if (!host) return;
+  const { moved, seen, daysAgo, inWin, chgRows, future, past, nChg, nNew, upRows, undetRows, nUp, nUndet, shown } = flowSets();   // 셈은 flowSets 한 벌(좌측 패널 업데이트 탭과 같은 자 · 2026-09-27)
   // 라벨 위 · 큰 숫자 아래(시안 실물). 종전엔 한 줄에 라벨+작은 숫자였다.
   const seg = (k, lb, n) => `<button class="fseg${FLOW_KIND === k ? " on" : ""}${n ? "" : " z"}" data-kind="${k}" onmouseenter="explainTip(event,'flow','${lb}(기간 창 안 · 노선당 1건) ${n.toLocaleString()}')" onmouseleave="explainHide()">${lb}<span class="n">${n.toLocaleString()}</span></button>`;
   const nFld = chgRows.length;
@@ -9240,14 +9546,10 @@ function renderFlow() {
   };
   const put = (key, arr) => { const box = host.querySelector(`.fg[data-g="${key}"]`); if (!box) return;
     let lastDay = null;
-    const _dayOf = s => { const fc = fieldChangeList(s, FLOW_MONTHS * 31); const of = fc.length && (!s.last_movement || daysAgo(s.last_movement) > FLOW_MONTHS * 31);
-      return dayLabel(String(of ? fc[fc.length - 1].date : (s.last_movement || ""))).d; };
+    const _dayOf = s => dayLabel(flowRowFacts(s, daysAgo).dt).d;
     const _dayN = {}; arr.slice(0, 80).forEach(s => { const k = _dayOf(s); _dayN[k] = (_dayN[k] || 0) + 1; });   // 날짜 머리 「요일 · N건」(시안)
     arr.slice(0, 80).forEach(s => {
-      const fc = fieldChangeList(s, FLOW_MONTHS * 31);
-      const d = movDelta(s);
-      const onlyFld = fc.length && (!s.last_movement || daysAgo(s.last_movement) > FLOW_MONTHS * 31);
-      const dt = String(onlyFld ? fc[fc.length - 1].date : (s.last_movement || ""));
+      const { fc, dt, kind } = flowRowFacts(s, daysAgo, key === "확인");   // 행 사실 한 벌(좌측 패널 업데이트 탭과 같은 자)
       const dl = dayLabel(dt);
       if (dl.d !== lastDay) { lastDay = dl.d;
         box.insertAdjacentHTML("beforeend", `<div class="fday"><b>${dl.d}</b><span class="wd">${dl.w}${_dayN[dl.d] ? ` · ${_dayN[dl.d]}건` : ""}</span></div>`); }
@@ -9257,16 +9559,8 @@ function renderFlow() {
            아래로 흩어졌다 — 시안이 한 열에 세운 것을 세 곳에 나눠 둔 셈이라, 「무엇이 어떻게
            바뀌었나」를 세로로 훑어야 했다. 열로 세우면 눈이 옆으로만 움직인다.
          ⚠ 변경 유형 배지는 **무채색, 신규만 검정**(색 채널은 유형 전용) — `.mvk` 규칙 그대로. */
-      const kind = onlyFld ? { c: "fld", t: "내용" } : key === "확인" ? { c: "seen", t: "확인" } : d && d.kind === "변동"
-        ? { c: "chg" + (PHASE_IDX[d.to] < PHASE_IDX[d.from] ? " back" : ""), t: isDesk() ? "단계 진행" : "변동" }
-        : { c: "new", t: "신규" };
       // 근거 = 「왜 바뀌었나」 한 줄. 값 변경이 있으면 그것이 근거고, 없으면 소스 단계·확인 사실.
-      const _lc = fc[fc.length - 1];
-      const why = fc.length
-        ? (_lc.field === "lvl" ? `등급 ${_lc.from === "미정" ? "없음" : _lc.from} → ${_lc.to === "미정" ? "없음" : _lc.to}`   // 등급은 전→후(2026-09-25)
-           : `${_lc.label || "값"} ${_lc.to} 확인`)
-        : (s.current_stage && s.current_stage !== phaseOf(s) ? s.current_stage
-           : (s.stage_note || s.note || "").split("·")[0].trim() || (s.stage_checked ? "단계 확인 " + s.stage_checked : ""));
+      const why = flowWhy(s, fc);
       const src = (s.sources || []).filter(Boolean)[0];
       const sub = [catOf(s) + subLabel(s), levelOf(s) === "미정" ? "" : levelOf(s) + "등급",
                    s.hh ? s.hh.toLocaleString() + "세대" : ""].filter(Boolean).join(" · ");
@@ -11169,7 +11463,7 @@ function initKakao() {
        **푸터에서 도출**한다 — 푸터 높이가 바뀌어도 따라온다(창 크기 변경도 같이 갱신). */
   const _hjCountEl = document.createElement("div");
   _hjCountEl.className = "hj-count";
-  el.appendChild(_hjCountEl);
+  (isDesk() ? el.parentNode : el).appendChild(_hjCountEl);   // 데스크톱 = 지도 아래 전폭 띠(카카오 로고를 가리지 않게 지도 밖 · 2026-09-27 클로드 디자인)
   const _placeHjCount = () => {
     const f = document.querySelector("footer");
     _hjCountEl.style.bottom = f && f.offsetHeight   // 푸터를 숨긴 화면(웹 크롬 v2)에서는 top이 0이라 배지가 화면 위로 날아간다 — 보일 때만 잰다
@@ -11198,6 +11492,7 @@ function initKakao() {
   // 지도가 멈출 때만 기억한다(드래그 중엔 쓰지 않는다).
   K.event.addListener(map, "idle", () => {
     const c = map.getCenter(); lastViewSave(c.getLat(), c.getLng(), map.getLevel());
+    try { lpOnIdle(); } catch (e) {}   // 좌측 패널 목록 탭은 「지금 지도 안」(결정 2A) — 지역을 고르지 않았을 때만 다시 센다
   });
   window._map = map; window._kmap = map; map.setMaxLevel(13);
   setTimeout(() => { try { facPaint(); } catch (e) { console.warn("facPaint(카카오 생성 뒤)", e); } }, 0);   // 겹침층 「시설」 — 지도가 데이터보다 늦게 생겨도 켜진 층이 보이게
@@ -11896,6 +12191,7 @@ function initKakao() {
        클릭해도 흐림은 해제하지 않는다 — 아파트 선택 맥락이 유지되어야 한다. 해제는 선택 해제 하나만. */
   let dimAnchor = null;   // [lng,lat] · null이면 흐림 없음
   const dimOpacity = s => {
+    if (window._flowFocus) return window._flowFocus.has(s) ? 1 : 0.22;   // 업데이트 탭 — 기간 안에 바뀐 호재만 진하게(2026-09-27 결정 4A)
     if (!dimAnchor) return 1;
     try {
       const [alng, alat] = dimAnchor;
@@ -12889,7 +13185,13 @@ function initKakao() {
     if (opt && opt.outline) opt.outline.forEach(l => hlPolys.push(new K.Polyline({ map, path: l.map(([x, y]) => LL(x, y)), strokeWeight: 3, strokeColor: "#4f6ee8", strokeOpacity: 1, zIndex: 8 })));
   };
   const sggRingsFn = () => { if (window._sggRings) return window._sggRings; const m = {}; SGG_GEO.features.forEach(f => { const disp = f.properties.sido + " " + sggDisplayName(f.properties.name); ringsOf(f).forEach(r => (m[disp] = m[disp] || []).push(r)); }); return (window._sggRings = m); };
-  mapApi = { refreshPins, panTo: ll => { if (mapTargetOk(ll[1], ll[0], "panTo")) map.panTo(LL(ll[0], ll[1])); }, showRadius, showRadiusMany, clearRadius, showAptAnchor, highlightRings, clearHighlight, clearAptMarker, emphasizePin, sggRings: sggRingsFn, highlightRoute, clearRoute, hideTip, closeAptPop };   // viewFilter 제거(2026-07-27) — 소비처 없는 죽은 API였다
+  /* 좌측 패널 행 가리킴 = 그 호재 자리에 **무채 고리**(DESIGN 「목록 행 가리킴 강조」와 같은 문법 · 유형색을 칠하지 않는다) */
+  let _lpHov = null;
+  const hoverAt = sg => { if (_lpHov) { _lpHov.setMap(null); _lpHov = null; } if (!sg) return;
+    const p = (signalPoints(sg) || [])[0]; if (!p || !p.coord) return;
+    const d = document.createElement("div"); d.className = "lphov";
+    _lpHov = new K.CustomOverlay({ map, position: LL(p.coord[0], p.coord[1]), content: d, zIndex: 40, yAnchor: .5, xAnchor: .5 }); };
+  mapApi = { refreshPins, panTo: ll => { if (mapTargetOk(ll[1], ll[0], "panTo")) map.panTo(LL(ll[0], ll[1])); }, showRadius, showRadiusMany, clearRadius, showAptAnchor, highlightRings, clearHighlight, clearAptMarker, emphasizePin, hoverAt, sggRings: sggRingsFn, highlightRoute, clearRoute, hideTip, closeAptPop };   // viewFilter 제거(2026-07-27) — 소비처 없는 죽은 API였다
   performance.mark("map:ready");   // 카카오 지도 API가 준비된 시점(계측 — head의 __perf)
   // (뱃지 카운트는 지역/필터 기준 고정 — 지도 이동마다 갱신하지 않는다, 2026-07-23)
   refreshPins();
@@ -12925,6 +13227,9 @@ function setView(mode) {
      `HANDOFF_모바일UX §4`가 이미 적어 둔 클래스다(*"모바일 전용 transform은 데스크톱으로 넓힐 때
      **누가 지우는지 정해 둔다**"*). 지우는 자리는 **여기 하나**다(호출부마다 막으면 하나를 빠뜨린다). */
   if (!isMobileView() && (mode === "near" || mode === "more")) mode = "map";
+  /* ★ 데스크톱의 목록·업데이트는 **지도 왼쪽 패널 탭**이다(2026-09-27 알렉스 결정 1A·5A) — 전체 화면으로 가지 않고 지도에 남아 그 탭을 연다. 폰은 종전 그대로. */
+  if (isDesk() && (mode === "list" || mode === "flow")) { let _lm = "region"; try { _lm = LIST_MODE; } catch (e) {}
+    lpS().tab = mode === "flow" ? "flow" : (_lm === "region" ? "region" : "sig"); lpS().fold = false; lpSave(); mode = "map"; }
   const _prev = VIEW_MODE;
   if (_prev === "map" && mode !== "map") mapViewSave();
   if (mode === "gantt" || mode === "raw") mode = "map";   // 폐기된 뷰(타임라인·수도권 원시) → 지도
@@ -12981,6 +13286,7 @@ function setView(mode) {
     setTimeout(() => { mapRelayout(); if (_prev !== "map") mapViewRestore(); }, 60); }   // 지도 복귀 = 타일 재계산 + 시점 복원
   if (mode === "list") initList();
   if (mode === "undet") initUndet();
+  try { lpApply(); if (VIEW_MODE === "map") renderLpane(); } catch (e) { console.warn("좌측 패널(setView)", e); }
 }
 /* ══════════ 목록 모드 (2026-07-30) ══════════
    지도는 '어디'에 강하고 목록은 '무엇이 최근에 움직였나'에 강하다. 우리는 신호 추적 미디어라
@@ -13958,8 +14264,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "6f353d5dcf", "adverse_funeral.json": "560f1cc55f", "apartments_all.json": "e8d3381aed", "arch_signals.json": "f98396171a", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "1acccd3072", "corridor_diff.json": "4f110b964b", "dart_signals.json": "2e7502b5e0", "dps_signals.json": "ada493bbf4", "eum_backfill_progress.json": "bc55b8ddac", "eum_enroll.json": "385a21e620", "eum_signals.json": "56eac66cb2", "eum_usage.json": "618e333190", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "f0e810669d", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "802900e157", "jeongbi_poly_seoul.json": "48ad1d52e7", "jigu_school_signals.json": "75dd93fb5f", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "a0889f8091", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2ecab7ae05", "mega_signals.json": "d2442c0fd4", "methodology.html": "41060ec2cb", "park_signals.json": "04f5d9badf", "privacy.html": "217d09c9a3", "push_feed.json": "a5e84d6a26", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "32ecd2a2ef", "rail_reference.html": "e40ce35eb1", "rail_signals.json": "635c9f7c63", "region_gaps.json": "47d45941c6", "regions.json": "b7c757393f", "report.html": "1d9115dd18", "retail_signals.json": "e318b47000", "road_signals.json": "1a4fe89a52", "robots.txt": "2312aa6291", "school_signals.json": "4cea606864", "settings.html": "d825ba6ca1", "sfz_signals.json": "ec202d8174", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "887425a509", "signals.json": "3f3409fd49", "signals_auto.json": "0100adfef3", "signals_jeongbi_all.json": "7008b33d86", "sitemap.xml": "a7a34c191f", "source_status.html": "04a84956c0", "sw.js": "bd80e753e7", "thresholds.json": "8a00286be2", "upis_facility_geom.json": "9b22ce4a0b", "upis_on_road.json": "3033c0bf83", "weekly.html": "4de5f1c665", "weekly_index.json": "6ba06f590e"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260927c");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "6f353d5dcf", "adverse_funeral.json": "560f1cc55f", "apartments_all.json": "e8d3381aed", "arch_signals.json": "f98396171a", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "9d22cef3d8", "corridor_diff.json": "5478f66613", "dart_signals.json": "2e7502b5e0", "dps_signals.json": "ada493bbf4", "eum_backfill_progress.json": "ae3c6c95fe", "eum_enroll.json": "31e55dfaa3", "eum_signals.json": "0b7957c2de", "eum_usage.json": "03b271f483", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "f0e810669d", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "802900e157", "jeongbi_poly_seoul.json": "b92fa8052e", "jigu_school_signals.json": "75dd93fb5f", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "a0889f8091", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2ecab7ae05", "mega_signals.json": "d2442c0fd4", "methodology.html": "aa54046532", "park_signals.json": "04f5d9badf", "privacy.html": "217d09c9a3", "push_feed.json": "a172ab57b9", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "9fe09d616e", "rail_reference.html": "ca3eb3027d", "rail_signals.json": "635c9f7c63", "region_gaps.json": "1a9d5e8ecb", "regions.json": "b7c757393f", "report.html": "1d9115dd18", "retail_signals.json": "e318b47000", "road_signals.json": "b77d81d54b", "robots.txt": "2312aa6291", "school_signals.json": "4cea606864", "settings.html": "d825ba6ca1", "sfz_signals.json": "ec202d8174", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "887425a509", "signals.json": "3f3409fd49", "signals_auto.json": "0100adfef3", "signals_jeongbi_all.json": "7008b33d86", "sitemap.xml": "a7a34c191f", "source_status.html": "e00891ec2c", "sw.js": "bd80e753e7", "thresholds.json": "8a00286be2", "upis_facility_geom.json": "9b22ce4a0b", "upis_on_road.json": "c4fc586d13", "weekly.html": "4de5f1c665", "weekly_index.json": "6ba06f590e"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260927d");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
