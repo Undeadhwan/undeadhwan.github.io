@@ -2784,7 +2784,7 @@
   </script>
 </head>
 <body>
-<noscript><p style="padding:16px">호재맵은 철도·도로·산업단지·재개발 등 공식 고시·인허가 자료에서 부동산 개발 호재 신호를 모아 지도에서 단계별로 추적하는 서비스입니다. 지도는 자바스크립트가 필요합니다. <a href="weekly.html">주간 신호</a> · <a href="methodology.html">데이터 소스·방법론</a></p></noscript>
+<noscript><p style="padding:16px">호재맵은 철도·도로·산업단지·재개발 등 공식 고시·인허가 자료에서 부동산 개발 호재 신호를 모아 지도에서 단계별로 추적하는 서비스입니다. 지도는 자바스크립트가 필요합니다. <a href="weekly.html">주간 신호</a> · <a href="sources.html">데이터 출처</a></p></noscript>
 <header>
   <div class="logo">호재맵</div>
   <!-- ★ 데이터 기준 시각 배지 (2026-09-06 세션101 · 알렉스 「배포 됐어?」「라이브 확인해줘」 5회 · 예약 빌드 3주 무음 실패).
@@ -2863,7 +2863,7 @@
     <span class="chip" onclick="window.open('admin.html','_blank')" title="운영 도구 전부 — 기준 설정 · 대장 · 주간 변경 · 접속 기록">🔧 관리자</span>
     <span class="chip" id="v-settings" onclick="window.open('settings.html','_blank')" title="등급 눈금(면적·금액·세대수)과 영향 반경을 thresholds.json에 직접 설정 — 운영자 전용">⚙ 기준 설정</span>
     <span class="chip" onclick="window.open('rail_reference.html','_blank')" title="신규 철도 노선·역사 좌표 대장 (영향권 기준)">🚈 노선·역 대장</span>
-    <span class="chip" onclick="window.open('methodology.html','_blank')" title="데이터 소스·추출·가공·매핑 방법 (운영 문서)">📄 데이터·방법론</span>
+    <span class="chip" onclick="window.open('sources.html','_blank')" title="데이터 출처 · 표기 원칙">📄 데이터 출처</span>
     <span class="chip" onclick="window.open('report.html','_blank')" title="주간 무인 수집 회전에서 바뀐 것 (자동 생성)">🗞 주간 변경</span>
   </div>
   <label class="opswitch" id="opswitch" title="운영 도구(기준 설정·등급 없음 목록·대장·주간 변경) 표시 — 로컬 또는 ?ops=1로 켠 브라우저에서만 보입니다">운영 모드<i></i></label>
@@ -2902,7 +2902,7 @@
   <div id="layerstack" aria-label="지도 레이어"></div>
   <div id="zoomstack"></div>
   <div id="hjlegend"></div>
-  <div id="hjrules" hidden><b>표기 규칙</b><br>색 = 유형 · 마커 안 문자 = 등급(S·A·B·C) · 계획 = 점선, 확정 이후 = 실선 · 도로 = 속이 빈 두 줄, 철도 = 채운 한 줄.<br>위치 근사는 마커를 <b>가리키거나 선택</b>할 때 후광으로 · 겹친 호재는 <b>유형 도넛</b>으로 묶입니다.<br><a href="methodology.html" target="_blank">데이터 · 방법론</a><br><span style="color:var(--m)">투자 권유 아님 · 모든 신호는 미확정 — 사실(단계·날짜·거리)만 표시하며 매수/매도 판단은 다루지 않습니다. · <a href="privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a></span></div>
+  <div id="hjrules" hidden><b>표기 규칙</b><br>색 = 유형 · 마커 안 문자 = 등급(S·A·B·C) · 계획 = 점선, 확정 이후 = 실선 · 도로 = 속이 빈 두 줄, 철도 = 채운 한 줄.<br>위치 근사는 마커를 <b>가리키거나 선택</b>할 때 후광으로 · 겹친 호재는 <b>유형 도넛</b>으로 묶입니다.<br><a href="sources.html" target="_blank">데이터 출처 · 표기 원칙</a><br><span style="color:var(--m)">투자 권유 아님 · 모든 신호는 미확정 — 사실(단계·날짜·거리)만 표시하며 매수/매도 판단은 다루지 않습니다. · <a href="privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a></span></div>
   <!-- 모바일 하단 요약 바 — 조회조건에 맞는 신호 수 + 이번 주 **문서상** 움직임.
        ⚠ 관측일(basis=observed)은 「그날 움직였다」가 아니므로 이 숫자에 넣지 않는다
        (그걸 뭉쳐서 "이번 주 움직임 2,588건"이 됐던 사고 — §movBasis 주석). -->
@@ -4973,7 +4973,7 @@ const JEONGBI_LICENSED = true;
 // 신규 철도 노선: OSM 실제 선형(railway=construction/proposed) 기반 재구축 → 활성.
 // 건설중=실선, 계획=점선(§7). 출처 OpenStreetMap(ODbL, 지도 하단·툴팁 표기).
 const RAIL_READY = true;
-let DONG_GEO = null, SGG_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [], JEONGBI_SIG = [], RAIL = [], RAIL_SIG = [], DART = [], DART_SIG = [], ARCH = [], ARCH_SIG = [], ROADF = [], ROAD_SIG = [], UPIS_SIG = [], DPS_SIG = [], SH_SIG = [], MASTER_SIG = [], JOBS_SIG = [], MEGA_SIG = [], EUM_SIG = [], ADVERSE = [];
+let DONG_GEO = null, SGG_GEO = null, SIDO_GEO = null, SIGNALS = [], MACRO = [], AUTO = [], APTS = [], REGIONS = null, JEONGBI = [], JEONGBI_POLY = [], JEONGBI_SIG = [], RAIL = [], RAIL_SIG = [], DART = [], DART_SIG = [], ARCH = [], ARCH_SIG = [], ROADF = [], ROAD_SIG = [], UPIS_SIG = [], DPS_SIG = [], SH_SIG = [], MASTER_SIG = [], JOBS_SIG = [], MEGA_SIG = [], EUM_SIG = [], ADVERSE = [];
 /* ★ 관찰 게이트로 풀 밖에 둔 신호 수 — 소스별 (2026-09-08 세션107 · 핸드오프 할 일 4 「관찰 게이트 건수를 건수 설명 깔때기에도」).
    자는 어댑터의 **그 필터 자체**다 — `gateObs(src)`가 거르면서 센다(따로 세면 갈린다). 선(노선)은 buildRailLines·renderRail의 같은 `continue`에서 센다.
    countExplain이 깔때기 뒤에 「판별 대기 N건 — 소스별」 한 줄로 말한다(종전엔 시군 피드 「이 지역 결손」만 말했다). 게이트 = html_check.count_explain_check. */
@@ -6465,7 +6465,7 @@ function applyRegion(sd, sg, dong) {
 }
 function selectSido(sd) {
   applyRegion(sd, null, null);
-  if (sd) loadBdongFor(sd);   // 그 시도 법정동 경계 지연 로드(전국 분할) — 도착 시 syncRegionBar가 읍면동 채움
+  // ★ 시도 선택은 법정동 파일을 받지 않는다(2026-09-28 · sggRingsShared 시도 주석) — 시군구를 고를 때(selectSgg·showSgg) 받는다
   fillRegion("r-sgg", sd ? sggListOf(sd) : [], "시군구 선택");
   fillRegion("r-dong", [], "읍면동 선택");
   /* ☠ **시도 범위 그리기는 철회했다** (2026-09-07 · 같은 날 넣고 같은 날 되물렀다).
@@ -6482,6 +6482,7 @@ function selectSido(sd) {
 }
 function selectSgg(sg) {
   applyRegion(nav.sd, sg, null);
+  if (sg && nav.sd) loadBdongFor(nav.sd);   // 그 시도 법정동 경계 지연 로드 — 시군구 정밀 범위·읍면동 목록(도착 시 syncRegionBar가 채운다 · 2026-09-28 시도 선택에서 옮김)
   fillRegion("r-dong", sg ? dongsOfSgg(nav.sd, sg) : [], "읍면동 선택");   // 경계 있는 시도(서울·경기·인천)면 읍면동 채움
   if (sg) regionGo(`${nav.sd} ${sg}`);
   else if (nav.sd && SIDO_CENTER[nav.sd]) regionJump(SIDO_CENTER[nav.sd][0], SIDO_CENTER[nav.sd][1], nav.sd === "서울" ? 7 : 8);   // 한 번에(2026-09-28)
@@ -6571,16 +6572,17 @@ function sggRingsShared(disp) {
   const [sd, ...rest] = String(disp || "").split(" ");
   const sg = rest.join(" ");
   if (!sg) {
-    /* ★★ **시도 범위는 union하지 않는다 — 시군구 링을 모아 채움만 그린다** (2026-09-07 · 알렉스 「서울시 선택하면 아예 안 나온다」).
-       ☠ 같은 날 시도를 **동 전체 합집합**으로 그렸다가 되물렀다: 잔재가 주 링에 엮여 한강에 선이 그어지고(서울),
-         접경이 톱니가 되고(경기 283링 1,793ms), 동이 안 온 시도는 폴백이 구별 러프 폴리곤을 나열했다(부산).
-       ⇒ union을 아예 하지 않는다. 시군구 링은 **각각 이미 깨끗한 1링**이고(포함 필터), 그것들을 나란히
-         **테두리 없이** 칠하면 인접 채움이 하나로 이어져 범위만 남는다 — 내부 선이 생길 자리가 없다. */
-    const out = [];
-    for (const nm of new Set((DONG_GEO?.features || []).filter(f => (f.properties.sido || "서울") === sd).map(f => f.properties.sgg))) {
-      if (nm) sggRingsFromDong(sd, nm).forEach(r => out.push(r));
-    }
-    return out.length ? (c[disp] = out) : [];    // 동이 아직 없으면 빈 배열 → 종전 중심 이동
+    /* ★★ **시도 범위 = 빌드 산출물 `sido_all.geojson`** (2026-09-28 세션140 · 알렉스 「경기도를 선택했더니 엄청 버벅이고 오래 걸리네 · 전체를 다 불러오는 방식은 위험」).
+       종전(2026-09-07)은 그 시도 법정동 파일(경기 1.8MB · 도착 처리 835ms 롱태스크)을 받아 시군구마다 동 합집합을 만들고 316링 · 28,470정점을
+       그렸다(2026-09-28 라이브 실측) — 시도 줌에서는 동 정확도가 필요 없는데 시도를 고를 때마다 그 비용을 냈다. 09-07 문서가 「제대로 하려면 빌드에서
+       정합된 경계를 만들어 배송해야 한다」고 적어 둔 그 산출물이다: 시군구 정밀 경계의 시도별 union(틈 메움 · 100m 단순화 · 작은 섬 제외 ·
+       경기 1,743정점 · 전체 182KB gz · `build_sido_geo.py`). 파일은 시도를 처음 고를 때 한 번 받는다(`loadSidoGeo`) — 도착 전엔 중심 이동, 도착하면 그린다.
+       ⇒ 시도 선택은 법정동 파일을 **받지 않는다**(시군구를 고르면 그때 받는다 · 게이트 `region_click_check`). */
+    const f = (SIDO_GEO?.features || []).find(x => x.properties.sido === sd);
+    const out = f ? ringsOf(f) : [];
+    if (out.length) return (c[disp] = out);
+    if (!SIDO_GEO && !_sidoGeoFailed) loadSidoGeo(() => { if (nav && nav.sd === sd && !nav.sg && filter.sd === sd) regionGo(sd); });   // 도착 시 다시 그린다(실패면 안 묻는다 — 고리 방지)
+    return [];                                     // 아직 없으면 빈 배열 → 종전 중심 이동
   }
   const fine = sggRingsFromDong(sd, sg);
   if (fine.length) return (c[disp] = fine);      // 동 합집합 = 동 수준 정확도(전송 0)
@@ -6664,7 +6666,8 @@ function regionGo(disp) {
   mapFit(rings.flat().map(([x, y]) => [y, x]), 30);
   // 시도 = 구 링 채움 + 시도 외곽선(sidoOutline) · 시군구 = 링 채움 + 링 자신의 변 판정 테두리(ringsOutline) — 둘 다 채움과 선을 가른다(2026-09-08)
   const isSd = !String(disp || "").includes(" ");
-  mapApi?.highlightRings?.(rings, { stroke: false, outline: isSd ? sidoOutline(String(disp || "").split(" ")[0]) : ringsOutline(rings) });
+  // 시도 = 산출물 링이 곧 외곽선(정합된 한 폴리곤 · 2026-09-28) — 종전 변 판정 sidoOutline(동 링 필요)은 쓰지 않는다
+  mapApi?.highlightRings?.(rings, { stroke: false, outline: isSd ? rings : ringsOutline(rings) });
   return true;
 }
 /* 지도/배지 클릭으로 진입 시 드롭다운 값 동기화 */
@@ -7686,7 +7689,7 @@ function renderDetailV2(s, host) {
       ${evidenceFold(s)}
     </div>
     ${(() => { const r = relHtml(s); return r ? `<div class="dhr"></div>${r}` : ""; })()}
-    <div class="dfoot"><details class="rulefold"><summary>표기 규칙 · 영향 반경 기준</summary><div class="note">완료=날짜(사실) · 미래=목표/미정 · 진척률(%) 없음 · 영향 반경은 유형 기준표 가안</div></details><a class="ruledoc" href="methodology.html" target="_blank" rel="noopener">기준 전문 →</a></div>
+    <div class="dfoot"><details class="rulefold"><summary>표기 규칙 · 영향 반경 기준</summary><div class="note">완료=날짜(사실) · 미래=목표/미정 · 진척률(%) 없음 · 영향 반경은 유형 기준표 가안</div></details><a class="ruledoc" href="sources.html#rules" target="_blank" rel="noopener">표기 원칙 →</a></div>
   </div>`;
 }
 
@@ -7702,6 +7705,7 @@ function showSgg(disp) {
   const dp = disp.split(" "); nav.sd = dp[0]; nav.sg = dp.slice(1).join(" "); nav.dong = null;
   // 지도에서 고른 지역도 **조회 범위**다 — 드롭다운만 바뀌고 목록·집계는 전 지역이면 두 화면이 갈린다.
   filter.region = `${nav.sd} ${nav.sg}`; filter.dong = ""; filter._autoRegion = true; syncRegionBar();   // 뷰가 건 지역축 — closePanel/goHome이 되돌린다
+  loadBdongFor(nav.sd);   // 시군구 정밀 범위(동 합집합)는 그 시도 법정동 파일이 필요하다 — 도착 시 regionGo가 다시 그린다(2026-09-28 · 시도 선택에서는 안 받는다)
   ANIMATE = true;
   renderPanel(); mapApi?.clearRadius(); mapApi?.clearRoute?.(); mapApi?.clearAptMarker?.();
   mapApi?.refreshPins?.();
@@ -8632,7 +8636,7 @@ function renderDock() {
          바뀌었는데(시안 §01) 문구만 남아 화면이 없는 부품을 가리켰다. 부품을 바꾸면 그 부품을
          설명하는 글도 같이 바뀐다(PROCEDURE_화면품질 — 규칙·이름은 언제나 쌍으로 존재한다). -->
     <div class="dk-foot"><details class="dkmore"><summary>표기 규칙</summary>위치 근사는 마커를 <b>가리키거나 선택</b>할 때 후광으로 · 겹친 호재는 <b>유형 도넛</b>으로 묶임</details>
-      <a href="methodology.html" target="_blank">데이터 · 방법론</a>
+      <a href="sources.html" target="_blank">데이터 출처 · 표기 원칙</a>
       <div class="dk-legal">투자 권유 아님 · 모든 신호는 미확정 — 사실(단계·날짜·거리)만 표시하며 매수/매도 판단은 다루지 않습니다. · <a href="privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a></div></div>`;
   /* sticky 대분류 머리가 **어디에 머무는지**를 헤더에서 잰다(시안 §03). 헤더는 지역명 길이에 따라
      두 줄이 되므로 상수로 박으면 그때 머리가 헤더 밑으로 숨는다 — 세지 않고 잰다. */
@@ -9597,7 +9601,7 @@ function renderFlow() {
   let html = `<div class="fwrap${_v2 ? " fv2" : ""}">
     <!-- 부제·요약줄을 뺐다 (2026-08-12 사용자 "제거"): 지역은 좌측 헤더가, 건수는 아래
          세그먼트가 이미 말한다 — 같은 말을 세 군데서 하면 정작 목록이 밀린다. -->
-    ` + (!_v2 ? flowCondLine() : "") + (_v2 ? `<div class="fleft">${ctrlHtml}<div class="flinks"><a href="methodology.html" target="_blank" rel="noopener">표기 규칙 ▾</a> · <a href="methodology.html" target="_blank" rel="noopener">데이터 · 방법론</a></div></div><div class="fright">` : (_ctrlHost ? "" : ctrlHtml))
+    ` + (!_v2 ? flowCondLine() : "") + (_v2 ? `<div class="fleft">${ctrlHtml}<div class="flinks"><a href="sources.html#rules" target="_blank" rel="noopener">표기 원칙</a> · <a href="sources.html#sources" target="_blank" rel="noopener">데이터 출처</a></div></div><div class="fright">` : (_ctrlHost ? "" : ctrlHtml))
     + (future.length ? `<div class="fempty" style="margin:2px 0 6px">※ ${future.length.toLocaleString()}건은 소스의 날짜가 <b>아직 오지 않은 날</b>(착공 예정일 등)이라 움직임으로 세지 않았습니다</div>` : "");
   html += shown.length ? `<div class="fg" data-g="main"></div>`
     : flowEmptyHtml();   // 조건을 되읽고 넓히는 길을 건수와 함께(2026-09-25 · 종전 「기간을 넓혀 보세요」 한 줄은 조건을 말하지 않았다)
@@ -10470,10 +10474,10 @@ function mapSrcMount() {
   if (!el || el.querySelector(".mapsrc")) return;                // 멱등 — mylocMount와 같은 규약
   const a = document.createElement("a");
   a.className = "mapsrc";
-  a.href = "methodology.html#sources";
+  a.href = "sources.html#sources";   // 공개용 출처 페이지(2026-09-28 알렉스 「노하우 공개는 줄이고 꼭 해야 되는 것만」 — 상세 방법론은 운영 문서)
   a.target = "_blank"; a.rel = "noopener";
   a.textContent = "데이터 출처";
-  a.title = "국토교통부·지자체 공식 고시와 공공데이터를 씁니다 — 소스별 출처·이용조건 보기";
+  a.title = "국토교통부·지자체 공식 고시와 공공데이터를 씁니다 — 출처·이용조건 보기";
   el.appendChild(a);
 }
 function baseMapMount() {
@@ -12178,7 +12182,7 @@ function initKakao() {
       + (_fr && _fr.textContent ? '<i class="hjsep"></i><span class="' + (_fr.classList.contains('stale') ? 'hjstale' : '') + '">' + _fr.textContent + '</span>' : '')
       + '<i class="hjsep"></i><span class="hjauto">지도 이동 시 자동 조회</span>' + (_rg ? '<i class="hjsep"></i><span class="hjrr" onclick="resetRegionOnly()">지역 해제</span>' : '');
     // 오른쪽 = 데이터 출처(시안) — 축척은 카카오 것이 지도 우하단에 남는다(약관 표기는 가리지 않는다 · DESIGN 「카카오 로고·축척」)
-    const _right = '<span class="hjright"><a class="hjsrc" href="methodology.html#sources" target="_blank" rel="noopener" title="국토교통부·지자체 공식 고시와 공공데이터를 씁니다 — 소스별 출처·이용조건 보기">데이터 출처</a></span>';
+    const _right = '<span class="hjright"><a class="hjsrc" href="sources.html#sources" target="_blank" rel="noopener" title="국토교통부·지자체 공식 고시와 공공데이터를 씁니다 — 출처·이용조건 보기">데이터 출처</a></span>';
     _hjCountEl.innerHTML = '<span class="hjn"><b>' + pool.length.toLocaleString() + '</b>' + (SRC_PENDING.size
           ? '건 표시 중 <span class="hjauto">· ' + [...SRC_PENDING].join('·') + ' 불러오는 중</span>'
           : dotBandLv(lv) ? '<span class="hjsl">/</span><b>' + _tot + '</b>건 표시'
@@ -14365,8 +14369,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "bb83bfbecd", "adverse_funeral.json": "1d0ccab7b8", "apartments_all.json": "789b6b6643", "arch_signals.json": "3dc20762c0", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "0bd1106a70", "corridor_diff.json": "3d4f9a8f23", "dart_signals.json": "1bbea8c65d", "dps_signals.json": "d3a4be7a73", "eum_backfill_progress.json": "e45930c471", "eum_enroll.json": "35ac2799ab", "eum_signals.json": "11f81effee", "eum_usage.json": "e7d078019e", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "fea94c7563", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "c60d555823", "jeongbi_poly_seoul.json": "b92fa8052e", "jigu_school_signals.json": "6f4d39f4fb", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "70379f544e", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "bd070c5ec7", "mega_signals.json": "aa5ae953b4", "methodology.html": "827766ab3a", "park_signals.json": "8a0a230b0f", "privacy.html": "217d09c9a3", "push_feed.json": "e91898b9c1", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "a7c2e206f2", "rail_reference.html": "178bab71de", "rail_signals.json": "c247bb5096", "region_gaps.json": "73b3aaffc6", "regions.json": "b7c757393f", "report.html": "295591664d", "retail_signals.json": "2ec514abe5", "road_signals.json": "761c62d34c", "robots.txt": "2312aa6291", "school_signals.json": "944a92a578", "settings.html": "d825ba6ca1", "sfz_signals.json": "227c855a7f", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "ac2a9519a8", "signals.json": "3f3409fd49", "signals_auto.json": "473c5f55fe", "signals_jeongbi_all.json": "765b03e70c", "sitemap.xml": "be2c10cdcb", "source_status.html": "534ec09563", "sw.js": "bd80e753e7", "thresholds.json": "8a00286be2", "upis_facility_geom.json": "98cbcea89a", "upis_on_road.json": "b1b6fdf57e", "weekly.html": "bcce0760e2", "weekly_index.json": "9a8db27033"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260928c");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "bb83bfbecd", "adverse_funeral.json": "1d0ccab7b8", "apartments_all.json": "789b6b6643", "arch_signals.json": "3dc20762c0", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "de344a4a55", "corridor_diff.json": "6eedc362ed", "dart_signals.json": "1bbea8c65d", "dps_signals.json": "d3a4be7a73", "eum_backfill_progress.json": "b1b7040f65", "eum_enroll.json": "35ac2799ab", "eum_signals.json": "042a32c604", "eum_usage.json": "f8907cba9f", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "fea94c7563", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "c60d555823", "jeongbi_poly_seoul.json": "b92fa8052e", "jigu_school_signals.json": "6f4d39f4fb", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "70379f544e", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "bd070c5ec7", "mega_signals.json": "aa5ae953b4", "methodology.html": "827766ab3a", "park_signals.json": "73fa1e7fd2", "privacy.html": "217d09c9a3", "push_feed.json": "9c7b96c74f", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "ce82af6c91", "rail_reference.html": "178bab71de", "rail_signals.json": "c247bb5096", "region_gaps.json": "a276ffe8c1", "regions.json": "b7c757393f", "report.html": "295591664d", "retail_signals.json": "88f66d11bb", "road_signals.json": "761c62d34c", "robots.txt": "21147e58c5", "school_signals.json": "e2ba9ef92a", "settings.html": "d825ba6ca1", "sfz_signals.json": "227c855a7f", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "ac2a9519a8", "sido_all.geojson": "5f0962db48", "signals.json": "3f3409fd49", "signals_auto.json": "473c5f55fe", "signals_jeongbi_all.json": "765b03e70c", "sitemap.xml": "b1e18d6ae4", "source_status.html": "534ec09563", "sources.html": "a6379bd1cd", "sw.js": "bd80e753e7", "thresholds.json": "8a00286be2", "upis_facility_geom.json": "98cbcea89a", "upis_on_road.json": "1e725b1e97", "weekly.html": "381f42eab0", "weekly_index.json": "9a8db27033"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260928d");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
@@ -14651,6 +14655,19 @@ const bdongLoadWanted = () => { const m = window._map; if (!m) return false;
   return m.getLevel ? m.getLevel() <= BDONG_LOAD_LV : (m.getZoom ? m.getZoom() >= 18 - BDONG_LOAD_LV : true); };
 const bdongLoaded = new Set(["서울"]);   // 서울은 부트에서 블로킹 로드됨
 const bdongLoading = new Set();
+/* 시도 경계 산출물(`sido_all.geojson` · build_sido_geo.py) — 시도를 처음 고를 때 한 번 받는다(182KB gz · 2026-09-28). 콜백은 도착 뒤 한 번(이미 있으면 즉시). */
+let _sidoGeoReq = null, _sidoGeoFailed = false;
+function loadSidoGeo(cb) {
+  if (SIDO_GEO) { cb && cb(); return; }
+  if (_sidoGeoFailed) return;   // 못 받았으면(404·네트워크) 다시 묻지 않는다 — 콜백이 regionGo를 부르고 그것이 다시 여기로 오면 **끝없는 마이크로태스크 고리**가 된다(2026-09-28 로컬 시험이 걸렸다)
+  if (!_sidoGeoReq) {
+    performance.mark("sido:start");
+    _sidoGeoReq = fetch("sido_all.geojson" + cbOf("sido_all.geojson")).then(r => r.ok ? r.json() : null)
+      .then(d => { if (d && d.features) SIDO_GEO = d; else _sidoGeoFailed = true; performance.mark("sido:end"); })
+      .catch(e => { _sidoGeoFailed = true; console.warn("시도 경계", e); });
+  }
+  _sidoGeoReq.then(() => { if (SIDO_GEO) { try { cb && cb(); } catch (e) { console.warn("시도 경계 콜백", e); } } });   // 받았을 때만 — 실패면 종전 중심 이동으로 남는다
+}
 function loadBdongFor(sd) {
   if (!BDONG_IDX || !sd || bdongLoaded.has(sd) || bdongLoading.has(sd) || !BDONG_IDX[sd]) return;
   bdongLoading.add(sd);
