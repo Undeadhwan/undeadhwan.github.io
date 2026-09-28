@@ -1404,15 +1404,12 @@
   .facmk0 { display:block; width:10px; height:10px; background:var(--c-ref); transform:rotate(45deg); border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.35); }
   .facleg .facmk0 { display:inline-block; width:8px; height:8px; margin-right:6px; vertical-align:0; }
   .facmk0.plan { background:transparent; border:2.5px solid var(--c-ref); box-shadow:none; }   /* 계획·일부 = **흰 테두리 없는 윤곽선**(지도가 비쳐 보인다) — 지어짐(채움 + 흰 테두리)과 한눈에 갈리게(2026-09-26 알렉스 「준공인지 계획인지 구분이 잘 안 된다 · 계획은 흰 테두리를 없애」 · 종전 흰 속 마름모는 흰 테두리처럼 보였다) · 속 빈 = 호재 문법 「계획 = 속 빈 원」과 같은 뜻(2026-09-25 알렉스 「가」) */
-  .facleg .facmk0.plan { margin-left:4px; }
   .facmk0.up { outline:1.5px dashed var(--c-ref); outline-offset:2px; }   /* 증설 계획 ◈ = 채운 마름모(지어짐) + **점선** 바깥 테(계획) — 2026-09-28 알렉스 「2번째 3번째 생긴것도 비슷해서 헷갈려」: 종전 실선 테는 「큰 ◆」로 읽혔다 */   /* 운영 중 · 증설·변경 계획(환경영향평가) = 지어짐 마름모 + 바깥 윤곽(계획 윤곽을 겹친 모양 · 2026-09-26 알렉스 「마곡열병합 … 기존 시설의 업그레이드」) */
   .faccard .facplan { font-weight:600; }   /* 증설·변경 계획 줄 — 색 채널은 쓰지 않는다(정체색 등과 뜻이 겹친다) */
   /* 범례는 원(`#hjlegend i`·`.mly-legend i`의 border-radius:50%)이 아니라 지도와 같은 **마름모**로 · 어두운 막대 위에선 참고층 슬레이트가 묻혀(2026-09-26 캡처 —
      계획 윤곽이 거의 안 보였다) 밝은 슬레이트(크롬 토큰 --m)로 같은 문법(지어짐 = 채움 + 흰 테두리 · 계획 = 흰색 없는 윤곽)을 그린다. */
   #hjlegend .facleg .facmk0, #mlayers .mly-legend .facleg .facmk0 { border-radius:0; }
   #hjlegend .facleg .facmk0 { background:var(--m); }
-  #hjlegend .facleg .facmk0.plan { background:transparent; border-color:var(--m); border-width:2px; }
-  #hjlegend .facleg .facmk0.up { outline-color:var(--m); }
   .facdi { background:none; border:0; }
   .facmk .faccard { display:none; position:absolute; left:14px; top:-6px; z-index:4; width:280px; background:#fff; color:#151618; border-radius:10px; padding:10px 12px;
     box-shadow:0 0 0 1.5px var(--c-ref), 0 8px 24px rgba(0,0,0,.25); font-size:12.5px; line-height:1.45; cursor:default; flex-direction:column; gap:3px; white-space:normal; }
@@ -4309,6 +4306,22 @@ function noteRow(s) {
    아홉이 똑같이 「원문 N」이었던 것. 빌드(eum_gosi --reclass)가 색인에서 고시일·고시번호·제목을 sources와 같은 index로 붙인다
    (src_meta). 여기서는 날짜 내림차순으로 보이고, 같은 고시번호는 한 줄로 접는다(색인 중복 실측: 김포 2023-76호가 두 seq).
    세 건 넘으면 나머지는 펼쳐야 보인다(비고와 같은 「빼는 게 아니라 접는」 문법). 사실이 없으면(빌드 전) ""를 내고 종전 근거 행이 그린다. */
+/* ★ 근거 링크 라벨 — **호스트(와 경로 머리)로** 가른다 (2026-09-29 세션142 · 알렉스 「호재의 근거자료 매칭이 이상한거 많던데 전수로 검증 가능한가?」 · 전수 감사 evidence_audit.py).
+   ☠ 종전 규칙은 주소 **부분 문자열**이었다 — `gg.go.kr`이 경기 도시계획 고시(sido.gg.go.kr/citynet)까지 「경기 정비현황」으로 · `data.go.kr`이 재정정보원(openfiscaldata.go.kr)까지
+     「공공데이터포털」로 · `opendart`만 알아 DART 공시(dart.fss.or.kr)가 「원문 1」로 나갔다(2026-09-29 실측 경기 21 · 재정 18 · DART 21). 규칙은 SRC_HOST 표 하나(html_check.src_label_check가 합성 주소로 잰다). */
+const SRC_HOST = [
+  [/^(www\.)?hub\.go\.kr$/, p => /^\/portal\/dps/.test(p) ? "건축HUB 설계공모" : "건축HUB 열람"], [/(^|\.)eais\.go\.kr$/, () => "세움터"],
+  [/^(opendart|dart)\.fss\.or\.kr$/, () => "DART 공시"], [/(^|\.)g2b\.go\.kr$/, () => "나라장터 공고"], [/^cleanup\.seoul\.go\.kr$/, () => "정비몽땅"],
+  [/^sido\.gg\.go\.kr$/, p => /citynet/.test(p) ? "경기 도시계획 고시" : "경기도 누리집"], [/^data\.gg\.go\.kr$/, () => "경기 정비현황"], [/^governor\.gg\.go\.kr$/, () => "경기도 보도"],
+  [/(^|\.)jigu\.go\.kr$/, () => "택지정보"], [/^(www\.)?data\.go\.kr$/, () => "공공데이터포털"], [/(^|\.)openfiscaldata\.go\.kr$/, () => "재정정보(예산)"],
+  [/(^|\.)gwanbo\.go\.kr$/, () => "관보 원문"], [/(^|\.)eum\.go\.kr$/, () => "토지이음 고시"], [/(^|\.)calspia\.go\.kr$/, () => "건설사업정보"],
+  [/(^|\.)korea\.kr$/, () => "정책브리핑"], [/(^|\.)molit\.go\.kr$/, () => "국토부 원문"], [/(^|\.)nlic\.go\.kr$/, () => "물류단지 목록"]];
+function srcLabel(u, s, i) {
+  let h = "", pth = "";
+  try { const x = new URL(u); h = x.hostname; pth = x.pathname; } catch (e) { return `원문 ${i + 1}`; }
+  for (const [rx, f] of SRC_HOST) if (rx.test(h)) return f(pth);
+  return (s.sources.length === 1 && s.src_name ? esc(String(s.src_name).split("—")[0].trim()) + " 원문" : `원문 ${i + 1}`);
+}
 function gosiHistory(s) {
   const meta = s.src_meta, srcs = s.sources || [];
   if (!s._eum || !Array.isArray(meta) || meta.length !== srcs.length || !meta.some(m => m && m.date)) return "";
@@ -4365,7 +4378,7 @@ function msTrack(s) {
   // 단계 확인일 — 교통 단계는 자동 갱신되지 않는 수동 SSOT라, 마지막으로 대조한 날짜가 곧 근거다.
   const chk = s.stage_checked
     ? `<div class="msmeta" style="margin-top:6px">${s.stage_checked} 확인`
-      + (s.stage_src ? ` · <a href="${s.stage_src}" target="_blank" rel="noopener">근거</a>` : "") + `</div>`
+      + (/^https?:/.test(s.stage_src || "") ? ` · <a href="${s.stage_src}" target="_blank" rel="noopener">근거</a>` : "") + `</div>`
     : "";
   return `<div class="mstrack">` + out.join("") + chk + `</div>`;
 }
@@ -4430,7 +4443,7 @@ function stationNos(list) {
 function stationLabel(x, no) {
   return no == null ? chipName(x) : String(no);
 }
-function chipGo(i) { const x = window._chipSigs?.[i]; if (!x) return; if (x.geometry?.coordinates) mapApi?.panTo?.(x.geometry.coordinates); showSignal(x, true); }   // 칩 클릭=그 지점으로 지도 이동(2026-07-22 — 종전 pan=false라 이동 안 됨)
+function chipGo(i) { const x = window._chipSigs?.[i]; if (!x) return; showSignal(x, true); }   // 칩 클릭=그 지점으로 지도 이동(2026-07-22 — 종전 pan=false라 이동 안 됨) · 이동은 showSignal(…, true) 하나(2026-09-29 — 종전 panTo를 먼저 불러 카카오 panTo와 미끄러짐이 두 번 움직였다)
 /* 그 노선에 **그릴 수 있는 선형**이 있나. geom_omitted = "공식 지점이 성겨 직선이 실제 경로와
    다르다"고 판정해 일부러 뺀 선형(2026-07-23 정직 표준, 도로 59건). 숨긴 이유가 '거짓이라서'인데
    하이라이트는 그걸 안 보고 그려서, 클릭하면 가장 굵은 표현으로 되살아났다(2026-07-29 수정). */
@@ -5698,19 +5711,26 @@ function mapGlide(lat, lon) {
     span = Math.max(Math.abs(lat - la0) / (n - s), Math.abs(lon - lo0) / (e - w));
   } catch (e) {}
   if (!isFinite(span)) span = 1;
-  const dur = Math.min(650, 280 + 120 * span), t0 = performance.now();
+  /* ★★ **시계는 첫 프레임부터 잰다 · 비율은 0 아래로 내려가지 않는다** (2026-09-29 알렉스 「호재 클릭시 해당 위치로 한번에 가는게 아니라 다른데 갔다가 가는경우 · 김포공항 도시재생혁신지구 · 예전에도 고쳤는데 계속 남아있네」).
+     ☠ 종전엔 t0 = 호출 시각(performance.now())이었다. rAF 콜백의 시각은 **그 프레임이 예약된 시각**이라, 상세 판 그리기 같은 긴 작업 **안에서** 미끄러짐을 시작하면
+       첫 프레임 시각이 t0보다 이르다(헤드리스 실측 −213ms · 업데이트 탭 → 지도 → 호재). 그러면 x가 음수 → ease가 음수 → 첫 프레임이 **목표 반대쪽으로** 튄다
+       (부산에서 김포로 갈 때 동남쪽 바다 47~65km · 2026-09-29 `move_trace` 실측) — 그 뒤 목표로 미끄러지니 「다른 데 갔다가 간다」로 보였다. 목록에서 바로 고르면 긴 작업이 없어 재현이 들쭉날쭉했다.
+     ⇒ t0 = 첫 프레임 시각 · x는 [0, 1]로 가둔다(둘 중 하나만 있어도 튀지 않는다 — 둘 다 둔다). 안전판은 호출 시각(tCall) 기준 그대로. 게이트 `html_check.glide_clock_check`. */
+  const dur = Math.min(650, 280 + 120 * span), tCall = performance.now();
+  let t0 = null;
   const ease = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
   const done = () => { if (_glideRaf) cancelAnimationFrame(_glideRaf); _glideRaf = 0; window._mapGliding = false; window._mapGlideStop = null; };
   window._mapGliding = true;
   window._mapGlideStop = (paint = true) => { done(); if (paint) redraw(); };   // 손으로 잡음·안전판 = 그린다 · 새 이동이 멈춤 = 안 그린다(false)
   const step = now => {
-    const x = Math.min(1, (now - t0) / dur), k = ease(x);
+    if (t0 === null || now < t0) t0 = now;
+    const x = Math.min(1, Math.max(0, (now - t0) / dur)), k = ease(x);
     set(la0 + (lat - la0) * k, lo0 + (lon - lo0) * k);
     if (x < 1) _glideRaf = requestAnimationFrame(step);
     else { done(); redraw(); }
   };
   _glideRaf = requestAnimationFrame(step);
-  setTimeout(() => { if (window._mapGliding && performance.now() - t0 >= dur) { set(lat, lon); window._mapGlideStop && window._mapGlideStop(); } }, dur + 400);   // rAF가 멎은 경우의 안전판
+  setTimeout(() => { if (window._mapGliding && performance.now() - tCall >= dur) { set(lat, lon); window._mapGlideStop && window._mapGlideStop(); } }, dur + 400);   // rAF가 멎은 경우의 안전판(호출 시각 기준)
 }
 /* ★ 지도에서 **판이 가리지 않은 영역**의 왼쪽 경계(px · 지도 컨테이너 기준) — 좌측 패널·상세 판·둘째 판 중 지도 왼쪽 절반에 떠 있는 것의 오른쪽 끝.
    mapCenterOn(가운데) · mapFit(지역 맞춤) · mapShowPair(아파트+호재)가 **같은 자**를 쓴다(데스크톱만 · 폰 상세는 전면이라 0). 2026-09-28 — 종전엔 mapCenterOn만 상세 두 판을 뺐고
@@ -5805,7 +5825,7 @@ function stageCheckedHtml(s) {
   if (!s.stage_checked) return "";
   const t = "이 사업의 진행 단계를 마지막으로 공식 소스에 대조해 확인한 날짜입니다. "
           + "교통 단계는 자동 갱신되지 않으므로 사람이 확인한 시점을 함께 표시합니다.";
-  const u = s.stage_src ? ` <a href="${s.stage_src}" target="_blank" rel="noopener">근거</a>` : "";
+  const u = /^https?:/.test(s.stage_src || "") ? ` <a href="${s.stage_src}" target="_blank" rel="noopener">근거</a>` : "";   // 주소가 아니면(문장이 든 행) 링크로 그리지 않는다(2026-09-29)
   return `<span class="pmini" title="${t}">단계 확인 ${s.stage_checked}</span>${u}`;
 }
 /* 단계 줄 꼬리 — 빈 조각을 걸러 `·`를 이어 붙인다.
@@ -7714,9 +7734,7 @@ function renderDetailV2(s, host) {
   const watch = notifyOn() && typeof mbWatchSignal === "function"
     ? `<button type="button" class="dbtn" onclick="mbWatchSignal(view.signal);renderPanel()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 13.5L2.8 8.3a3 3 0 0 1 4.2-4.2L8 5.1l1-1a3 3 0 0 1 4.2 4.2z"/></svg><span>관심 등록</span></button>` : "";
   const srcRow = gosiHistory(s) || `<div class="kv"><b>근거</b> ${srcBadge(s)} <span class="src">${(s.sources || []).map((u, i) => {
-      const lbl = /hub\.go\.kr\/portal\/dps/.test(u) ? "건축HUB 설계공모" : /hub\.go\.kr/.test(u) ? "건축HUB 열람" : /eais\.go\.kr/.test(u) ? "세움터" : /opendart\.fss/.test(u) ? "DART 공시"
-        : /g2b|nara/.test(u) ? "나라장터 공고" : /cleanup\.seoul/.test(u) ? "정비몽땅" : /gg\.go\.kr/.test(u) ? "경기 정비현황" : /jigu\.go\.kr/.test(u) ? "택지정보" : /data\.go\.kr/.test(u) ? "공공데이터포털"
-        : (s.sources.length === 1 && s.src_name ? esc(String(s.src_name).split("—")[0].trim()) + " 원문" : `원문 ${i + 1}`);
+      const lbl = srcLabel(u, s, i);
       return `<a href="${u}" target="_blank" rel="noopener">${lbl} →</a>`; }).join(" · ") || "원문 링크 없음"}</span>${s.src_tier === "osm" ? ' · <b>진행단계·명칭은 공식 확인 전</b>' : ""}</div>`;
   p.innerHTML = `<div class="detail dv2">
     <div class="dtop">
@@ -9144,7 +9162,7 @@ function paintLegend() {
     + `<span><svg width="28" height="8"><path d="M2 4H26" stroke="${C}" stroke-width="4" stroke-linecap="round"/></svg>철도</span>`
     + `<span><svg width="28" height="8"><path d="M0 4H28" stroke="${C}" stroke-width="7"/><path d="M0 4H28" style="stroke:var(--ly-hole,#161826)" stroke-width="4"/><path d="M0 4H28" stroke="${C}" stroke-opacity=".25" stroke-width="4"/></svg>도로</span>`
     + `<span><svg width="28" height="8"><path d="M2 4H26" stroke="${C}" stroke-width="4" stroke-linecap="round" stroke-dasharray="0 8"/></svg>계획</span>`
-    + (facOn() ? '<span class="facleg"><i class="facmk0"></i>환경·에너지·장사시설 <i class="facmk0 plan"></i>계획·일부 <i class="facmk0 up"></i>증설 계획</span>' : "")
+    + (facOn() ? '<span class="facleg" title="채운 ◆ 운영 중 · 윤곽 ◇ 계획·일부 · 점선 테 ◈ 증설 계획 — 누르면 카드에 상태가 적힙니다"><i class="facmk0"></i>환경·에너지·장사시설</span>' : "")   /* 범례는 한 항목(2026-09-29 알렉스 「시설 관련 범례 3개나 있으니 지저분하다 · 하나로 통일」) — 상태 셋은 마커 모양과 카드 칩(facMark 한 판정)이 말한다 */
     + '<span class="sep"></span><span class="rule" role="button" tabindex="0" aria-label="표기 규칙">?</span>';
   hosts.forEach(h => { h.innerHTML = html; });
 }
@@ -14353,10 +14371,9 @@ function srchResults(qRaw) {
   return out;
 }
 function srchGoSignal(s) {
-  const pts = signalPoints(s).length ? signalPoints(s) : (s._road ? roadLinePoints(s) : []);   // 전용도로=선형 폴백(이동용)
-  if (pts.length && window._map)
-    mapCenterOn(pts[0].coord[1], pts[0].coord[0]);   // 줌 불변 미끄러짐 — 목록·단지 카드의 호재 선택(sigGoTo)과 같은 이동(2026-09-13 알렉스)
-  showSignal(s);   // 상세 패널 + 영향 반경 (좌표 미확정 신호는 패널만)
+  /* 이동은 목록·단지 카드의 호재 선택과 **같은 자**(showSignal(…, true) → sigGoTo — 점이 없으면 선형 폴백 · 줌 불변 미끄러짐 · 2026-09-13 알렉스).
+     ☠ 종전엔 판을 열기 **전에** mapCenterOn을 불러 「판이 가리지 않은 영역의 가운데」를 판 없는 폭으로 쟀다 — 검색으로 고른 호재만 판 뒤로 치우쳤다(2026-09-29). */
+  showSignal(s, true);   // 상세 패널 + 영향 반경 + 이동 (좌표 미확정 신호는 패널만)
 }
 let srchItems = [], srchIdx = -1;
 function initSearch() {
@@ -14438,8 +14455,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "bb83bfbecd", "adverse_funeral.json": "1d0ccab7b8", "apartments_all.json": "789b6b6643", "arch_signals.json": "3dc20762c0", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "e8fbbcf0f9", "corridor_diff.json": "36268ca7ab", "dart_signals.json": "1bbea8c65d", "dps_signals.json": "d3a4be7a73", "eum_backfill_progress.json": "51ca1d9c61", "eum_enroll.json": "35ac2799ab", "eum_signals.json": "a5fbd737f7", "eum_usage.json": "b50bd10f26", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "fea94c7563", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "c60d555823", "jeongbi_poly_seoul.json": "b92fa8052e", "jigu_school_signals.json": "6f4d39f4fb", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "70379f544e", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "bd070c5ec7", "mega_signals.json": "aa5ae953b4", "methodology.html": "ccc0cfe94f", "officetels_all.json": "d83608f22a", "park_signals.json": "73fa1e7fd2", "privacy.html": "217d09c9a3", "push_feed.json": "c623ac8ff2", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "8ae9f967ec", "rail_reference.html": "29bfeea8b9", "rail_signals.json": "e6933f3a94", "region_gaps.json": "6c731ded1d", "regions.json": "b7c757393f", "report.html": "295591664d", "retail_signals.json": "88f66d11bb", "road_signals.json": "4c4771c094", "robots.txt": "21147e58c5", "school_signals.json": "e2ba9ef92a", "settings.html": "d825ba6ca1", "sfz_signals.json": "227c855a7f", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "ac2a9519a8", "sido_all.geojson": "2d0c426029", "signals.json": "3f3409fd49", "signals_auto.json": "473c5f55fe", "signals_jeongbi_all.json": "765b03e70c", "sitemap.xml": "a5c9902f27", "source_status.html": "35270c391f", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "e8735f4a72", "upis_facility_geom.json": "98cbcea89a", "upis_on_road.json": "c31c565613", "weekly.html": "20b2260879", "weekly_index.json": "9a8db27033"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260929a");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "68853e1573", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "fe2d8b5b68", "adverse_funeral.json": "088988ca9c", "apartments_all.json": "d9f26bcb00", "arch_signals.json": "775e285619", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "0281af7362", "corridor_diff.json": "284baf1056", "dart_signals.json": "8da8a330e2", "dps_signals.json": "dea730d851", "eum_backfill_progress.json": "51ca1d9c61", "eum_enroll.json": "2217272563", "eum_signals.json": "7dce6ee5c2", "eum_usage.json": "242adb020a", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "ecfad810fd", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "bd5bc9d091", "jeongbi_poly_seoul.json": "0d6512563a", "jigu_school_signals.json": "f543828e83", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "40e10478a6", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "d9d01ac824", "mega_signals.json": "89dc25f711", "methodology.html": "ccc0cfe94f", "officetels_all.json": "4d34dbb1d7", "park_signals.json": "8b3ea51980", "privacy.html": "217d09c9a3", "push_feed.json": "7892b91e79", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "503712c1e4", "rail_reference.html": "f1454e0ca7", "rail_signals.json": "58316af977", "region_gaps.json": "1e5623d982", "regions.json": "b7c757393f", "report.html": "358fdc95a0", "retail_signals.json": "6e1143d5e0", "road_signals.json": "e9247e54cd", "robots.txt": "21147e58c5", "school_signals.json": "9624f80be3", "settings.html": "ba96e63c1e", "sfz_signals.json": "1d94e1cfb2", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "9073c9bc97", "sido_all.geojson": "2d0c426029", "signals.json": "3f3409fd49", "signals_auto.json": "721c0cb663", "signals_jeongbi_all.json": "7dc6246fd4", "sitemap.xml": "0201837cec", "source_status.html": "f628dedc30", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "e8735f4a72", "upis_facility_geom.json": "f994708186", "upis_on_road.json": "82ee480ca1", "weekly.html": "f6f8aad308", "weekly_index.json": "9a8db27033"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260929b");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
@@ -14565,11 +14582,13 @@ function stampRk(file, d) {
   facPaint();
   // 공공건축 설계공모(2026-07-18) — 계획 단계 후보. 건축HUB 인허가가 놓치는 공공건축·중형(1만㎡ 미만)을 보완.
   DPS_SIG = ((dpsData && dpsData.signals) || []).filter(s => !s.superseded_by).filter(mapHidden("개발행위")).filter(gateObs("설계공모")).map(s => Object.assign({
-    _dps: true, template_type: "공공시설", confirmed: false, status: s.status || "활성"
+    _dps: true, template_type: "공공시설", confirmed: false, status: s.status || "활성",
+    sources: /^https?:/.test(s.src || "") ? [s.src] : []   // 링크는 src에 있다 — 없으면 카드가 「원문 링크 없음」(2026-09-29 전수 감사 106건 · s.sources가 있으면 그쪽이 이긴다)
   }, s));
   // SH 공급계획(2026-07-30) — 공급 전 신축만(매입형·본청약 완료 제외). 좌표=지구 대표점(jigu 근사).
   SH_SIG = ((shData && shData.signals) || []).filter(s => !s.superseded_by).filter(mapHidden("SH 공고")).filter(gateObs("SH 공고")).map(s => Object.assign({
-    _sh: true, template_type: "주거개발", confirmed: false, status: s.status || "활성"
+    _sh: true, template_type: "주거개발", confirmed: false, status: s.status || "활성",
+    sources: /^https?:/.test(s.src || "") ? [s.src] : []   // 설계공모와 같다(2026-09-29)
   }, s));
   // S급 지구 마스터(2026-07-22) — 택지정보 지구 대장. 좌표=지구 필지 평균(geo_prec=jigu, 근사).
   // 조각(건축·공모·DART)은 master_ref로 소속만 기록 — 지도에는 둘 다 표시(집계 접기는 추후 별도 논의).
