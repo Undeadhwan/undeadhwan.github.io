@@ -79,6 +79,7 @@
     --ink2:#4b4d53; --ink3:#63656c; --line2:#d6d7db; --panel:#edeef2;
     --c-traffic:#b9003d; --c-job:#2b4ea7; --c-infra:#b25ec5; --c-house:#38853e;   /* 명도 계단 0.45/0.50/0.55/0.62 — 근거는 DESIGN.md §2 */
     --warn:#b45309;
+    --oft:#1680a0; --oft2:#0e5e76;   /* 오피스텔 아이콘 = 청록(2026-09-28 알렉스 「아파트와 다른 색으로 · 호갱노노처럼」) — oklch(0.56 0.10 224) · 유형색 다섯·--apt와 OKLab 색차 ≥0.145 · 흰 숫자 대비 4.54 · 근거 DESIGN.md §2 */
     --apt:#273044; --apt2:#0f1522;   /* 아파트 아이콘 = 진회남색(무채 · 조연) · 눌림·선택은 --apt2. 2026-09-13 알렉스 「파란색이 일자리(--c-job) 파랑과 비슷해 헷갈린다 — 원래대로 검정 또는 짙은 회색」 → 2026-07-29 원색으로 복귀(09-08 「호갱노노 블루」 #4e52d3 폐기 — 유형색과 겹치는 색은 아이콘에 쓰지 않는다) */
     /* 글자 크기 = 네이버 부동산 수준(2026-07-30 사용자 지시 "텍스트 크기가 좀 더 컸으면") */
     --r:10px; --r-s:7px; --fs:14.5px; --fs-s:12.5px;
@@ -662,6 +663,8 @@
      호재 링과 구분되므로, 색 채널만 무채로 돌려준다. */
   .apt-dot.sel { filter:drop-shadow(0 0 4px rgba(0,0,0,.42)); }
   .apt-dot.sel path { fill:var(--apt2); stroke-width:2.1; }
+  .apt-dot.oft path { fill:var(--oft); }   /* 오피스텔 = 같은 집 · 색만 다르다(DESIGN 「오피스텔 단지」) */
+  .apt-dot.oft:hover path, .apt-dot.oft.sel path { fill:var(--oft2); }
   .apt-dot.lf { transform:translate(-50%,-50%); }   /* Leaflet divIcon은 좌상단 앵커 — 중심 보정 */
   /* ══ 현위치 점 (2026-09-10 알렉스 「현위치 모드인 경우 호갱노노처럼 빨간 점으로 표시해주자」) ══
      ⚠ 색이 아니라 **형태**가 분류 마커와 가른다 — 호재 마커는 링(도넛)·등급 크기이고 이건 **꽉 찬 점 + 흰 링**이다.
@@ -702,6 +705,7 @@
   .apt-dot.big b { display:block; position:absolute; left:0; right:0; top:15px; text-align:center; pointer-events:none;
     font:700 12.5px/1 'IBM Plex Mono',ui-monospace,monospace; letter-spacing:-.3px; color:#fff; }
   .apt-dot.big.zero path { fill:var(--muted); }
+  .apt-dot.big.zero.oft path { fill:var(--oft); fill-opacity:.45; }   /* 0건 오피스텔 — 회색이면 아파트와 못 가른다 · 옅게만 */
   .apt-dot.big.zero b { display:none; }
   /* 상세 패널 등장 — 네이버부동산풍: 느긋한 감속 슬라이드(사용자 2026-07-21 "훅 들어와 어색 → 속도 낮추고 부드럽게").
      innerHTML 교체마다 새 .detail이라 자동 재생 */
@@ -1401,18 +1405,20 @@
   .facleg .facmk0 { display:inline-block; width:8px; height:8px; margin-right:6px; vertical-align:0; }
   .facmk0.plan { background:transparent; border:2.5px solid var(--c-ref); box-shadow:none; }   /* 계획·일부 = **흰 테두리 없는 윤곽선**(지도가 비쳐 보인다) — 지어짐(채움 + 흰 테두리)과 한눈에 갈리게(2026-09-26 알렉스 「준공인지 계획인지 구분이 잘 안 된다 · 계획은 흰 테두리를 없애」 · 종전 흰 속 마름모는 흰 테두리처럼 보였다) · 속 빈 = 호재 문법 「계획 = 속 빈 원」과 같은 뜻(2026-09-25 알렉스 「가」) */
   .facleg .facmk0.plan { margin-left:4px; }
-  .facmk0.up { box-shadow:0 0 0 2px var(--c-ref), 0 1px 3px rgba(0,0,0,.35); }   /* 운영 중 · 증설·변경 계획(환경영향평가) = 지어짐 마름모 + 바깥 윤곽(계획 윤곽을 겹친 모양 · 2026-09-26 알렉스 「마곡열병합 … 기존 시설의 업그레이드」) */
+  .facmk0.up { outline:1.5px dashed var(--c-ref); outline-offset:2px; }   /* 증설 계획 ◈ = 채운 마름모(지어짐) + **점선** 바깥 테(계획) — 2026-09-28 알렉스 「2번째 3번째 생긴것도 비슷해서 헷갈려」: 종전 실선 테는 「큰 ◆」로 읽혔다 */   /* 운영 중 · 증설·변경 계획(환경영향평가) = 지어짐 마름모 + 바깥 윤곽(계획 윤곽을 겹친 모양 · 2026-09-26 알렉스 「마곡열병합 … 기존 시설의 업그레이드」) */
   .faccard .facplan { font-weight:600; }   /* 증설·변경 계획 줄 — 색 채널은 쓰지 않는다(정체색 등과 뜻이 겹친다) */
   /* 범례는 원(`#hjlegend i`·`.mly-legend i`의 border-radius:50%)이 아니라 지도와 같은 **마름모**로 · 어두운 막대 위에선 참고층 슬레이트가 묻혀(2026-09-26 캡처 —
      계획 윤곽이 거의 안 보였다) 밝은 슬레이트(크롬 토큰 --m)로 같은 문법(지어짐 = 채움 + 흰 테두리 · 계획 = 흰색 없는 윤곽)을 그린다. */
   #hjlegend .facleg .facmk0, #mlayers .mly-legend .facleg .facmk0 { border-radius:0; }
   #hjlegend .facleg .facmk0 { background:var(--m); }
   #hjlegend .facleg .facmk0.plan { background:transparent; border-color:var(--m); border-width:2px; }
-  #hjlegend .facleg .facmk0.up { box-shadow:0 0 0 2px var(--m); }
+  #hjlegend .facleg .facmk0.up { outline-color:var(--m); }
   .facdi { background:none; border:0; }
   .facmk .faccard { display:none; position:absolute; left:14px; top:-6px; z-index:4; width:280px; background:#fff; color:#151618; border-radius:10px; padding:10px 12px;
     box-shadow:0 0 0 1.5px var(--c-ref), 0 8px 24px rgba(0,0,0,.25); font-size:12.5px; line-height:1.45; cursor:default; flex-direction:column; gap:3px; white-space:normal; }
   .facmk.open .faccard, .facmk.hov .faccard { display:flex; }   /* hov = 마우스 미리보기(2026-09-25 알렉스) · open = 누름(고정) */
+  .faccard .facst { display:inline-flex; align-items:center; gap:6px; margin-left:8px; padding:1px 8px 1px 7px; border:1px solid #d6d7db; border-radius:9px; font-size:11.5px; font-weight:600; color:#3e465c; vertical-align:2px; }
+  .faccard .facst .facmk0 { width:7px; height:7px; border-width:1.5px; box-shadow:none; }
   .faccard b { font-size:13.5px; font-weight:600; } .faccard span { color:#4b4d53; } .faccard em { font-style:normal; color:#6f7178; font-size:12px; margin-top:2px; }
   /* ── 목록 「지역별」 보기 (2026-09-25 · DESIGN 「목록 지역별」 행) ── */
   /* 목록 머리 조작(보기 전환·이름 검색)의 **기본 규칙** — 종전엔 데스크톱 v2 블록(#listv …)에만 있어 폰에서 돋보기 SVG가 148×148로 그려졌다(2026-09-25 라이브 실측) */
@@ -2400,6 +2406,7 @@
     body.kcr #zoomstack { bottom:72px; } body.kcr .mapsrc { right:72px; bottom:22px; } body.kcr .mylocmsg { bottom:72px !important; }
     /* ── 좌하 범례 + 상태 줄 ── */
     /* ★ 범례는 상태 줄 바로 위(하단 52 · 40h · 2026-09-28 알렉스 「범례를 아래로 좀 내려봐 — 아파트 호재 목록 창이 위아래로 좁다」 · 시안은 하단 72·48h) — 판(#panel·#panel2) 최대 높이가 그만큼 는다(100vh−232) */
+    .cmpbar { bottom:100px; }   /* 비교 막대는 범례 막대 **위** — 같은 줄이면 범례의 일부처럼 겹쳐 담긴 줄 모른다(2026-09-28 알렉스 「바뀌는게 없으니 허전」 · 범례 하단 52 + 40h + 틈 8) */
     #hjlegend { position:absolute; left:16px; bottom:52px; z-index:1100; display:flex; gap:22px; align-items:center; height:40px; padding:0 20px;
       max-width:calc(100% - 112px); overflow:hidden; white-space:nowrap; border-radius:8px; background:var(--p); border:0; box-shadow:var(--shc); color:var(--t);
       font-size:15px; font-weight:700; letter-spacing:-.01em; }
@@ -2408,8 +2415,8 @@
     #hjlegend > span.cat.off { opacity:.4; text-decoration:line-through; }
     #hjlegend i { width:12px; height:12px; border-radius:50%; display:inline-block; flex:none; }
     #hjlegend .sep { width:1px; height:22px; background:linear-gradient(180deg, transparent, #9397ab, transparent); }
-    #hjlegend .rule { display:flex; align-items:center; gap:6px; height:32px; padding:0 12px; border-radius:6px; border:1px solid #75798c; color:var(--t);
-      font-size:14px; font-weight:700; cursor:pointer; position:relative; }
+    #hjlegend .rule { display:flex; align-items:center; justify-content:center; width:28px; height:28px; padding:0; border-radius:50%; border:1px solid #75798c; color:var(--t);
+      font-size:14px; font-weight:700; cursor:pointer; position:relative; }   /* 「?」 원 단추(2026-09-28 알렉스 「간소화」 — 종전 「표기 규칙 ↗」 글자 단추) */
     #hjlegend .rule:hover { border-color:#9184d9; color:#e7e5fe; }   /* 시안 dc.html·README 같은 값(가리킴 — 선택 상태가 아니라 하늘을 쓰지 않는다) */
     #hjlegend svg { display:block; }
     /* ★ 상태 줄 = **지도 아래 전폭 44px 띠**(2026-09-27 클로드 디자인) — 지도(#map)가 그 위에서 끝나므로 카카오 로고·축척을 가리지 않는다(약관 · #wrap 아래 여백) */
@@ -2428,7 +2435,7 @@
     /* 출처는 상태 줄 오른쪽이 말한다(시안) — 지도 안 출처 한 줄은 데스크톱에서 걷는다 · 카카오 로고·축척은 그대로(약관 · DESIGN 「카카오 로고·축척」) */
     .mapsrc { display:none !important; }
     /* 표기 규칙 펼침 — 범례의 「표기 규칙」 */
-    #hjrules { position:absolute; left:16px; bottom:100px; z-index:1150; width:360px; padding:12px 14px; border-radius:10px; background:var(--pp); border:1px solid var(--b); box-shadow:var(--shp); color:var(--t);
+    #hjrules { position:absolute; left:16px; bottom:100px; z-index:1150; width:300px; padding:12px 14px; border-radius:10px; background:var(--pp); border:1px solid var(--b); box-shadow:var(--shp); color:var(--t);
       font-size:13px; line-height:1.6; font-family:var(--ff2); }
     #hjrules[hidden] { display:none; }
     #hjrules b { font-weight:500; }
@@ -2489,6 +2496,7 @@
     .dv2 .stp .dt { font-size:11.5px; color:var(--m); text-align:center; font-variant-numeric:tabular-nums; }
     .dv2 .stcur { display:flex; flex-direction:column; gap:3px; padding:10px 12px; border-radius:8px; background:var(--s); font-size:13px; line-height:1.5; }
     .dv2 .stcur .mt { color:var(--m); font-size:12px; }
+    .dv2 .stscope { margin-top:6px; padding:8px 12px; border-radius:8px; border:1px dashed var(--b); font-size:12.5px; line-height:1.5; color:var(--t); }   /* 그린 범위(drawn_scope) — 점선 테 = 미확정 문법 */
     .dv2 .nextwatch { font-size:12.5px; color:var(--m); background:none; padding:0; border:0; margin:0; }
     .dv2 .sthist > summary { list-style:none; cursor:pointer; font-size:12.5px; color:var(--ac3); }
     .dv2 .sthist > summary::-webkit-details-marker { display:none; }
@@ -2903,7 +2911,9 @@
   <div id="layerstack" aria-label="지도 레이어"></div>
   <div id="zoomstack"></div>
   <div id="hjlegend"></div>
-  <div id="hjrules" hidden><b>표기 규칙</b><br>색 = 유형 · 마커 안 문자 = 등급(S·A·B·C) · 계획 = 점선, 확정 이후 = 실선 · 도로 = 속이 빈 두 줄, 철도 = 채운 한 줄.<br>위치 근사는 마커를 <b>가리키거나 선택</b>할 때 후광으로 · 겹친 호재는 <b>유형 도넛</b>으로 묶입니다.<br><a href="sources.html" target="_blank">데이터 출처 · 표기 원칙</a><br><span style="color:var(--m)">투자 권유 아님 · 모든 신호는 미확정 — 사실(단계·날짜·거리)만 표시하며 매수/매도 판단은 다루지 않습니다. · <a href="privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a></span></div>
+  <!-- 표기 규칙 = 범례 막대로 알 수 없는 셋만 (2026-09-28 알렉스 「표기규칙이 꼭 필요한가 · 간소화 및 위치 재정비」) — 색·철도·도로·계획은 막대가 말한다 ·
+       데이터 출처·개인정보 처리방침은 상태 줄 오른쪽(늘 보이는 자리 — 처리방침은 쉽게 찾을 수 있게 게시해야 한다) · 면책 문구는 출처 페이지·목록 하단 -->
+  <div id="hjrules" hidden><b>표기 규칙</b><br>마커 안 문자 = 등급(S·A·B·C)<br>옅은 후광 = 위치 근사(가리키거나 고를 때)<br>유형 도넛 = 한 자리에 겹친 호재(누르면 펼침)</div>
   <!-- 모바일 하단 요약 바 — 조회조건에 맞는 신호 수 + 이번 주 **문서상** 움직임.
        ⚠ 관측일(basis=observed)은 「그날 움직였다」가 아니므로 이 숫자에 넣지 않는다
        (그걸 뭉쳐서 "이번 주 움직임 2,588건"이 됐던 사고 — §movBasis 주석). -->
@@ -3173,7 +3183,7 @@ const MB_KEY = { anchor: "hojae_anchor", places: "hojae_places", watch: "hojae_w
                  vid: "hojae_vid", lines: "hojae_lines", linesV2: "hojae_lines_v2", legendOff: "hojae_legend_off",
                  aptHh: "hojae_apt_hh", ops: "hojae_ops", fbLast: "hojae_fb_last", aptSort: "hojae_apt_sort",
                  lastview: "hojae_lastview", dockOpen: "hojae_dock_open", basemap: "hojae_basemap", radii: "hojae_radii4",
-                 cad: "hojae_cad", fac: "hojae_fac" };   // fac = 겹침층 「시설」(환경기초·장사 · 2026-09-25 · 기본 끔)   // 지적편집도·묶음 레이어(웹 크롬 v2 · 2026-09-24)
+                 cad: "hojae_cad", fac: "hojae_fac", oft: "hojae_oft" };   // fac = 겹침층 「시설」(환경기초·장사 · 2026-09-25 · 기본 끔)   // 지적편집도·묶음 레이어(웹 크롬 v2 · 2026-09-24)
 /* ☠ **손으로 적은 날짜는 반드시 낡는다** (2026-08-11 사용자 제보 "흐름 325건 오늘26건 독에는 28건.
    다 제각각이야"의 뿌리). 여기 `new Date("2026-07-13")`이 박혀 있었고 실제 날짜는 8-11이었다 —
    **29일 어긋난 자**로 「오늘」·「이번 주」·「정체 N개월」을 전부 재고 있었다. 그래서 흐름의
@@ -3552,10 +3562,18 @@ function sdAggregates() {
   window._sdAggMemo = { k: _mk, v: _v };
   return _v;
 }
+/* ★ **시도 = 그 신호가 걸린 시군구들의 시도** (2026-09-28 세션141 · 알렉스 「세종이랑 세종시의 호재수가 왜 다르지?」 — 줌을 바꾸면 숫자가 달랐다).
+   시군구 알약은 지나가는 도로를 지나는 **모든** 시군구에 넣는데(buildSggIndex `_sggs`) 시도 알약은 도로의 소스 시도 하나에만 넣어, 시군구가 하나뿐인 세종에서도
+   68 ↔ 71이었다(2026-09-28 라이브 실측 · 지나가는 도로 3). 시도 알약·지역별 시도 행을 **시군구 귀속에서 도출**한다 — 그러면 시도 = 그 시군구들의 합집합이다.
+   ⚠ 조회 조건(지역)이 걸려 있으면 종전대로 sdOf 하나 — 「강서구로 조회했는데 경기도가 1건」(2026-08-12) 처방을 지킨다. 색인은 첫 화면에서 이미 만들어진다(추가 비용 0 · 2026-09-28 실측). */
+function sidosOf(s) {
+  if (!filter.region && !filter.sd && s._road && Array.isArray(s._sggs) && s._sggs.length) return [...new Set(s._sggs.map(d => d.split(" ")[0]))];
+  const sd = sdOf(s); return sd ? [sd] : [];
+}
 function sdAggregatesRaw() {
   const m = new Map();
-  (typeof allSignalsFlat === "function" ? allSignalsFlat() : SIGNALS).filter(visible).forEach(s => {
-    const sd = sdOf(s); if (!sd) return;
+  if (!SGG_SIG || SGG_SIG_V !== SIG_VER) buildSggIndex();   // 도로 `_sggs`(sidosOf의 재료)
+  (typeof allSignalsFlat === "function" ? allSignalsFlat() : SIGNALS).filter(visible).forEach(s => sidosOf(s).forEach(sd => {
     let e = m.get(sd); if (!e) m.set(sd, e = { sd, n: 0, _mv: new Set(), x: 0, y: 0, pts: 0 });
     e.n++;
     // 움직임은 `basis="source"`만 — 관측일은 「우리가 처음 본 날」이지 「그날 움직였다」가 아니다.
@@ -3563,7 +3581,7 @@ function sdAggregatesRaw() {
     if (movBasis(s) === "source" && inWeek(s.last_movement)) e._mv.add(movKey(s));
     const c = sigRepPoint(s);
     if (c) { e.x += c[0]; e.y += c[1]; e.pts++; }
-  });
+  }));
   const cen = sdCentroids();
   return [...m.values()].filter(e => e.pts)
     /* 알약 자리는 **시도 경계의 중심**이다(신호 무게중심이 아니라). 두 가지 이유:
@@ -3679,6 +3697,7 @@ const GEO_PREC = {
   poi:         { t: "POI 실위치 확인", d: "구글맵·카카오 장소 POI로 검증한 실위치 — 지번 지오코딩이 안 맞는 신설 시설(매립지·블록)" },
   namu_map:{ t: "문서 지도 좌표(근사)", d: "나무위키 문서 인포박스의 구글맵 좌표 — 고시에 지점 지번이 없을 때의 폴백(수백m). 공식 고시 근거보다 약함" },
   notice_cluster:{ t: "고시 세목 밀집(근사)", d: "도로구역 고시의 편입필지가 넓어지는 구간의 중심 — IC 부지 규모(수백m). 진출입 정확 지점 아님" },
+  human_route: { t: "사람 판정 경로 위", d: "공식 노선도가 도로를 벗어나 사람이 확정한 구간 경로(지도 대조) 위에 둔 새 환승 승강장 — 다른 노선의 기존 역 점이 아님" },
   notice_map:  { t: "공식 도면 판독(근사)", d: "고시 입지현황·공식 노선도의 지점 표시를 좌표계로 옮긴 값(수백m) — 지번 실측 아님" },
   landmark:    { t: "지물 기준(근사)", d: "교차로·시설 등 인근 지물 기준 (~200m) — 정거장 확정 위치 아님" },
   feature_wide:{ t: "대형 지물 대표점(근사)", d: "교량·방파제·부두처럼 **선형·광역 시설**을 한 점으로 대표 (수백m~수km) — 실제 구조물 위치 아님" },
@@ -6755,7 +6774,15 @@ const aptDotLabel = n => (n > 99 ? "99+" : String(n));
    오프셋 = 아이콘 반높이(요소 실측 · 19/32px 둘 다 맞는다) + 화살표 7px + 틈 3px. 두 렌더러가 이 헬퍼 하나를 쓴다(게이트 ⑦). */
 const APT_POP_GAP = 10;   // 카드 ::after 화살표 7px + 아이콘 위 틈 3px
 const aptPopOffsetY = el => ((el && el.offsetHeight) ? el.offsetHeight / 2 : 10) + APT_POP_GAP;
-const aptDotClass = (n, big, sel, lf) => "apt-dot" + (big ? " big" : "") + (big && n === 0 ? " zero" : "") + (sel ? " sel" : "") + (lf ? " lf" : "");
+/* ★ 오피스텔 단지(2026-09-28 세션141 · 알렉스 「오피스텔 착수」) — 원천 = 건축물대장 표제부·전유부(officetel_fetch.py → officetels_all.json) ·
+   APTS 한 배열에 kind로 합친다: 같은 집 아이콘 · 같은 건수 자(aptCount) · 같은 상세·비교·검색 — 색만 --oft(「아파트와 다른 색으로」).
+   세대수 거름(#apt-hh)은 **아파트에만** — 오피스텔은 층 하한(officetels_all.ho_min 호)과 켬/끔(OFT_SHOW) 하나. 두 렌더러가 이 넷을 같이 쓴다. */
+const isOft = a => !!a && a.kind === "오피스텔";
+let OFT_SHOW = localStorage.getItem(MB_KEY.oft) !== "0", OFT_HO_MIN = 0, OFT_REGIONS = [], OFT_COMPLETE = false;   // 수록 시도 — 전국 순회는 약 2주(하루 예산) · 다 돈 시도부터 싣는다
+const aptPass = (a, hhMin) => isOft(a) ? OFT_SHOW : (!hhMin || (a.hh || 0) >= hhMin);
+const aptSize = a => isOft(a) ? "오피스텔" + (a.ho ? " " + a.ho.toLocaleString() + "호" : "") : (a.hh ? a.hh.toLocaleString() + "세대" : "");
+const aptWeight = a => a.hh || a.ho || 0;   // 겹칠 때 큰 단지가 이긴다(세대·호)
+const aptDotClass = (n, big, sel, lf, oft) => "apt-dot" + (big ? " big" : "") + (big && n === 0 ? " zero" : "") + (sel ? " sel" : "") + (lf ? " lf" : "") + (oft ? " oft" : "");
 let _nearPool = [], _nearPoolKey = "";   // signalsNearPoint의 평탄화 풀 캐시(신호 세대·길이가 바뀌면 다시 잇는다)
 function signalsNearPoint(coord, all = false) {
   // 확정 신호 + 정비(어댑트) 통합 카운팅. 성능용 bbox 프리필터는 **최대 신호 반경에서 도출**한다.
@@ -6863,6 +6890,25 @@ function ensureRailSgg() {
   }
   return true;
 }
+/* ★ **소스가 시군구를 안 적은 신호는 좌표로 넣는다** (2026-09-28 세션141 · 알렉스 「세종이랑 세종시의 호재수가 왜 다르지?」).
+   시도 알약(`sdOf`)은 소스 시도가 없으면 좌표로 찾는데 시군구 색인엔 그 폴백이 없어, 지역 칸이 빈 신호(지구 학교 층 · 시군구 빈 부산 정비 …)가
+   시군구 알약·구 패널·지역별 목록에서 통째로 빠졌다 — 라이브 실측 648건 · 세종 68 ↔ 46 · 부산 741 ↔ 570(2026-09-28). 「규칙이 한쪽에만」.
+   · 소스가 시도를 적었으면 **그 시도 안에서만** 찾는다(sdOf가 소스 시도를 먼저 쓰므로 두 알약이 같은 시도로 센다)
+   · 결과는 `_sggRes`에만 — `sd`·`sg`는 소스가 말한 것이라 되쓰지 않는다(sdOf 주석 「필드 하나가 두 뜻」) · 대표점 = sigRepPoint(sdOf와 같은 자) */
+function sggByCoord(s) {
+  if (s._sggRes !== undefined) return s._sggRes;
+  const pt = sigRepPoint(s);
+  let hit = null;
+  if (pt && ensureSggRings()) {
+    const want = s.sd ? s.sd + " " : "";
+    for (const [disp, rings] of Object.entries(window._sggRings)) {
+      if (want && !disp.startsWith(want)) continue;
+      if (!inSggBB(sggBBOf(disp), pt[0], pt[1])) continue;   // bbox 프리필터(렌더러 무관)
+      if (rings.some(r => pointInRing(pt[0], pt[1], r))) { hit = disp; break; }
+    }
+  }
+  return (s._sggRes = hit);
+}
 function buildSggIndex() {
   if (!ensureRailSgg()) return false;
   SGG_SIG = {}; SGG_SIG_V = SIG_VER;
@@ -6871,7 +6917,7 @@ function buildSggIndex() {
   //   종전 수동 5종 목록이라 MASTER·JOBS·MEGA·EUM·UPIS·DPS·SH **7개 컬렉션이 시군구 집계**
   //   (배지 수·구 패널·아파트 지역 귀속)에서 통째로 빠져 있었다 — 컬렉션이 늘 때마다 이 목록만
   //   낡는 어댑터 함정. 철도는 _sgg(좌표 귀속), 도로(_road)는 아래 _sggs 다중 귀속 루프가 담당.
-  allSignalsFlat().filter(s => !s._road).forEach(s => add(s._sgg || `${s.sd} ${s.sg}`, s));
+  allSignalsFlat().filter(s => !s._road).forEach(s => add(s._sgg || (s.sd && s.sg ? `${s.sd} ${s.sg}` : sggByCoord(s)), s));
   // 도로: 노선이 여러 시군구를 지나므로 샘플점이 걸치는 모든 시군구에 1회씩 귀속
   // (귀속은 선형 사실 기준 roadLinePoints — 전용도로도 "지나는 지역" 목록엔 뜨되, 반경 집계는 signalPoints=IC만)
   const roadAll = ROAD_SIG.concat(SIGNALS.filter(s => s._road));
@@ -6890,7 +6936,7 @@ function buildSggIndex() {
       s._sggs = [...hit];
     });
   }
-  roadAll.forEach(s => (s._sggs || []).forEach(d => add(d, s)));
+  roadAll.forEach(s => { if (s.signal !== false) (s._sggs || []).forEach(d => add(d, s)); });   // JC·기존 IC(signal:false)는 풀(allSignalsFlat)처럼 세지 않는다 — 연기JC가 세종시 알약에만 들어갔다(2026-09-28 · 68↔71의 마지막 1)
   return true;
 }
 function signalsInSgg(disp) {
@@ -7021,7 +7067,7 @@ function renderApt(a) {
       <div class="advnote">폐기물·하수 등 환경기초시설, 열병합 등 집단에너지 사업장, 화장·봉안·묘지 등 장사시설 — 도시계획시설 결정과 기관 운영 목록(지은 것·계획 모두 · 지도는 레이어 「시설」). 존재·거리 사실만 — 영향 판단 아님</div></div>` : "";
   p.innerHTML = `
     ${pheadHtml(`<div class="pt">${a.n}</div>`)}
-    <div class="ps">${a.sg} ${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + " 세대" : ""}
+    <div class="ps">${a.sg} ${a.dong}${aptSize(a) ? " · " + aptSize(a) : ""}
       <span class="cmpAdd ${inCmp ? "in" : ""}" id="cmpAdd">${inCmp ? "✓ 비교함" : "비교 담기"}</span>
       ${notifyOn() ? `<span class="cmpAdd ${mbWatchHas("apt:" + a.n + "|" + a.dong) ? "in" : ""}" id="aptWatch" title="이 단지 주변에 새 신호가 잡히면 상단 🔔 알림함에 쌓입니다">${mbWatchHas("apt:" + a.n + "|" + a.dong) ? "🔔 지켜보는 중" : "🔔 지켜보기"}</span>` : ""}</div>
     <!-- 유형 칩만 남겨 필터로 쓴다 (시안 §07 「등급 요약은 중복 · 유형 칩만 남겨 필터로」) -->
@@ -7193,13 +7239,24 @@ function renderHome() {
 }
 
 /* ══════════ 아파트 비교 (§4.5 — 점수·시세 없이 신호 속성만) ══════════ */
+/* ★ 비교 담기 버튼 상태는 **직접** 고친다 (2026-09-28 알렉스 「비교담기 눌렀을때 바뀌는게 없으니 뭔가 허전하네」).
+   데스크톱 아파트 판은 「같은 단지·같은 렌더 세대면 다시 그리지 않는다」(renderPanel 메모 — 목록 스크롤을 지킨다)라 renderPanel로는 버튼이 안 바뀌었다
+   (헤드리스 실측: 누른 뒤에도 「비교 담기」 · 비교 목록엔 1건). 판을 다시 그리지 않고 버튼만 — 2겹 판(단지 + 호재 상세)에서도 같은 버튼이다. */
+function syncCmpBtn() {
+  const b = document.getElementById("cmpAdd"); if (!b) return;
+  const a = view.mode === "apt" ? view.apt : (view.mode === "detail" && returnView && returnView.apt) || null;
+  if (!a) return;
+  const inC = compareSet.some(x => x.n === a.n && x.dong === a.dong);
+  b.classList.toggle("in", inC); b.textContent = inC ? "✓ 비교함" : "비교 담기";
+}
 function toggleCompare(a) {
   const i = compareSet.findIndex(x => x.n === a.n && x.dong === a.dong);
   if (i >= 0) compareSet.splice(i, 1);
   else { if (compareSet.length >= CMP_MAX) { alert(`비교는 최대 ${CMP_MAX}개까지입니다.`); return; } compareSet.push(a); }
   cmpOpenChip = -1;   // 배열이 바뀌면 인덱스가 밀린다 — 열린 칩을 들고 있으면 엉뚱한 칩이 열린다
   renderCompareBar();
-  if (view.mode === "apt") renderPanel();   // 버튼 상태 갱신
+  if (view.mode === "apt") renderPanel();   // 폰(판을 다시 그린다)
+  syncCmpBtn();                             // 데스크톱(판 메모로 안 다시 그린다) — 위 주석
 }
 /* ══ 비교 담기 바 (2026-08-14 시안 §08) ═══════════════════════════════════════
    칩은 **스크롤 영역 안에**, 「비교하기」는 **밖에** — 종전엔 둘이 같은 flex 자식이라 칩 3개부터
@@ -7212,6 +7269,7 @@ function cmpClearAll() {
   compareSet.length = 0;
   renderCompareBar();
   if (view.mode === "apt") renderPanel();
+  syncCmpBtn();
 }
 function renderCompareBar() {
   const bar = document.getElementById("cmpBar");
@@ -7224,7 +7282,7 @@ function renderCompareBar() {
     + compareSet.map((a, i) => `<span class="cchip${cmpOpenChip === i ? " open" : ""}" data-i="${i}"`
         + ` title="${esc(a.n)} — 누르면 제거 버튼">`
         + `<span class="ct"><span class="cn">${esc(a.n)}</span>`
-        + `<span class="cs">${esc(a.dong || "")}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : ""}</span></span>`
+        + `<span class="cs">${esc(a.dong || "")}${aptSize(a) ? " · " + aptSize(a) : ""}</span></span>`
         + `<span class="x" data-x="${i}">✕</span></span>`).join("")
     + `</span>`
     + `<span class="csep"></span><span class="cclr" id="cclr">전체 비우기</span>`
@@ -7239,7 +7297,7 @@ function renderCompareBar() {
   bar.querySelectorAll("[data-x]").forEach(x => x.onclick = ev => {
     ev.stopPropagation();
     compareSet.splice(+x.dataset.x, 1); cmpOpenChip = -1;
-    renderCompareBar(); if (view.mode === "apt") renderPanel();
+    renderCompareBar(); if (view.mode === "apt") renderPanel(); syncCmpBtn();
   });
   bar.querySelector("#cclr").onclick = cmpClearAll;
   const go = bar.querySelector("#cgo");
@@ -7378,7 +7436,7 @@ function cmpSummaryHtml(cols) {
   const ink = { S: "var(--ink)", A: "var(--ink)", B: "var(--ink2)", C: "var(--ink3)", "미정": "var(--line2)" };
   /* 머리 = 단지명 + 소재동·세대수. 세대수는 **식별 표기**이지 비교 축이 아니다(각주에 그대로 적는다). */
   const head = cols.map(c => `<div class="ch">${esc(c.a.n)}`
-    + `<span class="m">${esc(c.a.dong || "")}${c.a.hh ? ` · <span class="mono">${c.a.hh.toLocaleString()}</span>세대` : ""}</span></div>`).join("");
+    + `<span class="m">${esc(c.a.dong || "")}${isOft(c.a) ? " · " + aptSize(c.a) : (c.a.hh ? ` · <span class="mono">${c.a.hh.toLocaleString()}</span>세대` : "")}</span></div>`).join("");
   /* 등급 라벨 = **링 + 글자**(시안 §08 실물 — 지도·목록과 같은 부품 `.lvcell`, 링 크기는 `HJR`).
      ⚠ 미판정은 막대를 그리지 않는다 — 규모 등급(S~C)과 **다른 축**이라 같은 눈금에 얹으면
        「가장 낮은 등급」으로 읽힌다(시안도 이 행만 숫자로 둔다). */
@@ -7597,7 +7655,7 @@ function stepperHtml(s) {
   const hist = ms.length > 1 ? `<details class="sthist"><summary>단계 이력 ${ms.length}건 ▾</summary>${msTrack(s)}</details>` : "";
   return `<div class="dsec"><div class="dlab">사업 단계</div>
     <div class="stepper"><div class="bar"></div><div class="prog" style="width:${prog}"></div>${steps}</div>
-    ${card}${nextWatch(s)}${hist}</div>`;
+    ${card}${s.drawn_scope ? `<div class="stscope">${esc(String(s.drawn_scope))}</div>` : ""}${nextWatch(s)}${hist}</div>`;   // 그린 범위 — 노선의 일부만 확정돼 한 토막만 그린 경우(drawn_scope · 2026-09-28 GTX F)
 }
 /* 관련 목록 — 교통 = 역세권 아파트 · 일자리·인프라 = 영향권 아파트 · 반경 · 주거개발 = 주변 호재.
    ⚠ §7 「수혜 단지」 금지 — 이름·거리만 적고, 순서는 거리(측정값) 하나다(aptsNearSignal 주석과 같은 규칙). */
@@ -7620,7 +7678,7 @@ function relHtml(s) {
   const ttl = c === "교통" ? "역세권 아파트" : `영향권 아파트 · 반경 ${r.km}km`;
   return `<div class="dsec rel"><div class="dlab">${ttl} <span class="more" onclick="_relAll=!_relAll;renderPanel()">${_relAll ? "접기" : "전체 " + r.n}</span></div>
     ${r.top.map((x, i) => `<div class="relrow" onclick="showApt(window._relApts[${i}])"><i class="ap"></i><div><span class="t">${esc(x.a.n)}</span>
-      <span class="m">${esc([x.a.sg, x.a.dong].filter(Boolean).join(" "))}${x.a.hh ? " · " + x.a.hh.toLocaleString() + "세대" : ""} · ${x.d < 1000 ? Math.round(x.d / 10) * 10 + "m" : (x.d / 1000).toFixed(1) + "km"}</span></div><span class="gt">›</span></div>`).join("")}</div>`;
+      <span class="m">${esc([x.a.sg, x.a.dong].filter(Boolean).join(" "))}${aptSize(x.a) ? " · " + aptSize(x.a) : ""} · ${x.d < 1000 ? Math.round(x.d / 10) * 10 + "m" : (x.d / 1000).toFixed(1) + "km"}</span></div><span class="gt">›</span></div>`).join("")}</div>`;
 }
 /* 공유 — 이 호재로 바로 여는 주소(`?sig=`)를 복사한다(공개 방문자도 열린다 · initOpsMode 밖) */
 function shareSig(btn) {
@@ -8770,6 +8828,11 @@ function bindFilterClicks(host) {
     if (t.dataset.allcat) { CAT_KEYS.forEach(c => filter.cat.add(c)); ALL_SUBS.forEach(k => filter.sub.add(k)); renderAll(); return; }   // 초기화 = 공용 함수 하나(패널 안내도 같은 것을 부른다)
     const axis = t.dataset.tog, k = t.dataset.k;
     if (axis === "cat") { toggleCat(k); renderAll(); return; }
+    if (axis === "oft") {   // 오피스텔 켬/끔 — 상태는 OFT_SHOW 하나(isOft 위 주석) · 두 렌더러 다시 그리기는 applyLOD
+      OFT_SHOW = !OFT_SHOW; localStorage.setItem(MB_KEY.oft, OFT_SHOW ? "1" : "0");
+      window._dbg?.applyLOD?.(); if (typeof renderChipbar === "function") renderChipbar();
+      return;
+    }
     if (axis === "hh") {   // 아파트 세대수 = 단일 선택 · 상태는 #apt-hh 셀렉트 하나(시트 칩은 그 도출 · 2026-09-04)
       const sel = window._aptHhEl || document.getElementById("apt-hh");
       if (sel && sel.value !== k) { sel.value = k; sel.dispatchEvent(new Event("change")); }
@@ -8862,9 +8925,10 @@ function renderChipbar() {
     <div class="cbw"><div class="cb${act(false, ntOn.length !== NATURE_KEYS.length)}" data-chip="nature">${ntOn.length === NATURE_KEYS.length ? "성격" : `<span class="v">${chipSum(ntOn.map(ntName), "성격 없음")}</span>`} ${cv}</div>
       ${CHIP_OPEN === "nature" ? `<div class="pop pad6" data-pop="nature" style="width:220px">
         ${NATURE_KEYS.map(k => `<div class="prow${filter.nature.has(k) ? " on" : ""}" data-tog="nature" data-k="${k}" title="${NATURE_HINT[k] || ""}">${CB_BOX}${ntName(k)}</div>`).join("")}</div>` : ""}</div>
-    <div class="cbw cbw-apt"><div class="cb${act(false, hhCur !== "all")}" data-chip="apt">${hhCur === "all" ? "아파트" : `<span class="v">${hhLab}</span>`} ${cv}</div>
+    <div class="cbw cbw-apt"><div class="cb${act(false, hhCur !== "all" || !OFT_SHOW)}" data-chip="apt">${hhCur === "all" ? "아파트" : `<span class="v">${hhLab}</span>`} ${cv}</div>
       ${CHIP_OPEN === "apt" ? `<div class="pop pad6" data-pop="apt" style="width:220px">
-        ${hhOpts.map(o => `<div class="prow${o.v === hhCur ? " on" : ""}" data-tog="hh" data-k="${o.v}"><span class="radio"></span>${o.t}</div>`).join("")}</div>` : ""}</div>
+        ${hhOpts.map(o => `<div class="prow${o.v === hhCur ? " on" : ""}" data-tog="hh" data-k="${o.v}"><span class="radio"></span>${o.t}</div>`).join("")}
+        <div class="prow${OFT_SHOW ? " on" : ""}" data-tog="oft" style="border-top:1px solid var(--line2);margin-top:4px;padding-top:8px" title="건축물대장 기준 오피스텔 단지${OFT_HO_MIN ? " · " + OFT_HO_MIN + "호 이상" : ""} — 세대수 거름과 무관">${CB_BOX}<i class="dt" style="background:var(--oft)"></i>오피스텔${OFT_HO_MIN ? ` <span style="color:var(--ink3)">${OFT_HO_MIN}호+</span>` : ""}</div>${OFT_REGIONS.length && !OFT_COMPLETE ? `<div class="note" style="padding:2px 10px 6px">오피스텔 수록: ${OFT_REGIONS.join("·")} — 나머지 지역은 수집 중(없다는 뜻이 아닙니다)</div>` : ""}</div>` : ""}</div>
     <div class="cbrst" data-all="on"${filtersDirty() ? "" : " hidden"}>초기화</div>`;
   const rc = document.getElementById("r-chip");
   if (rc) rc.classList.toggle("act", !!(filter.region || filter.sd));
@@ -8951,6 +9015,9 @@ function facOn() { try { return localStorage.getItem(MB_KEY.fac) === "1"; } catc
 /* 상태 = 원천 집행상태(upis_fetch FAC_STATE) — 지은 시설도 싣는다(2026-09-25 알렉스 「가」 · 서울은 원천이 집행상태를 전부 「기타」로 적어 미상). */
 const FAC_STATE_TXT = { "지어짐": "지어짐(집행완료)", "일부": "일부 지어짐(부분집행)", "계획": "계획(미집행)", "미상": "집행상태 미상(원천이 적지 않음)" };
 const facPlanned = f => f.fac_state === "계획" || f.fac_state === "일부";
+/* ★ 마커 모양과 상태 칩은 **한 판정**(2026-09-28 알렉스 「시설 미리보기에서 시설명 외에 3가지 상태표시를 추가해 · 그래야 뭔지 알지」) — 마커 클래스와 칩 문구를 같은 함수가 준다 */
+const facMark = f => facPlanned(f) ? [" plan", "계획·일부"] : f._plans ? [" up", "증설 계획"] : ["", f.fac_state === "지어짐" ? "운영 중" : "상태 미상"];
+const facChip = f => { const [c, t] = facMark(f); return `<span class="facst"><i class="facmk0${c}"></i>${t}</span>`; };
 /* 카드가 떠 있는 동안 그 오버레이를 맨 위로(노선 이름표·묶음 원 위 · 2026-09-25) — 여닫는 곳이 여럿이라 전역 한 벌 */
 const FAC_Z = 3, FAC_Z_UP = 60;
 function facLift(el, up) { const o = el && el._facOv; if (!o) return; try { if (o.setZIndex) o.setZIndex(up ? FAC_Z_UP : FAC_Z); else if (o.setZIndexOffset) o.setZIndexOffset(up ? 10000 : 0); } catch (e) { console.warn("시설 카드 층 올리기", e); } }
@@ -8962,12 +9029,12 @@ const facEiaTxt = e => `환경영향평가 ${esc(e.step || "")} ${esc(e.date || 
 function facCardHtml(f) {
   const nm = String(f.title || "").replace(/\s*\([^)]*㎡\)\s*$/, "");
   if (f.eia) {   // 환경영향평가 협의 목록에서 온 계획(짝 없는 새 부지) — 계획 = 새 사업 · 미상 = 오래된 사업의 최근 변경 협의(이미 운영 중일 수 있다)
-    return `<div class="faccard"><b>${esc(nm)}</b><span>${esc(f.sub || "")} · ${f.fac_state === "계획" ? "계획(환경영향평가 진행)" : "운영 여부 미상 — 오래된 사업의 변경 협의"}</span>`
+    return `<div class="faccard"><b>${esc(nm)}${facChip(f)}</b><span>${esc(f.sub || "")} · ${f.fac_state === "계획" ? "계획(환경영향평가 진행)" : "운영 여부 미상 — 오래된 사업의 변경 협의"}</span>`
       + `<span>${facEiaTxt(f.eia)}${f.eia.draft ? ` · 초안 공람 ${esc(f.eia.draft)}` : ""}</span><span>${esc(f.src_name || "")}</span>`
       + `<em>호재가 아닙니다 — 계획·위치 사실만 적습니다 · 건설 여부는 이 자료가 말하지 않습니다</em></div>`;
   }
   const st = f.area_m2 ? (FAC_STATE_TXT[f.fac_state] || FAC_STATE_TXT["미상"]) : (f.fac_state === "지어짐" ? "운영 중(기관 목록)" : "운영 여부 미상(기관 목록)");   // 보강 층은 도시계획시설 결정이 아니라 기관 운영 목록이다
-  return `<div class="faccard"><b>${esc(nm)}</b><span>${esc(f.sub || "")} · ${f.area_m2 ? "도시계획시설 · " : ""}${esc(st)}</span>`
+  return `<div class="faccard"><b>${esc(nm)}${facChip(f)}</b><span>${esc(f.sub || "")} · ${f.area_m2 ? "도시계획시설 · " : ""}${esc(st)}</span>`
     + (f.area_m2 ? `<span>부지 ${Number(f.area_m2).toLocaleString()}㎡ · 최근 고시 ${esc(f.gosi || "일자 미상")}</span>`
         : `<span>${f.cap_m3d ? `처리용량 ${Number(f.cap_m3d).toLocaleString()}㎥/일 · ` : ""}${esc(f.src_name || "")}</span>`   // 보강 층(기관 목록) — 부지·고시 대신 용량·출처(fac_extra)
           + (f.equip ? `<span>열 공급 시설 ${esc(f.equip)}</span>` : ""))   // 한난 지사안내의 그 자리 설비(2026-09-26 세션137 · 사무실이 아니라 시설이라는 근거)
@@ -8994,7 +9061,7 @@ function facPaint() {
   ADVERSE.forEach(f => {
     const el = document.createElement("div");
     el.className = "facmk";
-    el.innerHTML = `<i class="facmk0${facPlanned(f) ? " plan" : f._plans ? " up" : ""}"></i>`;
+    el.innerHTML = `<i class="facmk0${facMark(f)[0]}"></i>`;   // 모양 = facMark(카드 칩과 한 판정)
     el.addEventListener("pointerenter", ev => { if (ev.pointerType !== "mouse") return; card(el, f); el.classList.add("hov"); lift(el, true); });
     el.addEventListener("pointerleave", ev => { if (ev.pointerType !== "mouse") return; el.classList.remove("hov"); if (!el.classList.contains("open")) lift(el, false); });
     el.addEventListener("click", ev => {
@@ -9078,7 +9145,7 @@ function paintLegend() {
     + `<span><svg width="28" height="8"><path d="M0 4H28" stroke="${C}" stroke-width="7"/><path d="M0 4H28" style="stroke:var(--ly-hole,#161826)" stroke-width="4"/><path d="M0 4H28" stroke="${C}" stroke-opacity=".25" stroke-width="4"/></svg>도로</span>`
     + `<span><svg width="28" height="8"><path d="M2 4H26" stroke="${C}" stroke-width="4" stroke-linecap="round" stroke-dasharray="0 8"/></svg>계획</span>`
     + (facOn() ? '<span class="facleg"><i class="facmk0"></i>환경·에너지·장사시설 <i class="facmk0 plan"></i>계획·일부 <i class="facmk0 up"></i>증설 계획</span>' : "")
-    + '<span class="sep"></span><span class="rule" role="button" tabindex="0">표기 규칙 <svg width="14" height="14" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"><path d="M64 192L192 64M88 64h104v104"/></svg></span>';
+    + '<span class="sep"></span><span class="rule" role="button" tabindex="0" aria-label="표기 규칙">?</span>';
   hosts.forEach(h => { h.innerHTML = html; });
 }
 /* 화면 상태를 body 표식으로 — 크롬 부품의 보임/숨김은 CSS가 이 표식 하나로 가른다 */
@@ -10820,8 +10887,8 @@ function initLeaflet() {
     if (map.getZoom() < APT_ICON_ZOOM) return;
     const bd = map.getBounds();
     const cands = APTS.filter(a => bd.contains([a.lat, a.lon]))
-      .filter(a => !APT_HH_MIN || (a.hh || 0) >= APT_HH_MIN)   // 세대수 필터(미상=0 취급 → '전체'에서만 표시)
-      .map(a => ({ a, hh: a.hh || 0 }));
+      .filter(a => aptPass(a, APT_HH_MIN))   // 세대수 필터(미상=0 취급 → '전체'에서만 표시) · 오피스텔은 켬/끔만(aptPass 한 자)
+      .map(a => ({ a, hh: aptWeight(a) }));
     cands.sort((x, y) => y.hh - x.hh);   // 큰 단지 우선(겹칠 때 이긴다)
     const placed = [];
     const big = map.getZoom() >= APT_ZOOM;   // 카카오 APT_LV=4 ↔ z14 — 같은 문턱에서 28px + 건수(2026-09-05 알렉스 · §7 예외)
@@ -10834,11 +10901,11 @@ function initLeaflet() {
       // 집 아이콘 = 무채색(조연). 호재 원(컬러)이 주인공. 아이콘 안 건수는 §7의 명시적 예외(2026-09-05 알렉스) — 등급이 아니라 개수(aptCount · 카카오 층과 같은 자)
       const n = big ? aptCount(a) : null;
       const m = L.marker([a.lat, a.lon], { pane: "badge", zIndexOffset: sel ? 1000 : 0,
-        icon: L.divIcon({ className: "", html: `<div class="${aptDotClass(n, big, sel, true)}"><svg viewBox="0 0 24 24"><path d="${big ? APT_D_SOLID : APT_D_DOOR}"/></svg><b>${big ? aptDotLabel(n) : ""}</b></div>`, iconSize: null }) }).addTo(map);
+        icon: L.divIcon({ className: "", html: `<div class="${aptDotClass(n, big, sel, true, isOft(a))}"><svg viewBox="0 0 24 24"><path d="${big ? APT_D_SOLID : APT_D_DOOR}"/></svg><b>${big ? aptDotLabel(n) : ""}</b></div>`, iconSize: null }) }).addTo(map);
       // ⚠ **all=true 필수** — 단지 반경 내 호재 개수는 **사실**이라 조회조건과 무관해야 한다
       //   (2026-07-29 확정 "비교는 필터와 무관해야"가 팝업엔 적용돼 있지 않았다).
       //   실측 사고: 등급 S만 켠 상태에서 같은 단지가 팝업 **0건** / 비교 **6건**으로 갈렸다.
-      const sub = `${a.sg} ${a.dong}${a.hh ? " · " + a.hh.toLocaleString() + "세대" : " · 세대수 미상"}${a.built ? " · 준공 " + a.built : ""}`;
+      const sub = `${a.sg} ${a.dong}${isOft(a) ? " · " + aptSize(a) : (a.hh ? " · " + a.hh.toLocaleString() + "세대" : " · 세대수 미상")}${a.built ? " · 준공 " + a.built : ""}`;
       // hover 카드 = 보여주기만(커서를 받지 않는다 · 2026-09-24) — 마커를 벗어나면 곧바로 닫힌다 · 위치 = 아이콘 바로 위 중앙 · 목록 = aptNear 캐시(아이콘 건수와 같은 자)
       m.on("mouseover", () => {
         if (NO_HOVER) return;   // 터치 = 탭이 곧바로 상세(아래 click) · 카카오 층과 같은 규칙(2026-09-05)
@@ -12176,15 +12243,15 @@ function initKakao() {
        무거운 소스 넷이 첫 화면 뒤에 도착하므로, 그 사이 「전부 표시 중 · 숨김 0」은 **거짓말**이다
        (P2·P5 · §화면이 사실을 말하는가). 무엇이 안 왔는지까지 적는다 — 「불러오는 중」만으로는
        빠진 게 철도인지 정비인지 방문자가 알 수 없다. 다 오면 원래 보증 문구로 돌아온다. */
-    _hjCountEl.onmouseenter = ev => explainTip(ev, "view"); _hjCountEl.onmouseleave = explainHide;   // 건수 설명 — 도크·목록과 같은 자(countExplain · 2026-09-06 세션102)
+    // 건수 설명은 **건수 부분(.hjn)에만** — 줄 전체에 걸면 「데이터 출처」를 가리켜도 떴다(2026-09-28 알렉스 「갖다대면 뜨는거 없애」)   // 건수 설명 — 도크·목록과 같은 자(countExplain · 2026-09-06 세션102)
     /* ★ 웹 크롬 v2(2026-09-24 시안): 「N / 전체건 표시 · 지역 · 데이터 시각 · 지도 이동 시 자동 조회 · 지역 해제」 — 전체 = 도크와 같은 자(dockCounts · _dockTotal) */
     const _fr = document.getElementById("datafresh"), _rg = regionLabel(), _tot = (window._dockTotal || pool.length).toLocaleString();
     const _tail = '<i class="hjsep"></i><span>' + (_rg || '전국') + '</span>'
       + (_fr && _fr.textContent ? '<i class="hjsep"></i><span class="' + (_fr.classList.contains('stale') ? 'hjstale' : '') + '">' + _fr.textContent + '</span>' : '')
       + '<i class="hjsep"></i><span class="hjauto">지도 이동 시 자동 조회</span>' + (_rg ? '<i class="hjsep"></i><span class="hjrr" onclick="resetRegionOnly()">지역 해제</span>' : '');
     // 오른쪽 = 데이터 출처(시안) — 축척은 카카오 것이 지도 우하단에 남는다(약관 표기는 가리지 않는다 · DESIGN 「카카오 로고·축척」)
-    const _right = '<span class="hjright"><a class="hjsrc" href="sources.html#sources" target="_blank" rel="noopener" title="국토교통부·지자체 공식 고시와 공공데이터를 씁니다 — 출처·이용조건 보기">데이터 출처</a></span>';
-    _hjCountEl.innerHTML = '<span class="hjn"><b>' + pool.length.toLocaleString() + '</b>' + (SRC_PENDING.size
+    const _right = '<span class="hjright"><a class="hjsrc" href="sources.html#sources" target="_blank" rel="noopener">데이터 출처</a><i class="hjsep"></i><a class="hjsrc" href="privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a></span>';   // 말풍선 없음(2026-09-28 알렉스 「갖다대면 뜨는거 없애」)
+    _hjCountEl.innerHTML = '<span class="hjn" onmouseenter="explainTip(event,\'view\')" onmouseleave="explainHide()"><b>' + pool.length.toLocaleString() + '</b>' + (SRC_PENDING.size
           ? '건 표시 중 <span class="hjauto">· ' + [...SRC_PENDING].join('·') + ' 불러오는 중</span>'
           : dotBandLv(lv) ? '<span class="hjsl">/</span><b>' + _tot + '</b>건 표시'
           : '건 · ' + (lv >= SD_PILL_LV ? '시도' : '시군구') + ' 합계로 표시 <span class="hjauto">· 확대하면 점</span>') + '</span>' + _tail + _right; };
@@ -12863,20 +12930,20 @@ function initKakao() {
     if (map.getLevel() <= APT_ICON_LV) {
       const b = map.getBounds();
       const big = map.getLevel() <= APT_LV;   // 라벨 LOD와 같은 문턱에서 28px + 건수(2026-09-05 알렉스 · §7 예외)
-      const cands = APTS.filter(a => b.contain(LL(a.lon, a.lat))).filter(a => !aptHhMin || (a.hh || 0) >= aptHhMin).map(a => ({ a, hh: a.hh || 0 }));
+      const cands = APTS.filter(a => b.contain(LL(a.lon, a.lat))).filter(a => aptPass(a, aptHhMin)).map(a => ({ a, hh: aptWeight(a) }));
       cands.sort((x, y) => y.hh - x.hh); const placed = [];
       for (const { a } of cands) { if (placed.length > 200) break; const pt = toPt(a.lon, a.lat); if (collides(placed, pt, big ? 34 : 20, big ? 32 : 18)) continue; placed.push({ x: pt.x, y: pt.y });
         if (!a._kdot) {
           const d = document.createElement("div");   // 집모양 SVG(apt-dot, 2026-07-21) + 건수 <b>(2026-09-05)
           d.innerHTML = '<svg viewBox="0 0 24 24"><path d="' + APT_D_DOOR + '"/></svg><b></b>';
-          const sub = a.sg + " " + a.dong + (a.hh ? " · " + a.hh.toLocaleString() + "세대" : " · 세대수 미상") + (a.built ? " · 준공 " + a.built : "");
+          const sub = a.sg + " " + a.dong + (isOft(a) ? " · " + aptSize(a) : (a.hh ? " · " + a.hh.toLocaleString() + "세대" : " · 세대수 미상")) + (a.built ? " · 준공 " + a.built : "");
           d.addEventListener("mouseenter", () => { if (NO_HOVER) return; openAptPop(a, sub, toPt(a.lon, a.lat), d); });   // 터치 = 탭이 곧바로 상세(아래 click)
           d.addEventListener("mouseleave", closeAptPop);   // 카드는 커서를 받지 않으므로 유예가 필요 없다 — 아이콘을 벗어나면 곧바로 닫힌다
           tapThru(d, () => { treeState.selKey = "apt|" + a.n + "|" + a.dong; buildTree(); showApt(a); });   // 터치는 touchend에서 · 지도 click 이중 발화 무시(2026-09-08 세션107)
           a._kdot = new K.CustomOverlay({ position: LL(a.lon, a.lat), content: d, zIndex: 8, yAnchor: .5, xAnchor: .5 });
         }
         { const n = big ? aptCount(a) : null, c = a._kdot.getContent();
-          c.className = aptDotClass(n, big, treeState.selKey === "apt|" + a.n + "|" + a.dong, false);
+          c.className = aptDotClass(n, big, treeState.selKey === "apt|" + a.n + "|" + a.dong, false, isOft(a));
           c.querySelector("path").setAttribute("d", big ? APT_D_SOLID : APT_D_DOOR);
           c.querySelector("b").textContent = big ? aptDotLabel(n) : ""; }
         a._kdot.setMap(map); next.add(a); aptShown.delete(a); }
@@ -13676,7 +13743,8 @@ function regionTally(key, label, sigs) {
 function regionRows() {
   if (!nav.sd) {
     const by = new Map(); let unk = 0;
-    allSignalsFlat().filter(visible).forEach(s => { const k = sdOf(s); if (!k) { unk++; return; } if (!by.has(k)) by.set(k, []); by.get(k).push(s); });
+    if (!SGG_SIG || SGG_SIG_V !== SIG_VER) buildSggIndex();   // 시도 행 = 시도 알약과 같은 자(sidosOf)
+    allSignalsFlat().filter(visible).forEach(s => { const ks = sidosOf(s); if (!ks.length) { unk++; return; } ks.forEach(k => { if (!by.has(k)) by.set(k, []); by.get(k).push(s); }); });
     const keys = SIDO_ORDER.filter(k => by.has(k)).concat([...by.keys()].filter(k => !SIDO_ORDER.includes(k)));
     return { level: "sd", unk, rows: keys.map((k, i) => Object.assign(regionTally(k, SIDO_LONG[k] || k, by.get(k)), { ord: i })) };
   }
@@ -14254,7 +14322,7 @@ function srchResults(qRaw) {
     .sort((a, b) => aRank(a.n) - aRank(b.n) || (b.hh || 0) - (a.hh || 0)).slice(0, 6)
     .forEach(a => out.push({ kind: "apt", name: a.n,
       sub: `${a.sd || ""} ${a.sg || ""} ${a.dong || ""}`.trim(),
-      val: a.hh ? a.hh.toLocaleString() + "세대" : "", mono: true, run: () => showApt(a) }));
+      val: aptSize(a), mono: true, run: () => showApt(a) }));
   /* ★ 노선(철도·도로 원장) — 선 자체도 결과다 (2026-09-06). 종전엔 역·IC(점)만 걸려 「GTX D」를 치면 정거장 여덟이 나오고 노선은 없었다.
      선 항목은 선 레이어가 만든 것(window._lineObjs · buildRailLines)을 그대로 쓴다 — 클릭 핸들러(ck)가 카드+격리 강조를 이미 안다.
      시군 회랑(eum)은 아래 신호 검색이 제목으로 잡으므로 여기선 원장 노선만. */
@@ -14370,8 +14438,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "bb83bfbecd", "adverse_funeral.json": "1d0ccab7b8", "apartments_all.json": "789b6b6643", "arch_signals.json": "3dc20762c0", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "72f73e0b80", "corridor_diff.json": "76838562f0", "dart_signals.json": "1bbea8c65d", "dps_signals.json": "d3a4be7a73", "eum_backfill_progress.json": "b1b7040f65", "eum_enroll.json": "35ac2799ab", "eum_signals.json": "042a32c604", "eum_usage.json": "f8907cba9f", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "fea94c7563", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "c60d555823", "jeongbi_poly_seoul.json": "b92fa8052e", "jigu_school_signals.json": "6f4d39f4fb", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "70379f544e", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "bd070c5ec7", "mega_signals.json": "aa5ae953b4", "methodology.html": "827766ab3a", "park_signals.json": "73fa1e7fd2", "privacy.html": "217d09c9a3", "push_feed.json": "81d7ee5c5e", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "c52d73753b", "rail_reference.html": "178bab71de", "rail_signals.json": "c247bb5096", "region_gaps.json": "af8565952d", "regions.json": "b7c757393f", "report.html": "295591664d", "retail_signals.json": "88f66d11bb", "road_signals.json": "01fdfe2247", "robots.txt": "21147e58c5", "school_signals.json": "e2ba9ef92a", "settings.html": "d825ba6ca1", "sfz_signals.json": "227c855a7f", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "ac2a9519a8", "sido_all.geojson": "5f0962db48", "signals.json": "3f3409fd49", "signals_auto.json": "473c5f55fe", "signals_jeongbi_all.json": "765b03e70c", "sitemap.xml": "b1e18d6ae4", "source_status.html": "534ec09563", "sources.html": "a6379bd1cd", "sw.js": "bd80e753e7", "thresholds.json": "8a00286be2", "upis_facility_geom.json": "98cbcea89a", "upis_on_road.json": "1329fb7f77", "weekly.html": "381f42eab0", "weekly_index.json": "9a8db27033"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260928e");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "2b6b8bb217", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "bb83bfbecd", "adverse_funeral.json": "1d0ccab7b8", "apartments_all.json": "789b6b6643", "arch_signals.json": "3dc20762c0", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "0a8e6ef00f", "corridor_diff.json": "3c3e32f242", "dart_signals.json": "1bbea8c65d", "dps_signals.json": "d3a4be7a73", "eum_backfill_progress.json": "333e022de5", "eum_enroll.json": "35ac2799ab", "eum_signals.json": "52c2e1b578", "eum_usage.json": "c68b42560e", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "fea94c7563", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "c60d555823", "jeongbi_poly_seoul.json": "b92fa8052e", "jigu_school_signals.json": "6f4d39f4fb", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "70379f544e", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "bd070c5ec7", "mega_signals.json": "aa5ae953b4", "methodology.html": "ccc0cfe94f", "officetels_all.json": "5b1d379d1a", "park_signals.json": "73fa1e7fd2", "privacy.html": "217d09c9a3", "push_feed.json": "370c6da260", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "5037d52806", "rail_reference.html": "4e4dce1ce3", "rail_signals.json": "430506e3de", "region_gaps.json": "fb293ed93d", "regions.json": "b7c757393f", "report.html": "295591664d", "retail_signals.json": "88f66d11bb", "road_signals.json": "bf56586501", "robots.txt": "21147e58c5", "school_signals.json": "e2ba9ef92a", "settings.html": "d825ba6ca1", "sfz_signals.json": "227c855a7f", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "ac2a9519a8", "sido_all.geojson": "2d0c426029", "signals.json": "3f3409fd49", "signals_auto.json": "473c5f55fe", "signals_jeongbi_all.json": "765b03e70c", "sitemap.xml": "b1e18d6ae4", "source_status.html": "534ec09563", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "e8735f4a72", "upis_facility_geom.json": "98cbcea89a", "upis_on_road.json": "b99ec13f32", "weekly.html": "cd261a49a9", "weekly_index.json": "9a8db27033"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260928f");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
@@ -14787,11 +14855,17 @@ async function loadDeferred() {
     if (nav.sd) loadBdongFor(nav.sd);
   }).catch(() => {});
   // 전국 아파트 — 전국본 베이스 + 강서 정밀본(현재 APTS) 덮어씀
+  let aptBase = [], oftBase = [];
+  const aptMerge = () => { APTS = aptBase.concat(oftBase); window._dbg && window._dbg.applyLOD && window._dbg.applyLOD(); };
   gj("apartments_all.json").then(all => {
     // 브이월드 좌표 단일 소스. 종전엔 강서 211건을 Nominatim(OSM) 좌표로 덮어썼는데 실측 결과
     // 25건이 11개 지점에 뭉치고 최대 6,188m 어긋났다(방화동 단지가 등촌동 좌표) — 2026-07-19 제거.
-    APTS = ((all && all.apts) || []).filter(a => a.lat);
-    window._dbg && window._dbg.applyLOD && window._dbg.applyLOD();
+    aptBase = ((all && all.apts) || []).filter(a => a.lat); aptMerge();
+  }).catch(() => {});
+  // 오피스텔 단지(officetel_fetch · 2026-09-28) — 같은 배열에 kind로 합친다(아이콘·건수·검색·비교가 한 자 · isOft 위 주석)
+  gj("officetels_all.json").then(o => {
+    OFT_HO_MIN = (o && o.ho_min) || 0; OFT_REGIONS = (o && o.regions) || []; OFT_COMPLETE = !!(o && o.complete);
+    oftBase = ((o && o.apts) || []).filter(a => a.lat).map(a => Object.assign(a, { kind: "오피스텔" })); aptMerge();
   }).catch(() => {});
   // 서울 정비 폴리곤(z12+ 경계) — 라이선스 켜진 경우만
   if (JEONGBI_LICENSED) gj("jeongbi_poly_seoul.json").then(poly => {

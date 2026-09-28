@@ -19,6 +19,7 @@
   ul { padding-left:20px; margin:6px 0; }
   table { width:100%; border-collapse:collapse; font-size:12.5px; margin:10px 0; background:#fff; }
   th, td { border:1px solid var(--line); padding:7px 9px; text-align:left; vertical-align:top; }
+  th:first-child, td:first-child { white-space:nowrap; }   /* 구분 열은 한 줄(2026-09-28 알렉스) */
   th { background:#f2f4f8; font-weight:700; white-space:nowrap; }
   .box { background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px 18px; margin:12px 0; }
   .note { color:var(--muted); font-size:12px; }
@@ -53,6 +54,7 @@
     <tr><td>산업·택지</td><td>산업단지·물류단지 현황, 택지지구 정보</td><td>한국산업단지공단 · 산업입지정보시스템 · 택지정보시스템</td></tr>
     <tr><td>공시·입찰</td><td>기업 공시, 입찰 공고</td><td>금융감독원 DART · 조달청 나라장터</td></tr>
     <tr><td>단지</td><td>공동주택 단지 정보</td><td>국토교통부 공동주택관리정보시스템(K-apt)</td></tr>
+    <tr><td>오피스텔</td><td>오피스텔 단지(건물 용도·호수·사용승인일)</td><td>국토교통부 건축HUB 건축물대장(표제부·전유부)</td></tr>
     <tr><td>지도·좌표</td><td>배경지도, 행정경계, 주소 좌표</td><td>카카오맵 · 브이월드(국토교통부 공간정보 오픈플랫폼) · 통계청 SGIS</td></tr>
   </table>
   <p class="note">자료가 갱신되면 지도도 따라 바뀝니다(하루 한 번 이상). 원문 링크는 각 호재 카드의 「근거」에 있습니다.</p>
