@@ -2493,6 +2493,15 @@
     .dv2 .stp .dt { font-size:11.5px; color:var(--m); text-align:center; font-variant-numeric:tabular-nums; }
     .dv2 .stcur { display:flex; flex-direction:column; gap:3px; padding:10px 12px; border-radius:8px; background:var(--s); font-size:13px; line-height:1.5; }
     .dv2 .stcur .mt { color:var(--m); font-size:12px; }
+    .dv2 .stbid { margin-top:6px; padding:8px 12px; border-radius:8px; border:1px solid var(--b); font-size:12.5px; line-height:1.5; display:flex; flex-direction:column; gap:4px; }   /* 공사 발주(입찰공고 · bidHtml) */
+    .dv2 .stbid .bh { font-size:13px; font-weight:600; }
+    .dv2 .stbid .bh .mt { color:var(--m); font-size:12px; font-weight:400; margin-left:4px; }
+    .dv2 .stbid .bidrow { display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; gap:8px; align-items:baseline; }
+    .dv2 .stbid .bidrow .dt, .dv2 .stbid .bidrow .am { font-variant-numeric:tabular-nums; color:var(--m); white-space:nowrap; }
+    .dv2 .stbid .bidrow .nm { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .dv2 .stbid .bidrow a { color:var(--ac3); white-space:nowrap; }
+    .dv2 .stbid details > summary { cursor:pointer; color:var(--ac3); list-style:none; }
+    .dv2 .stbid details > summary::-webkit-details-marker { display:none; }
     .dv2 .stscope { margin-top:6px; padding:8px 12px; border-radius:8px; border:1px dashed var(--b); font-size:12.5px; line-height:1.5; color:var(--t); }   /* 그린 범위(drawn_scope) — 점선 테 = 미확정 문법 */
     .dv2 .nextwatch { font-size:12.5px; color:var(--m); background:none; padding:0; border:0; margin:0; }
     .dv2 .sthist > summary { list-style:none; cursor:pointer; font-size:12.5px; color:var(--ac3); }
@@ -5337,6 +5346,7 @@ function buildRoadSignals() {
       official_type: p.official_type, official_name: p.official_name, access: p.access, access_note: p.access_note, ic_note: p.ic_note,
       arms_n: p.arms_n, arms_drawn: p.arms_drawn, arms_missing: p.arms_missing,   // 못 그린 고시 갈래 — 카드 「못 그린 구간」 행(2026-09-09 세션109 · 어댑터 함정)
       end_gap: p.end_gap,   // 끝이 개통 도로에서 떠 있음 — 카드 「끝 접속」 행(2026-09-10 세션110 · 어댑터 함정)
+      bid: p.bid, bid_more: p.bid_more,   // 공사 발주(나라장터 입찰공고 · bid_link.py · 2026-09-29 · 어댑터 함정 예방)
       near_pts: p.near_pts,   // 세는 점(near_points.py) — 전용 노선 [] · 일반 노선 선 표본 · 앱과 같은 필드(2026-09-17 세션121 · 감사 C1 · 어댑터 함정 예방)
       stage_checked: p.stage_checked, stage_src: p.stage_src,   // 단계는 수동 SSOT — 확인 시점을 화면에 남긴다
       stage_history: p.stage_history, last_movement: p.last_movement, first_seen: p.first_seen,   // 생애주기 — 흐름·신선도(어댑터 함정)
@@ -7736,6 +7746,22 @@ function archFactsheet(s) {
 const PH4 = ["계획", "인가", "착공", "준공·개통"];
 function msPhaseIdx(m) { const p = m.phase === "준공" ? "준공·개통" : m.phase; return PHASE_IDX[p] ?? -1; }
 function ymDot(d) { const m = String(d || "").match(/^(\d{4})[-.]?(\d{2})?/); return m ? m[1] + (m[2] ? "." + m[2] : "") : ""; }
+/* ★ 공사 발주 — 나라장터 시설공사 입찰공고(bid_link.py · 2026-09-29 세션144 · 알렉스 결정 「새 원천 A」) · 인가 뒤 착공 전의 공식 시공 신호.
+   단계를 올리지 않는다(공고는 착공이 아니다) · 금액은 공고의 공사 규모(배정예산·추정가격 중 큰 값)이지 사업비 전체가 아니다(§7 — 시세가 아니라 사업 규모의 사실) ·
+   최근 셋 + 나머지는 접힘 · 공고 원문(나라장터)으로 간다. 필드 = `s.bid`(최근 순) · `s.bid_more`(목록 밖 건수) · 게이트 html_check.bid_row_check · 정본 DESIGN 「공사 발주」 행. */
+function bidHtml(s) {
+  const b = Array.isArray(s.bid) ? s.bid.filter(x => x && x.t) : [];
+  if (!b.length) return "";
+  const eok = w => { const e = Number(w) / 1e8; return e >= 1 ? e.toLocaleString(undefined, { maximumFractionDigits: e >= 100 ? 0 : 1 }) + "억" : ""; };
+  const day = d => String(d || "").slice(0, 10).replace(/-/g, ".");
+  const row = x => `<div class="bidrow"><span class="dt">${esc(day(x.date))}</span><span class="nm">${esc(String(x.t))}</span>`
+    + `<span class="am">${eok(x.amt)}</span>${/^https?:/.test(x.url || "") ? `<a href="${esc(String(x.url))}" target="_blank" rel="noopener">공고</a>` : ""}</div>`;
+  const n = b.length + (Number(s.bid_more) || 0);
+  return `<div class="stbid"><div class="bh">공사 발주 <span class="mt">나라장터 입찰공고 ${n}건 · 금액은 공사 규모</span></div>`
+    + b.slice(0, 3).map(row).join("")
+    + (b.length > 3 ? `<details><summary>나머지 ${b.length - 3}건${s.bid_more ? ` (+${s.bid_more}건은 목록 밖)` : ""}</summary>${b.slice(3).map(row).join("")}</details>` : "")
+    + `</div>`;
+}
 function stepperHtml(s) {
   const cur = PHASE_IDX[phaseOf(s)] ?? 0, ms = s.milestones || [];
   const reached = PH4.map((_, i) => ms.filter(m => msPhaseIdx(m) === i && m.date && m.state !== "future" && m.state !== "next" && m.state !== "target")
@@ -7750,7 +7776,7 @@ function stepperHtml(s) {
   const hist = ms.length > 1 ? `<details class="sthist"><summary>단계 이력 ${ms.length}건 ▾</summary>${msTrack(s)}</details>` : "";
   return `<div class="dsec"><div class="dlab">사업 단계</div>
     <div class="stepper"><div class="bar"></div><div class="prog" style="width:${prog}"></div>${steps}</div>
-    ${card}${s.drawn_scope ? `<div class="stscope">${esc(String(s.drawn_scope))}</div>` : ""}${nextWatch(s)}${hist}</div>`;   // 그린 범위 — 노선의 일부만 확정돼 한 토막만 그린 경우(drawn_scope · 2026-09-28 GTX F)
+    ${card}${bidHtml(s)}${s.drawn_scope ? `<div class="stscope">${esc(String(s.drawn_scope))}</div>` : ""}${nextWatch(s)}${hist}</div>`;   // 그린 범위 — 노선의 일부만 확정돼 한 토막만 그린 경우(drawn_scope · 2026-09-28 GTX F)
 }
 /* 관련 목록 — 교통 = 역세권 아파트 · 일자리·인프라 = 영향권 아파트 · 반경 · 주거개발 = 주변 호재.
    ⚠ §7 「수혜 단지」 금지 — 이름·거리만 적고, 순서는 거리(측정값) 하나다(aptsNearSignal 주석과 같은 규칙). */
@@ -14565,8 +14591,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "68853e1573", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "82ed3a9007", "adverse_funeral.json": "088988ca9c", "apartments_all.json": "d9f26bcb00", "arch_signals.json": "775e285619", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "c1dff97c09", "corridor_diff.json": "4ee36287d6", "dart_signals.json": "8da8a330e2", "dps_signals.json": "dea730d851", "eum_backfill_progress.json": "e3d44bd4ae", "eum_enroll.json": "2217272563", "eum_signals.json": "5973f7897d", "eum_usage.json": "9f8f7b93dc", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "ecfad810fd", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "bd5bc9d091", "jeongbi_poly_seoul.json": "0d6512563a", "jigu_school_signals.json": "f543828e83", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "40e10478a6", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "d9d01ac824", "mega_signals.json": "89dc25f711", "methodology.html": "ccc0cfe94f", "officetels_all.json": "4d34dbb1d7", "park_signals.json": "8b3ea51980", "privacy.html": "217d09c9a3", "push_feed.json": "4cd901c6e2", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "4d3c8ac45f", "rail_reference.html": "c5f9998bf7", "rail_signals.json": "3dafd934ec", "region_gaps.json": "b8dad8dee8", "regions.json": "b7c757393f", "report.html": "358fdc95a0", "retail_signals.json": "6e1143d5e0", "road_signals.json": "097c68fb53", "robots.txt": "21147e58c5", "school_signals.json": "9624f80be3", "settings.html": "ba96e63c1e", "sfz_signals.json": "1d94e1cfb2", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "9073c9bc97", "sido_all.geojson": "2d0c426029", "signals.json": "3f3409fd49", "signals_auto.json": "721c0cb663", "signals_jeongbi_all.json": "7dc6246fd4", "sitemap.xml": "0201837cec", "source_status.html": "1493c6c4d2", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "dc873a1072", "upis_facility_geom.json": "f994708186", "upis_on_road.json": "4a0d3c953c", "weekly.html": "f6f8aad308", "weekly_index.json": "9a8db27033"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260929o");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "68853e1573", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "82ed3a9007", "adverse_funeral.json": "088988ca9c", "apartments_all.json": "d9f26bcb00", "arch_signals.json": "775e285619", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "de136a04dd", "corridor_diff.json": "402e1bd397", "dart_signals.json": "8da8a330e2", "dps_signals.json": "0205edf403", "eum_backfill_progress.json": "e3d44bd4ae", "eum_enroll.json": "2217272563", "eum_signals.json": "25de1791b3", "eum_usage.json": "9f8f7b93dc", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "ecfad810fd", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "a9e9eadb77", "jeongbi_poly_seoul.json": "0d6512563a", "jigu_school_signals.json": "f543828e83", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "40e10478a6", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "392f51566b", "mega_signals.json": "89dc25f711", "methodology.html": "ccc0cfe94f", "officetels_all.json": "4d34dbb1d7", "park_signals.json": "8b3ea51980", "privacy.html": "217d09c9a3", "push_feed.json": "703fcfd958", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "059abb31d9", "rail_reference.html": "c5f9998bf7", "rail_signals.json": "3dafd934ec", "region_gaps.json": "8d794513fc", "regions.json": "b7c757393f", "report.html": "358fdc95a0", "retail_signals.json": "6e1143d5e0", "road_signals.json": "6a52e7bf70", "robots.txt": "21147e58c5", "school_signals.json": "9624f80be3", "settings.html": "ba96e63c1e", "sfz_signals.json": "1d94e1cfb2", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "9073c9bc97", "sido_all.geojson": "2d0c426029", "signals.json": "3f3409fd49", "signals_auto.json": "721c0cb663", "signals_jeongbi_all.json": "7dc6246fd4", "sitemap.xml": "0201837cec", "source_status.html": "48fe6809ca", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "ee580cdaea", "upis_facility_geom.json": "f994708186", "upis_on_road.json": "d4814c3f2e", "weekly.html": "f6f8aad308", "weekly_index.json": "9a8db27033"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260929p");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
