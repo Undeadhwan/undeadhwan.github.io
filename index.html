@@ -1475,7 +1475,7 @@
      종전엔 둘이 한 줄에 섞여 요약 숫자가 칩 안 작은 글씨였다 — *"무엇이 바뀌었는지가 본론"*인
      화면에서 본론이 가장 작았다. 숫자칸이 곧 필터라는 성질은 그대로 둔다(하나가 두 일을 한다). */
   #flowv .fbar { display:flex; align-items:center; justify-content:flex-end; gap:12px; flex-wrap:wrap; margin:10px 0 8px; }
-  #flowv .fsegs { display:grid; grid-template-columns:repeat(4,1fr); border:1px solid var(--line);
+  #flowv .fsegs { display:grid; grid-template-columns:repeat(5,1fr); border:1px solid var(--line);
                   border-radius:var(--r-s); overflow:hidden; background:#fff; margin:0 0 14px; }
   #flowv .fseg { background:#fff; border:0; border-right:1px solid var(--line); padding:13px 16px;
                  font:600 var(--fs-s)/1.2 inherit; color:var(--ink3); cursor:pointer;
@@ -1570,6 +1570,7 @@
   .mvtag.chg { color:var(--ink2); }
   .mvtag.chg.back { color:var(--stall-ink); }
   .mvtag.new { color:var(--ink2); }
+  .mvtag.bid { color:var(--ink2); }   /* 공사 발주(입찰공고) — 단계 그림 없이 사실 한 줄 */
   /* ══ 하단 탭바(독) — 모바일 전용. 데스크톱은 헤더 칩이 같은 일을 한다(두 벌을 만들지 않는다) ══ */
   /* 문법(DESIGN §1): 무채색 뼈대 · 상태는 채움(굵기)으로. `env(safe-area-inset-bottom)` —
      푸터를 숨겨 탭바가 최하단이 됐으므로 아이폰 홈 바를 침범하면 안 된다. */
@@ -9373,14 +9374,26 @@ function movDelta(s) {
      인정했더니 `basis`가 아예 없는 이력이 빠져, 요약이 「36건 = 변동 20 + 신규 14」처럼 **합이 안 맞았다**.
      `movBasis`는 「observed가 아니면 source」로 본다 — 두 곳이 다른 자를 쓰면 화면이 스스로와 어긋난다. */
   const h = (s.stage_history || []).filter(x => x && x.basis !== "observed" && x.date);
+  /* ★ 공사 발주(나라장터 입찰공고 · bid_link.py · 2026-09-29 세션144)가 마지막 움직임이면 **단계 변화가 아니다** — 종류 「발주」.
+     lifecycle이 공고일을 움직임으로 넣으므로(준공 전만) 이 분기가 없으면 옛 단계 변화(남양주왕숙 「확정 → 착공」 2019)가 이번 달
+     「단계 진행」으로 셌다(2026-09-29 실측 31일 창 안 11건). 공고일보다 늦은 단계 이력이 있으면 그 단계 변화가 먼저다. */
+  const bt = bidTop(s);
+  if (bt && String(s.last_movement || "").slice(0, 10) === bt.date && !h.some(x => String(x.date).slice(0, 10) >= bt.date))
+    return { kind: "발주", date: bt.date, bid: bt };
   if (!h.length) return null;
   const a = [...h].sort((x, y) => String(x.date).localeCompare(String(y.date)));
   const cur = a[a.length - 1], prev = a.length >= 2 ? a[a.length - 2] : null;
   return { kind: prev ? "변동" : "신규", from: prev && prev.stage, to: cur.stage, date: cur.date };
 }
+/* 가장 최근 공고(bid는 최근 순) — 없으면 null */
+function bidTop(s) { const b = Array.isArray(s.bid) ? s.bid.filter(x => x && x.date) : []; return b.length ? b[0] : null; }
 function movDeltaHtml(s) {
   const d = movDelta(s);
   if (!d) return "";
+  if (d.kind === "발주") {   // 단계 그림이 아니라 사실 한 줄 — 단계는 그대로다(공고는 착공이 아니다)
+    const e = Number(d.bid.amt) / 1e8;
+    return `<span class="mvtag bid" title="나라장터 입찰공고 — 단계가 바뀐 것이 아닙니다">공사 발주${e >= 1 ? " · " + e.toLocaleString(undefined, { maximumFractionDigits: e >= 100 ? 0 : 1 }) + "억" : ""}</span>`;
+  }
   /* ★ 「신규」는 전 → 후가 없다 — 대신 **현재 상태 하나**를 같은 문법으로 그린다
      (2026-08-13 갱신 시안 §05 실물 「◯ B · 계획」 · 사장님이 이 행에 표시).
      ☠ 종전엔 빈 문자열이라 신규 행만 그 칸이 **비어 있었다** — 「무엇이 새로 생겼나」를
@@ -9528,15 +9541,16 @@ function flowCompute(M, custom) {
   const future = moved.filter(s => daysAgo(s.last_movement) < 0);
   const past = moved.filter(inWin);
   const nChg = past.filter(s => (movDelta(s) || {}).kind === "변동").length;
-  const nNew = past.length - nChg;
-  return { rows, moved, seen, daysAgo, inWin, chgRows, future, past, nChg, nNew, total: past.length + chgRows.length };
+  const nBid = past.filter(s => (movDelta(s) || {}).kind === "발주").length;   // 공사 발주 — 단계 진행·신규가 아니다(movDelta 주석)
+  const nNew = past.length - nChg - nBid;
+  return { rows, moved, seen, daysAgo, inWin, chgRows, future, past, nChg, nNew, nBid, total: past.length + chgRows.length };
 }
 /* 업데이트 행 하나의 사실(날짜·종류·값 변경) — 전체 화면(폰)·좌측 패널 업데이트 탭 한 벌(2026-09-27 · renderFlow 안의 두 사본을 모았다) */
 function flowRowFacts(s, daysAgo, seen) {
   const fc = fieldChangeList(s, FLOW_MONTHS * 31), d = movDelta(s);
   const onlyFld = !!fc.length && (!s.last_movement || daysAgo(s.last_movement) > FLOW_MONTHS * 31);
   const dt = String(onlyFld ? fc[fc.length - 1].date : (s.last_movement || ""));
-  const kind = onlyFld ? { c: "fld", t: "내용" } : seen ? { c: "seen", t: "확인" } : d && d.kind === "변동"
+  const kind = onlyFld ? { c: "fld", t: "내용" } : seen ? { c: "seen", t: "확인" } : d && d.kind === "발주" ? { c: "bid", t: "공사 발주" } : d && d.kind === "변동"
     ? { c: "chg" + (PHASE_IDX[d.to] < PHASE_IDX[d.from] ? " back" : ""), t: isDesk() ? "단계 진행" : "변동" }
     : { c: "new", t: "신규" };
   return { fc, d, onlyFld, dt, kind };
@@ -9641,7 +9655,7 @@ function lpSrcFam(s) { return String(s.src_name || s.src_org || "").replace(/\s*
 function lpFlow() {
   const head = document.getElementById("lp-head"), body = document.getElementById("lp-body"); if (!head || !body) return;
   const F = flowSets();
-  const kinds = [["all", "전체", F.past.length + F.chgRows.length], ["new", "신규", F.nNew], ["chg", "단계 진행", F.nChg], ["up", "등급 상향", F.nUp], ["undet", "등급 없음 해소", F.nUndet]]
+  const kinds = [["all", "전체", F.past.length + F.chgRows.length], ["new", "신규", F.nNew], ["chg", "단계 진행", F.nChg], ["bid", "공사 발주", F.nBid], ["up", "등급 상향", F.nUp], ["undet", "등급 없음 해소", F.nUndet]]
     .filter(([k, , n]) => k === "all" || n || FLOW_KIND === k);   // 0건 종류는 숨긴다(6A) — 지금 고른 종류는 0이어도 남긴다(고른 것이 사라지면 길을 잃는다)
   head.innerHTML = `<div class="lppills">${FLOW_PERIODS.map(([mo, lb]) => `<button type="button" data-lpper="${mo}" class="${!FLOW_CUSTOM && mo === FLOW_MONTHS ? "on" : ""}">${lb}</button>`).join("")}</div>`
     + `<div class="lppills">${kinds.map(([k, lb, n]) => `<button type="button" data-lpkind="${k}" class="${FLOW_KIND === k ? "on" : ""}">${lb}<b>${n.toLocaleString()}</b></button>`).join("")}</div>`;
@@ -9714,6 +9728,8 @@ function lpBind() {
 }
 /* 업데이트 행의 근거 한 줄 — 「왜 바뀌었나」 · 전체 화면·좌측 패널 한 벌. ★ 쉬운 말(2026-09-27 결정 6A): 필드 라벨 「소스 단계」는 「원천 단계」로, 값은 「」로 싼다 */
 function flowWhy(s, fc) {
+  const _d = fc.length ? null : movDelta(s);
+  if (_d && _d.kind === "발주") return "공사 발주 「" + _d.bid.t + "」";   // 입찰공고 공고명(bid_link)
   const _lc = fc[fc.length - 1];
   return fc.length
     ? (_lc.field === "lvl" ? `등급 ${_lc.from === "미정" ? "없음" : _lc.from} → ${_lc.to === "미정" ? "없음" : _lc.to}`   // 등급은 전→후(2026-09-25)
@@ -9743,14 +9759,14 @@ function flowSets() {
     : FLOW_KIND === "up" ? upRows.map(x => x.s)
     : FLOW_KIND === "undet" ? undetRows.map(x => x.s)
     : FLOW_KIND === "fld" ? chgRows.map(x => x.s)
-    : past.filter(s => (movDelta(s) || {}).kind === (FLOW_KIND === "chg" ? "변동" : "신규"));
+    : past.filter(s => (movDelta(s) || {}).kind === (FLOW_KIND === "chg" ? "변동" : FLOW_KIND === "bid" ? "발주" : "신규"));
   shown.sort((a, b) => String(b.last_movement).localeCompare(String(a.last_movement)));   // 최신순(사용자 확정)
   return Object.assign({}, F, { upRows, undetRows, nUp, nUndet, shown });
 }
 function renderFlow() {
   const host = document.getElementById("flowv");
   if (!host) return;
-  const { moved, seen, daysAgo, inWin, chgRows, future, past, nChg, nNew, upRows, undetRows, nUp, nUndet, shown } = flowSets();   // 셈은 flowSets 한 벌(좌측 패널 업데이트 탭과 같은 자 · 2026-09-27)
+  const { moved, seen, daysAgo, inWin, chgRows, future, past, nChg, nNew, nBid, upRows, undetRows, nUp, nUndet, shown } = flowSets();   // 셈은 flowSets 한 벌(좌측 패널 업데이트 탭과 같은 자 · 2026-09-27)
   // 라벨 위 · 큰 숫자 아래(시안 실물). 종전엔 한 줄에 라벨+작은 숫자였다.
   const seg = (k, lb, n) => `<button class="fseg${FLOW_KIND === k ? " on" : ""}${n ? "" : " z"}" data-kind="${k}" onmouseenter="explainTip(event,'flow','${lb}(기간 창 안 · 노선당 1건) ${n.toLocaleString()}')" onmouseleave="explainHide()">${lb}<span class="n">${n.toLocaleString()}</span></button>`;
   const nFld = chgRows.length;
@@ -9760,7 +9776,7 @@ function renderFlow() {
      상태가 조용히 갈린다(「규칙이 한쪽에만」). renderDock이 flow 분기에서 마운트를 만든다. */
   const ctrlHtml = `
     <div class="fbar">
-      <!-- ★ 변경 유형을 **4개로 고정**한다 (시안 §05): 신규 · 단계 진행 · 등급 상향 · 등급 없음 해소(2026-08-16 시안 개칭 — 「미판정」은 화면 어휘에서 뺀다).
+      <!-- ★ 변경 유형을 **고정**한다 (시안 §05): 신규 · 단계 진행 · 등급 상향 · 등급 없음 해소(2026-08-16 시안 개칭 — 「미판정」은 화면 어휘에서 뺀다) + 공사 발주(2026-09-29 세션144 · 입찰공고 — 단계가 아니다).
            *"상단 요약 숫자가 곧 필터"* — 0건이어도 칸을 없애지 않는다. 없애면 「그런 변화는 애초에
            안 센다」로 읽히고, 0으로 두면 「이번 기간엔 없었다」는 사실이 된다(P2). -->
       <button class="fall${FLOW_KIND === "all" ? " on" : ""}" data-kind="all">전체 <span class="n">${(past.length + nFld).toLocaleString()}</span></button>
@@ -9787,7 +9803,7 @@ function renderFlow() {
          0건이어도 칸을 없애지 않는다: 없애면 「그런 변화는 애초에 안 센다」로 읽히고,
          0으로 두면 「이번 기간엔 없었다」는 사실이 된다(P2). -->
     <div class="fsegs">${seg("new", "신규", nNew)}${
-      seg("chg", "단계 진행", nChg)}${seg("up", "등급 상향", nUp)}${seg("undet", "등급 없음 해소", nUndet)}</div>`;
+      seg("chg", "단계 진행", nChg)}${seg("bid", "공사 발주", nBid)}${seg("up", "등급 상향", nUp)}${seg("undet", "등급 없음 해소", nUndet)}</div>`;
   const _dkf = document.getElementById("dk-flow");
   const _v2 = isDesk();   // 웹 크롬 v2 — 데스크톱은 사이드바가 없으므로 컨트롤이 본문 왼쪽 열에 선다(시안 「업데이트」)
   const _ctrlHost = (!_v2 && _dkf && !matchMedia("(max-width:768px)").matches) ? _dkf : null;
@@ -14591,8 +14607,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "68853e1573", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "82ed3a9007", "adverse_funeral.json": "088988ca9c", "apartments_all.json": "d9f26bcb00", "arch_signals.json": "775e285619", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "de136a04dd", "corridor_diff.json": "402e1bd397", "dart_signals.json": "8da8a330e2", "dps_signals.json": "0205edf403", "eum_backfill_progress.json": "e3d44bd4ae", "eum_enroll.json": "2217272563", "eum_signals.json": "25de1791b3", "eum_usage.json": "9f8f7b93dc", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "ecfad810fd", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "a9e9eadb77", "jeongbi_poly_seoul.json": "0d6512563a", "jigu_school_signals.json": "f543828e83", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "40e10478a6", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "392f51566b", "mega_signals.json": "89dc25f711", "methodology.html": "ccc0cfe94f", "officetels_all.json": "4d34dbb1d7", "park_signals.json": "8b3ea51980", "privacy.html": "217d09c9a3", "push_feed.json": "703fcfd958", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "059abb31d9", "rail_reference.html": "c5f9998bf7", "rail_signals.json": "3dafd934ec", "region_gaps.json": "8d794513fc", "regions.json": "b7c757393f", "report.html": "358fdc95a0", "retail_signals.json": "6e1143d5e0", "road_signals.json": "6a52e7bf70", "robots.txt": "21147e58c5", "school_signals.json": "9624f80be3", "settings.html": "ba96e63c1e", "sfz_signals.json": "1d94e1cfb2", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "9073c9bc97", "sido_all.geojson": "2d0c426029", "signals.json": "3f3409fd49", "signals_auto.json": "721c0cb663", "signals_jeongbi_all.json": "7dc6246fd4", "sitemap.xml": "0201837cec", "source_status.html": "48fe6809ca", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "ee580cdaea", "upis_facility_geom.json": "f994708186", "upis_on_road.json": "d4814c3f2e", "weekly.html": "f6f8aad308", "weekly_index.json": "9a8db27033"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260929p");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "68853e1573", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "5fa347372e", "adverse_funeral.json": "95cd099292", "apartments_all.json": "d9f26bcb00", "arch_signals.json": "e6e897ddcb", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "951f5a3ae9", "corridor_diff.json": "6dabb1f66e", "dart_signals.json": "8da8a330e2", "dps_signals.json": "0205edf403", "eum_backfill_progress.json": "e3d44bd4ae", "eum_enroll.json": "2217272563", "eum_signals.json": "25de1791b3", "eum_usage.json": "e57d4e2a11", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "8ea67200c2", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "774e9aec64", "jeongbi_poly_seoul.json": "0d6512563a", "jigu_school_signals.json": "abdc310d01", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "48de49c854", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "52309131ef", "mega_signals.json": "1428088d9a", "methodology.html": "ccc0cfe94f", "officetels_all.json": "c39abea049", "park_signals.json": "b9c1c46e10", "privacy.html": "217d09c9a3", "push_feed.json": "99ae85c8e6", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "35ec7cf273", "rail_reference.html": "c5f9998bf7", "rail_signals.json": "3dafd934ec", "region_gaps.json": "cac1dd4dd5", "regions.json": "b7c757393f", "report.html": "358fdc95a0", "retail_signals.json": "b31388088b", "road_signals.json": "c666c83a09", "robots.txt": "21147e58c5", "school_signals.json": "ebf475932f", "settings.html": "ba96e63c1e", "sfz_signals.json": "3833b6efbd", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "9073c9bc97", "sido_all.geojson": "2d0c426029", "signals.json": "3f3409fd49", "signals_auto.json": "e11226d414", "signals_jeongbi_all.json": "7dc6246fd4", "sitemap.xml": "f049eab001", "source_status.html": "9eeaa153b1", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "ee580cdaea", "upis_facility_geom.json": "f994708186", "upis_on_road.json": "e1d6dda62c", "weekly.html": "f6f8aad308", "weekly_index.json": "9a8db27033"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260930a");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
