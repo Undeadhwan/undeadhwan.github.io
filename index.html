@@ -404,7 +404,7 @@
        슬롯이 없으면 글자가 행마다 어긋나 계단처럼 보인다. 두께는 **균일**(죽은 0.2px 차등 제거). */
   .ltab .lt-lvc { width:58px; }
   .ltab .lt-lvc .lvcell { gap:7px; }
-  .ltab .lt-lvc .sl { display:inline-flex; align-items:center; justify-content:center; width:17px; flex:none; }
+  .ltab .lt-lvc .sl { display:inline-flex; align-items:center; justify-content:center; width:14px; flex:none; }
   /* 4점 트랙 (시안 §07) — 건당 60px 트랙 대신 6px 점 4개 */
   /* ★ 시안 실물: 4점 트랙은 **채운 점**이다(빈 링이 아니다) — 미도래만 흐린 점. */
   .rowtab .lt-ph { font-size:12px; line-height:1.3; }
@@ -521,10 +521,11 @@
   .cnt .loading { color:var(--ink3); font-weight:500; animation:hjfade 1.1s ease-in-out infinite; }
   @keyframes hjfade { 0%,100% { opacity:.45 } 50% { opacity:.9 } }
   .phcell { display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
-  .phcell i { width:11px; height:11px; border-radius:50%; flex:none; border:1.6px solid var(--ink2); }
+  .phcell i { width:11px; height:11px; border-radius:50%; flex:none; border:2px solid var(--ink2); box-sizing:border-box; }
   .phcell i.ph0 { border-style:dashed; }
-  .phcell i.ph2 { border-width:3px; }
-  .phcell i.ph3 { border-width:3px; background:radial-gradient(circle, var(--ink2) 0 2.2px, transparent 2.4px); }
+  /* 착공 = 채움 · 완공 = 채움 + 흰 코어 — 지도 점과 같은 문법(2026-09-30 점 표기 통일 · 종전 「두께 = 단계」) */
+  .phcell i.ph2 { background:var(--ink2); }
+  .phcell i.ph3 { background:radial-gradient(circle, #fff 0 1.8px, var(--ink2) 2px); }
 
   .regionbar { display:flex; gap:7px; align-items:center; flex-wrap:wrap; position:relative; }
   /* 조회 범위 칩 + 3열 동시 팝오버 (시안 §03·§04) — 드롭다운 3개가 먹던 가로폭을 칩 하나로 줄인다. */
@@ -824,7 +825,8 @@
   /* 「후」 = 유형색(시안 §05 실물). 링도 글자도 같은 색을 따라가야 한 덩어리로 읽힌다. */
   .mvtag .phcell.now, .mvtag .phcell.now b { color:inherit; }
   .mvtag .phcell.now i { border-color:currentColor; }
-  .mvtag .phcell.now i.ph3 { background:radial-gradient(circle, currentColor 0 2.2px, transparent 2.4px); }
+  .mvtag .phcell.now i.ph2 { background:currentColor; }
+  .mvtag .phcell.now i.ph3 { background:radial-gradient(circle, #fff 0 1.8px, currentColor 2px); }
   /* 기간 칩 (시안 §05) */
   /* ★ 업데이트 탭 조회 축(기간·변경 유형)의 **사이드바 마운트** (2026-08-16 갱신 시안 §03·§05 —
      *"사이드바는 세 탭에 모두 둡니다 — 자리는 같고 내용은 그 탭이 답하는 축입니다. …
@@ -2036,13 +2038,13 @@
     background:none; border:1.5px solid currentColor; border-radius:50%; }
   /* ⚠ 계획 아이콘은 **점선이 아니다**(2026-08-20 §14-3) — 점선은 위치 근사로 옮겼다.
      단계는 두께가 말하므로 계획은 **가장 얇은 실선**이다(마커와 같은 문법). */
-  #dock .pgrow i.phi.ph0, #msheet .mc i.phi.ph0 { border-width:1.5px; border-style:dashed; }
-  #dock .pgrow i.phi.ph1, #msheet .mc i.phi.ph1 { border-width:1.5px; }
-  #dock .pgrow i.phi.ph2, #msheet .mc i.phi.ph2,
-  #dock .pgrow i.phi.ph3, #msheet .mc i.phi.ph3 { border-width:4px; }
-  /* 완공 = 굵은 링 + **중심 코어** — 지도 마커가 준공에만 코어를 찍는 것과 같다 */
-  #dock .pgrow i.phi.ph3, #msheet .mc i.phi.ph3 {
-    background:radial-gradient(circle, currentColor 0 2.2px, transparent 2.4px); }
+  /* ★ 2026-09-30 점 표기 통일 — 단계 = 채움(계획 점선 테 · 확정 실선 테 · 착공 채움 · 완공 채움 + 흰 코어 · 테 2.5px) · 지도 점과 같은 문법 */
+  #dock .pgrow i.phi.ph0, #msheet .mc i.phi.ph0 { border-width:2.5px; border-style:dashed; }
+  #dock .pgrow i.phi.ph1, #msheet .mc i.phi.ph1 { border-width:2.5px; }
+  #dock .pgrow i.phi.ph2, #msheet .mc i.phi.ph2 { border-width:2.5px; background:currentColor; }
+  /* 완공 = 채움 + **흰 코어** — 지도 점이 완공에만 코어를 찍는 것과 같다 */
+  #dock .pgrow i.phi.ph3, #msheet .mc i.phi.ph3 { border-width:2.5px;
+    background:radial-gradient(circle, #fff 0 2px, currentColor 2.2px); }
   /* 등급 없음 = 마름모(2026-08-12) — 지도와 같은 문법. 점선 원으로 둔 동안은 계획 단계와 구분이 안 됐다.
      원 = 등급이 있는 것 · 마름모 = 등급 축 밖. 후광(좌표 근사)은 원이니 둘이 섞이지 않는다. */
   /* 선형 토글 라벨 앞 선 아이콘 — 토글이 범례를 겸하게 한다(지도: 실선=철도 · 점선=도로) */
@@ -3411,7 +3413,7 @@ const LVL_RANK = { S: 0, A: 1, B: 2, C: 3, "미정": 4 };
      면적이 등급에 비례하도록」). 종전 21/16/12/9는 지름 42/32/24/18이라 한 단계씩 컸다.
    ⚠ 미정(마름모)은 시안 swatch가 14px 정사각형을 45° 돌린 것이라 반대각선 ≈9.9다 —
      C(8)보다 크게 두어야 형태가 작아 보이지 않는다. */
-const HJR = { S: 17, A: 13, B: 10, C: 8, "미정": 7 };   // 지름 34·26·20·16 · 미정 마름모 14 — 전부 시안 §02 견본값
+const HJR = { S: 14, A: 12, B: 10, C: 9, "미정": 9 };   // 지름 28·24·20·18 · 미정 마름모 반대각 9×1.2 — 2026-09-30 알렉스 「①1 ②1 ③1」(앱처럼 또렷하게 · 가장 작은 C = 앱 점 크기 · 종전 34·26·20·16은 시안 §02 견본값)
 /* ★ **인라인 등급 링의 지름은 이 자 하나** (2026-09-13) — 같은 식이 **일곱 곳**에 사본으로 있었다
    (표 둘·비교 밴드·요약·툴팁·검색 등) — 그리고 **그 사본들이 도크와 다른 눈금**이었다: 도크 세그는 순수 `HJR`(17/13/10/8)을
    쓰는데 사본들은 바닥값 9(C가 8→9)와 미정 11을 얹어, 같은 등급이 자리마다 다른 크기로 그려졌다
@@ -11257,12 +11259,10 @@ function initLeaflet() {
       for (const c of pts) {
         if (!bd.contains([c[1], c[0]])) continue;
         n++;
-        const col = sg.status === "종결" ? "#9aa3b2" : colorOf(sg);
-        const solid = phaseSolid(sg);
-        const rKm = getRadius(sg) / 1000;
-        const r = Math.max(6, Math.min(16, 5 + rKm * 1.4));   // 카카오판과 같은 눈금
-        const m = L.circleMarker([c[1], c[0]], { pane: "sig", radius: r, color: col, weight: 1.6,
-          dashArray: solid ? null : "4 3", fillColor: col, fillOpacity: solid ? .14 : .08 });
+        // ★ 카카오판과 **같은 그림**(hojaeMarkerSvg · 2026-09-30 점 표기 통일) — 종전 circleMarker는 반경 km 눈금·옅은 채움이라 문법이 갈라져 있었다
+        const col = sg.status === "종결" ? "#9aa3b2" : colorOf(sg), lv = levelOf(sg);
+        const mk = hojaeMarkerSvg(col, lvSize(lv), PHASE_IDX[phaseOf(sg)] ?? 0, sg.status === "종결" ? .45 : .92, false, lv === "미정" ? "diamond" : "circle");
+        const m = L.marker([c[1], c[0]], { pane: "sig", icon: L.divIcon({ className: "", html: mk.svg, iconSize: [mk.size, mk.size], iconAnchor: [mk.c, mk.c] }) });
         m.on("click", () => showSignal(sg, false));
         m.addTo(map); hjDots.push(m);
       }
@@ -11638,81 +11638,52 @@ function hexA(hex, a) {
      ④ **코어 도트** — 채움을 옅게 낮춘 대신 중심에 점을 찍는다. 겹치거나 작아도 "여기 하나 있다"가
         사라지지 않는다. 착공 후=채운 점 / 계획·인가=속 빈 점으로 P2 문법(실선/점선)을 한 번 더 반복. */
 const _hjImg = {};
-function hojaeMarkerImage(col, r, bw, ph, fillOp, alpha, halo, shape) {
-  /* ★ 2026-08-13 **리디자인 시안 §02 문법으로 전환** (`design/hojaemap-redesign.html`).
-     종전엔 **두께가 등급**을 말하고(S·A 2 / 나머지 1.6) 채움이 유형색이었다. 시안은 축을 갈랐다:
-       · 크기 = 등급 (지름 34/26/20/16 → 반지름 17/13/10/8)
-       · 두께 = 단계 (계획 2 → 확정 2.5 → 착공 4 → 완공 4) — 「확정도가 높을수록 굵어진다」 한 방향
-       · 속은 **비운다** — 링 안쪽으로 지도가 비쳐야 5천 건을 다 그려도 지형이 읽힌다
-       · 코어 도트는 **완공에만** (종전엔 전 마커에 찍어 단계 정보가 아니었다)
-     `ph`는 PHASE_IDX(0 계획 · 1 인가=확정 · 2 착공 · 3 준공·개통=완공). 종전 `solid`(불리언)를
-     대체한다 — 두 상태로는 네 단계를 말할 수 없다. */
-  /* `shape`: "circle"(기본) · "diamond"(**등급 축 밖** = 미정). 2026-08-12 신설.
-     ☠ 종전엔 미정도 원이라 **계획 단계의 점선 원과 형태가 같았다** — 「등급을 모른다」와
-       「아직 계획이다」는 다른 축인데 한 모양이 둘을 말했다. 형태로 가르면 색 채널은 분류
-       전용으로 남는다(§4 「색만으로 상태 구분 금지」와 같은 방향).
-     ⚠ **캐시 키에 shape를 넣는다** — 안 넣으면 같은 색·크기의 원 이미지가 재사용돼 마름모가
-       영영 안 그려진다(이 저장소가 `_geom_full` 캐시로 이미 한 번 밟은 형태). */
-  shape = shape || "circle";
-  const key = col + "|" + r + "|" + bw + "|" + ph + "|" + fillOp + "|" + alpha + "|" + halo + "|" + shape;
-  if (_hjImg[key]) return _hjImg[key];
-  // 2026-07-31 문법 강화(사용자 "지도의 녹지·주황과 비슷해 인식성이 떨어진다"):
-  //   케이싱을 두껍게(1.6→2.2) 하고 그 **바깥에 어두운 헤어라인**을 한 겹 두른다.
-  //   색으로 배경을 이기는 데는 한계가 있다 — 카카오맵은 녹지·물·도로·지하철 9색으로 색상환을
-  //   거의 다 쓰므로, 4색을 아무리 잘 골라도 지도와의 색차는 ΔE 28쯤이 천장이다(실측).
-  //   반면 어두운 외곽선은 **배경이 무슨 색이든** 경계를 만든다 — 지도 마커의 표준 해법.
-  /* 흰 케이싱 = **1.5px**(시안 §02 견본 `box-shadow:0 0 0 1.5px #fff`). 2026-08-20 2.2 → 1.5.
-     ⚠ 바깥 어두운 헤어라인은 **남긴다** — 시안 견본은 드롭섀도(`0 1px 4px rgba(0,0,0,.3)`)인데,
-       그건 흰 문서 배경 기준이다. 실제 지도 타일 위에서는 헤어라인이 같은 일을 하고(2026-07-31
-       ΔE 28 실측), SVG 드롭섀도는 마커 수백 개에서 필터 비용이 붙는다. 근거가 다른 자리라 바꾸지 않는다. */
-  const cw = 1.5, ro = r + bw / 2 + cw / 2, ri = ro + cw / 2 + 0.35;
-  /* ★ **클릭 영역은 크기와 무관하게 고정**이다 (시안 §02 40px · §11 터치 44px).
-     ☠ 종전엔 히트 영역 = 그려진 이미지라 C등급(지름 16)은 케이싱까지 쳐도 **27px**이었다 —
-       손가락으로는 거의 못 누르고 마우스로도 조준이 필요했다. 등급이 낮다고 누르기 어려울
-       이유는 없다(등급은 규모 분류이지 중요도가 아니다 — P3).
-     ⚠ **그림은 그대로 두고 캔버스만 넓힌다** — 투명 여백이 히트 영역이 된다.
-     ⚠ 겹침 걱정은 없다: 클러스터 격자가 `HJR.S*2.4`(≈41px)라 **따로 그려진 두 마커는 이미
-       그만큼 떨어져 있다**(더 가까우면 도넛으로 합쳐진다). */
+/* ★★ 호재 점 한 벌 (2026-09-30 세션144 · 알렉스 결정 「①1 ②1 ③1」 · 결정 페이지 https://claude.ai/artifact/C1EJTZABDADeSjHE2mXDq6).
+   알렉스 「앱은 원 두께가 굵어서 인식이 잘되는 반면 웹 호재는 한눈에 안 들어와」 — 실측(2026-09-29): 지도 점의 64%가 가장 작은 두 크기(C 46% · 등급 없음 18%)이고
+   그 둘이 가장 얇은 테(1.5~2px)·30% 비친 속이라 카카오 공원·산 아이콘에 묻혔다. 앱은 모든 점이 테 3px·불투명이었다.
+   ⇒ 문법(웹·앱 공통 · 앱 네 렌더러도 같은 수):
+     · 크기 = 등급(좁힌 눈금 `HJR` · 가장 작은 C = 앱 점 크기) · 형태 = 등급 축(원 = 등급 있음 · 마름모 = 등급 없음 · 2026-08-12)
+     · 단계 = 채움 — 계획 = 흰 속 + **점선** 테 3px · 확정 = 흰 속 + 실선 테 3px · 착공 = 유형색 채움 + 흰 테 · 완공 = 유형색 채움 + 흰 코어(원만)
+     · 색 = 유형(완공도 유형색 — 회색은 「호재 아님」 전용 · 2026-09-10 결정) · 바깥 어두운 헤어라인은 남긴다(배경이 무슨 색이든 경계 · 2026-07-31 ΔE 28 실측)
+   ☠ 종전 문법(속 비움 흰 베일 30% · 두께 = 단계 2/2.5/4/4)은 「5천 건을 다 그려도 지형이 읽힌다」(2026-08-13 시안 §02)였는데 점이 지형에 묻혔다 —
+     그 판단을 알렉스 결정으로 뒤집는다. 카카오·Leaflet 두 렌더러가 **이 함수 하나**를 쓴다(Leaflet은 divIcon · 종전 circleMarker는 반경 km 눈금이라 문법이 갈라져 있었다).
+   클릭 영역은 크기와 무관하게 고정(40 · 터치 44 · 시안 §02·§11 — 등급이 낮다고 누르기 어려울 이유는 없다 · P3). */
+function hojaeMarkerSvg(col, r, ph, alpha, halo, shape) {
+  const dia = shape === "diamond", SW = 3;
+  const rr = dia ? r * 1.2 : r;                               // 마름모는 반대각 — 같은 무게로 보이게(시안 §02 마름모 견본이 원보다 컸다)
   const HIT = (typeof matchMedia === "function" && matchMedia("(pointer: coarse)").matches) ? 44 : 40;
-  const size = Math.max(HIT, Math.ceil((halo ? r + 7 : ri + 1) * 2)), c = size / 2;
-  const dia = shape === "diamond";
-  /* 마름모는 **같은 5겹 문법**을 유지하고 path만 바꾼다 — 케이싱·헤어라인은 배경 대비 장치라
-     형태가 바뀌어도 걷어내지 않는다(2026-07-31 ΔE 28 실측이 그대로 유효). */
-  const poly = (rr, fill, stroke, sw, extra) =>
-    '<polygon points="' + [[c, c - rr], [c + rr, c], [c, c + rr], [c - rr, c]].map(q => q.join(",")).join(" ") +
-    '" fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + sw + '" stroke-linejoin="round"' + (extra || "") + '/>';
-  const ring = (rr, fill, stroke, sw, extra) => dia ? poly(rr, fill, stroke, sw, extra)
-    : '<circle cx="' + c + '" cy="' + c + '" r="' + rr + '" fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + sw + '"' + (extra || "") + '/>';
-  let inner = halo ? '<circle cx="' + c + '" cy="' + c + '" r="' + (r + 7) + '" fill="' + col + '" opacity="0.10"/>' : "";
-  inner += ring(+ri.toFixed(2), "none", "rgba(0,0,0,0.22)", 0.7);
-  inner += ring(+ro.toFixed(2), "none", "#fff", cw, ' opacity="0.95"');
-  let dash = "";
-  /* ★★ **점선 = 계획 단계** (시안 rev2 §14-3 정정 · 2026-08-20 사장님 확정).
-     ☠ 초안은 「점선 = 위치 근사」였고 그대로 넣었다가 되돌렸다. 그러면 점선이 두 가지를 겸한다 —
-       사이드바 단계 필터는 「점선 = 계획」인데 지도는 「점선 = 근사」가 되어 **한 화면이 두 말**을
-       한다. rev2의 근거 셋: ⑴ 단계는 **모든** 호재에 있는 축이고 근사는 일부에만 붙는 부가
-       정보라 상시 있는 축이 기본 문법을 갖는다 ⑵ 근사는 이미 **후광 + ±수치** 두 장치가 있다
-       ⑶ *"사이드바 필터가 곧 범례"*라는 전제 위에서 지도와 필터의 문법이 갈리면 전제가 무너진다.
-     ⇒ 위치 근사는 **가리키거나 선택할 때만 후광**(§14-3) + **상세 ±수치**로만 말한다. */
-  if (ph === 0) {   // 계획만 점선. 둘레를 짝수 등분 → 크기가 달라도 결이 같다
-    const circ = dia ? 4 * r * Math.SQRT2 : 2 * Math.PI * r;   // 마름모는 변 길이 합(√2·r × 4)
-    const n = Math.max(8, Math.round(circ / 4.6 / 2) * 2), seg = circ / n;
-    dash = ' stroke-dasharray="' + (seg * 0.45).toFixed(2) + " " + (seg * 0.55).toFixed(2) + '" stroke-linecap="round"';
+  const edge = rr + SW / 2 + 1;
+  const size = Math.max(HIT, Math.ceil((halo ? rr + 8 : edge + 1) * 2)), c = size / 2;
+  const shp = (R, fill, stroke, w, extra) => dia
+    ? '<polygon points="' + [[c, c - R], [c + R, c], [c, c + R], [c - R, c]].map(q => q.map(v => +v.toFixed(2)).join(",")).join(" ")
+      + '" fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + w + '" stroke-linejoin="round"' + (extra || "") + '/>'
+    : '<circle cx="' + c + '" cy="' + c + '" r="' + (+R.toFixed(2)) + '" fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + w + '"' + (extra || "") + '/>';
+  let inner = halo ? '<circle cx="' + c + '" cy="' + c + '" r="' + (rr + 8) + '" fill="' + col + '" opacity="0.10"/>' : "";
+  inner += shp(edge, "none", "rgba(0,0,0,0.25)", 0.8);        // 바깥 헤어라인 — 배경 대비 장치
+  if (ph >= 2) {
+    inner += shp(rr, col, "#fff", 2);                          // 착공·완공 = 유형색 채움
+    if (ph === 3 && !dia) inner += '<circle cx="' + c + '" cy="' + c + '" r="' + Math.max(2, rr * 0.34).toFixed(1) + '" fill="#fff"/>';
+  } else {
+    let dash = "";
+    if (ph === 0) {   // 계획만 점선 — 둘레를 짝수 등분해 크기가 달라도 결이 같다
+      const circ = dia ? 4 * rr * Math.SQRT2 : 2 * Math.PI * rr;
+      const n = Math.max(6, Math.round(circ / 7 / 2) * 2), seg = circ / n;
+      dash = ' stroke-dasharray="' + (seg * 0.58).toFixed(2) + " " + (seg * 0.42).toFixed(2) + '"';
+    }
+    inner += shp(rr + SW / 2 + 0.5, "#fff", "none", 0);         // 흰 받침 — 점선 틈으로 지도가 새지 않게
+    inner += shp(rr, "#fff", col, SW, dash);
   }
-  /* ★ **속을 비운다** — 채움은 유형색이 아니라 옅은 흰 베일이다(시안 swatch = rgba(255,255,255,.3)).
-     종전엔 `hexA(col, fillOp)`로 유형색을 14%까지 깔아, 마커가 겹칠수록 지도가 사라졌다. */
-  /* 채움 = 옅은 흰 베일. **마름모는 더 진하다**(시안 §02 견본: 원 `.3` · 마름모 `.45`) —
-     작고 각진 형태라 같은 농도면 배경에 묻힌다. */
-  inner += ring(r, "rgba(255,255,255," + (dia ? Math.min(1, fillOp + .15) : fillOp) + ")", col, bw, dash);
-  /* ★ 코어 도트는 **완공에만** (시안 §02 — 「굵은 링 + 중심 코어」). 종전엔 전 마커에 찍혀
-     단계를 말하지 않는 장식이었다.
-     ★ 마름모에는 어느 단계에서도 찍지 않는다 — 가운데를 채우면 「값이 있다」로 읽힌다.
-       형태 자체가 「등급 축 밖」을 말하므로 중심은 비워 둔다(P2). */
-  if (!dia && ph === 3)
-    inner += '<circle cx="' + c + '" cy="' + c + '" r="' + Math.max(2, r * 0.30).toFixed(1) + '" fill="' + col + '"/>';
-  const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '"><g opacity="' + alpha + '">' + inner + '</g></svg>';
-  const img = new kakao.maps.MarkerImage("data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg),
-    new kakao.maps.Size(size, size), { offset: new kakao.maps.Point(c, c) });
+  return { svg: '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '"><g opacity="' + alpha + '">' + inner + '</g></svg>', size, c };
+}
+function hojaeMarkerImage(col, r, bw, ph, fillOp, alpha, halo, shape) {
+  /* 카카오 이미지 — 그림은 hojaeMarkerSvg 하나(bw·fillOp는 옛 문법의 인자라 쓰지 않는다 · 호출부 키 호환으로 남긴다) ·
+     ⚠ 캐시 키에 shape를 넣는다(안 넣으면 같은 색·크기 원이 재사용돼 마름모가 안 그려진다 — 2026-08-12) */
+  shape = shape || "circle";
+  const key = "v2|" + col + "|" + r + "|" + ph + "|" + alpha + "|" + halo + "|" + shape;
+  if (_hjImg[key]) return _hjImg[key];
+  const m = hojaeMarkerSvg(col, r, ph, alpha, halo, shape);
+  const img = new kakao.maps.MarkerImage("data:image/svg+xml;charset=utf-8," + encodeURIComponent(m.svg),
+    new kakao.maps.Size(m.size, m.size), { offset: new kakao.maps.Point(m.c, m.c) });
   _hjImg[key] = img;
   return img;
 }
@@ -14607,8 +14578,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "68853e1573", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "f9896b2576", "adverse_funeral.json": "bba4045c34", "apartments_all.json": "cc35f188c5", "arch_signals.json": "2e22beb409", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "9b75bf1bb4", "corridor_diff.json": "6c5a55b90e", "dart_signals.json": "2e47b2b222", "dps_signals.json": "30960626e2", "eum_backfill_progress.json": "e3d44bd4ae", "eum_enroll.json": "fcc72b9403", "eum_signals.json": "a38580f5eb", "eum_usage.json": "3e4cf4814b", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "feda7fbd44", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "f48a96588a", "jeongbi_poly_seoul.json": "b563ea90d8", "jigu_school_signals.json": "abdc310d01", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "7aecb68a79", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "5a9e8f82c2", "mega_signals.json": "795789c196", "methodology.html": "ccc0cfe94f", "officetels_all.json": "c39abea049", "park_signals.json": "1de84837ef", "privacy.html": "217d09c9a3", "push_feed.json": "800af98819", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "155307796c", "rail_reference.html": "c5f9998bf7", "rail_signals.json": "3dafd934ec", "region_gaps.json": "13c2e24fb3", "regions.json": "b7c757393f", "report.html": "be76b601f6", "retail_signals.json": "d4d4c30242", "road_signals.json": "c5c54d1384", "robots.txt": "21147e58c5", "school_signals.json": "935a2ece27", "settings.html": "ba96e63c1e", "sfz_signals.json": "3833b6efbd", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "5a2d8d3f14", "sido_all.geojson": "2d0c426029", "signals.json": "3f3409fd49", "signals_auto.json": "19d6dec6eb", "signals_jeongbi_all.json": "663e535c9c", "sitemap.xml": "a8e5150a00", "source_status.html": "c274d51650", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "ee580cdaea", "upis_facility_geom.json": "29e0907f6a", "upis_on_road.json": "29faa52748", "weekly.html": "f6f8aad308", "weekly_index.json": "9a8db27033"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260930b");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "68853e1573", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "f9896b2576", "adverse_funeral.json": "bba4045c34", "apartments_all.json": "cc35f188c5", "arch_signals.json": "973b4883d6", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "8e63a141bf", "corridor_diff.json": "0dff8f8fcb", "dart_signals.json": "6bc2d51f74", "dps_signals.json": "63846ef566", "eum_backfill_progress.json": "bf5170251c", "eum_enroll.json": "fcc72b9403", "eum_signals.json": "673c3b20d3", "eum_usage.json": "3e40b79ddd", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "feda7fbd44", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "f48a96588a", "jeongbi_poly_seoul.json": "2396392893", "jigu_school_signals.json": "abdc310d01", "jobs_signals.json": "a1195a6b1b", "logipark_signals.json": "7aecb68a79", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "5a9e8f82c2", "mega_signals.json": "795789c196", "methodology.html": "ccc0cfe94f", "officetels_all.json": "c39abea049", "park_signals.json": "1de84837ef", "privacy.html": "217d09c9a3", "push_feed.json": "870bcddc65", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "f278d43a12", "rail_reference.html": "c5f9998bf7", "rail_signals.json": "3dafd934ec", "region_gaps.json": "d6681d2960", "regions.json": "b7c757393f", "report.html": "be76b601f6", "retail_signals.json": "d4d4c30242", "road_signals.json": "d010111899", "robots.txt": "21147e58c5", "school_signals.json": "935a2ece27", "settings.html": "ba96e63c1e", "sfz_signals.json": "3833b6efbd", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "5a2d8d3f14", "sido_all.geojson": "2d0c426029", "signals.json": "3f3409fd49", "signals_auto.json": "19d6dec6eb", "signals_jeongbi_all.json": "3b5fc86f0c", "sitemap.xml": "a8e5150a00", "source_status.html": "99fee9fdfc", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "ee580cdaea", "upis_facility_geom.json": "29e0907f6a", "upis_on_road.json": "1e185fa49b", "weekly.html": "f6f8aad308", "weekly_index.json": "9a8db27033"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260930c");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
