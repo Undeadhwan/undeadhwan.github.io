@@ -2199,6 +2199,21 @@
     header #f-pub .chip.wk::before { content:""; width:20px; height:20px; flex:none;
       background:no-repeat center/20px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256' fill='none' stroke='%237dd3fc' stroke-width='24' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M232 56l-96 96-40-40-72 72M232 120V56h-64'/%3E%3C/svg%3E"); }
     header #f-pub .chip[hidden] { display:none; }
+    /* ★ 오늘 전국 움직임 띠(mvBand · 2026-09-30 세션144 · 알렉스 「다 1번으로 해」) — 검색창 오른쪽 끝과 「주간 신호」 왼쪽 끝 사이(실측 폭 변수 · 상수 폭 금지) · 같은 판·높이 */
+    header #mvband { position:absolute; top:16px; height:48px; left:calc(16px + var(--logoW, 104px) + 10px + 380px + 10px); right:calc(16px + var(--pubW, 118px) + 10px);
+      display:flex; align-items:center; gap:10px; padding:0 16px; border-radius:8px; background:var(--p); box-shadow:var(--shc); color:var(--t);
+      font-size:14px; white-space:nowrap; overflow:hidden; cursor:pointer; }
+    header #mvband[hidden] { display:none; }
+    header #mvband:hover { filter:brightness(1.12); }
+    header #mvband:focus-visible { outline:2px solid var(--ac); outline-offset:2px; }
+    header #mvband .cnt { font-weight:700; flex:none; } header #mvband .cnt b { font-variant-numeric:tabular-nums; }
+    header #mvband .sep { width:1px; height:20px; background:var(--b2); flex:none; }
+    header #mvband .dot { width:9px; height:9px; border-radius:50%; flex:none; }
+    header #mvband .kind { color:var(--m); flex:none; font-weight:600; }
+    header #mvband .txt { min-width:0; flex:1; overflow:hidden; text-overflow:ellipsis; }
+    header #mvband .rg { color:var(--m); }
+    header #mvband .pg { color:var(--m); flex:none; font-variant-numeric:tabular-nums; font-size:12.5px; }
+    @media (max-width:1180px) { header #mvband { display:none !important; } }   /* 띠가 280px 아래로 줄면 글자가 한두 낱말만 남는다 — 그 폭에선 세우지 않는다 */
     header #f-pub .chip:hover, header .logo:hover { filter:brightness(1.12); }
     header #f-view { position:absolute; right:16px; top:68px; }
     body.ops header #f-view { display:flex; }
@@ -2815,6 +2830,8 @@
     <input id="srch-in" type="search" placeholder="동 · 아파트 · 호재 검색" autocomplete="off">
     <div class="srchpanel" id="srch-panel"></div>
   </div>
+  <!-- ★ 오늘 전국 움직임 띠 — 데스크톱만(폰 웹은 아직 · 앱은 왼쪽 아래 알약) · 내용은 mvBandDraw · 정본 DESIGN 「오늘 전국 움직임 띠」 -->
+  <div id="mvband" hidden role="button" tabindex="0" title="원천에 날짜가 있는 공식 움직임(업데이트와 같은 판정) · 하루 한 번 갱신 · 누르면 그 호재로"></div>
   <!-- ★ 조회 범위 = **칩 1개 + 3열 동시 팝오버** (2026-08-13 시안 §03·§04).
        *"시도를 고르고 로딩을 기다렸다가 시군구를 고르고 다시 기다리는 흐름을 없앱니다. 세 열이
        한 번에 열려 있어 원하는 깊이에서 바로 멈출 수 있고, 세로 공간도 먹지 않습니다."*
@@ -10625,7 +10642,62 @@ function updateTabbar() {
   el.title = n ? `오늘 문서상 움직인 신호 ${n}건 — 흐름 탭의 「오늘」과 같은 수` : "";
   el.style.display = n ? "" : "none";
 }
-function renderAll() { _relEpoch++; renderChips(); renderDock(); renderAxis(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); if (VIEW_MODE === "list") renderList(); if (VIEW_MODE === "flow") renderFlow(); renderSheet(); updateTabbar(); layoutBottom(); }
+/* ★★ 오늘 전국 움직임 띠 (2026-09-30 세션144 · 알렉스 결정 「다 1번으로 해」 — 결정 한 장 claude.ai/artifact/Ern3FqkvhV83JDZKsbg9SX).
+   ① 데스크톱 윗줄 가운데(검색창과 「주간 신호」 사이) ③ 원천에 날짜가 있는 움직임 전부 — 업데이트와 **같은 판정**(flowCompute · movDelta 종류 넷) ·
+   ④ 늘 전국 · 조회조건과 무관(withFilters로 잠시 전부 켜고 센다 · 원래 조건은 그대로) ⑤ 누르면 그 호재로(showSignal) ·
+   ⑥ 4초마다 한 줄 · 가리키거나 초점이 오면 멈춤 · 줄임 동작 설정이면 안 돈다 · 오늘 0건이면 이번 주(7일) · 「실시간」 낱말 금지(하루 한 번 갱신 · P2).
+   앱은 같은 목록을 덤프로 받는다(web_view_dump `band` → 번들 manifest.band · 사본 판정 없음). 게이트 html_check.mvband_check · 정본 DESIGN 「오늘 전국 움직임 띠」 행. */
+const MVB_KIND = { "신규": "신규", "변동": "단계 진행", "발주": "공사 발주", "환경": "환경영향평가" };
+let MVB = { win: "", items: [], i: 0, key: "", hold: false, timer: null };
+function mvBandItems() {
+  const all = () => { CAT_KEYS.forEach(k => filter.cat.add(k)); ALL_SUBS.forEach(k => filter.sub.add(k)); PHASES.forEach(k => filter.phase.add(k));
+    GRADES_DISP.forEach(k => filter.lvl.add(k)); NATURE_KEYS.forEach(k => filter.nature.add(k)); filter.region = null; filter.sd = null; filter.dong = null; };
+  const t = TODAY.toISOString().slice(0, 10), w = new Date(TODAY.getTime() - 6 * 864e5).toISOString().slice(0, 10);
+  return withFilters(all, () => {
+    const pick = win => flowCompute(0, win).past.map(s => ({ s, d: movDelta(s) })).filter(x => x.d && MVB_KIND[x.d.kind])
+      .sort((a, b) => String(b.s.last_movement).localeCompare(String(a.s.last_movement)));
+    const today = pick([t, t]);
+    return today.length ? { win: "오늘", items: today } : { win: "이번 주", items: pick([w, t]) };
+  });
+}
+/* 한 줄 꼬리 — 무엇이 움직였나(단계 진행 = 도달 단계 · 신규 = 지금 단계 · 공사 발주 = 공사 규모 · 환경영향평가 = 협의 단계) */
+function mvBandTail(x) {
+  const d = x.d;
+  if (d.kind === "발주") { const e = Number(d.bid.amt) / 1e8; return e >= 1 ? e.toLocaleString(undefined, { maximumFractionDigits: e >= 100 ? 0 : 1 }) + "억" : ""; }
+  if (d.kind === "환경") return eiaStep(d.eia.step);
+  if (d.kind === "변동") return "→ " + phaseLabel(d.to);
+  return phaseLabel(phaseOf(x.s));
+}
+function mvBandDraw() {
+  const el = document.getElementById("mvband"), x = MVB.items[MVB.i];
+  if (!el || !x) return;
+  const s = x.s, rg = [s.sd, s.sg].filter(Boolean).join(" "), tl = mvBandTail(x);
+  el.innerHTML = `<span class="cnt">${MVB.win} 움직임 <b>${MVB.items.length.toLocaleString()}</b></span><i class="sep"></i>`
+    + `<i class="dot" style="background:${CAT_COLOR[catOf(s)] || CAT_COLOR["기타"]}"></i><span class="kind">${MVB_KIND[x.d.kind]}</span>`
+    + `<span class="txt">${rg ? `<span class="rg">${esc(rg)} · </span>` : ""}${esc(sigTitle(s))}${tl ? (tl.startsWith("→") ? " " : " — ") + esc(tl) : ""}</span>`
+    + `<span class="pg">${MVB.i + 1}/${MVB.items.length}</span>`;
+  el.setAttribute("aria-label", `${MVB.win} 움직임 ${MVB.items.length}건 중 ${MVB.i + 1}번째 — ${sigTitle(s)}`);
+}
+function mvBandRefresh() {
+  const el = document.getElementById("mvband");
+  if (!el) return;
+  if (!el._mvb) {   // 한 번만 묶는다 — 누르면 그 호재로 · 가리키거나 초점이 오면 멈춤
+    el._mvb = 1;
+    const go = () => { const x = MVB.items[MVB.i]; if (x) showSignal(x.s, true); };
+    el.addEventListener("click", go);
+    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+    ["mouseenter", "focus"].forEach(ev => el.addEventListener(ev, () => { MVB.hold = true; }));
+    ["mouseleave", "blur"].forEach(ev => el.addEventListener(ev, () => { MVB.hold = false; }));
+  }
+  if (!isDesk() || SRC_PENDING.size) { el.hidden = true; return; }   // 받는 중엔 세우지 않는다(덜 온 풀로 세면 「오늘 0건」이 거짓이 된다)
+  const key = allSignalsFlat().length + "|" + TODAY.toISOString().slice(0, 10);
+  if (key !== MVB.key) { const r = mvBandItems(); MVB.win = r.win; MVB.items = r.items; MVB.i = 0; MVB.key = key; }
+  el.hidden = !MVB.items.length;
+  mvBandDraw();
+  if (!MVB.timer && !matchMedia("(prefers-reduced-motion: reduce)").matches)
+    MVB.timer = setInterval(() => { if (MVB.hold || document.hidden || MVB.items.length < 2) return; MVB.i = (MVB.i + 1) % MVB.items.length; mvBandDraw(); }, 4000);
+}
+function renderAll() { _relEpoch++; renderChips(); renderDock(); renderAxis(); if (typeof buildTree === "function" && DONG_GEO) buildTree(); renderPanel(); if (mapApi) mapApi.refreshPins(); if (VIEW_MODE === "list") renderList(); if (VIEW_MODE === "flow") renderFlow(); renderSheet(); updateTabbar(); layoutBottom(); mvBandRefresh(); }
 
 /* ══════════ 마지막으로 본 자리 (2026-08-27 · 알렉스 요청) ══════════
    「사이트를 열면 마지막에 보던 곳이 나온다」 — 호갱노노·네이버부동산과 같은 문법이다.
@@ -14622,8 +14694,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "68853e1573", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "f9896b2576", "adverse_funeral.json": "bba4045c34", "apartments_all.json": "cc35f188c5", "arch_signals.json": "e11564cb9e", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "2f12cf677d", "corridor_diff.json": "464c116ad4", "dart_signals.json": "6bc2d51f74", "dps_signals.json": "63846ef566", "eum_backfill_progress.json": "f047651d43", "eum_enroll.json": "fcc72b9403", "eum_signals.json": "1109612f05", "eum_usage.json": "6bcfcd93fa", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "feda7fbd44", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "e37d4db905", "jeongbi_poly_seoul.json": "2396392893", "jigu_school_signals.json": "abdc310d01", "jobs_signals.json": "95a6b883b8", "logipark_signals.json": "0b2ff3846e", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "35453c587a", "mega_signals.json": "277dc82b09", "methodology.html": "90e22a9380", "officetels_all.json": "c39abea049", "park_signals.json": "1de84837ef", "privacy.html": "217d09c9a3", "push_feed.json": "8ef3f1bc36", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "bcb4e12329", "rail_reference.html": "c5f9998bf7", "rail_signals.json": "82795c97ff", "region_gaps.json": "6e687d7af4", "regions.json": "b7c757393f", "report.html": "be76b601f6", "retail_signals.json": "d4d4c30242", "road_signals.json": "7a569f76d4", "robots.txt": "21147e58c5", "school_signals.json": "935a2ece27", "settings.html": "ba96e63c1e", "sfz_signals.json": "3833b6efbd", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "5a2d8d3f14", "sido_all.geojson": "2d0c426029", "signals.json": "3f3409fd49", "signals_auto.json": "19d6dec6eb", "signals_jeongbi_all.json": "3b5fc86f0c", "sitemap.xml": "a8e5150a00", "source_status.html": "ee02624914", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "a2b2684fb5", "upis_facility_geom.json": "29e0907f6a", "upis_on_road.json": "8f657c3af3", "weekly.html": "f6f8aad308", "weekly_index.json": "9a8db27033"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260930g");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "68853e1573", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "f9896b2576", "adverse_funeral.json": "bba4045c34", "apartments_all.json": "cc35f188c5", "arch_signals.json": "e11564cb9e", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "ad2c483bb1", "corridor_diff.json": "7c2c660958", "dart_signals.json": "6bc2d51f74", "dps_signals.json": "63846ef566", "eum_backfill_progress.json": "f047651d43", "eum_enroll.json": "fcc72b9403", "eum_signals.json": "1109612f05", "eum_usage.json": "6bcfcd93fa", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "feda7fbd44", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "e37d4db905", "jeongbi_poly_seoul.json": "2396392893", "jigu_school_signals.json": "abdc310d01", "jobs_signals.json": "95a6b883b8", "logipark_signals.json": "0b2ff3846e", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "35453c587a", "mega_signals.json": "277dc82b09", "methodology.html": "90e22a9380", "officetels_all.json": "c39abea049", "park_signals.json": "1de84837ef", "privacy.html": "217d09c9a3", "push_feed.json": "61f574de51", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "08519bcd48", "rail_reference.html": "c5f9998bf7", "rail_signals.json": "82795c97ff", "region_gaps.json": "45a92d28fb", "regions.json": "b7c757393f", "report.html": "be76b601f6", "retail_signals.json": "d4d4c30242", "road_signals.json": "8d4b384a31", "robots.txt": "21147e58c5", "school_signals.json": "935a2ece27", "settings.html": "ba96e63c1e", "sfz_signals.json": "3833b6efbd", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "5a2d8d3f14", "sido_all.geojson": "2d0c426029", "signals.json": "3f3409fd49", "signals_auto.json": "19d6dec6eb", "signals_jeongbi_all.json": "3b5fc86f0c", "sitemap.xml": "a8e5150a00", "source_status.html": "ee02624914", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "a2b2684fb5", "upis_facility_geom.json": "29e0907f6a", "upis_on_road.json": "41652e03fc", "weekly.html": "f6f8aad308", "weekly_index.json": "9a8db27033"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20260930h");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
