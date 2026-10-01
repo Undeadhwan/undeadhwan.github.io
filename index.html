@@ -1543,6 +1543,7 @@
   /* ⚠ 역행(`.back`)만 정체색을 남긴다 — P5가 요구하는 사실이라 무채색에 섞으면 안 된다 */
   #flowv .mvk.chg.back { color:var(--stall-ink); background:#fdf8ec; }
   #flowv .mvk.seen { color:var(--ink3); background:var(--panel); }
+  #flowv .mvk.dd { color:var(--ink); background:transparent; border:1px solid var(--line); font-variant-numeric:tabular-nums; }   /* 다가오는 날짜(D-n) */
   #flowv .fbody { flex:1 1 0; min-width:0; }
   @media (max-width: 768px) {
     #flowv .fitem { gap:8px; }
@@ -2385,6 +2386,7 @@
     #lpane .lpday { font-size:11.5px; color:var(--m); padding:12px 8px 4px; font-weight:600; }
     #lpane .lpbadge { font-size:11px; font-weight:700; padding:1px 6px; border-radius:4px; background:var(--s); color:var(--t2); margin-right:6px; flex:none; }
     #lpane .lpbadge.new { background:#1f3a47; color:var(--st); }
+    #lpane .lpbadge.dd { background:transparent; border:1px solid var(--ac); color:var(--ac3); font-variant-numeric:tabular-nums; }   /* 다가오는 날짜 — 테만(새 색 없음) */
     #lpane .lpfold { display:flex; align-items:center; gap:8px; padding:9px 8px; border-radius:7px; cursor:pointer; font-size:13px; color:var(--t); }
     #lpane .lpfold:hover { background:#292b31; }
     #lpane .lpfold .n { color:var(--m); margin-left:auto; font-variant-numeric:tabular-nums; }
@@ -2522,6 +2524,9 @@
     .dv2 .stbid .eiaup { color:var(--ink); font-size:12.5px; }   /* 환경영향평가 — 다가오는 날짜(의견 제출 마감 · 주민설명회) 한 줄 */
     .dv2 .stbid details > summary { cursor:pointer; color:var(--ac3); list-style:none; }
     .dv2 .stbid details > summary::-webkit-details-marker { display:none; }
+    .dv2 .stdday { margin:2px 0 8px; padding:7px 12px; border-radius:8px; border:1px solid var(--ac); font-size:12.5px; line-height:1.45; display:flex; gap:8px; align-items:baseline; flex-wrap:wrap; }   /* 기다릴 날짜(D-day · ddayHtml) — 테 = 강조색(새 색 없음) */
+    .dv2 .stdday .d { font-variant-numeric:tabular-nums; color:var(--ac3); font-size:14px; }
+    .dv2 .stdday .w { min-width:0; } .dv2 .stdday .t { color:var(--m); } .dv2 .stdday .mt { color:var(--m); margin-left:auto; }
     .dv2 .stscope { margin-top:6px; padding:8px 12px; border-radius:8px; border:1px dashed var(--b); font-size:12.5px; line-height:1.5; color:var(--t); }   /* 그린 범위(drawn_scope) — 점선 테 = 미확정 문법 */
     .dv2 .nextwatch { font-size:12.5px; color:var(--m); background:none; padding:0; border:0; margin:0; }
     .dv2 .sthist > summary { list-style:none; cursor:pointer; font-size:12.5px; color:var(--ac3); }
@@ -5134,6 +5139,7 @@ function buildDartSignals() {   // DART 전자공시 = 법정 공시 → officia
     //    (실측 36건: 공장 18 · 오피스 6 · 연구소 5 · 물류 2 · 발전 1 · 미상 4).
     //    그걸 어댑터가 버려서 전부 미상으로 떠 있었다 — 어댑터 함정 재발.
     //    축 어휘에 없는 값(연구소·물류·발전)은 subKeyOf가 '미상'으로 모은다.
+    ...procFields(s),   // 공사 발주·환경영향평가(감사 4bⓒ)
     _dart: true, sub: s.sub || null, src_tier: "official_report", milestones: s.milestones, title: s.title, cat: "일자리", lvl: s.lvl || null, lvl_basis: s.lvl_basis, template_type: "기업이전",   // 등급 없음은 없음(양수 공시 등급 유보 · 2026-09-16 — C를 지어내지 않는다)
     current_stage: s.current_stage || "공시", phase: s.phase || "계획", status: "활성", confirmed: false,
     sd: s.sd, sg: s.sg, dong: s.dong || null, amount_eok: s.amount_eok,
@@ -5151,6 +5157,7 @@ function buildDartSignals() {   // DART 전자공시 = 법정 공시 → officia
 function buildArchSignals() {
   ARCH_SIG = (ARCH || []).filter(s => s.geometry && s.geometry.coordinates).map(s => ({
     _arch: true, _rk: s._rk, src_tier: "official_report", milestones: s.milestones, title: s.title, cat: s.cat || "인프라",
+    ...procFields(s),   // 공사 발주·환경영향평가(감사 4bⓒ)
     // 증축 필드(2026-07-30) — ⚠ 어댑터에 넣지 않으면 화면에 오지 않는다(어댑터 함정, 3회 밟음)
     arch_gb: s.arch_gb, ext_delta_m2: s.ext_delta_m2, ext_basis: s.ext_basis, nm_basis: s.nm_basis,
     absorbed_note: s.absorbed_note, absorbed: s.absorbed,   // 같은 필지 연속 증축으로 접힌 허가(2026-09-17 세션121 · 감사 J10) — 카드 근거 층 absorbedRow
@@ -5203,9 +5210,11 @@ function railLevelOf(name, kind) {
   return "B";   // 일반 지하철·광역철도·IC
 }
 function buildRailSignals() {
-  const lvlByLine = {}, basisByLine = {};
+  const lvlByLine = {}, basisByLine = {}, procByLine = {};
   RAIL.filter(f => f.properties.kind === "line").forEach(f => {
     lvlByLine[f.properties.name] = f.properties.lvl || railLevelOf(f.properties.name, f.properties.linekind);
+    // 공사 발주·환경영향평가는 **노선**에 붙는다 — 역(화면의 철도 호재)도 자기 노선 것을 말한다(2026-10-01 감사 4bⓑ · 업데이트·띠·카드 · 원장 lifecycle `line_proc`과 같은 규칙)
+    if (f.properties.bid || f.properties.eia || f.properties.press) procByLine[f.properties.name] = f.properties;
     // 역 등급은 **노선에서 온다**(lvlByLine) — 그러면 근거도 노선 것이어야 한다. 근거만 빼놓으면
     // 카드가 등급은 말하고 왜 그 등급인지는 말하지 않는다(2026-08-06 전수조사).
     if (f.properties.lvl_basis) basisByLine[f.properties.name] = f.properties.lvl_basis;
@@ -5243,6 +5252,9 @@ function buildRailSignals() {
     //   (2026-08-10 전수조사 D — 데이터엔 역 789건이 다 갖고 있는데 어댑터가 안 실었다. 어댑터 함정).
     stage_history: f.properties.stage_history, last_movement: f.properties.last_movement, first_seen: f.properties.first_seen,
     fin_date_unknown: f.properties.fin_date_unknown,   // 완료일 미상 — 안 실으면 관측일이 완료일로 읽힌다(2026-09-16 감사 C3 · 어댑터 함정)
+    ...(procByLine[f.properties.line] ? { bid: procByLine[f.properties.line].bid, bid_more: procByLine[f.properties.line].bid_more,
+        eia: procByLine[f.properties.line].eia, eia_more: procByLine[f.properties.line].eia_more,
+        press: procByLine[f.properties.line].press, press_more: procByLine[f.properties.line].press_more } : {}),   // 노선의 공사 발주·협의(위 procByLine)
     geometry: { coordinates: f.geometry.coordinates }
   }));
 }
@@ -5314,6 +5326,7 @@ function buildRoadSignals() {
     if (p.kind === "station") {   // IC·JC 점
       if (p.gate === "관찰") { GATE_OBS["도로 IC"]++; continue; }   // 노선·역과 같은 게이트 · 거른 수는 건수 설명이 말한다
       ROAD_SIG.push({ _road: true, title: p.name, _rk: p._rk, cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "A",
+        ...procFields(p),   // 공사 발주·환경영향평가(감사 4bⓒ)
         // 표준노드 본선 거리·보류 — 화이트리스트 어댑터라 여기서 안 실으면 카드의 「본선 거리」 행이 죽는다(2026-09-09 감사 · 어댑터 함정)
         node_line_m: p.node_line_m, node_hold: p.node_hold,
       work_nature: p.work_nature, work_nature_basis: p.work_nature_basis, work_nature_group: p.work_nature_group,
@@ -5368,7 +5381,7 @@ function buildRoadSignals() {
       official_type: p.official_type, official_name: p.official_name, access: p.access, access_note: p.access_note, ic_note: p.ic_note,
       arms_n: p.arms_n, arms_drawn: p.arms_drawn, arms_missing: p.arms_missing,   // 못 그린 고시 갈래 — 카드 「못 그린 구간」 행(2026-09-09 세션109 · 어댑터 함정)
       end_gap: p.end_gap,   // 끝이 개통 도로에서 떠 있음 — 카드 「끝 접속」 행(2026-09-10 세션110 · 어댑터 함정)
-      bid: p.bid, bid_more: p.bid_more, eia: p.eia, eia_more: p.eia_more,   // 공사 발주(나라장터 입찰공고 · bid_link.py · 2026-09-29 · 어댑터 함정 예방)
+      bid: p.bid, bid_more: p.bid_more, eia: p.eia, eia_more: p.eia_more, press: p.press, press_more: p.press_more,   // 공사 발주(나라장터 입찰공고 · bid_link.py · 2026-09-29 · 어댑터 함정 예방)
       near_pts: p.near_pts,   // 세는 점(near_points.py) — 전용 노선 [] · 일반 노선 선 표본 · 앱과 같은 필드(2026-09-17 세션121 · 감사 C1 · 어댑터 함정 예방)
       stage_checked: p.stage_checked, stage_src: p.stage_src,   // 단계는 수동 SSOT — 확인 시점을 화면에 남긴다
       stage_history: p.stage_history, last_movement: p.last_movement, first_seen: p.first_seen,   // 생애주기 — 흐름·신선도(어댑터 함정)
@@ -5465,6 +5478,7 @@ function hubHowTo(s) {
 function buildJeongbiSignals() {
   JEONGBI_SIG = JEONGBI.filter(c => c.lat && c.lon && !c.superseded_by).map(c => ({   // 층간 같은 사업 흡수분은 거른다(2026-09-17 세션121 · 감사 S3 — 이 어댑터만 거름이 없었다)
     _rk: c._rk,   // 원천 기록 표식(stampRk)
+    ...procFields(c),   // 공사 발주·환경영향평가(감사 4bⓒ)
     ...natureFields(c),   // 공사 성격(2026-09-08 전 유형 · 법정유형 → 재건축=신설 · 리모델링=개량) — 어댑터 함정 예방
     absorbed_note: c.absorbed_note, absorbed: c.absorbed,   // 층간 같은 사업으로 접힌 고시 — 카드 근거 층 absorbedRow(어댑터 함정 예방)
     merged_note: c.merged_note, merged_titles: c.merged_titles,   // 원천 대장의 같은 사업 두 행 통합(merge_same_project·merge_same_lot) — mergedRoadRow가 읽는다(2026-09-17 감사 · 2026-09-10부터 이 어댑터가 떨어뜨리고 있었다)
@@ -5548,6 +5562,11 @@ const NATURE_HINT = { "신설": "없던 길·선(우회도로·연결로·노선
 const NATURE_SCOPE = "전체";
 const natureFields = s => ({ work_nature: s.work_nature, work_nature_basis: s.work_nature_basis, work_nature_group: s.work_nature_group,
   work_nature_rank: s.work_nature_rank });   // 순위 = 팩트(2↑) ↔ 추정(1) — 칩이 「(추정)」을 붙이는 근거(2026-09-10 알렉스)
+/* 공사 발주·환경영향평가(bid_link·eia_link) — 필드를 골라 옮기는 어댑터가 같이 싣는 한 벌(2026-10-01 세션145 · 감사 4bⓒ: 공시·건축·IC·정비·도로 노선 카드
+   어댑터가 안 옮겨, 짝이 생기는 날 카드·업데이트가 침묵할 자리였다) · 게이트 html_check.proc_adapters_check */
+function procFields(x) {
+  return x && (x.bid || x.eia || x.press) ? { bid: x.bid, bid_more: x.bid_more, eia: x.eia, eia_more: x.eia_more, press: x.press, press_more: x.press_more } : {};
+}
 const natureGroupOf = s => { if (!s || !s.work_nature) return null; if (s.work_nature_group) return s.work_nature_group;
   for (const [g, ks] of Object.entries(NATURE_GROUPS)) if (ks.includes(s.work_nature)) return g; return "미상"; };
 const filter = {
@@ -7771,13 +7790,15 @@ function ymDot(d) { const m = String(d || "").match(/^(\d{4})[-.]?(\d{2})?/); re
 /* ★ 공사 발주 — 나라장터 시설공사 입찰공고(bid_link.py · 2026-09-29 세션144 · 알렉스 결정 「새 원천 A」) · 인가 뒤 착공 전의 공식 시공 신호.
    단계를 올리지 않는다(공고는 착공이 아니다) · 금액은 공고의 공사 규모(배정예산·추정가격 중 큰 값)이지 사업비 전체가 아니다(§7 — 시세가 아니라 사업 규모의 사실) ·
    최근 셋 + 나머지는 접힘 · 공고 원문(나라장터)으로 간다. 필드 = `s.bid`(최근 순) · `s.bid_more`(목록 밖 건수) · 게이트 html_check.bid_row_check · 정본 DESIGN 「공사 발주」 행. */
+/* 공사 규모(원) → 「2,144억」(100억 이상은 정수) · 날짜 「2026.09.21」 — 카드·앱(web_view_dump `bv`)이 같이 쓴다(앱에 사본 금지 · PROCEDURE_판정한벌 §2b) */
+function eokText(w) { const e = Number(w) / 1e8; return e >= 1 ? e.toLocaleString(undefined, { maximumFractionDigits: e >= 100 ? 0 : 1 }) + "억" : ""; }
+function dayDot(d) { return String(d || "").slice(0, 10).replace(/-/g, "."); }
 function bidHtml(s) {
   const b = Array.isArray(s.bid) ? s.bid.filter(x => x && x.t) : [];
   if (!b.length) return "";
-  const eok = w => { const e = Number(w) / 1e8; return e >= 1 ? e.toLocaleString(undefined, { maximumFractionDigits: e >= 100 ? 0 : 1 }) + "억" : ""; };
-  const day = d => String(d || "").slice(0, 10).replace(/-/g, ".");
+  const day = dayDot;
   const row = x => `<div class="bidrow"><span class="dt">${esc(day(x.date))}</span><span class="nm">${esc(String(x.t))}</span>`
-    + `<span class="am">${eok(x.amt)}</span>${/^https?:/.test(x.url || "") ? `<a href="${esc(String(x.url))}" target="_blank" rel="noopener">공고</a>` : ""}</div>`;
+    + `<span class="am">${eokText(x.amt)}</span>${/^https?:/.test(x.url || "") ? `<a href="${esc(String(x.url))}" target="_blank" rel="noopener">공고</a>` : ""}</div>`;
   const n = b.length + (Number(s.bid_more) || 0);
   return `<div class="stbid"><div class="bh">공사 발주 <span class="mt">나라장터 입찰공고 ${n}건 · 금액은 공사 규모</span></div>`
     + b.slice(0, 3).map(row).join("")
@@ -7797,22 +7818,76 @@ function eiaStep(t) {
 }
 function eiaUpcoming(x) {   // 의견 제출 마감(없으면 초안 공람 끝)이 오늘 이후면 그 날짜 — 다가오는 날짜(D-day 재료)
   const d = String(x.opinion_end || (Array.isArray(x.draft) ? x.draft[1] : "") || "").slice(0, 10);
-  return d && d >= new Date().toISOString().slice(0, 10) ? d : "";
+  return d && d >= TODAY.toISOString().slice(0, 10) ? d : "";   // 오늘 = 로컬 날짜(TODAY — UTC 자정에 놓인 로컬 날짜 · 종전 new Date()는 KST 아침 9시 전엔 어제였다)
+}
+/* 다가오는 의견 제출 마감 한 줄(글자 그대로 — 화면은 esc로 감싼다) · 카드·앱(web_view_dump `ev`)이 같이 쓴다 */
+function eiaUpText(x, up) {
+  return `의견 제출 ${dayDot(up)}까지${Array.isArray(x.draft) && x.draft[0] ? ` · 초안 공람 ${dayDot(x.draft[0])}~` : ""}${x.hearing ? ` · ${String(x.hearing).slice(0, 120)}` : ""}`;
+}
+/* ★ 기다릴 날짜(D-day) — 원천이 **날짜까지** 준 정해진 절차 일정만 (2026-10-01 세션145 · 알렉스 아이디어 2 · 결정 페이지
+   https://claude.ai/artifact/FqrjjfP54rE8c8TAZ4FFgC 추천안 ①1 ②1·2 ③2 ④1 ⑤1): 공사 입찰 마감(나라장터 bidClseDt) · 환경영향평가 의견 제출 마감 · 주민설명회·공청회.
+   사업 목표(착공·개통 목표)는 세지 않는다 — 목표에 남은 날을 달면 「실현 예정」처럼 읽히고(§7) 정체 사업에도 남는다(§7 정체 신호 일정 추정).
+   지난 날은 사라진다(그 절차의 결과는 원천이 주면 업데이트의 움직임이 된다). 카드 맨 위 한 줄(ddayHtml) · 업데이트 「다가오는 60일」(ddaySigs) ·
+   앱은 덤프 dd(판정 사본 금지) — 한 벌. 게이트 html_check.dday_check · 정본 DESIGN 「기다릴 날짜」 행. */
+const DDAY_DAYS = 60;
+function hearingDay(h) {   // 「2026년 10월 1일(목) 14:00」·「2026. 10. 14 오후 2시」·「2026.09.17」 → 첫 날짜(못 읽으면 "" — 지어내지 않는다)
+  const m = String(h || "").match(/(20\d{2})\s*[.년\-]\s*(\d{1,2})\s*[.월\-]\s*(\d{1,2})/);
+  return m ? `${m[1]}-${m[2].padStart(2, "0")}-${m[3].padStart(2, "0")}` : "";
+}
+function ddayItems(s) {
+  const t0 = TODAY.toISOString().slice(0, 10), out = [], seen = new Set();
+  const add = (d, k, t) => { if (!d || d < t0) return; const key = d + "|" + k; if (seen.has(key)) return; seen.add(key); out.push({ d, k, t: String(t || "") }); };
+  (Array.isArray(s.bid) ? s.bid : []).forEach(x => x && add(String(x.close || "").slice(0, 10), "입찰 마감", x.t));
+  (Array.isArray(s.eia) ? s.eia : []).forEach(x => { if (!x) return; add(eiaUpcoming(x), "의견 제출 마감", x.t); add(hearingDay(x.hearing), "주민설명회", x.t); });
+  return out.sort((a, b) => a.d.localeCompare(b.d));
+}
+function dLeft(d) { return Math.round((new Date(d + "T00:00:00Z") - TODAY) / 864e5); }   // TODAY = 로컬 날짜의 UTC 자정
+function ddLabel(d) { const n = dLeft(d); return n === 0 ? "D-day" : "D-" + n; }
+function ddWhy(s) { const it = ddayItems(s)[0]; return it ? `${it.k} ${dayDot(it.d).slice(5)}${it.t ? " · " + it.t : ""}` : ""; }
+function ddayHtml(s) {
+  const it = ddayItems(s); if (!it.length) return "";
+  const a = it[0], wd = ["일", "월", "화", "수", "목", "금", "토"][new Date(a.d + "T00:00:00").getDay()];
+  return `<div class="stdday"><b class="d">${ddLabel(a.d)}</b><span class="w">${esc(dayDot(a.d).slice(5))}(${wd}) ${esc(a.k)}${a.t ? ` · <span class="t">${esc(a.t)}</span>` : ""}</span>`
+    + (it.length > 1 ? `<span class="mt">외 ${it.length - 1}건</span>` : "") + `</div>`;
+}
+function ddaySigs(days) {   // 업데이트 「다가오는 N일」 — 보이는 호재(조회조건·지역) 중 가장 가까운 날이 창 안인 것 · 노선 역은 노선당 1건(movKey와 같은 뜻)
+  const lim = new Date(TODAY.getTime() + days * 864e5).toISOString().slice(0, 10), seen = new Set(), out = [];
+  for (const s of allSignalsFlat()) {
+    if (!(s.bid || s.eia) || !visible(s)) continue;
+    const it = ddayItems(s)[0]; if (!it || it.d > lim) continue;
+    const k = s.line ? `${s.line}|${it.d}|${it.k}` : s;
+    if (seen.has(k)) continue; seen.add(k); out.push({ s, it });
+  }
+  return out.sort((a, b) => a.it.d.localeCompare(b.it.d));
 }
 function eiaHtml(s) {
   const e = Array.isArray(s.eia) ? s.eia.filter(x => x && x.t) : [];
   if (!e.length) return "";
-  const day = d => String(d || "").slice(0, 10).replace(/-/g, ".");
+  const day = dayDot;
   const row = x => {
     const up = eiaUpcoming(x);
     return `<div class="bidrow"><span class="dt">${esc(day(x.date))}</span><span class="nm" title="평가 코드 ${esc(String(x.cd || ""))}">${esc(String(x.t))}</span>`
       + `<span class="am" title="${esc(String(x.step || ""))}">${esc(eiaStep(x.step))}</span></div>`
-      + (up ? `<div class="eiaup">의견 제출 ${esc(day(up))}까지${Array.isArray(x.draft) && x.draft[0] ? ` · 초안 공람 ${esc(day(x.draft[0]))}~` : ""}${x.hearing ? ` · ${esc(String(x.hearing).slice(0, 120))}` : ""}</div>` : "");
+      + (up ? `<div class="eiaup">${esc(eiaUpText(x, up))}</div>` : "");
   };
   const n = e.length + (Number(s.eia_more) || 0);
   return `<div class="stbid steia"><div class="bh">환경영향평가 <span class="mt">협의 ${n}건 · 국립환경과학원 협의 현황 · 평가 코드로 검색</span></div>`
     + e.slice(0, 3).map(row).join("")
     + (e.length > 3 ? `<details><summary>나머지 ${e.length - 3}건${s.eia_more ? ` (+${s.eia_more}건은 목록 밖)` : ""}</summary>${e.slice(3).map(row).join("")}</details>` : "")
+    + `</div>`;
+}
+/* ★ 관련 보도자료 — 정책브리핑(korea.kr) 부처 보도자료 중 이 사업 이름의 것(press_link.py · 2026-10-01 세션145 · 새 원천 E).
+   공식 발표지만 고시가 아니다 — 단계·움직임을 바꾸지 않는다(「보도자료만으로 확정 승격 금지」) · 최근 셋 + 접힘 · 원문(korea.kr)으로 간다.
+   필드 = `s.press`(최근 순) · 게이트 html_check.press_row_check · 정본 DESIGN 「관련 보도자료」 행. */
+function pressHtml(s) {
+  const b = Array.isArray(s.press) ? s.press.filter(x => x && x.t) : [];
+  if (!b.length) return "";
+  const row = x => `<div class="bidrow"><span class="dt">${esc(dayDot(x.d))}</span><span class="nm">${esc(String(x.t))}</span>`
+    + `<span class="am">${esc(String(x.org || ""))}</span>${/^https?:/.test(x.url || "") ? `<a href="${esc(String(x.url))}" target="_blank" rel="noopener">원문</a>` : ""}</div>`;
+  const n = b.length + (Number(s.press_more) || 0);
+  return `<div class="stbid stpress"><div class="bh">관련 보도자료 <span class="mt">정부 발표 ${n}건 · 고시가 아니라 단계는 바꾸지 않습니다</span></div>`
+    + b.slice(0, 3).map(row).join("")
+    + (b.length > 3 ? `<details><summary>나머지 ${b.length - 3}건${s.press_more ? ` (+${s.press_more}건은 목록 밖)` : ""}</summary>${b.slice(3).map(row).join("")}</details>` : "")
     + `</div>`;
 }
 function stepperHtml(s) {
@@ -7827,9 +7902,9 @@ function stepperHtml(s) {
       <span class="mt">${[now.date, now.src].filter(Boolean).map(x => esc(String(x))).join(" · ") || "시기 미정"}</span></div>`
     : `<div class="stcur"><span class="mt">${s._confirmedLayer ? "일정 미기재" : "일정 정보 없음(소스 미제공)"}</span></div>`;
   const hist = ms.length > 1 ? `<details class="sthist"><summary>단계 이력 ${ms.length}건 ▾</summary>${msTrack(s)}</details>` : "";
-  return `<div class="dsec"><div class="dlab">사업 단계</div>
+  return `<div class="dsec"><div class="dlab">사업 단계</div>${ddayHtml(s)}
     <div class="stepper"><div class="bar"></div><div class="prog" style="width:${prog}"></div>${steps}</div>
-    ${card}${bidHtml(s)}${eiaHtml(s)}${s.drawn_scope ? `<div class="stscope">${esc(String(s.drawn_scope))}</div>` : ""}${nextWatch(s)}${hist}</div>`;   // 그린 범위 — 노선의 일부만 확정돼 한 토막만 그린 경우(drawn_scope · 2026-09-28 GTX F)
+    ${card}${bidHtml(s)}${eiaHtml(s)}${pressHtml(s)}${s.drawn_scope ? `<div class="stscope">${esc(String(s.drawn_scope))}</div>` : ""}${nextWatch(s)}${hist}</div>`;   // 그린 범위 — 노선의 일부만 확정돼 한 토막만 그린 경우(drawn_scope · 2026-09-28 GTX F)
 }
 /* 관련 목록 — 교통 = 역세권 아파트 · 일자리·인프라 = 영향권 아파트 · 반경 · 주거개발 = 주변 호재.
    ⚠ §7 「수혜 단지」 금지 — 이름·거리만 적고, 순서는 거리(측정값) 하나다(aptsNearSignal 주석과 같은 규칙). */
@@ -9609,6 +9684,7 @@ function flowCompute(M, custom) {
 }
 /* 업데이트 행 하나의 사실(날짜·종류·값 변경) — 전체 화면(폰)·좌측 패널 업데이트 탭 한 벌(2026-09-27 · renderFlow 안의 두 사본을 모았다) */
 function flowRowFacts(s, daysAgo, seen) {
+  if (FLOW_KIND === "dd" && !seen) { const it = ddayItems(s)[0]; if (it) return { fc: [], d: null, onlyFld: false, dt: it.d, kind: { c: "dd", t: ddLabel(it.d) } }; }   // 다가오는 날짜 — 머리 날짜 = 그날
   const fc = fieldChangeList(s, FLOW_MONTHS * 31), d = movDelta(s);
   const onlyFld = !!fc.length && (!s.last_movement || daysAgo(s.last_movement) > FLOW_MONTHS * 31);
   const dt = String(onlyFld ? fc[fc.length - 1].date : (s.last_movement || ""));
@@ -9717,7 +9793,7 @@ function lpSrcFam(s) { return String(s.src_name || s.src_org || "").replace(/\s*
 function lpFlow() {
   const head = document.getElementById("lp-head"), body = document.getElementById("lp-body"); if (!head || !body) return;
   const F = flowSets();
-  const kinds = [["all", "전체", F.past.length + F.chgRows.length], ["new", "신규", F.nNew], ["chg", "단계 진행", F.nChg], ["bid", "공사 발주", F.nBid], ["eia", "환경영향평가", F.nEia], ["up", "등급 상향", F.nUp], ["undet", "등급 없음 해소", F.nUndet]]
+  const kinds = [["all", "전체", F.past.length + F.chgRows.length], ["new", "신규", F.nNew], ["chg", "단계 진행", F.nChg], ["bid", "공사 발주", F.nBid], ["eia", "환경영향평가", F.nEia], ["up", "등급 상향", F.nUp], ["undet", "등급 없음 해소", F.nUndet], ["dd", `다가오는 ${DDAY_DAYS}일`, F.nDd]]
     .filter(([k, , n]) => k === "all" || n || FLOW_KIND === k);   // 0건 종류는 숨긴다(6A) — 지금 고른 종류는 0이어도 남긴다(고른 것이 사라지면 길을 잃는다)
   head.innerHTML = `<div class="lppills">${FLOW_PERIODS.map(([mo, lb]) => `<button type="button" data-lpper="${mo}" class="${!FLOW_CUSTOM && mo === FLOW_MONTHS ? "on" : ""}">${lb}</button>`).join("")}</div>`
     + `<div class="lppills">${kinds.map(([k, lb, n]) => `<button type="button" data-lpkind="${k}" class="${FLOW_KIND === k ? "on" : ""}">${lb}<b>${n.toLocaleString()}</b></button>`).join("")}</div>`;
@@ -9734,11 +9810,11 @@ function lpFlow() {
     items.forEach(x => { const k = x.f.kind.t + "|" + lpSrcFam(x.s); if (!fam.has(k)) fam.set(k, []); fam.get(k).push(x); });
     for (const [k, xs] of fam) {
       const fk = d + "|" + k, folded = xs.length >= 4 && !LP_FOLDS.has(fk);
-      if (xs.length >= 4) html += `<div class="lpfold" data-lpfold="${esc(fk)}"><span class="lpbadge${xs[0].f.kind.c === "new" ? " new" : ""}">${xs[0].f.kind.t}</span>${esc(lpSrcFam(xs[0].s))}${folded ? " 갱신" : ""}<span class="n">${xs.length}건 ${folded ? "▸" : "▾"}</span></div>`;
+      if (xs.length >= 4) html += `<div class="lpfold" data-lpfold="${esc(fk)}"><span class="lpbadge${xs[0].f.kind.c === "new" ? " new" : xs[0].f.kind.c === "dd" ? " dd" : ""}">${xs[0].f.kind.t}</span>${esc(lpSrcFam(xs[0].s))}${folded ? " 갱신" : ""}<span class="n">${xs.length}건 ${folded ? "▸" : "▾"}</span></div>`;
       if (folded) continue;
       xs.forEach(x => { const i = _lpRows.push(x.s) - 1; n++;
         const why = flowWhy(x.s, x.f.fc);
-        html += lpRowHtml(x.s, i, { badge: `<span class="lpbadge${x.f.kind.c === "new" ? " new" : ""}">${x.f.kind.t}</span>`,
+        html += lpRowHtml(x.s, i, { badge: `<span class="lpbadge${x.f.kind.c === "new" ? " new" : x.f.kind.c === "dd" ? " dd" : ""}">${x.f.kind.t}</span>`,
           sub: esc(catOf(x.s) + subLabel(x.s)) + (why ? " · " + esc(why) : ""), date: "" }); });
     }
   }
@@ -9790,6 +9866,7 @@ function lpBind() {
 }
 /* 업데이트 행의 근거 한 줄 — 「왜 바뀌었나」 · 전체 화면·좌측 패널 한 벌. ★ 쉬운 말(2026-09-27 결정 6A): 필드 라벨 「소스 단계」는 「원천 단계」로, 값은 「」로 싼다 */
 function flowWhy(s, fc) {
+  if (FLOW_KIND === "dd") return ddWhy(s);   // 무엇이 언제 마감되나(입찰 마감·의견 제출 마감·주민설명회 · 공고명)
   const _d = fc.length ? null : movDelta(s);
   if (_d && _d.kind === "발주") return "공사 발주 「" + _d.bid.t + "」";   // 입찰공고 공고명(bid_link)
   if (_d && _d.kind === "환경") return "환경영향평가 「" + _d.eia.t + "」 " + eiaStep(_d.eia.step);   // 협의 사업명·단계(eia_link)
@@ -9818,18 +9895,20 @@ function flowSets() {
   const undetRows = chgRows.filter(x => _lvlChg(x).some(c => _lr(c.from) == null && _lr(c.to) != null));
   const nUp = upRows.length, nUndet = undetRows.length;
   const fldSigs = chgRows.map(x => x.s).filter(s => !past.includes(s));
+  const ddRows = ddaySigs(DDAY_DAYS), nDd = ddRows.length;   // 다가오는 날짜 — 기간 창과 무관(앞으로 DDAY_DAYS일)
+  if (FLOW_KIND === "dd") return Object.assign({}, F, { upRows, undetRows, nUp, nUndet, nDd, ddRows, shown: ddRows.map(x => x.s) });   // 가까운 날 먼저(최신순 정렬을 타지 않는다)
   const shown = FLOW_KIND === "all" ? past.concat(fldSigs)
     : FLOW_KIND === "up" ? upRows.map(x => x.s)
     : FLOW_KIND === "undet" ? undetRows.map(x => x.s)
     : FLOW_KIND === "fld" ? chgRows.map(x => x.s)
     : past.filter(s => (movDelta(s) || {}).kind === (FLOW_KIND === "chg" ? "변동" : FLOW_KIND === "bid" ? "발주" : FLOW_KIND === "eia" ? "환경" : "신규"));
   shown.sort((a, b) => String(b.last_movement).localeCompare(String(a.last_movement)));   // 최신순(사용자 확정)
-  return Object.assign({}, F, { upRows, undetRows, nUp, nUndet, shown });
+  return Object.assign({}, F, { upRows, undetRows, nUp, nUndet, nDd, ddRows, shown });
 }
 function renderFlow() {
   const host = document.getElementById("flowv");
   if (!host) return;
-  const { moved, seen, daysAgo, inWin, chgRows, future, past, nChg, nNew, nBid, nEia, upRows, undetRows, nUp, nUndet, shown } = flowSets();   // 셈은 flowSets 한 벌(좌측 패널 업데이트 탭과 같은 자 · 2026-09-27)
+  const { moved, seen, daysAgo, inWin, chgRows, future, past, nChg, nNew, nBid, nEia, upRows, undetRows, nUp, nUndet, nDd, shown } = flowSets();   // 셈은 flowSets 한 벌(좌측 패널 업데이트 탭과 같은 자 · 2026-09-27)
   // 라벨 위 · 큰 숫자 아래(시안 실물). 종전엔 한 줄에 라벨+작은 숫자였다.
   const seg = (k, lb, n) => `<button class="fseg${FLOW_KIND === k ? " on" : ""}${n ? "" : " z"}" data-kind="${k}" onmouseenter="explainTip(event,'flow','${lb}(기간 창 안 · 노선당 1건) ${n.toLocaleString()}')" onmouseleave="explainHide()">${lb}<span class="n">${n.toLocaleString()}</span></button>`;
   const nFld = chgRows.length;
@@ -9866,7 +9945,7 @@ function renderFlow() {
          0건이어도 칸을 없애지 않는다: 없애면 「그런 변화는 애초에 안 센다」로 읽히고,
          0으로 두면 「이번 기간엔 없었다」는 사실이 된다(P2). -->
     <div class="fsegs">${seg("new", "신규", nNew)}${
-      seg("chg", "단계 진행", nChg)}${seg("bid", "공사 발주", nBid)}${seg("eia", "환경영향평가", nEia)}${seg("up", "등급 상향", nUp)}${seg("undet", "등급 없음 해소", nUndet)}</div>`;
+      seg("chg", "단계 진행", nChg)}${seg("bid", "공사 발주", nBid)}${seg("eia", "환경영향평가", nEia)}${seg("up", "등급 상향", nUp)}${seg("undet", "등급 없음 해소", nUndet)}${seg("dd", `다가오는 ${DDAY_DAYS}일`, nDd)}</div>`;
   const _dkf = document.getElementById("dk-flow");
   const _v2 = isDesk();   // 웹 크롬 v2 — 데스크톱은 사이드바가 없으므로 컨트롤이 본문 왼쪽 열에 선다(시안 「업데이트」)
   const _ctrlHost = (!_v2 && _dkf && !matchMedia("(max-width:768px)").matches) ? _dkf : null;
@@ -9927,7 +10006,7 @@ function renderFlow() {
       row.innerHTML = `<i class="fbar4" style="background:${colorOf(s)}"></i>`
         + `<i class="mvk ${kind.c}">${kind.t}</i>`
         + `<span class="fnm"><b>${sigTitle(s)}</b><span class="fsub">${sub}</span></span>`
-        + `<span class="fdelta">${movDeltaHtml(s)}</span>`
+        + `<span class="fdelta">${FLOW_KIND === "dd" ? "" : movDeltaHtml(s)}</span>`
         + `<span class="fwhy">${why ? esc(why) : ""}</span>`
         + (src ? `<a class="fsrc" href="${src}" target="_blank" rel="noopener">출처 →</a>` : `<span class="fsrc"></span>`);
       row.onclick = e => { if (e.target.closest(".fsrc")) return; setView("map"); showSignal(s, true); };
@@ -11695,7 +11774,7 @@ function railToSignal(p, cen) {
     template_type: "철도", current_stage: p.status, phase: p.phase, status: p.drop ? "종결" : "활성", confirmed: p.confirmed,
     stage_checked: p.stage_checked, stage_src: p.stage_src,
     // 공사 발주·환경영향평가·그린 범위 — 노선 카드도 같은 줄을 말한다(2026-10-01 세션정리 감사 · 노선 14개가 필드를 가졌는데 웹 카드만 침묵 · 앱은 DETAIL_KEYS로 보였다)
-    bid: p.bid, bid_more: p.bid_more, eia: p.eia, eia_more: p.eia_more, drawn_scope: p.drawn_scope,
+    bid: p.bid, bid_more: p.bid_more, eia: p.eia, eia_more: p.eia_more, press: p.press, press_more: p.press_more, drawn_scope: p.drawn_scope,
     sd: null, geometry: { coordinates: cen },   // 노선은 여러 시도 경유 — 단일 sd 미표기
     /* ★ 선형 근거를 **싣는다** (2026-08-14 시안 §13). 종전엔 노선 카드가 `geom_src`를 아예 안 날라
        「이 선을 어떻게 그렸나」를 화면이 한 번도 말한 적이 없다 — 대신 점 신호용 「위치 ◇ ±1km
@@ -11720,6 +11799,7 @@ function roadLineToSignal(p, geom) {
   const cen = flat.length ? flat[Math.floor(flat.length / 2)] : null;
   return {
     _road: true, _line: true, title: p.official_name || p.name, line: p.name,
+    ...procFields(p),   // 공사 발주·환경영향평가(감사 4bⓒ — 노선 카드 폴백도 같은 줄)
     cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "C", lvl_basis: p.lvl_basis,
     gate: p.gate, gate_basis: p.gate_basis, template_type: "도로",
     current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
@@ -14696,8 +14776,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "68853e1573", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "4f16371f48", "adverse_funeral.json": "ea66c8ade3", "apartments_all.json": "7a6d8ff24f", "arch_signals.json": "88e7a35303", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "build_status.json": "7825f2a6ec", "corridor_diff.json": "8120d1fce2", "dart_signals.json": "5e7649e8fa", "dps_signals.json": "9827ec7279", "eum_backfill_progress.json": "f578df8d22", "eum_enroll.json": "a3d062965b", "eum_signals.json": "7e0cd862a6", "eum_usage.json": "f65a47088b", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "63713d4ec7", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "9fb09f9d5d", "jeongbi_poly_seoul.json": "2396392893", "jigu_school_signals.json": "926cf2a736", "jobs_signals.json": "95a6b883b8", "logipark_signals.json": "99817a52fd", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "76c6d55fd5", "mega_signals.json": "5545d2ad23", "methodology.html": "90e22a9380", "officetels_all.json": "cb58452786", "park_signals.json": "ac56c6c659", "privacy.html": "217d09c9a3", "push_feed.json": "2e76279e9b", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "8101fe758d", "rail_reference.html": "c5f9998bf7", "rail_signals.json": "82795c97ff", "region_gaps.json": "cb7360e7e1", "regions.json": "b7c757393f", "report.html": "61da2dbc02", "retail_signals.json": "f81fe074af", "road_signals.json": "956015ea62", "robots.txt": "21147e58c5", "school_signals.json": "e82ca6132e", "settings.html": "ba96e63c1e", "sfz_signals.json": "3a3eb92b37", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "e7d613297e", "sido_all.geojson": "2d0c426029", "signals.json": "3f3409fd49", "signals_auto.json": "60e7723ede", "signals_jeongbi_all.json": "a6d7ff525a", "sitemap.xml": "f398db75cb", "source_status.html": "f7a6086913", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "a2b2684fb5", "upis_facility_geom.json": "6e4e2d738b", "upis_on_road.json": "a10e893e78", "weekly.html": "f6f8aad308", "weekly_index.json": "9a8db27033"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20261001b");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "68853e1573", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "4f16371f48", "adverse_funeral.json": "ea66c8ade3", "apartments_all.json": "7a6d8ff24f", "arch_signals.json": "ad6a2b5fd9", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "bid_signals.json": "058de30dfa", "build_status.json": "d8ba8cee8c", "corridor_diff.json": "ea992d702a", "dart_signals.json": "5e7649e8fa", "dps_signals.json": "9827ec7279", "eum_backfill_progress.json": "46345b7efd", "eum_enroll.json": "a3d062965b", "eum_signals.json": "cbc4ddc14d", "eum_usage.json": "ccda02c3d7", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "63713d4ec7", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "24666f8090", "jeongbi_poly_seoul.json": "2396392893", "jigu_school_signals.json": "926cf2a736", "jobs_signals.json": "95a6b883b8", "logipark_signals.json": "99817a52fd", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "d088a1173f", "mega_signals.json": "5545d2ad23", "methodology.html": "ede3ac18e2", "officetels_all.json": "cb58452786", "park_signals.json": "ac56c6c659", "privacy.html": "217d09c9a3", "push_feed.json": "51afd75464", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "1c594887b3", "rail_reference.html": "c5f9998bf7", "rail_signals.json": "7095bdc807", "region_gaps.json": "0ad227985c", "regions.json": "b7c757393f", "report.html": "61da2dbc02", "retail_signals.json": "f81fe074af", "road_signals.json": "e44420588e", "robots.txt": "21147e58c5", "school_signals.json": "e82ca6132e", "settings.html": "ba96e63c1e", "sfz_signals.json": "3a3eb92b37", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "e7d613297e", "sido_all.geojson": "2d0c426029", "signals.json": "3f3409fd49", "signals_auto.json": "60e7723ede", "signals_jeongbi_all.json": "0a2cf94efe", "sitemap.xml": "f398db75cb", "source_status.html": "a7106c11c9", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "615c78593b", "upis_facility_geom.json": "6e4e2d738b", "upis_on_road.json": "1bd45f044f", "weekly.html": "d75519ff94", "weekly_index.json": "9a8db27033"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20261001c");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
@@ -14772,7 +14852,7 @@ function stampRk(file, d) {
   // ⚠ localStorage 오버라이드(loadRadii)보다 **뒤에** 적용된다 = 파일이 최종 권위(SSOT).
   applyThresholds(await gj("thresholds.json").catch(() => null));
   // 필수(즉시 렌더에 필요한 경량 데이터)만 블로킹 로드. 큰 파일 3종(capital_bdong 3.6MB·apartments_all 2.7MB·jeongbi_poly 1.9MB=8.2MB)은 초기 렌더 후 지연 로드(아래 loadDeferred).
-  const [dong, sgg, main, macro, autoData, regions, dartData, parkData, hospData, retailData, schoolData, jiguSchoolData, dpsData, shData, masterData, jobsData, indparkData, logiparkData, sfzData, megaData, advData, funData, extData] = await Promise.all([
+  const [dong, sgg, main, macro, autoData, regions, dartData, parkData, hospData, retailData, schoolData, jiguSchoolData, dpsData, shData, masterData, jobsData, indparkData, logiparkData, sfzData, megaData, advData, funData, extData, bidcData] = await Promise.all([
     gj("bdong/서울.geojson"),      // 초기 = 서울 467동(§3.1 법정동). 나머지 15시도는 뷰포트·선택 시 지연 로드(bdong/index.json)
     gj("sgg_all.geojson"),         // 전국 시군구 251
     gj("signals.json"),
@@ -14795,7 +14875,8 @@ function stampRk(file, d) {
     gj("mega_signals.json").catch(() => ({ signals: [] })),           // 관보 고시 원문 파싱 — 대장에 아직 없는 신규 지구(2026-07-22)
     gj("adverse_facilities.json").catch(() => ({ features: [] })),    // 역효과(UQ158 환경기초) — 아파트 카드 병기(②안, 2026-07-30) + 겹침층 「시설」(2026-09-25)
     gj("adverse_funeral.json").catch(() => ({ features: [] })),       // 장사시설(UQ157 화장·봉안·묘지·자연장 — 2026-09-25 알렉스 제안 ③) — 같은 참조층
-    gj("adverse_extra.json").catch(() => ({ features: [] }))          // 보강 — 도시계획시설 레이어에 없는 운영 시설(공공하수처리시설·집단에너지 사업장 기관 목록 · fac_extra.py · 2026-09-26 알렉스 「진행해」)
+    gj("adverse_extra.json").catch(() => ({ features: [] })),         // 보강 — 도시계획시설 레이어에 없는 운영 시설(공공하수처리시설·집단에너지 사업장 기관 목록 · fac_extra.py · 2026-09-26 알렉스 「진행해」)
+    gj("bid_signals.json").catch(() => ({ signals: [] }))             // 공사 발주 후보 — 짝 없는 나라장터 공사공고(위치 = 공고문 공사현장 · bid_new.py · 2026-10-01)
   ]);
   DART = ((dartData && dartData.signals) || []).filter(s => !s.superseded_by).filter(mapHidden("기업 공시")).filter(gateObs("기업 공시"));   // 승격 중복 제외
   buildDartSignals();   // DART → 일자리 후보 신호(호재 카운팅 포함)
@@ -14825,7 +14906,13 @@ function stampRk(file, d) {
   DPS_SIG = ((dpsData && dpsData.signals) || []).filter(s => !s.superseded_by).filter(mapHidden("개발행위")).filter(gateObs("설계공모")).map(s => Object.assign({
     _dps: true, template_type: "공공시설", confirmed: false, status: s.status || "활성",
     sources: /^https?:/.test(s.src || "") ? [s.src] : []   // 링크는 src에 있다 — 없으면 카드가 「원문 링크 없음」(2026-09-29 전수 감사 106건 · s.sources가 있으면 그쪽이 이긴다)
-  }, s));
+  }, s))
+  // ★ 공사 발주 후보(2026-10-01 세션145 · 새 원천 A 셋째 갈래 · bid_new.py) — 짝 없는 50억+ 공고 중 100억+ · 호재 부류만 · 위치 = 공고문 공사현장 칸.
+  //   설계공모와 같은 「발주 단계 공공 사업」이라 같은 배열에 합류한다(산단·물류가 일자리 배열에 합류한 문법 — 어댑터·집계를 늘리지 않는다) · 계보는 _bidc.
+  //   카드의 「공사 발주」 블록은 신호의 bid(같은 필드) · 다른 층에 같은 사업이 생기면 그 공고가 짝을 얻어 이 층에서 저절로 빠진다.
+  .concat(((bidcData && bidcData.signals) || []).filter(s => s.geometry && !s.superseded_by).filter(mapHidden("공사 발주")).filter(gateObs("공사 발주")).map(s => Object.assign({
+    _bidc: true, template_type: "공사 발주", confirmed: false, status: "활성"
+  }, s)));
   // SH 공급계획(2026-07-30) — 공급 전 신축만(매입형·본청약 완료 제외). 좌표=지구 대표점(jigu 근사).
   SH_SIG = ((shData && shData.signals) || []).filter(s => !s.superseded_by).filter(mapHidden("SH 공고")).filter(gateObs("SH 공고")).map(s => Object.assign({
     _sh: true, template_type: "주거개발", confirmed: false, status: s.status || "활성",
