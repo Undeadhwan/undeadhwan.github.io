@@ -620,7 +620,7 @@
   .gnote { padding:12px; font-size:11.5px; color:var(--muted); }
   /* ── 선택 시 호재 등장 애니메이션 (빠른 속도) ── */
   @keyframes pinIn { 0% { transform:scale(0); opacity:0 } 60% { transform:scale(1.18); opacity:1 } 100% { transform:scale(1) } }
-  .leaflet-overlay-pane path.pin-in { animation:pinIn .26s cubic-bezier(.2,.8,.3,1.2) both; transform-box:fill-box; transform-origin:center; }
+  .leaflet-overlay-pane path.pin-in, .leaflet-marker-pane svg.pin-in, .leaflet-pane svg.pin-in { animation:pinIn .26s cubic-bezier(.2,.8,.3,1.2) both; transform-box:fill-box; transform-origin:center; }
   @keyframes radialIn { from { transform:scale(.2); opacity:0 } to { transform:scale(1); opacity:.28 } }
   .leaflet-overlay-pane path.circ-in { animation:radialIn .34s ease-out both; transform-box:fill-box; transform-origin:center; }
   .pickhint { color:var(--muted); font-size:13px; padding:26px 14px; text-align:center; line-height:1.7; }
@@ -7825,14 +7825,17 @@ function eiaUpText(x, up) {
   return `의견 제출 ${dayDot(up)}까지${Array.isArray(x.draft) && x.draft[0] ? ` · 초안 공람 ${dayDot(x.draft[0])}~` : ""}${x.hearing ? ` · ${String(x.hearing).slice(0, 120)}` : ""}`;
 }
 /* ★ 기다릴 날짜(D-day) — 원천이 **날짜까지** 준 정해진 절차 일정만 (2026-10-01 세션145 · 알렉스 아이디어 2 · 결정 페이지
-   https://claude.ai/artifact/FqrjjfP54rE8c8TAZ4FFgC 추천안 ①1 ②1·2 ③2 ④1 ⑤1): 공사 입찰 마감(나라장터 bidClseDt) · 환경영향평가 의견 제출 마감 · 주민설명회·공청회.
+   https://claude.ai/artifact/FqrjjfP54rE8c8TAZ4FFgC · 알렉스 확정 2026-10-01 ①1 ②1·2 ③2 ④1 ⑤1 ⑥1): 공사 입찰 마감(나라장터 bidClseDt) · 환경영향평가 의견 제출 마감 · 주민설명회·공청회.
    사업 목표(착공·개통 목표)는 세지 않는다 — 목표에 남은 날을 달면 「실현 예정」처럼 읽히고(§7) 정체 사업에도 남는다(§7 정체 신호 일정 추정).
    지난 날은 사라진다(그 절차의 결과는 원천이 주면 업데이트의 움직임이 된다). 카드 맨 위 한 줄(ddayHtml) · 업데이트 「다가오는 60일」(ddaySigs) ·
    앱은 덤프 dd(판정 사본 금지) — 한 벌. 게이트 html_check.dday_check · 정본 DESIGN 「기다릴 날짜」 행. */
 const DDAY_DAYS = 60;
-function hearingDay(h) {   // 「2026년 10월 1일(목) 14:00」·「2026. 10. 14 오후 2시」·「2026.09.17」 → 첫 날짜(못 읽으면 "" — 지어내지 않는다)
-  const m = String(h || "").match(/(20\d{2})\s*[.년\-]\s*(\d{1,2})\s*[.월\-]\s*(\d{1,2})/);
-  return m ? `${m[1]}-${m[2].padStart(2, "0")}-${m[3].padStart(2, "0")}` : "";
+function hearingDay(h, t0) {   // 「2026년 10월 1일(목) 14:00」·「2026. 10. 14 오후 2시」·「2026.09.17」 → **오늘(t0) 이후 가장 이른** 날짜(못 읽으면 "" — 지어내지 않는다)
+  // 일정 문구가 날짜를 여럿 품는다(읍면별 설명회 · 실측 809건 중 75건) — 첫 날짜만 보면 그날이 지나는 순간 뒤 설명회까지 사라진다(2026-10-01 세션145 감사)
+  const lo = t0 || TODAY.toISOString().slice(0, 10);
+  const ds = [...String(h || "").matchAll(/(20\d{2})\s*[.년\-]\s*(\d{1,2})\s*[.월\-]\s*(\d{1,2})/g)]
+    .map(m => `${m[1]}-${m[2].padStart(2, "0")}-${m[3].padStart(2, "0")}`).filter(d => d >= lo).sort();
+  return ds[0] || "";
 }
 function ddayItems(s) {
   const t0 = TODAY.toISOString().slice(0, 10), out = [], seen = new Set();
@@ -7843,11 +7846,12 @@ function ddayItems(s) {
 }
 function dLeft(d) { return Math.round((new Date(d + "T00:00:00Z") - TODAY) / 864e5); }   // TODAY = 로컬 날짜의 UTC 자정
 function ddLabel(d) { const n = dLeft(d); return n === 0 ? "D-day" : "D-" + n; }
-function ddWhy(s) { const it = ddayItems(s)[0]; return it ? `${it.k} ${dayDot(it.d).slice(5)}${it.t ? " · " + it.t : ""}` : ""; }
+function ddDay(d) { return d.slice(0, 4) === TODAY.toISOString().slice(0, 4) ? dayDot(d).slice(5) : dayDot(d); }   // 올해가 아니면 연도까지(「03.16」이 2027년인데 올해로 읽혔다 · 2026-10-01 라이브)
+function ddWhy(s) { const it = ddayItems(s)[0]; return it ? `${it.k} ${ddDay(it.d)}${it.t ? " · " + it.t : ""}` : ""; }
 function ddayHtml(s) {
   const it = ddayItems(s); if (!it.length) return "";
   const a = it[0], wd = ["일", "월", "화", "수", "목", "금", "토"][new Date(a.d + "T00:00:00").getDay()];
-  return `<div class="stdday"><b class="d">${ddLabel(a.d)}</b><span class="w">${esc(dayDot(a.d).slice(5))}(${wd}) ${esc(a.k)}${a.t ? ` · <span class="t">${esc(a.t)}</span>` : ""}</span>`
+  return `<div class="stdday"><b class="d">${ddLabel(a.d)}</b><span class="w">${esc(ddDay(a.d))}(${wd}) ${esc(a.k)}${a.t ? ` · <span class="t">${esc(a.t)}</span>` : ""}</span>`
     + (it.length > 1 ? `<span class="mt">외 ${it.length - 1}건</span>` : "") + `</div>`;
 }
 function ddaySigs(days) {   // 업데이트 「다가오는 N일」 — 보이는 호재(조회조건·지역) 중 가장 가까운 날이 창 안인 것 · 노선 역은 노선당 1건(movKey와 같은 뜻)
@@ -7885,7 +7889,7 @@ function pressHtml(s) {
   const row = x => `<div class="bidrow"><span class="dt">${esc(dayDot(x.d))}</span><span class="nm">${esc(String(x.t))}</span>`
     + `<span class="am">${esc(String(x.org || ""))}</span>${/^https?:/.test(x.url || "") ? `<a href="${esc(String(x.url))}" target="_blank" rel="noopener">원문</a>` : ""}</div>`;
   const n = b.length + (Number(s.press_more) || 0);
-  return `<div class="stbid stpress"><div class="bh">관련 보도자료 <span class="mt">정부 발표 ${n}건 · 고시가 아니라 단계는 바꾸지 않습니다</span></div>`
+  return `<div class="stbid stpress"><div class="bh">관련 보도자료 <span class="mt">공식 발표 ${n}건 · 고시가 아니라 단계는 바꾸지 않습니다</span></div>`
     + b.slice(0, 3).map(row).join("")
     + (b.length > 3 ? `<details><summary>나머지 ${b.length - 3}건${s.press_more ? ` (+${s.press_more}건은 목록 밖)` : ""}</summary>${b.slice(3).map(row).join("")}</details>` : "")
     + `</div>`;
@@ -10040,7 +10044,7 @@ function renderFlow() {
       const cal = document.getElementById("f-cal");
       if (!cal.hidden) { cal.hidden = true; return; }
       const ia = document.getElementById("f-cal-a"), ib = document.getElementById("f-cal-b");
-      const iso = d => d.toISOString().slice(0, 10);
+      const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;   // 로컬 날짜 — toISOString은 UTC라 KST 아침 9시 전엔 어제가 된다(2026-10-01 감사)
       const today = new Date();
       if (!ia.value) { const st = new Date(today); st.setMonth(st.getMonth() - 3); ia.value = iso(st); }
       if (!ib.value) ib.value = iso(today);
@@ -10561,11 +10565,11 @@ function renderInbox() {
 }
 function inboxOpen(i) {
   const x = _inbox.items[i]; if (!x) return;
-  _inbox.read[_ibxKey(x)] = new Date().toISOString().slice(0, 10); mbSave(INBOX_KEY, _inbox); renderBell();
+  _inbox.read[_ibxKey(x)] = TODAY.toISOString().slice(0, 10); mbSave(INBOX_KEY, _inbox); renderBell();   // 오늘 = 로컬 날짜(TODAY)
   const z = allSignalsFlat().find(z => (x.id && String(z.id) === x.id) || (x.title && (z.official_name === x.title || z.title === x.title || sigTitle(z) === x.title)));
   if (z) showSignal(z, true); else mbToast("이 신호는 지금 화면 데이터에 없습니다 — 다음 빌드 뒤 다시 보세요.");
 }
-function inboxReadAll() { const t = new Date().toISOString().slice(0, 10); for (const x of _inbox.items) _inbox.read[_ibxKey(x)] = t; mbSave(INBOX_KEY, _inbox); renderBell(); renderInbox(); }
+function inboxReadAll() { const t = TODAY.toISOString().slice(0, 10); for (const x of _inbox.items) _inbox.read[_ibxKey(x)] = t; mbSave(INBOX_KEY, _inbox); renderBell(); renderInbox(); }
 /* ── 더보기 (지켜보는 것 관리 · 등록한 자리) ───────────────────────────── */
 function renderMore() {
   const host = document.getElementById("morev"); if (!host) return;
@@ -11588,25 +11592,22 @@ function initLeaflet() {
     act.forEach(sg => {
       // 도로 노선 신호: 샘플점(access_points)은 집계용일 뿐 — 핀은 앵커 1개만(선은 renderRail이 표시). 점 폭탄 방지
       const pts = sg._road ? signalPoints(sg).slice(0, 1) : signalPoints(sg);
-      const col = colorOf(sg);
-      // 핀 크기 = 영향 반경에 비례 (반경 클수록 큰 핀). 접근점은 약간 작게
-      const rKm = getRadius(sg) / 1000;
-      const baseR = Math.max(6, Math.min(16, 5 + rKm * 1.4)); // 반경 비례, clamp 6~16px
+      // ★ 핀 = 본 점과 같은 그림(hojaeMarkerSvg) · 같은 크기(등급) · 같은 중심 — 카카오판과 같은 규칙(2026-10-01 세션145 · 옛 핀은 반경 km 크기라 본 점 위에 다른 원이 겹쳤다)
+      const col = sg.status === "종결" ? "#9aa3b2" : colorOf(sg), lv = levelOf(sg), shape = lv === "미정" ? "diamond" : "circle", alpha = sg.status === "종결" ? .45 : .92;
+      const ph0 = PHASE_IDX[phaseOf(sg)] ?? 0;
       pts.forEach((p, k) => {
         const [x, y] = p.coord;
-        const r = (p.name ? baseR * 0.8 : baseR);
-        const m = L.circleMarker([y, x], {
-          pane: "sig", radius: r, color: col, weight: p.cand ? 2 : 3,
-          dashArray: p.cand ? "3 3" : null,               // ◌ 후보 표기(§4.1 문법)
-          fillColor: "#fff", fillOpacity: 1,
-          opacity: sg.status === "정체" ? .45 : 1
-        }).addTo(map);
+        const r = p.name ? Math.max(5, Math.round(lvSize(lv) * 0.8)) : lvSize(lv), ph = p.cand ? 0 : ph0;   // 후보 지점 = 계획 문법(점선 · §4.1)
+        const mk = hojaeMarkerSvg(col, r, ph, alpha, false, shape), big = hojaeMarkerSvg(col, r + 4, ph, alpha, false, shape);
+        const icon = q => L.divIcon({ className: "", html: q.svg, iconSize: [q.size, q.size], iconAnchor: [q.c, q.c] });
+        const m = L.marker([y, x], { pane: "sig", icon: icon(mk) }).addTo(map);
+        m._icons = [icon(mk), icon(big)];
         m.bindTooltip(p.name ? `${sg.title} — ${p.name}${p.cand ? " (후보)" : ""}` : sg.title,
           { direction: "right", offset: [10, 0] });
         m.on("click", () => showSignal(sg, false));
         m._sig = sg; m._baseR = r; m._col = col;
         if (k === 0) sg._pan = () => { if (mapTargetOk(y, x, "_pan")) map.panTo([y, x]); };   // 이동 창구 가드(2026-09-13 전수)
-        if (animate && m._path) { m._path.classList.add("pin-in"); m._path.style.animationDelay = (ai++ * 50) + "ms"; }
+        if (animate && m._icon && m._icon.firstElementChild) { m._icon.firstElementChild.classList.add("pin-in"); m._icon.firstElementChild.style.animationDelay = (ai++ * 50) + "ms"; }   // 그림(svg)에만 — 아이콘 상자의 transform은 Leaflet 위치다
         pins.push(m);
       });
     });
@@ -11619,14 +11620,14 @@ function initLeaflet() {
     clearEmph();
     pins.forEach(m => {
       const on = s && m._sig === s;   // 객체 동일성 — 어댑트 신호는 id가 없어 _sid 비교 시 전부 매칭되던 버그 수정
-      const R = on ? m._baseR + 4 : m._baseR;
-      m.setStyle({ radius: R });
+      const R = (on ? m._baseR + 4 : m._baseR) + 2;   // 그림의 바깥 가장자리(흰 받침·흰 테 포함)
+      if (m._icons) m.setIcon(m._icons[on ? 1 : 0]);   // 아이콘은 자기 기준점(iconAnchor)을 같이 바꾼다 — 가운데가 그대로다
       if (on) {
         const ll = m.getLatLng();
         _emphRings.push(L.circleMarker(ll, { radius: R + 3, color: "#fff", weight: 3, fill: false, interactive: false }).addTo(map));
         _emphRings.push(L.circleMarker(ll, { radius: R + 5.5, color: PIN_EMPH.ink(), weight: 3, fill: false, interactive: false }).addTo(map));
-        m.bringToFront();
-      }
+        m.setZIndexOffset(1000);
+      } else m.setZIndexOffset(0);
     });
   };
   let circles = [];
@@ -13506,17 +13507,32 @@ function initKakao() {
       const sl = new K.Polyline({ map, path: ll, strokeColor: col, strokeWeight: 3.5, strokeOpacity: .95, zIndex: 19 }); K.event.addListener(sl, "click", () => { _ovClickTs = Date.now(); showSignal(sg, false); }); lines.push(sl); } } };
   const refreshPins = () => { pins.forEach(o => o.setMap(null)); pins = []; lines.forEach(o => o.setMap(null)); lines = []; applyLOD();
     const act = activeSignals(); act.forEach(sg => drawLine(sg));
-    act.forEach(sg => { const pts = sg._road ? signalPoints(sg).slice(0, 1) : signalPoints(sg); const col = colorOf(sg); const rKm = getRadius(sg) / 1000; const baseR = Math.max(6, Math.min(16, 5 + rKm * 1.4));
-      pts.forEach((p, k) => { const [x, y] = p.coord; const r = (p.name ? baseR * 0.8 : baseR); const d = document.createElement("div"); const dia = r * 2;
-        d.style.cssText = "width:" + dia + "px;height:" + dia + "px;border-radius:50%;box-sizing:border-box;cursor:pointer;background:#fff;border:" + (p.cand ? "2px dashed" : "3px solid") + " " + col + ";opacity:" + (sg.status === "정체" ? .45 : 1);
+    /* ★★ 핀 = **본 점과 같은 그림·같은 크기·같은 중심** (2026-10-01 세션145 · 알렉스 「선택시 원 두개가 겹치는데 작은게 중심이 아니야」 셋).
+       ☠ 종전 핀은 옛 문법(흰 원 + 3px 테 · 크기 = 영향 반경 km)이라 **본 점(hojaeMarkerSvg · 크기 = 등급) 위에 크기가 다른 원이 하나 더** 그려졌고,
+         지름이 소수(21.2px)라 가운데도 1~2px 어긋났다 — 9-30 「점 표기 한 벌」 통일에서 이 층만 빠졌다. 그림은 hojaeMarkerSvg 하나 ·
+         크기는 hjStyle(등급 · 축소 전 — 위에 덮이므로 본 점보다 작아지지 않는다) · 노선 지점·접근점은 한 단계 작게 · 후보 지점은 계획 문법(점선).
+         상자는 **강조(+4px) 크기로 고정**한다 — 가리킴 강조가 상자 크기를 바꾸면 기준점(가운데)이 어긋난다(emphasizePin). */
+    act.forEach(sg => { const pts = sg._road ? signalPoints(sg).slice(0, 1) : signalPoints(sg); const col = colorOf(sg); const t = hjStyle(sg);
+      pts.forEach((p, k) => { const [x, y] = p.coord; const r = p.name ? Math.max(5, Math.round(t.r * 0.8)) : t.r, ph = p.cand ? 0 : t.ph;
+        const mk = hojaeMarkerSvg(t.col, r, ph, t.alpha, false, t.shape), big = hojaeMarkerSvg(t.col, r + 4, ph, t.alpha, false, t.shape);
+        const d = document.createElement("div"), g = document.createElement("div"), ring = document.createElement("span");
+        d.style.cssText = "position:relative;width:" + big.size + "px;height:" + big.size + "px;display:flex;align-items:center;justify-content:center;cursor:pointer";
+        g.style.cssText = "display:flex;line-height:0"; g.innerHTML = mk.svg;
+        ring.style.cssText = "position:absolute;left:50%;top:50%;width:0;height:0;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none";
+        d.appendChild(ring); d.appendChild(g);
         const label = p.name ? sg.title + " — " + p.name + (p.cand ? " (후보)" : "") : sg.title;
         d.addEventListener("mouseenter", e => showTip(label, e)); d.addEventListener("mousemove", e => showTip(label, e)); d.addEventListener("mouseleave", hideTip); d.addEventListener("click", e => { e.stopPropagation(); showSignal(sg, false); });
-        const ov = new K.CustomOverlay({ map, position: LL(x, y), content: d, zIndex: 20, yAnchor: .5, xAnchor: .5 }); ov._sig = sg; ov._el = d; ov._baseR = r; ov._col = col; if (k === 0) sg._pan = () => { if (mapTargetOk(y, x, "_pan")) map.panTo(LL(x, y)); }; pins.push(ov); }); }); };   // 이동 창구 가드(2026-09-13 전수)
+        const ov = new K.CustomOverlay({ map, position: LL(x, y), content: d, zIndex: 20, yAnchor: .5, xAnchor: .5 }); ov._sig = sg; ov._el = d; ov._baseR = r; ov._col = col;
+        ov._g = g; ov._ring = ring; ov._mk = mk.svg; ov._big = big.svg; if (k === 0) sg._pan = () => { if (mapTargetOk(y, x, "_pan")) map.panTo(LL(x, y)); }; pins.push(ov); }); }); };   // 이동 창구 가드(2026-09-13 전수)
   /* 가리킴 강조 = **유형색은 그대로 · 바깥 무채 고리**(`PIN_EMPH` · DESIGN 「목록 행 가리킴 강조」 · 두 렌더러 같은 문법).
      ☠ 2026-09-21 알렉스 「선택된 호재가 파란 원이라 교통 호재랑 헷갈린다」 — 종전엔 테두리를 #5b3fd4로 **바꿔 칠해**
        색 채널(유형)을 빌렸다: 교통 마커가 일자리 파랑처럼 읽혔다. 테두리(유형색·실선/점선)는 건드리지 않는다. */
-  const emphasizePin = s => { pins.forEach(ov => { const on = s && ov._sig === s; const r = on ? ov._baseR + 4 : ov._baseR, dia = r * 2;
-    ov._el.style.width = ov._el.style.height = dia + "px"; ov._el.style.boxShadow = on ? PIN_EMPH.shadow : ""; ov.setZIndex(on ? 30 : 20); }); };
+  const emphasizePin = s => { pins.forEach(ov => { const on = s && ov._sig === s;
+    // 상자는 그대로 두고 안의 그림만 +4px로 바꾼다 — 상자 크기를 바꾸면 카카오 오버레이 기준점이 옛 크기로 남아 원이 아래·오른쪽으로 밀린다(2026-10-01)
+    if (ov._g) ov._g.innerHTML = on ? ov._big : ov._mk;
+    // 고리 지름 = 강조된 점의 바깥 가장자리(흰 받침·흰 테 포함) ×2
+    if (ov._ring) { ov._ring.style.width = ov._ring.style.height = (on ? (ov._baseR + 4 + 2) * 2 : 0) + "px"; ov._ring.style.boxShadow = on ? PIN_EMPH.shadow : ""; }
+    ov.setZIndex(on ? 30 : 20); }); };
   const addRadius = s => { const col = colorOf(s);
     if (s._road && s.access_points) { if (s.road_kind === "전용") { (s.ic_points || []).forEach(ap => circles.push(new K.Circle({ map, center: LL(ap.coordinates[0], ap.coordinates[1]), radius: getRadius(s), strokeWeight: 1.5, strokeColor: col, strokeOpacity: .85, fillColor: col, fillOpacity: .14, zIndex: 5 }))); return; }
       // 회랑 = **그려진 선의 버퍼**. 보간 구간(선이 연한 점선인 자리)은 회랑도 연하게 — 선과 강약을 맞춘다.
@@ -14776,8 +14792,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "68853e1573", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "4f16371f48", "adverse_funeral.json": "ea66c8ade3", "apartments_all.json": "7a6d8ff24f", "arch_signals.json": "ad6a2b5fd9", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "bid_signals.json": "058de30dfa", "build_status.json": "d8ba8cee8c", "corridor_diff.json": "ea992d702a", "dart_signals.json": "5e7649e8fa", "dps_signals.json": "9827ec7279", "eum_backfill_progress.json": "46345b7efd", "eum_enroll.json": "a3d062965b", "eum_signals.json": "cbc4ddc14d", "eum_usage.json": "ccda02c3d7", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "63713d4ec7", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "24666f8090", "jeongbi_poly_seoul.json": "2396392893", "jigu_school_signals.json": "926cf2a736", "jobs_signals.json": "95a6b883b8", "logipark_signals.json": "99817a52fd", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "d088a1173f", "mega_signals.json": "5545d2ad23", "methodology.html": "ede3ac18e2", "officetels_all.json": "cb58452786", "park_signals.json": "ac56c6c659", "privacy.html": "217d09c9a3", "push_feed.json": "51afd75464", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "1c594887b3", "rail_reference.html": "c5f9998bf7", "rail_signals.json": "7095bdc807", "region_gaps.json": "0ad227985c", "regions.json": "b7c757393f", "report.html": "61da2dbc02", "retail_signals.json": "f81fe074af", "road_signals.json": "e44420588e", "robots.txt": "21147e58c5", "school_signals.json": "e82ca6132e", "settings.html": "ba96e63c1e", "sfz_signals.json": "3a3eb92b37", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "e7d613297e", "sido_all.geojson": "2d0c426029", "signals.json": "3f3409fd49", "signals_auto.json": "60e7723ede", "signals_jeongbi_all.json": "0a2cf94efe", "sitemap.xml": "f398db75cb", "source_status.html": "a7106c11c9", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "615c78593b", "upis_facility_geom.json": "6e4e2d738b", "upis_on_road.json": "1bd45f044f", "weekly.html": "d75519ff94", "weekly_index.json": "9a8db27033"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20261001c");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "68853e1573", "adverse_extra.json": "8fd80512ae", "adverse_facilities.json": "4f16371f48", "adverse_funeral.json": "ea66c8ade3", "apartments_all.json": "7a6d8ff24f", "arch_signals.json": "4499a27e19", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "bid_signals.json": "c22e21873b", "build_status.json": "5220894478", "corridor_diff.json": "99f4f4cfcd", "dart_signals.json": "5e7649e8fa", "dps_signals.json": "9827ec7279", "eum_backfill_progress.json": "687ca9b5f1", "eum_enroll.json": "a3d062965b", "eum_signals.json": "5c764958e8", "eum_usage.json": "1d10fe9dc6", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "63713d4ec7", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "24666f8090", "jeongbi_poly_seoul.json": "2396392893", "jigu_school_signals.json": "926cf2a736", "jobs_signals.json": "95a6b883b8", "logipark_signals.json": "9645f70bc4", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2210c834ea", "mega_signals.json": "5545d2ad23", "methodology.html": "666b6fdec9", "officetels_all.json": "cb58452786", "park_signals.json": "ac56c6c659", "privacy.html": "217d09c9a3", "push_feed.json": "c045671ee5", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "62d79160d7", "rail_reference.html": "c5f9998bf7", "rail_signals.json": "7095bdc807", "region_gaps.json": "f6d014e488", "regions.json": "b7c757393f", "report.html": "61da2dbc02", "retail_signals.json": "f81fe074af", "road_signals.json": "3336a4c9a6", "robots.txt": "21147e58c5", "school_signals.json": "e82ca6132e", "settings.html": "ba96e63c1e", "sfz_signals.json": "3a3eb92b37", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "e7d613297e", "sido_all.geojson": "2d0c426029", "signals.json": "3f3409fd49", "signals_auto.json": "60e7723ede", "signals_jeongbi_all.json": "0a2cf94efe", "sitemap.xml": "f398db75cb", "source_status.html": "de2b012bb4", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "615c78593b", "upis_facility_geom.json": "6e4e2d738b", "upis_on_road.json": "76b44d0d97", "weekly.html": "d75519ff94", "weekly_index.json": "9a8db27033"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20261001d");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
@@ -14907,7 +14923,7 @@ function stampRk(file, d) {
     _dps: true, template_type: "공공시설", confirmed: false, status: s.status || "활성",
     sources: /^https?:/.test(s.src || "") ? [s.src] : []   // 링크는 src에 있다 — 없으면 카드가 「원문 링크 없음」(2026-09-29 전수 감사 106건 · s.sources가 있으면 그쪽이 이긴다)
   }, s))
-  // ★ 공사 발주 후보(2026-10-01 세션145 · 새 원천 A 셋째 갈래 · bid_new.py) — 짝 없는 50억+ 공고 중 100억+ · 호재 부류만 · 위치 = 공고문 공사현장 칸.
+  // ★ 공사 발주 후보(2026-10-01 세션145 · 새 원천 A 셋째 갈래 · bid_new.py) — 짝 없는 공고 중 후보 문턱(thresholds 입찰공고.후보_문턱_억) 이상 · 호재 부류만 · 위치 = 공고문 공사현장 칸.
   //   설계공모와 같은 「발주 단계 공공 사업」이라 같은 배열에 합류한다(산단·물류가 일자리 배열에 합류한 문법 — 어댑터·집계를 늘리지 않는다) · 계보는 _bidc.
   //   카드의 「공사 발주」 블록은 신호의 bid(같은 필드) · 다른 층에 같은 사업이 생기면 그 공고가 짝을 얻어 이 층에서 저절로 빠진다.
   .concat(((bidcData && bidcData.signals) || []).filter(s => s.geometry && !s.superseded_by).filter(mapHidden("공사 발주")).filter(gateObs("공사 발주")).map(s => Object.assign({
@@ -15025,10 +15041,13 @@ function initOpsMode() {
     //   `map_shot.mjs --sig`가 이 딥링크를 쓰므로, 죽은 줄 모르고 「그 노선을 화면에서 못 찾는다」가 된다.
     // ☠ 그리고 **예외를 삼키지 않는다** — 종전 `catch (e) {}`는 showSignal이 던져도 조용했다.
     let sigTries = 0;
+    // ★★ **지도가 생긴 뒤에 연다** (2026-10-01 세션145 점검 · 라이브 재현) — 가벼운 층 신호(새 후보 등)는 부트 0.7초에 찾아지는데 카카오 지도는 그 뒤에 생겨,
+    //   sigGoTo가 「지도 없음」으로 **조용히 건너뛰고** 지도가 기본 중심(서울)에 남았다(통영 후보 딥링크 5번 중 4번 · 부산신항~김해 2번 중 2번 · 카드만 열림).
+    //   공유 링크(상세 「공유」)가 같은 길이라 공개 방문자가 겪는다. 지도가 끝내 안 생기면(한도 끝) 카드만이라도 연다.
     const find = () => {
       const s = allSignalsFlat().find(x => String(x.id) === sigId || x.official_name === sigId || x.name === sigId || sigTitle(x) === sigId);
-      if (s) { try { showSignal(s, true); } catch (e) { console.error("딥링크 showSignal 실패", sigId, e); } return; }
-      if (++sigTries < 60) setTimeout(find, 400);        // 최대 ~24초(무거운 층 도착까지)
+      if (s && (window._map || sigTries >= 59)) { try { showSignal(s, true); } catch (e) { console.error("딥링크 showSignal 실패", sigId, e); } return; }
+      if (++sigTries < 60) setTimeout(find, 400);        // 최대 ~24초(무거운 층 도착 · 지도 생성까지)
       else console.error("딥링크 sig를 끝내 못 찾았다:", sigId);
     };
     setTimeout(find, 300);
