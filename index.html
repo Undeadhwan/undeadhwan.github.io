@@ -7180,8 +7180,16 @@ function signalsInSgg(disp) {
   if (!SGG_SIG || SGG_SIG_V !== SIG_VER) buildSggIndex();
   return ((SGG_SIG && SGG_SIG[disp]) || []).filter(visible);
 }
-function showApt(a) {
-  if (!["apt", "detail", "home"].includes(view.mode)) returnView = view;   // 동 목록·시군구·겹침·알림함에서 온 단지 → ‹가 그리로 돌아간다(상세에서 돌아오는 길은 기억을 안 덮는다)
+function showApt(a, opt) {
+  /* 어디로 돌아갈지 — ① 되돌아오는 길(closePanel이 단지를 되살릴 때 `{ restore: true }`)은 기억을 안 덮는다
+     ② ★ 호재 상세에서 **앞으로** 연 단지(카드의 영향권·역세권 아파트 · 지도 단지 아이콘)는 그 상세로 돌아간다 — 상세가 원래 돌아갈 곳(prev)과
+        그때의 지도 시점(map)을 같이 적는다(2026-10-03 세션150 알렉스 「호재상세>영향권아파트선택>뒤로가기 하면 호재상세로 돌아와야 하는거 아님?」 —
+        종전엔 「상세」를 통째로 비켜 가 상세를 건너뛰고 그 앞 화면·홈으로 갔다)
+     ③ 동 목록·시군구·겹침·알림함에서 온 단지 → ‹가 그리로 돌아간다 */
+  if (!(opt && opt.restore)) {
+    if (view.mode === "detail" && view.signal) returnView = { mode: "detail", signal: view.signal, prev: returnView, map: mapViewNow() };
+    else if (!["apt", "home"].includes(view.mode)) returnView = view;
+  }
   view = { mode: "apt", apt: a };
   aptFocus = new Set(signalsNearPoint([a.lon, a.lat], true).map(x => x.s));   // 이 단지 호재만 지도에(필터 무관)
   ANIMATE = true;
@@ -8528,8 +8536,9 @@ function sigGoTo(s) {
   if (arr.length && window._map) return mapCenterOn(arr[0].coord[1], arr[0].coord[0]);   // 줌 불변 미끄러짐(2026-09-13 알렉스 「가깝던 멀던 동일하게 줌바뀜없이」 · 종전 mapGo(…, 14) 3단)
   if (s._pan) s._pan();      // 좌표를 만들지 못하는 신호(폴리곤 딱지 등)는 종전 경로로
 }
-function showSignal(s, pan) {
-  if (view.mode !== "detail") returnView = view;   // 신호 클릭 직전 뷰(동/구/단지) 기억
+function showSignal(s, pan, opt) {
+  if (opt && "back" in opt) returnView = opt.back;   // 되돌아오는 길(단지 → 상세) — 상세가 원래 돌아갈 곳을 그대로(지금 단지를 기억하면 둘 사이를 맴돈다)
+  else if (view.mode !== "detail") returnView = view;   // 신호 클릭 직전 뷰(동/구/단지) 기억
   /* ★ 아파트 옆 2겹 판은 **그 단지 목록에 든 호재**만 (2026-09-24 알렉스 「아파트 상세 띄워놓고 해당 아파트와 관련없는 호재를 선택한 경우는
      아파트 닫고 호재만 띄우도록」). 종전엔 직전 화면이 아파트면 지도에서 누른 **무관한** 호재도 아파트 옆에 붙었다(twoLayer = returnView.mode === "apt").
      목록 = 단지 판이 쓰는 그 목록(aptNear — 반경 안 · 조회조건 무관). 무관하면 되돌아갈 아파트도 없다(판 하나 · ‹ 없음). */
@@ -8561,7 +8570,13 @@ function closePanel() {
     const rv = returnView; returnView = null;
     if (rv.mode === "dong") return showDong(rv.dong);
     if (rv.mode === "sgg") return showSgg(rv.sgg);
-    if (rv.mode === "apt") return showApt(rv.apt);
+    if (rv.mode === "apt") return showApt(rv.apt, { restore: true });
+    if (rv.mode === "detail" && rv.signal) {   // 상세에서 연 단지 → 그 상세로(상세가 원래 돌아갈 곳·지도 시점까지 · 2026-10-03 알렉스)
+      const v = rv.map;
+      showSignal(rv.signal, !v, { back: rv.prev || null });
+      if (v) mapGo(v.lat, v.lng, v.lv != null ? 18 - v.lv : v.z);   // 단지로 들어가며 바꾼 줌·자리를 되돌린다(한 동작)
+      return;
+    }
     if (rv.mode === "cluster") return showCluster(rv.sigs);   // 겹침 배지 목록으로 복귀(2026-07-23)
     if (rv.mode === "inbox") return showInbox();               // 알림함에서 연 신호 → 닫으면 알림함으로(2026-09-08)
     if (rv.mode === "dongsig") return showDongSig(rv.sd, rv.sg, rv.dong, rv.sigs);   // 동 묶음 목록으로 복귀
@@ -13569,6 +13584,7 @@ function initKakao() {
       ["동→goHome", () => dong && showDong(dong), () => goHome()],
       ["클러스터→closePanel", () => showCluster(SIGNALS.slice(0, 3)), () => closePanel()],
       ["아파트→신호→닫기2회", () => { apt && showApt(apt); sig && showSignal(sig, true); }, () => { closePanel(); closePanel(); }],
+      ["신호→아파트→닫기2회", () => { sig && showSignal(sig, true); apt && showApt(apt); }, () => { closePanel(); closePanel(); }],   // 상세에서 연 단지 → 상세 → 홈(2026-10-03)
       ["목록뷰 왕복", () => setView("list"), () => setView("map")],
       ["흐름뷰 왕복", () => setView("flow"), () => setView("map")],
       ["조회조건 시트 왕복", () => toggleDock(true), () => toggleDock(false)],
@@ -13834,6 +13850,11 @@ let _mapView = null;   // 지도를 숨기기 직전의 시점(중심·줌)
    ⇒ 숨기기 직전에 **적어 두고**, 돌아와 레이아웃을 되돌린 **뒤에 복원**한다.
    ⚠ 카드를 눌러 들어온 경우(sigGoTo)는 **일부러 옮긴 것**이라 복원하면 그 이동을 되돌린다 —
      그래서 sigGoTo가 저장분을 지운다(복원 조건을 시간으로 재지 않는다). */
+/* 지금 지도 시점(중심·레벨) — 돌아갈 화면에 같이 적는다(공유 _mapView와 따로 · 되돌릴 때는 mapGo 한 동작) */
+function mapViewNow() {
+  const m = window._map; if (!m || !m.getCenter) return null;
+  try { const c = m.getCenter(); return m.getLevel ? { lat: c.getLat(), lng: c.getLng(), lv: m.getLevel() } : { lat: c.lat, lng: c.lng, z: m.getZoom() }; } catch (e) { return null; }
+}
 function mapViewSave() {
   const m = window._map; if (!m) return;
   if (m.getLevel && m.getCenter) { const c = m.getCenter(); _mapView = { lat: c.getLat(), lng: c.getLng(), lv: m.getLevel() }; }
@@ -14910,8 +14931,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "68853e1573", "adverse_extra.json": "1c11e0d0af", "adverse_facilities.json": "609bf10e66", "adverse_funeral.json": "867cde9c50", "apartments_all.json": "afc74f9fbf", "arch_signals.json": "f5631aca70", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "bid_signals.json": "fe357f6a83", "build_status.json": "92aa991e59", "corridor_diff.json": "78657a56ed", "dart_signals.json": "e121886613", "dps_signals.json": "0a1e22b9c6", "eum_backfill_progress.json": "fd3dccbb12", "eum_enroll.json": "dd5ab016f8", "eum_signals.json": "2cb2610662", "eum_usage.json": "32854b9748", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "2de61450c4", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "12011da817", "jeongbi_poly_seoul.json": "6459d76a0f", "jigu_school_signals.json": "5203eb8865", "jobs_signals.json": "95a6b883b8", "logipark_signals.json": "462a544629", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "929468dea0", "mega_signals.json": "d545ecaece", "methodology.html": "60c5e95081", "officetels_all.json": "5ba67ef6b5", "park_signals.json": "6a40f5e09c", "privacy.html": "217d09c9a3", "push_feed.json": "4153b105cc", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "9717e48796", "rail_reference.html": "b8417b674d", "rail_signals.json": "89c2ff71e7", "region_gaps.json": "7f1b26ff67", "regions.json": "0ce1bcda54", "report.html": "6c0dd7bb85", "retail_signals.json": "c38adee3f2", "road_signals.json": "919338593a", "robots.txt": "21147e58c5", "school_signals.json": "3c8ce9b3a1", "settings.html": "ba96e63c1e", "sfz_signals.json": "7991c05b8b", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "ef69a41407", "sido_all.geojson": "2d0c426029", "signals.json": "5048af57c4", "signals_auto.json": "ef09f2a842", "signals_jeongbi_all.json": "79e4f0e195", "sitemap.xml": "8b283d1f9d", "source_status.html": "9f83f87c3d", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "54fee75571", "upis_facility_geom.json": "fd35ad28fd", "upis_on_road.json": "32a8e03d58", "weekly.html": "73949dc1f5", "weekly_index.json": "9a8db27033"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20261003d");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "68853e1573", "adverse_extra.json": "1c11e0d0af", "adverse_facilities.json": "609bf10e66", "adverse_funeral.json": "867cde9c50", "apartments_all.json": "afc74f9fbf", "arch_signals.json": "f5631aca70", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "bid_signals.json": "fe357f6a83", "build_status.json": "36b5454e0a", "corridor_diff.json": "35002ebba8", "dart_signals.json": "e121886613", "dps_signals.json": "0a1e22b9c6", "eum_backfill_progress.json": "ab95ac4d8f", "eum_enroll.json": "dd5ab016f8", "eum_signals.json": "b0356b2ec4", "eum_usage.json": "5174f2f449", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "2de61450c4", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "12011da817", "jeongbi_poly_seoul.json": "6459d76a0f", "jigu_school_signals.json": "5203eb8865", "jobs_signals.json": "95a6b883b8", "logipark_signals.json": "462a544629", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "929468dea0", "mega_signals.json": "d545ecaece", "methodology.html": "60c5e95081", "officetels_all.json": "5ba67ef6b5", "park_signals.json": "bdb63518e1", "privacy.html": "217d09c9a3", "push_feed.json": "b5401c3a9d", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "0575d8f115", "rail_reference.html": "b8417b674d", "rail_signals.json": "89c2ff71e7", "region_gaps.json": "90406aedfe", "regions.json": "0ce1bcda54", "report.html": "6c0dd7bb85", "retail_signals.json": "c38adee3f2", "road_signals.json": "8699623883", "robots.txt": "21147e58c5", "school_signals.json": "3c8ce9b3a1", "settings.html": "ba96e63c1e", "sfz_signals.json": "7991c05b8b", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "ef69a41407", "sido_all.geojson": "2d0c426029", "signals.json": "5048af57c4", "signals_auto.json": "ef09f2a842", "signals_jeongbi_all.json": "79e4f0e195", "sitemap.xml": "8b283d1f9d", "source_status.html": "ae972a6b7b", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "54fee75571", "upis_facility_geom.json": "fd35ad28fd", "upis_on_road.json": "9ec3938af0", "weekly.html": "73949dc1f5", "weekly_index.json": "9a8db27033"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20261003e");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
