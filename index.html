@@ -1068,6 +1068,11 @@
   .tapt::before { content:"◦ "; color:var(--muted); }
   .pt { font-size:15px; font-weight:700; margin:4px 0 2px; }
   .ps { font-size:12px; color:var(--muted); margin-bottom:10px; }
+  /* 지역 화면 「이번 주 움직임 N건 ›」 줄(regionMoveLine · 2026-10-03) — 누르면 업데이트 「이번 주 · 문서상 움직임」 · 숫자 = 알약 「+N」(교통색은 지도 알약에만 — 판 위 글자는 잉크) */
+  .rgmv { display:flex; align-items:center; gap:6px; width:100%; margin:0 0 10px; padding:9px 12px; border:1px solid var(--line2); border-radius:var(--r-s); background:none; color:var(--ink); font:inherit; font-size:13px; font-weight:600; text-align:left; cursor:pointer; }
+  .rgmv span { flex:1; min-width:0; } .rgmv b { font-variant-numeric:tabular-nums; } .rgmv i { font-style:normal; color:var(--muted); }
+  .rgmv:hover { background:var(--panel); }
+  .rgmv:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
   /* 역효과 병기(아파트 카드 — 지도 미표시 층, 2026-07-30 ②안). 경고가 아니라 사실 표기: 무채+호박 포인트 */
   .advfacts { font-size:11.5px; color:#7a5b00; background:#fdf6e3; border:1px solid #f0e2b6; border-radius:8px; padding:7px 9px; margin:0 0 10px; line-height:1.55; }
   .advfacts .advnote { font-size:10.5px; color:#a08a4d; margin-top:3px; }
@@ -1170,16 +1175,27 @@
   /* ⚠ 도넛도 **속을 비운다** (2026-08-13 사용자 제보 *"동그라미 숫자가 많아서 제대로 볼 수가 없음"*).
      흰색으로 꽉 채우면 배지가 마커보다 무겁게 읽혀, 148개가 화면을 덮으면 지도가 사라진다 —
      시안 §01의 「큰 원은 채우지 않는다」는 클러스터에도 그대로 적용된다. */
-  /* ★ **크기는 개수가 아니라 안에 든 최고 등급을 따른다** (2026-08-13 갱신 시안 §01):
+  /* ★ **크기는 개수가 아니라 안에 든 최고 등급을 따른다** (2026-08-13 갱신 시안 §01 → 2026-10-04 알렉스 제보로 복귀):
      *"개수로 키우면 지도 전체가 지키는 「크기=등급」이 클러스터에서만 깨져, 큰 원이 중요한
-     호재인지 많은 호재인지 알 수 없게 됩니다."* 지름은 `HJR`(마커 반지름 ×2)에서 도출한다 —
-     여기 숫자를 적으면 마커 크기를 바꿀 때 클러스터만 낡는다. */
-  .cl-badge { position:relative; width:var(--clw,28px); height:var(--clw,28px); border-radius:50%;
+     호재인지 많은 호재인지 알 수 없게 됩니다."* 지름(--clw)·글자(--clf)는 `clSize`(HJR → 낱개 점과 같은 축소자 dotShrinkR → 그 등급 점이 **이 레벨에서** 보이는 지름)가 정한다 —
+     여기 숫자를 적으면 마커 크기를 바꿀 때 클러스터만 낡는다(2026-09-30 점을 28·24·20·18로 줄일 때 40px 고정 도넛만 남아
+     C급 둘이 S급 점보다 크게 그려졌다 · DESIGN 「클러스터 도넛 크기」 행). 아래 기본값은 JS가 안 돈 순간의 자리표시다. */
+  .cl-badge { position:relative; width:var(--clw,22px); height:var(--clw,22px); border-radius:50%;
     background:rgba(255,255,255,.62);
     box-shadow:0 1px 3px rgba(0,0,0,.10); cursor:pointer; display:flex; align-items:center; justify-content:center;
-    font-size:10.5px; font-weight:600; color:var(--ink2); font-variant-numeric:tabular-nums; line-height:1; }
-  /* 세 자리 수가 들어가면 글자가 원을 넘는다 — 등급이 정한 지름은 그대로 두고 **글자만** 줄인다 */
-  .cl-badge.cl-wide { font-size:9.5px; }
+    font-size:var(--clf,10.5px); font-weight:600; color:var(--ink2); font-variant-numeric:tabular-nums; line-height:1; }
+  /* ★ 누르는 자리 = **그려진 원 그대로**(.cl-badge 자신 · 지름 --clw · border-radius 50%) — 투명 과녁(::after·::before)을 두지 않는다 (2026-10-04 세션152 4차).
+     ☠ 3차는 점 마커처럼 투명 40px(터치 44) 원을 겹쳤는데, 겹침 원은 **낱개 점 위층**(zIndex 11 > 10)이라 그 과녁이 16~32px 그림 밖으로 뻗어
+       **바로 옆 낱개 점의 보이는 가운데를 눌러도 겹침 목록이 열렸다** — 레벨 6 이하는 묶음 반경이 STACK_R 12px라 낱개 점이 겹침 원 중심 12~20px에 남는다
+       (2026-10-04 헤드리스 실측 레벨 6 · 서면·강남·광화문·인천·부산 · 과녁 안·그림 밖에 가운데가 있는 낱개 점 31개 중 20개 · 점 몸통 표본 228점 중 93점).
+     종전 40px **그림**에선 그 가운데가 그려진 원판 아래 있어 보이는 것과 누르는 것이 같았다 — 그림만 줄이고 과녁을 남긴 것이 둘을 갈랐다.
+     ⚠ 점 마커의 40·44px 과녁(DESIGN 「마커 클릭 영역」)과 다른 규칙이다 — 점은 같은 층(zIndex 10)끼리라 그리는 순서가 가르지만 겹침 원은 늘 위층이라 넓히면 늘 이긴다.
+     ☠ **카카오 CustomOverlay 래퍼 div**(지름 D의 **정사각형** · pointer-events 기본 auto)도 과녁이었다 — 원 밖 네 모서리가 이웃 점 가운데를 가렸다
+       (투명 과녁을 뺀 뒤에도 2026-10-04 실측 강남 방배삼호 · 광화문 홍제제2 — 가운데에서 14~15px · 래퍼가 받아 **아무 일도 안 일어났다**). 역명 라벨(div:has(> .rail-name))과 같은 처방:
+       래퍼는 통과시키고 원만 받는다(border-radius 50%라 원 밖 모서리는 아래 점·지도로 간다).
+     시험 ui_tests/desk.js ⓣ(겹침 원 밖 낱개 점 가운데 → elementFromPoint가 겹침 원·그 래퍼가 아니다) · 게이트 html_check.cluster_donut_size_check(가상 요소 과녁 금지 · 래퍼 통과). */
+  div:has(> .cl-badge) { pointer-events:none; }
+  .cl-badge { pointer-events:auto; }
   .cl-badge svg { position:absolute; inset:0; pointer-events:none; }
   .cl-badge b { position:relative; z-index:1; font-weight:700; }
   .cl-badge:hover { box-shadow:0 2px 9px rgba(0,0,0,.30); }
@@ -2597,6 +2613,9 @@
     #panel > .phead .pback-d svg, #panel > .phead .closex svg { width:26px; height:26px; stroke:currentColor; stroke-width:2.4; }   /* 기본 판과 같은 수(2026-09-27 — 종전 16px·흐린 색) */
     #panel > .phead .pt, #panel .pt { font-size:17px; font-weight:500; color:var(--t); margin:0; }
     #panel > .ps { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:6px 20px 14px; font-size:13px; color:var(--m); margin:0; }
+    #panel > .rgmv { width:calc(100% - 40px); margin:0 20px 12px; border-color:var(--b2); color:var(--t); }   /* 판 여백(20)에 맞춘다 · 색은 판 토큰 */
+    #panel > .rgmv:hover, #lpane .rgmv:hover { background:var(--s); }
+    #lpane .rgmv { margin:0; border-color:var(--b2); color:var(--t); }
     #panel .cmpAdd { font-size:12.5px; padding:3px 9px; border-radius:6px; border:1px solid var(--t); color:var(--t); background:none; cursor:pointer; font-weight:400; }
     #panel .cmpAdd.in { border-color:var(--ac); color:var(--ac2); }
     #panel > .pcats { display:flex; align-items:center; gap:6px; flex-wrap:wrap; padding:0 20px 12px; font-size:13px; color:var(--m); margin:0; }
@@ -3342,7 +3361,6 @@ const CAT_KEYS = ["교통", "일자리", "인프라", "주거개발"];
 const DISPLAY_CAT_KEYS = ["교통", "일자리", "인프라", "주거개발", "기타"];
 const LEVELS = ["S", "A", "B", "C"];
 const GRADES_DISP = ["S", "A", "B", "C", "미정"];   // 배지·매트릭스 표시용(미정 포함)
-const GRADE_RANK = { S: 0, A: 1, B: 2, C: 3, "미정": 4 };   // 렌더 우선순위 — 600 상한이 걸려도 S/A(교통 역 등)가 살아남게(2026-07-22)
 /* 표시 어휘 통일(2026-07-30 사용자 "미상이랑 미정이랑 다른거야?") — 두 개념이 세 단어로 흩어져 있었다.
      · **등급**이 안 정해진 것 = 화면에서 항상 **"등급 없음"** (내부 키는 "미정" 유지 — 데이터 호환)
        ★ 2026-08-12 개칭: 「미판정」은 판정을 시도해 보류한 경우만 가리키는 것처럼 읽혔다. 실제로는
@@ -3440,6 +3458,39 @@ const HJR = { S: 14, A: 12, B: 10, C: 9, "미정": 6 };   // 지름 28·24·20·
    쓰는데 사본들은 바닥값 9(C가 8→9)와 미정 11을 얹어, 같은 등급이 자리마다 다른 크기로 그려졌다
    (2026-09-13 실측 · 알렉스 「등급에 따라 눈에 딱 들어오지는 않어」를 재다 발각). 눈금은 **HJR 하나**다. */
 const lvSize = lv => HJR[lv] || HJR["미정"];   // 바닥값·예외 없음 — 눈금은 HJR 하나다
+/* ★ **점 축소자 = 한 벌** (2026-10-04 세션152 4차 · 3차 반박 검증 「규칙이 한쪽에만」 재현) — 낱개 점(renderHojae `_shrinkR`)·후광 전환(`_reimage` ← `_shrinkRRef`)·
+   겹침 원(clSize)이 **이 함수 하나**를 쓴다. 무손실 축약의 「축약」: 레벨 9+에서 **낮은 등급(B·C·미정)만** 작아진다(S·A는 그대로 · 2026-07-23 「큰 신호가 먼저 사라짐」의 반대 방향만).
+   ☠ 3차엔 renderHojae 안 클로저라 겹침 원이 몰랐다 — 지역을 고르면(regionFocus) 알약 구간(레벨 9~10)에도 점·겹침 원이 그려지는데, 낱개 점만 줄고(B 20 · C 18px)
+     겹침 원은 안 줄어 **C만 묶인 원(22px)이 같은 화면의 낱개 B 점(20px)보다 컸다**(2026-10-04 헤드리스 실측 레벨 9 · 위반 고양 1 · 용인 3 · 화성 3 — 제보와 같은 왜곡).
+   레벨을 모르면(인자 없음) 줄이지 않는다(`!(lv >= 9)` — 클로저 시절 `lv < 9`는 늘 숫자를 받았지만, 전역으로 올리면 undefined에서 거짓이라 **줄인다**). */
+function dotShrinkR(r, lvl, lv) {
+  if (!(lv >= 9) || lvl === "S" || lvl === "A") return r;
+  return Math.max(lv >= 11 ? 5 : 6, r - (lv >= 11 ? 3 : 2));   // 지름 10~12px 하한
+}
+/* ★★ **겹침 원(유형 도넛)의 지름 = 묶인 호재 중 가장 높은 등급의 점이 보이는 지름** (2026-10-04 알렉스 제보 「호재가 겹치면 원 안에 숫자를 표시하고
+   크기를 S급 사이즈로 보여 주는데, C급 2개가 겹쳐도 S급 크기라 왜곡이 있다」 · ①안).
+   ☠ 종전 지름 40px 고정(시안 rev2 §14-2 · 2026-08-20 「크기 채널은 등급이 쓰므로 건수로 크기를 바꾸지 않는다」)은 그때 S 점이 34px라 「S보다 조금 큰 중립」이었는데,
+     2026-09-30 점을 28·24·20·18로 줄이며 도넛만 남아 **모든 겹침 원이 S 점보다 컸다** — 크기로 아무것도 말하지 않으려던 값이 「S급 이상」을 말했다
+     (2026-10-04 라이브 레벨 6 실측: 강남 겹침 원 9개 · 부산 서면 22개 전부 지름 40 · 최고 등급 S는 강남 2·서면 1뿐이고 C 이하가 강남 5·서면 13 · 규칙이 한쪽에만).
+   ⇒ 지름 = 2 × pinEdge(dotShrinkR(lvSize(최고 등급), 최고 등급, 지도 레벨)) — 점 마커 그림과 **같은 자**(HJR → lvSize → 축소자 → pinEdge = 테·흰 받침까지 보이는 가장자리)라
+     **같은 화면**의 같은 등급 점과 같은 크기로 읽힌다. 등급 없음(미정)만 묶이면 미정 크기의 **원**(마름모는 낱개 점의 형태다 · 도넛은 원이다).
+     ☠ 3차 주석은 「줌 축소는 알약 구간(레벨 9+) 일이라 점 구간(≤6)의 도넛엔 없다」였는데 사실이 아니었다 — 지역을 고르면 알약 구간에도 겹침 원이 그려진다(dotShrinkR 주석).
+   최고 등급 = 묶음 멤버의 levelOf 중 사다리(LVL_RANK — 점을 그리는 순서와 같은 자) 순위가 가장 앞선 것(clTopLevel · 낮은 쪽으로 뒤집기·첫 원소에서 멈춤은 게이트가 실행으로 잰다).
+   숫자는 그 안에 — 글자 크기 = 고리 안쪽 원에 숫자 상자가 들어가는 가장 큰 값(상한 CL_FONT = 종전 값). 그 값이 가독 하한(CL_FONT_MIN) 아래면 그때만 지름을
+     그 하한이 들어가는 만큼 키운다(2026-10-04 실측: 등급 지름 그대로 하한이 걸리는 것은 B·C·미정의 세 자리뿐 · 그것도 C보다 1px · 레벨 6 겹침 원 148개(15개 도시 × 레벨 4~6) 전부 한 자리 ·
+     같은 좌표 겹침 최대 9건 — 바닥은 사실상 발화하지 않는다 · 알약 구간 축소 뒤엔 세 자리 B·C가 23px로 커져 그 화면의 B 점(20px)보다 클 수 있다 — 가독이 먼저다 ·
+     한·두 자리는 어느 레벨에서도 더 높은 등급 점보다 크지 않다(게이트가 레벨 4~12 전부 실행으로 잰다)). 숫자 상자 = IBM Plex Mono 숫자 폭 0.602em(2026-10-04 헤드리스 실측 0.6021) × 자릿수 · 높이 0.7em(대문자·숫자 높이 698/1000).
+   누르는 자리 = **그려진 원 그대로**(.cl-badge 자신 · 투명 과녁 없음 — `<style>`의 .cl-badge 주석 · DESIGN 「클러스터 도넛 크기」 행). */
+const CL_RING_R = 11.4, CL_RING_W = 3.2, CL_VB = 28;   // 도넛 원호(SVG viewBox 28 기준) — 그림(clDonut)과 글자 맞춤(clSize)이 같은 값을 쓴다
+const CL_FONT = 10.5, CL_FONT_MIN = 8, CL_DIGIT_W = 0.602, CL_DIGIT_H = 0.7;
+function clTopLevel(g) { let t = "미정"; for (const m of g) { const l = levelOf(m); if (LVL_RANK[l] < LVL_RANK[t]) { t = l; if (t === "S") break; } } return t; }
+function clSize(g, lv) {
+  const top = clTopLevel(g), k = String(g.length).length;
+  const dot = 2 * pinEdge(dotShrinkR(lvSize(top), top, lv), "circle");                        // 그 등급 점이 이 레벨에서 보이는 지름(낱개 점과 같은 축소자)
+  const q = Math.hypot(CL_DIGIT_W * k, CL_DIGIT_H) / ((CL_RING_R - CL_RING_W / 2) * 2 / CL_VB);  // 글자 1px에 필요한 지름(숫자 상자 대각선 ÷ 고리 안쪽 지름 비)
+  const D = Math.max(dot, Math.ceil(CL_FONT_MIN * q));
+  return { top, D, f: Math.min(CL_FONT, Math.floor(D / q * 2) / 2) };
+}
 /* 두께 = 단계 · 등급 크기에 비례 축소 (시안 §02: 착공 기준 S 4px → C 3px) */
 /* 계획 · 확정(인가) · 착공 · 완공 — **시안 §02 견본값**(26px A등급 기준: 2 / 2.5 / 4 / 4+코어).
    ★ 2026-08-20: 점선이 **계획으로 환원**(rev2 §14-3 정정)되면서 계획·확정은 **선 종류**가 가르므로
@@ -3540,6 +3591,7 @@ const pillSggIn = e => !sidoFocus() || e.sd === filter.sd;
    지역 클릭은 「화면을 바꾸는」 전환이다. 게이트 `html_check.region_click_check` · 정본 = DESIGN 「시도 집계 알약」·「시군구 합계 알약」 행 · PROCEDURE_화면품질 C48. */
 function regionJump(lat, lon, kLevel) {   // kLevel = 카카오 레벨(Leaflet은 18 − 레벨)
   const M = window._map; if (!M || !mapTargetOk(lat, lon, "regionJump")) return;
+  mapMoveGen();   // 진행 중인 mapGo 사슬을 끝낸다(mapMoveGen 주석)
   if (typeof M.setLevel === "function") { M.setLevel(kLevel, { animate: false }); M.setCenter(new kakao.maps.LatLng(lat, lon)); }
   else M.setView([lat, lon], 18 - kLevel, { animate: false });
 }
@@ -3561,6 +3613,11 @@ function lpShowRegionTab() {
     s.tab = "region"; lpSave(); _lpShown = LP_PAGE; if (lpActive()) renderLpane();
   } catch (e) { console.warn("지역별 탭 전환", e); }
 }
+/* ★ 조회조건 셈 메모의 키 **한 벌** — 시군구·시도 알약(sggAggregates·sdAggregates)과 지역 「이번 주 움직임 N건」 줄(regionMoveLine)이 같은 visible로 세므로
+   같은 키를 쓴다(키가 갈리면 한쪽만 낡아 알약 +N과 줄 N이 다른 수를 말한다 · 2026-10-04 세션152 2차 — 사본 둘이 인라인으로 있었다).
+   재료 = 신호 세대(SIG_VER · 무거운 소스 합류) · 렌더 세대(_relEpoch) · 조회조건 서명(filterSig — 지역·동 포함) · 지역 이름(regionLabel).
+   오늘(TODAY)은 페이지 수명 동안 상수라 넣지 않는다. 게이트 html_check.region_move_line_check. */
+function aggMemoKey() { return [SIG_VER, typeof _relEpoch !== "undefined" ? _relEpoch : 0, filterSig(), regionLabel()].join("§"); }
 function sggAggregates(inView) {
   if ((!SGG_SIG || SGG_SIG_V !== SIG_VER) && !buildSggIndex()) return [];
   if (!window._sggPillBase) {   // 시군구 → 이름·경계 bbox·가장 큰 고리의 중심(한 번만)
@@ -3581,8 +3638,8 @@ function sggAggregates(inView) {
     window._sggPillBase = [...m.values()];
   }
   /* ★ 셈은 **조회조건이 바뀔 때만** (2026-09-25 세션136 · 알렉스 「알약이 생기면서 느려졌다」 — 지도가 멈출 때마다 화면 안 시군구 수십~백여 곳의
-     신호를 visible로 다시 걸러 알약 층 한 번에 11~15ms였다). 키 = 목록 캐시와 같은 재료(신호 세대 · 렌더 세대 · 조회조건 · 지역). 뷰 거름(inView)은 매번. */
-  const _mk = [SIG_VER, typeof _relEpoch !== "undefined" ? _relEpoch : 0, filterSig(), regionLabel()].join("§");
+     신호를 visible로 다시 걸러 알약 층 한 번에 11~15ms였다). 키 = aggMemoKey(신호 세대 · 렌더 세대 · 조회조건 · 지역 — 한 벌). 뷰 거름(inView)은 매번. */
+  const _mk = aggMemoKey();
   if (!window._sggAggMemo || window._sggAggMemo.k !== _mk) window._sggAggMemo = { k: _mk, m: new Map() };
   const _memo = window._sggAggMemo.m;
   const out = [];
@@ -3645,8 +3702,8 @@ function sdOf(s) {
   return (s._sdRes = hit);
 }
 function sdAggregates() {
-  /* 셈은 조회조건이 바뀔 때만(sggAggregates와 같은 키 · 2026-09-25 세션136 — 시도 알약 띠가 레벨 10부터로 넓어져 멈출 때마다 8천 건을 다시 걸렀다) */
-  const _mk = [SIG_VER, typeof _relEpoch !== "undefined" ? _relEpoch : 0, filterSig(), regionLabel()].join("§");
+  /* 셈은 조회조건이 바뀔 때만(sggAggregates와 같은 키 aggMemoKey · 2026-09-25 세션136 — 시도 알약 띠가 레벨 10부터로 넓어져 멈출 때마다 8천 건을 다시 걸렀다) */
+  const _mk = aggMemoKey();
   if (window._sdAggMemo && window._sdAggMemo.k === _mk) return window._sdAggMemo.v;
   const _v = sdAggregatesRaw();
   window._sdAggMemo = { k: _mk, v: _v };
@@ -5213,6 +5270,9 @@ function buildDartSignals() {   // DART 전자공시 = 법정 공시 → officia
     sd: s.sd, sg: s.sg, dong: s.dong || null, amount_eok: s.amount_eok,
     corp: s.corp, purpose: s.purpose, invest_start: s.invest_start, invest_end: s.invest_end,   // 투자 상세(2026-09-02 알렉스 ①)
     status_note: s.carried || null,   // 수집 기간(1년) 밖 이월분 — 「직전 수집분 이월(투자기간 …)」을 카드 비고가 말한다(2026-09-16 · dart_fetch 이월 · 어댑터 함정 예방)
+    // 위치 근거 셋(등급·근사·근거문) — 카드 「위치 정확도」 블록(precNote)·요약 배지가 읽는다. ☠ 어댑터가 셋 다 떨어뜨려 공시 카드는 늘 「±1km 등급 미상」이었다
+    //   (2026-10-04 실측 공시 59행 전부 근거 보유 · 좌표 보유 24행 = 지번 20·동 대표점 4 · 앱 상세는 DETAIL_KEYS로 이미 보였다 · 게이트 html_check.adapter_geo_basis_check)
+    geo_prec: s.geo_prec || null, geo_approx: !!s.geo_approx, geo_basis: s.geo_basis || null,
     last_movement_basis: s.last_movement_basis,
     // ★ 마지막 움직임 = **원장(lifecycle) 값이 먼저** — 접수일(rcept_dt)은 원장이 없을 때의 폴백(2026-10-01 세션145 · 알렉스 제보 스타필드 수원:
     //   운영 개시 대장으로 원장 완공일이 2024-01-26이 됐는데 화면은 접수일 2026-07-01을 따로 셈해 「준공 후 2개월」로 남았다 ·
@@ -5581,6 +5641,10 @@ function buildJeongbiSignals() {
     //   생산측(lifecycle)은 2026-07-31에 고쳤는데 어댑터가 그 필드를 떨어뜨려 화면은 그대로였다).
     fin_date_unknown: c.fin_date_unknown, fin_note: c.fin_note, done_apt: c.done_apt,
     geo_prec: c.geo_prec, geo_approx: !!c.geo_approx || c.geo_prec === "dong",   // 동 대표점 등 근사를 후광·카드에 정직 표기(§4.1 — 국토부 통합은 주소 컬럼이 없어 동 폴백이 많다: 대구 비산동 6건 한 점 사례)
+    // 위치 근거문 — 카드 「위치 정확도」 블록(precNote)이 읽는다. ☠ 어댑터가 떨어뜨려 jeongbi_geo_fix가 붙인 근거(카카오 지번 등)가 웹 카드에서 침묵했다 —
+    //   근사면 같은 문장이 position_confidence로 따로 보였지만 실좌표(지번)로 바로잡은 행은 아무 말도 없었다(2026-10-04 실측 정비 2,623행 중 근거 381 · 그중 251행 침묵 ·
+    //   앱 상세는 DETAIL_KEYS로 이미 보였다 — 웹·앱이 갈렸다 · 게이트 html_check.adapter_geo_basis_check)
+    geo_basis: c.geo_basis || null,
     // 경기 근거는 도청 홈이 아니라 **경기데이터드림 데이터셋 카탈로그**로 (2026-08-10 사용자
     // "근거 링크 가보면 어떻게 정비정보를 보는지 알 수 없다"). 검색 폼이 CSRF POST라 결과
     // 딥링크는 불가 — 카탈로그에서 「일반 정비 사업 추진 현황」 검색 → Sheet에서 사업장명 조회.
@@ -5782,9 +5846,16 @@ function mapTargetOk(lat, lon, why) {
   if (!ok) { window._moveRefused = (window._moveRefused || []).concat([{ why, lat, lon, at: Date.now() }]).slice(-20); console.warn("[지도이동 거부]", why, lat, lon); }
   return ok;
 }
+/* ★ 이동 세대 — **새 이동이 시작되면 진행 중인 mapGo 사슬(닻 확대 뒤 보정 settle)을 끝낸다** (2026-10-03 세션150 감사 「mapGo 세대」 → 세션151 넘김 「다른 이동 창구가 안 올림」 → 세션152).
+   종전엔 mapGo·mapGlide만 세대를 올려, mapGo 사슬이 도는 중 지역을 고르거나(mapFit·regionJump) 단지·호재 짝을 맞추거나(mapShowPair) 손으로 끌면
+   다음 idle에 옛 사슬의 보정이 지도를 되당겼다. 지도를 옮기는 창구는 전부 이 함수를 먼저 부른다(게이트 html_check.map_move_gen_check). */
+function mapMoveGen() { return (window._mapGoGen = (window._mapGoGen || 0) + 1); }
 function mapGo(lat, lon, zLeaflet, opt) {
   if (!window._map) return;
   if (!mapTargetOk(lat, lon, "mapGo")) return;
+  /* 이 이동의 세대 — **첫 이동 전에** 잡는다: 새 이동(mapGo·mapGlide·다른 창구)이 오면 옛 사슬의 다음 단계·보정은 버린다(빠른 ‹가 옛 settle에 되당겨지지 않게 · 2026-10-03 감사).
+     ☠ 종전엔 아래 카카오 사슬 직전에서 잡아 즉시 갈래(숨은 탭·instant·크기 못 잼·catch)와 Leaflet 갈래가 세대를 안 올리고 지도를 옮겼다(2026-10-04 세션152 감사 · 게이트 map_move_gen_check가 도출로 잰다). */
+  const gen = mapMoveGen();
   const M = window._map;
   /* ★ 부드럽게 간다 (2026-09-07 알렉스 「호재 선택하면 갑자기 뿅 이동하는 게 아니고 부드럽게」).
      · Leaflet = flyTo · 카카오 = panTo는 **이동 거리가 화면보다 크면 애니메이션 없이 점프**하므로(공식 문서) 목표가 화면 안에
@@ -5803,7 +5874,8 @@ function mapGo(lat, lon, zLeaflet, opt) {
     if (smooth && M.flyTo) M.flyTo(c, zLeaflet, { duration: .7 }); else M.setView(c, zLeaflet);
     return;
   }
-  const K = kakao.maps, lv = Math.max(1, 18 - zLeaflet), tgt = new K.LatLng(lat, lon);
+  const K = kakao.maps, tgt = new K.LatLng(lat, lon);
+  let lv = Math.max(1, 18 - zLeaflet);   // let — 사슬 도중 누른 줌 ±가 목표 레벨을 옮긴다(_mapGoFold · 아래)
   const mr = (document.getElementById("map") || {}).getBoundingClientRect?.() || { width: 0, height: 0 };
   const Cc = { x: mr.width / 2, y: mr.height / 2 }, C = at ? { x: at[0], y: at[1] } : Cc;
   // 목표가 C에 오는 중심 — 지금 레벨에서 목표의 화면점 P를 C로 옮기는 중심(= P + Cc − C 자리의 좌표)
@@ -5819,23 +5891,42 @@ function mapGo(lat, lon, zLeaflet, opt) {
     let ratio = Math.max(Math.abs(lat - c.getLat()) / spanLat, Math.abs(lon - c.getLng()) / spanLng) / Math.pow(2, base - cur);
     const lvOut = Math.min(13, base + (ratio > .8 ? Math.ceil(Math.log2(ratio / .8)) : 0));
     // 단계는 `idle`(애니메이션 종료)로 잇고, idle이 안 오는 경우(이미 그 자리 · 숨은 탭에서 rAF 정지)는 시간 상한으로 넘어간다.
-    const gen = (window._mapGoGen = (window._mapGoGen || 0) + 1);   // 이 이동의 세대 — 새 이동(mapGo·mapGlide)이 오면 옛 사슬의 다음 단계·보정은 버린다(빠른 ‹가 옛 settle에 되당겨지지 않게 · 2026-10-03 감사)
+    /* ☠ idle 듣기는 **한 박자 뒤에** 붙인다 (2026-10-04 세션152 2차 · 헤드리스 이벤트 추적). 다음 단계(one)는 앞 단계의 idle 처리 **도중**에 불리는데, 그 안에서
+         붙인 듣기를 카카오가 **같은 idle 발송에서 바로 불러** 끝 보정(settle)이 닻 확대가 시작되자마자(313ms) 돌았다 — 애니메이션 끝(약 800ms)이 아니라.
+         그래서 확대 도중 누른 줌 ±를 접을 사슬이 이미 끝나 있었다(_mapGoFold false → 그 setLevel은 카카오가 버렸다). */
     const after = (fn, ms) => { let done = false; const h = () => { if (done) return; done = true; K.event.removeListener(M, "idle", h); if (gen === window._mapGoGen) fn(); };
-      K.event.addListener(M, "idle", h); setTimeout(h, ms); };
+      setTimeout(() => { if (!done) K.event.addListener(M, "idle", h); }, 0); setTimeout(h, ms); };
     let endC = null;   // 한 동작이 끝났을 때의 중심(닻 확대 전에 계산 — 끝 보정이 다른 자리로 튀지 않게)
+    let live = true;   // 사슬이 아직 끝나지 않았나(끝 보정 전) — 그동안 누른 줌 ±는 이 사슬의 목표 레벨에 접힌다(_mapGoFold)
     const settle = () => {   // 마지막 보정 — 애니메이션이 중간에 멈췄어도(숨은 탭) 끝 상태는 목표다
+      live = false;
       if (M.getLevel() !== lv) M.setLevel(lv);
       const want = endC || (at ? centerFor() : tgt), c2 = M.getCenter();
       if (Math.abs(c2.getLat() - want.getLat()) > 1e-4 || Math.abs(c2.getLng() - want.getLng()) > 1e-4) M.setCenter(want); };
+    /* ★ 닻·끝 중심은 **세계 좌표(WCONGNAMUL · 평면)로** 푼다 (2026-10-04 세션152 3차 · 2차 감사 「먼 mapGo의 끝 자리가 레벨 4에서 약 104·47px 어긋난다」).
+       ☠ 종전엔 축소 레벨(11~12)의 화면점(containerPointFromCoords)으로 닻 A를 풀었는데 그 값은 **정수로 반올림**된다(2026-10-04 헤드리스 실측 — 소수 좌표를 넣어도 정수점) —
+         반 픽셀 오차가 확대 배율 k−1(12 → 4면 255)만큼 불어 끝 자리가 약 100px 빗나갔고(서울 → 부산 실측 104·47 · 대전 → 부산 −85·−22), 끝 중심(endC)도
+         같은 반올림 값에서 와 끝 보정(settle)이 「이미 그 자리」로 보고 못 잡았다. ⇒ 지금 화면의 세계 좌표 틀(화면 두 모서리 — coordsFromContainerPoint는 소수점을 받는다)로
+         목표의 화면점을 **소수로** 구하고 닻·끝 중심도 그 틀로 돌려준다(모서리를 원점으로 — 가운데 화소 가정 없음). 시험 desk.js ⓜ(끝 자리 허용치를 좁혔다). */
+    const wf = () => { const prj = M.getProjection(), a = prj.coordsFromContainerPoint(new K.Point(0, 0)).toCoords(), b = prj.coordsFromContainerPoint(new K.Point(mr.width, mr.height)).toCoords();
+      return { ax: a.getX(), ay: a.getY(), sx: (b.getX() - a.getX()) / mr.width, sy: (b.getY() - a.getY()) / mr.height }; };
+    const wPx = (f, ll) => { const q = ll.toCoords(); return { x: (q.getX() - f.ax) / f.sx, y: (q.getY() - f.ay) / f.sy }; };
+    const wLL = (f, x, y) => new K.Coords(f.ax + x * f.sx, f.ay + y * f.sy).toLatLng();
     const one = () => {   // ★ 이동 + 확대(축소) 한 동작 — 레벨이 같으면 panTo만
-      const cur2 = M.getLevel(), prj = M.getProjection();
+      const cur2 = M.getLevel();
       if (cur2 === lv) { M.panTo(at ? centerFor() : tgt); after(settle, 900); return; }
-      const P = prj.containerPointFromCoords(tgt), k = Math.pow(2, cur2 - lv);
-      const A = new K.Point((k * P.x - C.x) / (k - 1), (k * P.y - C.y) / (k - 1));
-      endC = prj.coordsFromContainerPoint(new K.Point(A.x + (Cc.x - A.x) / k, A.y + (Cc.y - A.y) / k));
-      M.setLevel(lv, { animate: { duration: 380 }, anchor: prj.coordsFromContainerPoint(A) });
+      const f = wf(), P = wPx(f, tgt), k = Math.pow(2, cur2 - lv);
+      const Ax = (k * P.x - C.x) / (k - 1), Ay = (k * P.y - C.y) / (k - 1);
+      endC = wLL(f, Ax + (Cc.x - Ax) / k, Ay + (Cc.y - Ay) / k);
+      M.setLevel(lv, { animate: { duration: 380 }, anchor: wLL(f, Ax, Ay) });
       after(settle, 1000);
     };
+    /* ★ **사슬 도중의 줌 ±는 이 사슬의 목표 레벨에 접는다** (2026-10-04 세션152 2차 감사 — 1차가 ±에 세대를 올린 회귀의 처방).
+       ☠ 1차는 줌 ±가 세대를 올리게 했다 — 먼 mapGo의 **축소 애니메이션 도중** ±를 누르면 사슬이 끊기는데 카카오는 애니메이션 중 들어온 setLevel을 버려
+         지도가 **출발 자리·축소 레벨(lv12)**에 멈췄다(2026-10-04 헤드리스 재현 · 목표에도 못 가고 누른 줌도 안 먹는다 · 그 전 판은 목표 도착 · 누른 줌은 버려짐).
+       ⇒ ±는 세대를 올리지 않는다(html_check MAP_MOVE_EXEMPT) · 사슬이 살아 있으면 setLevel 대신 **목표 레벨을 ±**한다 — 목표에 도착하고 누른 줌도 먹는다.
+         끝 보정(settle)이 새 레벨·중심을 놓는다(endC는 옛 레벨로 잰 값이라 버린다). 새 이동이 세대를 올렸으면 접지 않는다(그 사슬은 끝났다). 시험 ui_tests/desk.js ⓜ. */
+    window._mapGoFold = d => { if (!live || gen !== window._mapGoGen) return false; lv = Math.max(1, Math.min(14, lv + d)); endC = null; return true; };
     if (lvOut !== cur) { M.setLevel(lvOut, { animate: { duration: 260 } }); after(one, 700); }
     else one();
   } catch (e) { jump(); }
@@ -5859,6 +5950,7 @@ function mapFit(lls, padPx) {   // lls = [[lat,lon],...] 또는 경계객체({_s
     lls = [[sw.lat, sw.lng], [ne.lat, ne.lng]];
   }
   if (!lls.length) return;
+  mapMoveGen();   // 진행 중인 mapGo 사슬을 끝낸다(mapMoveGen 주석)
   /* ⚠ 애니메이션을 끈다 — 애니메이션 fit은 **탭이 숨겨져 있으면 끝나지 않고**, 끝나지 않으면
      "이동했다"가 아니라 조용한 무동작이 된다(2026-08-09 실측: 같은 호출이 animate:false에서만
      좌표가 바뀌었다). 지역 점프는 먼 거리라 애니메이션의 이득도 없다. */
@@ -5887,12 +5979,17 @@ let _glideRaf = 0;
 function mapGlide(lat, lon) {
   const M = window._map; if (!M) return;
   if (!mapTargetOk(lat, lon, "mapGlide")) return;
+  /* 진행 중인 mapGo 사슬(닻 확대 뒤 보정)을 끝낸다 — 미끄러짐이 새 목표다 · 지도를 옮기는 클로저(set)보다 먼저(게이트가 도출로 잰다).
+     ★ 이 세대를 **지연 콜백 안에서 다시 비교한다**(rAF 단계 · 안전판 — 2026-10-04 세션152 2차 감사). ☠ 종전엔 앞에서 올리기만 하고 콜백은 비교하지 않아
+       ① 연속 미끄러짐(0.5초 뒤 두 번째)에서 첫 미끄러짐의 안전판(dur+400ms)이 두 번째 도중 발화해 지도를 **첫 목표로 되당겼고**(두 번째 미끄러짐도 멈춤)
+       ② 미끄러짐 직후 지역 맞춤(mapFit)은 레벨만 먹고 중심이 미끄러짐 목표로 끌려갔다(rAF가 계속 setCenter · 2026-10-04 헤드리스 재현 · 그 전 판도 같음).
+       앞에서 올린 세대는 그 **뒤에 온** 새 이동으로부터 지연 콜백을 지켜 주지 않는다 — mapGo의 after와 같은 꼴(게이트 map_move_gen_check 지연 클로저 규칙 · 시험 desk.js ⓜ). */
+  const gen = mapMoveGen();
   const isK = typeof M.getLevel === "function";
   const set = (la, lo) => { if (isK) M.setCenter(new kakao.maps.LatLng(la, lo)); else M.setView([la, lo], M.getZoom(), { animate: false }); };
   const redraw = () => { try { window._dbg && window._dbg.applyLOD && window._dbg.applyLOD(); } catch (e) {} };
   // 앞선 미끄러짐을 멈추고 새 목표로 — **그리지 않는다**(곧 다시 움직인다 · 연속 선택마다 지도 층 전체를 다시 그려 상세 열기 최대 프레임이 233→450ms가 됐다 · 2026-09-13 perf_probe)
   if (window._mapGlideStop) window._mapGlideStop(false);
-  window._mapGoGen = (window._mapGoGen || 0) + 1;   // 진행 중인 mapGo 사슬(닻 확대 뒤 보정)을 끝낸다 — 미끄러짐이 새 목표다
   if (document.hidden) { set(lat, lon); return; }
   const c0 = M.getCenter(), la0 = isK ? c0.getLat() : c0.lat, lo0 = isK ? c0.getLng() : c0.lng;
   let span = 1;   // 화면 단위 거리(가로·세로 중 큰 쪽)
@@ -5913,8 +6010,9 @@ function mapGlide(lat, lon) {
   const ease = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
   const done = () => { if (_glideRaf) cancelAnimationFrame(_glideRaf); _glideRaf = 0; window._mapGliding = false; window._mapGlideStop = null; };
   window._mapGliding = true;
-  window._mapGlideStop = (paint = true) => { done(); if (paint) redraw(); };   // 손으로 잡음·안전판 = 그린다 · 새 이동이 멈춤 = 안 그린다(false)
+  const stop = window._mapGlideStop = (paint = true) => { done(); if (paint) redraw(); };   // 손으로 잡음·안전판 = 그린다 · 새 이동이 멈춤 = 안 그린다(false)
   const step = now => {
+    if (gen !== window._mapGoGen) { done(); redraw(); return; }   // 다른 창구가 새 목표를 잡았다(mapFit·regionJump·panTo·손 끌기…) — 되당기지 않고 멈춘다 · 멈춘 자리에서 한 번 그린다
     if (t0 === null || now < t0) t0 = now;
     const x = Math.min(1, Math.max(0, (now - t0) / dur)), k = ease(x);
     set(la0 + (lat - la0) * k, lo0 + (lon - lo0) * k);
@@ -5922,7 +6020,9 @@ function mapGlide(lat, lon) {
     else { done(); redraw(); }
   };
   _glideRaf = requestAnimationFrame(step);
-  setTimeout(() => { if (window._mapGliding && performance.now() - tCall >= dur) { set(lat, lon); window._mapGlideStop && window._mapGlideStop(); } }, dur + 400);   // rAF가 멎은 경우의 안전판(호출 시각 기준)
+  /* rAF가 멎은 경우의 안전판(호출 시각 기준) — 표식이 **이 미끄러짐의 것**일 때만(새 미끄러짐이 표식을 가졌으면 남의 것이다 · 종전 `_mapGliding`만 봐 두 번째 미끄러짐을 멈췄다).
+     세대가 바뀌었으면(다른 창구가 새 목표) 옮기지 않고 표식만 푼다 — 숨은 탭에서 rAF가 멎은 채 세대가 바뀌어도 표식이 남지 않게(남으면 지도 층이 영영 다시 안 그려진다). */
+  setTimeout(() => { if (window._mapGlideStop !== stop || !window._mapGliding) return; if (gen === window._mapGoGen && performance.now() - tCall >= dur) set(lat, lon); stop(); }, dur + 400);
 }
 /* ★ 지도에서 **판이 가리지 않은 영역**의 왼쪽 경계(px · 지도 컨테이너 기준) — 좌측 패널·상세 판·둘째 판 중 지도 왼쪽 절반에 떠 있는 것의 오른쪽 끝.
    mapCenterOn(가운데) · mapFit(지역 맞춤) · mapShowPair(아파트+호재)가 **같은 자**를 쓴다(데스크톱만 · 폰 상세는 전면이라 0). 2026-09-28 — 종전엔 mapCenterOn만 상세 두 판을 뺐고
@@ -5972,6 +6072,7 @@ function mapShowPair(a, b) {   // a·b = [위도, 경도]
      ⇒ 축소가 끝났을 때 mid가 보이는 영역 가운데(c)에 오도록 **고정점을 계산**한다 — 축소 배율 f면 화면점 p는 a + (p − a)/f로 가므로
        m → c 가 되는 고정점 a = (f·c − m)/(f − 1). 중심은 시작 → 끝 직선을 따라 한 번 움직인다(게이트 apt_pair_fit_check · 시험 desk.js 「한 번의 움직임」). */
   const cx = (x0 + mr.width) / 2, cy = mr.height / 2, pm = px(mid);   // mapCenterOn과 같은 「보이는 영역의 가운데」
+  mapMoveGen();   // 진행 중인 mapGo 사슬을 끝낸다(mapMoveGen 주석)
   if (isK) {
     const lv0 = M.getLevel(), lv1 = Math.min(14, lv0 + k), f = Math.pow(2, lv1 - lv0);
     if (f <= 1) return mapCenterOn(mid[0], mid[1]);
@@ -8202,6 +8303,7 @@ function renderSggFeed(disp) {
   p.innerHTML = `
     ${pheadHtml(`<div class="pt">${disp}</div>`)}
     <div class="ps" onmouseenter="explainTip(event,'sgg','영향권이 덮음 ${near.length} · 안에 소재 ${host.length} (지역축 대신 시군구 경계·반경권으로 판정 · 정비는 소재만)')" onmouseleave="explainHide()">영향권이 이 시군구를 덮는 호재 <b class="mono">${near.length}</b> · 시군구 안에 있는 호재 <b class="mono">${host.length}</b>${rel.length > LIST_CAP ? ` · 상위 ${LIST_CAP}건 표시` : ""}</div>
+    ${regionMoveLine()}
     ${regionHeadHtml(rel)}
     <div id="list"></div>
     ${cands.length ? `<details class="pfold"><summary>확인 전 후보 <b class="mono">${cands.length}</b>건 <small>— 입찰·공시에서 자동으로 뽑은 것 · 아직 확정 아님</small></summary><div id="candlist" class="pfbody"></div></details>` : ""}`;   // ★ 목록 아래 접힌 한 줄(2026-09-28 알렉스 「정리좀 하자」 — 펼친 채 목록 자리를 먹어 목록이 한 줄로 줄었다)
@@ -8555,6 +8657,7 @@ function sigGoTo(s) {
   if (arr.length && window._map && performance.now() - _mapShownAt < 400) {   // 숨은 지도에서 온 선택(위 주석)
     const M = window._map, z = typeof M.getLevel === "function" ? 18 - M.getLevel() : M.getZoom();
     if (z < 18 - SIG_FROM_LIST_LV && mapTargetOk(arr[0].coord[1], arr[0].coord[0], "sigGoTo")) {   // 막 드러난 지도 — 레벨·중심을 즉시(애니메이션 없음 · 보던 화면이 없었다)
+      mapMoveGen();   // 진행 중인 mapGo 사슬을 끝낸다(mapMoveGen 주석 · 2026-10-04 감사 — 이 즉시 갈래만 세대를 안 올렸다)
       if (typeof M.setLevel === "function") { M.setLevel(SIG_FROM_LIST_LV); M.setCenter(new kakao.maps.LatLng(arr[0].coord[1], arr[0].coord[0])); }
       else M.setView([arr[0].coord[1], arr[0].coord[0]], 18 - SIG_FROM_LIST_LV, { animate: false });
     }
@@ -8781,9 +8884,13 @@ function dockCounts() {
   return _dv;
 }
 let _dockMemo = null;
-/* 조회조건 서명 — 도크 패싯 메모 키의 재료. 축(Set)은 정렬해 잇고, 그 밖의 값은 문자열로. 새 축이 생겨도 열거를 고칠 일이 없다(filter 객체를 그대로 훑는다). */
+/* 조회조건 서명 — 도크 패싯 메모 키의 재료. 축(Set)은 정렬해 잇고, 그 밖의 값은 문자열로. 새 축이 생겨도 열거를 고칠 일이 없다(filter 객체를 그대로 훑는다).
+   ★ **표시 옵션·표식은 뺀다**(FILTER_SIG_SKIP · 2026-10-03 세션150 감사 넘김 → 세션152) — `lines`(철도선·도로선·노선명 = 어떻게 보나)와 `_autoRegion`(누가 지역을 걸었나)은
+     건수·목록을 바꾸지 않는데 서명에 섞여, 노선명을 켜고 끌 때마다 움직임 띠가 1번으로 돌아가 다시 재고 지역 알약·도크 셈 메모가 통째로 버려졌다(수는 그대로).
+     새 표시 옵션을 filter에 담으면 여기에 더한다(게이트 html_check.mvband_check). */
+const FILTER_SIG_SKIP = new Set(["lines", "_autoRegion"]);
 function filterSig() {
-  return Object.keys(filter).map(k => { const v = filter[k]; return k + "=" + (v instanceof Set ? [...v].sort().join("·") : (v && typeof v === "object" ? JSON.stringify(v) : String(v))); }).join(";");
+  return Object.keys(filter).filter(k => !FILTER_SIG_SKIP.has(k)).map(k => { const v = filter[k]; return k + "=" + (v instanceof Set ? [...v].sort().join("·") : (v && typeof v === "object" ? JSON.stringify(v) : String(v))); }).join(";");
 }
 /* ══ 세부유형 플라이아웃 (2026-08-19 시안 §15-04) ═══════════════════════════════════
    ★ 열림 = **고정(핀) ∪ 호버**. 핀은 ▶(chev)로 켜고 `dockOpen`에 저장되던 그 상태 그대로다 —
@@ -9522,6 +9629,10 @@ function mountZoomStack() {
     if (e.target.closest("#zs-loc")) { document.querySelector("#map .myloc")?.click(); return; }
     const z = e.target.closest("[data-z]"); if (!z) return;
     const d = +z.dataset.z, m = window._kmap;
+    /* ★ 줌 ±는 이동 세대를 올리지 **않는다** (2026-10-04 세션152 2차 — 1차가 올리게 했다가 회귀). 진행 중인 mapGo 사슬이면 그 목표 레벨에 접고(_mapGoFold · mapGo 주석),
+       아니면 그 자리에서 ±한다. ☠ 세대를 올리면 사슬의 축소 도중 누른 ±가 사슬을 끊고, 카카오는 애니메이션 중 setLevel을 버려 출발 자리·축소 레벨에 멈춘다(헤드리스 재현).
+       미끄러짐(mapGlide) 도중의 ±는 종전대로 함께 돈다(중심은 미끄러짐 · 레벨은 ±). 게이트 html_check.map_move_gen_check(예외 이유 · 접기 배선). */
+    if (m && window._mapGoFold && window._mapGoFold(d)) return;
     if (m) { m.setLevel(Math.max(1, Math.min(14, m.getLevel() + d)), { animate: { duration: 200 } }); return; }
     const lm = window._lmap; if (lm) (d < 0 ? lm.zoomIn() : lm.zoomOut());
   });
@@ -9930,6 +10041,7 @@ function lpRegion() {
   _lpRows = [];
   const crumb = R.level === "sd" ? "전국" : `<a data-lpact="nat">전국</a> › ${esc(SIDO_LONG[nav.sd] || nav.sd || "")}`;
   head.innerHTML = `<div class="lpcrumb">${crumb}</div><div class="lpn"><b>${total.toLocaleString()}</b><span>건 · ${R.level === "sd" ? "시도" : "시군구"} ${R.rows.length}곳</span></div>`
+    + (R.level === "sgg" ? regionMoveLine() : "")   // 고른 시도(·시군구)의 이번 주 움직임 — 알약 「+N」과 같은 수 · 누르면 그 목록(regionMoveLine)
     + `<div class="lpctl"><select id="lp-rgsort" aria-label="정렬">${[["n", "전체순"], ["sa", "규모 S·A순"], ["hb", "공사 중 정비 세대순"], ["name", "이름순"]].map(([v, t]) => `<option value="${v}"${REG_SORT.k === v ? " selected" : ""}>${t}</option>`).join("")}</select>`
     + `<span class="lpkey"><span><i class="p0"></i>계획</span><span><i class="p1"></i>인가</span><span><i class="p2"></i>착공</span><span><i class="p3"></i>준공</span></span></div>`;
   body.innerHTML = rows.map(r => {
@@ -9949,8 +10061,8 @@ function lpSrcFam(s) { return String(s.src_name || s.src_org || "").replace(/\s*
 function lpFlow() {
   const head = document.getElementById("lp-head"), body = document.getElementById("lp-body"); if (!head || !body) return;
   const F = flowSets();
-  const kinds = [["all", "전체", F.total], ["new", "신규", F.nNew], ["chg", "단계 진행", F.nChg], ["bid", "공사 발주", F.nBid], ["eia", "환경영향평가", F.nEia], ["up", "등급 상향", F.nUp], ["undet", "등급 없음 해소", F.nUndet], ["dd", `다가오는 ${DDAY_DAYS}일`, F.nDd]]
-    .filter(([k, , n]) => k === "all" || n || FLOW_KIND === k);   // 0건 종류는 숨긴다(6A) — 지금 고른 종류는 0이어도 남긴다(고른 것이 사라지면 길을 잃는다)
+  const kinds = [["all", "전체", F.total], ["src", "문서상 움직임", F.past.length], ["new", "신규", F.nNew], ["chg", "단계 진행", F.nChg], ["bid", "공사 발주", F.nBid], ["eia", "환경영향평가", F.nEia], ["up", "등급 상향", F.nUp], ["undet", "등급 없음 해소", F.nUndet], ["dd", `다가오는 ${DDAY_DAYS}일`, F.nDd]]
+    .filter(([k, , n]) => k === "all" || n && k !== "src" || FLOW_KIND === k);   // 0건 종류는 숨긴다(6A) — 지금 고른 종류는 0이어도 남긴다(고른 것이 사라지면 길을 잃는다) · 「문서상 움직임」은 지역 줄로 들어왔을 때만(regionMoveLine)
   head.innerHTML = `<div class="lppills">${FLOW_PERIODS.map(([mo, lb]) => `<button type="button" data-lpper="${mo}" class="${!FLOW_CUSTOM && mo === FLOW_MONTHS ? "on" : ""}">${lb}</button>`).join("")}</div>`
     + `<div class="lppills">${kinds.map(([k, lb, n]) => `<button type="button" data-lpkind="${k}" class="${FLOW_KIND === k ? "on" : ""}">${lb}<b>${n.toLocaleString()}</b></button>`).join("")}</div>`;
   const WD = ["일", "월", "화", "수", "목", "금", "토"];
@@ -10054,6 +10166,7 @@ function flowSets() {
   const ddRows = ddaySigs(DDAY_DAYS), nDd = ddRows.length;   // 다가오는 날짜 — 기간 창과 무관(앞으로 DDAY_DAYS일)
   if (FLOW_KIND === "dd") return Object.assign({}, F, { upRows, undetRows, nUp, nUndet, nDd, ddRows, shown: ddRows.map(x => x.s) });   // 가까운 날 먼저(최신순 정렬을 타지 않는다)
   const shown = FLOW_KIND === "all" ? past.concat(fldSigs)
+    : FLOW_KIND === "src" ? past.slice()   // 문서상 움직임만(지역 화면 「이번 주 움직임 N건 ›」의 목록 = 알약 「+N」 · regionMoveLine)
     : FLOW_KIND === "up" ? upRows.map(x => x.s)
     : FLOW_KIND === "undet" ? undetRows.map(x => x.s)
     : FLOW_KIND === "fld" ? chgRows.map(x => x.s)
@@ -10100,7 +10213,7 @@ function renderFlow() {
     <!-- ★ 요약 4칸 = **큰 숫자**(갱신 시안 §05 실물). 이 칸이 곧 필터다 — 하나가 두 일을 한다.
          0건이어도 칸을 없애지 않는다: 없애면 「그런 변화는 애초에 안 센다」로 읽히고,
          0으로 두면 「이번 기간엔 없었다」는 사실이 된다(P2). -->
-    <div class="fsegs">${seg("new", "신규", nNew)}${
+    <div class="fsegs">${FLOW_KIND === "src" ? seg("src", "문서상 움직임", past.length) : ""}${seg("new", "신규", nNew)}${
       seg("chg", "단계 진행", nChg)}${seg("bid", "공사 발주", nBid)}${seg("eia", "환경영향평가", nEia)}${seg("up", "등급 상향", nUp)}${seg("undet", "등급 없음 해소", nUndet)}${seg("dd", `다가오는 ${DDAY_DAYS}일`, nDd)}</div>`;
   const _dkf = document.getElementById("dk-flow");
   const _v2 = isDesk();   // 웹 크롬 v2 — 데스크톱은 사이드바가 없으므로 컨트롤이 본문 왼쪽 열에 선다(시안 「업데이트」)
@@ -10892,16 +11005,36 @@ function mvBandItems() {
     .sort((a, b) => b.dt.localeCompare(a.dt));
   return { win: "이번 주", items };
 }
-/* 띠를 누르면 — 좌측 판 업데이트 「이번 주 · 전체」(폰은 업데이트 전체 화면) · 띠와 같은 수·같은 목록 */
-function lpShowFlowWeek() {
+/* 띠를 누르면 — 좌측 판 업데이트 「이번 주 · 전체」(폰은 업데이트 전체 화면) · 띠와 같은 수·같은 목록
+   kind = "src"면 「이번 주 · 문서상 움직임」(지역 화면의 「이번 주 움직임 N건 ›」 줄 — regionMoveLine) */
+function lpShowFlowWeek(kind = "all") {
   try {
-    FLOW_CUSTOM = null; FLOW_MONTHS = 0.25; FLOW_KIND = "all";
+    FLOW_CUSTOM = null; FLOW_MONTHS = 0.25; FLOW_KIND = kind;
     if (!isDesk()) { setView("flow"); return; }
     if (VIEW_MODE !== "map") setView("map");
     const s = lpS(); s.tab = "flow"; s.fold = false; lpSave(); _lpShown = LP_PAGE;
     const bd = document.getElementById("lp-body"); if (bd) bd.scrollTop = 0;
     lpApply(); renderLpane();
   } catch (e) { console.warn("띠 → 업데이트", e); }
+}
+/* ★ 지역 화면의 「이번 주 움직임 N건 ›」 줄 (2026-10-03 알렉스 결정 ① — 지역 알약의 「+N」이 무엇인지 · 누르면 그 N건 목록).
+   N = 업데이트 「이번 주」의 **문서상 움직임**(flowCompute(0.25).past — 지금 조회조건 그대로 · 시군구 피드면 그 시군구가 걸린 채) =
+   알약 「+N」(sdAggregates·sggAggregates — 같은 visible·inWeek·movKey · 노선당 1건)과 같은 수다(시험 ui_tests/desk.js ⓡ가 전 지역을 잰다).
+   누르면 lpShowFlowWeek("src") — 업데이트 「이번 주 · 문서상 움직임」(같은 목록 · 「전체」를 누르면 값만 바뀐 「내용 변경」까지).
+   0건이면 줄을 세우지 않는다(알약도 0이면 「+N」을 안 붙인다) · 게이트 html_check.region_move_line_check · 정본 DESIGN 「지역 이번 주 움직임 줄」 행. */
+/* ★ **셈은 조회조건이 바뀔 때만** — 키 = aggMemoKey(알약 sdAggregates·sggAggregates와 같은 한 벌) (2026-10-04 세션152 2차 감사 「regionMoveLine 성능을 재지 않았다」).
+   헤드리스 실측(2026-10-04 map_shot --local · 데스크톱 · 호출 수·시간 계측): 한 번에 11~30ms(flowCompute 전체) · 시군구 피드 열기(showSgg 76~210ms)엔 1번이지만
+   좌측 판 「지역별」이 열린 채 시도 알약을 누르면(sdPillGo 128~235ms) **3번** 불렸다(syncRegionBar → renderAll → syncRegionBar가 판을 연달아 다시 그린다) —
+   메모 뒤 2번 셈 + 1번 적중(앞 한 번은 renderAll이 렌더 세대 `_relEpoch`를 올리기 전이라 키가 다르다 · 키는 알약과 한 벌로 둔다) · 시도 클릭당 약 15~20ms 덜 막힌다.
+   ☠ 같은 날 첫 판은 좌측 판을 접은 채 재 「동작당 1번 · 캐시 불요」라 적었다 — 판이 열린 경로를 안 쟀다. 메모가 낡으면 알약 +N과 줄 N이 갈린다(시험 desk.js ⓡ가 전 지역을 잰다). */
+function regionMoveLine() {
+  let n = 0;
+  const _mk = aggMemoKey(), _m = window._rmlMemo;
+  if (_m && _m.k === _mk) n = _m.n;
+  else try { n = flowCompute(0.25).past.length; window._rmlMemo = { k: _mk, n }; } catch (e) { console.warn("지역 움직임 줄", e); }
+  if (!n) return "";
+  return `<button type="button" class="rgmv" onclick="lpShowFlowWeek('src')" title="지난 7일 공식 문서상 움직임(노선은 노선당 1건) — 지도 알약의 +${n}과 같은 수 · 누르면 그 목록">`
+    + `<span>이번 주 움직임 <b>${n.toLocaleString()}</b>건</span><i aria-hidden="true">›</i></button>`;
 }
 /* 한 줄 꼬리 — 무엇이 움직였나(단계 진행 = 도달 단계 · 신규 = 지금 단계 · 공사 발주 = 공사 규모 · 환경영향평가 = 협의 단계) */
 function mvBandTail(x) {
@@ -11711,7 +11844,7 @@ function initLeaflet() {
     if (z >= DONG_ZOOM) loadBdongVisible();   // 동 라벨이 필요한 줌부터 화면에 걸친 시도 경계 로드(전국 분할)
   };
   map.on("zoomend moveend", () => { if (window._mapGliding) return; applyLOD(); });   // 선택 이동(mapGlide)은 프레임마다 moveend를 낸다 — 끝에서 한 번 그린다(카카오 applyLODSoon과 같은 규칙 · 2026-09-13)
-  map.on("dragstart", () => { window._mapGlideStop && window._mapGlideStop(); });       // 손으로 잡으면 멈춘다(카카오 pointerdown과 같은 규칙)
+  map.on("dragstart", () => { window._mapGlideStop && window._mapGlideStop(); mapMoveGen(); });       // 손으로 잡으면 멈춘다(카카오 pointerdown과 같은 규칙)
   map.on("moveend", () => { try { updateCenterLabel(); } catch (e) {} });
   setTimeout(() => { try { updateCenterLabel(); } catch (e) {} }, 600);
   // 지도 여백(타일)만 클릭 → 선택 해제 + 반경 원 제거.
@@ -11786,7 +11919,7 @@ function initLeaflet() {
           { direction: "right", offset: [10, 0] });
         m.on("click", () => showSignal(sg, false));
         m._sig = sg; m._baseR = r; m._col = col;
-        if (k === 0) sg._pan = () => { if (mapTargetOk(y, x, "_pan")) map.panTo([y, x]); };   // 이동 창구 가드(2026-09-13 전수)
+        if (k === 0) sg._pan = () => { if (mapTargetOk(y, x, "_pan")) { mapMoveGen(); map.panTo([y, x]); } };   // 이동 창구 가드(2026-09-13 전수)
         if (animate && m._icon && m._icon.firstElementChild) { m._icon.firstElementChild.classList.add("pin-in"); m._icon.firstElementChild.style.animationDelay = (ai++ * 50) + "ms"; }   // 그림(svg)에만 — 아이콘 상자의 transform은 Leaflet 위치다
         pins.push(m);
       });
@@ -11916,6 +12049,7 @@ function initLeaflet() {
         icon: L.divIcon({ className: "", html: `<div class="rail-name">${p.name}</div>`, iconSize: null }) }).addTo(map));
     }
     if (fit && routeHl.length) {
+      mapMoveGen();   // 노선 맞춤도 새 목표다(카카오판과 같은 자 · 2026-10-04 감사)
       try { map.fitBounds(L.featureGroup(routeHl).getBounds().pad(0.12)); } catch (e) {}
     }
   };
@@ -11934,7 +12068,7 @@ function initLeaflet() {
   //   (2026-07-31 사용자). 종전엔 treeState.selKey만 비우고 아이콘은 다음 지도 이동 때까지 남았다.
   const clearAptMarker = () => { if (aptMarker) { map.removeLayer(aptMarker); aptMarker = null; } try { renderAptDots(); } catch (e) {} };
   // 레이더 파동 폐기(2026-08-12) — 카카오판과 같은 결정. 세 층 중 한 층만 고치면 폴백 화면에서 부활한다.
-  mapApi = { refreshPins, panTo: ll => { if (mapTargetOk(ll[1], ll[0], "panTo")) map.panTo([ll[1], ll[0]]); }, showRadius, showRadiusMany, clearRadius, showAptAnchor,
+  mapApi = { refreshPins, panTo: ll => { if (mapTargetOk(ll[1], ll[0], "panTo")) { mapMoveGen(); map.panTo([ll[1], ll[0]]); } }, showRadius, showRadiusMany, clearRadius, showAptAnchor,
              highlightRings, clearHighlight, clearAptMarker, emphasizePin, sggRings: () => window._sggRings,
              highlightRoute, clearRoute,
              closeAptPop: () => map.closePopup() };   // Leaflet판 단지 말풍선은 leaflet popup이다(카카오판과 구현이 다름)
@@ -12279,7 +12413,7 @@ function initKakao() {
       const mv = e => {
         const dx = e.clientX - sx, dy = e.clientY - sy;
         if (!moved && !movedEnough(dx, dy)) return;
-        if (!moved) { moved = true; hideTip(); }   // 끌기 시작 = 말풍선은 물러난다
+        if (!moved) { moved = true; hideTip(); mapMoveGen(); }   // 끌기 시작 = 말풍선은 물러난다 · 손이 새 목표다(지도 팬 판정 `_panning`과 같은 규칙 — 옛 mapGo 보정 끝 · 2026-10-04 감사)
         if (!prj) return;
         try { map.setCenter(prj.coordsFromPoint(new K.Point(p0.x - dx * kx, p0.y - dy * ky))); } catch (e2) {}
       };
@@ -12348,29 +12482,27 @@ function initKakao() {
     s._kmkKey = t.col + "|" + tr + "|" + t.bw + "|" + t.ph + "|" + t.fillOp + "|" + t.alpha + "|" + (haloOn(s) ? 1 : 0) + "|" + t.shape + "|" + (isApprox(s) ? 1 : 0);
   };
   let _shrinkRRef = null;        // renderHojae가 자기 축소자를 여기 걸어 둔다(같은 자를 쓰기 위해)
-  const clDonut = (el, g) => {
+  const clDonut = (el, g, lv) => {
     const cnt = {}; for (const m of g) { const c = catOf(m); cnt[c] = (cnt[c] || 0) + 1; }
-    /* ★ 지름 = **40px 고정**(건수와 무연동) — 시안 rev2 §14-2 정정 · §15-12.
-       ☠ 초안은 `30 + 6·log₂(건수)`(최대 52)였다. **크기 채널은 등급이 이미 쓰고 있어**, 줌아웃에서
-         큰 도넛과 S등급 마커가 나란히 놓이면 둘 다 「크다」로만 읽히고 그것이 건수인지 등급인지
-         갈리지 않는다. 건수는 **숫자가 정확히** 말하므로 크기는 부정확한 중복이고, 원래 문제였던
-         「지형을 덮음」의 원인이기도 하다. 유형 비율은 원호가 말한다. */
-    const D = 40;
-    const key = g.length + "|" + D + "|" + Object.entries(cnt).map(([k, v]) => k + v).sort().join(",");
+    /* ★ 지름 = **묶인 호재 중 가장 높은 등급의 점 지름**(clSize · HJR → lvSize → pinEdge · 2026-10-04 알렉스 제보 · 정의·근거는 clSize 주석).
+       건수는 **숫자가** 말하고(크기로 건수를 말하지 않는다 — 시안 rev2 §14-2의 그 결론은 그대로) 유형 비율은 원호가 말한다.
+       ☠ 종전 40px 고정은 점이 줄어든 2026-09-30 뒤 모든 겹침 원을 S 점보다 크게 그렸다. ☠ 초안 `30 + 6·log₂(건수)`도 되살리지 않는다(크기 채널은 등급이 쓴다). */
+    const { top, D, f } = clSize(g, lv);   // lv = 그린 그 렌더의 지도 레벨(낱개 점 `_shrinkR`와 같은 값 · 알약 구간 축소)
+    const key = g.length + "|" + top + "|" + D + "|" + f + "|" + Object.entries(cnt).map(([k, v]) => k + v).sort().join(",");
     if (el._clKey === key) return;
     el._clKey = key;
     el.style.setProperty("--clw", D + "px");
-    const R = 11.4, W = 3.2, C = 2 * Math.PI * R, n = g.length;
+    el.style.setProperty("--clf", f + "px");
+    const R = CL_RING_R, W = CL_RING_W, h = CL_VB / 2, C = 2 * Math.PI * R, n = g.length;
     let off = 0, arcs = "";
     for (const [c, v] of Object.entries(cnt)) {
       const len = C * v / n;
-      arcs += '<circle cx="14" cy="14" r="' + R + '" fill="none" stroke="' + (CAT_COLOR[c] || CAT_COLOR["기타"]) +
+      arcs += '<circle cx="' + h + '" cy="' + h + '" r="' + R + '" fill="none" stroke="' + (CAT_COLOR[c] || CAT_COLOR["기타"]) +
         '" stroke-width="' + W + '" stroke-dasharray="' + len.toFixed(2) + " " + (C - len).toFixed(2) +
-        '" stroke-dashoffset="' + (-off).toFixed(2) + '" transform="rotate(-90 14 14)"/>';
+        '" stroke-dashoffset="' + (-off).toFixed(2) + '" transform="rotate(-90 ' + h + " " + h + ')"/>';
       off += len;
     }
-    el.classList.toggle("cl-wide", n >= 100);
-    el.innerHTML = '<svg viewBox="0 0 28 28" width="100%" height="100%">' + arcs + "</svg><b>" + n + "</b>";
+    el.innerHTML = '<svg viewBox="0 0 ' + CL_VB + " " + CL_VB + '" width="100%" height="100%">' + arcs + "</svg><b>" + n + "</b>";
   };
   /* hjStyle은 전역 한 벌(BW_GRADE 아래) — 2026-10-02 세션146 · 폴백(Leaflet) 사본이 근거 미보유 회색(.75)·분류 미상 회색을 빠뜨렸다 */
   /* ══ 호버 미리보기 (2026-08-14 시안 §12) ═════════════════════════════════════════════
@@ -12508,10 +12640,7 @@ function initKakao() {
     /* 무손실 축약의 「축약」 — **낮은 등급만 작아진다**(시안 §01: 「낮은 등급의 크기만 10~12px 링으로」).
        ⚠ S·A는 건드리지 않는다. 광역 화면에서 **큰 신호가 먼저 사라지던** 2026-07-23 사고(lv8에서
          B급 정비구역 65개는 보이는데 S급 GTX 역이 0개)의 정반대 방향으로만 움직인다. */
-    const _shrinkR = (r, lvl) => {
-      if (lv < 9 || lvl === "S" || lvl === "A") return r;
-      return Math.max(lv >= 11 ? 5 : 6, r - (lv >= 11 ? 3 : 2));   // 지름 10~12px 하한
-    };
+    const _shrinkR = (r, lvl) => dotShrinkR(r, lvl, lv);   // 축소자 본체는 전역 한 벌(dotShrinkR) — 겹침 원(clSize)도 같은 것을 같은 lv로 쓴다
     _shrinkRRef = _shrinkR;   // 후광 전환(_reimage)이 **같은 축소자**를 쓴다 — 두 벌이면 크기가 갈린다
     /* 겹침 격자 이력: 30px(남발) → 동일좌표만(2026-07-27) → 14px → **5px**(2026-08-04 사용자
        "14px로 하니깐 중첩이 너무 많이 되네. 5px정도로").
@@ -12676,7 +12805,7 @@ function initKakao() {
           ov = new K.CustomOverlay({ position: ll, content: el, zIndex: 11, yAnchor: .5, xAnchor: .5, clickable: true });
           ov._el = el; clusterOv.set(gk, ov);
         } else ov.setPosition(ll);   // 멤버 중심 갱신(팬/멤버 변화 반영)
-        ov._el._g = g; clDonut(ov._el, g);   // 현재 표시 조건의 멤버·개수·유형 구성으로 갱신
+        ov._el._g = g; clDonut(ov._el, g, lv);   // 현재 표시 조건의 멤버·개수·유형 구성으로 갱신 · lv = 낱개 점 축소와 같은 레벨
         ov._el.style.display = routeIsoName ? "none" : "";    // 노선 격리 중 숨김(호재 원과 함께 — 노선만 남긴다)
         ov.setMap(map); nextCl.add(gk);
         g.forEach(m => { if (m._kmk) m._kmk.setMap(null); hjShown.delete(m); });   // 개별 마커 숨김
@@ -13544,7 +13673,7 @@ function initKakao() {
     if (!_armed) return;
     if (_panning) { _trail.push({ t: performance.now(), x: e.clientX, y: e.clientY }); if (_trail.length > 12) _trail.shift(); return; }
     if (movedEnough(e.clientX - _armed.x, e.clientY - _armed.y)) {
-      _panning = true; hideTip(); _frStart("pan");     // 여기서부터가 팬이다 — 그리지도, 말풍선을 띄우지도 않는다
+      _panning = true; hideTip(); _frStart("pan"); mapMoveGen();     // 여기서부터가 팬이다 — 그리지도, 말풍선을 띄우지도 않는다 · 손이 새 목표다(옛 mapGo 보정 끝)
       _trail.push({ t: performance.now(), x: e.clientX, y: e.clientY });   // 첫 이동점도 자취에(속도 창이 비지 않게)
     }
   }, true);
@@ -13690,7 +13819,7 @@ function initKakao() {
         d.addEventListener("mouseleave", () => { hideTip(); if (_haloHover === sg) { _haloHover = null; _reimage(sg); } });
         tapThru(d, () => { hideTip(); showSignal(sg, false); });
         const ov = new K.CustomOverlay({ map, position: LL(x, y), content: d, zIndex: 20, yAnchor: .5, xAnchor: .5, clickable: true }); ov._sig = sg; ov._el = d; ov._baseR = r; ov._col = col; ov._shape = t.shape;
-        ov._g = g; ov._ring = ring; ov._mk = mk.svg; ov._big = big.svg; if (k === 0) sg._pan = () => { if (mapTargetOk(y, x, "_pan")) map.panTo(LL(x, y)); }; pins.push(ov); }); }); };   // 이동 창구 가드(2026-09-13 전수)
+        ov._g = g; ov._ring = ring; ov._mk = mk.svg; ov._big = big.svg; if (k === 0) sg._pan = () => { if (mapTargetOk(y, x, "_pan")) { mapMoveGen(); map.panTo(LL(x, y)); } }; pins.push(ov); }); }); };   // 이동 창구 가드(2026-09-13 전수)
   /* 가리킴 강조 = **유형색은 그대로 · 바깥 무채 고리**(`PIN_EMPH` · DESIGN 「목록 행 가리킴 강조」 · 두 렌더러 같은 문법).
      ☠ 2026-09-21 알렉스 「선택된 호재가 파란 원이라 교통 호재랑 헷갈린다」 — 종전엔 테두리를 #5b3fd4로 **바꿔 칠해**
        색 채널(유형)을 빌렸다: 교통 마커가 일자리 파랑처럼 읽혔다. 테두리(유형색·실선/점선)는 건드리지 않는다. */
@@ -13802,7 +13931,7 @@ function initKakao() {
     // 실제 숨김·복원은 renderRail(가시성 단일 결정점)이 한다 — 여기서는 대상 이름만 선언.
     if (routeHl.length > 1) { routeIsoName = lineName; try { renderRail(); } catch (e) {} try { renderHojae(); } catch (e) {} }
     else { routeHl.forEach(o => o.setMap(null)); routeHl = []; }   // 아무것도 못 그렸으면 베일도 걷는다(뿌연 화면만 남는 잔재 방지)
-    if (fit && !bounds.isEmpty()) { try { map.setBounds(bounds); } catch (e) {} } };
+    if (fit && !bounds.isEmpty()) { mapMoveGen(); try { map.setBounds(bounds); } catch (e) {} } };   // 노선 맞춤도 새 목표다 — 진행 중인 mapGo 보정이 되당기지 않게(2026-10-04 감사)
   let aptMarker = null;
   const showAptAnchor = a => { if (aptMarker) aptMarker.setMap(null);
     // 아파트는 호재가 아니므로 유형 4색을 쓰지 않는다 — 무채색 사각 코어 + **아래** 이름 라벨(시안 §09).
@@ -13869,7 +13998,7 @@ function initKakao() {
     const p = (signalPoints(sg) || [])[0]; if (!p || !p.coord) return;
     const d = document.createElement("div"); d.className = "lphov";
     _lpHov = new K.CustomOverlay({ map, position: LL(p.coord[0], p.coord[1]), content: d, zIndex: 40, yAnchor: .5, xAnchor: .5 }); };
-  mapApi = { refreshPins, panTo: ll => { if (mapTargetOk(ll[1], ll[0], "panTo")) map.panTo(LL(ll[0], ll[1])); }, showRadius, showRadiusMany, clearRadius, showAptAnchor, highlightRings, clearHighlight, clearAptMarker, emphasizePin, hoverAt, sggRings: sggRingsFn, highlightRoute, clearRoute, hideTip, closeAptPop };   // viewFilter 제거(2026-07-27) — 소비처 없는 죽은 API였다
+  mapApi = { refreshPins, panTo: ll => { if (mapTargetOk(ll[1], ll[0], "panTo")) { mapMoveGen(); map.panTo(LL(ll[0], ll[1])); } }, showRadius, showRadiusMany, clearRadius, showAptAnchor, highlightRings, clearHighlight, clearAptMarker, emphasizePin, hoverAt, sggRings: sggRingsFn, highlightRoute, clearRoute, hideTip, closeAptPop };   // viewFilter 제거(2026-07-27) — 소비처 없는 죽은 API였다
   performance.mark("map:ready");   // 카카오 지도 API가 준비된 시점(계측 — head의 __perf)
   // (뱃지 카운트는 지역/필터 기준 고정 — 지도 이동마다 갱신하지 않는다, 2026-07-23)
   refreshPins();
@@ -13901,6 +14030,7 @@ function mapViewSave() {
 function mapViewRestore() {
   const m = window._map, v = _mapView; if (!m || !v) return;
   if (!mapTargetOk(v.lat, v.lng, "mapViewRestore")) return;   // 이동 창구 가드(2026-09-13 전수)
+  mapMoveGen();   // 되돌린 시점이 새 목표다 — 진행 중인 mapGo 보정이 되당기지 않게(2026-10-04 감사)
   if (m.setLevel && v.lv != null) { m.setLevel(v.lv); m.setCenter(new kakao.maps.LatLng(v.lat, v.lng)); }
   else if (m.setView && v.z != null) m.setView([v.lat, v.lng], v.z);
 }
@@ -14969,8 +15099,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "8c167e050e", "adverse_extra.json": "1c11e0d0af", "adverse_facilities.json": "609bf10e66", "adverse_funeral.json": "867cde9c50", "apartments_all.json": "afc74f9fbf", "arch_signals.json": "f5631aca70", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "bid_signals.json": "fb5913ba51", "build_status.json": "79ea8d6b94", "corridor_diff.json": "eabb0f44ab", "dart_signals.json": "e121886613", "dps_signals.json": "0a1e22b9c6", "eum_backfill_progress.json": "c0032bf5ac", "eum_enroll.json": "dd5ab016f8", "eum_signals.json": "7559d163d8", "eum_usage.json": "eb1fee646c", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "2de61450c4", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "12011da817", "jeongbi_poly_seoul.json": "6459d76a0f", "jigu_school_signals.json": "5203eb8865", "jobs_signals.json": "95a6b883b8", "logipark_signals.json": "462a544629", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "929468dea0", "mega_signals.json": "d545ecaece", "methodology.html": "5ab1ebce6f", "officetels_all.json": "5ba67ef6b5", "park_signals.json": "1c88fe944a", "privacy.html": "217d09c9a3", "push_feed.json": "6626a9443b", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "d09f01fa4c", "rail_reference.html": "5b6a4d65f7", "rail_signals.json": "89c2ff71e7", "region_gaps.json": "4f4102d17f", "regions.json": "0ce1bcda54", "report.html": "6c0dd7bb85", "retail_signals.json": "61d699c695", "road_signals.json": "057a888e4f", "robots.txt": "21147e58c5", "school_signals.json": "729b937db2", "settings.html": "ba96e63c1e", "sfz_signals.json": "7991c05b8b", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "ef69a41407", "sido_all.geojson": "2d0c426029", "signals.json": "5048af57c4", "signals_auto.json": "ef09f2a842", "signals_jeongbi_all.json": "79e4f0e195", "sitemap.xml": "8b283d1f9d", "source_status.html": "67d07dc123", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "54fee75571", "upis_facility_geom.json": "fd35ad28fd", "upis_on_road.json": "adb1d524b4", "weekly.html": "73949dc1f5", "weekly_index.json": "9a8db27033"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20261003f");
+window.FHASH = {"DATA_STANDARD.md": "29b0efc708", "admin.html": "8c167e050e", "adverse_extra.json": "a24a606426", "adverse_facilities.json": "4d9fa96474", "adverse_funeral.json": "95ce873120", "apartments_all.json": "9df564e2b1", "arch_signals.json": "c8ba508722", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "bid_signals.json": "09176685b6", "build_status.json": "149af79bb6", "corridor_diff.json": "d97fcb6fa8", "dart_signals.json": "e47cd6522c", "dps_signals.json": "3f4db753ee", "eum_backfill_progress.json": "83a4f81716", "eum_enroll.json": "a1ed19984b", "eum_signals.json": "d9265091ae", "eum_usage.json": "696fd3cc24", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "7b01c03339", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "dc7a7493aa", "jeongbi_poly_seoul.json": "ab0e0779a9", "jigu_school_signals.json": "b770f5b6af", "jobs_signals.json": "95a6b883b8", "logipark_signals.json": "d9b53548be", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "2e53012b1a", "mega_signals.json": "6b4e1b112d", "methodology.html": "b8b055c800", "officetels_all.json": "cff3e4c9a6", "park_signals.json": "2f43b0bea7", "privacy.html": "217d09c9a3", "push_feed.json": "0855c5183c", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "88b8141936", "rail_reference.html": "f44547bb09", "rail_signals.json": "486d81cf57", "region_gaps.json": "3bfc200bbe", "regions.json": "61c412a4a5", "report.html": "a97b6fd819", "retail_signals.json": "231bf38f39", "road_signals.json": "4af533599c", "robots.txt": "21147e58c5", "school_signals.json": "6c523dfa99", "settings.html": "ba96e63c1e", "sfz_signals.json": "004edd86e1", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "a847f4627b", "sido_all.geojson": "2d0c426029", "signals.json": "5048af57c4", "signals_auto.json": "f850616ad5", "signals_jeongbi_all.json": "e568d35f8f", "sitemap.xml": "a54da18f2f", "source_status.html": "1569cdbf58", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "54fee75571", "upis_facility_geom.json": "d11ffe3fc6", "upis_on_road.json": "cf1fee7f56", "weekly.html": "73949dc1f5", "weekly_index.json": "9a8db27033"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20261004a");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
