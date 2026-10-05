@@ -4554,7 +4554,7 @@ function msTrack(s) {
     if ((m.state === "future" || m.state === "next" || m.state === "target") && !m.date) { fut.push(m); continue; }
     flush();
     const when = m.date ? `<span class="msdate">${m.date}</span>`
-              : m.eta ? `<span class="mseta">${m.eta} 목표</span>` : `<span class="msmeta">시기 미정</span>`;
+              : m.eta ? `<span class="mseta">${m.eta} 목표</span>` : `<span class="msmeta">${m.state === "stalled" ? "지금 중지 · 시작 시점 미상" : "시기 미정"}</span>`;
     out.push(`<div class="msrow ${m.state}"><span class="msdot"></span><div class="msbody">
       <div class="msttl">${phaseLabel(m.phase)} — ${m.stage || ""} ${m.state === "stalled" ? "⚠" : ""}</div>
       <div class="msmeta">${when}${m.src ? ` · ${m.src}` : ""}${m.state === "current" ? " · <b>현재</b>" : ""}</div>
@@ -4794,6 +4794,8 @@ const LVL_BASIS_TEXT = {
   "금액": "사업비 눈금 적용",
   "유형폴백": "도로 유형 기본값 — 원장에 사업비가 없어 금액 눈금 미적용",
   "스냅숏폴백": "종전 등급 유지 — 원장에 사업비가 없어 금액 눈금 미적용",
+  // ★ 사업비가 있는데 노선형 눈금 하한 아래 = 등급 유보(2026-10-05 세션154 — 종전엔 유형 기본값 B로 떨어져 작은 사업이 1천억대 C보다 높았다 · build_road_v2.road_lvl)
+  "문턱미달": "사업비가 노선형 도로 등급 눈금 하한에 못 미침 — 등급 유보",
 };
 const lvlBasisText = v => LVL_BASIS_TEXT[v] || v;
 /* ══ 상세 카드 두 층 (2026-09-08 세션108 · 알렉스 「상세 카드에 사용자 관점에서 불필요한 내용이 너무 많어 — 위치정확도, 근거 아래쪽에 링크를 열면 어쩌구 저꺼구 등. 정리가 필요해」)
@@ -4867,9 +4869,18 @@ function registryRow(s) {
       ${road ? `<span>도로명주소</span><b class="full">${esc(road)}</b>` : ""}
     </div></details>`;
 }
+/* ★ 원천 기재 — 등재기가 원천에서 옮겨 적은 한 줄(원장 note · 2026-10-05 세션156 · 핸드오프 할 일 5b(가)).
+   지방재정365 예산서의 총사업비·사업기간(「회계연도마다 다시 적힌다 — 일정 근거 아님」)·추진경과 원문 · 예타 목록의 공사유형·연장·총사업비 ·
+   건설알림이 공구 사업비·공사기간 · 건설사업정보 공사비·위치. 단계 판정의 재료라 **근거 층**이다(단계는 트랙이 말한다 · 그 행의 단계 문구는
+   일부러 짧다 — lofin_fetch.derive). 사람이 쓴 원장 메모·작업 기록은 생산자(build_road_v2.ledger_note_of)가 걸러 여기 오지 않는다. */
+function ledgerNoteRow(s) {
+  if (!s.ledger_note) return "";
+  return `<div class="kv"><b>원천 기재</b> ${esc(String(s.ledger_note))}</div>`;
+}
 function evidenceFold(s) {
   const rows = [
     s.gate_basis && s.gate !== "계획안" ? `<div class="kv"><b>단계 근거</b> ${esc(String(s.gate_basis))}</div>` : "",
+    ledgerNoteRow(s),   // 원천 기재 — 단계 근거 바로 아래(그 근거의 원문 · 2026-10-05 세션156)
     /* ★ 위치 정확도는 **별도 블록**(시안 §06 슬롯 7) — 라벨–값 행에 섞으면 한계라는 사실이 묻힌다(2026-08-20 대조). 접힘 안에서도 블록이다. */
     isLineSig(s) ? lineGeomRow(s) : `<div class="precblk"><div class="ph">위치 정확도</div>${precNote(s)}${
       stUndet(s) ? `<div class="gbasis"><b>${s.st_status}</b> — 명칭·위치 미확정</div>` : ""}${
@@ -5414,7 +5425,7 @@ function buildRailSignals() {
    - IC·JC = 점 신호(철도 역과 동일 개념)
    - 도로 노선 자체 = 호재 → 선을 ~1.2km 간격 샘플점으로 다점 신호화(geometry=첫 점, access_points=샘플점.
      signalPoints/dongRelation이 다점을 지원하므로 동·아파트 집계에 1건으로 정확히 잡힘)
-   등급 = 사업비 눈금(thresholds 금액_눈금_억원.교통:도로노선 · 없으면 유형 폴백 — build_road_v2.road_lvl). 반경 = CLASSES.교통.도로
+   등급 = 사업비 눈금(thresholds 금액_눈금_억원.교통:도로노선 · 눈금 아래면 미정 · 사업비가 없을 때만 유형 폴백 — build_road_v2.road_lvl). 반경 = CLASSES.교통.도로
    ── 도로 이원 관리(사용자 확정 2026-07-16): 일반도로=선(Line) 회랑 버퍼 / 고속·고속화·전용도로=진출입 IC(Point) 버퍼만.
    전용도로는 연도(沿道) 접근이 불가하므로 선 자체는 영향권을 만들지 않는다 — IC 좌표 미확보 시 영향권 미산정으로 정직 표기(P2) */
 /* 도로 접근 유형 (2026-07-17 사용자 확정 보강):
@@ -5477,7 +5488,7 @@ function buildRoadSignals() {
     const p = f.properties;
     if (p.kind === "station") {   // IC·JC 점
       if (p.gate === "관찰") { GATE_OBS["도로 IC"]++; continue; }   // 노선·역과 같은 게이트 · 거른 수는 건수 설명이 말한다
-      ROAD_SIG.push({ _road: true, title: p.name, _rk: p._rk, cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "A",
+      ROAD_SIG.push({ _road: true, title: p.name, _rk: p._rk, cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "미정",   // 빈 등급을 지어내지 않는다 — 생산자(build_road_v2.road_lvl)가 늘 채우고, 비면 모르는 것(2026-10-05 세션154)
         ...procFields(p),   // 공사 발주·환경영향평가(감사 4bⓒ)
         // 표준노드 본선 거리·보류 — 화이트리스트 어댑터라 여기서 안 실으면 카드의 「본선 거리」 행이 죽는다(2026-09-09 감사 · 어댑터 함정)
         node_line_m: p.node_line_m, node_hold: p.node_hold,
@@ -5512,7 +5523,7 @@ function buildRoadSignals() {
     if (p.gate === "관찰") continue;
     const dp = drawnParts(p, f.geometry);
     const step = roadKindOf(p) === "일반"
-      ? Math.max(50, roadCorridorKm(p.lvl || "C") * 1000 / 2)   // 반경의 절반 — 반경을 바꿔도 안 뚫린다
+      ? Math.max(50, roadCorridorKm(levelOf(p)) * 1000 / 2)   // 반경의 절반 — 반경을 바꿔도 안 뚫린다
       : SAMPLE_M;
     // 근거 구간과 보간 구간을 **둘 다** 훑되 어느 쪽인지 표식(weak=출처 사실)을 남긴다.
     // ⚠ weak는 **출처 표식이지 표시 규칙이 아니다**(필드 하나에 두 뜻을 싣지 않는다 — 2026-08-10
@@ -5524,7 +5535,7 @@ function buildRoadSignals() {
     // 대표점 = **선의 길이 중점**(lineMid) — 노선 전체를 대표한다. 종전엔 시작점이라 구석에 붙었다.
     const anchor = lineMid(dp.solid.length ? dp.solid : dp.bridges) || pts[0].c;
     // 표시명 = 공식 사업명 우선(OSM 이름은 선형 매칭용일 뿐 — 공식 SSOT 사상 2026-07-17)
-    ROAD_SIG.push({ _road: true, _has_solid: !!dp.solid.length, _rk: p._rk, title: p.official_name || `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "C",
+    ROAD_SIG.push({ _road: true, _has_solid: !!dp.solid.length, _rk: p._rk, title: p.official_name || `${p.name} (${p.linekind || "도로"})`, cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "미정",
       lvl_basis: p.lvl_basis, gate: p.gate, gate_basis: p.gate_basis,   // 등급 근거·게이트 — 카드가 읽는다(어댑터 함정 7호)
       work_nature: p.work_nature, work_nature_basis: p.work_nature_basis, work_nature_group: p.work_nature_group,   // 공사 성격(2026-09-02 알렉스) — 어댑터 함정 예방
       template_type: "도로", current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
@@ -5555,6 +5566,7 @@ function buildRoadSignals() {
       // 근거 구간(solid)과 보간 구간(bridges)을 갈라 넘긴다: 덮개율은 **근거 구간**으로 재야 한다.
       drawn_km: partsKm(dp.solid), bridge_km: partsKm(dp.bridges),
       src_name: p.src_name, note: p.note,
+      ledger_note: p.ledger_note,   // 원천 기재(원장 note 중 등재기 한 줄 — 예산서 총사업비·사업기간·추진경과 등 · build_road_v2.ledger_note_of) — 카드 근거 층 ledgerNoteRow(2026-10-05 세션156 · 어댑터 함정 예방)
       stage_note: `${p.linekind || "도로"} · ${p.status}`,
       // 선을 못 그리는 코리더 도로(IC 없음)는 **대표 점**으로 표시(경로 미확정 근사). 그 외는 선/IC점이 담당.
       geometry: { coordinates: p.geom_point_only && p.geom_point ? p.geom_point : anchor },
@@ -8166,9 +8178,11 @@ function stepperHtml(s) {
     .map(m => String(m.date)).sort()[0] || "");
   const prog = (cur / 3 * 76).toFixed(2) + "%";
   const steps = PH4.map((p, i) => `<div class="stp${i < cur ? " done" : i === cur ? " cur" : ""}"><i></i><span class="nm">${phaseLabel(p)}</span><span class="dt">${i <= cur ? ymDot(reached[i]) : ""}</span></div>`).join("");
-  /* 현재 고시 카드 — 「현재」 마일스톤, 없으면 날짜가 있는 마지막 마일스톤 */
-  const now = ms.find(m => m.state === "current") || [...ms].filter(m => m.date).sort((a, b) => String(a.date).localeCompare(String(b.date))).pop();
-  const card = now ? `<div class="stcur"><span>${esc(String(now.stage || phaseLabel(now.phase)))}${now.state === "stalled" ? " ⚠" : ""}</span>
+  /* 현재 고시 카드 — 「현재」 마일스톤, 없으면 **날짜 없는 정체·중지**(원천이 「지금 중지」라고만 말하는 상태 — 서울시 건설알림이 중지 공구 ·
+     seoul_cis_fetch.stop_ms · 2026-10-05 세션156: 그 마일스톤이 접힌 이력에만 있어 카드 머리가 「착공」만 말했다), 없으면 날짜가 있는 마지막 마일스톤 */
+  const now = ms.find(m => m.state === "current") || ms.find(m => m.state === "stalled" && !m.date)
+    || [...ms].filter(m => m.date).sort((a, b) => String(a.date).localeCompare(String(b.date))).pop();
+  const card = now ? `<div class="stcur${now.state === "stalled" ? " stalled" : ""}"><span>${esc(String(now.stage || phaseLabel(now.phase)))}${now.state === "stalled" ? " ⚠" : ""}</span>
       <span class="mt">${[now.date, now.src].filter(Boolean).map(x => esc(String(x))).join(" · ") || "시기 미정"}</span></div>`
     : `<div class="stcur"><span class="mt">${s._confirmedLayer ? "일정 미기재" : "일정 정보 없음(소스 미제공)"}</span></div>`;
   const hist = ms.length > 1 ? `<details class="sthist"><summary>단계 이력 ${ms.length}건 ▾</summary>${msTrack(s)}</details>` : "";
@@ -12153,7 +12167,7 @@ function roadLineToSignal(p, geom) {
   return {
     _road: true, _line: true, title: p.official_name || p.name, line: p.name,
     ...procFields(p),   // 공사 발주·환경영향평가(감사 4bⓒ — 노선 카드 폴백도 같은 줄)
-    cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "C", lvl_basis: p.lvl_basis,
+    cat: "교통", sub: roadSubOf(p), lvl: p.lvl || "미정", lvl_basis: p.lvl_basis,
     gate: p.gate, gate_basis: p.gate_basis, template_type: "도로",
     current_stage: p.status, phase: p.phase || (p.confirmed ? "착공" : "계획"),
     status: "활성", confirmed: !!p.confirmed, sd: null,
@@ -12165,6 +12179,7 @@ function roadLineToSignal(p, geom) {
     fin_date_unknown: p.fin_date_unknown,   // 완료일 미상 — 안 실으면 관측일이 완료일로 읽혀 완공 1년 규칙이 틀린다(2026-09-16 감사 C3)
     src_name: p.src_name, geom_adequacy: p.geom_adequacy, geom_adequacy_note: p.geom_adequacy_note, approx: !!p.approx,
     sources: p.src_url ? [p.src_url] : [], note: p.note,
+    ledger_note: p.ledger_note,   // 원천 기재 — 주 어댑터와 같은 줄(2026-10-05 세션156 · 폴백 카드도 같은 행)
     // ⚠ 선형 출처는 **선형 정확도 행**이 말한다(시안 §13) — 비고 문단 꼬리에 이어 붙이면
     //   그 한 줄 때문에 비고가 대여섯 줄이 된다(철도 어댑터와 같은 규칙, 양쪽에 건다).
     stage_note: `${p.linekind || "도로"} · ${p.status}`,
@@ -13246,7 +13261,7 @@ function initKakao() {
         nt: natureGroupOf(p),   // 공사 성격 그룹 — 선도 같은 축을 탄다(2026-09-03 알렉스 A안 · 미보유(철도)는 통과 · 자는 natureGroupOf 하나)
         nms: [p.name, p.full, p.official_name].filter(Boolean),   // 노선 격리(상세 하이라이트) 매칭 키
         ck: clickHandler, bnm: p.name, beta: _beta, mid: _bflat[0],
-        lvl: p.lvl || (isRoad ? "C" : railLevelOf(p.full || p.name, p.linekind)) };   // 등급 LOD용(어댑터와 같은 폴백)
+        lvl: p.lvl || (isRoad ? "미정" : railLevelOf(p.full || p.name, p.linekind)) };   // 등급 LOD용(어댑터와 같은 폴백 · 도로는 지어내지 않는다 — 2026-10-05)
       railLineObjs.push(_entry); _lineCache.set(f, _entry);
     }
     /* ★ 시군 시설도로 회랑(eum — UPIS 조인·조서 세목)도 상시 선 레이어에 얹는다 (2026-09-01
@@ -15149,8 +15164,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "aca084e059", "admin.html": "8c167e050e", "adverse_extra.json": "a24a606426", "adverse_facilities.json": "5847f71b77", "adverse_funeral.json": "3d80330efc", "apartments_all.json": "884e0475f1", "arch_signals.json": "a8b5fbc968", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "bid_signals.json": "70b5a7e154", "build_status.json": "6059fde8a3", "corridor_diff.json": "6a33834ec2", "dart_signals.json": "7c1708eee0", "dps_signals.json": "411a46a4ed", "eum_backfill_progress.json": "c5ebfda985", "eum_enroll.json": "6ae34e1022", "eum_signals.json": "18b152a352", "eum_usage.json": "b69821dfc0", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "67bdb4efd0", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "daeaff3b15", "jeongbi_poly_seoul.json": "ab0e0779a9", "jigu_school_signals.json": "e13a7b46f4", "jobs_signals.json": "95a6b883b8", "logipark_signals.json": "4226369e0c", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "0cd2313488", "mega_signals.json": "d9554f62ac", "methodology.html": "9a1718de27", "officetels_all.json": "65215f9d2e", "park_signals.json": "61d05f45e1", "privacy.html": "217d09c9a3", "push_feed.json": "5c4205451b", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "7b65113f93", "rail_reference.html": "d272260605", "rail_signals.json": "9dc991546c", "region_gaps.json": "cd4fd33d92", "regions.json": "20a30bad71", "report.html": "cf41adeb98", "retail_signals.json": "9e12f10de9", "road_signals.json": "f6db1be767", "robots.txt": "21147e58c5", "school_signals.json": "087c620357", "settings.html": "ba96e63c1e", "sfz_signals.json": "6a32c965f0", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "9b4973372d", "sido_all.geojson": "2d0c426029", "signals.json": "5048af57c4", "signals_auto.json": "1fb9431b63", "signals_jeongbi_all.json": "a4c27de1c8", "sitemap.xml": "5a53e5ff52", "source_status.html": "ac8976066d", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "e8a59cc9c9", "upis_facility_geom.json": "503733e7a5", "upis_on_road.json": "d08d69c746", "weekly.html": "f115004164", "weekly_index.json": "1f48a0808f"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20261005d");
+window.FHASH = {"DATA_STANDARD.md": "aca084e059", "admin.html": "8c167e050e", "adverse_extra.json": "a24a606426", "adverse_facilities.json": "a57dadf89b", "adverse_funeral.json": "081b237aa9", "apartments_all.json": "98fe3666ec", "arch_signals.json": "1c23765abb", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "bid_signals.json": "82642989f4", "build_status.json": "91e704410f", "corridor_diff.json": "9db8e2aa55", "dart_signals.json": "c2a35bf03f", "dps_signals.json": "0fbd7f5776", "eum_backfill_progress.json": "c6a6837696", "eum_enroll.json": "e6d0de3aa6", "eum_signals.json": "825e86ccdb", "eum_usage.json": "f00ebcb660", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "447aeb8b27", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "4006c9dd5b", "jeongbi_poly_seoul.json": "ab0e0779a9", "jigu_school_signals.json": "2870ddbf95", "jobs_signals.json": "95a6b883b8", "logipark_signals.json": "9722319e35", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "ba51436b62", "mega_signals.json": "a6ef36a0b3", "methodology.html": "a980a1ffb0", "officetels_all.json": "806437b686", "park_signals.json": "1acea138e2", "privacy.html": "217d09c9a3", "push_feed.json": "c34c6e5d8c", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "c97daf1876", "rail_reference.html": "199f4e4134", "rail_signals.json": "9dc991546c", "region_gaps.json": "059d4e1bc6", "regions.json": "20a30bad71", "report.html": "30c3d49809", "retail_signals.json": "056703cf4c", "road_signals.json": "389161e4ea", "robots.txt": "21147e58c5", "school_signals.json": "66fc2f6c77", "settings.html": "ba96e63c1e", "sfz_signals.json": "6afffd439f", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "2f33c878cd", "sido_all.geojson": "2d0c426029", "signals.json": "5048af57c4", "signals_auto.json": "b0791a530b", "signals_jeongbi_all.json": "4eaab33c4b", "sitemap.xml": "ad7515821d", "source_status.html": "6e2870bd49", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "70318dd119", "upis_facility_geom.json": "c353f7b940", "upis_on_road.json": "684ee55784", "weekly.html": "127e4f8560", "weekly_index.json": "1f48a0808f"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20261006a");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
