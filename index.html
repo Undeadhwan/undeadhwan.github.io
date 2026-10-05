@@ -5376,7 +5376,7 @@ function buildRailSignals() {
   RAIL.filter(f => f.properties.kind === "line").forEach(f => {
     lvlByLine[f.properties.name] = f.properties.lvl || railLevelOf(f.properties.name, f.properties.linekind);
     // 공사 발주·환경영향평가는 **노선**에 붙는다 — 역(화면의 철도 호재)도 자기 노선 것을 말한다(2026-10-01 감사 4bⓑ · 업데이트·띠·카드 · 원장 lifecycle `line_proc`과 같은 규칙)
-    if (f.properties.bid || f.properties.eia || f.properties.press) procByLine[f.properties.name] = f.properties;
+    if (f.properties.bid || f.properties.eia || f.properties.press || f.properties.tia) procByLine[f.properties.name] = f.properties;   // tia = 교통영향평가 심의(tia_link · 2026-10-06)
     // 역 등급은 **노선에서 온다**(lvlByLine) — 그러면 근거도 노선 것이어야 한다. 근거만 빼놓으면
     // 카드가 등급은 말하고 왜 그 등급인지는 말하지 않는다(2026-08-06 전수조사).
     if (f.properties.lvl_basis) basisByLine[f.properties.name] = f.properties.lvl_basis;
@@ -5417,7 +5417,8 @@ function buildRailSignals() {
     field_changes: f.properties.field_changes,   // 내용 변경(역 자신 · 2026-10-02 · 감사 10ⓖ)
     ...(procByLine[f.properties.line] ? { bid: procByLine[f.properties.line].bid, bid_more: procByLine[f.properties.line].bid_more,
         eia: procByLine[f.properties.line].eia, eia_more: procByLine[f.properties.line].eia_more,
-        press: procByLine[f.properties.line].press, press_more: procByLine[f.properties.line].press_more } : {}),   // 노선의 공사 발주·협의(위 procByLine)
+        press: procByLine[f.properties.line].press, press_more: procByLine[f.properties.line].press_more,
+        tia: procByLine[f.properties.line].tia, tia_more: procByLine[f.properties.line].tia_more } : {}),   // 노선의 공사 발주·협의·심의(위 procByLine)
     geometry: { coordinates: f.geometry.coordinates }
   }));
 }
@@ -5545,6 +5546,7 @@ function buildRoadSignals() {
       arms_n: p.arms_n, arms_drawn: p.arms_drawn, arms_missing: p.arms_missing,   // 못 그린 고시 갈래 — 카드 「못 그린 구간」 행(2026-09-09 세션109 · 어댑터 함정)
       end_gap: p.end_gap,   // 끝이 개통 도로에서 떠 있음 — 카드 「끝 접속」 행(2026-09-10 세션110 · 어댑터 함정)
       bid: p.bid, bid_more: p.bid_more, eia: p.eia, eia_more: p.eia_more, press: p.press, press_more: p.press_more,   // 공사 발주(나라장터 입찰공고 · bid_link.py · 2026-09-29 · 어댑터 함정 예방)
+      tia: p.tia, tia_more: p.tia_more,   // 교통영향평가 심의(tia_link.py · 2026-10-06 세션156)
       field_changes: p.field_changes,   // 내용 변경(2026-10-02 · 감사 10ⓖ)
       near_pts: p.near_pts,   // 세는 점(near_points.py) — 전용 노선 [] · 일반 노선 선 표본 · 앱과 같은 필드(2026-09-17 세션121 · 감사 C1 · 어댑터 함정 예방)
       stage_checked: p.stage_checked, stage_src: p.stage_src,   // 단계는 수동 SSOT — 확인 시점을 화면에 남긴다
@@ -5735,7 +5737,8 @@ const natureFields = s => ({ work_nature: s.work_nature, work_nature_basis: s.wo
 /* 공사 발주·환경영향평가(bid_link·eia_link) — 필드를 골라 옮기는 어댑터가 같이 싣는 한 벌(2026-10-01 세션145 · 감사 4bⓒ: 공시·건축·IC·정비·도로 노선 카드
    어댑터가 안 옮겨, 짝이 생기는 날 카드·업데이트가 침묵할 자리였다) · 게이트 html_check.proc_adapters_check */
 function procFields(x) {
-  const o = x && (x.bid || x.eia || x.press) ? { bid: x.bid, bid_more: x.bid_more, eia: x.eia, eia_more: x.eia_more, press: x.press, press_more: x.press_more } : {};
+  const o = x && (x.bid || x.eia || x.press || x.tia) ? { bid: x.bid, bid_more: x.bid_more, eia: x.eia, eia_more: x.eia_more, press: x.press, press_more: x.press_more,
+    tia: x.tia, tia_more: x.tia_more } : {};   // tia = 교통영향평가 심의(tia_link.py · 2026-10-06 세션156)
   /* 내용 변경(lifecycle.diff_fields — 사업비·연장·세대수·등급 …)도 같은 한 벌로(2026-10-02 세션146 · 감사 넘김 10ⓖ — 건축·정비 어댑터가 안 옮겨
      업데이트 「내용 변경」·「등급 상향」 칸에 그 층이 한 건도 안 닿았다 · 2026-10-01 실측 최근 31일 건축 76 · 정비 60) */
   if (x && x.field_changes) o.field_changes = x.field_changes;
@@ -8158,6 +8161,20 @@ function eiaHtml(s) {
     + (e.length > 3 ? `<details><summary>나머지 ${e.length - 3}건${s.eia_more ? ` (+${s.eia_more}건은 목록 밖)` : ""}</summary>${e.slice(3).map(row).join("")}</details>` : "")
     + `</div>`;
 }
+/* ★ 교통영향평가 — 심의(국토부 교통영향평가 정보지원시스템 · tia_link.py · 2026-10-06 세션156 · 알렉스 확정 2026-10-05 「추천대로 진행」).
+   도시개발·산단·대형 건축은 사업 **승인 전에** 이 심의를 거친다 — 단계를 올리지 않는다(심의는 인가가 아니다 · 환경영향평가와 같은 판단) ·
+   최근 셋 + 접힘 · 원문 = 시스템 상세 화면(사업 ID · businessView.do?bsns_id=). 필드 = `s.tia`(최근 순) · 게이트 html_check.tia_row_check · 정본 DESIGN 「교통영향평가」 행. */
+function tiaHtml(s) {
+  const e = Array.isArray(s.tia) ? s.tia.filter(x => x && x.t) : [];
+  if (!e.length) return "";
+  const row = x => `<div class="bidrow"><span class="dt">${esc(dayDot(x.date))}</span><span class="nm" title="${esc(String(x.biz || ""))}">${esc(String(x.t))}</span>`
+    + `<span class="am">${x.done ? "심의 완료" : "심의 중"}</span>${/^https:\/\/tia\.molit\.go\.kr\//.test(x.url || "") ? `<a href="${esc(String(x.url))}" target="_blank" rel="noopener">원문</a>` : ""}</div>`;
+  const n = e.length + (Number(s.tia_more) || 0);
+  return `<div class="stbid sttia"><div class="bh">교통영향평가 <span class="mt">심의 ${n}건 · 국토부 교통영향평가 정보지원시스템 · 승인 전 절차</span></div>`
+    + e.slice(0, 3).map(row).join("")
+    + (e.length > 3 ? `<details><summary>나머지 ${e.length - 3}건${s.tia_more ? ` (+${s.tia_more}건은 목록 밖)` : ""}</summary>${e.slice(3).map(row).join("")}</details>` : "")
+    + `</div>`;
+}
 /* ★ 관련 보도자료 — 정책브리핑(korea.kr) 부처 보도자료 중 이 사업 이름의 것(press_link.py · 2026-10-01 세션145 · 새 원천 E).
    공식 발표지만 고시가 아니다 — 단계·움직임을 바꾸지 않는다(「보도자료만으로 확정 승격 금지」) · 최근 셋 + 접힘 · 원문(korea.kr)으로 간다.
    필드 = `s.press`(최근 순) · 게이트 html_check.press_row_check · 정본 DESIGN 「관련 보도자료」 행. */
@@ -8188,7 +8205,7 @@ function stepperHtml(s) {
   const hist = ms.length > 1 ? `<details class="sthist"><summary>단계 이력 ${ms.length}건 ▾</summary>${msTrack(s)}</details>` : "";
   return `<div class="dsec"><div class="dlab">사업 단계</div>${ddayHtml(s)}
     <div class="stepper"><div class="bar"></div><div class="prog" style="width:${prog}"></div>${steps}</div>
-    ${card}${bidHtml(s)}${eiaHtml(s)}${pressHtml(s)}${s.drawn_scope ? `<div class="stscope">${esc(String(s.drawn_scope))}</div>` : ""}${nextWatch(s)}${hist}</div>`;   // 그린 범위 — 노선의 일부만 확정돼 한 토막만 그린 경우(drawn_scope · 2026-09-28 GTX F)
+    ${card}${bidHtml(s)}${eiaHtml(s)}${tiaHtml(s)}${pressHtml(s)}${s.drawn_scope ? `<div class="stscope">${esc(String(s.drawn_scope))}</div>` : ""}${nextWatch(s)}${hist}</div>`;   // 그린 범위 — 노선의 일부만 확정돼 한 토막만 그린 경우(drawn_scope · 2026-09-28 GTX F)
 }
 /* 관련 목록 — 교통 = 역세권 아파트 · 일자리·인프라 = 영향권 아파트 · 반경 · 주거개발 = 주변 호재.
    ⚠ §7 「수혜 단지」 금지 — 이름·거리만 적고, 순서는 거리(측정값) 하나다(aptsNearSignal 주석과 같은 규칙). */
@@ -12142,6 +12159,7 @@ function railToSignal(p, cen) {
     stage_checked: p.stage_checked, stage_src: p.stage_src,
     // 공사 발주·환경영향평가·그린 범위 — 노선 카드도 같은 줄을 말한다(2026-10-01 세션정리 감사 · 노선 14개가 필드를 가졌는데 웹 카드만 침묵 · 앱은 DETAIL_KEYS로 보였다)
     bid: p.bid, bid_more: p.bid_more, eia: p.eia, eia_more: p.eia_more, press: p.press, press_more: p.press_more, drawn_scope: p.drawn_scope, field_changes: p.field_changes,
+    tia: p.tia, tia_more: p.tia_more,   // 교통영향평가 심의(tia_link.py · 2026-10-06 세션156)
     sd: null, geometry: { coordinates: cen },   // 노선은 여러 시도 경유 — 단일 sd 미표기
     /* ★ 선형 근거를 **싣는다** (2026-08-14 시안 §13). 종전엔 노선 카드가 `geom_src`를 아예 안 날라
        「이 선을 어떻게 그렸나」를 화면이 한 번도 말한 적이 없다 — 대신 점 신호용 「위치 ◇ ±1km
@@ -15164,8 +15182,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "aca084e059", "admin.html": "8c167e050e", "adverse_extra.json": "a24a606426", "adverse_facilities.json": "a57dadf89b", "adverse_funeral.json": "081b237aa9", "apartments_all.json": "98fe3666ec", "arch_signals.json": "1c23765abb", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "bid_signals.json": "82642989f4", "build_status.json": "91e704410f", "corridor_diff.json": "9db8e2aa55", "dart_signals.json": "c2a35bf03f", "dps_signals.json": "0fbd7f5776", "eum_backfill_progress.json": "c6a6837696", "eum_enroll.json": "e6d0de3aa6", "eum_signals.json": "825e86ccdb", "eum_usage.json": "f00ebcb660", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "447aeb8b27", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "4006c9dd5b", "jeongbi_poly_seoul.json": "ab0e0779a9", "jigu_school_signals.json": "2870ddbf95", "jobs_signals.json": "95a6b883b8", "logipark_signals.json": "9722319e35", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "ba51436b62", "mega_signals.json": "a6ef36a0b3", "methodology.html": "a980a1ffb0", "officetels_all.json": "806437b686", "park_signals.json": "1acea138e2", "privacy.html": "217d09c9a3", "push_feed.json": "c34c6e5d8c", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "c97daf1876", "rail_reference.html": "199f4e4134", "rail_signals.json": "9dc991546c", "region_gaps.json": "059d4e1bc6", "regions.json": "20a30bad71", "report.html": "30c3d49809", "retail_signals.json": "056703cf4c", "road_signals.json": "389161e4ea", "robots.txt": "21147e58c5", "school_signals.json": "66fc2f6c77", "settings.html": "ba96e63c1e", "sfz_signals.json": "6afffd439f", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "2f33c878cd", "sido_all.geojson": "2d0c426029", "signals.json": "5048af57c4", "signals_auto.json": "b0791a530b", "signals_jeongbi_all.json": "4eaab33c4b", "sitemap.xml": "ad7515821d", "source_status.html": "6e2870bd49", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "70318dd119", "upis_facility_geom.json": "c353f7b940", "upis_on_road.json": "684ee55784", "weekly.html": "127e4f8560", "weekly_index.json": "1f48a0808f"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20261006a");
+window.FHASH = {"DATA_STANDARD.md": "aca084e059", "admin.html": "8c167e050e", "adverse_extra.json": "a24a606426", "adverse_facilities.json": "a57dadf89b", "adverse_funeral.json": "081b237aa9", "apartments_all.json": "98fe3666ec", "arch_signals.json": "be86d8bd79", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "bid_signals.json": "700c290516", "build_status.json": "d347a70fbe", "corridor_diff.json": "a31661e44c", "dart_signals.json": "a10e2773bf", "dps_signals.json": "8c746f179b", "eum_backfill_progress.json": "c6a6837696", "eum_enroll.json": "e6d0de3aa6", "eum_signals.json": "5244cf09f7", "eum_usage.json": "2c8f577e13", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "447aeb8b27", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "4fa8ae0c1a", "jeongbi_poly_seoul.json": "ab0e0779a9", "jigu_school_signals.json": "2870ddbf95", "jobs_signals.json": "95a6b883b8", "logipark_signals.json": "9722319e35", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "c8114618a4", "mega_signals.json": "a6ef36a0b3", "methodology.html": "88fdbb38c9", "officetels_all.json": "806437b686", "park_signals.json": "0911501dce", "privacy.html": "217d09c9a3", "push_feed.json": "bf166bc947", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "4229d9590e", "rail_reference.html": "889708b96e", "rail_signals.json": "646feda388", "region_gaps.json": "b3309d009f", "regions.json": "20a30bad71", "report.html": "30c3d49809", "retail_signals.json": "056703cf4c", "road_signals.json": "5148099070", "robots.txt": "21147e58c5", "school_signals.json": "66fc2f6c77", "settings.html": "ba96e63c1e", "sfz_signals.json": "6afffd439f", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "2f33c878cd", "sido_all.geojson": "2d0c426029", "signals.json": "5048af57c4", "signals_auto.json": "b0791a530b", "signals_jeongbi_all.json": "6f43b65f3c", "sitemap.xml": "685d025b84", "source_status.html": "e10e3dd2ee", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "ef6073eb26", "upis_facility_geom.json": "c353f7b940", "upis_on_road.json": "dcdfb4ffaf", "weekly.html": "127e4f8560", "weekly_index.json": "1f48a0808f"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20261006b");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
