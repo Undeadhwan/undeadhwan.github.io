@@ -3677,6 +3677,34 @@ function sggBoxes() {
   });
   return (window._sggBox = arr);
 }
+/* ★ **경계 파일이 못 담는 자리 — 가장 가까운 시군구(한도 NEAR_SGG_KM)** (@sgg-near · 2026-10-09 세션158).
+   좌표가 어느 시군구 링에도 안 들면(경계 틈 · 매립지 · 2013 판형) 링까지 거리가 한도 안인 가장 가까운 시군구로 귀속한다.
+   앱(`app_bundle.sgg_near_coord`)은 2026-09-21에 같은 규칙을 걸었는데 웹엔 없었다 — 라이브 실측 10,768건 중 **53건**이 시도·시군구 알약·지역 조건·
+   구 목록 어디에도 안 세졌다(시화 송산그린시티 학교 · 섬·매립지 도로·역 · 경계 틈 동 대표점 「위치만 확보」 5건 · 2026-10-09). 「규칙이 한쪽에만」의 앱↔웹판.
+   한도는 앱과 **같은 값**이어야 한다 — `html_check.sgg_near_check`가 app_bundle.NEAR_SGG_KM과 견준다(근거 = 그 상수 주석의 골짜기 2~6.88km).
+   한도 밖(먼 섬)은 그대로 둔다 — 「모르면 모른다」. 결과는 귀속 캐시(_sggRes·_sdRes·_sggs·_sgg)에만 — 소스 `sd`·`sg`는 되쓰지 않는다. */
+const NEAR_SGG_KM = 2.0;
+function ptSegKm(p, a, b) {   // 점 → 선분 거리(km) · [lng,lat] — 자는 meters 하나(mbPtSegKm도 이것을 부른다)
+  const vx = b[0] - a[0], vy = b[1] - a[1], wx = p[0] - a[0], wy = p[1] - a[1];
+  const d2 = vx * vx + vy * vy;
+  const t = d2 ? Math.max(0, Math.min(1, (wx * vx + wy * vy) / d2)) : 0;
+  return meters(p, [a[0] + t * vx, a[1] + t * vy]) / 1000;
+}
+function sggNearCoord(x, y, want) {
+  if (!ensureSggRings()) return null;
+  const pad = 0.05;   // bbox 프리필터 — 한도(2km)보다 넉넉히(app_bundle과 같은 여유)
+  let best = NEAR_SGG_KM, who = null;
+  for (const [disp, rings] of Object.entries(window._sggRings)) {
+    if (want && !disp.startsWith(want)) continue;
+    const bb = sggBBOf(disp);
+    if (!bb || x < bb[0] - pad || x > bb[2] + pad || y < bb[1] - pad || y > bb[3] + pad) continue;
+    for (const r of rings) for (let i = 1; i < r.length; i++) {
+      const d = ptSegKm([x, y], r[i - 1], r[i]);
+      if (d <= best) { best = d; who = disp; }
+    }
+  }
+  return who;
+}
 /* 시도 귀속 — 소스가 적어 준 `sd`가 우선, 없으면 **좌표로** 찾는다(시군구 경계 점포함).
    ⚠ 결과를 `s.sd`에 되쓰지 않는다 — `sd`는 *소스가 말한 것*이고 이건 *우리가 좌표로 도출한 것*이다.
      같은 필드에 두 뜻을 담으면 하류가 근거를 구분할 수 없다(§필드 하나가 두 뜻).
@@ -3700,6 +3728,7 @@ function sdOf(s) {
     if (pt[0] < b.x0 || pt[0] > b.x1 || pt[1] < b.y0 || pt[1] > b.y1) continue;   // bbox 선컷
     if (ringsOf(b.f).some(r => pointInRing(pt[0], pt[1], r))) { hit = b.sd; break; }
   }
+  if (!hit && pt) { const near = sggNearCoord(pt[0], pt[1]); if (near) hit = near.split(" ")[0]; }   // @sgg-near
   return (s._sdRes = hit);
 }
 function sdAggregates() {
@@ -7288,6 +7317,7 @@ function ensureRailSgg() {
         if (!inSggBB(sggBBOf(disp), x, y)) continue;   // bbox 프리필터(렌더러 무관)
         if (rings.some(r => pointInRing(x, y, r))) { s._sgg = disp; break; }
       }
+      if (!s._sgg) s._sgg = sggNearCoord(x, y);   // @sgg-near — 매립지 역(새만금신항·가덕도신공항 등)
       // 실제 소재 시도·시군구 부여 (전국 확장 2026-07-17: 옛 sd:"수도권" 하드코딩 → 좌표 기준 산출)
       if (s._sgg) { const p = s._sgg.split(" "); s.sd = p[0]; s.sg = p.slice(1).join(" "); }
     });
@@ -7313,6 +7343,7 @@ function sggByCoord(s) {
       if (!inSggBB(sggBBOf(disp), pt[0], pt[1])) continue;   // bbox 프리필터(렌더러 무관)
       if (rings.some(r => pointInRing(pt[0], pt[1], r))) { hit = disp; break; }
     }
+    if (!hit) hit = sggNearCoord(pt[0], pt[1], want);   // @sgg-near — 소스 시도가 있으면 그 시도 안에서만(위 루프와 같은 조건)
   }
   return (s._sggRes = hit);
 }
@@ -7340,6 +7371,7 @@ function buildSggIndex() {
           if (rings.some(r => pointInRing(p.coord[0], p.coord[1], r))) hit.add(disp);
         }
       }
+      if (!hit.size) for (const p of roadLinePoints(s)) { const near = sggNearCoord(p.coord[0], p.coord[1]); if (near) { hit.add(near); break; } }   // @sgg-near
       s._sggs = [...hit];
     });
   }
@@ -10654,14 +10686,7 @@ function mbSetPlace(k) {
 
 /* ── 찾는 범위 (Q2) ────────────────────────────────────────────────────
    ⚠ 「영향권」과 다른 말이다. 영향권은 신호가 주변에 미치는 범위이고, 이건 **찾는 범위**다. */
-function mbPtSegKm(p, a, b) {
-  const A = [a.lon, a.lat], B = [b.lon, b.lat];
-  const vx = B[0] - A[0], vy = B[1] - A[1];
-  const wx = p[0] - A[0], wy = p[1] - A[1];
-  const d2 = vx * vx + vy * vy;
-  const t = d2 ? Math.max(0, Math.min(1, (wx * vx + wy * vy) / d2)) : 0;
-  return meters(p, [A[0] + t * vx, A[1] + t * vy]) / 1000;
-}
+function mbPtSegKm(p, a, b) { return ptSegKm(p, [a.lon, a.lat], [b.lon, b.lat]); }   // 자는 ptSegKm 하나(@sgg-near · 2026-10-09)
 function mbNearRows() {
   const a = mbAnchorPoint();
   const pool = allSignalsFlat().filter(visible);
@@ -15183,8 +15208,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "aca084e059", "admin.html": "8c167e050e", "adverse_extra.json": "a24a606426", "adverse_facilities.json": "aab04bbd17", "adverse_funeral.json": "eab4344496", "apartments_all.json": "a1acb1318d", "arch_signals.json": "4a3f85240f", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "bid_signals.json": "666f912d57", "build_status.json": "b08b9af4d8", "corridor_diff.json": "3a2fdf5e1d", "dart_signals.json": "9ef46e2a78", "dps_signals.json": "be1c49f603", "eum_backfill_progress.json": "fbaff78485", "eum_enroll.json": "204fd75ca7", "eum_signals.json": "efc2e9871b", "eum_usage.json": "dc3ab5e2d3", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "7829040c54", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "818b2fefd5", "jeongbi_poly_seoul.json": "c073b6e038", "jigu_school_signals.json": "46c561d2c2", "jobs_signals.json": "95a6b883b8", "logipark_signals.json": "23162bfbbc", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "f055ec873d", "mega_signals.json": "46611aec38", "methodology.html": "47175e2608", "officetels_all.json": "b68946d515", "park_signals.json": "ffd9acc9a5", "privacy.html": "217d09c9a3", "push_feed.json": "2fe3da8e05", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "489ef24783", "rail_reference.html": "6da21d9343", "rail_signals.json": "d1f30a3c1d", "region_gaps.json": "b8622ccc5c", "regions.json": "20a30bad71", "report.html": "60d8a70d46", "retail_signals.json": "016dafe8bd", "road_signals.json": "aa9c6db2c3", "robots.txt": "21147e58c5", "school_signals.json": "f9202bcc03", "settings.html": "ba96e63c1e", "sfz_signals.json": "a85323b29c", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "bdedd0aa4a", "sido_all.geojson": "2d0c426029", "signals.json": "5048af57c4", "signals_auto.json": "c23a1bcdb1", "signals_jeongbi_all.json": "d525c3f4f2", "sitemap.xml": "5b973a3b57", "source_status.html": "3411dd41b5", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "ef6073eb26", "upis_facility_geom.json": "732aa00477", "upis_on_road.json": "669ed8a7d5", "weekly.html": "127e4f8560", "weekly_index.json": "1f48a0808f"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20261009a");
+window.FHASH = {"DATA_STANDARD.md": "aca084e059", "admin.html": "e528e09fbe", "adverse_extra.json": "a24a606426", "adverse_facilities.json": "96d87beaf4", "adverse_funeral.json": "7fbfa74b4e", "apartments_all.json": "80e6ae720d", "arch_signals.json": "5fa244690e", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "bid_signals.json": "69a879d790", "build_status.json": "bc40715ed6", "corridor_diff.json": "21211f4142", "dart_signals.json": "cf217eeff3", "dps_signals.json": "52aaee50df", "eum_backfill_progress.json": "3c57c0ab62", "eum_enroll.json": "ffea69bf5a", "eum_signals.json": "3cb13099f3", "eum_usage.json": "2d1bbfe647", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "2e73e09d34", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "f4f2404389", "jeongbi_poly_seoul.json": "c073b6e038", "jigu_school_signals.json": "341f7425b9", "jobs_signals.json": "95a6b883b8", "logipark_signals.json": "d38a3bf6c6", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "c29ad088c6", "mega_signals.json": "9344cf8c95", "methodology.html": "5e69d5670e", "officetels_all.json": "29f9e2220c", "park_signals.json": "899f43152e", "press_discover.json": "186db85236", "privacy.html": "217d09c9a3", "push_feed.json": "753955f9a5", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "2ae4134ed5", "rail_reference.html": "6da21d9343", "rail_signals.json": "815d208ed4", "region_gaps.json": "f3ed32e3a0", "regions.json": "20a30bad71", "report.html": "08f3d5cd38", "retail_signals.json": "f6503272cd", "road_signals.json": "6502030040", "robots.txt": "21147e58c5", "school_signals.json": "91903b8ec4", "settings.html": "ba96e63c1e", "sfz_signals.json": "b2d7e1929c", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "2d8077ca56", "sido_all.geojson": "2d0c426029", "signals.json": "5048af57c4", "signals_auto.json": "f4af433ae7", "signals_jeongbi_all.json": "1e8efa7f58", "sitemap.xml": "83349f0aea", "source_status.html": "498b94e8a7", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "ef6073eb26", "upis_facility_geom.json": "bb78d85f67", "upis_on_road.json": "c6731bd072", "weekly.html": "127e4f8560", "weekly_index.json": "1f48a0808f"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20261010a");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
