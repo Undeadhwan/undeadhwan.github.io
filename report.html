@@ -21,6 +21,7 @@ border:1.5px solid #2b3440} .status small{font-weight:400;color:#555}
 <p class="note">매주 자동 수집(build_all --fetch) 직후 파이프라인이 자동 생성합니다. 전부 사실 기록이며 판단을 담지 않습니다. <a href="index.html">← 지도로</a></p>
 <div class="status" id="status" style="display:none"></div>
 <h2 id="backfill">원문 소급 — 일별 추가·처리·잔여</h2>
+<p class="note"><a href="#runs">↓ 매시 실행 기록 — 몇 시에 돌아 몇 건 처리했나</a></p>
 <div id="bf"><p class="note">불러오는 중…</p></div>
 <h2 id="runs">원문 소급 — 매시 실행 기록</h2>
 <div id="bfr"><p class="note">불러오는 중…</p></div>
@@ -102,39 +103,27 @@ var ARCH = [{"date": "2026-10-13", "files": [{"file": "도로", "add": 709, "rem
     if(!d||!d.runs){ el.innerHTML='<p class="note">실행 기록(eum_backfill_runs.json)을 못 읽었다 — 기록은 2026-10-13 저녁부터 쌓인다</p>'; return; }
     var fmt=function(n){return n==null?'-':Number(n).toLocaleString();};
     var R=function(n){return '<td style="text-align:right">'+n+'</td>';};
-    var upd=(d.updated||'').replace('T',' ').slice(0,16), first=null, byDay={};
-    d.runs.forEach(function(r){ var day=(r.id||'').slice(0,10); if(!day) return; (byDay[day]=byDay[day]||[]).push(r); if(!first||r.id<first) first=r.id; });
-    var sbd=d.schedule_by_day||{}, days=Object.keys(byDay).concat(Object.keys(sbd)).filter(function(v,i,a){return a.indexOf(v)===i;}).sort().reverse().slice(0,7);
-    var schedOf=function(day){ if(sbd[day]) return sbd[day]; var ks=Object.keys(sbd).sort(), v=null; ks.forEach(function(k){ if(k<=day) v=sbd[k]; }); return v||[]; };
+    var upd=(d.updated||'').replace('T',' ').slice(0,16), byId={};
+    d.runs.forEach(function(r){ byId[r.id]=r; });
+    /* 칸 판정은 기록 파일의 days(backfill_runs.day_slots — 게이트와 같은 한 벌)를 그대로 그린다 · 이 화면은 판정하지 않는다(2026-10-13 세션정리 감사) */
+    var LAB={ok:['실행',''],skip:['건너뜀','muted'],error:['실패','bad'],running:['도는 중',''],miss:['기록 없음 — 실행 안 됨(맥 꺼짐·로그인 전 등)','bad'],pre:['기록 시작 전','muted'],later:['아직(이 기록 이후)','muted']};
+    var days=Object.keys(d.days||{}).sort().reverse().slice(0,7);
     var proc=function(r){ return ((r.em&&r.em.seqs)||0)+((r.eum&&r.eum.got)||0); };
+    var row=function(lab, r, st){
+      var em=r&&r.em, eu=r&&r.eum, l=LAB[st]||[st||'',''];
+      var res=l[0]+(r&&r.why&&st!=='ok'?' — '+r.why:'');
+      return '<tr><td'+(lab==='시간표 밖'?' class="muted"':'')+'>'+esc(lab)+'</td><td>'+(r?esc(r.id.slice(11,19)):'-')+'</td><td class="'+l[1]+'">'+esc(res)+'</td>'
+        +R(em?fmt(em.tried):'-')+R(em?fmt(em.seqs):'-')+R(eu?fmt(eu.target):'-')+R(eu?fmt(eu.got):'-')+R(r&&(em||eu)?'<b>'+fmt(proc(r))+'</b>':'-')
+        +R(r&&r.dur_s!=null?Math.round(r.dur_s/60)+'분':'-')+'</tr>';
+    };
     var t1='', det='';
     days.forEach(function(day, di){
-      var sch=schedOf(day), runs=(byDay[day]||[]).slice().sort(function(a,b){return a.id<b.id?-1:1;});
-      var used={}, rowsH='', n={ok:0,skip:0,err:0,miss:0,run:0,pre:0,later:0}, pEm=0, pEum=0;
-      sch.forEach(function(hm){
-        var slot=day+'T'+hm, hit=null;
-        runs.forEach(function(r,k){ if(!hit&&!used[k]&&r.id.slice(11,13)===hm.slice(0,2)){ hit=r; used[k]=1; } });
-        var res, cls='';
-        if(hit){
-          if(hit.status==='ok'){ res='실행'; n.ok++; } else if(hit.status==='skip'){ res='건너뜀 — '+(hit.why||''); cls='muted'; n.skip++; }
-          else if(hit.status==='error'){ res='실패(종료 코드 '+(hit.rc!=null?hit.rc:'?')+')'; cls='bad'; n.err++; } else { res='도는 중'; n.run++; }
-          pEm+=(hit.em&&hit.em.seqs)||0; pEum+=(hit.eum&&hit.eum.got)||0;
-        } else if(first&&slot<first.slice(0,16)){ res='기록 시작 전'; cls='muted'; n.pre++; }
-        else if(upd&&(day+' '+hm)>upd){ res='아직(이 기록 이후)'; cls='muted'; n.later++; }
-        else { res='기록 없음 — 실행 안 됨(맥 꺼짐·로그인 전 등)'; cls='bad'; n.miss++; }
-        var em=hit&&hit.em, eu=hit&&hit.eum;
-        rowsH+='<tr><td>'+hm+'</td><td>'+(hit?esc(hit.id.slice(11,19)):'-')+'</td><td class="'+cls+'">'+esc(res)+'</td>'
-          +R(em?fmt(em.tried):'-')+R(em?fmt(em.seqs):'-')+R(eu?fmt(eu.target):'-')+R(eu?fmt(eu.got):'-')+R(hit&&(em||eu)?'<b>'+fmt(proc(hit))+'</b>':'-')
-          +R(hit&&hit.dur_s!=null?Math.round(hit.dur_s/60)+'분':'-')+'</tr>';
-      });
-      runs.forEach(function(r,k){ if(used[k]) return;   // 시간표 밖 실행(시간표가 바뀐 날 등) — 숨기지 않는다
-        rowsH+='<tr><td class="muted">시간표 밖</td><td>'+esc(r.id.slice(11,19))+'</td><td>'+esc(r.status||'')+'</td>'+R(r.em?fmt(r.em.tried):'-')+R(r.em?fmt(r.em.seqs):'-')
-          +R(r.eum?fmt(r.eum.target):'-')+R(r.eum?fmt(r.eum.got):'-')+R('<b>'+fmt(proc(r))+'</b>')+R(r.dur_s!=null?Math.round(r.dur_s/60)+'분':'-')+'</tr>';
-        pEm+=(r.em&&r.em.seqs)||0; pEum+=(r.eum&&r.eum.got)||0; });
-      var due=sch.length-n.pre-n.later;
-      t1+='<tr><td>'+esc(day)+'</td>'+R(fmt(due))+R('<b>'+n.ok+'</b>')+R(n.skip?n.skip:'-')+R(n.err?'<span class="bad">'+n.err+'</span>':'-')+R(n.miss?'<span class="bad">'+n.miss+'</span>':'-')
+      var ds=d.days[day], n=ds.n||{}, rowsH='', pEm=0, pEum=0;
+      ds.slots.forEach(function(x){ var r=x[2]?byId[x[2]]:null; if(r){ pEm+=(r.em&&r.em.seqs)||0; pEum+=(r.eum&&r.eum.got)||0; } rowsH+=row(x[0], r, x[1]); });
+      (ds.extra||[]).forEach(function(id){ var r=byId[id]; if(!r) return; pEm+=(r.em&&r.em.seqs)||0; pEum+=(r.eum&&r.eum.got)||0; rowsH+=row('시간표 밖', r, r.status); });
+      t1+='<tr><td>'+esc(day)+'</td>'+R(fmt(ds.due))+R('<b>'+(n.ok||0)+'</b>')+R(n.skip?n.skip:'-')+R(n.error?'<span class="bad">'+n.error+'</span>':'-')+R(n.miss?'<span class="bad">'+n.miss+'</span>':'-')
         +R(fmt(pEm))+R(fmt(pEum))+R('<b>'+fmt(pEm+pEum)+'</b>')+'</tr>';
-      det+='<details'+(di<2?' open':'')+'><summary><b>'+esc(day)+'</b> — 실행 '+n.ok+' · 건너뜀 '+n.skip+' · 실패 '+n.err+' · 기록 없음 '+n.miss+' · 처리 '+fmt(pEm+pEum)+'건</summary>'
+      det+='<details'+(di<2?' open':'')+'><summary><b>'+esc(day)+'</b> — 실행 '+(n.ok||0)+' · 건너뜀 '+(n.skip||0)+' · 실패 '+(n.error||0)+' · 기록 없음 '+(n.miss||0)+' · 처리 '+fmt(pEm+pEum)+'건</summary>'
         +'<table><tr><th rowspan="2">시간표</th><th rowspan="2">실제 시작</th><th rowspan="2">결과</th><th colspan="2">시군구 공보</th><th colspan="2">토지이음</th><th rowspan="2">처리 합</th><th rowspan="2">걸린 시간</th></tr>'
         +'<tr><th>시도 고시</th><th>처리</th><th>표적</th><th>처리</th></tr>'+rowsH+'</table></details>';
     });

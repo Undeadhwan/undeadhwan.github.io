@@ -367,7 +367,7 @@
     const parts = Object.entries(by).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k.replace(/\.py$/, "")} ${v}`).join(" · ");
     h += `<div style="margin-top:8px">📊 토지이음 요청 ${day === today ? "오늘" : day} <b>${us[day] || 0}/${(bf && bf.day_max) || "?"}</b>`   // 하루 총량 = 진척 파일 day_max(eum_client.DAY_MAX) — 종전 손 적은 150이 200·300으로 바뀐 뒤에도 남았다(2026-10-13)
        + (parts ? `<span class="k"> — ${parts}</span>` : `<span class="k"> — 호출자별 실적 없음(2026-09-03 이후 실행부터 쌓인다)</span>`)
-       + `<span class="k"> · 소급이 아닌 단계는 하루 몫까지(eum_client.CALLER_QUOTA) · 소급은 매시 20분(00시 · 03~23시)이 남는 몫 전부</span></div>`;
+       + `<span class="k"> · 소급이 아닌 단계는 하루 몫까지(eum_client.CALLER_QUOTA) · 소급은 매시 실행 ${(() => { const d = rn && rn.schedule_by_day ? Object.keys(rn.schedule_by_day).sort().pop() : null; const sc = d ? rn.schedule_by_day[d] : []; return sc.length ? `하루 ${sc.length}회(${sc[0]}~${sc[sc.length - 1]} · launchd 시간표)` : "(시간표 미상)"; })()}가 남는 몫 전부</span></div>`;
   }
   /* 색인 등재 + UPIS 조인 — 소급과 **같은 사상**으로 화면이 읽는다(2026-09-01 신설).
      로그에만 있으면 며칠째 0건이어도 아무도 모른다. 두 갈래가 함께 도는 파이프라인이라
