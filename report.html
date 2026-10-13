@@ -59,7 +59,7 @@ var ARCH = [{"date": "2026-10-13", "files": [{"file": "도로", "add": 709, "rem
     var p=v[0], em=v[1], el=document.getElementById('bf'); if(!el) return;
     if(!p){ el.innerHTML='<p class="note">진척 파일(eum_backfill_progress.json)을 못 읽었다</p>'; return; }
     var h=(p.history||[]).filter(function(x){return x.total!=null&&x.done!=null;});
-    var emBy={}; ((em&&em.history)||[]).forEach(function(x){ emBy[x.date]=x.seqs; });
+    var emBy={}, emHost={}; ((em&&em.history)||[]).forEach(function(x){ emBy[x.date]=x.seqs; if(x.hostable!=null) emHost[x.date]=x.hostable; });
     var fmt=function(n){return n==null?'-':Number(n).toLocaleString();};
     var sgn=function(n){return n==null?'-':(n>0?'+':'')+Number(n).toLocaleString();};
     var R=function(n){return '<td style="text-align:right">'+n+'</td>';};
@@ -73,7 +73,8 @@ var ARCH = [{"date": "2026-10-13", "files": [{"file": "도로", "add": 709, "rem
       var note=x.note||(scope?'범위 변경(대량 편입) — 새 고시만이 아니다':'');
       if(nD<7&&y){ sumD+=done; nD++; }
       t1+='<tr><td>'+esc(x.date)+'</td>'+R(scope?'-':sgn(add))+R(scope?sgn(add):'-')+R('<b>'+sgn(done)+'</b>')+R(x.taken!=null?fmt(x.taken):'-')+R(emBy[x.date]!=null?fmt(emBy[x.date]):'-')
-          +R('<b>'+fmt(x.pending)+'</b>')+'<td>'+esc(note)+'</td></tr>';
+          +R('<b>'+fmt(x.pending)+'</b>')+R(emHost[x.date]!=null?fmt(emHost[x.date]):'-')+R(emHost[x.date]!=null&&x.pending!=null?fmt(Math.max(0,x.pending-emHost[x.date])):'-')
+          +'<td>'+esc(note)+'</td></tr>';
       var tr=x.tiers||null, ts=0;
       t2+='<tr><td>'+esc(x.date)+'</td>'+TIERS.map(function(k){ var n=tr?tr[k[0]]:null; if(n!=null) ts+=n; return R(fmt(n)); }).join('')
           +R(tr&&x.pending!=null?fmt(x.pending-ts):'-')+R(fmt(x.pending))+'</tr>';
@@ -81,8 +82,10 @@ var ARCH = [{"date": "2026-10-13", "files": [{"file": "도로", "add": 709, "rem
     el.innerHTML='<div class="kpi"><div><b>'+fmt(p.total)+'</b>전체</div><div><b>'+fmt(p.done)+'</b>처리(원문 받음)</div><div><b>'+fmt(p.pending)+'</b>남음</div>'
       +'<div><b>'+(nD?Math.round(sumD/nD).toLocaleString():'-')+'</b>최근 7일 하루 평균 처리</div></div>'
       +'<p class="note">마지막 실행 '+esc(p.ran||'?')+' · 날짜마다 그날 마지막 실행 기준 · 처리 합 = 원문을 받은 고시 증가(두 창구 합) — 창구별 수는 그 창구가 채운 원문이라(창 밖·겹침 포함) 합과 조금 다를 수 있다</p>'
-      +(t1?'<table><tr><th rowspan="2">날짜</th><th colspan="2">추가</th><th colspan="3">처리</th><th rowspan="2">잔여</th><th rowspan="2">비고</th></tr>'
-          +'<tr><th>새 고시</th><th>범위 변경</th><th>합</th><th>토지이음</th><th>시군구 공보</th></tr>'+t1+'</table>':'<p class="note">기록 없음</p>')
+      +(t1?'<table><tr><th rowspan="2">날짜</th><th colspan="2">추가</th><th colspan="3">처리</th><th colspan="3">잔여</th><th rowspan="2">비고</th></tr>'
+          +'<tr><th>새 고시</th><th>범위 변경</th><th>합</th><th>토지이음</th><th>시군구 공보</th><th>합</th><th>공보로 받을 수 있음</th><th>토지이음에서만</th></tr>'+t1+'</table>'
+          +'<p class="note">잔여 「공보로 받을 수 있음」 = 그 고시를 낸 시군구의 공보 서버가 열려 있는 것(병렬로 빠르게 줄어든다) · 「토지이음에서만」 = 시도 고시·공보가 없는 기관 — 토지이음 하루 몫으로만 줄어든다(공보 창구 기록이 쌓인 날부터 · 2026-10-13~)</p>'
+          :'<p class="note">기록 없음</p>')
       +'<h2>원문 소급 — 잔여 유형별(먼저 읽는 줄)</h2>'
       +'<p class="note">'+TIERS.map(function(k){return '<b>'+k[0]+'</b> '+k[1];}).join(' · ')+' · <b>그 밖</b> 일반 대기(순서대로)</p>'
       +(t2?'<table><tr><th>날짜</th>'+TIERS.map(function(k){return '<th>'+k[0]+'</th>';}).join('')+'<th>그 밖</th><th>잔여 합</th></tr>'+t2+'</table>':'');
