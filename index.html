@@ -3570,9 +3570,9 @@ function ringOf(s) {
 const SD_PILL_LV = 10;                 // 카카오 level ≥ 10 = 시도 합산 (Leaflet z ≤ 8)
 const SD_PILL_ZOOM = 18 - SD_PILL_LV;  // 두 렌더러가 **같은 경계**를 쓰도록 하나에서 도출한다
 /* ★ 시군구 합계 알약 (2026-09-25 알렉스 「모바일의 경우 구별 호재건수를 보여주고 있는데, 웹의 경우도 줌을 아웃하면 마찬가지로 구에 대한 종합 건수 정도를」) —
-   시도 알약과 **같은 부품·같은 규칙**을 한 층 아래(시군구 줌)에 둔다: 점을 치우지 않는다(얹는 층) · 숫자 = 그 시군구에 **지금 조회조건으로 보이는** 신호
+   시도 알약과 **같은 부품·같은 규칙**을 한 층 아래(시군구 줌)에 둔다(⚠ 「점을 치우지 않는다(얹는 층)」는 2026-09-25 줌 띠 결정으로 폐기 — 아래 dotBandLv) · 숫자 = 그 시군구에 **지금 조회조건으로 보이는** 신호
    (`signalsInSgg` — 지역 피드가 세는 그 목록 · 앱 알약 @pill-filtered와 같은 뜻) · 0건은 안 붙인다 · 누르면 그 시군구(`showSgg`) · 비키기는 자기 시군구 경계 안에서만.
-   구간 = 카카오 level SGG_PILL_LV ~ SD_PILL_LV−1(Leaflet 같은 경계를 하나에서 도출) — 동·읍면 줌(≤ DONG_LV 6)과 시도 알약(≥ 12) 사이. */
+   구간 = 카카오 level SGG_PILL_LV ~ SD_PILL_LV−1(Leaflet 같은 경계를 하나에서 도출) — 점 띠(< SGG_PILL_LV)와 시도 알약(≥ SD_PILL_LV) 사이. */
 /* ★ 2026-10-13 알렉스 「이 줌 수준(레벨 7)에서도 호재 원이 보였으면」 → 점 띠를 한 단계 넓힌다(레벨 ≤7 점 · 시군구 알약 8~9) ·
    노선 이름표는 레벨 6부터 그대로(레벨 7에 이름표까지 띄우면 글자가 화면을 덮는다 · 아래 _bandHi) · 동 이름 DONG_LV 6 그대로.
    실측(2026-10-13 서울 시작 · perf_probe 교대 두 번): 끌어 이동 최장 멈춤 레벨7 점 67·67ms ↔ 레벨7 알약 17ms ↔ 레벨6 점 17·34ms · 표식 153 ↔ 87 ↔ 120 ·
@@ -8111,7 +8111,7 @@ function archFactsheet(s) {
         </details>` : "";
 }
 /* ══════════ 호재 상세 팝업 — 웹 크롬 v2 (2026-09-24 · DESIGN.md §6 · 시안 「호재 상세 팝업」) ══════════
-   위→아래: 머리줄(‹ · 유형 · 세부 · 등급 · ×) → 제목 → 요약 한 줄(영향 · 성격 · 움직임) → 버튼(관심 등록·공유) →
+   위→아래: 머리(‹ · ×) → 제목 → 핵심 요약 칸(specHtml · 유형·세부·등급·단계 · 2026-10-13) → 요약 한 줄(영향 · 성격 · 움직임) → 버튼(관심 등록·공유) →
    사업 단계 스텝퍼 + 현재 고시 카드 → (교통) 노선 지점 → 키-값 표 → 관련 목록 → 푸터.
    ★ 사실 행은 **버리지 않는다** — 종전 카드의 행(대지위치·영향권·효력·사업비·구간·근거·비고·근거 층)은 키-값 표에 그대로 선다(P2·P5).
      단계 이력 전체는 스텝퍼 아래 접힘으로 남긴다(`msTrack` 한 벌).
@@ -12373,7 +12373,7 @@ function initKakao() {
      테두리 두 줄(roadEdges)은 지도 좌표 오프셋이라 **레벨이 바뀔 때마다 보이는 도로 전부를 새로 만든다** — 전국 줌에서 3,888줄·정점 10만 개였고
      한 칸 줌아웃 698ms · 전국→경기 이동 400ms · 경기 알약 367ms를 막았다(2026-09-29 헤드리스 데스크톱 실측 · 교대 두 번 · 폰은 몇 배).
      시도 띠는 「멀리서는 알약」 구간이라 선은 맥락이다 — 도로를 유형색 한 줄(계획 = 대시)로 그리면 레벨과 무관해 한 번 만들고 끝(실측 117·89·133ms).
-     철도는 채운 5px 한 줄 그대로라 종류는 **굵기**가 말한다(도로 2px ↔ 철도 5px). 시군구 띠(7~9)·점 띠(≤6)는 종전대로 속 빈 두 줄(시안 1a).
+     철도는 채운 5px 한 줄 그대로라 종류는 **굵기**가 말한다(도로 2px ↔ 철도 5px). 시군구 띠·점 띠(< SD_PILL_LV)는 종전대로 속 빈 두 줄(시안 1a).
      ☠ 기각: 유형색 넓은 선 위에 불투명 속을 얹는 앱식 한 줄 — 카카오 JS는 대시가 굵기에 비례해 계획 도로가 **긴 분홍 알약**이 됐다(2026-09-29 캡처 · 09-23 「시안과 다르다」의 그 모양). */
   const farRoad = (path, col, dashed, k, sc, z) =>
     new K.Polyline({ path, strokeColor: col, strokeWeight: ROAD_LINE.far * sc, strokeOpacity: .9 * k, strokeStyle: dashed ? ROAD_LINE.style : "solid", zIndex: z });
@@ -13509,7 +13509,7 @@ function initKakao() {
         && (!routeIsoName || (o.nms || []).includes(routeIsoName))
         /* ★ **시도 띠(레벨 SD_PILL_LV+)에서는 시군 도시계획 도로 회랑을 그리지 않는다** (2026-09-29 알렉스 「줌을 매우 넓게 잡았는데 버벅이는 이유 중 하나가
            도로나 철도를 죄다 보여줘서 그런 거 같은데 좀 줄여서 보여줄까?」). 전국 줌에 그려지는 선 1,394개 중 967개(69%)가 시군 회랑이었다(2026-09-29 실측 ·
-           대부분 C급 · 몇 km라 그 줌에선 점 크기 — 정보가 없다). 철도·원장 도로(고속·국도·광역)는 그대로 · 시군구 띠(7~9)부터는 전부 · 고른 호재·격리 노선은 예외.
+           대부분 C급 · 몇 km라 그 줌에선 점 크기 — 정보가 없다). 철도·원장 도로(고속·국도·광역)는 그대로 · 시군구 띠(< SD_PILL_LV)부터는 전부 · 고른 호재·격리 노선은 예외.
            「멀리서는 알약만」(줌 띠)의 선판 — 점이 알약으로 바뀌는 그 띠에서 동네 길도 걷는다. 데이터·건수·목록은 그대로(안 그릴 뿐 · P5). 게이트 html_check.far_eum_check. */
         && !(o.eum && _far && !routeIsoName && !(_haloSel && o._s === _haloSel));
       // ★ 줌아웃 밴드(lv7+)는 간축본으로 스위치 (2026-08-10 승인 — 팬 프레임당 SVG 정점 ~36k→~6k)
@@ -15252,8 +15252,8 @@ function initSearch() {
      (조용히 캐시가 굳는 일이 없다).
    ⚠ 꼬리표 만드는 자리는 **여기 하나다** — 세 곳이 각자 만들면 하나만 고쳐지고 나머지는
      조용히 예외가 된다(이 저장소가 오늘만 다섯 번 겪은 형태). */
-window.FHASH = {"DATA_STANDARD.md": "aca084e059", "admin.html": "e528e09fbe", "adverse_extra.json": "6334df232f", "adverse_facilities.json": "bf2ac4ff98", "adverse_funeral.json": "b97cafa7b7", "apartments_all.json": "468c776d00", "arch_signals.json": "815e7fdfa2", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "bid_signals.json": "dfba0f5880", "build_status.json": "baf6c3f5eb", "corridor_diff.json": "8a002817d5", "dart_signals.json": "a5aef04caf", "dps_signals.json": "46485a9fc9", "eum_backfill_progress.json": "632948f91f", "eum_enroll.json": "4be2287afd", "eum_signals.json": "3f23976d4c", "eum_usage.json": "83ea91421b", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "efe578b7fd", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "94ed849542", "jeongbi_poly_seoul.json": "c073b6e038", "jigu_school_signals.json": "684d5a90bc", "jobs_signals.json": "95a6b883b8", "logipark_signals.json": "9dd2a7b056", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "74574a7dbf", "mega_signals.json": "13f71280cd", "methodology.html": "a66a812bcd", "officetels_all.json": "e6436f752b", "park_signals.json": "5bbb5838cd", "press_discover.json": "8f73bc1cf2", "privacy.html": "217d09c9a3", "push_feed.json": "6d9d64acd4", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "1d58ade8c7", "rail_reference.html": "12b0a09300", "rail_signals.json": "c4b9ec580e", "region_gaps.json": "fb43e411b4", "regions.json": "20a30bad71", "report.html": "340f97c8c7", "retail_signals.json": "8c417d4cde", "road_signals.json": "b1037453af", "robots.txt": "21147e58c5", "school_signals.json": "d493e265c3", "settings.html": "ba96e63c1e", "sfz_signals.json": "69e1b819f6", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "78b69ac809", "sido_all.geojson": "2d0c426029", "signals.json": "5048af57c4", "signals_auto.json": "290d40a333", "signals_jeongbi_all.json": "ba0177cc93", "sitemap.xml": "ed15ef2bf9", "source_status.html": "a5a52f3e74", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "5611ee3a85", "upis_facility_geom.json": "f0683591b1", "upis_on_road.json": "d3f2a8ea4c", "weekly.html": "94b2de2b1c", "weekly_index.json": "4efaf23042"};
-const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20261013c");
+window.FHASH = {"DATA_STANDARD.md": "aca084e059", "admin.html": "e528e09fbe", "adverse_extra.json": "6334df232f", "adverse_facilities.json": "bf2ac4ff98", "adverse_funeral.json": "b97cafa7b7", "apartments_all.json": "468c776d00", "arch_signals.json": "815e7fdfa2", "bdong/index.json": "058d013b9a", "bdong/강원.geojson": "f6bdfb0f6b", "bdong/경기.geojson": "46024f00cb", "bdong/경남.geojson": "3243649f66", "bdong/경북.geojson": "08e59a2dd0", "bdong/대구.geojson": "69a5a0b256", "bdong/대전.geojson": "cd6d5e7b3d", "bdong/부산.geojson": "27dc4a79ba", "bdong/서울.geojson": "8e6883b406", "bdong/세종.geojson": "dbbf61a6d4", "bdong/울산.geojson": "9eadb65524", "bdong/인천.geojson": "f778bf93b0", "bdong/전남광주.geojson": "07e1ef89cf", "bdong/전북.geojson": "c835a86965", "bdong/제주.geojson": "60e0e54cac", "bdong/충남.geojson": "84c14c7370", "bdong/충북.geojson": "65e9b2f738", "bid_signals.json": "85a4d59b3b", "build_status.json": "6cfb9bb7d7", "corridor_diff.json": "c6bbee6ae7", "dart_signals.json": "a5aef04caf", "dps_signals.json": "46485a9fc9", "eum_backfill_progress.json": "632948f91f", "eum_enroll.json": "4be2287afd", "eum_signals.json": "396eb66931", "eum_usage.json": "83ea91421b", "favicon-32.png": "a7a03ded9d", "favicon.ico": "8b301c7437", "google3631f73bd83ce64f.html": "ac0adc2fe5", "hospital_signals.json": "efe578b7fd", "icon-180.png": "ded6bfb57d", "icon-192.png": "725ffca0e3", "icon-512.png": "ce86a49d7f", "indpark_signals.json": "94ed849542", "jeongbi_poly_seoul.json": "c073b6e038", "jigu_school_signals.json": "684d5a90bc", "jobs_signals.json": "95a6b883b8", "logipark_signals.json": "9dd2a7b056", "macro_signals_draft.json": "0dfc1a929c", "master_signals.json": "74574a7dbf", "mega_signals.json": "13f71280cd", "methodology.html": "67b5fc3959", "officetels_all.json": "e6436f752b", "park_signals.json": "5bbb5838cd", "press_discover.json": "8f73bc1cf2", "privacy.html": "217d09c9a3", "push_feed.json": "a5a9a6edf5", "pwa_manifest.json": "3f1bd4f548", "qa_debt_open.json": "3055df7522", "rail_reference.html": "12b0a09300", "rail_signals.json": "c4b9ec580e", "region_gaps.json": "0e54bcb9e0", "regions.json": "20a30bad71", "report.html": "340f97c8c7", "retail_signals.json": "8c417d4cde", "road_signals.json": "2320d0a940", "robots.txt": "21147e58c5", "school_signals.json": "d493e265c3", "settings.html": "ba96e63c1e", "sfz_signals.json": "69e1b819f6", "sgg_all.geojson": "1bfe5de8ad", "sh_signals.json": "78b69ac809", "sido_all.geojson": "2d0c426029", "signals.json": "5048af57c4", "signals_auto.json": "290d40a333", "signals_jeongbi_all.json": "ba0177cc93", "sitemap.xml": "ed15ef2bf9", "source_status.html": "b9c2b35b22", "sources.html": "d5915a485b", "sw.js": "bd80e753e7", "thresholds.json": "5611ee3a85", "upis_facility_geom.json": "f0683591b1", "upis_on_road.json": "a6c0899ff0", "weekly.html": "f83a646feb", "weekly_index.json": "4efaf23042"};
+const cbOf = f => "?b=" + (window.FHASH[String(f).split("?")[0]] || window.BUILD || "20261013d");
 
 /* ══════════ 무거운 신호 소스는 **첫 화면 뒤에** 흘려보낸다 (2026-08-20) ══════════
    ☠ 종전엔 27개 파일을 `Promise.all`로 **전부** 기다린 뒤에야 첫 픽셀이 나왔다. 그중 넷
