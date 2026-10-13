@@ -283,10 +283,11 @@
 (async () => {
   const box = document.getElementById("runbox");
   const get = async f => { try { const r = await fetch(f + "?t=" + Date.now()); return r.ok ? await r.json() : null; } catch (e) { return null; } };
-  const [st, debt, bf, en, uf, ur] = await Promise.all([get("build_status.json"), get("qa_debt_open.json"),
+  const [st, debt, bf, en, uf, ur, em] = await Promise.all([get("build_status.json"), get("qa_debt_open.json"),
                                             get("eum_backfill_progress.json"),
                                             get("eum_enroll.json"), get("upis_facility_geom.json"),
-                                            get("upis_on_road.json")]);   // 개통 대조(2026-09-05) — 워크리스트(모순·미측정)가 여기 있다
+                                            get("upis_on_road.json"),   // 개통 대조(2026-09-05) — 워크리스트(모순·미측정)가 여기 있다
+                                            get("eminwon_progress.json")]);   // 시군구 공보 창구(원문 소급 두 번째 창구 · 2026-10-13 — 리포트 일별 표의 창구별 처리도 이 파일)
   if (!st) { box.textContent = "build_status.json을 읽지 못했습니다."; return; }
   const okRun = st.result === "성공";
   const nDebt = debt ? (debt.debt || 0) : 0;
@@ -333,11 +334,18 @@
              + (bf.days_limit ? (String(bf.days_limit).length === 8
                  ? ` (창 바닥 ${String(bf.days_limit).replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3")})`
                  : ` (최근 ${bf.days_limit}일 창)`) : "")
-             + ` · 오늘 ${bf.taken || 0}건 수집 · 약 ${bf.est_runs_left || "?"}회 실행 남음`;
+             + ` · 오늘 ${bf.taken || 0}건 수집 · 약 ${bf.est_runs_left || "?"}회 실행 남음`
+             + ` · <a href="report.html#backfill" target="_blank">일별 추가·처리·잔여 표 ›</a>`;   // 일별 표 = 운영 리포트 한 곳(2026-10-13 알렉스 · 사본 두지 않는다)
     h += `<div style="margin-top:8px">${msg}<span class="k"> · 마지막 실행 ${bf.ran || "?"}</span></div>`;
     if (cls === "bad" && okRun) box.className = "runbox debt";   // 빌드는 성공이라도 소급 死는 노랗게
   } else {
     h += `<div style="margin-top:8px">⏳ 토지이음 소급: <b>진척 파일 없음</b> — eum_backfill이 아직 한 번도 안 돌았거나 배포 전</div>`;
+  }
+  // 시군구 공보 창구(토지이음 예산 밖 · 2026-10-02 세션148) — 소급 처리의 대부분이 이 창구다(2026-10-13 리포트 일별 표 실측)
+  if (em && (em.history || []).length) {
+    const eh = em.history[em.history.length - 1];
+    h += `<div style="margin-top:4px">📮 시군구 공보 창구: ${eh.date || "?"} 원문 <b>${(eh.seqs || 0).toLocaleString()}건</b> 채움`
+       + `<span class="k"> · 시도 ${(eh.tried || 0).toLocaleString()} · 받음 ${(eh.got || 0).toLocaleString()} · 마지막 실행 ${em.ran || "?"}</span></div>`;
   }
   /* 토지이음 예산 — **누가 얼마나 썼나**(2026-09-03). 위 「사흘째 그대로」 경고는 나흘을 켜져 있었는데 아무도 안 읽었다 —
      원인은 02:00 빌드가 하루 150을 다 써 14:00 소급이 매일 0을 받은 것. 호출자별 실적이 있어야 「예약분(EUM_RESERVE)이
@@ -348,9 +356,9 @@
     const day = Object.keys(us).filter(k => /^\d{4}-\d{2}-\d{2}$/.test(k)).sort().pop();
     const by = (us.by || {})[day] || {};
     const parts = Object.entries(by).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k.replace(/\.py$/, "")} ${v}`).join(" · ");
-    h += `<div style="margin-top:8px">📊 토지이음 요청 ${day === today ? "오늘" : day} <b>${us[day] || 0}/150</b>`
+    h += `<div style="margin-top:8px">📊 토지이음 요청 ${day === today ? "오늘" : day} <b>${us[day] || 0}/${(bf && bf.day_max) || "?"}</b>`   // 하루 총량 = 진척 파일 day_max(eum_client.DAY_MAX) — 종전 손 적은 150이 200·300으로 바뀐 뒤에도 남았다(2026-10-13)
        + (parts ? `<span class="k"> — ${parts}</span>` : `<span class="k"> — 호출자별 실적 없음(2026-09-03 이후 실행부터 쌓인다)</span>`)
-       + `<span class="k"> · 빌드는 60을 남기고 멈추고(EUM_RESERVE) 14:00 소급이 그 몫을 쓴다</span></div>`;
+       + `<span class="k"> · 소급이 아닌 단계는 하루 몫까지(eum_client.CALLER_QUOTA) · 소급은 매시(03~23시 20분)가 남는 몫 전부</span></div>`;
   }
   /* 색인 등재 + UPIS 조인 — 소급과 **같은 사상**으로 화면이 읽는다(2026-09-01 신설).
      로그에만 있으면 며칠째 0건이어도 아무도 모른다. 두 갈래가 함께 도는 파이프라인이라

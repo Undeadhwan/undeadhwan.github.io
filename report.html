@@ -15,10 +15,14 @@ select{font-size:14px;padding:6px 10px;border:1.5px solid #2b3440;border-radius:
 border:1.5px solid #2b3440} .status small{font-weight:400;color:#555}
 .st-ok{background:#eafaf1;border-color:#0a8a4a} .st-warn{background:#fff7e6;border-color:#c77700}
 .st-err{background:#fdecec;border-color:#c0392b}
+#bf td,#bf th{white-space:nowrap} #bf td:last-child{white-space:normal}
 </style></head><body>
 <h1>주간 변경 보고</h1>
 <p class="note">매주 자동 수집(build_all --fetch) 직후 파이프라인이 자동 생성합니다. 전부 사실 기록이며 판단을 담지 않습니다. <a href="index.html">← 지도로</a></p>
 <div class="status" id="status" style="display:none"></div>
+<h2 id="backfill">원문 소급 — 일별 추가·처리·잔여</h2>
+<div id="bf"><p class="note">불러오는 중…</p></div>
+<h2>주간 변경</h2>
 <div class="bar"><label>조회 주차 <select id="wk"><option value="0">2026-10-13</option><option value="1">2026-10-12</option><option value="2">2026-10-11</option><option value="3">2026-10-10</option><option value="4">2026-10-09</option><option value="5">2026-10-08</option><option value="6">2026-10-07</option><option value="7">2026-10-06</option><option value="8">2026-10-05</option><option value="9">2026-10-04</option><option value="10">2026-10-03</option><option value="11">2026-10-02</option><option value="12">2026-10-01</option><option value="13">2026-09-30</option><option value="14">2026-09-29</option><option value="15">2026-09-28</option><option value="16">2026-09-27</option><option value="17">2026-09-26</option><option value="18">2026-09-25</option><option value="19">2026-09-24</option><option value="20">2026-09-23</option><option value="21">2026-09-22</option><option value="22">2026-09-21</option><option value="23">2026-09-20</option><option value="24">2026-09-19</option><option value="25">2026-09-18</option><option value="26">2026-09-17</option><option value="27">2026-09-16</option><option value="28">2026-09-15</option><option value="29">2026-09-14</option><option value="30">2026-09-13</option><option value="31">2026-09-12</option><option value="32">2026-09-11</option><option value="33">2026-09-10</option><option value="34">2026-09-09</option><option value="35">2026-09-08</option><option value="36">2026-09-07</option><option value="37">2026-09-06</option><option value="38">2026-09-05</option><option value="39">2026-09-04</option><option value="40">2026-09-03</option><option value="41">2026-09-02</option><option value="42">2026-09-01</option><option value="43">2026-08-31</option><option value="44">2026-08-25</option><option value="45">2026-08-24</option><option value="46">2026-08-18</option><option value="47">2026-08-17</option><option value="48">2026-08-10</option><option value="49">2026-08-03</option><option value="50">2026-07-29</option><option value="51">2026-07-27</option></select></label>
 <span class="delta" id="cmp"></span></div>
 <div id="body"></div>
@@ -43,6 +47,46 @@ var ARCH = [{"date": "2026-10-13", "files": [{"file": "도로", "add": 709, "rem
     else if(s.build) msg+=' <small>· BUILD '+esc(s.build)+(s.changes?' · 신규 '+(s.changes.add||0)+'·전이 '+(s.changes.trans||0):'')+'</small>';
     el.className='status '+cls; el.innerHTML=msg; el.style.display='';
   }).catch(function(){});
+})();
+// ── 원문 소급 일별 표 (2026-10-13 세션165 · 알렉스 「레포트에 일별로 추가건·처리건·잔여건을 표로」 → 「유형이 다르면 구분해서」) ──
+// 정본 = eum_backfill_progress.json history(날짜마다 그날 마지막 실행의 전체 total · 원문 받음 done · 남음 pending · 층별 tiers · 토지이음 받음 taken · 매시 소급이 쓴다 · 120일)
+//       + eminwon_progress.json history(시군구 공보 창구가 그날 채운 원문 seqs).
+// 추가 = 전체 증가를 새 고시 / 범위 변경(history.note가 있거나 하루 1,000건 이상)으로 · 처리 = 원문 받음 증가(두 창구 합) + 창구별 · 잔여 = pending + 층별.
+// 런타임 fetch라 이 페이지가 주간 빌드에만 다시 만들어져도 표는 늘 최신이다(위 빌드 상태 배너와 같은 방식).
+(function(){
+  var j=function(f){return fetch(f+'?_='+Date.now()).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;});};
+  Promise.all([j('eum_backfill_progress.json'), j('eminwon_progress.json')]).then(function(v){
+    var p=v[0], em=v[1], el=document.getElementById('bf'); if(!el) return;
+    if(!p){ el.innerHTML='<p class="note">진척 파일(eum_backfill_progress.json)을 못 읽었다</p>'; return; }
+    var h=(p.history||[]).filter(function(x){return x.total!=null&&x.done!=null;});
+    var emBy={}; ((em&&em.history)||[]).forEach(function(x){ emBy[x.date]=x.seqs; });
+    var fmt=function(n){return n==null?'-':Number(n).toLocaleString();};
+    var sgn=function(n){return n==null?'-':(n>0?'+':'')+Number(n).toLocaleString();};
+    var R=function(n){return '<td style="text-align:right">'+n+'</td>';};
+    var TIERS=[['재판독','판독 규칙이 바뀌어 다시 읽을 원문'],['보류','지도 선을 보류한 도로 — 원문 위치가 풀어 준다'],['경합','같은 번호 도로가 여럿이라 자리가 의심되는 것'],
+               ['위치미검증','지도 선은 있는데 원문 위치로 아직 확인 못 한 것'],['추정','공사 성격이 「추정」인 것 — 원문이 사실로 바꾼다']];
+    var t1='', t2='', sumD=0, nD=0;
+    for(var i=h.length-1;i>=0;i--){
+      var x=h[i], y=h[i-1]||null;
+      var add=y?x.total-y.total:null, done=y?x.done-y.done:null;
+      var scope=add!=null&&(x.note||add>=1000);
+      var note=x.note||(scope?'범위 변경(대량 편입) — 새 고시만이 아니다':'');
+      if(nD<7&&y){ sumD+=done; nD++; }
+      t1+='<tr><td>'+esc(x.date)+'</td>'+R(scope?'-':sgn(add))+R(scope?sgn(add):'-')+R('<b>'+sgn(done)+'</b>')+R(x.taken!=null?fmt(x.taken):'-')+R(emBy[x.date]!=null?fmt(emBy[x.date]):'-')
+          +R('<b>'+fmt(x.pending)+'</b>')+'<td>'+esc(note)+'</td></tr>';
+      var tr=x.tiers||null, ts=0;
+      t2+='<tr><td>'+esc(x.date)+'</td>'+TIERS.map(function(k){ var n=tr?tr[k[0]]:null; if(n!=null) ts+=n; return R(fmt(n)); }).join('')
+          +R(tr&&x.pending!=null?fmt(x.pending-ts):'-')+R(fmt(x.pending))+'</tr>';
+    }
+    el.innerHTML='<div class="kpi"><div><b>'+fmt(p.total)+'</b>전체</div><div><b>'+fmt(p.done)+'</b>처리(원문 받음)</div><div><b>'+fmt(p.pending)+'</b>남음</div>'
+      +'<div><b>'+(nD?Math.round(sumD/nD).toLocaleString():'-')+'</b>최근 7일 하루 평균 처리</div></div>'
+      +'<p class="note">마지막 실행 '+esc(p.ran||'?')+' · 날짜마다 그날 마지막 실행 기준 · 처리 합 = 원문을 받은 고시 증가(두 창구 합) — 창구별 수는 그 창구가 채운 원문이라(창 밖·겹침 포함) 합과 조금 다를 수 있다</p>'
+      +(t1?'<table><tr><th rowspan="2">날짜</th><th colspan="2">추가</th><th colspan="3">처리</th><th rowspan="2">잔여</th><th rowspan="2">비고</th></tr>'
+          +'<tr><th>새 고시</th><th>범위 변경</th><th>합</th><th>토지이음</th><th>시군구 공보</th></tr>'+t1+'</table>':'<p class="note">기록 없음</p>')
+      +'<h2>원문 소급 — 잔여 유형별(먼저 읽는 줄)</h2>'
+      +'<p class="note">'+TIERS.map(function(k){return '<b>'+k[0]+'</b> '+k[1];}).join(' · ')+' · <b>그 밖</b> 일반 대기(순서대로)</p>'
+      +(t2?'<table><tr><th>날짜</th>'+TIERS.map(function(k){return '<th>'+k[0]+'</th>';}).join('')+'<th>그 밖</th><th>잔여 합</th></tr>'+t2+'</table>':'');
+  });
 })();
 function esc(s){return String(s==null?'':s).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
 function rows(items,cols){return items.map(function(i){return '<tr>'+cols.map(function(c){return '<td>'+esc(i[c])+'</td>';}).join('')+'</tr>';}).join('');}
