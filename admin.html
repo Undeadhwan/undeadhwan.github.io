@@ -23,7 +23,7 @@
      ⚠ 접속 통계 비콘은 **넣지 않는다.** 운영자 본인 사용이 방문 수를 부풀리면 통계가
        거짓말을 한다(P2 · html_check.analytics_beacon_check가 이걸 검사한다). -->
 <style>
-  :root{--bg:#fff;--fg:#16181d;--mut:#6b7280;--dim:#9aa0aa;--line:#e6e8ec;--card:#fff;--acc:#2f6fed}
+  :root{--bg:#fff;--fg:#1c2230;--mut:#656b7a;--dim:#9aa0aa;--line:#e5e8ee;--card:#fff;--acc:#2f6bff}
   @media (prefers-color-scheme:dark){
     :root{--bg:#0f1114;--fg:#e8eaee;--mut:#9aa1ac;--dim:#6b7280;--line:#242830;--card:#151920}
   }
@@ -288,7 +288,9 @@
                                             get("eum_enroll.json"), get("upis_facility_geom.json"),
                                             get("upis_on_road.json"),   // 개통 대조(2026-09-05) — 워크리스트(모순·미측정)가 여기 있다
                                             get("eminwon_progress.json"),   // 시군구 공보 창구(원문 소급 두 번째 창구 · 2026-10-13 — 리포트 일별 표의 창구별 처리도 이 파일)
-                                            get("eum_backfill_runs.json")]);   // 매시 실행 기록(backfill_runs.py · 2026-10-13 알렉스 「실제 실행되는 게 중요」 — 리포트 「매시 실행 기록」 표의 정본)
+                                            get("eum_backfill_runs.json")]);
+  // 세·네 번째 창구(시도·관보 · 2026-10-14 세션168) — 이 화면이 읽어야 배포 목록(site_manifest — index.html·admin.html에서 도출)에 들고 리포트도 라이브에서 읽는다
+  const [sdp, gbp] = await Promise.all([get("sido_progress.json"), get("gwanbo_progress.json")]);   // 매시 실행 기록(backfill_runs.py · 2026-10-13 알렉스 「실제 실행되는 게 중요」 — 리포트 「매시 실행 기록」 표의 정본)
   if (!st) { box.textContent = "build_status.json을 읽지 못했습니다."; return; }
   const okRun = st.result === "성공";
   const nDebt = debt ? (debt.debt || 0) : 0;
@@ -331,7 +333,10 @@
     else if (lost.length) { cls = "bad"; msg = `❌ ${last.date || ""} 소급이 갈아끼운 행에서 <b>사라진 필드 ${lost.reduce((a, [, v]) => a + (+v || 0), 0)}건</b> — `
                                  + lost.slice(0, 5).map(([k, v]) => `${k} ${v}`).join(" · ") + ` (승계 규칙 깨짐 · eum_gosi.merge_by_seq · 다음 빌드 QA 「소급승계」가 막는다)`; }
     else if (stuck) { cls = "debt"; msg = `🟡 소급 대상이 <b>사흘째 ${bf.pending.toLocaleString()}건 그대로</b> — 예산이 계속 0이거나 대상 계산이 고장`; }
-    else msg = `⏳ 토지이음 소급: 남은 <b>${(bf.pending ?? 0).toLocaleString()}건</b>`
+    else msg = `⏳ 원문 소급: 남은 <b>${(bf.pending ?? 0).toLocaleString()}건</b>`
+             /* 창구별(배타 분할 · eum_backfill.window_split — 리포트 잔여 칸과 같은 수 · 2026-10-14 세션168 감사 3판 #9 — 종전 「토지이음 소급: 남은 N」은 전 창구 합이었다) */
+             + (bf.lanes ? ` = 공보 ${(bf.lanes.em ?? 0).toLocaleString()} · 시도 ${(bf.lanes.sido ?? 0).toLocaleString()} · 관보 ${(bf.lanes.gwanbo ?? 0).toLocaleString()} · <b>토지이음에서만 ${(bf.lanes.eum ?? 0).toLocaleString()}</b>`
+                          + ((bf.lanes.ledger_broken || []).length ? ` <span class="k">(⚠ 깨진 시도 대장 ${bf.lanes.ledger_broken.join("·")} — 쉼 없이 센 수)</span>` : "") : "")
              + (bf.days_limit ? (String(bf.days_limit).length === 8
                  ? ` (창 바닥 ${String(bf.days_limit).replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3")})`
                  : ` (최근 ${bf.days_limit}일 창)`) : "")
@@ -348,11 +353,18 @@
     h += `<div style="margin-top:4px">📮 시군구 공보 창구: ${eh.date || "?"} 원문 <b>${(eh.seqs || 0).toLocaleString()}건</b> 채움`
        + `<span class="k"> · 시도 ${(eh.tried || 0).toLocaleString()} · 받음 ${(eh.got || 0).toLocaleString()} · 마지막 실행 ${em.ran || "?"}</span></div>`;
   }
+  for (const [lab, wp] of [["🏛 시도 창구", sdp], ["📰 관보 창구", gbp]]) {
+    if (wp && (wp.history || []).length) {
+      const wh = wp.history[wp.history.length - 1];
+      h += `<div style="margin-top:4px">${lab}: ${wh.date || "?"} 원문 <b>${(wh.seqs || 0).toLocaleString()}건</b> 채움`
+         + `<span class="k"> · 물은 고시 ${(wh.tried || 0).toLocaleString()} · 받음 ${(wh.got || 0).toLocaleString()}${(wh.dead || []).length ? " · 쉰 서버 " + wh.dead.length : ""} · 마지막 실행 ${wp.ran || "?"}</span></div>`;
+    }
+  }
   // 매시 실행 — 오늘 몇 번 돌았나(시간표 대비 · 상세는 리포트 #runs)
   if (rn && (rn.runs || []).length) {
     const td = (rn.updated || "").slice(0, 10), rs = rn.runs.filter(r => (r.id || "").startsWith(td));
     const ok = rs.filter(r => r.status === "ok").length, sk = rs.filter(r => r.status === "skip").length, er = rs.filter(r => r.status === "error").length;
-    const pr = rs.reduce((a, r) => a + ((r.em && r.em.seqs) || 0) + ((r.eum && r.eum.got) || 0), 0);
+    const pr = rs.reduce((a, r) => a + ((r.em && r.em.seqs) || 0) + ((r.sido && r.sido.seqs) || 0) + ((r.gwanbo && r.gwanbo.seqs) || 0) + ((r.eum && r.eum.got) || 0), 0);
     h += `<div style="margin-top:4px">⏱ 매시 소급 ${td}: 실행 <b>${ok}</b>회 · 건너뜀 ${sk} · 실패 ${er} · 처리 <b>${pr.toLocaleString()}건</b>`
        + `<span class="k"> · 시간표 ${((rn.schedule_by_day || {})[td] || []).length}회 · 기록 갱신 ${(rn.updated || "?").replace("T", " ").slice(0, 16)} · <a href="report.html#runs">시간별</a></span></div>`;
   }
