@@ -1,7 +1,1 @@
-{
- "last_run": "2026-10-17 03:45",
- "result": "실패",
- "build": "20261016a",
- "exit_code": 1,
- "kind": "daily"
-}
+{"last_run":"2026-10-18 03:50","result":"성공","build":"20261018a","fetch":true,"deploy":true,"duration_s":6600,"changes":{"add":733,"rem":22,"merged":0,"opened":0,"trans":0,"done":0},"timing":[{"cmd":"python3 local_gosi_discover.py --sweep --apply","s":579.7},{"cmd":"python3 facility_built.py --apply","s":548.7},{"cmd":"python3 rail_road_follow.py --all --apply","s":485.4},{"cmd":"python3 housing_new.py --fetch --max 400","s":481.3},{"cmd":"python3 qa_check.py","s":426.2},{"cmd":"python3 lofin_fetch.py --fetch --derive","s":417.0},{"cmd":"python3 eia_fetch.py --fetch","s":329.1},{"cmd":"python3 dps_fetch.py","s":314.6},{"cmd":"python3 collect_1yr.py","s":312.4},{"cmd":"python3 g2b_design_fetch.py --days 27 --apply","s":176.5},{"cmd":"python3 road_gosi.py --index","s":170.5},{"cmd":"python3 road_bid_fetch.py --days 30","s":159.6},{"cmd":"python3 road_gosi_geom.py --apply","s":146.8},{"cmd":"python3 reg_relief.py --scan --fetch","s":116.5},{"cmd":"python3 rocm_gosi.py --targets --apply --recent","s":86.8},{"cmd":"python3 collect_capital.py","s":86.2},{"cmd":"python3 block_gosi.py","s":83.2},{"cmd":"python3 lifecycle.py","s":67.9},{"cmd":"python3 seoul_sibo.py --index","s":64.1},{"cmd":"python3 project_identity.py --apply","s":61.6},{"cmd":"python3 eum_gosi.py --district-pin","s":60.0},{"cmd":"python3 upis_facility_geom.py --hold-apply --go","s":58.0},{"cmd":"python3 eum_gosi.py --merge-road","s":55.2},{"cmd":"python3 geo_precision.py","s":54.7},{"cmd":"python3 road_gosi.py","s":53.6}],"failed":[]}
